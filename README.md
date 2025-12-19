@@ -81,6 +81,9 @@ If you spot gaps or mistranslations, open an issue. I'd love to make this even f
 
 ## Changelog
 
+### v5.07 - December 2025
+- Deferred mutation observer until `document.documentElement` is present to avoid Firefox race condition.
+
 ### v5.06 - October 2025
 - Added an optional "Try Meta AI" News Feed filter to hide Meta AI promo cards.
 - Merged language fallbacks so new options automatically inherit English copy.

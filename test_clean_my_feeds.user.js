@@ -2718,7 +2718,7 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
           addToSS(
             state,
             ".fb-cmf-toggle.fb-cmf-toggle-topbar",
-            "border:none; outline:none; position: relative; overflow: hidden;color: var(--cmf-icon-color, var(--secondary-icon));background-color: var(--cmf-btn-bg, var(--secondary-button-background-floating));transition: none;"
+            "border:none; outline:none; position: relative; overflow: hidden;color: var(--cmf-icon-color, var(--secondary-icon));background-color: var(--cmf-btn-bg, var(--secondary-button-background-floating));transition: background-color 100ms cubic-bezier(0, 0, 1, 1), color 100ms cubic-bezier(0, 0, 1, 1);"
           );
           addToSS(
             state,

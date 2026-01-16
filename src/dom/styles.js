@@ -316,21 +316,21 @@ function addExtraCSS(state, options, defaults) {
     addToSS(state, ".fb-cmf-toggle svg", "height: 95%; aspect-ratio : 1 / 1;");
     addToSS(state, ".fb-cmf-toggle:hover", "cursor:pointer;");
     addToSS(state, `.fb-cmf-toggle[${state.showAtt}]`, "display:flex; align-items:center; justify-content:center;");
-    addToSS(
-      state,
-      ".fb-cmf-toggle.fb-cmf-toggle-topbar",
-      "border:none; outline:none; position: relative; overflow: hidden;" +
-        "color: var(--cmf-icon-color, var(--secondary-icon));" +
-        "background-color: var(--cmf-btn-bg, var(--secondary-button-background-floating));" +
-        "transition: none;"
-    );
-    addToSS(
-      state,
-      ".fb-cmf-toggle.fb-cmf-toggle-topbar::after",
-      "content: \"\"; position: absolute; inset: 0; border-radius: inherit;" +
-        "background-color: var(--cmf-btn-hover, var(--hover-overlay)); opacity: 0; pointer-events: none;" +
-        "transition: none;"
-    );
+      addToSS(
+        state,
+        ".fb-cmf-toggle.fb-cmf-toggle-topbar",
+        "border:none; outline:none; position: relative; overflow: hidden;" +
+          "color: var(--cmf-icon-color, var(--secondary-icon));" +
+          "background-color: var(--cmf-btn-bg, var(--secondary-button-background-floating));" +
+          "transition: background-color 100ms cubic-bezier(0, 0, 1, 1), color 100ms cubic-bezier(0, 0, 1, 1);"
+      );
+      addToSS(
+        state,
+        ".fb-cmf-toggle.fb-cmf-toggle-topbar::after",
+        "content: \"\"; position: absolute; inset: 0; border-radius: inherit;" +
+          "background-color: var(--cmf-btn-hover, var(--hover-overlay)); opacity: 0; pointer-events: none;" +
+          "transition: none;"
+      );
     addToSS(state, ".fb-cmf-toggle.fb-cmf-toggle-topbar:hover::after", "opacity: 1;");
     addToSS(
       state,

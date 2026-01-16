@@ -6,7 +6,7 @@ const { hasSizeChanged } = require("../dom/dirty-check");
 const { doLightDusting } = require("../dom/dusting");
 const { hideNewsPost, hideFeature } = require("../dom/hide");
 const { scrubInfoBoxes } = require("../dom/info-boxes");
-const { extractTextContent } = require("../dom/walker");
+const { extractTextContent, scanTreeForText } = require("../dom/walker");
 const { climbUpTheTree, querySelectorAllNoChildren } = require("../utils/dom");
 const { newsSelectors } = require("../selectors/news");
 
@@ -161,15 +161,26 @@ function isNewsFollow(post, state, keyWords) {
     };
 
     const hasFollowKeyword = (value) => {
-      if (!value || typeof value !== "string") {
-        return false;
-      }
-      return state.dictionaryFollow.find((item) => item === normaliseToLower(value));
+      const normalised = normaliseToLower(value);
+      return normalised !== "" && state.dictionaryFollow.some((keyword) => normalised.includes(keyword));
     };
 
-    const elements = post.querySelectorAll("span[dir]");
-    for (const element of elements) {
-      if (hasFollowKeyword(element.textContent)) {
+    const followButton = Array.from(
+      post.querySelectorAll('a[role="button"], div[role="button"], span[role="button"]')
+    ).find((button) => {
+      const ariaLabel =
+        button && typeof button.getAttribute === "function" ? button.getAttribute("aria-label") : "";
+      const buttonText = button && typeof button.textContent === "string" ? button.textContent : "";
+      return hasFollowKeyword(ariaLabel) || hasFollowKeyword(buttonText);
+    });
+    if (followButton) {
+      return keyWords.NF_FOLLOW;
+    }
+
+    const blocks = post.querySelectorAll(getNewsBlocksQuery(post));
+    if (blocks.length > 0) {
+      const headerText = normaliseToLower(scanTreeForText(blocks[0]).join(" "));
+      if (headerText !== "" && state.dictionaryFollow.some((keyword) => headerText.includes(keyword))) {
         return keyWords.NF_FOLLOW;
       }
     }
@@ -181,7 +192,46 @@ function isNewsFollow(post, state, keyWords) {
 function isNewsParticipate(post, keyWords) {
   const query = ":scope h4 > span > span[class] > span";
   const elements = querySelectorAllNoChildren(post, query, 0);
-  return elements.length !== 1 ? "" : keyWords.NF_PARTICIPATE;
+  if (elements.length === 1) {
+    return keyWords.NF_PARTICIPATE;
+  }
+
+  const keywords = [keyWords.NF_PARTICIPATE, "Join"]
+    .filter((value) => typeof value === "string" && value.trim() !== "")
+    .map((value) => value.toLowerCase());
+  if (keywords.length === 0) {
+    return "";
+  }
+
+  const hasKeyword = (value) => {
+    if (!value || typeof value !== "string") {
+      return false;
+    }
+    const normalised = value.toLowerCase();
+    return keywords.some((keyword) => normalised.includes(keyword));
+  };
+
+  const participateButton = Array.from(
+    post.querySelectorAll('a[role="button"], div[role="button"], span[role="button"]')
+  ).find((button) => {
+    const ariaLabel =
+      button && typeof button.getAttribute === "function" ? button.getAttribute("aria-label") : "";
+    const buttonText = button && typeof button.textContent === "string" ? button.textContent : "";
+    return hasKeyword(ariaLabel) || hasKeyword(buttonText);
+  });
+  if (participateButton) {
+    return keyWords.NF_PARTICIPATE;
+  }
+
+  const blocks = post.querySelectorAll(getNewsBlocksQuery(post));
+  if (blocks.length > 0) {
+    const headerText = scanTreeForText(blocks[0]).join(" ").toLowerCase();
+    if (headerText && keywords.some((keyword) => headerText.includes(keyword))) {
+      return keyWords.NF_PARTICIPATE;
+    }
+  }
+
+  return "";
 }
 
 function isNewsMetaAICard(post, keyWords) {

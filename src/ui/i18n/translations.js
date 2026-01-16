@@ -22,7 +22,7 @@ module.exports = {
     NF_SPONSORED_PAID: 'Sponsored · Paid for by ______',
     NF_SUGGESTIONS: 'Suggestions / Recommendations',
     NF_FOLLOW: 'Follow',
-    NF_PARTICIPATE: 'Participate',
+    NF_PARTICIPATE: 'Participate / Join',
     NF_REELS_SHORT_VIDEOS: 'Reels and short videos',
     NF_SHORT_REEL_VIDEO: 'Reel/short video',
     NF_META_AI: 'Try Meta AI',

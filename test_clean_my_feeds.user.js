@@ -51,7 +51,7 @@
             NF_SPONSORED_PAID: "Sponsored \xB7 Paid for by ______",
             NF_SUGGESTIONS: "Suggestions / Recommendations",
             NF_FOLLOW: "Follow",
-            NF_PARTICIPATE: "Participate",
+            NF_PARTICIPATE: "Participate / Join",
             NF_REELS_SHORT_VIDEOS: "Reels and short videos",
             NF_SHORT_REEL_VIDEO: "Reel/short video",
             NF_META_AI: "Try Meta AI",
@@ -2511,7 +2511,7 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         );
         addToSS(
           state,
-          `details[${postAtt}][open] > div, details[${postAtt}][open] > span > div, div[${state.showAtt}]:not([id="fbcmf"])`,
+          `details[${postAtt}][open] > div, details[${postAtt}][open] > span > div, div[${state.showAtt}]:not([id="fbcmf"]):not(.fb-cmf-toggle):not(.fb-cmf-toggle-wrapper)`,
           `display:block !important; height: auto !important; min-height: auto !important; max-height: 10000px; overflow: auto; margin-bottom:1rem !important; opacity: 1 !important; pointer-events: auto !important;border:3px dotted ${options.CMF_BORDER_COLOUR} !important; border-radius:8px; padding:0.2rem 0.1rem 0.1rem 0.1rem;`
         );
         addToSS(
@@ -2702,14 +2702,7 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         state.tempStyleSheetCode = "";
         let styles = "";
         if (cmfBtnLocation === "1") {
-          if (document.querySelector('[role="banner"]')) {
-            addToSS(
-              state,
-              'div[role="banner"] > div:last-of-type div[role="navigation"]',
-              "margin-right: 42px;"
-            );
-          }
-          styles = "position:fixed; top:0.5rem; right:0.5rem; display:none;";
+          styles = "display:none;";
         } else if (cmfBtnLocation === "2") {
           styles = "display: none !important;";
         } else {
@@ -2721,7 +2714,33 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
           addToSS(state, ".fb-cmf-toggle", styles);
           addToSS(state, ".fb-cmf-toggle svg", "height: 95%; aspect-ratio : 1 / 1;");
           addToSS(state, ".fb-cmf-toggle:hover", "cursor:pointer;");
-          addToSS(state, `.fb-cmf-toggle[${state.showAtt}]`, "display:block;");
+          addToSS(state, `.fb-cmf-toggle[${state.showAtt}]`, "display:flex; align-items:center; justify-content:center;");
+          addToSS(
+            state,
+            ".fb-cmf-toggle.fb-cmf-toggle-topbar",
+            "border:none; outline:none; position: relative; overflow: hidden;color: var(--cmf-icon-color, var(--secondary-icon));background-color: var(--cmf-btn-bg, var(--secondary-button-background-floating));transition: none;"
+          );
+          addToSS(
+            state,
+            ".fb-cmf-toggle.fb-cmf-toggle-topbar::after",
+            'content: ""; position: absolute; inset: 0; border-radius: inherit;background-color: var(--cmf-btn-hover, var(--hover-overlay)); opacity: 0; pointer-events: none;transition: none;'
+          );
+          addToSS(state, ".fb-cmf-toggle.fb-cmf-toggle-topbar:hover::after", "opacity: 1;");
+          addToSS(
+            state,
+            ".fb-cmf-toggle.fb-cmf-toggle-topbar:active::after",
+            "background-color: var(--cmf-btn-press, var(--press-overlay)); opacity: 1;"
+          );
+          addToSS(
+            state,
+            ".fb-cmf-toggle.fb-cmf-toggle-topbar:active",
+            "color: var(--accent);"
+          );
+          addToSS(
+            state,
+            '.fb-cmf-toggle.fb-cmf-toggle-topbar[data-cmf-open="true"]',
+            "color: var(--cmf-active-icon, var(--accent)); background-color: var(--cmf-active-bg, var(--primary-button-background));"
+          );
         }
         if (cmfDlgLocation === "1") {
           styles = "right:0.35rem; margin-left:1rem; transform:scale(0);transform-origin:top right;";
@@ -4134,7 +4153,7 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
       var { doLightDusting } = require_dusting();
       var { hideNewsPost, hideFeature } = require_hide();
       var { scrubInfoBoxes } = require_info_boxes();
-      var { extractTextContent } = require_walker();
+      var { extractTextContent, scanTreeForText } = require_walker();
       var { climbUpTheTree, querySelectorAllNoChildren } = require_dom();
       var { newsSelectors } = require_news();
       var { findNewsBlockedText } = require_blocked_text2();
@@ -4267,14 +4286,23 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             }
           };
           const hasFollowKeyword = (value) => {
-            if (!value || typeof value !== "string") {
-              return false;
-            }
-            return state.dictionaryFollow.find((item) => item === normaliseToLower(value));
+            const normalised = normaliseToLower(value);
+            return normalised !== "" && state.dictionaryFollow.some((keyword) => normalised.includes(keyword));
           };
-          const elements = post.querySelectorAll("span[dir]");
-          for (const element of elements) {
-            if (hasFollowKeyword(element.textContent)) {
+          const followButton = Array.from(
+            post.querySelectorAll('a[role="button"], div[role="button"], span[role="button"]')
+          ).find((button) => {
+            const ariaLabel = button && typeof button.getAttribute === "function" ? button.getAttribute("aria-label") : "";
+            const buttonText = button && typeof button.textContent === "string" ? button.textContent : "";
+            return hasFollowKeyword(ariaLabel) || hasFollowKeyword(buttonText);
+          });
+          if (followButton) {
+            return keyWords.NF_FOLLOW;
+          }
+          const blocks = post.querySelectorAll(getNewsBlocksQuery(post));
+          if (blocks.length > 0) {
+            const headerText = normaliseToLower(scanTreeForText(blocks[0]).join(" "));
+            if (headerText !== "" && state.dictionaryFollow.some((keyword) => headerText.includes(keyword))) {
               return keyWords.NF_FOLLOW;
             }
           }
@@ -4284,7 +4312,38 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
       function isNewsParticipate(post, keyWords) {
         const query = ":scope h4 > span > span[class] > span";
         const elements = querySelectorAllNoChildren(post, query, 0);
-        return elements.length !== 1 ? "" : keyWords.NF_PARTICIPATE;
+        if (elements.length === 1) {
+          return keyWords.NF_PARTICIPATE;
+        }
+        const keywords = [keyWords.NF_PARTICIPATE, "Join"].filter((value) => typeof value === "string" && value.trim() !== "").map((value) => value.toLowerCase());
+        if (keywords.length === 0) {
+          return "";
+        }
+        const hasKeyword = (value) => {
+          if (!value || typeof value !== "string") {
+            return false;
+          }
+          const normalised = value.toLowerCase();
+          return keywords.some((keyword) => normalised.includes(keyword));
+        };
+        const participateButton = Array.from(
+          post.querySelectorAll('a[role="button"], div[role="button"], span[role="button"]')
+        ).find((button) => {
+          const ariaLabel = button && typeof button.getAttribute === "function" ? button.getAttribute("aria-label") : "";
+          const buttonText = button && typeof button.textContent === "string" ? button.textContent : "";
+          return hasKeyword(ariaLabel) || hasKeyword(buttonText);
+        });
+        if (participateButton) {
+          return keyWords.NF_PARTICIPATE;
+        }
+        const blocks = post.querySelectorAll(getNewsBlocksQuery(post));
+        if (blocks.length > 0) {
+          const headerText = scanTreeForText(blocks[0]).join(" ").toLowerCase();
+          if (headerText && keywords.some((keyword) => headerText.includes(keyword))) {
+            return keyWords.NF_PARTICIPATE;
+          }
+        }
+        return "";
       }
       function isNewsMetaAICard(post, keyWords) {
         const selectors = [
@@ -5336,14 +5395,169 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         if (!document.body) {
           return null;
         }
-        const btn = document.createElement("button");
+        const btnLocation = state.options && state.options.CMF_BTN_OPTION ? state.options.CMF_BTN_OPTION.toString() : "0";
+        const useTopRight = btnLocation === "1";
+        const btn = document.createElement(useTopRight ? "div" : "button");
         btn.innerHTML = state.logoHTML;
         btn.id = "fbcmfToggle";
         btn.title = keyWords.DLG_TITLE;
         btn.className = "fb-cmf-toggle fb-cmf-icon";
-        document.body.appendChild(btn);
-        btn.addEventListener("click", onToggle, false);
+        if (useTopRight) {
+          btn.classList.add("fb-cmf-toggle-topbar");
+        }
+        let toggleHandler = onToggle;
+        if (useTopRight) {
+          toggleHandler = () => {
+            onToggle();
+          };
+          btn.setAttribute("role", "button");
+          btn.setAttribute("tabindex", "0");
+          btn.setAttribute("aria-label", keyWords.DLG_TITLE);
+          btn.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              toggleHandler();
+            }
+          });
+        }
+        btn.addEventListener("click", toggleHandler, false);
+        let cachedIconColor = "";
+        let cachedBtnBg = "";
+        let cachedHover = "";
+        let cachedPress = "";
+        const hexToRgba = (value, alpha) => {
+          if (!value) {
+            return "";
+          }
+          const hex = value.trim();
+          if (!hex.startsWith("#")) {
+            return "";
+          }
+          const normalized = hex.length === 4 ? `#${hex[1]}${hex[1]}${hex[2]}${hex[2]}${hex[3]}${hex[3]}` : hex;
+          if (normalized.length !== 7) {
+            return "";
+          }
+          const r = parseInt(normalized.slice(1, 3), 16);
+          const g = parseInt(normalized.slice(3, 5), 16);
+          const b = parseInt(normalized.slice(5, 7), 16);
+          if (Number.isNaN(r) || Number.isNaN(g) || Number.isNaN(b)) {
+            return "";
+          }
+          return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        };
+        const updateTopRightPosition = () => {
+          const menuButton = document.querySelector('[role="banner"] [aria-label="Menu"]');
+          if (!menuButton) {
+            btn.style.position = "fixed";
+            btn.style.top = "0.5rem";
+            btn.style.right = "0.5rem";
+            btn.style.left = "auto";
+            btn.style.zIndex = "999";
+            return false;
+          }
+          const rect = menuButton.getBoundingClientRect();
+          const menuStyle = window.getComputedStyle(menuButton);
+          const hoverOverlay = menuStyle.getPropertyValue("--hover-overlay");
+          const pressOverlay = menuStyle.getPropertyValue("--press-overlay");
+          const secondaryBg = menuStyle.getPropertyValue("--secondary-button-background");
+          const accent = menuStyle.getPropertyValue("--accent");
+          const primaryButtonBg = menuStyle.getPropertyValue("--primary-button-background");
+          const isMenuExpanded = menuButton.getAttribute("aria-expanded") === "true";
+          const gap = 8;
+          const left = Math.max(0, rect.left - rect.width - gap);
+          btn.style.position = "fixed";
+          btn.style.top = `${rect.top}px`;
+          btn.style.left = `${left}px`;
+          btn.style.right = "auto";
+          btn.style.width = `${rect.width}px`;
+          btn.style.height = `${rect.height}px`;
+          btn.style.borderRadius = menuStyle.borderRadius;
+          btn.style.boxShadow = menuStyle.boxShadow;
+          const iconElement = menuButton.querySelector("svg, i, span");
+          const iconStyle = iconElement ? window.getComputedStyle(iconElement) : null;
+          const iconColor = iconStyle && iconStyle.color ? iconStyle.color : "";
+          const resolvedIconColor = iconColor && iconColor !== "rgba(0, 0, 0, 0)" ? iconColor : "var(--secondary-icon)";
+          if (!isMenuExpanded || !cachedIconColor) {
+            cachedIconColor = resolvedIconColor;
+          }
+          btn.style.setProperty("--cmf-icon-color", cachedIconColor || resolvedIconColor);
+          const activeBg = hexToRgba(primaryButtonBg, 0.2);
+          if (activeBg) {
+            btn.style.setProperty("--cmf-active-bg", activeBg);
+          }
+          if (accent) {
+            btn.style.setProperty("--cmf-active-icon", accent);
+          }
+          btn.style.color = "";
+          const svg = btn.querySelector("svg");
+          if (svg) {
+            svg.style.fill = "currentColor";
+            if (iconStyle && iconStyle.width && iconStyle.height) {
+              svg.style.width = iconStyle.width;
+              svg.style.height = iconStyle.height;
+            }
+          }
+          const zIndexValue = menuStyle.zIndex;
+          if (zIndexValue && zIndexValue !== "auto" && zIndexValue !== "0") {
+            btn.style.zIndex = zIndexValue;
+          } else {
+            btn.style.zIndex = "9999";
+          }
+          btn.style.padding = "0";
+          btn.style.margin = "0";
+          if (!isMenuExpanded || !cachedBtnBg) {
+            if (secondaryBg) {
+              cachedBtnBg = secondaryBg;
+            } else if (menuStyle.backgroundColor) {
+              cachedBtnBg = menuStyle.backgroundColor;
+            }
+          }
+          if (cachedBtnBg) {
+            btn.style.setProperty("--cmf-btn-bg", cachedBtnBg);
+          }
+          btn.style.backgroundColor = "";
+          if (!isMenuExpanded || !cachedHover) {
+            cachedHover = hoverOverlay || "var(--hover-overlay)";
+          }
+          if (!isMenuExpanded || !cachedPress) {
+            cachedPress = pressOverlay || "var(--press-overlay)";
+          }
+          btn.style.setProperty("--cmf-btn-hover", cachedHover || hoverOverlay || "var(--hover-overlay)");
+          btn.style.setProperty("--cmf-btn-press", cachedPress || pressOverlay || "var(--press-overlay)");
+          return true;
+        };
+        if (useTopRight) {
+          if (!btn.isConnected) {
+            document.body.appendChild(btn);
+          }
+          updateTopRightPosition();
+          const banner = document.querySelector('[role="banner"]');
+          if (banner && typeof MutationObserver !== "undefined") {
+            const observer = new MutationObserver(() => {
+              updateTopRightPosition();
+            });
+            observer.observe(banner, { childList: true, subtree: true });
+          }
+          if (typeof window !== "undefined") {
+            window.addEventListener("resize", updateTopRightPosition);
+            const interval = setInterval(() => {
+              updateTopRightPosition();
+            }, 1e3);
+            setTimeout(() => clearInterval(interval), 15e3);
+          }
+        } else {
+          document.body.appendChild(btn);
+        }
         state.btnToggleEl = btn;
+        if (state.isAF) {
+          btn.setAttribute(state.showAtt, "");
+        }
+        if (useTopRight) {
+          const dialog = document.getElementById("fbcmf");
+          if (dialog && dialog.hasAttribute(state.showAtt)) {
+            btn.setAttribute("data-cmf-open", "true");
+          }
+        }
         return btn;
       }
       module.exports = {
@@ -5721,6 +5935,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
       var { buildDictionaries } = require_dictionaries();
       var { defaults, translations } = require_translations();
       var { buildDialogSections } = require_sections();
+      function replaceObjectContents(target, source) {
+        if (!target || !source) {
+          return;
+        }
+        Object.keys(target).forEach((key) => {
+          delete target[key];
+        });
+        Object.assign(target, source);
+      }
       function toggleDialog(state) {
         const elDialog = document.getElementById("fbcmf");
         if (!elDialog || !state) {
@@ -5728,20 +5951,52 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         }
         if (elDialog.hasAttribute(state.showAtt)) {
           elDialog.removeAttribute(state.showAtt);
+          if (state.btnToggleEl) {
+            state.btnToggleEl.removeAttribute("data-cmf-open");
+          }
         } else {
           elDialog.setAttribute(state.showAtt, "");
+          if (state.btnToggleEl) {
+            state.btnToggleEl.setAttribute("data-cmf-open", "true");
+          }
+        }
+      }
+      function syncToggleButtonOpenState(state) {
+        const elDialog = document.getElementById("fbcmf");
+        const toggleButton = state && state.btnToggleEl ? state.btnToggleEl : null;
+        if (!elDialog || !toggleButton || !state) {
+          return;
+        }
+        if (elDialog.hasAttribute(state.showAtt)) {
+          toggleButton.setAttribute("data-cmf-open", "true");
+        } else {
+          toggleButton.removeAttribute("data-cmf-open");
         }
       }
       function addLegendEvents() {
         const elFBCMF = document.getElementById("fbcmf");
         if (elFBCMF) {
-          const legends = elFBCMF.querySelectorAll("legend");
-          legends.forEach((legend) => {
-            legend.parentElement.classList.add("cmf-hidden");
-            legend.addEventListener("click", () => {
-              legend.parentElement.classList.toggle("cmf-hidden");
-              legend.parentElement.classList.toggle("cmf-visible");
-            });
+          const fieldsets = elFBCMF.querySelectorAll("fieldset");
+          fieldsets.forEach((fieldset) => {
+            fieldset.classList.add("cmf-hidden");
+            fieldset.classList.remove("cmf-visible");
+          });
+          if (elFBCMF.dataset.cmfLegendInit === "1") {
+            return;
+          }
+          elFBCMF.dataset.cmfLegendInit = "1";
+          elFBCMF.addEventListener("click", (event) => {
+            const target = event.target instanceof Element ? event.target : null;
+            const legend = target ? target.closest("legend") : null;
+            if (!legend || !elFBCMF.contains(legend)) {
+              return;
+            }
+            const fieldset = legend.parentElement;
+            if (!fieldset) {
+              return;
+            }
+            fieldset.classList.toggle("cmf-hidden");
+            fieldset.classList.toggle("cmf-visible");
           });
         }
       }
@@ -6014,13 +6269,13 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             await setOptions(JSON.stringify(state.options));
             const siteLanguage = document.documentElement ? document.documentElement.lang : "en";
             const hydrated = hydrateOptions(state.options, siteLanguage);
-            state.options = hydrated.options;
-            state.filters = hydrated.filters;
+            replaceObjectContents(state.options, hydrated.options);
+            replaceObjectContents(state.filters, hydrated.filters);
             state.language = hydrated.language;
             state.hideAnInfoBox = hydrated.hideAnInfoBox;
-            context.options = hydrated.options;
-            context.filters = hydrated.filters;
-            context.keyWords = hydrated.keyWords;
+            replaceObjectContents(context.options, hydrated.options);
+            replaceObjectContents(context.filters, hydrated.filters);
+            replaceObjectContents(context.keyWords, hydrated.keyWords);
             const dictionaries = buildDictionaries();
             state.dictionarySponsored = dictionaries.dictionarySponsored;
             state.dictionaryFollow = dictionaries.dictionaryFollow;
@@ -6140,6 +6395,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             createToggleButton(state, context.keyWords, () => toggleDialog(state));
             buildDialog(context, handlers, false);
             addLegendEvents();
+            const dialog = document.getElementById("fbcmf");
+            if (dialog && !dialog.dataset.cmfToggleSync) {
+              dialog.dataset.cmfToggleSync = "1";
+              syncToggleButtonOpenState(state);
+              if (typeof MutationObserver !== "undefined") {
+                const observer = new MutationObserver(() => syncToggleButtonOpenState(state));
+                observer.observe(dialog, { attributes: true, attributeFilter: [state.showAtt] });
+              }
+            }
           } else {
             setTimeout(runInit, 50);
           }
@@ -6284,6 +6548,13 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
           state.isAF = state.isNF || state.isGF || state.isVF || state.isMF || state.isSF || state.isRF || state.isPP;
           state.echoCount = 0;
           state.noChangeCounter = 0;
+          if (state.btnToggleEl) {
+            if (state.isAF) {
+              state.btnToggleEl.setAttribute(state.showAtt, "");
+            } else {
+              state.btnToggleEl.removeAttribute(state.showAtt);
+            }
+          }
           return true;
         }
         return false;

@@ -15,6 +15,16 @@ const { defaults, translations } = require("../i18n/translations");
 
 const { buildDialogSections } = require("./sections");
 
+function replaceObjectContents(target, source) {
+  if (!target || !source) {
+    return;
+  }
+  Object.keys(target).forEach((key) => {
+    delete target[key];
+  });
+  Object.assign(target, source);
+}
+
 function toggleDialog(state) {
   const elDialog = document.getElementById("fbcmf");
   if (!elDialog || !state) {
@@ -23,21 +33,55 @@ function toggleDialog(state) {
 
   if (elDialog.hasAttribute(state.showAtt)) {
     elDialog.removeAttribute(state.showAtt);
+    if (state.btnToggleEl) {
+      state.btnToggleEl.removeAttribute("data-cmf-open");
+    }
   } else {
     elDialog.setAttribute(state.showAtt, "");
+    if (state.btnToggleEl) {
+      state.btnToggleEl.setAttribute("data-cmf-open", "true");
+    }
+  }
+}
+
+function syncToggleButtonOpenState(state) {
+  const elDialog = document.getElementById("fbcmf");
+  const toggleButton = state && state.btnToggleEl ? state.btnToggleEl : null;
+  if (!elDialog || !toggleButton || !state) {
+    return;
+  }
+  if (elDialog.hasAttribute(state.showAtt)) {
+    toggleButton.setAttribute("data-cmf-open", "true");
+  } else {
+    toggleButton.removeAttribute("data-cmf-open");
   }
 }
 
 function addLegendEvents() {
   const elFBCMF = document.getElementById("fbcmf");
   if (elFBCMF) {
-    const legends = elFBCMF.querySelectorAll("legend");
-    legends.forEach((legend) => {
-      legend.parentElement.classList.add("cmf-hidden");
-      legend.addEventListener("click", () => {
-        legend.parentElement.classList.toggle("cmf-hidden");
-        legend.parentElement.classList.toggle("cmf-visible");
-      });
+    const fieldsets = elFBCMF.querySelectorAll("fieldset");
+    fieldsets.forEach((fieldset) => {
+      fieldset.classList.add("cmf-hidden");
+      fieldset.classList.remove("cmf-visible");
+    });
+
+    if (elFBCMF.dataset.cmfLegendInit === "1") {
+      return;
+    }
+    elFBCMF.dataset.cmfLegendInit = "1";
+    elFBCMF.addEventListener("click", (event) => {
+      const target = event.target instanceof Element ? event.target : null;
+      const legend = target ? target.closest("legend") : null;
+      if (!legend || !elFBCMF.contains(legend)) {
+        return;
+      }
+      const fieldset = legend.parentElement;
+      if (!fieldset) {
+        return;
+      }
+      fieldset.classList.toggle("cmf-hidden");
+      fieldset.classList.toggle("cmf-visible");
     });
   }
 }
@@ -346,13 +390,13 @@ function initDialog(context, helpers) {
 
       const siteLanguage = document.documentElement ? document.documentElement.lang : "en";
       const hydrated = hydrateOptions(state.options, siteLanguage);
-      state.options = hydrated.options;
-      state.filters = hydrated.filters;
+      replaceObjectContents(state.options, hydrated.options);
+      replaceObjectContents(state.filters, hydrated.filters);
       state.language = hydrated.language;
       state.hideAnInfoBox = hydrated.hideAnInfoBox;
-      context.options = hydrated.options;
-      context.filters = hydrated.filters;
-      context.keyWords = hydrated.keyWords;
+      replaceObjectContents(context.options, hydrated.options);
+      replaceObjectContents(context.filters, hydrated.filters);
+      replaceObjectContents(context.keyWords, hydrated.keyWords);
 
       const dictionaries = buildDictionaries();
       state.dictionarySponsored = dictionaries.dictionarySponsored;
@@ -492,6 +536,15 @@ function initDialog(context, helpers) {
       createToggleButton(state, context.keyWords, () => toggleDialog(state));
       buildDialog(context, handlers, false);
       addLegendEvents();
+      const dialog = document.getElementById("fbcmf");
+      if (dialog && !dialog.dataset.cmfToggleSync) {
+        dialog.dataset.cmfToggleSync = "1";
+        syncToggleButtonOpenState(state);
+        if (typeof MutationObserver !== "undefined") {
+          const observer = new MutationObserver(() => syncToggleButtonOpenState(state));
+          observer.observe(dialog, { attributes: true, attributeFilter: [state.showAtt] });
+        }
+      }
     } else {
       setTimeout(runInit, 50);
     }

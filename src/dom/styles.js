@@ -78,7 +78,7 @@ function addCSS(state, options, defaults) {
 
   addToSS(
     state,
-    `details[${postAtt}][open] > div, details[${postAtt}][open] > span > div, div[${state.showAtt}]:not([id="fbcmf"])`,
+    `details[${postAtt}][open] > div, details[${postAtt}][open] > span > div, div[${state.showAtt}]:not([id="fbcmf"]):not(.fb-cmf-toggle):not(.fb-cmf-toggle-wrapper)`,
     "display:block !important; height: auto !important; min-height: auto !important; max-height: 10000px; overflow: auto; margin-bottom:1rem !important; opacity: 1 !important; pointer-events: auto !important;" +
       `border:3px dotted ${options.CMF_BORDER_COLOUR} !important; border-radius:8px; padding:0.2rem 0.1rem 0.1rem 0.1rem;`
   );
@@ -302,14 +302,7 @@ function addExtraCSS(state, options, defaults) {
   let styles = "";
 
   if (cmfBtnLocation === "1") {
-    if (document.querySelector('[role="banner"]')) {
-      addToSS(
-        state,
-        'div[role="banner"] > div:last-of-type div[role="navigation"]',
-        "margin-right: 42px;"
-      );
-    }
-    styles = "position:fixed; top:0.5rem; right:0.5rem; display:none;";
+    styles = "display:none;";
   } else if (cmfBtnLocation === "2") {
     styles = "display: none !important;";
   } else {
@@ -322,7 +315,38 @@ function addExtraCSS(state, options, defaults) {
     addToSS(state, ".fb-cmf-toggle", styles);
     addToSS(state, ".fb-cmf-toggle svg", "height: 95%; aspect-ratio : 1 / 1;");
     addToSS(state, ".fb-cmf-toggle:hover", "cursor:pointer;");
-    addToSS(state, `.fb-cmf-toggle[${state.showAtt}]`, "display:block;");
+    addToSS(state, `.fb-cmf-toggle[${state.showAtt}]`, "display:flex; align-items:center; justify-content:center;");
+    addToSS(
+      state,
+      ".fb-cmf-toggle.fb-cmf-toggle-topbar",
+      "border:none; outline:none; position: relative; overflow: hidden;" +
+        "color: var(--cmf-icon-color, var(--secondary-icon));" +
+        "background-color: var(--cmf-btn-bg, var(--secondary-button-background-floating));" +
+        "transition: none;"
+    );
+    addToSS(
+      state,
+      ".fb-cmf-toggle.fb-cmf-toggle-topbar::after",
+      "content: \"\"; position: absolute; inset: 0; border-radius: inherit;" +
+        "background-color: var(--cmf-btn-hover, var(--hover-overlay)); opacity: 0; pointer-events: none;" +
+        "transition: none;"
+    );
+    addToSS(state, ".fb-cmf-toggle.fb-cmf-toggle-topbar:hover::after", "opacity: 1;");
+    addToSS(
+      state,
+      ".fb-cmf-toggle.fb-cmf-toggle-topbar:active::after",
+      "background-color: var(--cmf-btn-press, var(--press-overlay)); opacity: 1;"
+    );
+    addToSS(
+      state,
+      ".fb-cmf-toggle.fb-cmf-toggle-topbar:active",
+      "color: var(--accent);"
+    );
+    addToSS(
+      state,
+      ".fb-cmf-toggle.fb-cmf-toggle-topbar[data-cmf-open=\"true\"]",
+      "color: var(--cmf-active-icon, var(--accent)); background-color: var(--cmf-active-bg, var(--primary-button-background));"
+    );
   }
 
   if (cmfDlgLocation === "1") {

@@ -144,6 +144,13 @@ function setFeedSettings(state, options, forceUpdate = false) {
       state.isNF || state.isGF || state.isVF || state.isMF || state.isSF || state.isRF || state.isPP;
     state.echoCount = 0;
     state.noChangeCounter = 0;
+    if (state.btnToggleEl) {
+      if (state.isAF) {
+        state.btnToggleEl.setAttribute(state.showAtt, "");
+      } else {
+        state.btnToggleEl.removeAttribute(state.showAtt);
+      }
+    }
 
     return true;
   }

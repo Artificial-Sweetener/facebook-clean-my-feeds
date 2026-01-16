@@ -41,10 +41,10 @@ This roadmap covers the modularization, build, linting, CI, and release process 
 
 ## Phase 2: Modular Architecture and Core Extraction
 
-- Define module boundaries and public APIs (core classifier, selectors, feed logic, UI, storage, runtime).
-- Keep `src/core/` pure (no DOM access); DOM mutations live in `src/feeds/` and `src/dom/`.
-- Keep selectors centralized in `src/selectors/`; feed modules should not define new selectors inline.
-- Userscript header source of truth is `src/entry/metadata.user.js`.
+- Define module boundaries and public APIs (core classifier, selectors, feed logic, UI, storage, runtime). (Done)
+- Keep `src/core/` pure (no DOM access); DOM mutations live in `src/feeds/` and `src/dom/`. (Done)
+- Keep selectors centralized in `src/selectors/`; feed modules should not define new selectors inline. (Done)
+- Userscript header source of truth is `src/entry/metadata.user.js`. (Done)
 - Use the agreed scaffolding layout:
   - src/entry/ (entrypoint + userscript metadata template)
   - src/core/ (options, filters, rules, state)
@@ -104,9 +104,18 @@ This roadmap covers the modularization, build, linting, CI, and release process 
     - tools/banner.js
     - config/eslint.config.cjs
     - config/prettier.config.cjs
-- Extract core utilities (text normalization, matching helpers, rule evaluation).
-- Keep DOM access in feed-specific modules; keep business logic in core modules.
-- Wrap vendor code as a module and remove inline bundles from the source.
+- Extract core utilities (text normalization, matching helpers, rule evaluation). (Done)
+- Keep DOM access in feed-specific modules; keep business logic in core modules. (Done)
+- Wrap vendor code as a module and remove inline bundles from the source. (Done)
+
+Notes (Phase 2 landing details):
+- `src/ui/i18n/translations.js` now carries the monolith `masterKeyWords` data (translations, defaults, pathInfo). This is the source for options defaults and language fallback behavior.
+- `src/ui/i18n/dictionaries.js` builds sponsored/follow/reels dictionaries from translations; these replace ad-hoc dictionary builders in the monolith.
+- `src/core/options/hydrate.js` mirrors the monolith option-defaulting + blocked-text filter assembly (including cross-feed blocked list merging) and returns `{ options, filters, language, hideAnInfoBox, keyWords }`.
+- `src/vendor/idb-keyval.js` is the vendored UMD bundle and `src/storage/idb.js` wraps it with the monolith DB names/keys; the monolith still uses its own inline copy until Phase 3 wiring.
+- `src/dom/walker.js` contains the text/alt-text scanners and `extractTextContent`; `src/utils/dom.js` now owns `querySelectorAllNoChildren`.
+- `src/selectors/*.js` centralizes the current selector strings per feed; feed modules are still stubs and will be wired during Phase 3.
+- `src/entry/userscript.js` remains a placeholder entrypoint; build output is still `test_clean_my_feeds.user.js` with no runtime logic until Phase 3 migration completes.
 
 ## Phase 3: Feed-by-Feed Migration
 

@@ -1,0 +1,508 @@
+const { hydrateOptions } = require("../../core/options/hydrate");
+const {
+  mainColumnAtt,
+  postAtt,
+  postAttCPID,
+  postAttChildFlag,
+  postAttTab,
+} = require("../../dom/attributes");
+const { toggleHiddenElements } = require("../../dom/hide");
+const { addCSS, addExtraCSS } = require("../../dom/styles");
+const { deleteOptions, setOptions } = require("../../storage/idb");
+const { createToggleButton } = require("../controls/toggle-button");
+const { buildDictionaries } = require("../i18n/dictionaries");
+const { defaults, translations } = require("../i18n/translations");
+
+const { buildDialogSections } = require("./sections");
+
+function toggleDialog(state) {
+  const elDialog = document.getElementById("fbcmf");
+  if (!elDialog || !state) {
+    return;
+  }
+
+  if (elDialog.hasAttribute(state.showAtt)) {
+    elDialog.removeAttribute(state.showAtt);
+  } else {
+    elDialog.setAttribute(state.showAtt, "");
+  }
+}
+
+function addLegendEvents() {
+  const elFBCMF = document.getElementById("fbcmf");
+  if (elFBCMF) {
+    const legends = elFBCMF.querySelectorAll("legend");
+    legends.forEach((legend) => {
+      legend.parentElement.classList.add("cmf-hidden");
+      legend.addEventListener("click", () => {
+        legend.parentElement.classList.toggle("cmf-hidden");
+        legend.parentElement.classList.toggle("cmf-visible");
+      });
+    });
+  }
+}
+
+function updateDialog(state) {
+  const dialog = document.getElementById("fbcmf");
+  const content = dialog ? dialog.querySelector(".content") : null;
+  if (!content || !state) {
+    return;
+  }
+
+  let cbs = Array.from(content.querySelectorAll('input[type="checkbox"][cbtype="T"]'));
+  cbs.forEach((cb) => {
+    if (Object.prototype.hasOwnProperty.call(state.options, cb.name)) {
+      cb.checked = state.options[cb.name];
+    }
+  });
+  cbs = Array.from(content.querySelectorAll('input[type="checkbox"][cbtype="M"]'));
+  cbs.forEach((cb) => {
+    if (Object.prototype.hasOwnProperty.call(state.options, cb.name)) {
+      cb.checked = state.options[cb.name][parseInt(cb.value, 10)] === "1";
+    }
+  });
+
+  const rbs = content.querySelectorAll('input[type="radio"]');
+  rbs.forEach((rb) => {
+    if (Object.prototype.hasOwnProperty.call(state.options, rb.name) && rb.value === state.options[rb.name]) {
+      rb.checked = true;
+    }
+  });
+
+  const tas = Array.from(content.querySelectorAll("textarea"));
+  tas.forEach((ta) => {
+    if (Object.prototype.hasOwnProperty.call(state.options, ta.name)) {
+      ta.value = state.options[ta.name].replaceAll(state.SEP, "\n");
+    }
+  });
+
+  const inputs = Array.from(content.querySelectorAll('input[type="text"]'));
+  inputs.forEach((inp) => {
+    if (Object.prototype.hasOwnProperty.call(state.options, inp.name)) {
+      inp.value = state.options[inp.name];
+    }
+  });
+
+  const selects = Array.from(content.querySelectorAll("select"));
+  selects.forEach((select) => {
+    if (Object.prototype.hasOwnProperty.call(state.options, select.name)) {
+      for (let i = 0; i < select.options.length; i += 1) {
+        const option = select.options[i];
+        option.selected = option.value === state.options[select.name];
+      }
+    }
+  });
+}
+
+function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
+  if (!state || !keyWords || !document.body) {
+    return null;
+  }
+
+  const langEntry = translations[state.language];
+  const direction = langEntry ? langEntry.LANGUAGE_DIRECTION : "ltr";
+  let dlg;
+  let cnt;
+
+  if (!languageChanged) {
+    dlg = document.createElement("div");
+    dlg.id = "fbcmf";
+    dlg.className = "fb-cmf";
+
+    const hdr = document.createElement("header");
+    const hdr1 = document.createElement("div");
+    hdr1.className = "fb-cmf-icon";
+    hdr1.innerHTML = state.logoHTML;
+
+    const hdr2 = document.createElement("div");
+    hdr2.className = "fb-cmf-title";
+
+    const hdr3 = document.createElement("div");
+    hdr3.className = "fb-cmf-close";
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.innerHTML = state.iconClose;
+    const closeLabel = Array.isArray(keyWords.DLG_BUTTONS) ? keyWords.DLG_BUTTONS[1] : "Close";
+    btn.setAttribute("aria-label", closeLabel);
+    btn.title = closeLabel;
+    btn.addEventListener("click", () => toggleDialog(state), false);
+    hdr3.appendChild(btn);
+
+    hdr.appendChild(hdr1);
+    hdr.appendChild(hdr2);
+    hdr.appendChild(hdr3);
+    dlg.appendChild(hdr);
+
+    cnt = document.createElement("div");
+    cnt.classList.add("content");
+  } else {
+    dlg = document.getElementById("fbcmf");
+    const hdr = dlg.querySelector("header");
+    const hdr2 = hdr.querySelector(".fb-cmf-title");
+    while (hdr2.firstChild) {
+      hdr2.removeChild(hdr2.firstChild);
+    }
+    hdr2.classList.remove("fb-cmf-lang-1");
+    hdr2.classList.remove("fb-cmf-lang-2");
+
+    cnt = dlg.querySelector(".content");
+    while (cnt.firstChild) {
+      cnt.removeChild(cnt.firstChild);
+    }
+  }
+
+  dlg.setAttribute("dir", direction);
+
+  const hdr2 = dlg.querySelector(".fb-cmf-title");
+  const htxt = document.createElement("div");
+  htxt.textContent = translations.en.DLG_TITLE;
+  const s = document.createElement("small");
+  s.className = "script-version";
+  const gm = typeof globalThis !== "undefined" ? globalThis.GM : undefined;
+  const scriptVersion =
+    gm && gm.info && gm.info.script && gm.info.script.version ? gm.info.script.version : "";
+  if (scriptVersion) {
+    s.appendChild(document.createTextNode(` (${scriptVersion})`));
+  }
+  htxt.appendChild(s);
+  hdr2.appendChild(htxt);
+  if (state.language !== "en") {
+    const stxt = document.createElement("small");
+    stxt.textContent = `(${keyWords.DLG_TITLE})`;
+    hdr2.appendChild(stxt);
+    hdr2.classList.add("fb-cmf-lang-2");
+  } else {
+    hdr2.classList.add("fb-cmf-lang-1");
+  }
+
+  const sections = buildDialogSections({
+    state,
+    options: state.options,
+    keyWords,
+    translations,
+  });
+  sections.forEach((section) => cnt.appendChild(section));
+
+  if (!languageChanged) {
+    dlg.appendChild(cnt);
+
+    const footer = document.createElement("footer");
+    const buttonDefinitions = [
+      { id: "BTNSave", text: keyWords.DLG_BUTTONS[0], handler: handlers.saveUserOptions },
+      { id: "BTNExport", text: keyWords.DLG_BUTTONS[2], handler: handlers.exportUserOptions },
+      { id: "BTNImport", text: keyWords.DLG_BUTTONS[3], handler: null },
+      { id: "BTNReset", text: keyWords.DLG_BUTTONS[4], handler: handlers.resetUserOptions },
+    ];
+
+    buttonDefinitions.forEach((def) => {
+      const buttonEl = document.createElement("button");
+      buttonEl.type = "button";
+      buttonEl.setAttribute("id", def.id);
+      buttonEl.textContent = def.text;
+      if (typeof def.handler === "function") {
+        buttonEl.addEventListener("click", def.handler, false);
+      }
+      footer.appendChild(buttonEl);
+    });
+
+    const fileImport = document.createElement("input");
+    fileImport.setAttribute("type", "file");
+    fileImport.setAttribute("id", `FI${postAtt}`);
+    fileImport.classList.add("fileInput");
+    footer.appendChild(fileImport);
+    const fileResults = document.createElement("div");
+    fileResults.classList.add("fileResults");
+    fileResults.innerHTML = "&nbsp;";
+    footer.appendChild(fileResults);
+
+    dlg.appendChild(footer);
+    document.body.appendChild(dlg);
+
+    const fileInput = document.getElementById(`FI${postAtt}`);
+    fileInput.addEventListener("change", handlers.importUserOptions, false);
+    const btnImport = document.getElementById("BTNImport");
+    btnImport.addEventListener(
+      "click",
+      () => {
+        fileInput.click();
+      },
+      false
+    );
+  } else {
+    const footer = dlg.querySelector("footer");
+    let btn = footer.querySelector("#BTNSave");
+    btn.textContent = keyWords.DLG_BUTTONS[0];
+    btn = footer.querySelector("#BTNExport");
+    btn.textContent = keyWords.DLG_BUTTONS[2];
+    btn = footer.querySelector("#BTNImport");
+    btn.textContent = keyWords.DLG_BUTTONS[3];
+    btn = footer.querySelector("#BTNReset");
+    btn.textContent = keyWords.DLG_BUTTONS[4];
+    addLegendEvents();
+  }
+
+  addLegendEvents();
+  return dlg;
+}
+
+function initDialog(context, helpers) {
+  if (!context || !helpers) {
+    return null;
+  }
+
+  const { state } = context;
+  const { setFeedSettings, rerunFeeds } = helpers;
+
+  const handlers = {
+    saveUserOptions: async (event, source = "dialog") => {
+      let languageChanged = false;
+      if (source === "dialog") {
+        const md = document.getElementById("fbcmf");
+        const elLikesMaximum = md.querySelector('input[name="NF_LIKES_MAXIMUM"]');
+        if (elLikesMaximum.checked) {
+          const elLikesMaximumCount = md.querySelector('input[name="NF_LIKES_MAXIMUM_COUNT"]');
+          if (elLikesMaximumCount.value.length === 0) {
+            alert(`${context.keyWords.NF_LIKES_MAXIMUM}?`);
+            elLikesMaximumCount.focus();
+            return;
+          }
+        }
+
+        let cbs = Array.from(md.querySelectorAll('input[type="checkbox"][cbtype="T"]'));
+        cbs.forEach((cb) => {
+          state.options[cb.name] = cb.checked;
+        });
+
+        let cbName = "NF_BLOCKED_FEED";
+        cbs = Array.from(md.querySelectorAll(`input[type="checkbox"][name="${cbName}"]`));
+        cbs.forEach((cb) => {
+          state.options[cbName][parseInt(cb.value, 10)] = cb.checked ? "1" : "0";
+        });
+        cbName = "GF_BLOCKED_FEED";
+        cbs = Array.from(md.querySelectorAll(`input[type="checkbox"][name="${cbName}"]`));
+        cbs.forEach((cb) => {
+          state.options[cbName][parseInt(cb.value, 10)] = cb.checked ? "1" : "0";
+        });
+        cbName = "VF_BLOCKED_FEED";
+        cbs = Array.from(md.querySelectorAll(`input[type="checkbox"][name="${cbName}"]`));
+        cbs.forEach((cb) => {
+          state.options[cbName][parseInt(cb.value, 10)] = cb.checked ? "1" : "0";
+        });
+        cbName = "MP_BLOCKED_FEED";
+        cbs = Array.from(md.querySelectorAll(`input[type="checkbox"][name="${cbName}"]`));
+        cbs.forEach((cb) => {
+          state.options[cbName][parseInt(cb.value, 10)] = cb.checked ? "1" : "0";
+        });
+        cbName = "PP_BLOCKED_FEED";
+        cbs = Array.from(md.querySelectorAll(`input[type="checkbox"][name="${cbName}"]`));
+        cbs.forEach((cb) => {
+          state.options[cbName][parseInt(cb.value, 10)] = cb.checked ? "1" : "0";
+        });
+
+        const rbs = md.querySelectorAll('input[type="radio"]:checked');
+        rbs.forEach((rb) => {
+          state.options[rb.name] = rb.value;
+        });
+        const inputs = Array.from(md.querySelectorAll('input[type="text"]'));
+        inputs.forEach((inp) => {
+          state.options[inp.name] = inp.value;
+        });
+        const tas = md.querySelectorAll("textarea");
+        tas.forEach((ta) => {
+          const txtn = ta.value.split("\n");
+          const txts = [];
+          txtn.forEach((txt) => {
+            if (txt.trim().length > 0) {
+              txts.push(txt);
+            }
+          });
+          state.options[ta.name] = txts.join(state.SEP);
+        });
+        const selects = Array.from(md.querySelectorAll("select"));
+        selects.forEach((select) => {
+          state.options[select.name] = select.value;
+        });
+
+        languageChanged = state.language !== state.options.CMF_DIALOG_LANGUAGE;
+      } else if (source === "reset") {
+        languageChanged = true;
+      }
+
+      const md = document.getElementById("fbcmf");
+      const inputs = Array.from(md.querySelectorAll("input:not([type=\"file\"]), textarea, select"));
+      const validNames = [];
+      inputs.forEach((inp) => {
+        if (!validNames.includes(inp.name)) {
+          validNames.push(inp.name);
+        }
+      });
+      Object.keys(state.options).forEach((key) => {
+        if (!validNames.includes(key)) {
+          delete state.options[key];
+        }
+      });
+
+      await setOptions(JSON.stringify(state.options));
+
+      const siteLanguage = document.documentElement ? document.documentElement.lang : "en";
+      const hydrated = hydrateOptions(state.options, siteLanguage);
+      state.options = hydrated.options;
+      state.filters = hydrated.filters;
+      state.language = hydrated.language;
+      state.hideAnInfoBox = hydrated.hideAnInfoBox;
+      context.options = hydrated.options;
+      context.filters = hydrated.filters;
+      context.keyWords = hydrated.keyWords;
+
+      const dictionaries = buildDictionaries();
+      state.dictionarySponsored = dictionaries.dictionarySponsored;
+      state.dictionaryFollow = dictionaries.dictionaryFollow;
+      state.dictionaryReelsAndShortVideos = dictionaries.dictionaryReelsAndShortVideos;
+
+      if (languageChanged) {
+        buildDialog(context, handlers, true);
+      }
+
+      setFeedSettings(true);
+      addCSS(state, context.options, defaults);
+      addExtraCSS(state, context.options, defaults);
+
+      const elements = document.querySelectorAll(`[${mainColumnAtt}]`);
+      for (const element of elements) {
+        element.removeAttribute(mainColumnAtt);
+      }
+      toggleHiddenElements(state, context.options);
+
+      const fileResults = document.querySelector("#fbcmf .fileResults");
+      if (fileResults) {
+        fileResults.textContent = `Last Saved @ ${new Date().toTimeString().slice(0, 8)}`;
+      }
+
+      if (state.isAF) {
+        state.scanCountStart += 100;
+        state.scanCountMaxLoop += 100;
+
+        const details = document.querySelectorAll(`details[${postAtt}]`);
+        for (const element of details) {
+          const elParent = element.parentElement;
+          const elContent = element.lastElementChild;
+          if (elContent && elContent.tagName === "DIV") {
+            elParent.appendChild(elContent);
+          }
+          elParent.removeChild(element);
+        }
+
+        const miniCaptions = document.querySelectorAll(`h6[${postAttTab}]`);
+        for (const miniCaption of miniCaptions) {
+          const elParent = miniCaption.parentElement;
+          elParent.removeChild(miniCaption);
+        }
+
+        let resetElements = document.querySelectorAll(`[${postAtt}]`);
+        for (const element of resetElements) {
+          element.removeAttribute(postAtt);
+          element.removeAttribute(state.hideAtt);
+          element.removeAttribute(state.cssHideEl);
+          element.removeAttribute(state.cssHideNumberOfShares);
+          element.removeAttribute(state.showAtt);
+        }
+
+        resetElements = document.querySelectorAll(`[${postAttCPID}], [${postAttChildFlag}]`);
+        for (const element of resetElements) {
+          if (element.hasAttribute(postAttCPID)) {
+            element.removeAttribute(postAttCPID);
+          }
+          if (element.hasAttribute(postAttChildFlag)) {
+            element.removeAttribute(postAttChildFlag);
+          }
+        }
+
+        resetElements = document.querySelectorAll(
+          `[${state.hideAtt}], [${state.cssHideEl}], [${state.cssHideNumberOfShares}]`
+        );
+        for (const element of resetElements) {
+          element.removeAttribute(state.hideAtt);
+          element.removeAttribute(state.cssHideEl);
+          element.removeAttribute(state.cssHideNumberOfShares);
+          element.removeAttribute(state.showAtt);
+        }
+
+        rerunFeeds("saveUserOptions");
+      }
+    },
+    exportUserOptions: () => {
+      const exportOptions = document.createElement("a");
+      exportOptions.href = window.URL.createObjectURL(
+        new Blob([JSON.stringify(state.options)], { type: "text/plain" })
+      );
+      exportOptions.download = "fb - clean my feeds - settings.json";
+      exportOptions.click();
+      exportOptions.remove();
+      const fileResults = document.querySelector("#fbcmf .fileResults");
+      if (fileResults) {
+        fileResults.textContent = "Exported: fb - clean my feeds - settings.json";
+      }
+    },
+    importUserOptions: (event) => {
+      const fileResults = document.querySelector("#fbcmf .fileResults");
+      const file = event.target.files[0];
+      const fileName = event.target.files[0] ? event.target.files[0].name : "";
+      const reader = new FileReader();
+      reader.onload = (fileEvent) => {
+        try {
+          const fileContent = JSON.parse(fileEvent.target.result);
+          if (
+            Object.prototype.hasOwnProperty.call(fileContent, "NF_SPONSORED") &&
+            Object.prototype.hasOwnProperty.call(fileContent, "GF_SPONSORED") &&
+            Object.prototype.hasOwnProperty.call(fileContent, "VF_SPONSORED") &&
+            Object.prototype.hasOwnProperty.call(fileContent, "MP_SPONSORED")
+          ) {
+            state.options = fileContent;
+            handlers.saveUserOptions(null, "file").then(() => {
+              updateDialog(state);
+              if (fileResults) {
+                fileResults.textContent = `File imported: ${fileName}`;
+              }
+            });
+          } else if (fileResults) {
+            fileResults.textContent = `File NOT imported: ${fileName}`;
+          }
+        } catch (error) {
+          if (fileResults) {
+            fileResults.textContent = `File NOT imported: ${fileName}`;
+          }
+        }
+      };
+      reader.readAsText(file);
+    },
+    resetUserOptions: () => {
+      deleteOptions()
+        .then(() => {
+          state.options.CMF_DIALOG_LANGUAGE = "";
+          handlers.saveUserOptions(null, "reset").then(() => {
+            updateDialog(state);
+          });
+        })
+        .catch(() => null);
+    },
+  };
+
+  const runInit = () => {
+    if (document.body) {
+      createToggleButton(state, context.keyWords, () => toggleDialog(state));
+      buildDialog(context, handlers, false);
+      addLegendEvents();
+    } else {
+      setTimeout(runInit, 50);
+    }
+  };
+
+  runInit();
+  return handlers;
+}
+
+module.exports = {
+  initDialog,
+  toggleDialog,
+  updateDialog,
+};

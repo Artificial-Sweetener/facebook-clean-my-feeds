@@ -86,6 +86,97 @@ function addLegendEvents() {
   }
 }
 
+function applySearchFilter(dialog, query) {
+  if (!dialog) {
+    return;
+  }
+  const normalized = query.trim().toLowerCase();
+  const fieldsets = Array.from(dialog.querySelectorAll("fieldset"));
+  fieldsets.forEach((fieldset) => {
+    const legend = fieldset.querySelector("legend");
+    const legendText = legend ? legend.textContent.trim().toLowerCase() : "";
+    const labels = Array.from(fieldset.querySelectorAll("label"));
+    let anyMatch = false;
+    labels.forEach((label) => {
+      const labelText = label.textContent.trim().toLowerCase();
+      const matches = normalized.length === 0 || labelText.includes(normalized);
+      label.style.display = matches ? "" : "none";
+      if (matches) {
+        anyMatch = true;
+      }
+    });
+
+    const legendMatches = normalized.length === 0 || legendText.includes(normalized);
+    const showFieldset = normalized.length === 0 ? true : legendMatches || anyMatch;
+
+    if (normalized.length > 0) {
+      if (!fieldset.dataset.cmfPrevState) {
+        fieldset.dataset.cmfPrevState = fieldset.classList.contains("cmf-hidden") ? "hidden" : "visible";
+      }
+      if (showFieldset) {
+        fieldset.classList.remove("cmf-hidden");
+        fieldset.classList.add("cmf-visible");
+      }
+      fieldset.style.display = showFieldset ? "" : "none";
+    } else {
+      fieldset.style.display = "";
+      if (fieldset.dataset.cmfPrevState) {
+        const prev = fieldset.dataset.cmfPrevState;
+        fieldset.classList.remove("cmf-hidden", "cmf-visible");
+        fieldset.classList.add(prev === "hidden" ? "cmf-hidden" : "cmf-visible");
+        delete fieldset.dataset.cmfPrevState;
+      }
+    }
+  });
+}
+
+function addSearchEvents(state) {
+  const dialog = document.getElementById("fbcmf");
+  if (!dialog || dialog.dataset.cmfSearchInit === "1") {
+    return;
+  }
+  const searchInput = dialog.querySelector(".fb-cmf-search input");
+  if (!searchInput) {
+    return;
+  }
+  dialog.dataset.cmfSearchInit = "1";
+  searchInput.addEventListener("input", () => {
+    applySearchFilter(dialog, searchInput.value || "");
+  });
+  const toggleButton = state && state.btnToggleEl ? state.btnToggleEl : null;
+  if (toggleButton) {
+    toggleButton.addEventListener("click", () => {
+      if (searchInput.value) {
+        applySearchFilter(dialog, searchInput.value);
+      }
+    });
+  }
+}
+
+function updateLegendWidths(dialog) {
+  if (!dialog) {
+    return;
+  }
+  const legends = Array.from(dialog.querySelectorAll("fieldset legend"));
+  if (legends.length === 0) {
+    return;
+  }
+  const previousWidths = legends.map((legend) => legend.style.width);
+  legends.forEach((legend) => {
+    legend.style.width = "auto";
+  });
+  let maxWidth = 0;
+  legends.forEach((legend) => {
+    const rect = legend.getBoundingClientRect();
+    if (rect.width > maxWidth) {
+      maxWidth = rect.width;
+    }
+  });
+  legends.forEach((legend, index) => {
+    legend.style.width = maxWidth > 0 ? `${Math.ceil(maxWidth)}px` : previousWidths[index];
+  });
+}
+
 function updateDialog(state) {
   const dialog = document.getElementById("fbcmf");
   const content = dialog ? dialog.querySelector(".content") : null;
@@ -199,16 +290,10 @@ function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
 
   const hdr2 = dlg.querySelector(".fb-cmf-title");
   const htxt = document.createElement("div");
-  htxt.textContent = translations.en.DLG_TITLE;
-  const s = document.createElement("small");
-  s.className = "script-version";
   const gm = typeof globalThis !== "undefined" ? globalThis.GM : undefined;
   const scriptVersion =
     gm && gm.info && gm.info.script && gm.info.script.version ? gm.info.script.version : "";
-  if (scriptVersion) {
-    s.appendChild(document.createTextNode(` (${scriptVersion})`));
-  }
-  htxt.appendChild(s);
+  htxt.textContent = `${translations.en.DLG_TITLE}${scriptVersion ? ` version ${scriptVersion}` : ""}`;
   hdr2.appendChild(htxt);
   if (state.language !== "en") {
     const stxt = document.createElement("small");
@@ -225,6 +310,18 @@ function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
     keyWords,
     translations,
   });
+  const searchRow = document.createElement("div");
+  searchRow.className = "fb-cmf-search";
+  const searchIcon = document.createElement("div");
+  searchIcon.className = "fb-cmf-search-icon";
+  searchIcon.innerHTML = state.logoHTML;
+  const searchInput = document.createElement("input");
+  searchInput.type = "text";
+  searchInput.setAttribute("aria-label", "Search settings");
+  searchInput.setAttribute("placeholder", "Search settings");
+  searchRow.appendChild(searchIcon);
+  searchRow.appendChild(searchInput);
+  cnt.appendChild(searchRow);
   sections.forEach((section) => cnt.appendChild(section));
 
   if (!languageChanged) {
@@ -286,6 +383,8 @@ function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
   }
 
   addLegendEvents();
+  updateLegendWidths(dlg);
+  addSearchEvents(state);
   return dlg;
 }
 

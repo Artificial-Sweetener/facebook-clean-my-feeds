@@ -19,3 +19,4 @@ Thumbs.db
 
 *.log
 *.tmp
+tools/.icon-cache.json

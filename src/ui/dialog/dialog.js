@@ -332,7 +332,7 @@ function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
     const hdr = document.createElement("header");
     const hdr1 = document.createElement("div");
     hdr1.className = "fb-cmf-icon";
-    hdr1.innerHTML = state.logoHTML;
+    hdr1.innerHTML = state.iconDialogHeaderHTML;
 
     const hdr2 = document.createElement("div");
     hdr2.className = "fb-cmf-title";
@@ -399,7 +399,7 @@ function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
   searchRow.className = "fb-cmf-search";
   const searchIcon = document.createElement("div");
   searchIcon.className = "fb-cmf-search-icon";
-  searchIcon.innerHTML = state.logoHTML;
+  searchIcon.innerHTML = state.iconDialogSearchHTML;
   const searchInput = document.createElement("input");
   searchInput.type = "text";
   searchInput.setAttribute("aria-label", "Search settings");
@@ -417,6 +417,7 @@ function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
     mainColumn.appendChild(cnt);
 
     const footer = document.createElement("footer");
+    const dialogFooterIcons = state.dialogFooterIcons || {};
     const buttonDefinitions = [
       { id: "BTNSave", text: keyWords.DLG_BUTTONS[0], handler: handlers.saveUserOptions },
       { id: "BTNExport", text: keyWords.DLG_BUTTONS[2], handler: handlers.exportUserOptions },
@@ -431,7 +432,7 @@ function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
       buttonEl.classList.add("cmf-action");
       const iconWrap = document.createElement("span");
       iconWrap.className = "cmf-action-icon";
-      iconWrap.innerHTML = state.logoHTML;
+      iconWrap.innerHTML = dialogFooterIcons[def.id] || state.iconDialogFooterHTML;
       const textWrap = document.createElement("span");
       textWrap.className = "cmf-action-text";
       textWrap.textContent = def.text;

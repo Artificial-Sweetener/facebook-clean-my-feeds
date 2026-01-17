@@ -144,6 +144,13 @@ function addCSS(state, options, defaults) {
       "border:none; border-radius:12px; opacity:0; visibility:hidden; color:" + tColour + ";"
   );
   addToSS(state, ".fb-cmf", "background-color: var(--comment-background);");
+  addToSS(
+    state,
+    ".cmf-icon",
+    "display:inline-block; width:20px; height:20px; background-color: currentColor;" +
+      "mask-image: var(--cmf-icon-url); mask-repeat:no-repeat; mask-position:center; mask-size:contain;" +
+      "-webkit-mask-image: var(--cmf-icon-url); -webkit-mask-repeat:no-repeat; -webkit-mask-position:center; -webkit-mask-size:contain;"
+  );
 
   addToSS(
     state,
@@ -156,6 +163,7 @@ function addCSS(state, options, defaults) {
     "display:none;"
   );
   addToSS(state, ".fb-cmf header .fb-cmf-icon svg", "width:28px; height:28px; margin:0;");
+  addToSS(state, ".fb-cmf header .fb-cmf-icon .cmf-icon", "width:28px; height:28px; margin:0;");
   addToSS(
     state,
     ".fb-cmf header .fb-cmf-title",
@@ -255,6 +263,21 @@ function addCSS(state, options, defaults) {
     state,
     ".fb-cmf fieldset legend .cmf-legend-icon svg",
     "width:20px; height:20px; fill: currentColor;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf fieldset legend .cmf-legend-icon .cmf-icon",
+    "width:26px; height:26px;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf fieldset legend .cmf-legend-icon .cmf-icon--legend-report-bug",
+    "width:32px; height:32px;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf fieldset legend .cmf-legend-icon .cmf-icon--legend-reels",
+    "width:32px; height:32px;"
   );
   addToSS(
     state,
@@ -386,6 +409,11 @@ function addCSS(state, options, defaults) {
   );
   addToSS(
     state,
+    ".fb-cmf .fb-cmf-search-icon .cmf-icon",
+    "width:22px; height:22px;"
+  );
+  addToSS(
+    state,
     ".fb-cmf .fb-cmf-search input",
     "background: transparent; border: none; outline: none; color: var(--primary-text); width:100%; font-size:0.95rem;"
   );
@@ -481,6 +509,7 @@ function addExtraCSS(state, options, defaults) {
   if (styles.length > 0) {
     addToSS(state, ".fb-cmf-toggle", styles);
     addToSS(state, ".fb-cmf-toggle svg", "height: 95%; aspect-ratio : 1 / 1;");
+    addToSS(state, ".fb-cmf-toggle .cmf-icon", "height: 95%; aspect-ratio : 1 / 1;");
     addToSS(state, ".fb-cmf-toggle:hover", "cursor:pointer;");
     addToSS(state, `.fb-cmf-toggle[${state.showAtt}]`, "display:flex; align-items:center; justify-content:center;");
       addToSS(
@@ -565,6 +594,11 @@ function addExtraCSS(state, options, defaults) {
     state,
     ".fb-cmf footer .cmf-action-icon svg",
     "width:20px; height:20px; fill: currentColor;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf footer .cmf-action-icon .cmf-icon",
+    "width:32px; height:32px;"
   );
 
   if (state.tempStyleSheetCode.length > 0) {

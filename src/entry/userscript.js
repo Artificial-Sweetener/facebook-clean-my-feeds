@@ -11,15 +11,51 @@ const { mopSearchFeed } = require("../feeds/search");
 const { mopVideosFeed } = require("../feeds/videos");
 const { defaults, pathInfo } = require("../ui/i18n/translations");
 const { buildDictionaries } = require("../ui/i18n/dictionaries");
+const { buildIconHTML } = require("../ui/icon-html");
 const { initDialog, toggleDialog } = require("../ui/dialog/dialog");
 const { getOptions } = require("../storage/idb");
+const {
+  aboutIcon,
+  bugIcon,
+  exportIcon,
+  groupsIcon,
+  importIcon,
+  infoIcon,
+  marketplaceIcon,
+  mopIcon,
+  newsIcon,
+  prefIcon,
+  profileIcon,
+  reelsIcon,
+  resetIcon,
+  saveIcon,
+  searchIcon,
+  videosIcon,
+} = require("../core/assets");
 
 const ICON_CLOSE =
   '<svg viewBox="0 0 20 20" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M15.543 3.043a1 1 0 1 1 1.414 1.414L11.414 10l5.543 5.542a1 1 0 0 1-1.414 1.415L10 11.414l-5.543 5.543a1 1 0 0 1-1.414-1.415L8.586 10 3.043 4.457a1 1 0 1 1 1.414-1.414L10 8.586z"/></svg>';
-const LOGO_HTML =
-  '<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="32" height="32"><g id="Layer" fill="currentColor"><path id="Layer" fill-rule="evenodd" class="s0" d="m51 3.2c0.7 1.1 0.7 1-1.6 9.2-1.4 5-2.1 7.4-2.3 7.6-0.1 0.1-0.3 0.2-0.6 0.2-0.4 0-0.9-0.4-0.9-0.7 0-0.1 1-3.5 2-7.4 1.2-4 2-7.3 2-7.5 0-0.4-0.6-1-0.9-1-0.2 0-0.5 0.2-0.7 0.3-0.3 0.3-0.7 1.8-5.5 19.2l-5.3 18.9 0.9 0.5c0.5 0.3 0.9 0.5 0.9 0.5 0 0 1.3-4.4 2.8-9.8 1.5-5.3 2.8-10 2.8-10.3 0.2-0.5 0.3-0.7 0.6-0.9 0.3-0.1 0.4-0.1 0.8 0 0.2 0.2 0.4 0.3 0.4 0.5 0.1 0.2-0.4 2.2-1.5 6.1-0.9 3.2-1.6 5.8-1.6 5.9 0 0 0.5 0.1 1.3 0.1 1.9 0 2.7 0.4 3.2 1.5 0.3 0.6 0.3 2.7 0 3.4-0.3 0.9-1.2 1.4-2 1.4-0.3 0-0.5 0.1-0.5 0.1 0 0.2-2.3 20.2-2.3 20.4-0.2 0.8 0.7 0.7-14.1 0.7-15.3 0-14.3 0.1-15.3-1-0.8-0.8-1.1-1.5-1-2.9 0.2-3.6 2.7-6.7 6.3-7.8 0.4-0.2 0.9-0.3 1-0.3 0.6 0 0.6 0.1 0.1-4.5-0.3-2.4-0.5-4.4-0.5-4.5-0.1-0.1-0.3-0.1-0.7-0.2-0.6 0-1.1-0.3-1.6-1-0.3-0.4-0.3-0.5-0.4-1.8 0-1.7 0.1-2.1 0.6-2.7 0.7-0.6 1-0.7 2.5-0.8h1.3v-2.9c0-3.1 0-3.4 0.6-3.6 0.2-0.1 2.4-0.1 7.1-0.1 6.5 0.1 6.9 0.1 7.1 0.3 0.2 0.2 0.2 0.3 0.2 3.3v3h0.6l0.6-0.1 4.3-15.3c2.4-8.5 4.4-15.6 4.5-15.9 0.4-0.6 0.9-1 1.5-1.3 1.2-0.4 2.6 0.1 3.3 1.2zm-26.6 26.6h-0.7c-0.3 0-0.6 0-0.7 0 0 0.1-0.1 1.2-0.1 2.5v2.3h1.5zm3.4 0h-0.7c-0.5 0-0.9 0-0.9 0.1 0 0-0.1 1.1-0.1 2.4v2.3h1.8v-2.4zm3.4 0h-1.6v4.8h1.6zm3.2 0h-1.3v4.8h1.3zm-6.4 6.6c-7.9 0-9 0-9.2 0.2-0.3 0.2-0.3 0.3-0.3 1.3 0 0.7 0.1 1.1 0.2 1.2 0.1 0.1 2.3 0.1 7.3 0.1 6.9 0.1 7.2 0.1 7.5 0.3 0.3 0.3 0.3 1 0 1.3-0.2 0.2-0.8 0.2-6.3 0.2h-6l0.1 0.5c0 0.3 0.2 2.3 0.5 4.5l0.4 4h0.4c0.6 0 1.5-0.3 2-0.7 0.3-0.3 0.7-0.8 0.9-1.3 0.6-1.1 1.3-2 2.1-2.7 1.1-0.9 2.8-1.5 4-1.5h0.6l0.7-1.1c0.6-1 0.8-1.2 1.3-1.5 0.4-0.2 0.6-0.2 0.9-0.2 0.4 0.1 0.5 0.1 0.5-0.1 0.1-0.1 0.3-1.1 0.6-2.1 0.3-1.1 0.6-2.1 0.6-2.2 0.1-0.2-0.4-0.2-8.8-0.2zm16.2 0h-1.5l-0.4 1.3c-0.2 0.8-0.4 1.4-0.4 1.5 0 0 0.9 0 2 0 2.3 0 2.3 0.1 2.3-1.4 0-0.9-0.1-1-0.3-1.2-0.2-0.2-0.6-0.2-1.7-0.2zm-2.8 4.7c0 0.1-0.2 0.8-0.5 1.6-0.2 1-0.3 1.4-0.2 1.5 0 0 0.3 0.2 0.6 0.4 0.4 0.4 0.4 0.5 0.5 1.2 0 0.6 0 0.7-0.8 2-0.7 1.1-0.8 1.3-1.3 1.6l-0.5 0.2v1.8c0 1.3-0.1 2-0.2 2.5-0.1 0.4-0.2 0.8-0.2 0.8 0 0 0.7 0.1 1.5 0.1 1.2 0 1.6-0.1 1.6-0.2 0-0.1 0.4-3.1 0.8-6.8 0.4-3.6 0.7-6.7 0.7-6.7-0.1-0.2-1.9-0.1-2 0zm-6.3 1.8c-0.2-0.1-0.3 0-0.9 1-0.2 0.4-0.4 0.8-0.3 0.8 0 0.1 1.1 0.7 2.3 1.5 1.3 0.7 2.4 1.4 2.5 1.5 0.3 0.1 0.3 0.1 0.8-0.8 0.3-0.6 0.6-1 0.5-1 0 0-1.1-0.7-2.4-1.5-1.3-0.8-2.4-1.4-2.5-1.5zm-4.5 2.8c-1.6 0.5-2.7 1.5-3.5 3.1-0.6 1.2-1.3 2-2.4 2.5-0.9 0.4-0.9 0.4-2.9 0.5-2.8 0.1-3.9 0.6-5.4 2.1-0.8 0.8-1 1.1-1.4 1.9-1 2.2-0.9 4 0.2 4.4 0.7 0.3 0.8 0.3 1-0.5 0.8-2.4 2.7-4.5 5.1-5.5 1.1-0.4 1.6-0.5 3.2-0.6 2-0.2 2.8-0.7 3.4-2.2 0.3-0.5 0.6-1.2 0.8-1.6 0.8-1.3 2.4-2.5 3.8-2.9 0.4-0.1 0.8-0.2 0.8-0.2q0.2-0.1-0.3-0.4c-0.3-0.2-0.6-0.4-0.6-0.5-0.1-0.3-1.1-0.3-1.8-0.1zm3.2 2.7c-0.9 0.2-2 0.8-2.8 1.5-0.7 0.6-0.8 0.9-1.6 2.6-0.7 1.5-2.2 2.5-3.9 2.7-3.4 0.4-4.3 0.8-5.8 2.2-0.7 0.8-1 1.2-1.4 1.9l-0.5 1 0.9 0.1c0.9 0 0.9 0 1.2-0.4q2.7-3.2 7.3-3.2c2.2 0 2.9-0.5 3.9-2.3 0.3-0.5 0.7-1.2 0.9-1.5 1-1.2 3-2.3 4.6-2.4l0.8-0.1-0.1-0.5c-0.1-0.8-0.3-1.2-0.9-1.4-0.7-0.2-1.9-0.3-2.6-0.2zm3.6 3.9h-0.4c-0.5 0-1.6 0.3-2.3 0.7-0.7 0.5-1.6 1.5-2.2 2.6-1.1 2.1-2.5 2.9-5.2 2.9-0.6 0-1.6 0.1-2 0.2-1 0.2-2.3 0.8-2.9 1.3l-0.4 0.4h4.1c4.6-0.1 4.7-0.1 6.5-1 0.9-0.5 1.3-0.7 2.2-1.6 1.4-1.4 2.2-3 2.5-4.9zm4.3 4.2h-1.9-1.8l-0.5 0.8c-0.6 0.9-1.5 1.9-2.4 2.6l-0.6 0.5h3.4c2.6 0 3.4 0 3.4-0.1 0-0.1 0.1-1 0.2-2z"/></g></svg>';
 const ICON_NEW_WINDOW =
   '<svg width="16" height="16" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link"><title>Open post in a new window</title><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>';
+const ICON_TOGGLE_HTML = buildIconHTML(mopIcon, "cmf-icon--toggle");
+const ICON_DIALOG_HEADER_HTML = buildIconHTML(mopIcon, "cmf-icon--dialog-header");
+const ICON_DIALOG_SEARCH_HTML = buildIconHTML(searchIcon, "cmf-icon--dialog-search");
+const ICON_DIALOG_FOOTER_HTML = buildIconHTML(mopIcon, "cmf-icon--dialog-footer");
+const ICON_LEGEND_HTML = buildIconHTML(mopIcon, "cmf-icon--legend");
+const ICON_FOOTER_SAVE_HTML = buildIconHTML(saveIcon, "cmf-icon--footer-save");
+const ICON_FOOTER_EXPORT_HTML = buildIconHTML(exportIcon, "cmf-icon--footer-export");
+const ICON_FOOTER_IMPORT_HTML = buildIconHTML(importIcon, "cmf-icon--footer-import");
+const ICON_FOOTER_RESET_HTML = buildIconHTML(resetIcon, "cmf-icon--footer-reset");
+const ICON_LEGEND_NEWS_HTML = buildIconHTML(newsIcon, "cmf-icon--legend-news");
+const ICON_LEGEND_GROUPS_HTML = buildIconHTML(groupsIcon, "cmf-icon--legend-groups");
+const ICON_LEGEND_MARKETPLACE_HTML = buildIconHTML(marketplaceIcon, "cmf-icon--legend-marketplace");
+const ICON_LEGEND_VIDEOS_HTML = buildIconHTML(videosIcon, "cmf-icon--legend-videos");
+const ICON_LEGEND_PROFILE_HTML = buildIconHTML(profileIcon, "cmf-icon--legend-profile");
+const ICON_LEGEND_OTHER_HTML = buildIconHTML(infoIcon, "cmf-icon--legend-other");
+const ICON_LEGEND_REELS_HTML = buildIconHTML(reelsIcon, "cmf-icon--legend-reels");
+const ICON_LEGEND_PREFERENCES_HTML = buildIconHTML(prefIcon, "cmf-icon--legend-preferences");
+const ICON_LEGEND_REPORT_BUG_HTML = buildIconHTML(bugIcon, "cmf-icon--legend-report-bug");
+const ICON_LEGEND_TIPS_HTML = buildIconHTML(aboutIcon, "cmf-icon--legend-tips");
 
 async function loadOptions(state) {
   const rawOptions = await getOptions();
@@ -244,7 +280,29 @@ function startLoop(state, options, filters, keyWords, context) {
 async function startUserscript() {
   const state = createState();
   state.iconClose = ICON_CLOSE;
-  state.logoHTML = LOGO_HTML;
+  state.iconToggleHTML = ICON_TOGGLE_HTML;
+  state.iconDialogHeaderHTML = ICON_DIALOG_HEADER_HTML;
+  state.iconDialogSearchHTML = ICON_DIALOG_SEARCH_HTML;
+  state.iconDialogFooterHTML = ICON_DIALOG_FOOTER_HTML;
+  state.iconLegendHTML = ICON_LEGEND_HTML;
+  state.dialogSectionIcons = {
+    DLG_NF: ICON_LEGEND_NEWS_HTML,
+    DLG_GF: ICON_LEGEND_GROUPS_HTML,
+    DLG_MP: ICON_LEGEND_MARKETPLACE_HTML,
+    DLG_VF: ICON_LEGEND_VIDEOS_HTML,
+    DLG_PP: ICON_LEGEND_PROFILE_HTML,
+    DLG_OTHER: ICON_LEGEND_OTHER_HTML,
+    REELS_TITLE: ICON_LEGEND_REELS_HTML,
+    DLG_PREFERENCES: ICON_LEGEND_PREFERENCES_HTML,
+    DLG_REPORT_BUG: ICON_LEGEND_REPORT_BUG_HTML,
+    DLG_TIPS: ICON_LEGEND_TIPS_HTML,
+  };
+  state.dialogFooterIcons = {
+    BTNSave: ICON_FOOTER_SAVE_HTML,
+    BTNExport: ICON_FOOTER_EXPORT_HTML,
+    BTNImport: ICON_FOOTER_IMPORT_HTML,
+    BTNReset: ICON_FOOTER_RESET_HTML,
+  };
   state.iconNewWindow = ICON_NEW_WINDOW;
   const unsafeWindowRef =
     typeof globalThis !== "undefined" ? globalThis.unsafeWindow : undefined;

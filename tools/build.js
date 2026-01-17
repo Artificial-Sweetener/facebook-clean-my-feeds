@@ -16,6 +16,9 @@ esbuild
     format: "iife",
     platform: "browser",
     target: ["es2018"],
+    loader: {
+      ".png": "dataurl",
+    },
     banner: {
       js: banner,
     },

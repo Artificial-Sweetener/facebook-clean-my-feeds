@@ -158,7 +158,7 @@ function getKeyword(keyWords, translations, key) {
   return fallback;
 }
 
-function createLegend(state, title, subtitle) {
+function createLegend(state, title, subtitle, iconHTML = "") {
   const legend = document.createElement("legend");
   legend.classList.add("cmf-legend");
   if (title) {
@@ -170,7 +170,7 @@ function createLegend(state, title, subtitle) {
 
   const iconWrap = document.createElement("span");
   iconWrap.className = "cmf-legend-icon";
-  iconWrap.innerHTML = state.logoHTML;
+  iconWrap.innerHTML = iconHTML || state.iconLegendHTML;
 
   const textWrap = document.createElement("span");
   textWrap.className = "cmf-legend-text";
@@ -192,12 +192,15 @@ function createLegend(state, title, subtitle) {
 
 function buildDialogSections({ state, options, keyWords, translations }) {
   const sections = [];
+  const dialogSectionIcons = state.dialogSectionIcons || {};
+  const iconFor = (key) => dialogSectionIcons[key] || state.iconLegendHTML;
 
   let fs = document.createElement("fieldset");
   let l = createLegend(
     state,
     getKeyword(keyWords, translations, "DLG_NF"),
-    getKeyword(keyWords, translations, "DLG_NF_DESC")
+    getKeyword(keyWords, translations, "DLG_NF_DESC"),
+    iconFor("DLG_NF")
   );
   fs.appendChild(l);
   fs.appendChild(createSingleCB(keyWords, options, "NF_SPONSORED", false));
@@ -231,7 +234,8 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   l = createLegend(
     state,
     getKeyword(keyWords, translations, "DLG_GF"),
-    getKeyword(keyWords, translations, "DLG_GF_DESC")
+    getKeyword(keyWords, translations, "DLG_GF_DESC"),
+    iconFor("DLG_GF")
   );
   fs.appendChild(l);
   fs.appendChild(createSingleCB(keyWords, options, "GF_SPONSORED", false));
@@ -259,7 +263,8 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   l = createLegend(
     state,
     getKeyword(keyWords, translations, "DLG_MP"),
-    getKeyword(keyWords, translations, "DLG_MP_DESC")
+    getKeyword(keyWords, translations, "DLG_MP_DESC"),
+    iconFor("DLG_MP")
   );
   fs.appendChild(l);
   fs.appendChild(createSingleCB(keyWords, options, "MP_SPONSORED", false));
@@ -295,7 +300,8 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   l = createLegend(
     state,
     getKeyword(keyWords, translations, "DLG_VF"),
-    getKeyword(keyWords, translations, "DLG_VF_DESC")
+    getKeyword(keyWords, translations, "DLG_VF_DESC"),
+    iconFor("DLG_VF")
   );
   fs.appendChild(l);
   fs.appendChild(createSingleCB(keyWords, options, "VF_SPONSORED", false));
@@ -323,7 +329,8 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   l = createLegend(
     state,
     getKeyword(keyWords, translations, "DLG_PP"),
-    getKeyword(keyWords, translations, "DLG_PP_DESC")
+    getKeyword(keyWords, translations, "DLG_PP_DESC"),
+    iconFor("DLG_PP")
   );
   fs.appendChild(l);
   Object.keys(keyWords).forEach((key) => {
@@ -350,7 +357,8 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   l = createLegend(
     state,
     getKeyword(keyWords, translations, "DLG_OTHER"),
-    getKeyword(keyWords, translations, "DLG_OTHER_DESC")
+    getKeyword(keyWords, translations, "DLG_OTHER_DESC"),
+    iconFor("DLG_OTHER")
   );
   fs.appendChild(l);
   Object.keys(keyWords).forEach((key) => {
@@ -364,7 +372,8 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   l = createLegend(
     state,
     getKeyword(keyWords, translations, "REELS_TITLE"),
-    getKeyword(keyWords, translations, "DLG_REELS_DESC")
+    getKeyword(keyWords, translations, "DLG_REELS_DESC"),
+    iconFor("REELS_TITLE")
   );
   fs.appendChild(l);
   fs.appendChild(createSingleCB(keyWords, options, "REELS_CONTROLS"), false);
@@ -375,7 +384,8 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   l = createLegend(
     state,
     getKeyword(keyWords, translations, "DLG_PREFERENCES"),
-    getKeyword(keyWords, translations, "DLG_PREFERENCES_DESC")
+    getKeyword(keyWords, translations, "DLG_PREFERENCES_DESC"),
+    iconFor("DLG_PREFERENCES")
   );
   fs.appendChild(l);
   s = document.createElement("span");
@@ -409,7 +419,8 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   l = createLegend(
     state,
     getKeyword(keyWords, translations, "DLG_REPORT_BUG"),
-    getKeyword(keyWords, translations, "DLG_REPORT_BUG_DESC")
+    getKeyword(keyWords, translations, "DLG_REPORT_BUG_DESC"),
+    iconFor("DLG_REPORT_BUG")
   );
   fs.appendChild(l);
   s = document.createElement("span");
@@ -447,7 +458,8 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   l = createLegend(
     state,
     getKeyword(keyWords, translations, "DLG_TIPS"),
-    getKeyword(keyWords, translations, "DLG_TIPS_DESC")
+    getKeyword(keyWords, translations, "DLG_TIPS_DESC"),
+    iconFor("DLG_TIPS")
   );
   fs.appendChild(l);
   s = document.createElement("span");

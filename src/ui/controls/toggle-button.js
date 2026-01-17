@@ -11,7 +11,7 @@ function createToggleButton(state, keyWords, onToggle) {
     state.options && state.options.CMF_BTN_OPTION ? state.options.CMF_BTN_OPTION.toString() : "0";
   const useTopRight = btnLocation === "1";
   const btn = document.createElement(useTopRight ? "div" : "button");
-  btn.innerHTML = state.logoHTML;
+  btn.innerHTML = state.iconToggleHTML;
   btn.id = "fbcmfToggle";
   btn.title = keyWords.DLG_TITLE;
   btn.className = "fb-cmf-toggle fb-cmf-icon";
@@ -105,12 +105,14 @@ function createToggleButton(state, keyWords, onToggle) {
       btn.style.setProperty("--cmf-active-icon", accent);
     }
     btn.style.color = "";
-    const svg = btn.querySelector("svg");
-    if (svg) {
-      svg.style.fill = "currentColor";
+    const icon = btn.querySelector("svg, .cmf-icon");
+    if (icon) {
+      if (icon.tagName && icon.tagName.toLowerCase() === "svg") {
+        icon.style.fill = "currentColor";
+      }
       if (iconStyle && iconStyle.width && iconStyle.height) {
-        svg.style.width = iconStyle.width;
-        svg.style.height = iconStyle.height;
+        icon.style.width = iconStyle.width;
+        icon.style.height = iconStyle.height;
       }
     }
 

@@ -2,12 +2,25 @@ const fs = require("fs");
 const path = require("path");
 
 const metadataPath = path.join(__dirname, "..", "src", "entry", "metadata.user.js");
+const packagePath = path.join(__dirname, "..", "package.json");
 
 function loadBanner() {
   try {
-    const content = fs.readFileSync(metadataPath, "utf8");
+    const pkg = JSON.parse(fs.readFileSync(packagePath, "utf8"));
+    const version = pkg.version;
+
+    let content = fs.readFileSync(metadataPath, "utf8");
+
+    // Replace @version
+    content = content.replace(/\/\/ @version\s+.*/, `// @version      ${version}`);
+
+    // Replace version in @name (e.g. "Name (5.07)" or "Name (VERSION)")
+    // Matches @name followed by whitespaces, then the name part, then the version in parens
+    content = content.replace(/(\/\/ @name\s+.*?)\s*\(.*?\)/, `$1 (${version})`);
+
     return content.trim().length > 0 ? `${content.trim()}\n` : "";
   } catch (error) {
+    console.error("Error loading banner:", error);
     return "";
   }
 }

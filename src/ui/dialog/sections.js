@@ -190,6 +190,73 @@ function createLegend(state, title, subtitle, iconHTML = "") {
   return legend;
 }
 
+function createTipsContent(keyWords, translations) {
+  const wrap = document.createElement("div");
+  wrap.className = "cmf-tips-content";
+
+  const tipsText = getKeyword(keyWords, translations, "DLG_TIPS_CONTENT");
+  if (tipsText) {
+    const p = document.createElement("p");
+    p.textContent = tipsText;
+    wrap.appendChild(p);
+  }
+
+  const maintainerText = getKeyword(keyWords, translations, "DLG_TIPS_MAINTAINER");
+  if (maintainerText) {
+    const p = document.createElement("p");
+    const prefixText = getKeyword(keyWords, translations, "DLG_TIPS_MAINTAINER_PREFIX");
+    if (prefixText) {
+      const prefix = document.createElement("strong");
+      prefix.textContent = prefixText;
+      p.appendChild(prefix);
+      p.appendChild(document.createTextNode(` ${maintainerText}`));
+    } else {
+      p.textContent = maintainerText;
+    }
+    wrap.appendChild(p);
+  }
+
+  const links = [
+    {
+      href: "https://github.com/Artificial-Sweetener/facebook-clean-my-feeds",
+      label: getKeyword(keyWords, translations, "DLG_TIPS_LINK_REPO"),
+    },
+    {
+      href: "https://www.facebook.com/artificialsweetenerai",
+      label: getKeyword(keyWords, translations, "DLG_TIPS_LINK_FACEBOOK"),
+    },
+    {
+      href: "https://artificialsweetener.ai",
+      label: getKeyword(keyWords, translations, "DLG_TIPS_LINK_SITE"),
+    },
+  ];
+  const linkItems = links.filter((link) => link.label);
+  if (linkItems.length > 0) {
+    const p = document.createElement("p");
+    linkItems.forEach((link, index) => {
+      const anchor = document.createElement("a");
+      anchor.href = link.href;
+      anchor.target = "_blank";
+      anchor.rel = "noopener noreferrer";
+      anchor.textContent = link.label;
+      p.appendChild(anchor);
+      if (index < linkItems.length - 1) {
+        p.appendChild(document.createTextNode(" | "));
+      }
+    });
+    wrap.appendChild(p);
+  }
+
+  const thanksText = getKeyword(keyWords, translations, "DLG_TIPS_THANKS");
+  if (thanksText) {
+    const p = document.createElement("p");
+    p.textContent = thanksText;
+    wrap.appendChild(p);
+  }
+
+  return wrap;
+}
+
 function buildDialogSections({ state, options, keyWords, translations }) {
   const sections = [];
   const dialogSectionIcons = state.dialogSectionIcons || {};
@@ -389,6 +456,7 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   );
   fs.appendChild(l);
   s = document.createElement("span");
+  s.className = "cmf-tips-content";
   s.appendChild(document.createTextNode(`${keyWords.DLG_VERBOSITY_CAPTION}:`));
   fs.appendChild(s);
   fs.appendChild(createRB(options, "VERBOSITY_LEVEL", "0", `${keyWords.VERBOSITY_MESSAGE[0]}`));
@@ -462,9 +530,7 @@ function buildDialogSections({ state, options, keyWords, translations }) {
     iconFor("DLG_TIPS")
   );
   fs.appendChild(l);
-  s = document.createElement("span");
-  s.appendChild(document.createTextNode(keyWords.DLG_TIPS_CONTENT));
-  fs.appendChild(s);
+  fs.appendChild(createTipsContent(keyWords, translations));
   sections.push(fs);
 
   return sections;

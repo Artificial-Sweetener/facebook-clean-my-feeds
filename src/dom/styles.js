@@ -393,6 +393,21 @@ function addCSS(state, options, defaults) {
   );
   addToSS(
     state,
+    ".fb-cmf .cmf-tips-content p",
+    "margin:0.35rem 0 0.15rem 0; color: var(--secondary-text);"
+  );
+  addToSS(
+    state,
+    ".fb-cmf .cmf-tips-content a",
+    "color:#4fa3ff; text-decoration: underline;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf .cmf-tips-content a:hover",
+    "color:#7bbcff;"
+  );
+  addToSS(
+    state,
     ".fb-cmf .fb-cmf-search",
     "display:flex; align-items:center; gap:0.5rem; padding:0.35rem 0.5rem; margin:0 0 0.5rem 0;" +
       "border-radius:999px; background-color: var(--comment-background);"

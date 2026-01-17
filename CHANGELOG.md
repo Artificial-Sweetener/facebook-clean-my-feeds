@@ -1,5 +1,17 @@
 # Changelog
 
+### v6.0.0 - January 2026
+
+- Fully modularized the source tree to separate core logic, feeds, DOM helpers, UI, and storage.
+- Rebuilt the settings dialog with refreshed menus, labels, animations, and feedback.
+- Added diagnostics tooling for bug reports and expanded UI controls.
+- Improved topbar toggle positioning, styling, and menu sync behavior.
+- Added localization verification tooling and expanded translation coverage.
+- Introduced build tooling for icon optimization and userscript banner syncing.
+- Added automated release workflow (semantic-release) and Conventional Commit guidance.
+- Added a Jest test suite with expanded UI coverage.
+- Updated tooltips and UI styling to respond to light/dark theme changes.
+
 ### v5.07 - December 2025
 
 - Deferred mutation observer until `document.documentElement` is present to avoid Firefox race condition.

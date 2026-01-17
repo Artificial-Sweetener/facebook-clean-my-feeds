@@ -234,6 +234,29 @@ function closeDialogIfOpen(state) {
   }
 }
 
+function shouldShowHeaderClose(state) {
+  const btnLocation =
+    state && state.options && state.options.CMF_BTN_OPTION
+      ? state.options.CMF_BTN_OPTION.toString()
+      : "0";
+  return btnLocation !== "1";
+}
+
+function updateHeaderCloseVisibility(dialog, state) {
+  if (!dialog || !state) {
+    return;
+  }
+  const closeWrap = dialog.querySelector(".fb-cmf-close");
+  if (!closeWrap) {
+    return;
+  }
+  if (shouldShowHeaderClose(state)) {
+    closeWrap.removeAttribute("hidden");
+  } else {
+    closeWrap.setAttribute("hidden", "");
+  }
+}
+
 function getTopbarMenuButtons() {
   const banner = document.querySelector('[role="banner"]');
   if (!banner) {
@@ -250,7 +273,9 @@ function getTopbarMenuButtons() {
       normalized === "menu" ||
       normalized === "messenger" ||
       normalized === "messages" ||
-      normalized.startsWith("notifications");
+      normalized.startsWith("notifications") ||
+      normalized === "your profile" ||
+      normalized === "account";
     if (!isTopbarMenu) {
       return false;
     }
@@ -273,7 +298,9 @@ function isTopbarMenuButton(element) {
     normalized === "menu" ||
     normalized === "messenger" ||
     normalized === "messages" ||
-    normalized.startsWith("notifications");
+    normalized.startsWith("notifications") ||
+    normalized === "your profile" ||
+    normalized === "account";
   if (!isTopbarMenu) {
     return false;
   }
@@ -293,6 +320,41 @@ function closeFacebookMenus(exceptButton) {
       button.click();
     }
   });
+}
+
+function setupOutsideClickClose(state) {
+  if (!state || state.cmfOutsideClickInit) {
+    return;
+  }
+  state.cmfOutsideClickInit = true;
+
+  const isEventInside = (event, element) => {
+    if (!element) {
+      return false;
+    }
+    const path = typeof event.composedPath === "function" ? event.composedPath() : [];
+    if (path.includes(element)) {
+      return true;
+    }
+    const target = event.target instanceof Element ? event.target : null;
+    return target ? element.contains(target) : false;
+  };
+
+  const onOutsideActivate = (event) => {
+    const dialog = document.getElementById("fbcmf");
+    if (!dialog || !dialog.hasAttribute(state.showAtt)) {
+      return;
+    }
+    if (isEventInside(event, dialog)) {
+      return;
+    }
+    if (isEventInside(event, state.btnToggleEl)) {
+      return;
+    }
+    closeDialogIfOpen(state);
+  };
+
+  document.addEventListener("pointerdown", onOutsideActivate, true);
 }
 
 function setupTopbarMenuSync(state) {
@@ -710,6 +772,7 @@ function updateDialog(state) {
     }
   });
 
+  updateHeaderCloseVisibility(dialog, state);
   syncSaveButtonState(state);
 }
 
@@ -751,6 +814,7 @@ function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
     hdr.appendChild(hdr2);
     hdr.appendChild(hdr3);
     dlg.appendChild(hdr);
+    updateHeaderCloseVisibility(dlg, state);
 
     cnt = document.createElement("div");
     cnt.classList.add("content");
@@ -768,6 +832,7 @@ function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
     while (cnt.firstChild) {
       cnt.removeChild(cnt.firstChild);
     }
+    updateHeaderCloseVisibility(dlg, state);
   }
 
   dlg.setAttribute("dir", direction);
@@ -1037,6 +1102,7 @@ function initDialog(context, helpers) {
       setFeedSettings(true);
       addCSS(state, context.options, defaults);
       addExtraCSS(state, context.options, defaults);
+      updateHeaderCloseVisibility(document.getElementById("fbcmf"), state);
 
       const elements = document.querySelectorAll(`[${mainColumnAtt}]`);
       for (const element of elements) {
@@ -1169,6 +1235,7 @@ function initDialog(context, helpers) {
         }
       }
       setupTopbarMenuSync(state);
+      setupOutsideClickClose(state);
     } else {
       setTimeout(runInit, 50);
     }

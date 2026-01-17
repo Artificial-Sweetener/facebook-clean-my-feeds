@@ -94,7 +94,9 @@ function applySearchFilter(dialog, query) {
   const fieldsets = Array.from(dialog.querySelectorAll("fieldset"));
   fieldsets.forEach((fieldset) => {
     const legend = fieldset.querySelector("legend");
-    const legendText = legend ? legend.textContent.trim().toLowerCase() : "";
+    const legendText = legend
+      ? (legend.dataset.cmfTitle || legend.textContent).trim().toLowerCase()
+      : "";
     const labels = Array.from(fieldset.querySelectorAll("label"));
     let anyMatch = false;
     labels.forEach((label) => {
@@ -159,6 +161,13 @@ function updateLegendWidths(dialog) {
   }
   const legends = Array.from(dialog.querySelectorAll("fieldset legend"));
   if (legends.length === 0) {
+    return;
+  }
+  const usesMenuLegend = legends.some((legend) => legend.classList.contains("cmf-legend"));
+  if (usesMenuLegend) {
+    legends.forEach((legend) => {
+      legend.style.width = "";
+    });
     return;
   }
   const previousWidths = legends.map((legend) => legend.style.width);
@@ -325,7 +334,11 @@ function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
   sections.forEach((section) => cnt.appendChild(section));
 
   if (!languageChanged) {
-    dlg.appendChild(cnt);
+    const body = document.createElement("div");
+    body.className = "fb-cmf-body";
+    const mainColumn = document.createElement("div");
+    mainColumn.className = "fb-cmf-main";
+    mainColumn.appendChild(cnt);
 
     const footer = document.createElement("footer");
     const buttonDefinitions = [
@@ -339,7 +352,15 @@ function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
       const buttonEl = document.createElement("button");
       buttonEl.type = "button";
       buttonEl.setAttribute("id", def.id);
-      buttonEl.textContent = def.text;
+      buttonEl.classList.add("cmf-action");
+      const iconWrap = document.createElement("span");
+      iconWrap.className = "cmf-action-icon";
+      iconWrap.innerHTML = state.logoHTML;
+      const textWrap = document.createElement("span");
+      textWrap.className = "cmf-action-text";
+      textWrap.textContent = def.text;
+      buttonEl.appendChild(iconWrap);
+      buttonEl.appendChild(textWrap);
       if (typeof def.handler === "function") {
         buttonEl.addEventListener("click", def.handler, false);
       }
@@ -355,8 +376,13 @@ function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
     fileResults.classList.add("fileResults");
     fileResults.innerHTML = "&nbsp;";
     footer.appendChild(fileResults);
+    const sideColumn = document.createElement("div");
+    sideColumn.className = "fb-cmf-side";
+    sideColumn.appendChild(footer);
 
-    dlg.appendChild(footer);
+    body.appendChild(mainColumn);
+    body.appendChild(sideColumn);
+    dlg.appendChild(body);
     document.body.appendChild(dlg);
 
     const fileInput = document.getElementById(`FI${postAtt}`);

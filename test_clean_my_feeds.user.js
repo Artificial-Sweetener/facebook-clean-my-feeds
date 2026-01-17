@@ -81,15 +81,22 @@
             OTHER_INFO_BOX_CLIMATE_SCIENCE: "Climate Science (information box)",
             OTHER_INFO_BOX_SUBSCRIBE: "Subscribe (information box)",
             REELS_TITLE: "Reels",
+            DLG_REELS_DESC: "Playback controls and looping.",
             REELS_CONTROLS: "Show video controls",
             REELS_DISABLE_LOOPING: "Disable looping",
             DLG_TITLE: "Clean My Feeds",
             DLG_NF: "News Feed",
+            DLG_NF_DESC: "Clean up suggestions and set how strict the feed feels.",
             DLG_GF: "Groups Feed",
+            DLG_GF_DESC: "Tidy group feeds by trimming extras and noisy bits.",
             DLG_VF: "Videos Feed",
+            DLG_VF_DESC: "Keep video feeds focused by reducing repeats and clutter.",
             DLG_MP: "Marketplace Feed",
+            DLG_MP_DESC: "Filter listings by price and words you care about.",
             DLG_PP: "Profile / Page",
-            DLG_OTHER: "Supplementary / information section",
+            DLG_PP_DESC: "Tune what shows on profiles and pages.",
+            DLG_OTHER: "Supplementary Notes",
+            DLG_OTHER_DESC: "Hide extra boxes you don\u2019t want.",
             DLG_BLOCK_TEXT_FILTER_TITLE: "Text filter",
             DLG_BLOCK_NEW_LINE: "(Separate words or phrases with a line break, Regular Expressions are supported)",
             NF_BLOCKED_ENABLED: "Enabled",
@@ -103,6 +110,8 @@
             MP_BLOCKED_RE: "Regular Expressions (RegExp)",
             PP_BLOCKED_RE: "Regular Expressions (RegExp)",
             DLG_VERBOSITY: "Options for Hidden Posts",
+            DLG_PREFERENCES: "Preferences",
+            DLG_PREFERENCES_DESC: "Labels, placement, colors, and language.",
             DLG_VERBOSITY_CAPTION: "Show a label if a post is hidden",
             VERBOSITY_MESSAGE: ["no label", "Post hidden. Rule: ", " posts hidden", "7 posts hidden ~ (Groups Feed only)"],
             VERBOSITY_MESSAGE_COLOUR: "Text colour",
@@ -118,7 +127,8 @@
             CMF_DIALOG_LOCATION: "Location of Clean My Feeds' dialog box",
             CMF_DIALOG_OPTION: ["left side", "right side"],
             CMF_BORDER_COLOUR: "Border colour",
-            DLG_TIPS: "Tips",
+            DLG_TIPS: "About / Tips",
+            DLG_TIPS_DESC: "Project links, maintainer info, and setup help.",
             DLG_TIPS_CONTENT: `Clearing your browser's cache will reset your settings to their default values.
 
 Use the "Export" and "Import" buttons to backup and restore your customised settings.`,
@@ -167,15 +177,22 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             OTHER_INFO_BOX_SUBSCRIBE: "(\u0635\u0646\u062F\u0648\u0642 \u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062A) \u0627\u0644\u0627\u0634\u062A\u0631\u0627\u0643",
             REELS_TITLE: "\u0631\u064A\u0644\u0632",
             // -- FB's label
+            DLG_REELS_DESC: "\u0639\u0646\u0627\u0635\u0631 \u0627\u0644\u062A\u062D\u0643\u0645 \u0641\u064A \u0627\u0644\u062A\u0634\u063A\u064A\u0644 \u0648\u0627\u0644\u062A\u0643\u0631\u0627\u0631.",
             REELS_CONTROLS: "\u0639\u0631\u0636 \u0623\u062F\u0648\u0627\u062A \u0627\u0644\u062A\u062D\u0643\u0645 \u0641\u064A \u0627\u0644\u0641\u064A\u062F\u064A\u0648",
             REELS_DISABLE_LOOPING: "\u062A\u0639\u0637\u064A\u0644 \u0627\u0644\u062A\u0643\u0631\u0627\u0631",
             DLG_TITLE: "\u062A\u0646\u0638\u064A\u0641 \u062E\u0644\u0627\u0635\u0627\u062A\u064A",
             DLG_NF: "\u0627\u0644\u0623\u062E\u0628\u0627\u0631 \u062A\u063A\u0630\u064A\u0629",
+            DLG_NF_DESC: "\u062A\u0646\u0638\u064A\u0641 \u0627\u0644\u0627\u0642\u062A\u0631\u0627\u062D\u0627\u062A \u0648\u062A\u062D\u062F\u064A\u062F \u0645\u062F\u0649 \u0635\u0631\u0627\u0645\u0629 \u0627\u0644\u062E\u0644\u0627\u0635\u0629.",
             DLG_GF: "\u0645\u062C\u0645\u0648\u0639\u0627\u062A \u062A\u063A\u0630\u064A\u0629",
+            DLG_GF_DESC: "\u062A\u0646\u0638\u064A\u0641 \u062E\u0644\u0627\u0635\u0627\u062A \u0627\u0644\u0645\u062C\u0645\u0648\u0639\u0627\u062A \u0628\u0625\u0632\u0627\u0644\u0629 \u0627\u0644\u0632\u0648\u0627\u0626\u062F \u0648\u0627\u0644\u0636\u062C\u064A\u062C.",
             DLG_VF: "\u0627\u0644\u0641\u064A\u062F\u064A\u0648 \u062A\u063A\u0630\u064A\u0629",
+            DLG_VF_DESC: "\u0627\u062C\u0639\u0644 \u062E\u0644\u0627\u0635\u0629 \u0627\u0644\u0641\u064A\u062F\u064A\u0648 \u0623\u0643\u062B\u0631 \u062A\u0631\u0643\u064A\u0632\u064B\u0627 \u0628\u062A\u0642\u0644\u064A\u0644 \u0627\u0644\u062A\u0643\u0631\u0627\u0631 \u0648\u0627\u0644\u0627\u0632\u062F\u062D\u0627\u0645.",
             DLG_MP: "\u0627\u0644\u0633\u0648\u0642 \u062A\u063A\u0630\u064A\u0629",
+            DLG_MP_DESC: "\u062A\u0635\u0641\u064A\u0629 \u0627\u0644\u0642\u0648\u0627\u0626\u0645 \u062D\u0633\u0628 \u0627\u0644\u0633\u0639\u0631 \u0648\u0627\u0644\u0643\u0644\u0645\u0627\u062A \u0627\u0644\u062A\u064A \u062A\u0647\u0645\u0643.",
             DLG_PP: "\u0627\u0644\u0645\u0644\u0641 \u0627\u0644\u0634\u062E\u0635\u064A / \u0627\u0644\u0635\u0641\u062D\u0629",
-            DLG_OTHER: "\u0642\u0633\u0645 \u0627\u0644\u062A\u0643\u0645\u064A\u0644\u064A / \u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062A",
+            DLG_PP_DESC: "\u0627\u0636\u0628\u0637 \u0645\u0627 \u064A\u0638\u0647\u0631 \u0641\u064A \u0627\u0644\u0645\u0644\u0641\u0627\u062A \u0627\u0644\u0634\u062E\u0635\u064A\u0629 \u0648\u0627\u0644\u0635\u0641\u062D\u0627\u062A.",
+            DLG_OTHER: "\u0645\u0644\u0627\u062D\u0638\u0627\u062A \u0625\u0636\u0627\u0641\u064A\u0629",
+            DLG_OTHER_DESC: "\u0625\u062E\u0641\u0627\u0621 \u0627\u0644\u0635\u0646\u0627\u062F\u064A\u0642 \u0627\u0644\u0625\u0636\u0627\u0641\u064A\u0629 \u0627\u0644\u062A\u064A \u0644\u0627 \u062A\u0631\u064A\u062F\u0647\u0627.",
             DLG_BLOCK_TEXT_FILTER_TITLE: "\u0645\u0631\u0634\u062D \u0627\u0644\u0646\u0635",
             DLG_BLOCK_NEW_LINE: "(\u0627\u0641\u0635\u0644 \u0627\u0644\u0643\u0644\u0645\u0627\u062A \u0623\u0648 \u0627\u0644\u0639\u0628\u0627\u0631\u0627\u062A \u0628\u0641\u0627\u0635\u0644 \u0633\u0637\u0631\u060C \u064A\u062A\u0645 \u062F\u0639\u0645 \u0627\u0644\u062A\u0639\u0628\u064A\u0631\u0627\u062A \u0627\u0644\u0639\u0627\u062F\u064A\u0629)",
             NF_BLOCKED_ENABLED: "\u062A\u0645\u0643\u064A\u0646",
@@ -189,6 +206,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             MP_BLOCKED_RE: "\u0627\u0644\u062A\u0639\u0628\u064A\u0631\u0627\u062A \u0627\u0644\u0639\u0627\u062F\u064A\u0629 (RegExp)",
             PP_BLOCKED_RE: "\u0627\u0644\u062A\u0639\u0628\u064A\u0631\u0627\u062A \u0627\u0644\u0639\u0627\u062F\u064A\u0629 (RegExp)",
             DLG_VERBOSITY: "\u062E\u064A\u0627\u0631\u0627\u062A \u0627\u0644\u0645\u0634\u0627\u0631\u0643\u0627\u062A \u0627\u0644\u0645\u062E\u0641\u064A\u0629",
+            DLG_PREFERENCES: "\u0627\u0644\u062A\u0641\u0636\u064A\u0644\u0627\u062A",
+            DLG_PREFERENCES_DESC: "\u0627\u0644\u062A\u0633\u0645\u064A\u0627\u062A\u060C \u0627\u0644\u0645\u0648\u0636\u0639\u060C \u0627\u0644\u0623\u0644\u0648\u0627\u0646\u060C \u0648\u0627\u0644\u0644\u063A\u0629.",
             DLG_VERBOSITY_CAPTION: "\u0625\u0638\u0647\u0627\u0631 \u0625\u0634\u0639\u0627\u0631 \u0628\u0639\u0631\u0636 \u0627\u0644\u0645\u0642\u0627\u0644\u0627\u062A \u0627\u0644\u0645\u062E\u0641\u064A\u0629",
             VERBOSITY_MESSAGE: ["\u0644\u0627 \u062A\u0633\u0645\u064A\u0629", "\u0645\u0634\u0627\u0631\u0643\u0629 \u0648\u0627\u062D\u062F\u0629 \u0645\u062E\u0641\u064A\u0629. \u062D\u0643\u0645: ", " \u0627\u0644\u0645\u0634\u0627\u0631\u0643\u0627\u062A \u0627\u0644\u0645\u062E\u0641\u064A\u0629", "7 \u0645\u0634\u0627\u0631\u0643\u0627\u062A \u0645\u062E\u0641\u064A\u0629 ~ (\u0641\u0642\u0637 \u0641\u064A \u062A\u063A\u0630\u064A\u0629 \u0627\u0644\u0645\u062C\u0645\u0648\u0639\u0627\u062A)"],
             VERBOSITY_MESSAGE_COLOUR: "\u0644\u0648\u0646 \u0627\u0644\u0646\u0635",
@@ -204,7 +223,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: '\u0645\u0648\u0642\u0639 \u0645\u0631\u0628\u0639 \u0627\u0644\u062D\u0648\u0627\u0631 "\u062A\u0646\u0638\u064A\u0641 \u0645\u0648\u062C\u0632 \u0648\u064A\u0628\u0627\u062A\u064A"',
             CMF_DIALOG_OPTION: ["\u0627\u0644\u062C\u0647\u0647 \u0627\u0644\u064A\u0633\u0631\u0649", "\u0627\u0644\u062C\u0627\u0646\u0628 \u0627\u0644\u0635\u062D\u064A\u062D"],
             CMF_BORDER_COLOUR: "\u0644\u0648\u0646 \u0627\u0644\u062D\u062F\u0648\u062F",
-            DLG_TIPS: "\u062A\u0644\u0645\u064A\u062D\u0627\u062A",
+            DLG_TIPS: "\u062D\u0648\u0644 / \u0646\u0635\u0627\u0626\u062D",
+            DLG_TIPS_DESC: "\u0631\u0648\u0627\u0628\u0637 \u0627\u0644\u0645\u0634\u0631\u0648\u0639\u060C \u0645\u0639\u0644\u0648\u0645\u0627\u062A \u0627\u0644\u0645\u0634\u0631\u0641\u060C \u0648\u0645\u0633\u0627\u0639\u062F\u0629 \u0627\u0644\u0625\u0639\u062F\u0627\u062F.",
             DLG_TIPS_CONTENT: '\u0633\u064A\u0624\u062F\u064A \u0645\u0633\u062D \u0630\u0627\u0643\u0631\u0629 \u0627\u0644\u062A\u062E\u0632\u064A\u0646 \u0627\u0644\u0645\u0624\u0642\u062A \u0644\u0644\u0645\u062A\u0635\u0641\u062D \u0625\u0644\u0649 \u0625\u0639\u0627\u062F\u0629 \u062A\u0639\u064A\u064A\u0646 \u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A \u0625\u0644\u0649 \u0642\u064A\u0645\u0647\u0627 \u0627\u0644\u0627\u0641\u062A\u0631\u0627\u0636\u064A\u0629.\n\n\u0627\u0633\u062A\u062E\u062F\u0645 \u0627\u0644\u0632\u0631\u064A\u0646 "\u062A\u0635\u062F\u064A\u0631" \u0648 "\u0627\u0633\u062A\u064A\u0631\u0627\u062F" \u0644\u0644\u0646\u0633\u062E \u0627\u0644\u0627\u062D\u062A\u064A\u0627\u0637\u064A \u0648\u0627\u0633\u062A\u0639\u0627\u062F\u0629 \u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A \u0627\u0644\u0645\u062E\u0635\u0635\u0629.',
             DLG_BUTTONS: ["\u062D\u0641\u0638", "\u0642\u0631\u064A\u0628", "\u064A\u0635\u062F\u0651\u0631", "\u064A\u0633\u062A\u0648\u0631\u062F", "\u0625\u0639\u0627\u062F\u0629 \u062A\u0639\u064A\u064A\u0646"],
             DLG_FB_COLOUR_HINT: "\u0627\u062A\u0631\u0643\u0647 \u0641\u0627\u0631\u063A\u064B\u0627 \u0644\u0627\u0633\u062A\u062E\u062F\u0627\u0645 \u0646\u0638\u0627\u0645 \u0623\u0644\u0648\u0627\u0646 FB"
@@ -251,15 +271,22 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             OTHER_INFO_BOX_SUBSCRIBE: "\u0410\u0431\u043E\u043D\u0438\u0440\u0430\u0439 \u0441\u0435 (\u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u043E\u043D\u043D\u0430 \u043A\u0443\u0442\u0438\u044F)",
             REELS_TITLE: "\u041B\u0435\u043D\u0442\u0438",
             // -- FB's label
+            DLG_REELS_DESC: "\u041A\u043E\u043D\u0442\u0440\u043E\u043B\u0438 \u0437\u0430 \u0432\u044A\u0437\u043F\u0440\u043E\u0438\u0437\u0432\u0435\u0436\u0434\u0430\u043D\u0435 \u0438 \u0446\u0438\u043A\u043B\u0438\u0447\u043D\u043E\u0441\u0442.",
             REELS_CONTROLS: "\u041F\u043E\u043A\u0430\u0436\u0438 \u043A\u043E\u043D\u0442\u0440\u043E\u043B\u0438 \u043D\u0430 \u0432\u0438\u0434\u0435\u043E\u0442\u043E",
             REELS_DISABLE_LOOPING: "\u0418\u0437\u043A\u043B\u044E\u0447\u0432\u0430\u043D\u0435 \u043D\u0430 \u043F\u043E\u0432\u0442\u043E\u0440\u0435\u043D\u0438\u0435\u0442\u043E",
             DLG_TITLE: "\u041F\u043E\u0447\u0438\u0441\u0442\u0438 \u043C\u043E\u0438\u0442\u0435 \u0435\u043C\u0438\u0441\u0438\u0438",
             DLG_NF: "\u041D\u043E\u0432\u0438\u043D\u0430\u0440\u0441\u043A\u0438 \u043F\u043E\u0442\u043E\u043A",
+            DLG_NF_DESC: "\u041F\u043E\u0447\u0438\u0441\u0442\u0435\u0442\u0435 \u043F\u0440\u0435\u0434\u043B\u043E\u0436\u0435\u043D\u0438\u044F\u0442\u0430 \u0438 \u0437\u0430\u0434\u0430\u0439\u0442\u0435 \u043A\u043E\u043B\u043A\u043E \u0441\u0442\u0440\u0438\u043A\u0442\u0435\u043D \u0434\u0430 \u0435 \u043F\u043E\u0442\u043E\u043A\u044A\u0442.",
             DLG_GF: "\u041F\u043E\u0442\u043E\u043A \u0441 \u0433\u0440\u0443\u043F\u0438",
+            DLG_GF_DESC: "\u041F\u043E\u0434\u0440\u0435\u0434\u0435\u0442\u0435 \u043F\u043E\u0442\u043E\u0446\u0438\u0442\u0435 \u0432 \u0433\u0440\u0443\u043F\u0438\u0442\u0435, \u043A\u0430\u0442\u043E \u043C\u0430\u0445\u043D\u0435\u0442\u0435 \u0438\u0437\u043B\u0438\u0448\u043D\u043E\u0442\u043E \u0438 \u0448\u0443\u043C\u0430.",
             DLG_VF: "\u041F\u043E\u0442\u043E\u043A \u0441 \u0432\u0438\u0434\u0435\u0430",
+            DLG_VF_DESC: "\u0424\u043E\u043A\u0443\u0441\u0438\u0440\u0430\u0439\u0442\u0435 \u0432\u0438\u0434\u0435\u043E\u043F\u043E\u0442\u043E\u043A\u0430, \u043A\u0430\u0442\u043E \u043D\u0430\u043C\u0430\u043B\u0438\u0442\u0435 \u043F\u043E\u0432\u0442\u043E\u0440\u0435\u043D\u0438\u044F\u0442\u0430 \u0438 \u0448\u0443\u043C\u0430.",
             DLG_MP: "\u041F\u043E\u0442\u043E\u043A \u0441 Marketplace",
+            DLG_MP_DESC: "\u0424\u0438\u043B\u0442\u0440\u0438\u0440\u0430\u0439\u0442\u0435 \u043E\u0431\u044F\u0432\u0438 \u043F\u043E \u0446\u0435\u043D\u0430 \u0438 \u043A\u043B\u044E\u0447\u043E\u0432\u0438 \u0434\u0443\u043C\u0438.",
             DLG_PP: "\u041F\u0440\u043E\u0444\u0438\u043B / \u0421\u0442\u0440\u0430\u043D\u0438\u0446\u0430",
-            DLG_OTHER: "\u0414\u043E\u043F\u044A\u043B\u043D\u0438\u0442\u0435\u043B\u0435\u043D / \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u043E\u043D\u0435\u043D \u0440\u0430\u0437\u0434\u0435\u043B",
+            DLG_PP_DESC: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u0442\u0435 \u043A\u0430\u043A\u0432\u043E \u0441\u0435 \u043F\u043E\u043A\u0430\u0437\u0432\u0430 \u0432 \u043F\u0440\u043E\u0444\u0438\u043B\u0438 \u0438 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0438.",
+            DLG_OTHER: "\u0414\u043E\u043F\u044A\u043B\u043D\u0438\u0442\u0435\u043B\u043D\u0438 \u0431\u0435\u043B\u0435\u0436\u043A\u0438",
+            DLG_OTHER_DESC: "\u0421\u043A\u0440\u0438\u0439\u0442\u0435 \u0434\u043E\u043F\u044A\u043B\u043D\u0438\u0442\u0435\u043B\u043D\u0438\u0442\u0435 \u043F\u043E\u043B\u0435\u0442\u0430, \u043A\u043E\u0438\u0442\u043E \u043D\u0435 \u0438\u0441\u043A\u0430\u0442\u0435.",
             DLG_BLOCK_TEXT_FILTER_TITLE: "\u0422\u0435\u043A\u0441\u0442\u043E\u0432 \u0444\u0438\u043B\u0442\u044A\u0440",
             DLG_BLOCK_NEW_LINE: "(\u0420\u0430\u0437\u0434\u0435\u043B\u0435\u0442\u0435 \u0434\u0443\u043C\u0438\u0442\u0435 \u0438\u043B\u0438 \u0444\u0440\u0430\u0437\u0438\u0442\u0435 \u0441 \u043D\u043E\u0432 \u0440\u0435\u0434, \u0440\u0435\u0433\u0443\u043B\u044F\u0440\u043D\u0438\u0442\u0435 \u0438\u0437\u0440\u0430\u0437\u0438 \u0441\u0430 \u043F\u043E\u0434\u0434\u044A\u0440\u0436\u0430\u043D\u0438)",
             NF_BLOCKED_ENABLED: "\u0410\u043A\u0442\u0438\u0432\u0438\u0440\u0430\u043D\u043E",
@@ -273,6 +300,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             MP_BLOCKED_RE: "\u0420\u0435\u0433\u0443\u043B\u044F\u0440\u043D\u0438 \u0438\u0437\u0440\u0430\u0437\u0438 (RegExp)",
             PP_BLOCKED_RE: "\u0420\u0435\u0433\u0443\u043B\u044F\u0440\u043D\u0438 \u0438\u0437\u0440\u0430\u0437\u0438 (RegExp)",
             DLG_VERBOSITY: "\u041E\u043F\u0446\u0438\u0438 \u0437\u0430 \u0441\u043A\u0440\u0438\u0442\u0438 \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u0438",
+            DLG_PREFERENCES: "\u041F\u0440\u0435\u0434\u043F\u043E\u0447\u0438\u0442\u0430\u043D\u0438\u044F",
+            DLG_PREFERENCES_DESC: "\u0415\u0442\u0438\u043A\u0435\u0442\u0438, \u043F\u043E\u0437\u0438\u0446\u0438\u044F, \u0446\u0432\u0435\u0442\u043E\u0432\u0435 \u0438 \u0435\u0437\u0438\u043A.",
             DLG_VERBOSITY_CAPTION: "\u041F\u043E\u043A\u0430\u0437\u0432\u0430\u043D\u0435 \u043D\u0430 \u0435\u0442\u0438\u043A\u0435\u0442, \u0430\u043A\u043E \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u044F\u0442\u0430 \u0435 \u0441\u043A\u0440\u0438\u0442\u0430",
             VERBOSITY_MESSAGE: ["\u043D\u044F\u043C\u0430 \u0435\u0442\u0438\u043A\u0435\u0442", "\u0421\u043A\u0440\u0438\u0442\u0430 \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u044F. \u041F\u0440\u0430\u0432\u0438\u043B\u043E: ", " \u0441\u043A\u0440\u0438\u0442\u0438 \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u0438", "7 \u0441\u043A\u0440\u0438\u0442\u0438 \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u0438 ~ (\u0441\u0430\u043C\u043E \u0437\u0430 \u0413\u0440\u0443\u043F\u043E\u0432\u0438\u044F \u043F\u043E\u0442\u043E\u043A)"],
             VERBOSITY_MESSAGE_COLOUR: "\u0426\u0432\u044F\u0442 \u043D\u0430 \u0442\u0435\u043A\u0441\u0442\u0430",
@@ -288,7 +317,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: '\u041C\u0435\u0441\u0442\u043E\u043F\u043E\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043D\u0430 \u0434\u0438\u0430\u043B\u043E\u0433\u043E\u0432\u0438\u044F \u043F\u0440\u043E\u0437\u043E\u0440\u0435\u0446 "\u041F\u043E\u0447\u0438\u0441\u0442\u0438 \u043C\u043E\u0438\u0442\u0435 \u0435\u043C\u0438\u0441\u0438\u0438"',
             CMF_DIALOG_OPTION: ["\u043B\u044F\u0432\u0430 \u0441\u0442\u0440\u0430\u043D\u0430", "\u0434\u044F\u0441\u043D\u0430 \u0441\u0442\u0440\u0430\u043D\u0430"],
             CMF_BORDER_COLOUR: "\u0426\u0432\u044F\u0442 \u043D\u0430 \u0440\u0430\u043C\u043A\u0430\u0442\u0430",
-            DLG_TIPS: "\u0421\u044A\u0432\u0435\u0442\u0438",
+            DLG_TIPS: "\u0417\u0430 \u043F\u0440\u043E\u0435\u043A\u0442\u0430 / \u0421\u044A\u0432\u0435\u0442\u0438",
+            DLG_TIPS_DESC: "\u041B\u0438\u043D\u043A\u043E\u0432\u0435 \u043A\u044A\u043C \u043F\u0440\u043E\u0435\u043A\u0442\u0430, \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F \u0437\u0430 \u043F\u043E\u0434\u0434\u0440\u044A\u0436\u043D\u0438\u043A\u0430 \u0438 \u043F\u043E\u043C\u043E\u0449 \u0437\u0430 \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0430.",
             DLG_TIPS_CONTENT: '\u0418\u0437\u0447\u0438\u0441\u0442\u0432\u0430\u043D\u0435\u0442\u043E \u043D\u0430 \u043A\u0435\u0448\u0430 \u043D\u0430 \u0431\u0440\u0430\u0443\u0437\u044A\u0440\u0430 \u0449\u0435 \u043D\u0443\u043B\u0438\u0440\u0430 \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438\u0442\u0435 \u0432\u0438 \u0434\u043E \u0442\u0435\u0445\u043D\u0438\u0442\u0435 \u0441\u0442\u0430\u043D\u0434\u0430\u0440\u0442\u043D\u0438 \u0441\u0442\u043E\u0439\u043D\u043E\u0441\u0442\u0438.\n\n\u0418\u0437\u043F\u043E\u043B\u0437\u0432\u0430\u0439\u0442\u0435 \u0431\u0443\u0442\u043E\u043D\u0438\u0442\u0435 "\u0415\u043A\u0441\u043F\u043E\u0440\u0442" \u0438 "\u0418\u043C\u043F\u043E\u0440\u0442", \u0437\u0430 \u0434\u0430 \u0437\u0430\u043F\u0430\u0437\u0438\u0442\u0435 \u0438 \u0432\u044A\u0437\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u0435 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u043B\u0438\u0437\u0438\u0440\u0430\u043D\u0438\u0442\u0435 \u0441\u0438 \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438.',
             DLG_BUTTONS: ["\u0417\u0430\u043F\u0430\u0437\u0438", "\u0417\u0430\u0442\u0432\u043E\u0440\u0438", "\u0415\u043A\u0441\u043F\u043E\u0440\u0442", "\u0418\u043C\u043F\u043E\u0440\u0442", "\u041D\u0443\u043B\u0438\u0440\u0430\u043D\u0435"],
             DLG_FB_COLOUR_HINT: "\u041E\u0441\u0442\u0430\u0432\u0435\u0442\u0435 \u043F\u0440\u0430\u0437\u043D\u043E, \u0437\u0430 \u0434\u0430 \u0438\u0437\u043F\u043E\u043B\u0437\u0432\u0430\u0442\u0435 \u0446\u0432\u0435\u0442\u043E\u0432\u0430\u0442\u0430 \u0441\u0445\u0435\u043C\u0430 \u043D\u0430 FB"
@@ -334,15 +364,22 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             OTHER_INFO_BOX_CLIMATE_SCIENCE: "Klimatick\xE1 v\u011Bda (informa\u010Dn\xED box)",
             OTHER_INFO_BOX_SUBSCRIBE: "Odeb\xEDrat (informa\u010Dn\xED box)",
             REELS_TITLE: "Reels",
+            DLG_REELS_DESC: "Ovl\xE1d\xE1n\xED p\u0159ehr\xE1v\xE1n\xED a opakov\xE1n\xED.",
             REELS_CONTROLS: "Zobrazit ovl\xE1d\xE1n\xED videa",
             REELS_DISABLE_LOOPING: "Vypnout smy\u010Den\xED",
             DLG_TITLE: "Vy\u010Dist\u011Bte m\xE9 kan\xE1ly",
             DLG_NF: "Informa\u010Dn\xED kan\xE1l",
+            DLG_NF_DESC: "Vy\u010Dist\u011Bte n\xE1vrhy a nastavte, jak p\u0159\xEDsn\xFD m\xE1 b\xFDt feed.",
             DLG_GF: "Skupinov\xFD kan\xE1l",
+            DLG_GF_DESC: "Upravte skupinov\xE9 feedy odstran\u011Bn\xEDm balastu a \u0161umu.",
             DLG_VF: "Video kan\xE1l",
+            DLG_VF_DESC: "Udr\u017Ete video feed p\u0159ehledn\xFD omezen\xEDm opakov\xE1n\xED a nepo\u0159\xE1dku.",
             DLG_MP: "Marketplace kan\xE1l",
+            DLG_MP_DESC: "Filtrujte nab\xEDdky podle ceny a kl\xED\u010Dov\xFDch slov.",
             DLG_PP: "Profil / Str\xE1nka",
-            DLG_OTHER: "Dopl\u0148kov\xE1/informa\u010Dn\xED \u010D\xE1st",
+            DLG_PP_DESC: "Upravte, co se zobrazuje na profilech a str\xE1nk\xE1ch.",
+            DLG_OTHER: "Dopl\u0148kov\xE9 pozn\xE1mky",
+            DLG_OTHER_DESC: "Skryjte extra boxy, kter\xE9 nechcete.",
             DLG_BLOCK_TEXT_FILTER_TITLE: "Textov\xFD filtr",
             DLG_BLOCK_NEW_LINE: "(Odd\u011Blte slova nebo fr\xE1ze pomoc\xED nov\xE9ho \u0159\xE1dku, regul\xE1rn\xED v\xFDrazy jsou podporov\xE1ny)",
             NF_BLOCKED_ENABLED: "Zapnuto",
@@ -356,6 +393,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             MP_BLOCKED_RE: "Regul\xE4re Ausdr\xFCcke (RegExp)",
             PP_BLOCKED_RE: "Regul\xE4re Ausdr\xFCcke (RegExp)",
             DLG_VERBOSITY: "Mo\u017Enosti skryt\xFDch p\u0159\xEDsp\u011Bvk\u016F",
+            DLG_PREFERENCES: "P\u0159edvolby",
+            DLG_PREFERENCES_DESC: "\u0160t\xEDtky, um\xEDst\u011Bn\xED, barvy a jazyk.",
             DLG_VERBOSITY_CAPTION: "Zobrazit popisek, pokud je p\u0159\xEDsp\u011Bvek skryt\xFD",
             VERBOSITY_MESSAGE: ["\u017E\xE1dn\xFD popisek", "P\u0159\xEDsp\u011Bvek byl skryt. Pravidlo: ", " p\u0159\xEDsp\u011Bvk\u016F skryt\xFDch", "7 p\u0159\xEDsp\u011Bvk\u016F skryt\xFDch ~ (pouze ve skupinov\xE9m zpravodaji)"],
             VERBOSITY_MESSAGE_COLOUR: "Barva textu",
@@ -371,7 +410,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: "Um\xEDst\u011Bn\xED dialogov\xE9ho okna Vy\u010Dist\u011Bte m\xE9 kan\xE1ly",
             CMF_DIALOG_OPTION: ["lev\xE1 strana", "prav\xE1 strana"],
             CMF_BORDER_COLOUR: "Barva ohrani\u010Den\xED",
-            DLG_TIPS: "Tipy",
+            DLG_TIPS: "O projektu / Tipy",
+            DLG_TIPS_DESC: "Odkazy na projekt, informace o spr\xE1vci a pomoc s nastaven\xEDm.",
             DLG_TIPS_CONTENT: 'Vymaz\xE1n\xEDm mezipam\u011Bti prohl\xED\u017Ee\u010De obnov\xEDte v\xFDchoz\xED hodnoty nastaven\xED.\n\nPomoc\xED tla\u010D\xEDtek "Export" a "Import" z\xE1lohujte a obnovte sv\xE1 p\u0159izp\u016Fsoben\xE1 nastaven\xED.',
             DLG_BUTTONS: ["Ulo\u017Eit", "Zav\u0159\xEDt", "Export", "Import", "Resetovat"],
             DLG_FB_COLOUR_HINT: "Chcete-li pou\u017E\xEDt barevn\xE9 sch\xE9ma FB, nechte pr\xE1zdn\xE9"
@@ -418,15 +458,22 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             OTHER_INFO_BOX_CLIMATE_SCIENCE: "Klimawissenschaft (Infobox)",
             OTHER_INFO_BOX_SUBSCRIBE: "Abonnieren (Infobox)",
             REELS_TITLE: "Reels",
+            DLG_REELS_DESC: "Wiedergabe- und Loop-Steuerung.",
             REELS_CONTROLS: "Video-Steuerung anzeigen",
             REELS_DISABLE_LOOPING: "Wiederholung deaktivieren",
             DLG_TITLE: "Bereinige meine Feeds",
             DLG_NF: "Newsfeed",
+            DLG_NF_DESC: "Vorschl\xE4ge aufr\xE4umen und festlegen, wie streng der Feed ist.",
             DLG_GF: "Gruppen-Feed",
+            DLG_GF_DESC: "Gruppenfeeds aufr\xE4umen, Extras und L\xE4rm reduzieren.",
             DLG_VF: "Video-Feed",
+            DLG_VF_DESC: "Video-Feed fokussieren, Wiederholungen und Unordnung reduzieren.",
             DLG_MP: "Marktplatz-Feed",
+            DLG_MP_DESC: "Angebote nach Preis und Schl\xFCsselw\xF6rtern filtern.",
             DLG_PP: "Profil / Seite",
-            DLG_OTHER: "Erg\xE4nzungs-/Informationsbereich",
+            DLG_PP_DESC: "Anpassen, was in Profilen und Seiten erscheint.",
+            DLG_OTHER: "Zus\xE4tzliche Hinweise",
+            DLG_OTHER_DESC: "Blenden Sie zus\xE4tzliche K\xE4sten aus, die Sie nicht m\xF6chten.",
             DLG_BLOCK_TEXT_FILTER_TITLE: "Textfilter",
             DLG_BLOCK_NEW_LINE: "(Trennen Sie W\xF6rter oder Phrasen mit einem Zeilenumbruch, regul\xE4re Ausdr\xFCcke werden unterst\xFCtzt)",
             NF_BLOCKED_ENABLED: "Erm\xF6glichte",
@@ -440,6 +487,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             MP_BLOCKED_RE: "Regul\xE4re Ausdr\xFCcke (RegExp)",
             PP_BLOCKED_RE: "Regul\xE4re Ausdr\xFCcke (RegExp)",
             DLG_VERBOSITY: "Optionen f\xFCr ausgeblendete Beitr\xE4ge",
+            DLG_PREFERENCES: "Einstellungen",
+            DLG_PREFERENCES_DESC: "Labels, Position, Farben und Sprache.",
             DLG_VERBOSITY_CAPTION: "Ein Label anzeigen, wenn ein Beitrag ausgeblendet ist",
             VERBOSITY_MESSAGE: ["kein Label", "Beitrag ausgeblendet. Regel: ", " Beitr\xE4ge versteckt", "7 Beitr\xE4ge versteckt ~ (nur Gruppen-Feed)"],
             VERBOSITY_MESSAGE_COLOUR: "Textfarbe",
@@ -455,7 +504,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: 'Position des Dialogfelds "Bereinige meine Feeds"',
             CMF_DIALOG_OPTION: ["linke Seite", "rechte Seite"],
             CMF_BORDER_COLOUR: "Farbe der Umrandung",
-            DLG_TIPS: "Tipps",
+            DLG_TIPS: "Info / Tipps",
+            DLG_TIPS_DESC: "Projektlinks, Infos zum Betreuer und Einrichtungshilfe.",
             DLG_TIPS_CONTENT: 'Wenn Sie den Cache Ihres Browsers leeren, werden Ihre Einstellungen auf die Standardwerte zur\xFCckgesetzt.\n\nVerwenden Sie die Schaltfl\xE4chen "Exportieren" und "Importieren", um Ihre benutzerdefinierten Einstellungen zu sichern und wiederherzustellen.',
             DLG_BUTTONS: ["Speichern", "Schlie\xDFen", "Exportieren", "Importieren", "Zur\xFCcksetzen"],
             DLG_FB_COLOUR_HINT: "Leer lassen, um das Farbschema von FB zu verwenden"
@@ -501,15 +551,22 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             OTHER_INFO_BOX_CLIMATE_SCIENCE: "\u0395\u03C0\u03B9\u03C3\u03C4\u03AE\u03BC\u03B7 \u03C4\u03BF\u03C5 \u03BA\u03BB\u03AF\u03BC\u03B1\u03C4\u03BF\u03C2 (\u03C0\u03BB\u03B1\u03AF\u03C3\u03B9\u03BF \u03C0\u03BB\u03B7\u03C1\u03BF\u03C6\u03BF\u03C1\u03B9\u03CE\u03BD)",
             OTHER_INFO_BOX_SUBSCRIBE: "\u0395\u03B3\u03B3\u03C1\u03B1\u03C6\u03AE (\u03C0\u03BB\u03B1\u03AF\u03C3\u03B9\u03BF \u03C0\u03BB\u03B7\u03C1\u03BF\u03C6\u03BF\u03C1\u03B9\u03CE\u03BD)",
             REELS_TITLE: "Reel",
+            DLG_REELS_DESC: "\u0388\u03BB\u03B5\u03B3\u03C7\u03BF\u03B9 \u03B1\u03BD\u03B1\u03C0\u03B1\u03C1\u03B1\u03B3\u03C9\u03B3\u03AE\u03C2 \u03BA\u03B1\u03B9 \u03B5\u03C0\u03B1\u03BD\u03AC\u03BB\u03B7\u03C8\u03B7\u03C2.",
             REELS_CONTROLS: "\u0395\u03BC\u03C6\u03AC\u03BD\u03B9\u03C3\u03B7 \u03C7\u03B5\u03B9\u03C1\u03B9\u03C3\u03C4\u03B7\u03C1\u03AF\u03C9\u03BD \u03B2\u03AF\u03BD\u03C4\u03B5\u03BF",
             REELS_DISABLE_LOOPING: "\u0391\u03C0\u03B5\u03BD\u03B5\u03C1\u03B3\u03BF\u03C0\u03BF\u03AF\u03B7\u03C3\u03B7 \u03B5\u03C0\u03B1\u03BD\u03AC\u03BB\u03B7\u03C8\u03B7\u03C2",
             DLG_TITLE: "\u039A\u03B1\u03B8\u03B1\u03C1\u03B9\u03C3\u03BC\u03CC\u03C2 \u03C4\u03C9\u03BD \u03C1\u03BF\u03CE\u03BD \u03BC\u03BF\u03C5",
             DLG_NF: "\u03A1\u03BF\u03AE \u03B5\u03B9\u03B4\u03AE\u03C3\u03B5\u03C9\u03BD",
+            DLG_NF_DESC: "\u039A\u03B1\u03B8\u03B1\u03C1\u03AF\u03C3\u03C4\u03B5 \u03C4\u03B9\u03C2 \u03C0\u03C1\u03BF\u03C4\u03AC\u03C3\u03B5\u03B9\u03C2 \u03BA\u03B1\u03B9 \u03BF\u03C1\u03AF\u03C3\u03C4\u03B5 \u03C0\u03CC\u03C3\u03BF \u03B1\u03C5\u03C3\u03C4\u03B7\u03C1\u03AE \u03B8\u03B1 \u03B5\u03AF\u03BD\u03B1\u03B9 \u03B7 \u03C1\u03BF\u03AE.",
             DLG_GF: "\u03A1\u03BF\u03AE \u03BF\u03BC\u03AC\u03B4\u03C9\u03BD",
+            DLG_GF_DESC: "\u03A4\u03B1\u03BA\u03C4\u03BF\u03C0\u03BF\u03B9\u03AE\u03C3\u03C4\u03B5 \u03C4\u03B9\u03C2 \u03C1\u03BF\u03AD\u03C2 \u03BF\u03BC\u03AC\u03B4\u03C9\u03BD \u03BC\u03B5\u03B9\u03CE\u03BD\u03BF\u03BD\u03C4\u03B1\u03C2 \u03C4\u03B1 \u03C0\u03B5\u03C1\u03B9\u03C4\u03C4\u03AC \u03BA\u03B1\u03B9 \u03C4\u03BF \u03B8\u03CC\u03C1\u03C5\u03B2\u03BF.",
             DLG_VF: "\u03A1\u03BF\u03AE \u03B2\u03AF\u03BD\u03C4\u03B5\u03BF",
+            DLG_VF_DESC: "\u039A\u03C1\u03B1\u03C4\u03AE\u03C3\u03C4\u03B5 \u03C4\u03B7 \u03C1\u03BF\u03AE \u03B2\u03AF\u03BD\u03C4\u03B5\u03BF \u03BA\u03B1\u03B8\u03B1\u03C1\u03AE \u03BC\u03B5\u03B9\u03CE\u03BD\u03BF\u03BD\u03C4\u03B1\u03C2 \u03B5\u03C0\u03B1\u03BD\u03B1\u03BB\u03AE\u03C8\u03B5\u03B9\u03C2 \u03BA\u03B1\u03B9 \u03B1\u03BA\u03B1\u03C4\u03B1\u03C3\u03C4\u03B1\u03C3\u03AF\u03B1.",
             DLG_MP: "\u03A1\u03BF\u03AE Marketplace",
+            DLG_MP_DESC: "\u03A6\u03B9\u03BB\u03C4\u03C1\u03AC\u03C1\u03B5\u03C4\u03B5 \u03B1\u03B3\u03B3\u03B5\u03BB\u03AF\u03B5\u03C2 \u03BC\u03B5 \u03B2\u03AC\u03C3\u03B7 \u03C4\u03B9\u03BC\u03AE \u03BA\u03B1\u03B9 \u03BB\u03AD\u03BE\u03B5\u03B9\u03C2.",
             DLG_PP: "\u03A0\u03C1\u03BF\u03C6\u03AF\u03BB / \u03A3\u03B5\u03BB\u03AF\u03B4\u03B1",
-            DLG_OTHER: "\u03A3\u03C5\u03BC\u03C0\u03BB\u03B7\u03C1\u03C9\u03BC\u03B1\u03C4\u03B9\u03BA\u03CC \u03C4\u03BC\u03AE\u03BC\u03B1 / \u03C0\u03BB\u03B7\u03C1\u03BF\u03C6\u03BF\u03C1\u03B9\u03B1\u03BA\u03CC \u03C4\u03BC\u03AE\u03BC\u03B1",
+            DLG_PP_DESC: "\u03A1\u03C5\u03B8\u03BC\u03AF\u03C3\u03C4\u03B5 \u03C4\u03B9 \u03B5\u03BC\u03C6\u03B1\u03BD\u03AF\u03B6\u03B5\u03C4\u03B1\u03B9 \u03C3\u03B5 \u03C0\u03C1\u03BF\u03C6\u03AF\u03BB \u03BA\u03B1\u03B9 \u03C3\u03B5\u03BB\u03AF\u03B4\u03B5\u03C2.",
+            DLG_OTHER: "\u03A3\u03C5\u03BC\u03C0\u03BB\u03B7\u03C1\u03C9\u03BC\u03B1\u03C4\u03B9\u03BA\u03AD\u03C2 \u03C3\u03B7\u03BC\u03B5\u03B9\u03CE\u03C3\u03B5\u03B9\u03C2",
+            DLG_OTHER_DESC: "\u039A\u03C1\u03CD\u03C8\u03C4\u03B5 \u03B5\u03C0\u03B9\u03C0\u03BB\u03AD\u03BF\u03BD \u03C0\u03BB\u03B1\u03AF\u03C3\u03B9\u03B1 \u03C0\u03BF\u03C5 \u03B4\u03B5\u03BD \u03B8\u03AD\u03BB\u03B5\u03C4\u03B5.",
             DLG_BLOCK_TEXT_FILTER_TITLE: "\u03A6\u03AF\u03BB\u03C4\u03C1\u03BF \u03BA\u03B5\u03B9\u03BC\u03AD\u03BD\u03BF\u03C5",
             DLG_BLOCK_NEW_LINE: "(\u0394\u03B9\u03B1\u03C7\u03C9\u03C1\u03AF\u03C3\u03C4\u03B5 \u03BB\u03AD\u03BE\u03B5\u03B9\u03C2 \u03AE \u03C6\u03C1\u03AC\u03C3\u03B5\u03B9\u03C2 \u03BC\u03B5 \u03B1\u03BB\u03BB\u03B1\u03B3\u03AE \u03B3\u03C1\u03B1\u03BC\u03BC\u03AE\u03C2, \u03C5\u03C0\u03BF\u03C3\u03C4\u03B7\u03C1\u03AF\u03B6\u03BF\u03BD\u03C4\u03B1\u03B9 \u03BA\u03B1\u03BD\u03BF\u03BD\u03B9\u03BA\u03AD\u03C2 \u03B5\u03BA\u03C6\u03C1\u03AC\u03C3\u03B5\u03B9\u03C2)",
             NF_BLOCKED_ENABLED: "\u0395\u03BD\u03B5\u03C1\u03B3\u03BF\u03C0\u03BF\u03B9\u03B7\u03BC\u03AD\u03BD\u03BF",
@@ -523,6 +580,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             MP_BLOCKED_RE: "\u039A\u03B1\u03BD\u03BF\u03BD\u03B9\u03BA\u03AD\u03C2 \u0395\u03BA\u03C6\u03C1\u03AC\u03C3\u03B5\u03B9\u03C2 (RegExp)",
             PP_BLOCKED_RE: "\u039A\u03B1\u03BD\u03BF\u03BD\u03B9\u03BA\u03AD\u03C2 \u0395\u03BA\u03C6\u03C1\u03AC\u03C3\u03B5\u03B9\u03C2 (RegExp)",
             DLG_VERBOSITY: "\u0395\u03C0\u03B9\u03BB\u03BF\u03B3\u03AD\u03C2 \u03B3\u03B9\u03B1 \u03BA\u03C1\u03C5\u03C6\u03AD\u03C2 \u03B1\u03BD\u03B1\u03C1\u03C4\u03AE\u03C3\u03B5\u03B9\u03C2",
+            DLG_PREFERENCES: "\u03A0\u03C1\u03BF\u03C4\u03B9\u03BC\u03AE\u03C3\u03B5\u03B9\u03C2",
+            DLG_PREFERENCES_DESC: "\u0395\u03C4\u03B9\u03BA\u03AD\u03C4\u03B5\u03C2, \u03B8\u03AD\u03C3\u03B7, \u03C7\u03C1\u03CE\u03BC\u03B1\u03C4\u03B1 \u03BA\u03B1\u03B9 \u03B3\u03BB\u03CE\u03C3\u03C3\u03B1.",
             DLG_VERBOSITY_CAPTION: "\u0395\u03BC\u03C6\u03AC\u03BD\u03B9\u03C3\u03B7 \u03B5\u03C4\u03B9\u03BA\u03AD\u03C4\u03B1\u03C2 \u03B1\u03BD \u03BC\u03B9\u03B1 \u03B4\u03B7\u03BC\u03BF\u03C3\u03AF\u03B5\u03C5\u03C3\u03B7 \u03B5\u03AF\u03BD\u03B1\u03B9 \u03BA\u03C1\u03C5\u03BC\u03BC\u03AD\u03BD\u03B7",
             VERBOSITY_MESSAGE: ["\u03C7\u03C9\u03C1\u03AF\u03C2 \u03B5\u03C4\u03B9\u03BA\u03AD\u03C4\u03B1", "\u0394\u03B7\u03BC\u03BF\u03C3\u03AF\u03B5\u03C5\u03C3\u03B7 \u03BA\u03C1\u03C5\u03BC\u03BC\u03AD\u03BD\u03B7. \u039A\u03B1\u03BD\u03CC\u03BD\u03B1\u03C2: ", " \u03B4\u03B7\u03BC\u03BF\u03C3\u03B9\u03B5\u03CD\u03C3\u03B5\u03B9\u03C2 \u03BA\u03C1\u03C5\u03BC\u03BC\u03AD\u03BD\u03B5\u03C2", "7 \u03B4\u03B7\u03BC\u03BF\u03C3\u03B9\u03B5\u03CD\u03C3\u03B5\u03B9\u03C2 \u03BA\u03C1\u03C5\u03BC\u03BC\u03AD\u03BD\u03B5\u03C2 ~ (\u03BC\u03CC\u03BD\u03BF \u03C3\u03C4\u03B7\u03BD \u03C4\u03C1\u03BF\u03C6\u03BF\u03B4\u03BF\u03C3\u03AF\u03B1 \u03C4\u03C9\u03BD \u03BF\u03BC\u03AC\u03B4\u03C9\u03BD)"],
             VERBOSITY_MESSAGE_COLOUR: "\u03A7\u03C1\u03CE\u03BC\u03B1 \u03BA\u03B5\u03B9\u03BC\u03AD\u03BD\u03BF\u03C5",
@@ -538,7 +597,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: '\u03A4\u03BF\u03C0\u03BF\u03B8\u03B5\u03C3\u03AF\u03B1 \u03C4\u03B7\u03C2 \u03B4\u03B9\u03B1\u03BB\u03CC\u03B3\u03BF\u03C5 "\u039A\u03B1\u03B8\u03B1\u03C1\u03B9\u03C3\u03BC\u03CC\u03C2 \u03C4\u03C9\u03BD \u03C1\u03BF\u03CE\u03BD \u03BC\u03BF\u03C5"',
             CMF_DIALOG_OPTION: ["\u03B1\u03C1\u03B9\u03C3\u03C4\u03B5\u03C1\u03AE \u03C0\u03BB\u03B5\u03C5\u03C1\u03AC", "\u03B4\u03B5\u03BE\u03B9\u03AC \u03C0\u03BB\u03B5\u03C5\u03C1\u03AC"],
             CMF_BORDER_COLOUR: "\u03A7\u03C1\u03CE\u03BC\u03B1 \u03C0\u03B5\u03C1\u03B9\u03B3\u03C1\u03AC\u03BC\u03BC\u03B1\u03C4\u03BF\u03C2",
-            DLG_TIPS: "\u03A3\u03C5\u03BC\u03B2\u03BF\u03C5\u03BB\u03AD\u03C2",
+            DLG_TIPS: "\u03A3\u03C7\u03B5\u03C4\u03B9\u03BA\u03AC / \u03A3\u03C5\u03BC\u03B2\u03BF\u03C5\u03BB\u03AD\u03C2",
+            DLG_TIPS_DESC: "\u03A3\u03CD\u03BD\u03B4\u03B5\u03C3\u03BC\u03BF\u03B9 \u03AD\u03C1\u03B3\u03BF\u03C5, \u03C0\u03BB\u03B7\u03C1\u03BF\u03C6\u03BF\u03C1\u03AF\u03B5\u03C2 \u03C3\u03C5\u03BD\u03C4\u03B7\u03C1\u03B7\u03C4\u03AE \u03BA\u03B1\u03B9 \u03B2\u03BF\u03AE\u03B8\u03B5\u03B9\u03B1 \u03C1\u03CD\u03B8\u03BC\u03B9\u03C3\u03B7\u03C2.",
             DLG_TIPS_CONTENT: '\u0397 \u03B5\u03BA\u03BA\u03B1\u03B8\u03AC\u03C1\u03B9\u03C3\u03B7 \u03C4\u03B7\u03C2 \u03BC\u03BD\u03AE\u03BC\u03B7\u03C2 cache \u03C4\u03BF\u03C5 \u03C0\u03C1\u03BF\u03B3\u03C1\u03AC\u03BC\u03BC\u03B1\u03C4\u03BF\u03C2 \u03C0\u03B5\u03C1\u03B9\u03AE\u03B3\u03B7\u03C3\u03B7\u03C2 \u03B8\u03B1 \u03B5\u03C0\u03B1\u03BD\u03B1\u03C6\u03AD\u03C1\u03B5\u03B9 \u03C4\u03B9\u03C2 \u03C1\u03C5\u03B8\u03BC\u03AF\u03C3\u03B5\u03B9\u03C2 \u03C3\u03B1\u03C2 \u03C3\u03C4\u03B9\u03C2 \u03C0\u03C1\u03BF\u03B5\u03C0\u03B9\u03BB\u03B5\u03B3\u03BC\u03AD\u03BD\u03B5\u03C2 \u03C4\u03B9\u03BC\u03AD\u03C2 \u03C4\u03BF\u03C5\u03C2.\n\n\u03A7\u03C1\u03B7\u03C3\u03B9\u03BC\u03BF\u03C0\u03BF\u03B9\u03AE\u03C3\u03C4\u03B5 \u03C4\u03B1 \u03BA\u03BF\u03C5\u03BC\u03C0\u03B9\u03AC "\u0395\u03BE\u03B1\u03B3\u03C9\u03B3\u03AE" \u03BA\u03B1\u03B9 "\u0395\u03B9\u03C3\u03B1\u03B3\u03C9\u03B3\u03AE" \u03B3\u03B9\u03B1 \u03BD\u03B1 \u03B4\u03B7\u03BC\u03B9\u03BF\u03C5\u03C1\u03B3\u03AE\u03C3\u03B5\u03C4\u03B5 \u03B1\u03BD\u03C4\u03AF\u03B3\u03C1\u03B1\u03C6\u03BF \u03B1\u03C3\u03C6\u03B1\u03BB\u03B5\u03AF\u03B1\u03C2 \u03BA\u03B1\u03B9 \u03BD\u03B1 \u03B5\u03C0\u03B1\u03BD\u03B1\u03C6\u03AD\u03C1\u03B5\u03C4\u03B5 \u03C4\u03B9\u03C2 \u03B5\u03BE\u03B1\u03C4\u03BF\u03BC\u03B9\u03BA\u03B5\u03C5\u03BC\u03AD\u03BD\u03B5\u03C2 \u03C1\u03C5\u03B8\u03BC\u03AF\u03C3\u03B5\u03B9\u03C2 \u03C3\u03B1\u03C2.',
             DLG_BUTTONS: ["\u0391\u03C0\u03BF\u03B8\u03AE\u03BA\u03B5\u03C5\u03C3\u03B7", "\u039A\u03BB\u03B5\u03AF\u03C3\u03B9\u03BC\u03BF", "\u0395\u03BE\u03B1\u03B3\u03C9\u03B3\u03AE", "\u0395\u03B9\u03C3\u03B1\u03B3\u03C9\u03B3\u03AE", "\u0395\u03C0\u03B1\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC"],
             DLG_FB_COLOUR_HINT: "\u0391\u03C6\u03AE\u03C3\u03C4\u03B5 \u03BA\u03B5\u03BD\u03CC \u03B3\u03B9\u03B1 \u03BD\u03B1 \u03C7\u03C1\u03B7\u03C3\u03B9\u03BC\u03BF\u03C0\u03BF\u03B9\u03AE\u03C3\u03B5\u03C4\u03B5 \u03C4\u03BF \u03C7\u03C1\u03C9\u03BC\u03B1\u03C4\u03B9\u03BA\u03CC \u03C3\u03C7\u03AE\u03BC\u03B1 \u03C4\u03BF\u03C5 FB"
@@ -584,15 +644,22 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             OTHER_INFO_BOX_CLIMATE_SCIENCE: "Ciencia del clima (cuadro de informaci\xF3n)",
             OTHER_INFO_BOX_SUBSCRIBE: "Suscribir (cuadro de informaci\xF3n)",
             REELS_TITLE: "Reels",
+            DLG_REELS_DESC: "Controles de reproducci\xF3n y bucle.",
             REELS_CONTROLS: "Mostrar controles de video",
             REELS_DISABLE_LOOPING: "Desactivar bucle",
             DLG_TITLE: "Limpia mis feeds",
             DLG_NF: "Feed de noticias",
+            DLG_NF_DESC: "Limpia sugerencias y define lo estricto del feed.",
             DLG_GF: "Feed de grupos",
+            DLG_GF_DESC: "Ordena los feeds de grupos recortando extras y ruido.",
             DLG_VF: "Feed de v\xEDdeos",
+            DLG_VF_DESC: "Mant\xE9n el feed de videos enfocado reduciendo repeticiones y desorden.",
             DLG_MP: "Feed de Marketplace",
+            DLG_MP_DESC: "Filtra anuncios por precio y palabras clave.",
             DLG_PP: "Perfil / P\xE1gina",
-            DLG_OTHER: "Secci\xF3n suplementaria / informaci\xF3n",
+            DLG_PP_DESC: "Ajusta lo que se muestra en perfiles y p\xE1ginas.",
+            DLG_OTHER: "Notas complementarias",
+            DLG_OTHER_DESC: "Oculta cuadros extra que no quieras.",
             DLG_BLOCK_TEXT_FILTER_TITLE: "Filtro de texto",
             DLG_BLOCK_NEW_LINE: "(Separe palabras o frases con un salto de l\xEDnea, se admiten expresiones regulares)",
             NF_BLOCKED_ENABLED: "Habilitadas",
@@ -606,6 +673,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             MP_BLOCKED_RE: "Expresiones regulares (RegExp)",
             PP_BLOCKED_RE: "Expresiones regulares (RegExp)",
             DLG_VERBOSITY: "Opciones para publicaciones ocultas",
+            DLG_PREFERENCES: "Preferencias",
+            DLG_PREFERENCES_DESC: "Etiquetas, ubicaci\xF3n, colores e idioma.",
             DLG_VERBOSITY_CAPTION: "Mostrar una etiqueta si una publicaci\xF3n est\xE1 oculta",
             VERBOSITY_MESSAGE: ["sin etiqueta", "Publicaci\xF3n oculta. Regla: ", " publicaciones ocultas", "7 publicaciones ocultas ~ (solo en el Feed de Grupos)"],
             VERBOSITY_MESSAGE_COLOUR: "Color del texto",
@@ -621,7 +690,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: "Ubicaci\xF3n del cuadro de di\xE1logo Limpia mis feeds",
             CMF_DIALOG_OPTION: ["lado izquierdo", "lado derecho"],
             CMF_BORDER_COLOUR: "Color de borde",
-            DLG_TIPS: "Consejos",
+            DLG_TIPS: "Acerca de / Consejos",
+            DLG_TIPS_DESC: "Enlaces del proyecto, info del mantenedor y ayuda de configuraci\xF3n.",
             DLG_TIPS_CONTENT: 'Limpiar la memoria cach\xE9 de su navegador restablecer\xE1 la configuraci\xF3n a sus valores predeterminados.\n\nUtilice los botones "Exportar" e "Importar" para hacer una copia de seguridad y restaurar su configuraci\xF3n personalizada.',
             DLG_BUTTONS: ["Guardar", "Cerrar", "Exportar", "Importar", "Reajustar"],
             DLG_FB_COLOUR_HINT: "Dejar en blanco para usar el esquema de color de FB"
@@ -667,15 +737,22 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             OTHER_INFO_BOX_CLIMATE_SCIENCE: "Ilmastotiede (tietolaatikko)",
             OTHER_INFO_BOX_SUBSCRIBE: "Rekister\xF6idy (tietolaatikko)",
             REELS_TITLE: "Reels",
+            DLG_REELS_DESC: "Toiston ja silmukoinnin ohjaimet.",
             REELS_CONTROLS: "N\xE4yt\xE4 videon hallintaelementit",
             REELS_DISABLE_LOOPING: "Poista toisto",
             DLG_TITLE: "Puhdista sy\xF6tteeni",
             DLG_NF: "Uutisvirta",
+            DLG_NF_DESC: "Siivoa ehdotukset ja m\xE4\xE4rit\xE4, kuinka tiukka sy\xF6te on.",
             DLG_GF: "Ryhm\xE4sy\xF6te",
+            DLG_GF_DESC: "Siisti ryhm\xE4sy\xF6tteet karsimalla turhaa ja melua.",
             DLG_VF: "Videosy\xF6te",
+            DLG_VF_DESC: "Pid\xE4 videosy\xF6te selke\xE4n\xE4 v\xE4hent\xE4m\xE4ll\xE4 toistoa ja h\xE4ly\xE4.",
             DLG_MP: "Marketplace-sy\xF6te",
+            DLG_MP_DESC: "Suodata ilmoituksia hinnan ja avainsanojen mukaan.",
             DLG_PP: "Profiili / Sivu",
-            DLG_OTHER: "T\xE4ydent\xE4v\xE4 / tieto-osio",
+            DLG_PP_DESC: "S\xE4\xE4d\xE4 mit\xE4 profiileissa ja sivuilla n\xE4ytet\xE4\xE4n.",
+            DLG_OTHER: "Lis\xE4huomiot",
+            DLG_OTHER_DESC: "Piilota ylim\xE4\xE4r\xE4iset laatikot, joita et halua.",
             DLG_BLOCK_TEXT_FILTER_TITLE: "Tekstisuodatin",
             DLG_BLOCK_NEW_LINE: "(Erota sanat tai lauseet rivinvaihdolla, s\xE4\xE4nn\xF6lliset lausekkeet ovat tuettuja)",
             NF_BLOCKED_ENABLED: "Ota vaihtoehto k\xE4ytt\xF6\xF6n",
@@ -689,6 +766,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             MP_BLOCKED_RE: "S\xE4\xE4nn\xF6lliset lausekkeet (RegExp)",
             PP_BLOCKED_RE: "S\xE4\xE4nn\xF6lliset lausekkeet (RegExp)",
             DLG_VERBOSITY: "Vaihtoehdot piilotetuille viesteille",
+            DLG_PREFERENCES: "Asetukset",
+            DLG_PREFERENCES_DESC: "Tunnisteet, sijainti, v\xE4rit ja kieli.",
             DLG_VERBOSITY_CAPTION: "N\xE4yt\xE4 merkki, jos artikkeli on piilotettu",
             VERBOSITY_MESSAGE: ["ei tunnistetta", "Viesti piilotettu. S\xE4\xE4nt\xF6: ", " viesti\xE4 piilotettu", "7 viesti\xE4 piilotettu ~ (vain Ryhmien sy\xF6tteess\xE4)"],
             VERBOSITY_MESSAGE_COLOUR: "Tekstin v\xE4ri",
@@ -704,7 +783,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: "Puhdista sy\xF6tteeni -valintaikkunan sijainti",
             CMF_DIALOG_OPTION: ["vasen puoli", "oikea puoli"],
             CMF_BORDER_COLOUR: "Reunuksen v\xE4ri",
-            DLG_TIPS: "Vinkkej\xE4",
+            DLG_TIPS: "Tietoa / Vinkit",
+            DLG_TIPS_DESC: "Projektin linkit, yll\xE4pit\xE4j\xE4n tiedot ja ohjeet.",
             DLG_TIPS_CONTENT: 'Selaimen v\xE4limuistin tyhjent\xE4minen palauttaa asetuksesi oletusarvoihinsa.\n\nK\xE4yt\xE4 "Vie"- ja "Tuo"-painikkeita varmuuskopioidaksesi ja palauttaaksesi mukautetut asetukset.',
             DLG_BUTTONS: ["Tallentaa", "Sulkea", "Vienti", "Tuonti", "Nollaa"],
             DLG_FB_COLOUR_HINT: "J\xE4t\xE4 tyhj\xE4ksi k\xE4ytt\xE4\xE4ksesi FB:n v\xE4rimaailmaa"
@@ -750,15 +830,22 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             OTHER_INFO_BOX_CLIMATE_SCIENCE: "Science du climat (encadr\xE9 d'information)",
             OTHER_INFO_BOX_SUBSCRIBE: "S\u2019abonner (encadr\xE9 d'information)",
             REELS_TITLE: "Reels",
+            DLG_REELS_DESC: "Contr\xF4les de lecture et de boucle.",
             REELS_CONTROLS: "Afficher les contr\xF4les vid\xE9o",
             REELS_DISABLE_LOOPING: "D\xE9sactiver la boucle",
             DLG_TITLE: "Nettoyer mes flux",
             DLG_NF: "Fil de nouvelles",
+            DLG_NF_DESC: "Nettoyez les suggestions et d\xE9finissez le niveau de s\xE9v\xE9rit\xE9 du fil.",
             DLG_GF: "Flux de groupes",
+            DLG_GF_DESC: "All\xE9gez les fils de groupes en retirant le superflu et le bruit.",
             DLG_VF: "Flux de vid\xE9os",
+            DLG_VF_DESC: "Gardez le fil vid\xE9o clair en r\xE9duisant r\xE9p\xE9titions et encombrement.",
             DLG_MP: "Flux de la place de march\xE9",
+            DLG_MP_DESC: "Filtrez les annonces par prix et mots-cl\xE9s.",
             DLG_PP: "Profil / Page",
-            DLG_OTHER: "Section suppl\xE9mentaire / information",
+            DLG_PP_DESC: "R\xE9glez ce qui s\u2019affiche sur les profils et les pages.",
+            DLG_OTHER: "Notes compl\xE9mentaires",
+            DLG_OTHER_DESC: "Masquez les encarts suppl\xE9mentaires que vous ne voulez pas.",
             DLG_BLOCK_TEXT_FILTER_TITLE: "Filtre de texte",
             DLG_BLOCK_NEW_LINE: "(S\xE9parez les mots ou les phrases par un saut de ligne, les expressions r\xE9guli\xE8res sont prises en charge)",
             NF_BLOCKED_ENABLED: "Activ\xE9",
@@ -772,6 +859,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             MP_BLOCKED_RE: "Expressions r\xE9guli\xE8res (RegExp)",
             PP_BLOCKED_RE: "Expressions r\xE9guli\xE8res (RegExp)",
             DLG_VERBOSITY: "Options pour les publications cach\xE9es",
+            DLG_PREFERENCES: "Pr\xE9f\xE9rences",
+            DLG_PREFERENCES_DESC: "Libell\xE9s, emplacement, couleurs et langue.",
             DLG_VERBOSITY_CAPTION: "Afficher un libell\xE9 si une publication est masqu\xE9e",
             VERBOSITY_MESSAGE: ["pas de libell\xE9", "Poste cach\xE9. R\xE8gle: ", " posts cach\xE9s", "7 posts cach\xE9s ~ (uniquement dans le flux de groupes)"],
             VERBOSITY_MESSAGE_COLOUR: "Couleur du texte",
@@ -787,7 +876,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: "Emplacement de la bo\xEEte de dialogue Nettoyer mes flux",
             CMF_DIALOG_OPTION: ["c\xF4t\xE9 gauche", "c\xF4t\xE9 droit"],
             CMF_BORDER_COLOUR: "Couleur de bordure",
-            DLG_TIPS: "Des astuces",
+            DLG_TIPS: "\xC0 propos / Conseils",
+            DLG_TIPS_DESC: "Liens du projet, infos du mainteneur et aide \xE0 la configuration.",
             DLG_TIPS_CONTENT: 'Vider le cache de votre navigateur r\xE9initialisera vos param\xE8tres \xE0 leurs valeurs par d\xE9faut.\n\nUtilisez les boutons "Exporter" et "Importer" pour sauvegarder et restaurer vos param\xE8tres personnalis\xE9s.',
             DLG_BUTTONS: ["Sauvegarder", "Fermer", "Exporter", "Importer", "R\xE9initialiser"],
             DLG_FB_COLOUR_HINT: "Laissez vide pour utiliser le jeu de couleurs de FB"
@@ -834,15 +924,22 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             OTHER_INFO_BOX_SUBSCRIBE: "\u05D4\u05D9\u05E8\u05E9\u05DD (\u05EA\u05D9\u05D1\u05EA \u05DE\u05D9\u05D3\u05E2)",
             REELS_TITLE: "Reels",
             // -- FB's label
+            DLG_REELS_DESC: "\u05D1\u05E7\u05E8\u05D5\u05EA \u05D4\u05E4\u05E2\u05DC\u05D4 \u05D5\u05DC\u05D5\u05DC\u05D0\u05D4.",
             REELS_CONTROLS: "\u05D4\u05E6\u05D2 \u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA \u05D1\u05E7\u05E8\u05EA \u05D5\u05D9\u05D3\u05D0\u05D5",
             REELS_DISABLE_LOOPING: "\u05D4\u05E9\u05D1\u05EA \u05DC\u05D5\u05DC\u05D0\u05D4",
             DLG_TITLE: "\u05EA\u05E0\u05E7\u05D4 \u05D0\u05EA \u05D4\u05D6\u05E0\u05D5\u05EA \u05E9\u05DC\u05D9",
             DLG_NF: "\u05E0\u05D9\u05D5\u05D6 \u05E4\u05D9\u05D3",
+            DLG_NF_DESC: "\u05E0\u05E7\u05D4 \u05D4\u05E6\u05E2\u05D5\u05EA \u05D5\u05E7\u05D1\u05E2 \u05DB\u05DE\u05D4 \u05E7\u05E4\u05D3\u05E0\u05D9 \u05D9\u05D4\u05D9\u05D4 \u05D4\u05E4\u05D9\u05D3.",
             DLG_GF: "\u05E4\u05D9\u05D3 \u05E7\u05D1\u05D5\u05E6\u05D5\u05EA",
+            DLG_GF_DESC: "\u05E1\u05D3\u05E8 \u05E4\u05D9\u05D3\u05D9\u05DD \u05E9\u05DC \u05E7\u05D1\u05D5\u05E6\u05D5\u05EA \u05E2\u05DC-\u05D9\u05D3\u05D9 \u05E6\u05DE\u05E6\u05D5\u05DD \u05EA\u05D5\u05E1\u05E4\u05D5\u05EA \u05D5\u05E8\u05E2\u05E9.",
             DLG_VF: "\u05E6\u05E4\u05D4 \u05D1\u05E4\u05D9\u05D3 \u05D4\u05E1\u05E8\u05D8\u05D5\u05E0\u05D9\u05DD",
+            DLG_VF_DESC: "\u05E9\u05DE\u05D5\u05E8 \u05E2\u05DC \u05E4\u05D9\u05D3 \u05D4\u05D5\u05D5\u05D9\u05D3\u05D0\u05D5 \u05DE\u05DE\u05D5\u05E7\u05D3 \u05E2\u05DD \u05E4\u05D7\u05D5\u05EA \u05D7\u05D6\u05E8\u05D5\u05EA \u05D5\u05E2\u05D5\u05DE\u05E1.",
             DLG_MP: "\u05D6\u05D9\u05E8\u05EA \u05DE\u05E1\u05D7\u05E8",
+            DLG_MP_DESC: "\u05E1\u05E0\u05DF \u05DE\u05D5\u05D3\u05E2\u05D5\u05EA \u05DC\u05E4\u05D9 \u05DE\u05D7\u05D9\u05E8 \u05D5\u05DE\u05D9\u05DC\u05D5\u05EA \u05DE\u05E4\u05EA\u05D7.",
             DLG_PP: "\u05E4\u05E8\u05D5\u05E4\u05D9\u05DC / \u05D3\u05E3",
-            DLG_OTHER: "\u05DE\u05D3\u05D5\u05E8 \u05DE\u05E9\u05DC\u05D9\u05DD / \u05DE\u05D9\u05D3\u05E2",
+            DLG_PP_DESC: "\u05D4\u05EA\u05D0\u05DD \u05DE\u05D4 \u05DE\u05D5\u05E6\u05D2 \u05D1\u05E4\u05E8\u05D5\u05E4\u05D9\u05DC\u05D9\u05DD \u05D5\u05D1\u05D3\u05E4\u05D9\u05DD.",
+            DLG_OTHER: "\u05D4\u05E2\u05E8\u05D5\u05EA \u05E0\u05D5\u05E1\u05E4\u05D5\u05EA",
+            DLG_OTHER_DESC: "\u05D4\u05E1\u05EA\u05E8 \u05EA\u05D9\u05D1\u05D5\u05EA \u05E0\u05D5\u05E1\u05E4\u05D5\u05EA \u05E9\u05D0\u05D9\u05E0\u05DA \u05E8\u05D5\u05E6\u05D4.",
             DLG_BLOCK_TEXT_FILTER_TITLE: "\u05DE\u05E1\u05E0\u05DF \u05D8\u05E7\u05E1\u05D8",
             DLG_BLOCK_NEW_LINE: "(\u05D4\u05E4\u05E8\u05D3 \u05DE\u05D9\u05DC\u05D9\u05DD \u05D0\u05D5 \u05D1\u05D9\u05D8\u05D5\u05D9\u05D9\u05DD \u05E2\u05DD \u05D9\u05E8\u05D9\u05D3\u05EA \u05E9\u05D5\u05E8\u05D4, \u05D1\u05D9\u05D8\u05D5\u05D9\u05D9\u05DD \u05E8\u05D2\u05D5\u05DC\u05E8\u05D9\u05D9\u05DD \u05E0\u05EA\u05DE\u05DB\u05D9\u05DD)",
             NF_BLOCKED_ENABLED: "\u05DE\u05D5\u05E4\u05E2\u05DC",
@@ -856,6 +953,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             MP_BLOCKED_RE: "\u05D1\u05D9\u05D8\u05D5\u05D9\u05D9\u05DD \u05E8\u05D2\u05D5\u05DC\u05E8\u05D9\u05D9\u05DD (RegExp)",
             PP_BLOCKED_RE: "\u05D1\u05D9\u05D8\u05D5\u05D9\u05D9\u05DD \u05E8\u05D2\u05D5\u05DC\u05E8\u05D9\u05D9\u05DD (RegExp)",
             DLG_VERBOSITY: "\u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA \u05DC\u05E4\u05D5\u05E1\u05D8\u05D9\u05DD \u05DE\u05D5\u05E1\u05EA\u05E8\u05D9\u05DD",
+            DLG_PREFERENCES: "\u05D4\u05E2\u05D3\u05E4\u05D5\u05EA",
+            DLG_PREFERENCES_DESC: "\u05EA\u05D5\u05D5\u05D9\u05D5\u05EA, \u05DE\u05D9\u05E7\u05D5\u05DD, \u05E6\u05D1\u05E2\u05D9\u05DD \u05D5\u05E9\u05E4\u05D4.",
             DLG_VERBOSITY_CAPTION: "\u05D4\u05E6\u05D2 \u05EA\u05D5\u05D9\u05EA \u05D0\u05DD \u05DE\u05D0\u05DE\u05E8 \u05DE\u05D5\u05E1\u05EA\u05E8",
             VERBOSITY_MESSAGE: ["\u05D0\u05D9\u05DF \u05EA\u05D5\u05D5\u05D9\u05EA", "\u05E4\u05D5\u05E1\u05D8 \u05D0\u05D7\u05D3 \u05DE\u05D5\u05E1\u05EA\u05E8. \u05DB\u05DC\u05DC: ", " \u05E4\u05D5\u05E1\u05D8\u05D9\u05DD \u05DE\u05D5\u05E1\u05EA\u05E8\u05D9\u05DD", "7 \u05E4\u05D5\u05E1\u05D8\u05D9\u05DD \u05DE\u05D5\u05E1\u05EA\u05E8\u05D9\u05DD ~ (\u05E8\u05E7 \u05D1\u05E1\u05D3\u05E8 \u05D7\u05D1\u05E8\u05D9\u05DD)"],
             VERBOSITY_MESSAGE_COLOUR: "\u05E6\u05D1\u05E2 \u05D8\u05E7\u05E1\u05D8",
@@ -871,7 +970,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: '\u05DE\u05D9\u05E7\u05D5\u05DD \u05EA\u05D9\u05D1\u05EA \u05D4\u05D3\u05D5-\u05E9\u05D9\u05D7 "\u05E0\u05E7\u05D4 \u05D0\u05EA \u05D4\u05D4\u05D6\u05E0\u05D5\u05EA \u05E9\u05DC\u05D9"',
             CMF_DIALOG_OPTION: ["\u05E6\u05D3 \u05E9\u05DE\u05D0\u05DC", "\u05E6\u05D3 \u05D9\u05DE\u05D9\u05DF"],
             CMF_BORDER_COLOUR: "\u05E6\u05D1\u05E2 \u05D2\u05D1\u05D5\u05DC",
-            DLG_TIPS: "\u05D8\u05D9\u05E4\u05D9\u05DD",
+            DLG_TIPS: "\u05D0\u05D5\u05D3\u05D5\u05EA / \u05D8\u05D9\u05E4\u05D9\u05DD",
+            DLG_TIPS_DESC: "\u05E7\u05D9\u05E9\u05D5\u05E8\u05D9 \u05D4\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8, \u05DE\u05D9\u05D3\u05E2 \u05E2\u05DC \u05D4\u05DE\u05EA\u05D7\u05D6\u05E7 \u05D5\u05E2\u05D6\u05E8\u05D4 \u05D1\u05D4\u05D2\u05D3\u05E8\u05D4.",
             DLG_TIPS_CONTENT: '\u05DE\u05D7\u05D9\u05E7\u05EA \u05D4\u05D4\u05D9\u05E1\u05D8\u05D5\u05E8\u05D4 \u05D1\u05D3\u05E4\u05D3\u05E4\u05DF \u05EA\u05E0\u05E7\u05D4 \u05D0\u05EA \u05D4\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05D5\u05EA\u05D7\u05D6\u05D9\u05E8 \u05D0\u05D5\u05EA\u05DD \u05DC\u05D1\u05E8\u05D9\u05E8\u05EA \u05D4\u05DE\u05D7\u05D3\u05DC.\n\n\u05D4\u05E9\u05EA\u05DE\u05E9 \u05D1"\u05D9\u05D9\u05E6\u05D0" \u05D5"\u05D9\u05D9\u05D1\u05D0" \u05DB\u05D3\u05D9 \u05DC\u05D2\u05D1\u05D5\u05EA \u05D5\u05DC\u05D4\u05D7\u05D6\u05D9\u05E8 \u05D0\u05EA \u05D4\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05E9\u05DC\u05DA',
             DLG_BUTTONS: ["\u05E9\u05DE\u05D5\u05E8", "\u05E1\u05D2\u05D5\u05E8", "\u05D9\u05D9\u05E6\u05D0", "\u05D9\u05D9\u05D1\u05D0", "\u05D0\u05D9\u05E4\u05D5\u05E1"],
             DLG_FB_COLOUR_HINT: "\u05D4\u05E9\u05D0\u05E8 \u05E8\u05D9\u05E7 \u05DB\u05D3\u05D9 \u05DC\u05D4\u05E9\u05EA\u05DE\u05E9 \u05D1\u05E2\u05E8\u05DB\u05EA \u05D4\u05E6\u05D1\u05E2\u05D9\u05DD \u05E9\u05DC FB"
@@ -917,15 +1017,22 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             OTHER_INFO_BOX_CLIMATE_SCIENCE: "Ilmu iklim (kotak informasi)",
             OTHER_INFO_BOX_SUBSCRIBE: "Berlangganan (kotak informasi)",
             REELS_TITLE: "Reels",
+            DLG_REELS_DESC: "Kontrol pemutaran dan pengulangan.",
             REELS_CONTROLS: "Tampilkan kontrol video",
             REELS_DISABLE_LOOPING: "Nonaktifkan pengulangan",
             DLG_TITLE: "Bersihkan feed saya",
             DLG_NF: "Umpan Berita",
+            DLG_NF_DESC: "Bersihkan saran dan tentukan seberapa ketat feed.",
             DLG_GF: "Umpan Grup",
+            DLG_GF_DESC: "Rapikan feed grup dengan mengurangi hal yang berlebihan dan bising.",
             DLG_VF: "Umpan Video",
+            DLG_VF_DESC: "Jaga feed video tetap fokus dengan mengurangi pengulangan dan kekacauan.",
             DLG_MP: "Umpan Marketplace",
+            DLG_MP_DESC: "Saring listing berdasarkan harga dan kata kunci.",
             DLG_PP: "Profil / Halaman",
-            DLG_OTHER: "Bagian tambahan / informasi",
+            DLG_PP_DESC: "Atur apa yang tampil di profil dan halaman.",
+            DLG_OTHER: "Catatan tambahan",
+            DLG_OTHER_DESC: "Sembunyikan kotak tambahan yang tidak Anda inginkan.",
             DLG_BLOCK_TEXT_FILTER_TITLE: "Filter teks",
             DLG_BLOCK_NEW_LINE: "(Pisahkan kata atau frasa dengan jeda baris, Ekspresi Reguler didukung)",
             NF_BLOCKED_ENABLED: "Diaktifkan",
@@ -939,6 +1046,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             MP_BLOCKED_RE: "Ekspresi Reguler (RegExp)",
             PP_BLOCKED_RE: "Ekspresi Reguler (RegExp)",
             DLG_VERBOSITY: "Opsi untuk Postingan Tersembunyi",
+            DLG_PREFERENCES: "Preferensi",
+            DLG_PREFERENCES_DESC: "Label, penempatan, warna, dan bahasa.",
             DLG_VERBOSITY_CAPTION: "Tampilkan label jika kiriman disembunyikan",
             VERBOSITY_MESSAGE: ["tanpa label", "Pos disembunyikan. Aturan: ", " postingan disembunyikan", "7 postingan disembunyikan ~ (hanya di Feed Grup)"],
             VERBOSITY_MESSAGE_COLOUR: "Warna teks",
@@ -954,7 +1063,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: "Lokasi kotak dialog Bersihkan umpan saya",
             CMF_DIALOG_OPTION: ["sisi kiri", "sisi kanan"],
             CMF_BORDER_COLOUR: "Warna perbatasan",
-            DLG_TIPS: "Tips",
+            DLG_TIPS: "Tentang / Tips",
+            DLG_TIPS_DESC: "Tautan proyek, info pengelola, dan bantuan pengaturan.",
             DLG_TIPS_CONTENT: 'Menghapus cache browser Anda akan mengatur ulang pengaturan Anda ke nilai defaultnya.\n\nGunakan tombol "Ekspor" dan "Impor" untuk mencadangkan dan memulihkan pengaturan khusus Anda.',
             DLG_BUTTONS: ["Simpan", "Tutup", "Ekspor", "Impor", "Reset"],
             DLG_FB_COLOUR_HINT: "Biarkan kosong untuk menggunakan skema warna FB"
@@ -1000,15 +1110,22 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             OTHER_INFO_BOX_CLIMATE_SCIENCE: "Scienza del clima (casella informativa)",
             OTHER_INFO_BOX_SUBSCRIBE: "Iscriviti (casella informativa)",
             REELS_TITLE: "Reels",
+            DLG_REELS_DESC: "Controlli di riproduzione e loop.",
             REELS_CONTROLS: "Mostra controlli video",
             REELS_DISABLE_LOOPING: "Disattiva ripetizione",
             DLG_TITLE: "Pulisci i miei feed",
             DLG_NF: "Feed di notizie",
+            DLG_NF_DESC: "Ripulisci i suggerimenti e imposta quanto \xE8 severo il feed.",
             DLG_GF: "Feed di gruppo",
+            DLG_GF_DESC: "Riordina i feed dei gruppi riducendo extra e rumore.",
             DLG_VF: "Feed di video",
+            DLG_VF_DESC: "Rendi il feed video pi\xF9 pulito riducendo ripetizioni e disordine.",
             DLG_MP: "Feed id Marketplace",
+            DLG_MP_DESC: "Filtra gli annunci per prezzo e parole chiave.",
             DLG_PP: "Profilo / Pagina",
-            DLG_OTHER: "Sezione supplementare / informativa",
+            DLG_PP_DESC: "Regola cosa appare su profili e pagine.",
+            DLG_OTHER: "Note aggiuntive",
+            DLG_OTHER_DESC: "Nascondi riquadri extra che non vuoi.",
             DLG_BLOCK_TEXT_FILTER_TITLE: "Filtro di testo",
             DLG_BLOCK_NEW_LINE: "(Separa parole o frasi con un'interruzione di riga, le espressioni regolari sono supportate)",
             NF_BLOCKED_ENABLED: "Abilita opzione",
@@ -1022,6 +1139,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             MP_BLOCKED_RE: "Espressioni regolari (RegExp)",
             PP_BLOCKED_RE: "Espressioni regolari (RegExp)",
             DLG_VERBOSITY: "Opzioni per post nascosti",
+            DLG_PREFERENCES: "Preferenze",
+            DLG_PREFERENCES_DESC: "Etichette, posizione, colori e lingua.",
             DLG_VERBOSITY_CAPTION: "Mostrare un'etichetta se un post \xE8 nascosto",
             VERBOSITY_MESSAGE: ["nessuna etichetta", "Post nascosto. Regola: ", " post nascosti", "7 post nascosti ~ (solo nel Feed di Gruppi)"],
             VERBOSITY_MESSAGE_COLOUR: "Colore del testo",
@@ -1037,7 +1156,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: "Posizione della finestra di dialogo Pulisci i miei feed",
             CMF_DIALOG_OPTION: ["lato sinistro", "lato destro"],
             CMF_BORDER_COLOUR: "Colore del bordo",
-            DLG_TIPS: "Suggerimenti",
+            DLG_TIPS: "Info / Suggerimenti",
+            DLG_TIPS_DESC: "Link al progetto, info del manutentore e aiuto alla configurazione.",
             DLG_TIPS_CONTENT: 'La cancellazione della cache del browser ripristiner\xE0 le impostazioni ai valori predefiniti.\n\nUtilizza i pulsanti "Esporta" e "Importa" per eseguire il backup e ripristinare le impostazioni personalizzate.',
             DLG_BUTTONS: ["Salva", "Chiudi", "Esportare", "Importare", "Ripristina"],
             DLG_FB_COLOUR_HINT: "Lascia vuoto per usare la combinazione di colori di FB"
@@ -1083,15 +1203,22 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             OTHER_INFO_BOX_CLIMATE_SCIENCE: "\u6C17\u5019\u79D1\u5B66\uFF08\u60C5\u5831\u30DC\u30C3\u30AF\u30B9\uFF09",
             OTHER_INFO_BOX_SUBSCRIBE: "\u8CFC\u8AAD\u3059\u308B\uFF08\u60C5\u5831\u30DC\u30C3\u30AF\u30B9\uFF09",
             REELS_TITLE: "\u30EA\u30FC\u30EB\u52D5\u753B",
+            DLG_REELS_DESC: "\u518D\u751F\u3068\u30EB\u30FC\u30D7\u306E\u30B3\u30F3\u30C8\u30ED\u30FC\u30EB\u3002",
             REELS_CONTROLS: "\u30D3\u30C7\u30AA\u30B3\u30F3\u30C8\u30ED\u30FC\u30EB\u3092\u8868\u793A",
             REELS_DISABLE_LOOPING: "\u30EB\u30FC\u30D7\u306E\u7121\u52B9\u5316",
             DLG_TITLE: "\u30D5\u30A3\u30FC\u30C9\u3092\u30AF\u30EA\u30FC\u30F3\u30A2\u30C3\u30D7",
             DLG_NF: "\u30CB\u30E5\u30FC\u30B9\u30D5\u30A3\u30FC\u30C9",
+            DLG_NF_DESC: "\u304A\u3059\u3059\u3081\u3092\u6574\u7406\u3057\u3001\u30D5\u30A3\u30FC\u30C9\u306E\u53B3\u3057\u3055\u3092\u8ABF\u6574\u3057\u307E\u3059\u3002",
             DLG_GF: "\u30B0\u30EB\u30FC\u30D7 \u30D5\u30A3\u30FC\u30C9",
+            DLG_GF_DESC: "\u30B0\u30EB\u30FC\u30D7\u306E\u30D5\u30A3\u30FC\u30C9\u3092\u6574\u7406\u3057\u3066\u4F59\u8A08\u306A\u3082\u306E\u3084\u30CE\u30A4\u30BA\u3092\u6E1B\u3089\u3057\u307E\u3059\u3002",
             DLG_VF: "\u52D5\u753B\u30D5\u30A3\u30FC\u30C9",
+            DLG_VF_DESC: "\u52D5\u753B\u30D5\u30A3\u30FC\u30C9\u306E\u91CD\u8907\u3084\u30CE\u30A4\u30BA\u3092\u6E1B\u3089\u3057\u3066\u898B\u3084\u3059\u304F\u3057\u307E\u3059\u3002",
             DLG_MP: "\u30DE\u30FC\u30B1\u30C3\u30C8\u30D7\u30EC\u30A4\u30B9 \u30D5\u30A3\u30FC\u30C9",
+            DLG_MP_DESC: "\u4FA1\u683C\u3084\u30AD\u30FC\u30EF\u30FC\u30C9\u3067\u51FA\u54C1\u3092\u7D5E\u308A\u8FBC\u307F\u307E\u3059\u3002",
             DLG_PP: "\u30D7\u30ED\u30D5\u30A3\u30FC\u30EB / \u30DA\u30FC\u30B8",
-            DLG_OTHER: "\u88DC\u8DB3\u30FB\u60C5\u5831\u30BB\u30AF\u30B7\u30E7\u30F3",
+            DLG_PP_DESC: "\u30D7\u30ED\u30D5\u30A3\u30FC\u30EB\u3084\u30DA\u30FC\u30B8\u306B\u8868\u793A\u3055\u308C\u308B\u5185\u5BB9\u3092\u8ABF\u6574\u3057\u307E\u3059\u3002",
+            DLG_OTHER: "\u88DC\u8DB3\u30E1\u30E2",
+            DLG_OTHER_DESC: "\u4E0D\u8981\u306A\u8FFD\u52A0\u30DC\u30C3\u30AF\u30B9\u3092\u975E\u8868\u793A\u306B\u3057\u307E\u3059\u3002",
             DLG_BLOCK_TEXT_FILTER_TITLE: "\u30C6\u30AD\u30B9\u30C8\u30D5\u30A3\u30EB\u30BF\u30FC",
             DLG_BLOCK_NEW_LINE: "(\u5358\u8A9E\u3084\u30D5\u30EC\u30FC\u30BA\u3092\u6539\u884C\u3067\u533A\u5207\u3063\u3066\u304F\u3060\u3055\u3044\u3002\u6B63\u898F\u8868\u73FE\u304C\u30B5\u30DD\u30FC\u30C8\u3055\u308C\u3066\u3044\u307E\u3059)",
             NF_BLOCKED_ENABLED: "\u6709\u52B9\u5316",
@@ -1105,6 +1232,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             MP_BLOCKED_RE: "\u6B63\u898F\u8868\u73FE (RegExp)",
             PP_BLOCKED_RE: "\u6B63\u898F\u8868\u73FE (RegExp)",
             DLG_VERBOSITY: "\u975E\u8868\u793A\u6295\u7A3F\u306E\u30AA\u30D7\u30B7\u30E7\u30F3",
+            DLG_PREFERENCES: "\u8A2D\u5B9A",
+            DLG_PREFERENCES_DESC: "\u30E9\u30D9\u30EB\u3001\u914D\u7F6E\u3001\u8272\u3001\u8A00\u8A9E\u3002",
             DLG_VERBOSITY_CAPTION: "\u6295\u7A3F\u304C\u975E\u8868\u793A\u306E\u5834\u5408\u306B\u30E9\u30D9\u30EB\u3092\u8868\u793A\u3059\u308B",
             VERBOSITY_MESSAGE: ["\u30E9\u30D9\u30EB\u306A\u3057", "\u6295\u7A3F\u3092\u975E\u8868\u793A\u306B\u3057\u307E\u3057\u305F\u3002 \u30EB\u30FC\u30EB\uFF1A ", " \u4EF6\u306E\u6295\u7A3F\u304C\u975E\u8868\u793A", "7\u4EF6\u306E\u6295\u7A3F\u304C\u975E\u8868\u793A ~ (\u30B0\u30EB\u30FC\u30D7\u30D5\u30A3\u30FC\u30C9\u306E\u307F)"],
             VERBOSITY_MESSAGE_COLOUR: "\u30C6\u30AD\u30B9\u30C8\u306E\u8272",
@@ -1120,7 +1249,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: "[\u30D5\u30A3\u30FC\u30C9\u306E\u6D88\u53BB] \u30C0\u30A4\u30A2\u30ED\u30B0 \u30DC\u30C3\u30AF\u30B9\u306E\u914D\u7F6E",
             CMF_DIALOG_OPTION: ["\u5DE6\u5074", "\u53F3\u5074"],
             CMF_BORDER_COLOUR: "\u30DC\u30FC\u30C0\u30FC\u30AB\u30E9\u30FC",
-            DLG_TIPS: "\u30D2\u30F3\u30C8",
+            DLG_TIPS: "\u6982\u8981 / \u30D2\u30F3\u30C8",
+            DLG_TIPS_DESC: "\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u30EA\u30F3\u30AF\u3001\u30E1\u30F3\u30C6\u30CA\u60C5\u5831\u3001\u8A2D\u5B9A\u306E\u30D8\u30EB\u30D7\u3002",
             DLG_TIPS_CONTENT: "\u30D6\u30E9\u30A6\u30B6\u306E\u30AD\u30E3\u30C3\u30B7\u30E5\u3092\u30AF\u30EA\u30A2\u3059\u308B\u3068\u3001\u8A2D\u5B9A\u304C\u30C7\u30D5\u30A9\u30EB\u30C8\u5024\u306B\u30EA\u30BB\u30C3\u30C8\u3055\u308C\u307E\u3059\u3002\n\n[\u30A8\u30AF\u30B9\u30DD\u30FC\u30C8] \u304A\u3088\u3073 [\u30A4\u30F3\u30DD\u30FC\u30C8] \u30DC\u30BF\u30F3\u3092\u4F7F\u7528\u3057\u3066\u3001\u30AB\u30B9\u30BF\u30DE\u30A4\u30BA\u3057\u305F\u8A2D\u5B9A\u3092\u30D0\u30C3\u30AF\u30A2\u30C3\u30D7\u304A\u3088\u3073\u5FA9\u5143\u3057\u307E\u3059\u3002",
             DLG_BUTTONS: ["\u30BB\u30FC\u30D6", "\u30AF\u30ED\u30FC\u30BA", "\u8F38\u51FA\u3059\u308B", "\u8F38\u5165", "\u30EA\u30BB\u30C3\u30C8"],
             DLG_FB_COLOUR_HINT: "\u7A7A\u767D\u306E\u307E\u307E\u306B\u3059\u308B\u3068\u3001FB \u306E\u914D\u8272\u304C\u4F7F\u7528\u3055\u308C\u307E\u3059"
@@ -1166,15 +1296,22 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             OTHER_INFO_BOX_CLIMATE_SCIENCE: "Klimata zin\u0101tne (inform\u0101cijas lodzi\u0146\u0161)",
             OTHER_INFO_BOX_SUBSCRIBE: "Abon\u0113t (inform\u0101cijas lodzi\u0146\u0161)",
             REELS_TITLE: "Reels",
+            DLG_REELS_DESC: "Atska\u0146o\u0161anas un cikla kontrole.",
             REELS_CONTROLS: "R\u0101d\u012Bt video vad\u012Bklus",
             REELS_DISABLE_LOOPING: "Atsp\u0113jot cilpoto\u0161anu",
             DLG_TITLE: "T\u012Br\u012Bt manas pl\u016Bsmas",
             DLG_NF: "Zi\u0146u pl\u016Bsma",
+            DLG_NF_DESC: "Sak\u0101rto ieteikumus un nosaki, cik stingrai j\u0101b\u016Bt pl\u016Bsmai.",
             DLG_GF: "Grupu pl\u016Bsma",
+            DLG_GF_DESC: "Sak\u0101rto grupu pl\u016Bsmas, mazinot lieko un troksni.",
             DLG_VF: "Video pl\u016Bsma",
+            DLG_VF_DESC: "Uzturi video pl\u016Bsmu fokus\u0113tu, samazinot atk\u0101rtojumus un jucekli.",
             DLG_MP: "Marketplace",
+            DLG_MP_DESC: "Filtr\u0113 sludin\u0101jumus p\u0113c cenas un atsl\u0113gv\u0101rdiem.",
             DLG_PP: "Profils / Lapa",
-            DLG_OTHER: "Papildu / inform\u0101cija sada\u013Ca",
+            DLG_PP_DESC: "Piel\u0101go, kas redzams profilos un lap\u0101s.",
+            DLG_OTHER: "Papildu piez\u012Bmes",
+            DLG_OTHER_DESC: "Pasl\u0113p papildu lodzi\u0146us, kurus nev\u0113laties.",
             DLG_BLOCK_TEXT_FILTER_TITLE: "Teksta filtrs",
             DLG_BLOCK_NEW_LINE: "(Atdaliet v\u0101rdus vai fr\u0101zes ar rindkopu p\u0101rtraukumu, regul\u0101rie izteicieni tiek atbalst\u012Bti)",
             NF_BLOCKED_ENABLED: "Iesp\u0113jots",
@@ -1188,6 +1325,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             MP_BLOCKED_RE: "Regul\u0101r\u0101s izteiksmes (RegExp)",
             PP_BLOCKED_RE: "Regul\u0101r\u0101s izteiksmes (RegExp)",
             DLG_VERBOSITY: "Sl\u0113pto ierakstu iesp\u0113jas",
+            DLG_PREFERENCES: "Iestat\u012Bjumi",
+            DLG_PREFERENCES_DESC: "Eti\u0137etes, novietojums, kr\u0101sas un valoda.",
             DLG_VERBOSITY_CAPTION: "R\u0101d\u012Bt eti\u0137eti, ja raksts ir pasl\u0113pts",
             VERBOSITY_MESSAGE: ["nav nek\u0101da zi\u0146ojuma", "Zi\u0146a ir pasl\u0113pta. Noteikums: ", " zi\u0146as ir pasl\u0113ptas", "7 zi\u0146as pasl\u0113ptas ~ (tikai Grupu pl\u016Bsm\u0113)"],
             VERBOSITY_MESSAGE_COLOUR: "Teksta kr\u0101sa",
@@ -1203,7 +1342,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: "Dialoglodzi\u0146a T\u012Br\u012Bt manas pl\u016Bsmas atra\u0161an\u0101s vieta",
             CMF_DIALOG_OPTION: ["kreis\u0101 puse", "lab\u0101 puse"],
             CMF_BORDER_COLOUR: "Apmales kr\u0101sa",
-            DLG_TIPS: "Padomi",
+            DLG_TIPS: "Par / Padomi",
+            DLG_TIPS_DESC: "Projekta saites, uztur\u0113t\u0101ja info un iestat\u012B\u0161anas pal\u012Bdz\u012Bba.",
             DLG_TIPS_CONTENT: 'Izt\u012Brot p\u0101rl\u016Bkprogrammas ke\u0161atmi\u0146u, iestat\u012Bjumi tiks atiestat\u012Bti uz noklus\u0113juma v\u0113rt\u012Bb\u0101m.\n\nIzmantojiet pogas "Eksport\u0113t" un "Import\u0113t", lai dubl\u0113tu un atjaunotu piel\u0101gotos iestat\u012Bjumus.',
             DLG_BUTTONS: ["Saglab\u0101jiet", "Aizveriet", "Eksport\u0113t", "Import\u0113t", "Atiestat\u012Bt"],
             DLG_FB_COLOUR_HINT: "Atst\u0101jiet tuk\u0161u, lai izmantotu FB kr\u0101su sh\u0113mu"
@@ -1249,15 +1389,22 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             OTHER_INFO_BOX_CLIMATE_SCIENCE: "Klimaatwetenschap (informatiebox)",
             OTHER_INFO_BOX_SUBSCRIBE: "Abonneren (informatievak)",
             REELS_TITLE: "Reels",
+            DLG_REELS_DESC: "Afspeel- en lusbediening.",
             REELS_CONTROLS: "Toon video bedieningselementen",
             REELS_DISABLE_LOOPING: "Herhalen uitschakelen",
             DLG_TITLE: "Schoon mijn feeds",
             DLG_NF: "Nieuwsfeed",
+            DLG_NF_DESC: "Ruim suggesties op en bepaal hoe streng de feed is.",
             DLG_GF: "Groepsfeed",
+            DLG_GF_DESC: "Maak groepsfeeds rustiger door extra\u2019s en ruis te verminderen.",
             DLG_VF: "Videofeed",
+            DLG_VF_DESC: "Houd de videofeed overzichtelijk door herhaling en rommel te beperken.",
             DLG_MP: "Marktplaatsfeed",
+            DLG_MP_DESC: "Filter aanbiedingen op prijs en trefwoorden.",
             DLG_PP: "Profiel / Pagina",
-            DLG_OTHER: "Aanvullende / informatie sectie",
+            DLG_PP_DESC: "Stel in wat er op profielen en pagina\u2019s verschijnt.",
+            DLG_OTHER: "Aanvullende notities",
+            DLG_OTHER_DESC: "Verberg extra vakken die je niet wilt.",
             DLG_BLOCK_TEXT_FILTER_TITLE: "Tekstfilter",
             DLG_BLOCK_NEW_LINE: "(Scheid woorden of zinnen met een regeleinde, reguliere expressies worden ondersteund)",
             NF_BLOCKED_ENABLED: "Ingeschakeld",
@@ -1271,6 +1418,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             MP_BLOCKED_RE: "Reguliere expressies (RegExp)",
             PP_BLOCKED_RE: "Reguliere expressies (RegExp)",
             DLG_VERBOSITY: "Opties voor verborgen berichten",
+            DLG_PREFERENCES: "Voorkeuren",
+            DLG_PREFERENCES_DESC: "Labels, plaatsing, kleuren en taal.",
             DLG_VERBOSITY_CAPTION: "Toon een label als een artikel verborgen is",
             VERBOSITY_MESSAGE: ["geen label", "Post verborgen. Regel: ", " posts verborgen", "7 posts verborgen ~ (alleen in Groepen Feed)"],
             VERBOSITY_MESSAGE_COLOUR: "Tekstkleur",
@@ -1286,7 +1435,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: "Locatie van het dialoogvenster Mijn feeds opschonen",
             CMF_DIALOG_OPTION: ["linkerkant", "rechterkant"],
             CMF_BORDER_COLOUR: "Randkleur",
-            DLG_TIPS: "Tips",
+            DLG_TIPS: "Over / Tips",
+            DLG_TIPS_DESC: "Projectlinks, info over de beheerder en hulp bij instellen.",
             DLG_TIPS_CONTENT: 'Als u de cache van uw browser wist, worden uw instellingen teruggezet naar hun standaardwaarden.\n\nGebruik de knoppen "Exporteren" en "Importeren" om een back-up te maken van uw aangepaste instellingen en deze te herstellen.',
             DLG_BUTTONS: ["Opslaan", "Sluiten", "Exporteren", "Importeren", "Reset"],
             DLG_FB_COLOUR_HINT: "Laat leeg om het kleurenschema van FB te gebruiken"
@@ -1332,15 +1482,22 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             OTHER_INFO_BOX_CLIMATE_SCIENCE: "Nauka o klimacie (skrzynka informacyjna)",
             OTHER_INFO_BOX_SUBSCRIBE: "Subskrybuj (pole informacyjne)",
             REELS_TITLE: "Reels",
+            DLG_REELS_DESC: "Sterowanie odtwarzaniem i p\u0119tl\u0105.",
             REELS_CONTROLS: "Poka\u017C sterowanie wideo",
             REELS_DISABLE_LOOPING: "Wy\u0142\u0105cz p\u0119tl\u0119",
             DLG_TITLE: "Wyczy\u015B\u0107 moje kana\u0142y",
             DLG_NF: "Kana\u0142 aktualno\u015Bci",
+            DLG_NF_DESC: "Uporz\u0105dkuj sugestie i ustaw, jak restrykcyjny ma by\u0107 kana\u0142.",
             DLG_GF: "Kana\u0142 grup",
+            DLG_GF_DESC: "Uporz\u0105dkuj kana\u0142y grup, ograniczaj\u0105c dodatki i szum.",
             DLG_VF: "Kana\u0142 wideo",
+            DLG_VF_DESC: "Utrzymaj przejrzysty kana\u0142 wideo, ograniczaj\u0105c powt\xF3rki i ba\u0142agan.",
             DLG_MP: "Kana\u0142 Marketplace",
+            DLG_MP_DESC: "Filtruj oferty wed\u0142ug ceny i s\u0142\xF3w kluczowych.",
             DLG_PP: "Profil / Strona",
-            DLG_OTHER: "Sekcja uzupe\u0142niaj\u0105ca/informacyjna",
+            DLG_PP_DESC: "Dostosuj, co pojawia si\u0119 na profilach i stronach.",
+            DLG_OTHER: "Dodatkowe notatki",
+            DLG_OTHER_DESC: "Ukryj dodatkowe pola, kt\xF3rych nie chcesz.",
             DLG_BLOCK_TEXT_FILTER_TITLE: "Filtr tekstu",
             DLG_BLOCK_NEW_LINE: "(Oddziel s\u0142owa lub frazy za pomoc\u0105 znaku nowej linii, wyra\u017Cenia regularne s\u0105 obs\u0142ugiwane)",
             NF_BLOCKED_ENABLED: "W\u0142\u0105czone",
@@ -1354,6 +1511,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             MP_BLOCKED_RE: "Wyra\u017Cenia regularne (RegExp)",
             PP_BLOCKED_RE: "Wyra\u017Cenia regularne (RegExp)",
             DLG_VERBOSITY: "Opcje dla ukrytych post\xF3w",
+            DLG_PREFERENCES: "Preferencje",
+            DLG_PREFERENCES_DESC: "Etykiety, po\u0142o\u017Cenie, kolory i j\u0119zyk.",
             DLG_VERBOSITY_CAPTION: "Poka\u017C etykiet\u0119, je\u015Bli artyku\u0142 jest ukryty",
             VERBOSITY_MESSAGE: ["brak etykiety", "Ukryto 1 post. Regu\u0142a: ", " posty ukryte", "7 posty ukryte ~ (tylko w Kana\u0142ach Grup)"],
             VERBOSITY_MESSAGE_COLOUR: "Kolor tekstu",
@@ -1369,7 +1528,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: "Lokalizacja okna dialogowego Wyczy\u015B\u0107 moje kana\u0142y",
             CMF_DIALOG_OPTION: ["lewa strona", "prawa strona"],
             CMF_BORDER_COLOUR: "Kolor obramowania",
-            DLG_TIPS: "Sugestia",
+            DLG_TIPS: "O projekcie / Wskaz\xF3wki",
+            DLG_TIPS_DESC: "Linki do projektu, informacje o opiekunie i pomoc w konfiguracji.",
             DLG_TIPS_CONTENT: "Wyczyszczenie pami\u0119ci podr\u0119cznej przegl\u0105darki spowoduje zresetowanie ustawie\u0144 do warto\u015Bci domy\u015Blnych.\n\nU\u017Cyj przycisk\xF3w \u201EEksportuj\u201D i \u201EImportuj\u201D, aby wykona\u0107 kopi\u0119 zapasow\u0105 i przywr\xF3ci\u0107 niestandardowe ustawienia.",
             DLG_BUTTONS: ["Zapisz", "Zamknij", "Eksport", "Import", "Przesk\u0142ada\u0107"],
             DLG_FB_COLOUR_HINT: "Pozostaw puste, aby u\u017Cy\u0107 schematu kolor\xF3w FB"
@@ -1415,15 +1575,22 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             OTHER_INFO_BOX_CLIMATE_SCIENCE: "Ci\xEAncia do Clima (caixa de informa\xE7\xF5es)",
             OTHER_INFO_BOX_SUBSCRIBE: "Assine (caixa de informa\xE7\xF5es)",
             REELS_TITLE: "Reels",
+            DLG_REELS_DESC: "Controles de reprodu\xE7\xE3o e loop.",
             REELS_CONTROLS: "Mostrar controles do v\xEDdeo",
             REELS_DISABLE_LOOPING: "Desativar repeti\xE7\xE3o",
             DLG_TITLE: "Limpe meus feeds",
             DLG_NF: "Feed de not\xEDcias",
+            DLG_NF_DESC: "Limpe sugest\xF5es e defina o qu\xE3o r\xEDgido \xE9 o feed.",
             DLG_GF: "Feed de grupos",
+            DLG_GF_DESC: "Organize os feeds de grupos reduzindo extras e ru\xEDdo.",
             DLG_VF: "Feed de v\xEDdeos",
+            DLG_VF_DESC: "Mantenha o feed de v\xEDdeos focado reduzindo repeti\xE7\xF5es e bagun\xE7a.",
             DLG_MP: "Feed de mercado",
+            DLG_MP_DESC: "Filtre an\xFAncios por pre\xE7o e palavras-chave.",
             DLG_PP: "Perfil / P\xE1gina",
-            DLG_OTHER: "Se\xE7\xE3o suplementar / informativa",
+            DLG_PP_DESC: "Ajuste o que aparece em perfis e p\xE1ginas.",
+            DLG_OTHER: "Notas suplementares",
+            DLG_OTHER_DESC: "Oculte caixas extras que voc\xEA n\xE3o quer.",
             DLG_BLOCK_TEXT_FILTER_TITLE: "Filtro de texto",
             DLG_BLOCK_NEW_LINE: "(Separe palavras ou frases com uma quebra de linha, express\xF5es regulares s\xE3o suportadas)",
             NF_BLOCKED_ENABLED: "Habilidoso",
@@ -1437,6 +1604,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             MP_BLOCKED_RE: "Express\xF5es regulares (RegExp)",
             PP_BLOCKED_RE: "Express\xF5es regulares (RegExp)",
             DLG_VERBOSITY: "Op\xE7\xF5es para postagens ocultas",
+            DLG_PREFERENCES: "Prefer\xEAncias",
+            DLG_PREFERENCES_DESC: "R\xF3tulos, posi\xE7\xE3o, cores e idioma.",
             DLG_VERBOSITY_CAPTION: "Mostrar um r\xF3tulo se uma postagem estiver oculta",
             VERBOSITY_MESSAGE: ["sem r\xF3tulo", "Postagem oculta. Regra: ", " postagens ocultas", "7 postagens ocultas ~ (apenas no Feed de Grupos)"],
             VERBOSITY_MESSAGE_COLOUR: "Cor do texto",
@@ -1452,7 +1621,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: "Localiza\xE7\xE3o da caixa de di\xE1logo Limpe meus feeds",
             CMF_DIALOG_OPTION: ["lado esquerdo", "lado direito"],
             CMF_BORDER_COLOUR: "Cor da borda",
-            DLG_TIPS: "Pontas",
+            DLG_TIPS: "Sobre / Dicas",
+            DLG_TIPS_DESC: "Links do projeto, info do mantenedor e ajuda de configura\xE7\xE3o.",
             DLG_TIPS_CONTENT: 'Limpar o cache do navegador redefinir\xE1 suas configura\xE7\xF5es para os valores padr\xE3o.\n\nUse os bot\xF5es "Exportar" e "Importar" para fazer backup e restaurar suas configura\xE7\xF5es personalizadas.',
             DLG_BUTTONS: ["Salvar", "Fechar", "Exportar", "Importar", "Redefinir"],
             DLG_FB_COLOUR_HINT: "Deixe em branco para usar o esquema de cores do FB"
@@ -1498,15 +1668,22 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             OTHER_INFO_BOX_CLIMATE_SCIENCE: "\u041D\u0430\u0443\u043A\u0430 \u043E \u043A\u043B\u0438\u043C\u0430\u0442\u0435 (\u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u043E\u043D\u043D\u043E\u0435 \u043E\u043A\u043D\u043E)",
             OTHER_INFO_BOX_SUBSCRIBE: "\u041F\u043E\u0434\u043F\u0438\u0441\u0430\u0442\u044C\u0441\u044F (\u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u043E\u043D\u043D\u043E\u0435 \u043E\u043A\u043D\u043E)",
             REELS_TITLE: "\u0412\u0438\u0434\u0435\u043E Reels",
+            DLG_REELS_DESC: "\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0432\u043E\u0441\u043F\u0440\u043E\u0438\u0437\u0432\u0435\u0434\u0435\u043D\u0438\u0435\u043C \u0438 \u0446\u0438\u043A\u043B\u043E\u043C.",
             REELS_CONTROLS: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u044C \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u044B \u0443\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u044F \u0432\u0438\u0434\u0435\u043E",
             REELS_DISABLE_LOOPING: "\u041E\u0442\u043A\u043B\u044E\u0447\u0438\u0442\u044C \u043F\u043E\u0432\u0442\u043E\u0440\u0435\u043D\u0438\u0435",
             DLG_TITLE: "\u041E\u0447\u0438\u0441\u0442\u0438\u0442\u044C \u043C\u043E\u0438 \u043D\u043E\u0432\u043E\u0441\u0442\u043D\u044B\u0435 \u043B\u0435\u043D\u0442\u044B",
             DLG_NF: "\u041B\u0435\u043D\u0442\u0430 \u043D\u043E\u0432\u043E\u0441\u0442\u0435\u0439",
+            DLG_NF_DESC: "\u0423\u0431\u0435\u0440\u0438\u0442\u0435 \u043B\u0438\u0448\u043D\u0438\u0435 \u0440\u0435\u043A\u043E\u043C\u0435\u043D\u0434\u0430\u0446\u0438\u0438 \u0438 \u0437\u0430\u0434\u0430\u0439\u0442\u0435 \u0441\u0442\u0440\u043E\u0433\u043E\u0441\u0442\u044C \u043B\u0435\u043D\u0442\u044B.",
             DLG_GF: "\u041B\u0435\u043D\u0442\u0430 \u0433\u0440\u0443\u043F\u043F",
+            DLG_GF_DESC: "\u041F\u0440\u0438\u0432\u0435\u0434\u0438\u0442\u0435 \u043B\u0435\u043D\u0442\u044B \u0433\u0440\u0443\u043F\u043F \u0432 \u043F\u043E\u0440\u044F\u0434\u043E\u043A, \u0443\u0431\u0440\u0430\u0432 \u043B\u0438\u0448\u043D\u0435\u0435 \u0438 \u0448\u0443\u043C.",
             DLG_VF: "\u041B\u0435\u043D\u0442\u0430 \u0432\u0438\u0434\u0435\u043E",
+            DLG_VF_DESC: "\u0421\u0434\u0435\u043B\u0430\u0439\u0442\u0435 \u043B\u0435\u043D\u0442\u0443 \u0432\u0438\u0434\u0435\u043E \u0447\u0438\u0449\u0435, \u0443\u043C\u0435\u043D\u044C\u0448\u0430\u044F \u043F\u043E\u0432\u0442\u043E\u0440\u044B \u0438 \u0448\u0443\u043C.",
             DLG_MP: "\u041B\u0435\u043D\u0442\u0430 Marketplace",
+            DLG_MP_DESC: "\u0424\u0438\u043B\u044C\u0442\u0440\u0443\u0439\u0442\u0435 \u043E\u0431\u044A\u044F\u0432\u043B\u0435\u043D\u0438\u044F \u043F\u043E \u0446\u0435\u043D\u0435 \u0438 \u043A\u043B\u044E\u0447\u0435\u0432\u044B\u043C \u0441\u043B\u043E\u0432\u0430\u043C.",
             DLG_PP: "\u041F\u0440\u043E\u0444\u0438\u043B\u044C / \u0421\u0442\u0440\u0430\u043D\u0438\u0446\u0430",
-            DLG_OTHER: "\u0414\u043E\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C\u043D\u044B\u0439/\u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u043E\u043D\u043D\u044B\u0439 \u0440\u0430\u0437\u0434\u0435\u043B",
+            DLG_PP_DESC: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u0442\u0435, \u0447\u0442\u043E \u043F\u043E\u043A\u0430\u0437\u044B\u0432\u0430\u0435\u0442\u0441\u044F \u0432 \u043F\u0440\u043E\u0444\u0438\u043B\u044F\u0445 \u0438 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0430\u0445.",
+            DLG_OTHER: "\u0414\u043E\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C\u043D\u044B\u0435 \u0437\u0430\u043C\u0435\u0442\u043A\u0438",
+            DLG_OTHER_DESC: "\u0421\u043A\u0440\u043E\u0439\u0442\u0435 \u0434\u043E\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C\u043D\u044B\u0435 \u0431\u043B\u043E\u043A\u0438, \u043A\u043E\u0442\u043E\u0440\u044B\u0435 \u0432\u0430\u043C \u043D\u0435 \u043D\u0443\u0436\u043D\u044B.",
             DLG_BLOCK_TEXT_FILTER_TITLE: "\u0422\u0435\u043A\u0441\u0442\u043E\u0432\u044B\u0439 \u0444\u0438\u043B\u044C\u0442\u0440",
             DLG_BLOCK_NEW_LINE: "(\u0420\u0430\u0437\u0434\u0435\u043B\u044F\u0439\u0442\u0435 \u0441\u043B\u043E\u0432\u0430 \u0438\u043B\u0438 \u0444\u0440\u0430\u0437\u044B \u0441 \u043F\u043E\u043C\u043E\u0449\u044C\u044E \u0440\u0430\u0437\u0440\u044B\u0432\u0430 \u0441\u0442\u0440\u043E\u043A\u0438, \u043F\u043E\u0434\u0434\u0435\u0440\u0436\u0438\u0432\u0430\u044E\u0442\u0441\u044F \u0440\u0435\u0433\u0443\u043B\u044F\u0440\u043D\u044B\u0435 \u0432\u044B\u0440\u0430\u0436\u0435\u043D\u0438\u044F)",
             NF_BLOCKED_ENABLED: "\u0412\u043A\u043B\u044E\u0447\u0435\u043D\u043E",
@@ -1520,6 +1697,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             MP_BLOCKED_RE: "\u0420\u0435\u0433\u0443\u043B\u044F\u0440\u043D\u044B\u0435 \u0432\u044B\u0440\u0430\u0436\u0435\u043D\u0438\u044F (RegExp)",
             PP_BLOCKED_RE: "\u0420\u0435\u0433\u0443\u043B\u044F\u0440\u043D\u044B\u0435 \u0432\u044B\u0440\u0430\u0436\u0435\u043D\u0438\u044F (RegExp)",
             DLG_VERBOSITY: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u0441\u043A\u0440\u044B\u0442\u044B\u0445 \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u0439",
+            DLG_PREFERENCES: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438",
+            DLG_PREFERENCES_DESC: "\u041C\u0435\u0442\u043A\u0438, \u0440\u0430\u0441\u043F\u043E\u043B\u043E\u0436\u0435\u043D\u0438\u0435, \u0446\u0432\u0435\u0442\u0430 \u0438 \u044F\u0437\u044B\u043A.",
             DLG_VERBOSITY_CAPTION: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u044C \u044F\u0440\u043B\u044B\u043A, \u0435\u0441\u043B\u0438 \u0437\u0430\u043F\u0438\u0441\u044C \u0441\u043A\u0440\u044B\u0442\u0430",
             VERBOSITY_MESSAGE: ["\u043D\u0435\u0442 \u044F\u0440\u043B\u044B\u043A\u0430", "\u041F\u043E\u0441\u0442 \u0441\u043A\u0440\u044B\u0442. \u041F\u0440\u0430\u0432\u0438\u043B\u043E: ", " \u043F\u043E\u0441\u0442\u043E\u0432 \u0441\u043A\u0440\u044B\u0442\u043E", "7 \u043F\u043E\u0441\u0442\u043E\u0432 \u0441\u043A\u0440\u044B\u0442\u043E ~ (\u0442\u043E\u043B\u044C\u043A\u043E \u0432 \u041B\u0435\u043D\u0442\u0435 \u0413\u0440\u0443\u043F\u043F)"],
             VERBOSITY_MESSAGE_COLOUR: "\u0426\u0432\u0435\u0442 \u0442\u0435\u043A\u0441\u0442\u0430",
@@ -1535,7 +1714,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: "\u0420\u0430\u0441\u043F\u043E\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u0434\u0438\u0430\u043B\u043E\u0433\u043E\u0432\u043E\u0433\u043E \u043E\u043A\u043D\u0430 \xAB\u041E\u0447\u0438\u0441\u0442\u0438\u0442\u044C \u043C\u043E\u0438 \u043B\u0435\u043D\u0442\u044B\xBB",
             CMF_DIALOG_OPTION: ["\u043B\u0435\u0432\u0430\u044F \u0441\u0442\u043E\u0440\u043E\u043D\u0430", "\u043F\u0440\u0430\u0432\u0430\u044F \u0441\u0442\u043E\u0440\u043E\u043D\u0430"],
             CMF_BORDER_COLOUR: "\u0426\u0432\u0435\u0442 \u0433\u0440\u0430\u043D\u0438\u0446\u044B",
-            DLG_TIPS: "\u0421\u043E\u0432\u0435\u0442\u044B",
+            DLG_TIPS: "\u041E \u043F\u0440\u043E\u0435\u043A\u0442\u0435 / \u0421\u043E\u0432\u0435\u0442\u044B",
+            DLG_TIPS_DESC: "\u0421\u0441\u044B\u043B\u043A\u0438 \u043F\u0440\u043E\u0435\u043A\u0442\u0430, \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F \u043E \u0441\u043E\u043F\u0440\u043E\u0432\u043E\u0436\u0434\u0430\u044E\u0449\u0435\u043C \u0438 \u043F\u043E\u043C\u043E\u0449\u044C \u0441 \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u043E\u0439.",
             DLG_TIPS_CONTENT: "\u041E\u0447\u0438\u0441\u0442\u043A\u0430 \u043A\u044D\u0448\u0430 \u0431\u0440\u0430\u0443\u0437\u0435\u0440\u0430 \u0441\u0431\u0440\u043E\u0441\u0438\u0442 \u0432\u0430\u0448\u0438 \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u043D\u0430 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u044F \u043F\u043E \u0443\u043C\u043E\u043B\u0447\u0430\u043D\u0438\u044E.\n\n\u0418\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0439\u0442\u0435 \u043A\u043D\u043E\u043F\u043A\u0438 \xAB\u042D\u043A\u0441\u043F\u043E\u0440\u0442\xBB \u0438 \xAB\u0418\u043C\u043F\u043E\u0440\u0442\xBB, \u0447\u0442\u043E\u0431\u044B \u0441\u043E\u0437\u0434\u0430\u0442\u044C \u0440\u0435\u0437\u0435\u0440\u0432\u043D\u0443\u044E \u043A\u043E\u043F\u0438\u044E \u0438 \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C \u0432\u0430\u0448\u0438 \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438.",
             DLG_BUTTONS: ["\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C", "\u0417\u0430\u043A\u0440\u044B\u0442\u044C", "\u042D\u043A\u0441\u043F\u043E\u0440\u0442", "\u0418\u043C\u043F\u043E\u0440\u0442", "\u0421\u0431\u0440\u043E\u0441"],
             DLG_FB_COLOUR_HINT: "\u041E\u0441\u0442\u0430\u0432\u044C\u0442\u0435 \u043F\u0443\u0441\u0442\u044B\u043C, \u0447\u0442\u043E\u0431\u044B \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C \u0446\u0432\u0435\u0442\u043E\u0432\u0443\u044E \u0441\u0445\u0435\u043C\u0443 FB"
@@ -1580,15 +1760,22 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             OTHER_INFO_BOX_CLIMATE_SCIENCE: "\u0130klim Bilimi (bilgi kutusu)",
             OTHER_INFO_BOX_SUBSCRIBE: "Abone ol (bilgi kutusu)",
             REELS_TITLE: "Reels",
+            DLG_REELS_DESC: "Oynatma ve d\xF6ng\xFC kontrolleri.",
             REELS_CONTROLS: "Video kontrollerini g\xF6ster",
             REELS_DISABLE_LOOPING: "D\xF6ng\xFCy\xFC devre d\u0131\u015F\u0131 b\u0131rak",
             DLG_TITLE: "Feed'lerimi temizle",
             DLG_NF: "Haber ak\u0131\u015F\u0131",
+            DLG_NF_DESC: "\xD6nerileri temizleyin ve ak\u0131\u015F\u0131n ne kadar s\u0131k\u0131 olaca\u011F\u0131n\u0131 ayarlay\u0131n.",
             DLG_GF: "Gruplar Feed'i",
+            DLG_GF_DESC: "Grup ak\u0131\u015Flar\u0131n\u0131 d\xFCzenleyerek fazlal\u0131klar\u0131 ve g\xFCr\xFClt\xFCy\xFC azalt\u0131n.",
             DLG_VF: "Video Beslemelerini \u0130zle",
+            DLG_VF_DESC: "Video ak\u0131\u015F\u0131n\u0131 tekrar ve karma\u015Fay\u0131 azaltarak odakl\u0131 tutun.",
             DLG_MP: "Pazar Yeri Feed'i",
+            DLG_MP_DESC: "\u0130lanlar\u0131 fiyat ve anahtar kelimelere g\xF6re filtreleyin.",
             DLG_PP: "Profil / Sayfa",
-            DLG_OTHER: "Tamamlay\u0131c\u0131 / bilgi b\xF6l\xFCm\xFC",
+            DLG_PP_DESC: "Profil ve sayfalarda g\xF6r\xFCnenleri ayarlay\u0131n.",
+            DLG_OTHER: "Ek Notlar",
+            DLG_OTHER_DESC: "\u0130stemedi\u011Finiz ek kutular\u0131 gizleyin.",
             DLG_BLOCK_TEXT_FILTER_TITLE: "Metin filtresi",
             DLG_BLOCK_NEW_LINE: "(Kelimeleri veya ifadeleri sat\u0131r sonu ile ay\u0131r\u0131n, D\xFCzenli \u0130fadeler desteklenir)",
             NF_BLOCKED_ENABLED: "Etkinle\u015Ftirildi",
@@ -1602,6 +1789,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             MP_BLOCKED_RE: "D\xFCzenli \u0130fadeler (RegExp)",
             PP_BLOCKED_RE: "D\xFCzenli \u0130fadeler (RegExp)",
             DLG_VERBOSITY: "Gizli G\xF6nderi Se\xE7enekleri",
+            DLG_PREFERENCES: "Tercihler",
+            DLG_PREFERENCES_DESC: "Etiketler, konum, renkler ve dil.",
             DLG_VERBOSITY_CAPTION: "Bir g\xF6nderi gizlenmi\u015Fse bir etiket g\xF6ster",
             VERBOSITY_MESSAGE: ["etiket yok", "G\xF6nderi gizlendi. Kural: ", " g\xF6nderi gizlendi", "7 g\xF6nderi gizlendi ~ (yaln\u0131zca Grup Beslemesi)"],
             VERBOSITY_MESSAGE_COLOUR: "Metin rengi",
@@ -1617,7 +1806,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: `"Feed'lerimi temizle" ileti\u015Fim kutusunun konumu`,
             CMF_DIALOG_OPTION: ["sol yan", "sa\u011F yan"],
             CMF_BORDER_COLOUR: "Kenarl\u0131k rengi",
-            DLG_TIPS: "Ipu\xE7lar\u0131",
+            DLG_TIPS: "Hakk\u0131nda / \u0130pu\xE7lar\u0131",
+            DLG_TIPS_DESC: "Proje ba\u011Flant\u0131lar\u0131, bak\u0131m sorumlusu bilgisi ve kurulum yard\u0131m\u0131.",
             DLG_TIPS_CONTENT: 'Taray\u0131c\u0131n\u0131z\u0131n \xF6nbelle\u011Fini temizlemek, ayarlar\u0131n\u0131z\u0131 varsay\u0131lan de\u011Ferlerine s\u0131f\u0131rlayacakt\u0131r. \n\n\xD6zelle\u015Ftirilmi\u015F ayarlar\u0131n\u0131z\u0131 yedeklemek ve geri y\xFCklemek i\xE7in "D\u0131\u015Fa Aktar" ve "\u0130\xE7e Aktar" d\xFC\u011Fmelerini kullan\u0131n.',
             DLG_BUTTONS: ["Kaydetmek", "Kapat", "\u0130hracat", "\u0130\xE7e aktarmak", "S\u0131f\u0131rla"],
             DLG_FB_COLOUR_HINT: "FB'un renk d\xFCzenini kullanmak i\xE7in bo\u015F b\u0131rak\u0131n"
@@ -1663,15 +1853,22 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             OTHER_INFO_BOX_CLIMATE_SCIENCE: "\u041D\u0430\u0443\u043A\u0430 \u043F\u0440\u043E \u043A\u043B\u0456\u043C\u0430\u0442 (\u0456\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0456\u0439\u043D\u0435 \u0432\u0456\u043A\u043D\u043E)",
             OTHER_INFO_BOX_SUBSCRIBE: "\u041F\u0456\u0434\u043F\u0438\u0441\u0430\u0442\u0438\u0441\u044F (\u0456\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0456\u0439\u043D\u0435 \u0432\u0456\u043A\u043D\u043E)",
             REELS_TITLE: "Reels",
+            DLG_REELS_DESC: "\u041A\u0435\u0440\u0443\u0432\u0430\u043D\u043D\u044F \u0432\u0456\u0434\u0442\u0432\u043E\u0440\u0435\u043D\u043D\u044F\u043C \u0456 \u0446\u0438\u043A\u043B\u043E\u043C.",
             REELS_CONTROLS: "\u0412\u0456\u0434\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u043D\u044F \u0435\u043B\u0435\u043C\u0435\u043D\u0442\u0456\u0432 \u043A\u0435\u0440\u0443\u0432\u0430\u043D\u043D\u044F \u0432\u0456\u0434\u0435\u043E",
             REELS_DISABLE_LOOPING: "\u0412\u0438\u043C\u043A\u043D\u0443\u0442\u0438 \u043F\u043E\u0432\u0442\u043E\u0440\u0435\u043D\u043D\u044F",
             DLG_TITLE: "\u041E\u0447\u0438\u0441\u0442\u0438\u0442\u0438 \u043C\u043E\u0457 \u0441\u0442\u0440\u0456\u0447\u043A\u0438",
             DLG_NF: "\u0421\u0442\u0440\u0456\u0447\u043A\u0430 \u043D\u043E\u0432\u0438\u043D",
+            DLG_NF_DESC: "\u041F\u0440\u0438\u0431\u0435\u0440\u0456\u0442\u044C \u0440\u0435\u043A\u043E\u043C\u0435\u043D\u0434\u0430\u0446\u0456\u0457 \u0442\u0430 \u0437\u0430\u0434\u0430\u0439\u0442\u0435 \u0441\u0443\u0432\u043E\u0440\u0456\u0441\u0442\u044C \u0441\u0442\u0440\u0456\u0447\u043A\u0438.",
             DLG_GF: "\u0421\u0442\u0440\u0456\u0447\u043A\u0430 \u0413\u0440\u0443\u043F\u0438",
+            DLG_GF_DESC: "\u0423\u043F\u043E\u0440\u044F\u0434\u043A\u0443\u0439\u0442\u0435 \u0441\u0442\u0440\u0456\u0447\u043A\u0438 \u0433\u0440\u0443\u043F, \u043F\u0440\u0438\u0431\u0440\u0430\u0432\u0448\u0438 \u0437\u0430\u0439\u0432\u0435 \u0439 \u0448\u0443\u043C.",
             DLG_VF: "\u0421\u0442\u0440\u0456\u0447\u043A\u0430 \u0432\u0456\u0434\u0435\u043E",
+            DLG_VF_DESC: "\u0417\u0440\u043E\u0431\u0456\u0442\u044C \u0432\u0456\u0434\u0435\u043E\u0441\u0442\u0440\u0456\u0447\u043A\u0443 \u0447\u0438\u0441\u0442\u0456\u0448\u043E\u044E, \u0437\u043C\u0435\u043D\u0448\u0438\u0432\u0448\u0438 \u043F\u043E\u0432\u0442\u043E\u0440\u0438 \u0439 \u0431\u0435\u0437\u043B\u0430\u0434.",
             DLG_MP: "\u0421\u0442\u0440\u0456\u0447\u043A\u0430 Marketplace",
+            DLG_MP_DESC: "\u0424\u0456\u043B\u044C\u0442\u0440\u0443\u0439\u0442\u0435 \u043E\u0433\u043E\u043B\u043E\u0448\u0435\u043D\u043D\u044F \u0437\u0430 \u0446\u0456\u043D\u043E\u044E \u0442\u0430 \u043A\u043B\u044E\u0447\u043E\u0432\u0438\u043C\u0438 \u0441\u043B\u043E\u0432\u0430\u043C\u0438.",
             DLG_PP: "\u041F\u0440\u043E\u0444\u0456\u043B\u044C / \u0421\u0442\u043E\u0440\u0456\u043D\u043A\u0430",
-            DLG_OTHER: "\u0414\u043E\u0434\u0430\u0442\u043A\u043E\u0432\u0438\u0439/\u0456\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0456\u0439\u043D\u0438\u0439 \u0440\u043E\u0437\u0434\u0456\u043B",
+            DLG_PP_DESC: "\u041D\u0430\u043B\u0430\u0448\u0442\u0443\u0439\u0442\u0435, \u0449\u043E \u043F\u043E\u043A\u0430\u0437\u0443\u0454\u0442\u044C\u0441\u044F \u0432 \u043F\u0440\u043E\u0444\u0456\u043B\u044F\u0445 \u0456 \u0441\u0442\u043E\u0440\u0456\u043D\u043A\u0430\u0445.",
+            DLG_OTHER: "\u0414\u043E\u0434\u0430\u0442\u043A\u043E\u0432\u0456 \u043D\u043E\u0442\u0430\u0442\u043A\u0438",
+            DLG_OTHER_DESC: "\u0421\u0445\u043E\u0432\u0430\u0439\u0442\u0435 \u0437\u0430\u0439\u0432\u0456 \u0431\u043B\u043E\u043A\u0438, \u044F\u043A\u0456 \u043D\u0435 \u0445\u043E\u0447\u0435\u0442\u0435.",
             DLG_BLOCK_TEXT_FILTER_TITLE: "\u0422\u0435\u043A\u0441\u0442\u043E\u0432\u0438\u0439 \u0444\u0456\u043B\u044C\u0442\u0440",
             DLG_BLOCK_NEW_LINE: "(\u0420\u043E\u0437\u0434\u0456\u043B\u044F\u0439\u0442\u0435 \u0441\u043B\u043E\u0432\u0430 \u0430\u0431\u043E \u0444\u0440\u0430\u0437\u0438 \u0440\u043E\u0437\u0440\u0438\u0432\u043E\u043C \u0440\u044F\u0434\u043A\u0430, \u0440\u0435\u0433\u0443\u043B\u044F\u0440\u043D\u0456 \u0432\u0438\u0440\u0430\u0437\u0438 \u043F\u0456\u0434\u0442\u0440\u0438\u043C\u0443\u044E\u0442\u044C\u0441\u044F)",
             NF_BLOCKED_ENABLED: "\u0423\u0432\u0456\u043C\u043A\u043D\u0435\u043D\u043E",
@@ -1685,6 +1882,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             MP_BLOCKED_RE: "\u0420\u0435\u0433\u0443\u043B\u044F\u0440\u043D\u0456 \u0432\u0438\u0440\u0430\u0437\u0438 (RegExp)",
             PP_BLOCKED_RE: "\u0420\u0435\u0433\u0443\u043B\u044F\u0440\u043D\u0456 \u0432\u0438\u0440\u0430\u0437\u0438 (RegExp)",
             DLG_VERBOSITY: "\u041F\u0430\u0440\u0430\u043C\u0435\u0442\u0440\u0438 \u043F\u0440\u0438\u0445\u043E\u0432\u0430\u043D\u0438\u0445 \u0434\u043E\u043F\u0438\u0441\u0456\u0432",
+            DLG_PREFERENCES: "\u041D\u0430\u043B\u0430\u0448\u0442\u0443\u0432\u0430\u043D\u043D\u044F",
+            DLG_PREFERENCES_DESC: "\u041C\u0456\u0442\u043A\u0438, \u0440\u043E\u0437\u0442\u0430\u0448\u0443\u0432\u0430\u043D\u043D\u044F, \u043A\u043E\u043B\u044C\u043E\u0440\u0438 \u0442\u0430 \u043C\u043E\u0432\u0430.",
             DLG_VERBOSITY_CAPTION: "\u0412\u0456\u0434\u043E\u0431\u0440\u0430\u0436\u0430\u0442\u0438 \u043C\u0456\u0442\u043A\u0443, \u044F\u043A\u0449\u043E \u043F\u0443\u0431\u043B\u0456\u043A\u0430\u0446\u0456\u044F \u043F\u0440\u0438\u0445\u043E\u0432\u0430\u043D\u0430",
             VERBOSITY_MESSAGE: ["\u0436\u043E\u0434\u043D\u043E\u0457 \u043C\u0456\u0442\u043A\u0438", "\u0414\u043E\u043F\u0438\u0441 \u043F\u0440\u0438\u0445\u043E\u0432\u0430\u043D\u0438\u0439. \u041F\u0440\u0430\u0432\u0438\u043B\u043E: ", " \u0434\u043E\u043F\u0438\u0441\u0438 \u043F\u0440\u0438\u0445\u043E\u0432\u0430\u043D\u043E", "7 \u0434\u043E\u043F\u0438\u0441\u0438 \u043F\u0440\u0438\u0445\u043E\u0432\u0430\u043D\u043E ~ (\u043B\u0438\u0448\u0435 \u0432 \u0441\u0442\u0440\u0456\u0447\u0446\u0456 \u0413\u0440\u0443\u043F)"],
             VERBOSITY_MESSAGE_COLOUR: "\u041A\u043E\u043B\u0456\u0440 \u0442\u0435\u043A\u0441\u0442\u0443",
@@ -1700,7 +1899,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: "\u0420\u043E\u0437\u0442\u0430\u0448\u0443\u0432\u0430\u043D\u043D\u044F \u0434\u0456\u0430\u043B\u043E\u0433\u043E\u0432\u043E\u0433\u043E \u0432\u0456\u043A\u043D\u0430 \xAB\u041E\u0447\u0438\u0441\u0442\u0438\u0442\u0438 \u043C\u043E\u0457 \u0441\u0442\u0440\u0456\u0447\u043A\u0438\xBB",
             CMF_DIALOG_OPTION: ["\u043B\u0456\u0432\u0430 \u0441\u0442\u043E\u0440\u043E\u043D\u0430", "\u043F\u0440\u0430\u0432\u0430 \u0441\u0442\u043E\u0440\u043E\u043D\u0430"],
             CMF_BORDER_COLOUR: "\u041A\u043E\u043B\u0456\u0440 \u043A\u043E\u0440\u0434\u043E\u043D\u0443",
-            DLG_TIPS: "\u041F\u0456\u0434\u043A\u0430\u0437\u043A\u0438",
+            DLG_TIPS: "\u041F\u0440\u043E \u043F\u0440\u043E\u0454\u043A\u0442 / \u041F\u043E\u0440\u0430\u0434\u0438",
+            DLG_TIPS_DESC: "\u041F\u043E\u0441\u0438\u043B\u0430\u043D\u043D\u044F \u043D\u0430 \u043F\u0440\u043E\u0454\u043A\u0442, \u0456\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0456\u044F \u043F\u0440\u043E \u0441\u0443\u043F\u0440\u043E\u0432\u0456\u0434\u043D\u0438\u043A\u0430 \u0442\u0430 \u0434\u043E\u043F\u043E\u043C\u043E\u0433\u0430 \u0437 \u043D\u0430\u043B\u0430\u0448\u0442\u0443\u0432\u0430\u043D\u043D\u044F\u043C.",
             DLG_TIPS_CONTENT: "\u041E\u0447\u0438\u0449\u0435\u043D\u043D\u044F \u043A\u0435\u0448\u0443 \u0431\u0440\u0430\u0443\u0437\u0435\u0440\u0430 \u043F\u0440\u0438\u0437\u0432\u0435\u0434\u0435 \u0434\u043E \u0441\u043A\u0438\u0434\u0430\u043D\u043D\u044F \u043D\u0430\u043B\u0430\u0448\u0442\u0443\u0432\u0430\u043D\u044C \u0434\u043E \u0437\u043D\u0430\u0447\u0435\u043D\u044C \u0437\u0430 \u0437\u0430\u043C\u043E\u0432\u0447\u0443\u0432\u0430\u043D\u043D\u044F\u043C.\n\n\u0412\u0438\u043A\u043E\u0440\u0438\u0441\u0442\u043E\u0432\u0443\u0439\u0442\u0435 \u043A\u043D\u043E\u043F\u043A\u0438 \xAB\u0415\u043A\u0441\u043F\u043E\u0440\u0442\xBB \u0442\u0430 \xAB\u0406\u043C\u043F\u043E\u0440\u0442\xBB, \u0449\u043E\u0431 \u0441\u0442\u0432\u043E\u0440\u0438\u0442\u0438 \u0440\u0435\u0437\u0435\u0440\u0432\u043D\u0443 \u043A\u043E\u043F\u0456\u044E \u0442\u0430 \u0432\u0456\u0434\u043D\u043E\u0432\u0438\u0442\u0438 \u043D\u0430\u043B\u0430\u0448\u0442\u043E\u0432\u0430\u043D\u0456 \u043D\u0430\u043B\u0430\u0448\u0442\u0443\u0432\u0430\u043D\u043D\u044F.",
             DLG_BUTTONS: ["\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438", "\u0417\u0430\u043A\u0440\u0438\u0442\u0438", "\u0415\u043A\u0441\u043F\u043E\u0440\u0442", "\u0406\u043C\u043F\u043E\u0440\u0442", "\u0421\u043A\u0438\u043D\u0443\u0442\u0438"],
             DLG_FB_COLOUR_HINT: "\u0417\u0430\u043B\u0438\u0448\u0442\u0435 \u043F\u043E\u0440\u043E\u0436\u043D\u0456\u043C, \u0449\u043E\u0431 \u0432\u0438\u043A\u043E\u0440\u0438\u0441\u0442\u043E\u0432\u0443\u0432\u0430\u0442\u0438 \u043A\u043E\u043B\u0456\u0440\u043D\u0443 \u0441\u0445\u0435\u043C\u0443 FB"
@@ -1746,15 +1946,22 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             OTHER_INFO_BOX_CLIMATE_SCIENCE: "Khoa h\u1ECDc kh\xED h\u1EADu (h\u1ED9p th\xF4ng tin)",
             OTHER_INFO_BOX_SUBSCRIBE: "\u0110\u0103ng k\xED (h\u1ED9p th\xF4ng tin)",
             REELS_TITLE: "Reels",
+            DLG_REELS_DESC: "\u0110i\u1EC1u khi\u1EC3n ph\xE1t v\xE0 l\u1EB7p.",
             REELS_CONTROLS: "Hi\u1EC3n th\u1ECB \u0111i\u1EC1u khi\u1EC3n video",
             REELS_DISABLE_LOOPING: "T\u1EAFt l\u1EB7p l\u1EA1i",
             DLG_TITLE: "L\xE0m s\u1EA1ch ngu\u1ED3n c\u1EA5p d\u1EEF li\u1EC7u c\u1EE7a t\xF4i",
             DLG_NF: "Ngu\u1ED3n c\u1EA5p tin t\u1EE9c",
+            DLG_NF_DESC: "D\u1ECDn g\u1EE3i \xFD v\xE0 \u0111\u1EB7t m\u1EE9c \u0111\u1ED9 nghi\xEAm kh\u1EAFc c\u1EE7a b\u1EA3ng tin.",
             DLG_GF: "Ngu\u1ED3n c\u1EA5p d\u1EEF li\u1EC7u Nh\xF3m",
+            DLG_GF_DESC: "D\u1ECDn g\u1ECDn b\u1EA3ng tin nh\xF3m b\u1EB1ng c\xE1ch gi\u1EA3m ph\u1EA7n th\u1EEBa v\xE0 nhi\u1EC5u.",
             DLG_VF: "Ngu\u1ED3n c\u1EA5p d\u1EEF li\u1EC7u video",
+            DLG_VF_DESC: "Gi\u1EEF b\u1EA3ng tin video g\u1ECDn b\u1EB1ng c\xE1ch gi\u1EA3m l\u1EB7p l\u1EA1i v\xE0 l\u1ED9n x\u1ED9n.",
             DLG_MP: "Ngu\u1ED3n c\u1EA5p d\u1EEF li\u1EC7u Marketplace",
+            DLG_MP_DESC: "L\u1ECDc danh s\xE1ch theo gi\xE1 v\xE0 t\u1EEB kh\xF3a.",
             DLG_PP: "H\u1ED3 s\u01A1 / Trang",
-            DLG_OTHER: "Ph\u1EA7n b\u1ED5 sung/th\xF4ng tin",
+            DLG_PP_DESC: "Ch\u1EC9nh nh\u1EEFng g\xEC hi\u1EC3n th\u1ECB tr\xEAn h\u1ED3 s\u01A1 v\xE0 trang.",
+            DLG_OTHER: "Ghi ch\xFA b\u1ED5 sung",
+            DLG_OTHER_DESC: "\u1EA8n c\xE1c h\u1ED9p b\u1ED5 sung m\xE0 b\u1EA1n kh\xF4ng mu\u1ED1n.",
             DLG_BLOCK_TEXT_FILTER_TITLE: "B\u1ED9 l\u1ECDc v\u0103n b\u1EA3n",
             DLG_BLOCK_NEW_LINE: "(Ng\u0103n c\xE1ch t\u1EEB ho\u1EB7c c\u1EE5m t\u1EEB b\u1EB1ng d\u1EA5u xu\u1ED1ng d\xF2ng, Bi\u1EC3u th\u1EE9c ch\xEDnh quy \u0111\u01B0\u1EE3c h\u1ED7 tr\u1EE3)",
             NF_BLOCKED_ENABLED: "\u0110\xE3 k\xEDch ho\u1EA1t",
@@ -1768,6 +1975,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             MP_BLOCKED_RE: "Bi\u1EC3u th\u1EE9c ch\xEDnh quy (RegExp)",
             PP_BLOCKED_RE: "Bi\u1EC3u th\u1EE9c ch\xEDnh quy (RegExp)",
             DLG_VERBOSITY: "T\xF9y ch\u1ECDn cho b\xE0i \u0111\u0103ng \u1EA9n",
+            DLG_PREFERENCES: "T\xF9y ch\u1ECDn",
+            DLG_PREFERENCES_DESC: "Nh\xE3n, v\u1ECB tr\xED, m\xE0u s\u1EAFc v\xE0 ng\xF4n ng\u1EEF.",
             DLG_VERBOSITY_CAPTION: "Hi\u1EC3n th\u1ECB m\u1ED9t nh\xE3n n\u1EBFu m\u1ED9t b\xE0i \u0111\u0103ng b\u1ECB \u1EA9n",
             VERBOSITY_MESSAGE: ["kh\xF4ng c\xF3 nh\xE3n", "B\xE0i b\u1ECB \u1EA9n. Quy t\u1EAFc: ", " b\xE0i vi\u1EBFt \u1EA9n", "7 b\xE0i vi\u1EBFt \u1EA9n ~ (ch\u1EC9 \xE1p d\u1EE5ng cho B\u1EA3ng tin Nh\xF3m)"],
             VERBOSITY_MESSAGE_COLOUR: "M\xE0u v\u0103n b\u1EA3n",
@@ -1783,7 +1992,8 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: "V\u1ECB tr\xED c\u1EE7a h\u1ED9p tho\u1EA1i L\xE0m s\u1EA1ch ngu\u1ED3n c\u1EA5p d\u1EEF li\u1EC7u c\u1EE7a t\xF4i",
             CMF_DIALOG_OPTION: ["b\xEAn tr\xE1i", "b\xEAn ph\u1EA3i"],
             CMF_BORDER_COLOUR: "M\xE0u vi\u1EC1n",
-            DLG_TIPS: "Th\u1EE7 thu\u1EADt",
+            DLG_TIPS: "Gi\u1EDBi thi\u1EC7u / M\u1EB9o",
+            DLG_TIPS_DESC: "Li\xEAn k\u1EBFt d\u1EF1 \xE1n, th\xF4ng tin ng\u01B0\u1EDDi b\u1EA3o tr\xEC v\xE0 tr\u1EE3 gi\xFAp thi\u1EBFt l\u1EADp.",
             DLG_TIPS_CONTENT: 'X\xF3a b\u1ED9 nh\u1EDB cache c\u1EE7a tr\xECnh duy\u1EC7t s\u1EBD \u0111\u1EB7t l\u1EA1i c\xE0i \u0111\u1EB7t c\u1EE7a b\u1EA1n v\u1EC1 c\xE1c gi\xE1 tr\u1ECB m\u1EB7c \u0111\u1ECBnh c\u1EE7a ch\xFAng.\n\nS\u1EED d\u1EE5ng c\xE1c n\xFAt "Xu\u1EA5t" v\xE0 "Nh\u1EADp" \u0111\u1EC3 sao l\u01B0u v\xE0 kh\xF4i ph\u1EE5c c\xE0i \u0111\u1EB7t t\xF9y ch\u1EC9nh c\u1EE7a b\u1EA1n.',
             DLG_BUTTONS: ["L\u01B0u", "\u0110\xF3ng", "Xu\u1EA5t", "Nh\u1EADp", "\u0110\u1EB7t l\u1EA1i"],
             DLG_FB_COLOUR_HINT: "\u0110\u1EC3 tr\u1ED1ng \u0111\u1EC3 s\u1EED d\u1EE5ng b\u1EA3ng m\xE0u c\u1EE7a FB"
@@ -1837,7 +2047,7 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VF: "\u89C6\u9891\u63D0\u8981",
             DLG_MP: "\u5E02\u573A\u63D0\u8981",
             DLG_PP: "\u4E2A\u4EBA\u8D44\u6599 / \u9875\u9762",
-            DLG_OTHER: "\u8865\u5145/\u8D44\u6599\u90E8\u5206",
+            DLG_OTHER: "Ghi ch\xFA b\u1ED5 sung",
             DLG_BLOCK_TEXT_FILTER_TITLE: "\u6587\u672C\u8FC7\u6EE4\u5668",
             DLG_BLOCK_NEW_LINE: "(\u4F7F\u7528\u6362\u884C\u7B26\u5206\u9694\u5355\u8BCD\u6216\u77ED\u8BED\uFF0C\u652F\u6301\u6B63\u5219\u8868\u8FBE\u5F0F)",
             NF_BLOCKED_ENABLED: "\u542F\u7528",
@@ -1866,7 +2076,7 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: "\u201C\u6E05\u7406\u6211\u7684\u63D0\u8981\u201D\u5BF9\u8BDD\u6846\u4F4D\u7F6E",
             CMF_DIALOG_OPTION: ["\u5DE6\u8FB9", "\u53F3\u8FB9"],
             CMF_BORDER_COLOUR: "\u8FB9\u6846\u989C\u8272",
-            DLG_TIPS: "\u63D0\u793A",
+            DLG_TIPS: "Gi\u1EDBi thi\u1EC7u / M\u1EB9o",
             DLG_TIPS_CONTENT: "\u6E05\u9664\u6D4F\u89C8\u5668\u7F13\u5B58\u4F1A\u5C06\u60A8\u7684\u8BBE\u7F6E\u91CD\u7F6E\u4E3A\u9ED8\u8BA4\u503C\u3002\n\n\u4F7F\u7528\u201C\u5BFC\u51FA\u201D\u548C\u201C\u5BFC\u5165\u201D\u6309\u94AE\u6765\u5907\u4EFD\u548C\u6062\u590D\u60A8\u7684\u81EA\u5B9A\u4E49\u8BBE\u7F6E\u3002",
             DLG_BUTTONS: ["\u8282\u7701", "\u5173", "\u51FA\u53E3", "\u8FDB\u53E3", "\u91CD\u7F6E"],
             DLG_FB_COLOUR_HINT: "\u7559\u7A7A\u4EE5\u4F7F\u7528 FB \u7684\u914D\u8272\u65B9\u6848"
@@ -1920,7 +2130,7 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VF: "\u5F71\u7247\u52D5\u614B\u6D88\u606F",
             DLG_MP: "Marketplace \u52D5\u614B\u6D88\u606F",
             DLG_PP: "\u500B\u4EBA\u6A94\u6848 / \u9801\u9762",
-            DLG_OTHER: "\u88DC\u5145/\u8CC7\u8A0A\u90E8\u5206",
+            DLG_OTHER: "Ghi ch\xFA b\u1ED5 sung",
             DLG_BLOCK_TEXT_FILTER_TITLE: "\u6587\u5B57\u904E\u6FFE\u5668",
             DLG_BLOCK_NEW_LINE: "(\u4F7F\u7528\u63DB\u884C\u7B26\u5206\u9694\u55AE\u8A5E\u6216\u77ED\u8A9E\uFF0C\u652F\u6301\u6B63\u5247\u8868\u9054\u5F0F)",
             NF_BLOCKED_ENABLED: "\u555F\u7528",
@@ -1949,7 +2159,7 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             CMF_DIALOG_LOCATION: "\u300C\u6E05\u7406\u6211\u7684\u52D5\u614B\u6D88\u606F\u300D\u5C0D\u8A71\u6846\u7684\u4F4D\u7F6E",
             CMF_DIALOG_OPTION: ["\u5DE6\u908A", "\u53F3\u908A"],
             CMF_BORDER_COLOUR: "\u908A\u6846\u984F\u8272",
-            DLG_TIPS: "\u63D0\u793A",
+            DLG_TIPS: "Gi\u1EDBi thi\u1EC7u / M\u1EB9o",
             DLG_TIPS_CONTENT: "\u6E05\u9664\u700F\u89BD\u5668\u5FEB\u53D6\u6703\u5C07\u60A8\u7684\u8A2D\u5B9A\u91CD\u7F6E\u70BA\u9810\u8A2D\u503C\u3002\n\n\u4F7F\u7528\u300C\u532F\u51FA\u300D\u548C\u300C\u532F\u5165\u300D\u6309\u9215\u4F86\u5099\u4EFD\u548C\u56DE\u5FA9\u60A8\u7684\u81EA\u5B9A\u7FA9\u8A2D\u5B9A\u3002",
             DLG_BUTTONS: ["\u5132\u5B58", "\u95DC\u9589", "\u532F\u51FA", "\u532F\u5165", "\u91CD\u8A2D"],
             DLG_FB_COLOUR_HINT: "\u7559\u7A7A\u4EE5\u4F7F\u7528 FB \u7684\u914D\u8272\u65B9\u6848"
@@ -2549,35 +2759,40 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
           "border-radius: 0.55rem 0.55rem 0 0; width:75%; margin:0 auto; padding: 0.45rem 0.25rem; font-style:italic; text-align:center; font-weight:normal;" + (options.VERBOSITY_MESSAGE_COLOUR === "" ? "" : `  color: ${options.VERBOSITY_MESSAGE_COLOUR}; `) + `background-color:${options.VERBOSITY_MESSAGE_BG_COLOUR === "" ? defaults.VERBOSITY_MESSAGE_BG_COLOUR : options.VERBOSITY_MESSAGE_BG_COLOUR}; `
         );
         addToSS(state, `[${state.cssHideNumberOfShares}]`, "display:none !important;");
-        const userBorderColour = options.CMF_BORDER_COLOUR || "";
-        const defaultBorderColour = defaults.CMF_BORDER_COLOUR || "";
-        const dialogBorderColour = userBorderColour && userBorderColour !== defaultBorderColour ? userBorderColour : "var(--divider)";
         const tColour = "var(--primary-text)";
         addToSS(
           state,
           ".fb-cmf ",
-          `position:fixed; top:0.15rem; bottom:0.15rem; display:flex; flex-direction:column; width: 100%; max-width:30rem; padding:0.75rem; z-index:5;box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);border:1px solid ${dialogBorderColour}; border-radius:12px; opacity:0; visibility:hidden; color:${tColour};`
+          "position:fixed; top:56px; bottom:16px; left:16px; display:flex; flex-direction:column; width: 100%; max-width:30rem; padding:0.75rem; z-index:5;box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1); overflow:hidden;border:none; border-radius:12px; opacity:0; visibility:hidden; color:" + tColour + ";"
         );
         addToSS(state, ".fb-cmf", "background-color: var(--comment-background);");
-        addToSS(state, ".fb-cmf header", "display:flex; align-items:center; justify-content:space-between; direction:ltr;");
+        addToSS(
+          state,
+          ".fb-cmf header",
+          "display:flex; align-items:flex-start; justify-content:space-between; direction:ltr; padding:0 1rem 0.5rem 0;"
+        );
         addToSS(
           state,
           ".fb-cmf header .fb-cmf-icon",
           "display:none;"
         );
         addToSS(state, ".fb-cmf header .fb-cmf-icon svg", "width:28px; height:28px; margin:0;");
-        addToSS(state, ".fb-cmf header .fb-cmf-title", "flex-grow:2; align-self:auto; order:2; text-align:left;");
+        addToSS(
+          state,
+          ".fb-cmf header .fb-cmf-title",
+          "flex-grow:2; align-self:auto; order:2; text-align:left; padding:0;"
+        );
         addToSS(
           state,
           ".fb-cmf header .fb-cmf-title .script-version",
           "font-size: 0.75rem; font-weight: normal;"
         );
-        addToSS(state, ".fb-cmf header .fb-cmf-lang-1", "padding-top:0.35rem;");
-        addToSS(state, ".fb-cmf header .fb-cmf-lang-2", "padding-top:0.25rem;");
+        addToSS(state, ".fb-cmf header .fb-cmf-lang-1", "padding-top:0;");
+        addToSS(state, ".fb-cmf header .fb-cmf-lang-2", "padding-top:0;");
         addToSS(
           state,
           ".fb-cmf header .fb-cmf-title > div",
-          "font-size:1.25rem; font-weight: 700; text-align:left;"
+          'font-size:24px; font-weight:700; line-height:28px; text-align:left;font-family:"Segoe UI Historic","Segoe UI",Helvetica,Arial,sans-serif;'
         );
         addToSS(
           state,
@@ -2587,7 +2802,7 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         addToSS(
           state,
           ".fb-cmf header .fb-cmf-close",
-          "flex-grow:0; align-self:auto; width:auto; text-align:right; padding: 0; order:3;"
+          "flex-grow:0; align-self:flex-start; width:auto; text-align:right; padding: 0; order:3;"
         );
         addToSS(
           state,
@@ -2597,15 +2812,80 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         addToSS(state, ".fb-cmf header .fb-cmf-close button:hover", "background-color: var(--hover-overlay);");
         addToSS(
           state,
-          ".fb-cmf div.content",
-          "flex:1; overflow: hidden auto; border:none; border-radius:12px; color: var(--primary-text); padding:0.75rem; background-color: var(--card-background);"
+          ".fb-cmf .fb-cmf-body",
+          "display:flex; gap:1rem; flex:1; overflow-y:auto; overflow-x:hidden; scrollbar-gutter: stable;"
         );
-        addToSS(state, ".fb-cmf fieldset", "margin:0.5rem 0; padding:0 0.5rem; border:none;");
+        addToSS(
+          state,
+          ".fb-cmf .fb-cmf-body",
+          "scrollbar-width: thin; scrollbar-color: var(--secondary-icon) transparent;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf .fb-cmf-body::-webkit-scrollbar",
+          "width:4px; height:4px;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf .fb-cmf-body::-webkit-scrollbar-track",
+          "background: transparent;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf .fb-cmf-body::-webkit-scrollbar-thumb",
+          "background-color: var(--secondary-icon); border-radius: 999px;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf .fb-cmf-main",
+          "flex:1 1 auto; min-width:0; display:flex; flex-direction:column;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf .fb-cmf-side",
+          "flex:0 0 auto; width:max-content; align-self:flex-start; position:sticky; top:0;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf div.content",
+          "flex:0 0 auto; overflow: visible; border:none; border-radius:12px; color: var(--primary-text); padding:0.75rem; background-color: var(--card-background);"
+        );
+        addToSS(state, ".fb-cmf fieldset", "margin:0.5rem 0; padding:0; border:none;");
         addToSS(state, ".fb-cmf fieldset *", "font-size: 0.8125rem;");
         addToSS(
           state,
           ".fb-cmf fieldset legend",
-          "font-size: 0.85rem; padding: 0.35rem 0.5rem; line-height: 1.6; border: none;border-radius: 8px; color: var(--primary-text); font-weight: 600; position: relative; overflow: hidden;margin: 0 0.5rem; display:inline-flex; align-items:center;"
+          "padding: 0.5rem 0.75rem; border: none;border-radius: 8px; color: var(--primary-text); position: relative; overflow: hidden;margin: 0; display:flex; align-items:center; gap:0.75rem; width:100%; box-sizing:border-box;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf fieldset legend.cmf-legend",
+          "cursor:pointer;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf fieldset legend .cmf-legend-icon",
+          "width:36px; height:36px; border-radius:50%; background-color: var(--secondary-button-background);display:flex; align-items:center; justify-content:center; color: var(--primary-icon); flex-shrink:0;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf fieldset legend .cmf-legend-icon svg",
+          "width:20px; height:20px; fill: currentColor;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf fieldset legend .cmf-legend-text",
+          "display:flex; flex-direction:column; align-items:flex-start; gap:0; min-width:0;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf fieldset legend .cmf-legend-title",
+          "font-size:0.95rem; font-weight:600; line-height:1.05; color: var(--primary-text); margin:0; padding:0;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf fieldset legend .cmf-legend-subtext",
+          "font-size:0.75rem; font-weight:400; line-height:1.05; color: var(--secondary-text); margin:0; padding:0;"
         );
         addToSS(
           state,
@@ -2613,7 +2893,6 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
           'content:""; position:absolute; inset:0; border-radius:inherit; background-color: var(--hover-overlay);opacity:0; pointer-events:none; transition: opacity 0.1s cubic-bezier(0, 0, 1, 1);'
         );
         addToSS(state, ".fb-cmf fieldset legend:hover::after", "opacity:1;");
-        addToSS(state, ".fb-cmf fieldset legend:hover", "cursor: pointer;");
         addToSS(
           state,
           ".fb-cmf fieldset.cmf-visible,.fb-cmf fieldset.cmf-visible legend ",
@@ -2624,12 +2903,12 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
           ".fb-cmf fieldset.cmf-hidden,.fb-cmf fieldset.cmf-hidden legend ",
           "border-color: transparent;"
         );
-        addToSS(state, ".fb-cmf fieldset.cmf-hidden *:not(legend) ", "display: none;");
+        addToSS(state, ".fb-cmf fieldset.cmf-hidden > :not(legend)", "display: none;");
         addToSS(state, ".fb-cmf fieldset legend::after", 'content: "";');
         addToSS(
           state,
           ".fb-cmf fieldset label",
-          "display:flex; align-items:center; gap:0.5rem; min-height:40px; padding:0.25rem 0.5rem; margin:0;color: var(--primary-text); font-weight: normal; width:100%; max-width:100%; box-sizing:border-box;border-radius:8px; position:relative; overflow:hidden;"
+          "display:flex; align-items:center; gap:0.4rem; min-height:32px; padding:0.15rem 0.5rem; margin:0;color: var(--primary-text); font-weight: normal; width:100%; max-width:100%; box-sizing:border-box;border-radius:8px; position:relative; overflow:hidden;"
         );
         addToSS(state, ".fb-cmf fieldset label *", "color: inherit;");
         addToSS(
@@ -2639,6 +2918,26 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         );
         addToSS(state, ".fb-cmf fieldset label[disabled]", "color:darkgrey;");
         addToSS(state, ".fb-cmf fieldset textarea", "width:100%; height:12rem;");
+        addToSS(
+          state,
+          ".fb-cmf fieldset strong",
+          "display:block; margin:0.35rem 0 0.15rem 0; font-weight:600; color: var(--primary-text);"
+        );
+        addToSS(
+          state,
+          ".fb-cmf fieldset small",
+          "display:block; margin:0.15rem 0 0.35rem 0; color: var(--secondary-text);"
+        );
+        addToSS(
+          state,
+          ".fb-cmf .cmf-row",
+          "margin:0.1rem 0;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf fieldset span",
+          "display:block; margin:0.35rem 0 0.15rem 0; color: var(--secondary-text);"
+        );
         addToSS(
           state,
           ".fb-cmf .fb-cmf-search",
@@ -2672,7 +2971,12 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         addToSS(
           state,
           ".fb-cmf footer",
-          "display:flex; justify-content:flex-end; gap:0.5rem; padding:0.75rem 0.25rem; text-align:center;"
+          "display:flex; flex-direction:column; gap:0.5rem; padding:0.75rem; text-align:center; background-color: var(--card-background);border-radius:12px;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf footer .fileResults",
+          "margin-top:0.25rem; font-size:0.75rem; color: var(--secondary-text);"
         );
         addToSS(state, ".fb-cmf .buttons button", "margin-left: 0.25rem; margin-right: 0.25rem;");
         addToSS(state, ".fb-cmf .fileInput", "display:none;");
@@ -2777,12 +3081,33 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         addToSS(
           state,
           "div#fbcmf footer > button",
-          "font-family: inherit; cursor: pointer;height: var(--button-height-medium); padding: 0 var(--button-padding-horizontal-medium);border: none; border-radius: var(--button-corner-radius);background-color: var(--secondary-button-background);-webkit-transition: background-color 0.2s linear; transition: background-color 0.2s linear;font-size: .9375rem; font-weight: 600;color: var(--secondary-button-text);"
+          "font-family: inherit; cursor: pointer;height: 48px; padding: 0 0.5rem;border: none; border-radius: 8px;background-color: transparent;display:flex; align-items:center; gap:0.5rem; justify-content:flex-start;font-size: .9375rem; font-weight: 600;color: var(--primary-text); position:relative; overflow:hidden;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf footer .cmf-action-text",
+          "padding-right: 0.5rem;"
         );
         addToSS(
           state,
           "#fbcmf footer > button:hover",
-          "font-family: inherit;background-color: var(--primary-button-background);color: var(--primary-button-text);"
+          "font-family: inherit;"
+        );
+        addToSS(
+          state,
+          "#fbcmf footer > button::after",
+          'content:""; position:absolute; inset:0; border-radius:inherit;background-color: var(--hover-overlay); opacity:0; pointer-events:none;transition: opacity 0.1s cubic-bezier(0, 0, 1, 1);'
+        );
+        addToSS(state, "#fbcmf footer > button:hover::after", "opacity:1;");
+        addToSS(
+          state,
+          ".fb-cmf footer .cmf-action-icon",
+          "width:36px; height:36px; border-radius:50%; background-color: var(--secondary-button-background);display:flex; align-items:center; justify-content:center; color: var(--primary-icon); flex-shrink:0;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf footer .cmf-action-icon svg",
+          "width:20px; height:20px; fill: currentColor;"
         );
         if (state.tempStyleSheetCode.length > 0) {
           styleTag.appendChild(document.createTextNode(state.tempStyleSheetCode));
@@ -5617,6 +5942,7 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
           label.appendChild(document.createTextNode(cbName));
         }
         const div = document.createElement("div");
+        div.classList.add("cmf-row");
         div.appendChild(label);
         return div;
       }
@@ -5624,6 +5950,7 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         const arrElements = [];
         for (let i = 0; i < keyWords[cbName].length; i += 1) {
           const div = document.createElement("div");
+          div.classList.add("cmf-row");
           const cbKeyWord = keyWords[cbName][i];
           const cb = document.createElement("input");
           cb.type = "checkbox";
@@ -5642,11 +5969,11 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
           div.appendChild(label);
           arrElements.push(div);
         }
-        arrElements.push(document.createElement("br"));
         return arrElements;
       }
       function createRB(options, rbName, rbValue, rbLabelText) {
         const div = document.createElement("div");
+        div.classList.add("cmf-row");
         const rb = document.createElement("input");
         rb.type = "radio";
         rb.name = rbName;
@@ -5660,6 +5987,7 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
       }
       function createInput(options, inputName, inputLabel) {
         const div = document.createElement("div");
+        div.classList.add("cmf-row");
         const input = document.createElement("input");
         input.type = "text";
         input.name = inputName;
@@ -5698,11 +6026,13 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         label.appendChild(document.createTextNode(`${keyWords[cbName]}: `));
         label.appendChild(input);
         const div = document.createElement("div");
+        div.classList.add("cmf-row");
         div.appendChild(label);
         return div;
       }
       function createSelectLanguage(state, keyWords, translations) {
         const div = document.createElement("div");
+        div.classList.add("cmf-row");
         const select = document.createElement("select");
         select.name = "CMF_DIALOG_LANGUAGE";
         Object.keys(translations).forEach((languageCode) => {
@@ -5721,11 +6051,49 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         div.appendChild(label);
         return div;
       }
+      function getKeyword(keyWords, translations, key) {
+        if (keyWords && typeof keyWords[key] === "string" && keyWords[key].trim() !== "") {
+          return keyWords[key];
+        }
+        const fallback = translations && translations.en && typeof translations.en[key] === "string" ? translations.en[key] : "";
+        return fallback;
+      }
+      function createLegend(state, title, subtitle) {
+        const legend = document.createElement("legend");
+        legend.classList.add("cmf-legend");
+        if (title) {
+          legend.dataset.cmfTitle = title;
+        }
+        if (subtitle) {
+          legend.dataset.cmfSubtitle = subtitle;
+        }
+        const iconWrap = document.createElement("span");
+        iconWrap.className = "cmf-legend-icon";
+        iconWrap.innerHTML = state.logoHTML;
+        const textWrap = document.createElement("span");
+        textWrap.className = "cmf-legend-text";
+        const titleWrap = document.createElement("span");
+        titleWrap.className = "cmf-legend-title";
+        titleWrap.textContent = title || "";
+        textWrap.appendChild(titleWrap);
+        if (subtitle) {
+          const subtitleWrap = document.createElement("span");
+          subtitleWrap.className = "cmf-legend-subtext";
+          subtitleWrap.textContent = subtitle;
+          textWrap.appendChild(subtitleWrap);
+        }
+        legend.appendChild(iconWrap);
+        legend.appendChild(textWrap);
+        return legend;
+      }
       function buildDialogSections({ state, options, keyWords, translations }) {
         const sections = [];
         let fs = document.createElement("fieldset");
-        let l = document.createElement("legend");
-        l.textContent = keyWords.DLG_NF;
+        let l = createLegend(
+          state,
+          getKeyword(keyWords, translations, "DLG_NF"),
+          getKeyword(keyWords, translations, "DLG_NF_DESC")
+        );
         fs.appendChild(l);
         fs.appendChild(createSingleCB(keyWords, options, "NF_SPONSORED", false));
         Object.keys(keyWords).forEach((key) => {
@@ -5739,7 +6107,6 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             }
           }
         });
-        fs.appendChild(document.createElement("br"));
         l = document.createElement("strong");
         l.textContent = `${keyWords.DLG_BLOCK_TEXT_FILTER_TITLE}:`;
         fs.appendChild(l);
@@ -5755,8 +6122,11 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         fs.appendChild(ta);
         sections.push(fs);
         fs = document.createElement("fieldset");
-        l = document.createElement("legend");
-        l.textContent = keyWords.DLG_GF;
+        l = createLegend(
+          state,
+          getKeyword(keyWords, translations, "DLG_GF"),
+          getKeyword(keyWords, translations, "DLG_GF_DESC")
+        );
         fs.appendChild(l);
         fs.appendChild(createSingleCB(keyWords, options, "GF_SPONSORED", false));
         Object.keys(keyWords).forEach((key) => {
@@ -5764,7 +6134,6 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             fs.appendChild(createSingleCB(keyWords, options, key));
           }
         });
-        fs.appendChild(document.createElement("br"));
         l = document.createElement("strong");
         l.textContent = `${keyWords.DLG_BLOCK_TEXT_FILTER_TITLE}:`;
         fs.appendChild(l);
@@ -5780,11 +6149,13 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         fs.appendChild(ta);
         sections.push(fs);
         fs = document.createElement("fieldset");
-        l = document.createElement("legend");
-        l.textContent = keyWords.DLG_MP;
+        l = createLegend(
+          state,
+          getKeyword(keyWords, translations, "DLG_MP"),
+          getKeyword(keyWords, translations, "DLG_MP_DESC")
+        );
         fs.appendChild(l);
         fs.appendChild(createSingleCB(keyWords, options, "MP_SPONSORED", false));
-        fs.appendChild(document.createElement("br"));
         l = document.createElement("strong");
         l.textContent = `${keyWords.DLG_BLOCK_TEXT_FILTER_TITLE}:`;
         fs.appendChild(l);
@@ -5794,7 +6165,6 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         l = document.createElement("strong");
         l.textContent = "Prices: ";
         fs.appendChild(l);
-        fs.appendChild(document.createElement("br"));
         s = document.createElement("small");
         s.appendChild(document.createTextNode(keyWords.DLG_BLOCK_NEW_LINE));
         fs.appendChild(s);
@@ -5802,12 +6172,9 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         ta.name = "MP_BLOCKED_TEXT";
         ta.textContent = options.MP_BLOCKED_TEXT.split(state.SEP).join("\n");
         fs.appendChild(ta);
-        fs.appendChild(document.createElement("br"));
-        fs.appendChild(document.createElement("br"));
         l = document.createElement("strong");
         l.textContent = "Description: ";
         fs.appendChild(l);
-        fs.appendChild(document.createElement("br"));
         s = document.createElement("small");
         s.appendChild(document.createTextNode(keyWords.DLG_BLOCK_NEW_LINE));
         fs.appendChild(s);
@@ -5817,8 +6184,11 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         fs.appendChild(ta);
         sections.push(fs);
         fs = document.createElement("fieldset");
-        l = document.createElement("legend");
-        l.textContent = keyWords.DLG_VF;
+        l = createLegend(
+          state,
+          getKeyword(keyWords, translations, "DLG_VF"),
+          getKeyword(keyWords, translations, "DLG_VF_DESC")
+        );
         fs.appendChild(l);
         fs.appendChild(createSingleCB(keyWords, options, "VF_SPONSORED", false));
         Object.keys(keyWords).forEach((key) => {
@@ -5826,7 +6196,6 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             fs.appendChild(createSingleCB(keyWords, options, key));
           }
         });
-        fs.appendChild(document.createElement("br"));
         l = document.createElement("strong");
         l.textContent = `${keyWords.DLG_BLOCK_TEXT_FILTER_TITLE}:`;
         fs.appendChild(l);
@@ -5842,15 +6211,17 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         fs.appendChild(ta);
         sections.push(fs);
         fs = document.createElement("fieldset");
-        l = document.createElement("legend");
-        l.textContent = keyWords.DLG_PP;
+        l = createLegend(
+          state,
+          getKeyword(keyWords, translations, "DLG_PP"),
+          getKeyword(keyWords, translations, "DLG_PP_DESC")
+        );
         fs.appendChild(l);
         Object.keys(keyWords).forEach((key) => {
           if (key.startsWith("PP_") && !key.startsWith("PP_BLOCK")) {
             fs.appendChild(createSingleCB(keyWords, options, key));
           }
         });
-        fs.appendChild(document.createElement("br"));
         l = document.createElement("strong");
         l.textContent = `${keyWords.DLG_BLOCK_TEXT_FILTER_TITLE}:`;
         fs.appendChild(l);
@@ -5866,8 +6237,11 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         fs.appendChild(ta);
         sections.push(fs);
         fs = document.createElement("fieldset");
-        l = document.createElement("legend");
-        l.textContent = keyWords.DLG_OTHER;
+        l = createLegend(
+          state,
+          getKeyword(keyWords, translations, "DLG_OTHER"),
+          getKeyword(keyWords, translations, "DLG_OTHER_DESC")
+        );
         fs.appendChild(l);
         Object.keys(keyWords).forEach((key) => {
           if (key.startsWith("OTHER_INFO")) {
@@ -5876,16 +6250,21 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         });
         sections.push(fs);
         fs = document.createElement("fieldset");
-        l = document.createElement("legend");
-        l.textContent = keyWords.REELS_TITLE;
+        l = createLegend(
+          state,
+          getKeyword(keyWords, translations, "REELS_TITLE"),
+          getKeyword(keyWords, translations, "DLG_REELS_DESC")
+        );
         fs.appendChild(l);
         fs.appendChild(createSingleCB(keyWords, options, "REELS_CONTROLS"), false);
-        fs.appendChild(l);
         fs.appendChild(createSingleCB(keyWords, options, "REELS_DISABLE_LOOPING"), false);
         sections.push(fs);
         fs = document.createElement("fieldset");
-        l = document.createElement("legend");
-        l.textContent = keyWords.DLG_VERBOSITY;
+        l = createLegend(
+          state,
+          getKeyword(keyWords, translations, "DLG_PREFERENCES"),
+          getKeyword(keyWords, translations, "DLG_PREFERENCES_DESC")
+        );
         fs.appendChild(l);
         s = document.createElement("span");
         s.appendChild(document.createTextNode(`${keyWords.DLG_VERBOSITY_CAPTION}:`));
@@ -5893,18 +6272,11 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         fs.appendChild(createRB(options, "VERBOSITY_LEVEL", "0", `${keyWords.VERBOSITY_MESSAGE[0]}`));
         fs.appendChild(createRB(options, "VERBOSITY_LEVEL", "1", `${keyWords.VERBOSITY_MESSAGE[1]}______`));
         fs.appendChild(createRB(options, "VERBOSITY_LEVEL", "2", `${keyWords.VERBOSITY_MESSAGE[3]}`));
-        fs.appendChild(document.createElement("br"));
         fs.appendChild(createInput(options, "VERBOSITY_MESSAGE_COLOUR", `${keyWords.VERBOSITY_MESSAGE_COLOUR}:`));
         fs.appendChild(
           createInput(options, "VERBOSITY_MESSAGE_BG_COLOUR", `${keyWords.VERBOSITY_MESSAGE_BG_COLOUR}:`)
         );
-        fs.appendChild(document.createElement("br"));
         fs.appendChild(createSingleCB(keyWords, options, "VERBOSITY_DEBUG"));
-        sections.push(fs);
-        fs = document.createElement("fieldset");
-        l = document.createElement("legend");
-        l.textContent = keyWords.CMF_CUSTOMISATIONS;
-        fs.appendChild(l);
         s = document.createElement("span");
         s.appendChild(document.createTextNode(`${keyWords.CMF_BTN_LOCATION}:`));
         fs.appendChild(s);
@@ -5912,20 +6284,20 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         for (let i = 0; i < len; i += 1) {
           fs.appendChild(createRB(options, "CMF_BTN_OPTION", i.toString(), keyWords.CMF_BTN_OPTION[i]));
         }
-        fs.appendChild(document.createElement("br"));
         s = document.createElement("span");
         s.appendChild(document.createTextNode(`${keyWords.CMF_DIALOG_LOCATION}:`));
         fs.appendChild(s);
         fs.appendChild(createRB(options, "CMF_DIALOG_OPTION", "0", keyWords.CMF_DIALOG_OPTION[0]));
         fs.appendChild(createRB(options, "CMF_DIALOG_OPTION", "1", keyWords.CMF_DIALOG_OPTION[1]));
-        fs.appendChild(document.createElement("br"));
         fs.appendChild(createInput(options, "CMF_BORDER_COLOUR", `${keyWords.CMF_BORDER_COLOUR}:`));
-        fs.appendChild(document.createElement("br"));
         fs.appendChild(createSelectLanguage(state, keyWords, translations));
         sections.push(fs);
         fs = document.createElement("fieldset");
-        l = document.createElement("legend");
-        l.textContent = keyWords.DLG_TIPS;
+        l = createLegend(
+          state,
+          getKeyword(keyWords, translations, "DLG_TIPS"),
+          getKeyword(keyWords, translations, "DLG_TIPS_DESC")
+        );
         fs.appendChild(l);
         s = document.createElement("span");
         s.appendChild(document.createTextNode(keyWords.DLG_TIPS_CONTENT));
@@ -6030,7 +6402,7 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         const fieldsets = Array.from(dialog.querySelectorAll("fieldset"));
         fieldsets.forEach((fieldset) => {
           const legend = fieldset.querySelector("legend");
-          const legendText = legend ? legend.textContent.trim().toLowerCase() : "";
+          const legendText = legend ? (legend.dataset.cmfTitle || legend.textContent).trim().toLowerCase() : "";
           const labels = Array.from(fieldset.querySelectorAll("label"));
           let anyMatch = false;
           labels.forEach((label) => {
@@ -6091,6 +6463,13 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         }
         const legends = Array.from(dialog.querySelectorAll("fieldset legend"));
         if (legends.length === 0) {
+          return;
+        }
+        const usesMenuLegend = legends.some((legend) => legend.classList.contains("cmf-legend"));
+        if (usesMenuLegend) {
+          legends.forEach((legend) => {
+            legend.style.width = "";
+          });
           return;
         }
         const previousWidths = legends.map((legend) => legend.style.width);
@@ -6237,7 +6616,11 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         cnt.appendChild(searchRow);
         sections.forEach((section) => cnt.appendChild(section));
         if (!languageChanged) {
-          dlg.appendChild(cnt);
+          const body = document.createElement("div");
+          body.className = "fb-cmf-body";
+          const mainColumn = document.createElement("div");
+          mainColumn.className = "fb-cmf-main";
+          mainColumn.appendChild(cnt);
           const footer = document.createElement("footer");
           const buttonDefinitions = [
             { id: "BTNSave", text: keyWords.DLG_BUTTONS[0], handler: handlers.saveUserOptions },
@@ -6249,7 +6632,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             const buttonEl = document.createElement("button");
             buttonEl.type = "button";
             buttonEl.setAttribute("id", def.id);
-            buttonEl.textContent = def.text;
+            buttonEl.classList.add("cmf-action");
+            const iconWrap = document.createElement("span");
+            iconWrap.className = "cmf-action-icon";
+            iconWrap.innerHTML = state.logoHTML;
+            const textWrap = document.createElement("span");
+            textWrap.className = "cmf-action-text";
+            textWrap.textContent = def.text;
+            buttonEl.appendChild(iconWrap);
+            buttonEl.appendChild(textWrap);
             if (typeof def.handler === "function") {
               buttonEl.addEventListener("click", def.handler, false);
             }
@@ -6264,7 +6655,12 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
           fileResults.classList.add("fileResults");
           fileResults.innerHTML = "&nbsp;";
           footer.appendChild(fileResults);
-          dlg.appendChild(footer);
+          const sideColumn = document.createElement("div");
+          sideColumn.className = "fb-cmf-side";
+          sideColumn.appendChild(footer);
+          body.appendChild(mainColumn);
+          body.appendChild(sideColumn);
+          dlg.appendChild(body);
           document.body.appendChild(dlg);
           const fileInput = document.getElementById(`FI${postAtt}`);
           fileInput.addEventListener("change", handlers.importUserOptions, false);

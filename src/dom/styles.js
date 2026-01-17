@@ -135,39 +135,44 @@ function addCSS(state, options, defaults) {
 
   addToSS(state, `[${state.cssHideNumberOfShares}]`, "display:none !important;");
 
-  const userBorderColour = options.CMF_BORDER_COLOUR || "";
-  const defaultBorderColour = defaults.CMF_BORDER_COLOUR || "";
-  const dialogBorderColour =
-    userBorderColour && userBorderColour !== defaultBorderColour ? userBorderColour : "var(--divider)";
   const tColour = "var(--primary-text)";
   addToSS(
     state,
     ".fb-cmf ",
-    "position:fixed; top:0.15rem; bottom:0.15rem; display:flex; flex-direction:column; width: 100%; max-width:30rem; padding:0.75rem; z-index:5;" +
-      "box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);" +
-      `border:1px solid ${dialogBorderColour}; border-radius:12px; opacity:0; visibility:hidden; color:${tColour};`
+    "position:fixed; top:56px; bottom:16px; left:16px; display:flex; flex-direction:column; width: 100%; max-width:30rem; padding:0.75rem; z-index:5;" +
+      "box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1); overflow:hidden;" +
+      "border:none; border-radius:12px; opacity:0; visibility:hidden; color:" + tColour + ";"
   );
   addToSS(state, ".fb-cmf", "background-color: var(--comment-background);");
 
-  addToSS(state, ".fb-cmf header", "display:flex; align-items:center; justify-content:space-between; direction:ltr;");
+  addToSS(
+    state,
+    ".fb-cmf header",
+    "display:flex; align-items:flex-start; justify-content:space-between; direction:ltr; padding:0 1rem 0.5rem 0;"
+  );
   addToSS(
     state,
     ".fb-cmf header .fb-cmf-icon",
     "display:none;"
   );
   addToSS(state, ".fb-cmf header .fb-cmf-icon svg", "width:28px; height:28px; margin:0;");
-  addToSS(state, ".fb-cmf header .fb-cmf-title", "flex-grow:2; align-self:auto; order:2; text-align:left;");
+  addToSS(
+    state,
+    ".fb-cmf header .fb-cmf-title",
+    "flex-grow:2; align-self:auto; order:2; text-align:left; padding:0;"
+  );
   addToSS(
     state,
     ".fb-cmf header .fb-cmf-title .script-version",
     "font-size: 0.75rem; font-weight: normal;"
   );
-  addToSS(state, ".fb-cmf header .fb-cmf-lang-1", "padding-top:0.35rem;");
-  addToSS(state, ".fb-cmf header .fb-cmf-lang-2", "padding-top:0.25rem;");
+  addToSS(state, ".fb-cmf header .fb-cmf-lang-1", "padding-top:0;");
+  addToSS(state, ".fb-cmf header .fb-cmf-lang-2", "padding-top:0;");
   addToSS(
     state,
     ".fb-cmf header .fb-cmf-title > div",
-    "font-size:1.25rem; font-weight: 700; text-align:left;"
+    "font-size:24px; font-weight:700; line-height:28px; text-align:left;" +
+      'font-family:"Segoe UI Historic","Segoe UI",Helvetica,Arial,sans-serif;'
   );
   addToSS(
     state,
@@ -177,7 +182,7 @@ function addCSS(state, options, defaults) {
   addToSS(
     state,
     ".fb-cmf header .fb-cmf-close",
-    "flex-grow:0; align-self:auto; width:auto; text-align:right; padding: 0; order:3;"
+    "flex-grow:0; align-self:flex-start; width:auto; text-align:right; padding: 0; order:3;"
   );
   addToSS(
     state,
@@ -188,17 +193,83 @@ function addCSS(state, options, defaults) {
 
   addToSS(
     state,
-    ".fb-cmf div.content",
-    "flex:1; overflow: hidden auto; border:none; border-radius:12px; color: var(--primary-text); padding:0.75rem; background-color: var(--card-background);"
+    ".fb-cmf .fb-cmf-body",
+    "display:flex; gap:1rem; flex:1; overflow-y:auto; overflow-x:hidden; scrollbar-gutter: stable;"
   );
-  addToSS(state, ".fb-cmf fieldset", "margin:0.5rem 0; padding:0 0.5rem; border:none;");
+  addToSS(
+    state,
+    ".fb-cmf .fb-cmf-body",
+    "scrollbar-width: thin; scrollbar-color: var(--secondary-icon) transparent;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf .fb-cmf-body::-webkit-scrollbar",
+    "width:4px; height:4px;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf .fb-cmf-body::-webkit-scrollbar-track",
+    "background: transparent;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf .fb-cmf-body::-webkit-scrollbar-thumb",
+    "background-color: var(--secondary-icon); border-radius: 999px;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf .fb-cmf-main",
+    "flex:1 1 auto; min-width:0; display:flex; flex-direction:column;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf .fb-cmf-side",
+    "flex:0 0 auto; width:max-content; align-self:flex-start; position:sticky; top:0;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf div.content",
+    "flex:0 0 auto; overflow: visible; border:none; border-radius:12px; color: var(--primary-text); padding:0.75rem; background-color: var(--card-background);"
+  );
+  addToSS(state, ".fb-cmf fieldset", "margin:0.5rem 0; padding:0; border:none;");
   addToSS(state, ".fb-cmf fieldset *", "font-size: 0.8125rem;");
   addToSS(
     state,
     ".fb-cmf fieldset legend",
-    "font-size: 0.85rem; padding: 0.35rem 0.5rem; line-height: 1.6; border: none;" +
-      "border-radius: 8px; color: var(--primary-text); font-weight: 600; position: relative; overflow: hidden;" +
-      "margin: 0 0.5rem; display:inline-flex; align-items:center;"
+    "padding: 0.5rem 0.75rem; border: none;" +
+      "border-radius: 8px; color: var(--primary-text); position: relative; overflow: hidden;" +
+      "margin: 0; display:flex; align-items:center; gap:0.75rem; width:100%; box-sizing:border-box;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf fieldset legend.cmf-legend",
+    "cursor:pointer;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf fieldset legend .cmf-legend-icon",
+    "width:36px; height:36px; border-radius:50%; background-color: var(--secondary-button-background);" +
+      "display:flex; align-items:center; justify-content:center; color: var(--primary-icon); flex-shrink:0;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf fieldset legend .cmf-legend-icon svg",
+    "width:20px; height:20px; fill: currentColor;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf fieldset legend .cmf-legend-text",
+    "display:flex; flex-direction:column; align-items:flex-start; gap:0; min-width:0;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf fieldset legend .cmf-legend-title",
+    "font-size:0.95rem; font-weight:600; line-height:1.05; color: var(--primary-text); margin:0; padding:0;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf fieldset legend .cmf-legend-subtext",
+    "font-size:0.75rem; font-weight:400; line-height:1.05; color: var(--secondary-text); margin:0; padding:0;"
   );
   addToSS(
     state,
@@ -207,7 +278,6 @@ function addCSS(state, options, defaults) {
       "opacity:0; pointer-events:none; transition: opacity 0.1s cubic-bezier(0, 0, 1, 1);"
   );
   addToSS(state, ".fb-cmf fieldset legend:hover::after", "opacity:1;");
-  addToSS(state, ".fb-cmf fieldset legend:hover", "cursor: pointer;");
   addToSS(
     state,
     ".fb-cmf fieldset.cmf-visible,.fb-cmf fieldset.cmf-visible legend ",
@@ -218,12 +288,12 @@ function addCSS(state, options, defaults) {
     ".fb-cmf fieldset.cmf-hidden,.fb-cmf fieldset.cmf-hidden legend ",
     "border-color: transparent;"
   );
-  addToSS(state, ".fb-cmf fieldset.cmf-hidden *:not(legend) ", "display: none;");
+  addToSS(state, ".fb-cmf fieldset.cmf-hidden > :not(legend)", "display: none;");
   addToSS(state, ".fb-cmf fieldset legend::after", 'content: "";');
   addToSS(
     state,
     ".fb-cmf fieldset label",
-    "display:flex; align-items:center; gap:0.5rem; min-height:40px; padding:0.25rem 0.5rem; margin:0;" +
+    "display:flex; align-items:center; gap:0.4rem; min-height:32px; padding:0.15rem 0.5rem; margin:0;" +
       "color: var(--primary-text); font-weight: normal; width:100%; max-width:100%; box-sizing:border-box;" +
       "border-radius:8px; position:relative; overflow:hidden;"
   );
@@ -235,6 +305,26 @@ function addCSS(state, options, defaults) {
   );
   addToSS(state, ".fb-cmf fieldset label[disabled]", "color:darkgrey;");
   addToSS(state, ".fb-cmf fieldset textarea", "width:100%; height:12rem;");
+  addToSS(
+    state,
+    ".fb-cmf fieldset strong",
+    "display:block; margin:0.35rem 0 0.15rem 0; font-weight:600; color: var(--primary-text);"
+  );
+  addToSS(
+    state,
+    ".fb-cmf fieldset small",
+    "display:block; margin:0.15rem 0 0.35rem 0; color: var(--secondary-text);"
+  );
+  addToSS(
+    state,
+    ".fb-cmf .cmf-row",
+    "margin:0.1rem 0;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf fieldset span",
+    "display:block; margin:0.35rem 0 0.15rem 0; color: var(--secondary-text);"
+  );
   addToSS(
     state,
     ".fb-cmf .fb-cmf-search",
@@ -269,7 +359,13 @@ function addCSS(state, options, defaults) {
   addToSS(
     state,
     ".fb-cmf footer",
-    "display:flex; justify-content:flex-end; gap:0.5rem; padding:0.75rem 0.25rem; text-align:center;"
+    "display:flex; flex-direction:column; gap:0.5rem; padding:0.75rem; text-align:center; background-color: var(--card-background);" +
+      "border-radius:12px;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf footer .fileResults",
+    "margin-top:0.25rem; font-size:0.75rem; color: var(--secondary-text);"
   );
   addToSS(state, ".fb-cmf .buttons button", "margin-left: 0.25rem; margin-right: 0.25rem;");
   addToSS(state, ".fb-cmf .fileInput", "display:none;");
@@ -391,19 +487,41 @@ function addExtraCSS(state, options, defaults) {
     state,
     "div#fbcmf footer > button",
     "font-family: inherit; cursor: pointer;" +
-      "height: var(--button-height-medium); padding: 0 var(--button-padding-horizontal-medium);" +
-      "border: none; border-radius: var(--button-corner-radius);" +
-      "background-color: var(--secondary-button-background);" +
-      "-webkit-transition: background-color 0.2s linear; transition: background-color 0.2s linear;" +
+      "height: 48px; padding: 0 0.5rem;" +
+      "border: none; border-radius: 8px;" +
+      "background-color: transparent;" +
+      "display:flex; align-items:center; gap:0.5rem; justify-content:flex-start;" +
       "font-size: .9375rem; font-weight: 600;" +
-      "color: var(--secondary-button-text);"
+      "color: var(--primary-text); position:relative; overflow:hidden;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf footer .cmf-action-text",
+    "padding-right: 0.5rem;"
   );
   addToSS(
     state,
     "#fbcmf footer > button:hover",
-    "font-family: inherit;" +
-      "background-color: var(--primary-button-background);" +
-      "color: var(--primary-button-text);"
+    "font-family: inherit;"
+  );
+  addToSS(
+    state,
+    "#fbcmf footer > button::after",
+    "content:\"\"; position:absolute; inset:0; border-radius:inherit;" +
+      "background-color: var(--hover-overlay); opacity:0; pointer-events:none;" +
+      "transition: opacity 0.1s cubic-bezier(0, 0, 1, 1);"
+  );
+  addToSS(state, "#fbcmf footer > button:hover::after", "opacity:1;");
+  addToSS(
+    state,
+    ".fb-cmf footer .cmf-action-icon",
+    "width:36px; height:36px; border-radius:50%; background-color: var(--secondary-button-background);" +
+      "display:flex; align-items:center; justify-content:center; color: var(--primary-icon); flex-shrink:0;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf footer .cmf-action-icon svg",
+    "width:20px; height:20px; fill: currentColor;"
   );
 
   if (state.tempStyleSheetCode.length > 0) {

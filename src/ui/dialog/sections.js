@@ -27,6 +27,7 @@ function createSingleCB(keyWords, options, cbName, cbReadOnly = false) {
   }
 
   const div = document.createElement("div");
+  div.classList.add("cmf-row");
   div.appendChild(label);
   return div;
 }
@@ -35,6 +36,7 @@ function createMultipleCBs(keyWords, options, cbName, cbReadOnlyIdx = -1) {
   const arrElements = [];
   for (let i = 0; i < keyWords[cbName].length; i += 1) {
     const div = document.createElement("div");
+    div.classList.add("cmf-row");
     const cbKeyWord = keyWords[cbName][i];
     const cb = document.createElement("input");
     cb.type = "checkbox";
@@ -53,12 +55,12 @@ function createMultipleCBs(keyWords, options, cbName, cbReadOnlyIdx = -1) {
     div.appendChild(label);
     arrElements.push(div);
   }
-  arrElements.push(document.createElement("br"));
   return arrElements;
 }
 
 function createRB(options, rbName, rbValue, rbLabelText) {
   const div = document.createElement("div");
+  div.classList.add("cmf-row");
   const rb = document.createElement("input");
   rb.type = "radio";
   rb.name = rbName;
@@ -73,6 +75,7 @@ function createRB(options, rbName, rbValue, rbLabelText) {
 
 function createInput(options, inputName, inputLabel) {
   const div = document.createElement("div");
+  div.classList.add("cmf-row");
   const input = document.createElement("input");
   input.type = "text";
   input.name = inputName;
@@ -116,12 +119,14 @@ function createCheckboxAndInput(keyWords, options, cbName, inputName) {
   label.appendChild(input);
 
   const div = document.createElement("div");
+  div.classList.add("cmf-row");
   div.appendChild(label);
   return div;
 }
 
 function createSelectLanguage(state, keyWords, translations) {
   const div = document.createElement("div");
+  div.classList.add("cmf-row");
   const select = document.createElement("select");
   select.name = "CMF_DIALOG_LANGUAGE";
 
@@ -143,12 +148,57 @@ function createSelectLanguage(state, keyWords, translations) {
   return div;
 }
 
+function getKeyword(keyWords, translations, key) {
+  if (keyWords && typeof keyWords[key] === "string" && keyWords[key].trim() !== "") {
+    return keyWords[key];
+  }
+  const fallback = translations && translations.en && typeof translations.en[key] === "string"
+    ? translations.en[key]
+    : "";
+  return fallback;
+}
+
+function createLegend(state, title, subtitle) {
+  const legend = document.createElement("legend");
+  legend.classList.add("cmf-legend");
+  if (title) {
+    legend.dataset.cmfTitle = title;
+  }
+  if (subtitle) {
+    legend.dataset.cmfSubtitle = subtitle;
+  }
+
+  const iconWrap = document.createElement("span");
+  iconWrap.className = "cmf-legend-icon";
+  iconWrap.innerHTML = state.logoHTML;
+
+  const textWrap = document.createElement("span");
+  textWrap.className = "cmf-legend-text";
+  const titleWrap = document.createElement("span");
+  titleWrap.className = "cmf-legend-title";
+  titleWrap.textContent = title || "";
+  textWrap.appendChild(titleWrap);
+  if (subtitle) {
+    const subtitleWrap = document.createElement("span");
+    subtitleWrap.className = "cmf-legend-subtext";
+    subtitleWrap.textContent = subtitle;
+    textWrap.appendChild(subtitleWrap);
+  }
+
+  legend.appendChild(iconWrap);
+  legend.appendChild(textWrap);
+  return legend;
+}
+
 function buildDialogSections({ state, options, keyWords, translations }) {
   const sections = [];
 
   let fs = document.createElement("fieldset");
-  let l = document.createElement("legend");
-  l.textContent = keyWords.DLG_NF;
+  let l = createLegend(
+    state,
+    getKeyword(keyWords, translations, "DLG_NF"),
+    getKeyword(keyWords, translations, "DLG_NF_DESC")
+  );
   fs.appendChild(l);
   fs.appendChild(createSingleCB(keyWords, options, "NF_SPONSORED", false));
   Object.keys(keyWords).forEach((key) => {
@@ -162,7 +212,6 @@ function buildDialogSections({ state, options, keyWords, translations }) {
       }
     }
   });
-  fs.appendChild(document.createElement("br"));
   l = document.createElement("strong");
   l.textContent = `${keyWords.DLG_BLOCK_TEXT_FILTER_TITLE}:`;
   fs.appendChild(l);
@@ -179,8 +228,11 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   sections.push(fs);
 
   fs = document.createElement("fieldset");
-  l = document.createElement("legend");
-  l.textContent = keyWords.DLG_GF;
+  l = createLegend(
+    state,
+    getKeyword(keyWords, translations, "DLG_GF"),
+    getKeyword(keyWords, translations, "DLG_GF_DESC")
+  );
   fs.appendChild(l);
   fs.appendChild(createSingleCB(keyWords, options, "GF_SPONSORED", false));
   Object.keys(keyWords).forEach((key) => {
@@ -188,7 +240,6 @@ function buildDialogSections({ state, options, keyWords, translations }) {
       fs.appendChild(createSingleCB(keyWords, options, key));
     }
   });
-  fs.appendChild(document.createElement("br"));
   l = document.createElement("strong");
   l.textContent = `${keyWords.DLG_BLOCK_TEXT_FILTER_TITLE}:`;
   fs.appendChild(l);
@@ -205,11 +256,13 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   sections.push(fs);
 
   fs = document.createElement("fieldset");
-  l = document.createElement("legend");
-  l.textContent = keyWords.DLG_MP;
+  l = createLegend(
+    state,
+    getKeyword(keyWords, translations, "DLG_MP"),
+    getKeyword(keyWords, translations, "DLG_MP_DESC")
+  );
   fs.appendChild(l);
   fs.appendChild(createSingleCB(keyWords, options, "MP_SPONSORED", false));
-  fs.appendChild(document.createElement("br"));
   l = document.createElement("strong");
   l.textContent = `${keyWords.DLG_BLOCK_TEXT_FILTER_TITLE}:`;
   fs.appendChild(l);
@@ -219,7 +272,6 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   l = document.createElement("strong");
   l.textContent = "Prices: ";
   fs.appendChild(l);
-  fs.appendChild(document.createElement("br"));
   s = document.createElement("small");
   s.appendChild(document.createTextNode(keyWords.DLG_BLOCK_NEW_LINE));
   fs.appendChild(s);
@@ -227,12 +279,9 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   ta.name = "MP_BLOCKED_TEXT";
   ta.textContent = options.MP_BLOCKED_TEXT.split(state.SEP).join("\n");
   fs.appendChild(ta);
-  fs.appendChild(document.createElement("br"));
-  fs.appendChild(document.createElement("br"));
   l = document.createElement("strong");
   l.textContent = "Description: ";
   fs.appendChild(l);
-  fs.appendChild(document.createElement("br"));
   s = document.createElement("small");
   s.appendChild(document.createTextNode(keyWords.DLG_BLOCK_NEW_LINE));
   fs.appendChild(s);
@@ -243,8 +292,11 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   sections.push(fs);
 
   fs = document.createElement("fieldset");
-  l = document.createElement("legend");
-  l.textContent = keyWords.DLG_VF;
+  l = createLegend(
+    state,
+    getKeyword(keyWords, translations, "DLG_VF"),
+    getKeyword(keyWords, translations, "DLG_VF_DESC")
+  );
   fs.appendChild(l);
   fs.appendChild(createSingleCB(keyWords, options, "VF_SPONSORED", false));
   Object.keys(keyWords).forEach((key) => {
@@ -252,7 +304,6 @@ function buildDialogSections({ state, options, keyWords, translations }) {
       fs.appendChild(createSingleCB(keyWords, options, key));
     }
   });
-  fs.appendChild(document.createElement("br"));
   l = document.createElement("strong");
   l.textContent = `${keyWords.DLG_BLOCK_TEXT_FILTER_TITLE}:`;
   fs.appendChild(l);
@@ -269,15 +320,17 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   sections.push(fs);
 
   fs = document.createElement("fieldset");
-  l = document.createElement("legend");
-  l.textContent = keyWords.DLG_PP;
+  l = createLegend(
+    state,
+    getKeyword(keyWords, translations, "DLG_PP"),
+    getKeyword(keyWords, translations, "DLG_PP_DESC")
+  );
   fs.appendChild(l);
   Object.keys(keyWords).forEach((key) => {
     if (key.startsWith("PP_") && !key.startsWith("PP_BLOCK")) {
       fs.appendChild(createSingleCB(keyWords, options, key));
     }
   });
-  fs.appendChild(document.createElement("br"));
   l = document.createElement("strong");
   l.textContent = `${keyWords.DLG_BLOCK_TEXT_FILTER_TITLE}:`;
   fs.appendChild(l);
@@ -294,8 +347,11 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   sections.push(fs);
 
   fs = document.createElement("fieldset");
-  l = document.createElement("legend");
-  l.textContent = keyWords.DLG_OTHER;
+  l = createLegend(
+    state,
+    getKeyword(keyWords, translations, "DLG_OTHER"),
+    getKeyword(keyWords, translations, "DLG_OTHER_DESC")
+  );
   fs.appendChild(l);
   Object.keys(keyWords).forEach((key) => {
     if (key.startsWith("OTHER_INFO")) {
@@ -305,17 +361,22 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   sections.push(fs);
 
   fs = document.createElement("fieldset");
-  l = document.createElement("legend");
-  l.textContent = keyWords.REELS_TITLE;
+  l = createLegend(
+    state,
+    getKeyword(keyWords, translations, "REELS_TITLE"),
+    getKeyword(keyWords, translations, "DLG_REELS_DESC")
+  );
   fs.appendChild(l);
   fs.appendChild(createSingleCB(keyWords, options, "REELS_CONTROLS"), false);
-  fs.appendChild(l);
   fs.appendChild(createSingleCB(keyWords, options, "REELS_DISABLE_LOOPING"), false);
   sections.push(fs);
 
   fs = document.createElement("fieldset");
-  l = document.createElement("legend");
-  l.textContent = keyWords.DLG_VERBOSITY;
+  l = createLegend(
+    state,
+    getKeyword(keyWords, translations, "DLG_PREFERENCES"),
+    getKeyword(keyWords, translations, "DLG_PREFERENCES_DESC")
+  );
   fs.appendChild(l);
   s = document.createElement("span");
   s.appendChild(document.createTextNode(`${keyWords.DLG_VERBOSITY_CAPTION}:`));
@@ -323,19 +384,11 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   fs.appendChild(createRB(options, "VERBOSITY_LEVEL", "0", `${keyWords.VERBOSITY_MESSAGE[0]}`));
   fs.appendChild(createRB(options, "VERBOSITY_LEVEL", "1", `${keyWords.VERBOSITY_MESSAGE[1]}______`));
   fs.appendChild(createRB(options, "VERBOSITY_LEVEL", "2", `${keyWords.VERBOSITY_MESSAGE[3]}`));
-  fs.appendChild(document.createElement("br"));
   fs.appendChild(createInput(options, "VERBOSITY_MESSAGE_COLOUR", `${keyWords.VERBOSITY_MESSAGE_COLOUR}:`));
   fs.appendChild(
     createInput(options, "VERBOSITY_MESSAGE_BG_COLOUR", `${keyWords.VERBOSITY_MESSAGE_BG_COLOUR}:`)
   );
-  fs.appendChild(document.createElement("br"));
   fs.appendChild(createSingleCB(keyWords, options, "VERBOSITY_DEBUG"));
-  sections.push(fs);
-
-  fs = document.createElement("fieldset");
-  l = document.createElement("legend");
-  l.textContent = keyWords.CMF_CUSTOMISATIONS;
-  fs.appendChild(l);
   s = document.createElement("span");
   s.appendChild(document.createTextNode(`${keyWords.CMF_BTN_LOCATION}:`));
   fs.appendChild(s);
@@ -343,21 +396,21 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   for (let i = 0; i < len; i += 1) {
     fs.appendChild(createRB(options, "CMF_BTN_OPTION", i.toString(), keyWords.CMF_BTN_OPTION[i]));
   }
-  fs.appendChild(document.createElement("br"));
   s = document.createElement("span");
   s.appendChild(document.createTextNode(`${keyWords.CMF_DIALOG_LOCATION}:`));
   fs.appendChild(s);
   fs.appendChild(createRB(options, "CMF_DIALOG_OPTION", "0", keyWords.CMF_DIALOG_OPTION[0]));
   fs.appendChild(createRB(options, "CMF_DIALOG_OPTION", "1", keyWords.CMF_DIALOG_OPTION[1]));
-  fs.appendChild(document.createElement("br"));
   fs.appendChild(createInput(options, "CMF_BORDER_COLOUR", `${keyWords.CMF_BORDER_COLOUR}:`));
-  fs.appendChild(document.createElement("br"));
   fs.appendChild(createSelectLanguage(state, keyWords, translations));
   sections.push(fs);
 
   fs = document.createElement("fieldset");
-  l = document.createElement("legend");
-  l.textContent = keyWords.DLG_TIPS;
+  l = createLegend(
+    state,
+    getKeyword(keyWords, translations, "DLG_TIPS"),
+    getKeyword(keyWords, translations, "DLG_TIPS_DESC")
+  );
   fs.appendChild(l);
   s = document.createElement("span");
   s.appendChild(document.createTextNode(keyWords.DLG_TIPS_CONTENT));

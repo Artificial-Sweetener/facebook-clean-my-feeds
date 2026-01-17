@@ -157,6 +157,14 @@ function addCSS(state, options, defaults) {
       "mask-image: var(--cmf-icon-url); mask-repeat:no-repeat; mask-position:center; mask-size:contain;" +
       "-webkit-mask-image: var(--cmf-icon-url); -webkit-mask-repeat:no-repeat; -webkit-mask-position:center; -webkit-mask-size:contain;"
   );
+  addToSS(
+    state,
+    ".fb-cmf-tooltip",
+    "position:fixed; z-index:9999; pointer-events:none;" +
+      "background-color: rgba(255, 255, 255, 0.8); color: rgb(28, 30, 33);" +
+      "border-radius:12px; padding:12px; font-size:12px; font-weight:400; line-height:16.08px;" +
+      "box-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px; max-width:334px; white-space:normal;"
+  );
 
   addToSS(
     state,
@@ -347,8 +355,19 @@ function addCSS(state, options, defaults) {
   );
   addToSS(state, ".fb-cmf fieldset label *", "color: inherit;");
   addToSS(state, ".fb-cmf fieldset label input", "margin: 0; vertical-align:middle;");
+  addToSS(
+    state,
+    '.fb-cmf fieldset input[type="text"]',
+    "border: 1px solid var(--divider); border-radius: 8px; padding: 0.35rem 0.5rem;" +
+      "background-color: var(--comment-background); color: var(--primary-text);"
+  );
   addToSS(state, ".fb-cmf fieldset label[disabled]", "color:darkgrey;");
   addToSS(state, ".fb-cmf fieldset textarea", "width:100%; height:12rem;");
+  addToSS(
+    state,
+    ".fb-cmf fieldset > textarea",
+    "margin-left: calc(36px * 0.75); width: calc(100% - (36px * 0.75));"
+  );
   addToSS(
     state,
     ".fb-cmf fieldset strong",
@@ -369,6 +388,11 @@ function addCSS(state, options, defaults) {
     state,
     ".fb-cmf .cmf-tips-content p",
     "margin:0.35rem 0 0.15rem 0; color: var(--secondary-text);"
+  );
+  addToSS(
+    state,
+    ".fb-cmf fieldset > .cmf-row, .fb-cmf fieldset > .cmf-report-actions, .fb-cmf fieldset > .cmf-report-status, .fb-cmf fieldset > .cmf-report-output, .fb-cmf fieldset > .cmf-tips-content, .fb-cmf fieldset > strong, .fb-cmf fieldset > small, .fb-cmf fieldset > span",
+    "margin-left: calc(36px * 0.75);"
   );
   addToSS(state, ".fb-cmf .cmf-tips-content a", "color:#4fa3ff; text-decoration: underline;");
   addToSS(state, ".fb-cmf .cmf-tips-content a:hover", "color:#7bbcff;");
@@ -393,11 +417,13 @@ function addCSS(state, options, defaults) {
   addToSS(
     state,
     ".fb-cmf fieldset select",
-    "border: 2px inset lightgray; margin: 0 0.5rem 0 0.5rem; vertical-align:baseline;"
+    "border: 1px solid var(--divider); margin: 0 0.5rem 0 0.5rem; vertical-align:baseline;" +
+      "border-radius: 8px; padding: 0.35rem 0.5rem;" +
+      "background-color: var(--comment-background); color: var(--primary-text);"
   );
   addToSS(
     state,
-    '.__fb-dark-mode .fb-cmf fieldset textarea,.__fb-dark-mode .fb-cmf fieldset input[type="input"].__fb-dark-mode .fb-cmf fieldset select',
+    '.__fb-dark-mode .fb-cmf fieldset textarea,.__fb-dark-mode .fb-cmf fieldset input[type="text"],.__fb-dark-mode .fb-cmf fieldset select',
     "background-color:var(--comment-background); color:var(--primary-text);"
   );
   addToSS(
@@ -487,11 +513,13 @@ function addExtraCSS(state, options, defaults) {
       `.fb-cmf-toggle[${state.showAtt}]`,
       "display:flex; align-items:center; justify-content:center;"
     );
-    addToSS(
-      state,
-      '.fb-cmf-toggle:not(.fb-cmf-toggle-topbar)[data-cmf-open="true"]',
-      "display:none;"
-    );
+    if (cmfDlgLocation !== "1") {
+      addToSS(
+        state,
+        '.fb-cmf-toggle:not(.fb-cmf-toggle-topbar)[data-cmf-open="true"]',
+        "display:none;"
+      );
+    }
     addToSS(
       state,
       ".fb-cmf-toggle.fb-cmf-toggle-topbar",

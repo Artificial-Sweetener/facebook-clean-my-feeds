@@ -1,3 +1,5 @@
+const { attachTooltip } = require("../../dom/tooltip");
+
 function createToggleButton(state, keyWords, onToggle) {
   if (!state || !keyWords || typeof onToggle !== "function") {
     return null;
@@ -13,7 +15,7 @@ function createToggleButton(state, keyWords, onToggle) {
   const btn = document.createElement(useTopRight ? "div" : "button");
   btn.innerHTML = state.iconToggleHTML;
   btn.id = "fbcmfToggle";
-  btn.title = keyWords.DLG_TITLE;
+  btn.removeAttribute("title");
   btn.className = "fb-cmf-toggle fb-cmf-icon";
   if (useTopRight) {
     btn.classList.add("fb-cmf-toggle-topbar");
@@ -34,6 +36,8 @@ function createToggleButton(state, keyWords, onToggle) {
     });
   }
   btn.addEventListener("click", toggleHandler, false);
+  const tooltipPlacement = btnLocation === "0" ? "right" : "auto";
+  attachTooltip(btn, keyWords.DLG_TITLE, { placement: tooltipPlacement });
   let cachedIconColor = "";
   let cachedBtnBg = "";
   let cachedHover = "";

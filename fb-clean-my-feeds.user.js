@@ -3523,6 +3523,11 @@
         );
         addToSS(
           state,
+          ".fb-cmf-tooltip",
+          "position:fixed; z-index:9999; pointer-events:none;background-color: rgba(255, 255, 255, 0.8); color: rgb(28, 30, 33);border-radius:12px; padding:12px; font-size:12px; font-weight:400; line-height:16.08px;box-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px; max-width:334px; white-space:normal;"
+        );
+        addToSS(
+          state,
           ".fb-cmf header",
           "display:flex; align-items:flex-start; justify-content:space-between; direction:ltr; padding:0 1rem 0.5rem 0;"
         );
@@ -3695,8 +3700,18 @@
         );
         addToSS(state, ".fb-cmf fieldset label *", "color: inherit;");
         addToSS(state, ".fb-cmf fieldset label input", "margin: 0; vertical-align:middle;");
+        addToSS(
+          state,
+          '.fb-cmf fieldset input[type="text"]',
+          "border: 1px solid var(--divider); border-radius: 8px; padding: 0.35rem 0.5rem;background-color: var(--comment-background); color: var(--primary-text);"
+        );
         addToSS(state, ".fb-cmf fieldset label[disabled]", "color:darkgrey;");
         addToSS(state, ".fb-cmf fieldset textarea", "width:100%; height:12rem;");
+        addToSS(
+          state,
+          ".fb-cmf fieldset > textarea",
+          "margin-left: calc(36px * 0.75); width: calc(100% - (36px * 0.75));"
+        );
         addToSS(
           state,
           ".fb-cmf fieldset strong",
@@ -3717,6 +3732,11 @@
           state,
           ".fb-cmf .cmf-tips-content p",
           "margin:0.35rem 0 0.15rem 0; color: var(--secondary-text);"
+        );
+        addToSS(
+          state,
+          ".fb-cmf fieldset > .cmf-row, .fb-cmf fieldset > .cmf-report-actions, .fb-cmf fieldset > .cmf-report-status, .fb-cmf fieldset > .cmf-report-output, .fb-cmf fieldset > .cmf-tips-content, .fb-cmf fieldset > strong, .fb-cmf fieldset > small, .fb-cmf fieldset > span",
+          "margin-left: calc(36px * 0.75);"
         );
         addToSS(state, ".fb-cmf .cmf-tips-content a", "color:#4fa3ff; text-decoration: underline;");
         addToSS(state, ".fb-cmf .cmf-tips-content a:hover", "color:#7bbcff;");
@@ -3740,11 +3760,11 @@
         addToSS(
           state,
           ".fb-cmf fieldset select",
-          "border: 2px inset lightgray; margin: 0 0.5rem 0 0.5rem; vertical-align:baseline;"
+          "border: 1px solid var(--divider); margin: 0 0.5rem 0 0.5rem; vertical-align:baseline;border-radius: 8px; padding: 0.35rem 0.5rem;background-color: var(--comment-background); color: var(--primary-text);"
         );
         addToSS(
           state,
-          '.__fb-dark-mode .fb-cmf fieldset textarea,.__fb-dark-mode .fb-cmf fieldset input[type="input"].__fb-dark-mode .fb-cmf fieldset select',
+          '.__fb-dark-mode .fb-cmf fieldset textarea,.__fb-dark-mode .fb-cmf fieldset input[type="text"],.__fb-dark-mode .fb-cmf fieldset select',
           "background-color:var(--comment-background); color:var(--primary-text);"
         );
         addToSS(
@@ -3822,11 +3842,13 @@
             `.fb-cmf-toggle[${state.showAtt}]`,
             "display:flex; align-items:center; justify-content:center;"
           );
-          addToSS(
-            state,
-            '.fb-cmf-toggle:not(.fb-cmf-toggle-topbar)[data-cmf-open="true"]',
-            "display:none;"
-          );
+          if (cmfDlgLocation !== "1") {
+            addToSS(
+              state,
+              '.fb-cmf-toggle:not(.fb-cmf-toggle-topbar)[data-cmf-open="true"]',
+              "display:none;"
+            );
+          }
           addToSS(
             state,
             ".fb-cmf-toggle.fb-cmf-toggle-topbar",
@@ -6570,9 +6592,119 @@
     }
   });
 
+  // src/dom/tooltip.js
+  var require_tooltip = __commonJS({
+    "src/dom/tooltip.js"(exports, module) {
+      var { generateRandomString } = require_random();
+      function positionTooltip(target, tooltip, placement = "auto") {
+        if (!target || !tooltip || typeof target.getBoundingClientRect !== "function") {
+          return;
+        }
+        if (typeof window === "undefined") {
+          return;
+        }
+        const rect = target.getBoundingClientRect();
+        const tooltipRect = tooltip.getBoundingClientRect();
+        const gap = 8;
+        const edgePadding = 8;
+        let top = rect.bottom + gap;
+        let left = rect.left + rect.width / 2 - tooltipRect.width / 2;
+        if (placement === "right") {
+          top = rect.top + rect.height / 2 - tooltipRect.height / 2;
+          left = rect.right + gap;
+          if (left + tooltipRect.width + edgePadding > window.innerWidth) {
+            left = rect.left - tooltipRect.width - gap;
+          }
+          top = Math.max(edgePadding, Math.min(top, window.innerHeight - tooltipRect.height - edgePadding));
+        } else {
+          if (top + tooltipRect.height + edgePadding > window.innerHeight) {
+            top = rect.top - tooltipRect.height - gap;
+          }
+        }
+        left = Math.max(edgePadding, Math.min(left, window.innerWidth - tooltipRect.width - edgePadding));
+        tooltip.style.top = `${Math.round(top)}px`;
+        tooltip.style.left = `${Math.round(left)}px`;
+      }
+      function attachTooltip(target, text, options = {}) {
+        if (!target || !text) {
+          return () => {
+          };
+        }
+        let tooltip = null;
+        let showTimer = null;
+        const placement = options && options.placement ? options.placement : "auto";
+        const tooltipId = target.dataset.cmfTooltipId || `fbcmf-tooltip-${generateRandomString(8)}`;
+        target.dataset.cmfTooltipId = tooltipId;
+        target.setAttribute("aria-describedby", tooltipId);
+        const updatePosition = () => {
+          if (!tooltip) {
+            return;
+          }
+          positionTooltip(target, tooltip, placement);
+        };
+        const show = () => {
+          if (tooltip || !document.body || !target.isConnected) {
+            return;
+          }
+          tooltip = document.createElement("div");
+          tooltip.id = tooltipId;
+          tooltip.className = "fb-cmf-tooltip";
+          tooltip.setAttribute("role", "tooltip");
+          tooltip.textContent = text;
+          tooltip.style.visibility = "hidden";
+          document.body.appendChild(tooltip);
+          updatePosition();
+          tooltip.style.visibility = "visible";
+        };
+        const hide = () => {
+          if (showTimer) {
+            clearTimeout(showTimer);
+            showTimer = null;
+          }
+          if (tooltip) {
+            tooltip.remove();
+            tooltip = null;
+          }
+        };
+        const onEnter = () => {
+          if (showTimer) {
+            clearTimeout(showTimer);
+          }
+          showTimer = setTimeout(show, 400);
+        };
+        const onLeave = () => {
+          hide();
+        };
+        target.addEventListener("pointerenter", onEnter);
+        target.addEventListener("pointerleave", onLeave);
+        target.addEventListener("focus", onEnter);
+        target.addEventListener("blur", onLeave);
+        if (typeof window !== "undefined") {
+          window.addEventListener("scroll", updatePosition, true);
+          window.addEventListener("resize", updatePosition);
+        }
+        return () => {
+          hide();
+          target.removeEventListener("pointerenter", onEnter);
+          target.removeEventListener("pointerleave", onLeave);
+          target.removeEventListener("focus", onEnter);
+          target.removeEventListener("blur", onLeave);
+          if (typeof window !== "undefined") {
+            window.removeEventListener("scroll", updatePosition, true);
+            window.removeEventListener("resize", updatePosition);
+          }
+        };
+      }
+      module.exports = {
+        attachTooltip
+      };
+    }
+  });
+
   // src/ui/controls/toggle-button.js
   var require_toggle_button = __commonJS({
     "src/ui/controls/toggle-button.js"(exports, module) {
+      var { attachTooltip } = require_tooltip();
       function createToggleButton(state, keyWords, onToggle) {
         if (!state || !keyWords || typeof onToggle !== "function") {
           return null;
@@ -6585,7 +6717,7 @@
         const btn = document.createElement(useTopRight ? "div" : "button");
         btn.innerHTML = state.iconToggleHTML;
         btn.id = "fbcmfToggle";
-        btn.title = keyWords.DLG_TITLE;
+        btn.removeAttribute("title");
         btn.className = "fb-cmf-toggle fb-cmf-icon";
         if (useTopRight) {
           btn.classList.add("fb-cmf-toggle-topbar");
@@ -6606,6 +6738,8 @@
           });
         }
         btn.addEventListener("click", toggleHandler, false);
+        const tooltipPlacement = btnLocation === "0" ? "right" : "auto";
+        attachTooltip(btn, keyWords.DLG_TITLE, { placement: tooltipPlacement });
         let cachedIconColor = "";
         let cachedBtnBg = "";
         let cachedHover = "";

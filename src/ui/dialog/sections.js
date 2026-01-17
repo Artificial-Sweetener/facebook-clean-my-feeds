@@ -408,6 +408,44 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   fs = document.createElement("fieldset");
   l = createLegend(
     state,
+    getKeyword(keyWords, translations, "DLG_REPORT_BUG"),
+    getKeyword(keyWords, translations, "DLG_REPORT_BUG_DESC")
+  );
+  fs.appendChild(l);
+  s = document.createElement("span");
+  s.appendChild(document.createTextNode(getKeyword(keyWords, translations, "DLG_REPORT_BUG_NOTICE")));
+  fs.appendChild(s);
+  const reportActions = document.createElement("div");
+  reportActions.className = "cmf-report-actions";
+  const btnGenerate = document.createElement("button");
+  btnGenerate.type = "button";
+  btnGenerate.id = "BTNReportGenerate";
+  btnGenerate.textContent = getKeyword(keyWords, translations, "DLG_REPORT_BUG_GENERATE");
+  reportActions.appendChild(btnGenerate);
+  const btnCopy = document.createElement("button");
+  btnCopy.type = "button";
+  btnCopy.id = "BTNReportCopy";
+  btnCopy.textContent = getKeyword(keyWords, translations, "DLG_REPORT_BUG_COPY");
+  reportActions.appendChild(btnCopy);
+  const btnOpen = document.createElement("button");
+  btnOpen.type = "button";
+  btnOpen.id = "BTNReportOpenIssues";
+  btnOpen.textContent = getKeyword(keyWords, translations, "DLG_REPORT_BUG_OPEN_ISSUES");
+  reportActions.appendChild(btnOpen);
+  fs.appendChild(reportActions);
+  const reportStatus = document.createElement("div");
+  reportStatus.className = "cmf-report-status";
+  fs.appendChild(reportStatus);
+  const reportOutput = document.createElement("textarea");
+  reportOutput.className = "cmf-report-output";
+  reportOutput.readOnly = true;
+  reportOutput.rows = 6;
+  fs.appendChild(reportOutput);
+  sections.push(fs);
+
+  fs = document.createElement("fieldset");
+  l = createLegend(
+    state,
     getKeyword(keyWords, translations, "DLG_TIPS"),
     getKeyword(keyWords, translations, "DLG_TIPS_DESC")
   );

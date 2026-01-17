@@ -12,6 +12,7 @@ const { deleteOptions, setOptions } = require("../../storage/idb");
 const { createToggleButton } = require("../controls/toggle-button");
 const { buildDictionaries } = require("../i18n/dictionaries");
 const { defaults, translations } = require("../i18n/translations");
+const { buildBugReport, getSupportUrl } = require("../reporting/bug-report");
 
 const { buildDialogSections } = require("./sections");
 
@@ -153,6 +154,81 @@ function addSearchEvents(state) {
       }
     });
   }
+}
+
+function initReportBug(context) {
+  const dialog = document.getElementById("fbcmf");
+  if (!dialog || dialog.dataset.cmfReportInit === "1") {
+    return;
+  }
+
+  const btnGenerate = dialog.querySelector("#BTNReportGenerate");
+  const btnCopy = dialog.querySelector("#BTNReportCopy");
+  const btnOpenIssues = dialog.querySelector("#BTNReportOpenIssues");
+  const statusEl = dialog.querySelector(".cmf-report-status");
+  const outputEl = dialog.querySelector(".cmf-report-output");
+  if (!btnGenerate || !btnCopy || !btnOpenIssues || !statusEl || !outputEl) {
+    return;
+  }
+
+  const { state, keyWords } = context;
+  dialog.dataset.cmfReportInit = "1";
+
+  const setStatus = (key) => {
+    if (!keyWords || !keyWords[key]) {
+      statusEl.textContent = "";
+      return;
+    }
+    statusEl.textContent = keyWords[key];
+  };
+
+  const ensureReport = () => {
+    if (state && typeof state.cmfReportText === "string" && state.cmfReportText.length > 0) {
+      return state.cmfReportText;
+    }
+    const { text } = buildBugReport(context);
+    if (state) {
+      state.cmfReportText = text;
+    }
+    outputEl.value = text;
+    outputEl.classList.add("cmf-report-output--visible");
+    setStatus("DLG_REPORT_BUG_STATUS_READY");
+    return text;
+  };
+
+  btnGenerate.addEventListener("click", () => {
+    if (state) {
+      state.cmfReportText = "";
+    }
+    ensureReport();
+  });
+
+  btnCopy.addEventListener("click", async () => {
+    const reportText = ensureReport();
+    if (!reportText) {
+      setStatus("DLG_REPORT_BUG_STATUS_FAILED");
+      return;
+    }
+    try {
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+        await navigator.clipboard.writeText(reportText);
+      } else {
+        outputEl.focus();
+        outputEl.select();
+        document.execCommand("copy");
+      }
+      setStatus("DLG_REPORT_BUG_STATUS_COPIED");
+    } catch (error) {
+      setStatus("DLG_REPORT_BUG_STATUS_FAILED");
+    }
+  });
+
+  btnOpenIssues.addEventListener("click", () => {
+    const url = getSupportUrl();
+    if (url) {
+      window.open(url, "_blank");
+    }
+  });
 }
 
 function updateLegendWidths(dialog) {
@@ -530,6 +606,7 @@ function initDialog(context, helpers) {
 
       if (languageChanged) {
         buildDialog(context, handlers, true);
+        initReportBug(context);
       }
 
       setFeedSettings(true);
@@ -660,6 +737,7 @@ function initDialog(context, helpers) {
     if (document.body) {
       createToggleButton(state, context.keyWords, () => toggleDialog(state));
       buildDialog(context, handlers, false);
+      initReportBug(context);
       addLegendEvents();
       const dialog = document.getElementById("fbcmf");
       if (dialog && !dialog.dataset.cmfToggleSync) {

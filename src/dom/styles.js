@@ -139,7 +139,7 @@ function addCSS(state, options, defaults) {
   addToSS(
     state,
     ".fb-cmf ",
-    "position:fixed; top:56px; bottom:16px; left:16px; display:flex; flex-direction:column; width: 100%; max-width:30rem; padding:0.75rem; z-index:5;" +
+    "position:fixed; top:56px; bottom:16px; left:16px; display:flex; flex-direction:column; width: 608px; max-width:608px; padding:0.75rem; z-index:5;" +
       "box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1); overflow:hidden;" +
       "border:none; border-radius:12px; opacity:0; visibility:hidden; color:" + tColour + ";"
   );
@@ -270,6 +270,49 @@ function addCSS(state, options, defaults) {
     state,
     ".fb-cmf fieldset legend .cmf-legend-subtext",
     "font-size:0.75rem; font-weight:400; line-height:1.05; color: var(--secondary-text); margin:0; padding:0;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf .cmf-report-actions",
+    "display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:0.35rem;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf .cmf-report-actions button",
+    "position:relative; overflow:hidden; border:none; border-radius:8px;" +
+      "background-color: var(--secondary-button-background); color: var(--primary-text);" +
+      "height:36px; padding:0 0.75rem; font-weight:600; cursor:pointer;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf .cmf-report-actions button::after",
+    "content:\"\"; position:absolute; inset:0; border-radius:inherit; background-color: var(--hover-overlay);" +
+      "opacity:0; pointer-events:none; transition: opacity 0.1s cubic-bezier(0, 0, 1, 1);"
+  );
+  addToSS(state, ".fb-cmf .cmf-report-actions button:hover::after", "opacity:1;");
+  addToSS(
+    state,
+    ".fb-cmf .cmf-report-status",
+    "margin-top:0.35rem; font-size:0.75rem; color: var(--secondary-text);"
+  );
+  addToSS(
+    state,
+    ".fb-cmf .cmf-report-output",
+    "display:none; width:100%; max-width:100%; box-sizing:border-box; min-height:6rem; margin-top:0.5rem; padding:0.5rem;" +
+      "border-radius:8px; border:1px solid var(--divider);" +
+      "background-color: var(--comment-background); color: var(--primary-text);" +
+      "font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;" +
+      "font-size:0.75rem; line-height:1.3; resize:vertical;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf .cmf-report-output.cmf-report-output--visible",
+    "display:block;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf fieldset.cmf-hidden .cmf-report-output",
+    "display:none !important;"
   );
   addToSS(
     state,

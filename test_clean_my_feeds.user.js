@@ -112,6 +112,15 @@
             DLG_VERBOSITY: "Options for Hidden Posts",
             DLG_PREFERENCES: "Preferences",
             DLG_PREFERENCES_DESC: "Labels, placement, colors, and language.",
+            DLG_REPORT_BUG: "Report a Bug",
+            DLG_REPORT_BUG_DESC: "Generate a diagnostic report for issues.",
+            DLG_REPORT_BUG_NOTICE: "Post text and names are redacted. Review before sharing.",
+            DLG_REPORT_BUG_GENERATE: "Generate report",
+            DLG_REPORT_BUG_COPY: "Copy report",
+            DLG_REPORT_BUG_OPEN_ISSUES: "Open issues",
+            DLG_REPORT_BUG_STATUS_READY: "Report ready.",
+            DLG_REPORT_BUG_STATUS_COPIED: "Report copied to clipboard.",
+            DLG_REPORT_BUG_STATUS_FAILED: "Copy failed. Please copy manually.",
             DLG_VERBOSITY_CAPTION: "Show a label if a post is hidden",
             VERBOSITY_MESSAGE: ["no label", "Post hidden. Rule: ", " posts hidden", "7 posts hidden ~ (Groups Feed only)"],
             VERBOSITY_MESSAGE_COLOUR: "Text colour",
@@ -208,6 +217,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VERBOSITY: "\u062E\u064A\u0627\u0631\u0627\u062A \u0627\u0644\u0645\u0634\u0627\u0631\u0643\u0627\u062A \u0627\u0644\u0645\u062E\u0641\u064A\u0629",
             DLG_PREFERENCES: "\u0627\u0644\u062A\u0641\u0636\u064A\u0644\u0627\u062A",
             DLG_PREFERENCES_DESC: "\u0627\u0644\u062A\u0633\u0645\u064A\u0627\u062A\u060C \u0627\u0644\u0645\u0648\u0636\u0639\u060C \u0627\u0644\u0623\u0644\u0648\u0627\u0646\u060C \u0648\u0627\u0644\u0644\u063A\u0629.",
+            DLG_REPORT_BUG: "\u0627\u0644\u0625\u0628\u0644\u0627\u063A \u0639\u0646 \u062E\u0637\u0623",
+            DLG_REPORT_BUG_DESC: "\u0623\u0646\u0634\u0626 \u062A\u0642\u0631\u064A\u0631\u064B\u0627 \u062A\u0634\u062E\u064A\u0635\u064A\u064B\u0627 \u0644\u0644\u0645\u0634\u0643\u0644\u0627\u062A.",
+            DLG_REPORT_BUG_NOTICE: "\u064A\u062A\u0645 \u0625\u062E\u0641\u0627\u0621 \u0646\u0635\u0648\u0635 \u0627\u0644\u0645\u0646\u0634\u0648\u0631\u0627\u062A \u0648\u0627\u0644\u0623\u0633\u0645\u0627\u0621. \u0631\u0627\u062C\u0639 \u0642\u0628\u0644 \u0627\u0644\u0645\u0634\u0627\u0631\u0643\u0629.",
+            DLG_REPORT_BUG_GENERATE: "\u0625\u0646\u0634\u0627\u0621 \u0627\u0644\u062A\u0642\u0631\u064A\u0631",
+            DLG_REPORT_BUG_COPY: "\u0646\u0633\u062E \u0627\u0644\u062A\u0642\u0631\u064A\u0631",
+            DLG_REPORT_BUG_OPEN_ISSUES: "\u0641\u062A\u062D \u0627\u0644\u0628\u0644\u0627\u063A\u0627\u062A",
+            DLG_REPORT_BUG_STATUS_READY: "\u0627\u0644\u062A\u0642\u0631\u064A\u0631 \u062C\u0627\u0647\u0632.",
+            DLG_REPORT_BUG_STATUS_COPIED: "\u062A\u0645 \u0646\u0633\u062E \u0627\u0644\u062A\u0642\u0631\u064A\u0631.",
+            DLG_REPORT_BUG_STATUS_FAILED: "\u0641\u0634\u0644 \u0627\u0644\u0646\u0633\u062E. \u0627\u0646\u0633\u062E \u064A\u062F\u0648\u064A\u064B\u0627.",
             DLG_VERBOSITY_CAPTION: "\u0625\u0638\u0647\u0627\u0631 \u0625\u0634\u0639\u0627\u0631 \u0628\u0639\u0631\u0636 \u0627\u0644\u0645\u0642\u0627\u0644\u0627\u062A \u0627\u0644\u0645\u062E\u0641\u064A\u0629",
             VERBOSITY_MESSAGE: ["\u0644\u0627 \u062A\u0633\u0645\u064A\u0629", "\u0645\u0634\u0627\u0631\u0643\u0629 \u0648\u0627\u062D\u062F\u0629 \u0645\u062E\u0641\u064A\u0629. \u062D\u0643\u0645: ", " \u0627\u0644\u0645\u0634\u0627\u0631\u0643\u0627\u062A \u0627\u0644\u0645\u062E\u0641\u064A\u0629", "7 \u0645\u0634\u0627\u0631\u0643\u0627\u062A \u0645\u062E\u0641\u064A\u0629 ~ (\u0641\u0642\u0637 \u0641\u064A \u062A\u063A\u0630\u064A\u0629 \u0627\u0644\u0645\u062C\u0645\u0648\u0639\u0627\u062A)"],
             VERBOSITY_MESSAGE_COLOUR: "\u0644\u0648\u0646 \u0627\u0644\u0646\u0635",
@@ -302,6 +320,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VERBOSITY: "\u041E\u043F\u0446\u0438\u0438 \u0437\u0430 \u0441\u043A\u0440\u0438\u0442\u0438 \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u0438",
             DLG_PREFERENCES: "\u041F\u0440\u0435\u0434\u043F\u043E\u0447\u0438\u0442\u0430\u043D\u0438\u044F",
             DLG_PREFERENCES_DESC: "\u0415\u0442\u0438\u043A\u0435\u0442\u0438, \u043F\u043E\u0437\u0438\u0446\u0438\u044F, \u0446\u0432\u0435\u0442\u043E\u0432\u0435 \u0438 \u0435\u0437\u0438\u043A.",
+            DLG_REPORT_BUG: "\u0421\u044A\u043E\u0431\u0449\u0438 \u0437\u0430 \u0431\u044A\u0433",
+            DLG_REPORT_BUG_DESC: "\u0421\u044A\u0437\u0434\u0430\u0439 \u0434\u0438\u0430\u0433\u043D\u043E\u0441\u0442\u0438\u0447\u0435\u043D \u043E\u0442\u0447\u0435\u0442 \u0437\u0430 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u0438.",
+            DLG_REPORT_BUG_NOTICE: "\u0422\u0435\u043A\u0441\u0442\u043E\u0432\u0435\u0442\u0435 \u0438 \u0438\u043C\u0435\u043D\u0430\u0442\u0430 \u0441\u0430 \u0441\u043A\u0440\u0438\u0442\u0438. \u041F\u0440\u043E\u0432\u0435\u0440\u0438 \u043F\u0440\u0435\u0434\u0438 \u0441\u043F\u043E\u0434\u0435\u043B\u044F\u043D\u0435.",
+            DLG_REPORT_BUG_GENERATE: "\u0421\u044A\u0437\u0434\u0430\u0439 \u043E\u0442\u0447\u0435\u0442",
+            DLG_REPORT_BUG_COPY: "\u041A\u043E\u043F\u0438\u0440\u0430\u0439 \u043E\u0442\u0447\u0435\u0442\u0430",
+            DLG_REPORT_BUG_OPEN_ISSUES: "\u041E\u0442\u0432\u043E\u0440\u0438 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u0438\u0442\u0435",
+            DLG_REPORT_BUG_STATUS_READY: "\u041E\u0442\u0447\u0435\u0442\u044A\u0442 \u0435 \u0433\u043E\u0442\u043E\u0432.",
+            DLG_REPORT_BUG_STATUS_COPIED: "\u041E\u0442\u0447\u0435\u0442\u044A\u0442 \u0435 \u043A\u043E\u043F\u0438\u0440\u0430\u043D.",
+            DLG_REPORT_BUG_STATUS_FAILED: "\u041A\u043E\u043F\u0438\u0440\u0430\u043D\u0435\u0442\u043E \u043D\u0435 \u0443\u0441\u043F\u044F. \u041A\u043E\u043F\u0438\u0440\u0430\u0439 \u0440\u044A\u0447\u043D\u043E.",
             DLG_VERBOSITY_CAPTION: "\u041F\u043E\u043A\u0430\u0437\u0432\u0430\u043D\u0435 \u043D\u0430 \u0435\u0442\u0438\u043A\u0435\u0442, \u0430\u043A\u043E \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u044F\u0442\u0430 \u0435 \u0441\u043A\u0440\u0438\u0442\u0430",
             VERBOSITY_MESSAGE: ["\u043D\u044F\u043C\u0430 \u0435\u0442\u0438\u043A\u0435\u0442", "\u0421\u043A\u0440\u0438\u0442\u0430 \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u044F. \u041F\u0440\u0430\u0432\u0438\u043B\u043E: ", " \u0441\u043A\u0440\u0438\u0442\u0438 \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u0438", "7 \u0441\u043A\u0440\u0438\u0442\u0438 \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u0438 ~ (\u0441\u0430\u043C\u043E \u0437\u0430 \u0413\u0440\u0443\u043F\u043E\u0432\u0438\u044F \u043F\u043E\u0442\u043E\u043A)"],
             VERBOSITY_MESSAGE_COLOUR: "\u0426\u0432\u044F\u0442 \u043D\u0430 \u0442\u0435\u043A\u0441\u0442\u0430",
@@ -395,6 +422,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VERBOSITY: "Mo\u017Enosti skryt\xFDch p\u0159\xEDsp\u011Bvk\u016F",
             DLG_PREFERENCES: "P\u0159edvolby",
             DLG_PREFERENCES_DESC: "\u0160t\xEDtky, um\xEDst\u011Bn\xED, barvy a jazyk.",
+            DLG_REPORT_BUG: "Nahl\xE1sit chybu",
+            DLG_REPORT_BUG_DESC: "Vytvo\u0159 diagnostickou zpr\xE1vu k probl\xE9mu.",
+            DLG_REPORT_BUG_NOTICE: "Texty p\u0159\xEDsp\u011Bvk\u016F a jm\xE9na jsou skryt\xE9. P\u0159ed sd\xEDlen\xEDm zkontroluj.",
+            DLG_REPORT_BUG_GENERATE: "Vytvo\u0159it zpr\xE1vu",
+            DLG_REPORT_BUG_COPY: "Kop\xEDrovat zpr\xE1vu",
+            DLG_REPORT_BUG_OPEN_ISSUES: "Otev\u0159\xEDt hl\xE1\u0161en\xED",
+            DLG_REPORT_BUG_STATUS_READY: "Zpr\xE1va je p\u0159ipravena.",
+            DLG_REPORT_BUG_STATUS_COPIED: "Zpr\xE1va zkop\xEDrov\xE1na.",
+            DLG_REPORT_BUG_STATUS_FAILED: "Kop\xEDrov\xE1n\xED se nezda\u0159ilo. Zkop\xEDruj ru\u010Dn\u011B.",
             DLG_VERBOSITY_CAPTION: "Zobrazit popisek, pokud je p\u0159\xEDsp\u011Bvek skryt\xFD",
             VERBOSITY_MESSAGE: ["\u017E\xE1dn\xFD popisek", "P\u0159\xEDsp\u011Bvek byl skryt. Pravidlo: ", " p\u0159\xEDsp\u011Bvk\u016F skryt\xFDch", "7 p\u0159\xEDsp\u011Bvk\u016F skryt\xFDch ~ (pouze ve skupinov\xE9m zpravodaji)"],
             VERBOSITY_MESSAGE_COLOUR: "Barva textu",
@@ -489,6 +525,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VERBOSITY: "Optionen f\xFCr ausgeblendete Beitr\xE4ge",
             DLG_PREFERENCES: "Einstellungen",
             DLG_PREFERENCES_DESC: "Labels, Position, Farben und Sprache.",
+            DLG_REPORT_BUG: "Fehler melden",
+            DLG_REPORT_BUG_DESC: "Erstelle einen Diagnosebericht f\xFCr Probleme.",
+            DLG_REPORT_BUG_NOTICE: "Beitragstexte und Namen werden ausgeblendet. Bitte vor dem Teilen pr\xFCfen.",
+            DLG_REPORT_BUG_GENERATE: "Bericht erstellen",
+            DLG_REPORT_BUG_COPY: "Bericht kopieren",
+            DLG_REPORT_BUG_OPEN_ISSUES: "Issues \xF6ffnen",
+            DLG_REPORT_BUG_STATUS_READY: "Bericht bereit.",
+            DLG_REPORT_BUG_STATUS_COPIED: "Bericht in die Zwischenablage kopiert.",
+            DLG_REPORT_BUG_STATUS_FAILED: "Kopieren fehlgeschlagen. Bitte manuell kopieren.",
             DLG_VERBOSITY_CAPTION: "Ein Label anzeigen, wenn ein Beitrag ausgeblendet ist",
             VERBOSITY_MESSAGE: ["kein Label", "Beitrag ausgeblendet. Regel: ", " Beitr\xE4ge versteckt", "7 Beitr\xE4ge versteckt ~ (nur Gruppen-Feed)"],
             VERBOSITY_MESSAGE_COLOUR: "Textfarbe",
@@ -582,6 +627,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VERBOSITY: "\u0395\u03C0\u03B9\u03BB\u03BF\u03B3\u03AD\u03C2 \u03B3\u03B9\u03B1 \u03BA\u03C1\u03C5\u03C6\u03AD\u03C2 \u03B1\u03BD\u03B1\u03C1\u03C4\u03AE\u03C3\u03B5\u03B9\u03C2",
             DLG_PREFERENCES: "\u03A0\u03C1\u03BF\u03C4\u03B9\u03BC\u03AE\u03C3\u03B5\u03B9\u03C2",
             DLG_PREFERENCES_DESC: "\u0395\u03C4\u03B9\u03BA\u03AD\u03C4\u03B5\u03C2, \u03B8\u03AD\u03C3\u03B7, \u03C7\u03C1\u03CE\u03BC\u03B1\u03C4\u03B1 \u03BA\u03B1\u03B9 \u03B3\u03BB\u03CE\u03C3\u03C3\u03B1.",
+            DLG_REPORT_BUG: "\u0391\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC \u03C3\u03C6\u03AC\u03BB\u03BC\u03B1\u03C4\u03BF\u03C2",
+            DLG_REPORT_BUG_DESC: "\u0394\u03B7\u03BC\u03B9\u03BF\u03CD\u03C1\u03B3\u03B7\u03C3\u03B5 \u03B4\u03B9\u03B1\u03B3\u03BD\u03C9\u03C3\u03C4\u03B9\u03BA\u03AE \u03B1\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC \u03B3\u03B9\u03B1 \u03C0\u03C1\u03BF\u03B2\u03BB\u03AE\u03BC\u03B1\u03C4\u03B1.",
+            DLG_REPORT_BUG_NOTICE: "\u03A4\u03B1 \u03BA\u03B5\u03AF\u03BC\u03B5\u03BD\u03B1 \u03BA\u03B1\u03B9 \u03C4\u03B1 \u03BF\u03BD\u03CC\u03BC\u03B1\u03C4\u03B1 \u03B1\u03C0\u03BF\u03BA\u03C1\u03CD\u03C0\u03C4\u03BF\u03BD\u03C4\u03B1\u03B9. \u0388\u03BB\u03B5\u03B3\u03BE\u03B5 \u03C0\u03C1\u03B9\u03BD \u03C4\u03BF \u03BC\u03BF\u03B9\u03C1\u03B1\u03C3\u03C4\u03B5\u03AF\u03C2.",
+            DLG_REPORT_BUG_GENERATE: "\u0394\u03B7\u03BC\u03B9\u03BF\u03C5\u03C1\u03B3\u03AF\u03B1 \u03B1\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC\u03C2",
+            DLG_REPORT_BUG_COPY: "\u0391\u03BD\u03C4\u03B9\u03B3\u03C1\u03B1\u03C6\u03AE \u03B1\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC\u03C2",
+            DLG_REPORT_BUG_OPEN_ISSUES: "\u0386\u03BD\u03BF\u03B9\u03B3\u03BC\u03B1 \u03B8\u03B5\u03BC\u03AC\u03C4\u03C9\u03BD",
+            DLG_REPORT_BUG_STATUS_READY: "\u0397 \u03B1\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC \u03B5\u03AF\u03BD\u03B1\u03B9 \u03AD\u03C4\u03BF\u03B9\u03BC\u03B7.",
+            DLG_REPORT_BUG_STATUS_COPIED: "\u0397 \u03B1\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC \u03B1\u03BD\u03C4\u03B9\u03B3\u03C1\u03AC\u03C6\u03B7\u03BA\u03B5.",
+            DLG_REPORT_BUG_STATUS_FAILED: "\u0391\u03C0\u03BF\u03C4\u03C5\u03C7\u03AF\u03B1 \u03B1\u03BD\u03C4\u03B9\u03B3\u03C1\u03B1\u03C6\u03AE\u03C2. \u0391\u03BD\u03C4\u03AD\u03B3\u03C1\u03B1\u03C8\u03B5 \u03C7\u03B5\u03B9\u03C1\u03BF\u03BA\u03AF\u03BD\u03B7\u03C4\u03B1.",
             DLG_VERBOSITY_CAPTION: "\u0395\u03BC\u03C6\u03AC\u03BD\u03B9\u03C3\u03B7 \u03B5\u03C4\u03B9\u03BA\u03AD\u03C4\u03B1\u03C2 \u03B1\u03BD \u03BC\u03B9\u03B1 \u03B4\u03B7\u03BC\u03BF\u03C3\u03AF\u03B5\u03C5\u03C3\u03B7 \u03B5\u03AF\u03BD\u03B1\u03B9 \u03BA\u03C1\u03C5\u03BC\u03BC\u03AD\u03BD\u03B7",
             VERBOSITY_MESSAGE: ["\u03C7\u03C9\u03C1\u03AF\u03C2 \u03B5\u03C4\u03B9\u03BA\u03AD\u03C4\u03B1", "\u0394\u03B7\u03BC\u03BF\u03C3\u03AF\u03B5\u03C5\u03C3\u03B7 \u03BA\u03C1\u03C5\u03BC\u03BC\u03AD\u03BD\u03B7. \u039A\u03B1\u03BD\u03CC\u03BD\u03B1\u03C2: ", " \u03B4\u03B7\u03BC\u03BF\u03C3\u03B9\u03B5\u03CD\u03C3\u03B5\u03B9\u03C2 \u03BA\u03C1\u03C5\u03BC\u03BC\u03AD\u03BD\u03B5\u03C2", "7 \u03B4\u03B7\u03BC\u03BF\u03C3\u03B9\u03B5\u03CD\u03C3\u03B5\u03B9\u03C2 \u03BA\u03C1\u03C5\u03BC\u03BC\u03AD\u03BD\u03B5\u03C2 ~ (\u03BC\u03CC\u03BD\u03BF \u03C3\u03C4\u03B7\u03BD \u03C4\u03C1\u03BF\u03C6\u03BF\u03B4\u03BF\u03C3\u03AF\u03B1 \u03C4\u03C9\u03BD \u03BF\u03BC\u03AC\u03B4\u03C9\u03BD)"],
             VERBOSITY_MESSAGE_COLOUR: "\u03A7\u03C1\u03CE\u03BC\u03B1 \u03BA\u03B5\u03B9\u03BC\u03AD\u03BD\u03BF\u03C5",
@@ -675,6 +729,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VERBOSITY: "Opciones para publicaciones ocultas",
             DLG_PREFERENCES: "Preferencias",
             DLG_PREFERENCES_DESC: "Etiquetas, ubicaci\xF3n, colores e idioma.",
+            DLG_REPORT_BUG: "Reportar un error",
+            DLG_REPORT_BUG_DESC: "Genera un informe de diagn\xF3stico para problemas.",
+            DLG_REPORT_BUG_NOTICE: "Los textos y nombres se ocultan. Revisa antes de compartir.",
+            DLG_REPORT_BUG_GENERATE: "Generar informe",
+            DLG_REPORT_BUG_COPY: "Copiar informe",
+            DLG_REPORT_BUG_OPEN_ISSUES: "Abrir incidencias",
+            DLG_REPORT_BUG_STATUS_READY: "Informe listo.",
+            DLG_REPORT_BUG_STATUS_COPIED: "Informe copiado al portapapeles.",
+            DLG_REPORT_BUG_STATUS_FAILED: "Error al copiar. Copia manualmente.",
             DLG_VERBOSITY_CAPTION: "Mostrar una etiqueta si una publicaci\xF3n est\xE1 oculta",
             VERBOSITY_MESSAGE: ["sin etiqueta", "Publicaci\xF3n oculta. Regla: ", " publicaciones ocultas", "7 publicaciones ocultas ~ (solo en el Feed de Grupos)"],
             VERBOSITY_MESSAGE_COLOUR: "Color del texto",
@@ -768,6 +831,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VERBOSITY: "Vaihtoehdot piilotetuille viesteille",
             DLG_PREFERENCES: "Asetukset",
             DLG_PREFERENCES_DESC: "Tunnisteet, sijainti, v\xE4rit ja kieli.",
+            DLG_REPORT_BUG: "Ilmoita virhe",
+            DLG_REPORT_BUG_DESC: "Luo diagnoosiraportti ongelmista.",
+            DLG_REPORT_BUG_NOTICE: "Julkaisujen teksti ja nimet peitet\xE4\xE4n. Tarkista ennen jakamista.",
+            DLG_REPORT_BUG_GENERATE: "Luo raportti",
+            DLG_REPORT_BUG_COPY: "Kopioi raportti",
+            DLG_REPORT_BUG_OPEN_ISSUES: "Avaa tiketit",
+            DLG_REPORT_BUG_STATUS_READY: "Raportti valmis.",
+            DLG_REPORT_BUG_STATUS_COPIED: "Raportti kopioitu leikep\xF6yd\xE4lle.",
+            DLG_REPORT_BUG_STATUS_FAILED: "Kopiointi ep\xE4onnistui. Kopioi k\xE4sin.",
             DLG_VERBOSITY_CAPTION: "N\xE4yt\xE4 merkki, jos artikkeli on piilotettu",
             VERBOSITY_MESSAGE: ["ei tunnistetta", "Viesti piilotettu. S\xE4\xE4nt\xF6: ", " viesti\xE4 piilotettu", "7 viesti\xE4 piilotettu ~ (vain Ryhmien sy\xF6tteess\xE4)"],
             VERBOSITY_MESSAGE_COLOUR: "Tekstin v\xE4ri",
@@ -861,6 +933,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VERBOSITY: "Options pour les publications cach\xE9es",
             DLG_PREFERENCES: "Pr\xE9f\xE9rences",
             DLG_PREFERENCES_DESC: "Libell\xE9s, emplacement, couleurs et langue.",
+            DLG_REPORT_BUG: "Signaler un bug",
+            DLG_REPORT_BUG_DESC: "G\xE9n\xE9rer un rapport de diagnostic.",
+            DLG_REPORT_BUG_NOTICE: "Les textes et noms sont masqu\xE9s. V\xE9rifiez avant de partager.",
+            DLG_REPORT_BUG_GENERATE: "G\xE9n\xE9rer le rapport",
+            DLG_REPORT_BUG_COPY: "Copier le rapport",
+            DLG_REPORT_BUG_OPEN_ISSUES: "Ouvrir les issues",
+            DLG_REPORT_BUG_STATUS_READY: "Rapport pr\xEAt.",
+            DLG_REPORT_BUG_STATUS_COPIED: "Rapport copi\xE9 dans le presse-papiers.",
+            DLG_REPORT_BUG_STATUS_FAILED: "\xC9chec de la copie. Copiez manuellement.",
             DLG_VERBOSITY_CAPTION: "Afficher un libell\xE9 si une publication est masqu\xE9e",
             VERBOSITY_MESSAGE: ["pas de libell\xE9", "Poste cach\xE9. R\xE8gle: ", " posts cach\xE9s", "7 posts cach\xE9s ~ (uniquement dans le flux de groupes)"],
             VERBOSITY_MESSAGE_COLOUR: "Couleur du texte",
@@ -955,6 +1036,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VERBOSITY: "\u05D0\u05E4\u05E9\u05E8\u05D5\u05D9\u05D5\u05EA \u05DC\u05E4\u05D5\u05E1\u05D8\u05D9\u05DD \u05DE\u05D5\u05E1\u05EA\u05E8\u05D9\u05DD",
             DLG_PREFERENCES: "\u05D4\u05E2\u05D3\u05E4\u05D5\u05EA",
             DLG_PREFERENCES_DESC: "\u05EA\u05D5\u05D5\u05D9\u05D5\u05EA, \u05DE\u05D9\u05E7\u05D5\u05DD, \u05E6\u05D1\u05E2\u05D9\u05DD \u05D5\u05E9\u05E4\u05D4.",
+            DLG_REPORT_BUG: "\u05D3\u05D5\u05D5\u05D7 \u05E2\u05DC \u05D1\u05D0\u05D2",
+            DLG_REPORT_BUG_DESC: "\u05E6\u05D5\u05E8 \u05D3\u05D5\u05D7 \u05D0\u05D1\u05D7\u05D5\u05DF \u05DC\u05D1\u05E2\u05D9\u05D5\u05EA.",
+            DLG_REPORT_BUG_NOTICE: "\u05D8\u05E7\u05E1\u05D8\u05D9\u05DD \u05D5\u05E9\u05DE\u05D5\u05EA \u05DE\u05D5\u05E1\u05EA\u05E8\u05D9\u05DD. \u05D1\u05D3\u05D5\u05E7 \u05DC\u05E4\u05E0\u05D9 \u05E9\u05D9\u05EA\u05D5\u05E3.",
+            DLG_REPORT_BUG_GENERATE: "\u05E6\u05D5\u05E8 \u05D3\u05D5\u05D7",
+            DLG_REPORT_BUG_COPY: "\u05D4\u05E2\u05EA\u05E7 \u05D3\u05D5\u05D7",
+            DLG_REPORT_BUG_OPEN_ISSUES: "\u05E4\u05EA\u05D7 \u05EA\u05E7\u05DC\u05D5\u05EA",
+            DLG_REPORT_BUG_STATUS_READY: "\u05D4\u05D3\u05D5\u05D7 \u05DE\u05D5\u05DB\u05DF.",
+            DLG_REPORT_BUG_STATUS_COPIED: "\u05D4\u05D3\u05D5\u05D7 \u05D4\u05D5\u05E2\u05EA\u05E7 \u05DC\u05DC\u05D5\u05D7.",
+            DLG_REPORT_BUG_STATUS_FAILED: "\u05D4\u05D4\u05E2\u05EA\u05E7\u05D4 \u05E0\u05DB\u05E9\u05DC\u05D4. \u05D4\u05E2\u05EA\u05E7 \u05D9\u05D3\u05E0\u05D9\u05EA.",
             DLG_VERBOSITY_CAPTION: "\u05D4\u05E6\u05D2 \u05EA\u05D5\u05D9\u05EA \u05D0\u05DD \u05DE\u05D0\u05DE\u05E8 \u05DE\u05D5\u05E1\u05EA\u05E8",
             VERBOSITY_MESSAGE: ["\u05D0\u05D9\u05DF \u05EA\u05D5\u05D5\u05D9\u05EA", "\u05E4\u05D5\u05E1\u05D8 \u05D0\u05D7\u05D3 \u05DE\u05D5\u05E1\u05EA\u05E8. \u05DB\u05DC\u05DC: ", " \u05E4\u05D5\u05E1\u05D8\u05D9\u05DD \u05DE\u05D5\u05E1\u05EA\u05E8\u05D9\u05DD", "7 \u05E4\u05D5\u05E1\u05D8\u05D9\u05DD \u05DE\u05D5\u05E1\u05EA\u05E8\u05D9\u05DD ~ (\u05E8\u05E7 \u05D1\u05E1\u05D3\u05E8 \u05D7\u05D1\u05E8\u05D9\u05DD)"],
             VERBOSITY_MESSAGE_COLOUR: "\u05E6\u05D1\u05E2 \u05D8\u05E7\u05E1\u05D8",
@@ -1048,6 +1138,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VERBOSITY: "Opsi untuk Postingan Tersembunyi",
             DLG_PREFERENCES: "Preferensi",
             DLG_PREFERENCES_DESC: "Label, penempatan, warna, dan bahasa.",
+            DLG_REPORT_BUG: "Laporkan bug",
+            DLG_REPORT_BUG_DESC: "Buat laporan diagnostik untuk masalah.",
+            DLG_REPORT_BUG_NOTICE: "Teks dan nama disamarkan. Tinjau sebelum membagikan.",
+            DLG_REPORT_BUG_GENERATE: "Buat laporan",
+            DLG_REPORT_BUG_COPY: "Salin laporan",
+            DLG_REPORT_BUG_OPEN_ISSUES: "Buka isu",
+            DLG_REPORT_BUG_STATUS_READY: "Laporan siap.",
+            DLG_REPORT_BUG_STATUS_COPIED: "Laporan disalin ke clipboard.",
+            DLG_REPORT_BUG_STATUS_FAILED: "Gagal menyalin. Salin manual.",
             DLG_VERBOSITY_CAPTION: "Tampilkan label jika kiriman disembunyikan",
             VERBOSITY_MESSAGE: ["tanpa label", "Pos disembunyikan. Aturan: ", " postingan disembunyikan", "7 postingan disembunyikan ~ (hanya di Feed Grup)"],
             VERBOSITY_MESSAGE_COLOUR: "Warna teks",
@@ -1141,6 +1240,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VERBOSITY: "Opzioni per post nascosti",
             DLG_PREFERENCES: "Preferenze",
             DLG_PREFERENCES_DESC: "Etichette, posizione, colori e lingua.",
+            DLG_REPORT_BUG: "Segnala un bug",
+            DLG_REPORT_BUG_DESC: "Genera un report diagnostico.",
+            DLG_REPORT_BUG_NOTICE: "Testi e nomi sono oscurati. Controlla prima di condividere.",
+            DLG_REPORT_BUG_GENERATE: "Genera report",
+            DLG_REPORT_BUG_COPY: "Copia report",
+            DLG_REPORT_BUG_OPEN_ISSUES: "Apri segnalazioni",
+            DLG_REPORT_BUG_STATUS_READY: "Report pronto.",
+            DLG_REPORT_BUG_STATUS_COPIED: "Report copiato negli appunti.",
+            DLG_REPORT_BUG_STATUS_FAILED: "Copia non riuscita. Copia manualmente.",
             DLG_VERBOSITY_CAPTION: "Mostrare un'etichetta se un post \xE8 nascosto",
             VERBOSITY_MESSAGE: ["nessuna etichetta", "Post nascosto. Regola: ", " post nascosti", "7 post nascosti ~ (solo nel Feed di Gruppi)"],
             VERBOSITY_MESSAGE_COLOUR: "Colore del testo",
@@ -1234,6 +1342,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VERBOSITY: "\u975E\u8868\u793A\u6295\u7A3F\u306E\u30AA\u30D7\u30B7\u30E7\u30F3",
             DLG_PREFERENCES: "\u8A2D\u5B9A",
             DLG_PREFERENCES_DESC: "\u30E9\u30D9\u30EB\u3001\u914D\u7F6E\u3001\u8272\u3001\u8A00\u8A9E\u3002",
+            DLG_REPORT_BUG: "\u30D0\u30B0\u3092\u5831\u544A",
+            DLG_REPORT_BUG_DESC: "\u554F\u984C\u306E\u8A3A\u65AD\u30EC\u30DD\u30FC\u30C8\u3092\u4F5C\u6210\u3057\u307E\u3059\u3002",
+            DLG_REPORT_BUG_NOTICE: "\u6295\u7A3F\u306E\u672C\u6587\u3068\u540D\u524D\u306F\u4F0F\u305B\u307E\u3059\u3002\u5171\u6709\u524D\u306B\u78BA\u8A8D\u3057\u3066\u304F\u3060\u3055\u3044\u3002",
+            DLG_REPORT_BUG_GENERATE: "\u30EC\u30DD\u30FC\u30C8\u4F5C\u6210",
+            DLG_REPORT_BUG_COPY: "\u30EC\u30DD\u30FC\u30C8\u3092\u30B3\u30D4\u30FC",
+            DLG_REPORT_BUG_OPEN_ISSUES: "Issue \u3092\u958B\u304F",
+            DLG_REPORT_BUG_STATUS_READY: "\u30EC\u30DD\u30FC\u30C8\u304C\u7528\u610F\u3067\u304D\u307E\u3057\u305F\u3002",
+            DLG_REPORT_BUG_STATUS_COPIED: "\u30EC\u30DD\u30FC\u30C8\u3092\u30B3\u30D4\u30FC\u3057\u307E\u3057\u305F\u3002",
+            DLG_REPORT_BUG_STATUS_FAILED: "\u30B3\u30D4\u30FC\u306B\u5931\u6557\u3057\u307E\u3057\u305F\u3002\u624B\u52D5\u3067\u30B3\u30D4\u30FC\u3057\u3066\u304F\u3060\u3055\u3044\u3002",
             DLG_VERBOSITY_CAPTION: "\u6295\u7A3F\u304C\u975E\u8868\u793A\u306E\u5834\u5408\u306B\u30E9\u30D9\u30EB\u3092\u8868\u793A\u3059\u308B",
             VERBOSITY_MESSAGE: ["\u30E9\u30D9\u30EB\u306A\u3057", "\u6295\u7A3F\u3092\u975E\u8868\u793A\u306B\u3057\u307E\u3057\u305F\u3002 \u30EB\u30FC\u30EB\uFF1A ", " \u4EF6\u306E\u6295\u7A3F\u304C\u975E\u8868\u793A", "7\u4EF6\u306E\u6295\u7A3F\u304C\u975E\u8868\u793A ~ (\u30B0\u30EB\u30FC\u30D7\u30D5\u30A3\u30FC\u30C9\u306E\u307F)"],
             VERBOSITY_MESSAGE_COLOUR: "\u30C6\u30AD\u30B9\u30C8\u306E\u8272",
@@ -1327,6 +1444,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VERBOSITY: "Sl\u0113pto ierakstu iesp\u0113jas",
             DLG_PREFERENCES: "Iestat\u012Bjumi",
             DLG_PREFERENCES_DESC: "Eti\u0137etes, novietojums, kr\u0101sas un valoda.",
+            DLG_REPORT_BUG: "Zi\u0146ot par k\u013C\u016Bdu",
+            DLG_REPORT_BUG_DESC: "Izveido diagnostikas atskaiti probl\u0113m\u0101m.",
+            DLG_REPORT_BUG_NOTICE: "Zi\u0146u teksti un v\u0101rdi tiek pasl\u0113pti. P\u0101rbaudi pirms kop\u012Bgo\u0161anas.",
+            DLG_REPORT_BUG_GENERATE: "Izveidot atskaiti",
+            DLG_REPORT_BUG_COPY: "Kop\u0113t atskaiti",
+            DLG_REPORT_BUG_OPEN_ISSUES: "Atv\u0113rt pieteikumus",
+            DLG_REPORT_BUG_STATUS_READY: "Atskaite ir gatava.",
+            DLG_REPORT_BUG_STATUS_COPIED: "Atskaite nokop\u0113ta starpliktuv\u0113.",
+            DLG_REPORT_BUG_STATUS_FAILED: "Kop\u0113\u0161ana neizdev\u0101s. Kop\u0113 manu\u0101li.",
             DLG_VERBOSITY_CAPTION: "R\u0101d\u012Bt eti\u0137eti, ja raksts ir pasl\u0113pts",
             VERBOSITY_MESSAGE: ["nav nek\u0101da zi\u0146ojuma", "Zi\u0146a ir pasl\u0113pta. Noteikums: ", " zi\u0146as ir pasl\u0113ptas", "7 zi\u0146as pasl\u0113ptas ~ (tikai Grupu pl\u016Bsm\u0113)"],
             VERBOSITY_MESSAGE_COLOUR: "Teksta kr\u0101sa",
@@ -1420,6 +1546,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VERBOSITY: "Opties voor verborgen berichten",
             DLG_PREFERENCES: "Voorkeuren",
             DLG_PREFERENCES_DESC: "Labels, plaatsing, kleuren en taal.",
+            DLG_REPORT_BUG: "Bug melden",
+            DLG_REPORT_BUG_DESC: "Maak een diagnostisch rapport voor problemen.",
+            DLG_REPORT_BUG_NOTICE: "Berichttekst en namen zijn verborgen. Controleer voor delen.",
+            DLG_REPORT_BUG_GENERATE: "Rapport maken",
+            DLG_REPORT_BUG_COPY: "Rapport kopi\xEBren",
+            DLG_REPORT_BUG_OPEN_ISSUES: "Issues openen",
+            DLG_REPORT_BUG_STATUS_READY: "Rapport klaar.",
+            DLG_REPORT_BUG_STATUS_COPIED: "Rapport gekopieerd naar klembord.",
+            DLG_REPORT_BUG_STATUS_FAILED: "Kopi\xEBren mislukt. Kopieer handmatig.",
             DLG_VERBOSITY_CAPTION: "Toon een label als een artikel verborgen is",
             VERBOSITY_MESSAGE: ["geen label", "Post verborgen. Regel: ", " posts verborgen", "7 posts verborgen ~ (alleen in Groepen Feed)"],
             VERBOSITY_MESSAGE_COLOUR: "Tekstkleur",
@@ -1513,6 +1648,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VERBOSITY: "Opcje dla ukrytych post\xF3w",
             DLG_PREFERENCES: "Preferencje",
             DLG_PREFERENCES_DESC: "Etykiety, po\u0142o\u017Cenie, kolory i j\u0119zyk.",
+            DLG_REPORT_BUG: "Zg\u0142o\u015B b\u0142\u0105d",
+            DLG_REPORT_BUG_DESC: "Utw\xF3rz raport diagnostyczny.",
+            DLG_REPORT_BUG_NOTICE: "Teksty i nazwy s\u0105 ukryte. Sprawd\u017A przed udost\u0119pnieniem.",
+            DLG_REPORT_BUG_GENERATE: "Utw\xF3rz raport",
+            DLG_REPORT_BUG_COPY: "Kopiuj raport",
+            DLG_REPORT_BUG_OPEN_ISSUES: "Otw\xF3rz zg\u0142oszenia",
+            DLG_REPORT_BUG_STATUS_READY: "Raport gotowy.",
+            DLG_REPORT_BUG_STATUS_COPIED: "Raport skopiowany do schowka.",
+            DLG_REPORT_BUG_STATUS_FAILED: "Nie uda\u0142o si\u0119 skopiowa\u0107. Skopiuj r\u0119cznie.",
             DLG_VERBOSITY_CAPTION: "Poka\u017C etykiet\u0119, je\u015Bli artyku\u0142 jest ukryty",
             VERBOSITY_MESSAGE: ["brak etykiety", "Ukryto 1 post. Regu\u0142a: ", " posty ukryte", "7 posty ukryte ~ (tylko w Kana\u0142ach Grup)"],
             VERBOSITY_MESSAGE_COLOUR: "Kolor tekstu",
@@ -1606,6 +1750,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VERBOSITY: "Op\xE7\xF5es para postagens ocultas",
             DLG_PREFERENCES: "Prefer\xEAncias",
             DLG_PREFERENCES_DESC: "R\xF3tulos, posi\xE7\xE3o, cores e idioma.",
+            DLG_REPORT_BUG: "Reportar bug",
+            DLG_REPORT_BUG_DESC: "Gere um relat\xF3rio de diagn\xF3stico.",
+            DLG_REPORT_BUG_NOTICE: "Textos e nomes s\xE3o ocultados. Revise antes de compartilhar.",
+            DLG_REPORT_BUG_GENERATE: "Gerar relat\xF3rio",
+            DLG_REPORT_BUG_COPY: "Copiar relat\xF3rio",
+            DLG_REPORT_BUG_OPEN_ISSUES: "Abrir issues",
+            DLG_REPORT_BUG_STATUS_READY: "Relat\xF3rio pronto.",
+            DLG_REPORT_BUG_STATUS_COPIED: "Relat\xF3rio copiado para a \xE1rea de transfer\xEAncia.",
+            DLG_REPORT_BUG_STATUS_FAILED: "Falha ao copiar. Copie manualmente.",
             DLG_VERBOSITY_CAPTION: "Mostrar um r\xF3tulo se uma postagem estiver oculta",
             VERBOSITY_MESSAGE: ["sem r\xF3tulo", "Postagem oculta. Regra: ", " postagens ocultas", "7 postagens ocultas ~ (apenas no Feed de Grupos)"],
             VERBOSITY_MESSAGE_COLOUR: "Cor do texto",
@@ -1699,6 +1852,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VERBOSITY: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u0441\u043A\u0440\u044B\u0442\u044B\u0445 \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u0439",
             DLG_PREFERENCES: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438",
             DLG_PREFERENCES_DESC: "\u041C\u0435\u0442\u043A\u0438, \u0440\u0430\u0441\u043F\u043E\u043B\u043E\u0436\u0435\u043D\u0438\u0435, \u0446\u0432\u0435\u0442\u0430 \u0438 \u044F\u0437\u044B\u043A.",
+            DLG_REPORT_BUG: "\u0421\u043E\u043E\u0431\u0449\u0438\u0442\u044C \u043E\u0431 \u043E\u0448\u0438\u0431\u043A\u0435",
+            DLG_REPORT_BUG_DESC: "\u0421\u043E\u0437\u0434\u0430\u0439\u0442\u0435 \u0434\u0438\u0430\u0433\u043D\u043E\u0441\u0442\u0438\u0447\u0435\u0441\u043A\u0438\u0439 \u043E\u0442\u0447\u0451\u0442.",
+            DLG_REPORT_BUG_NOTICE: "\u0422\u0435\u043A\u0441\u0442\u044B \u0438 \u0438\u043C\u0435\u043D\u0430 \u0441\u043A\u0440\u044B\u0442\u044B. \u041F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435 \u043F\u0435\u0440\u0435\u0434 \u043E\u0442\u043F\u0440\u0430\u0432\u043A\u043E\u0439.",
+            DLG_REPORT_BUG_GENERATE: "\u0421\u043E\u0437\u0434\u0430\u0442\u044C \u043E\u0442\u0447\u0451\u0442",
+            DLG_REPORT_BUG_COPY: "\u041A\u043E\u043F\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u043E\u0442\u0447\u0451\u0442",
+            DLG_REPORT_BUG_OPEN_ISSUES: "\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u0437\u0430\u0434\u0430\u0447\u0438",
+            DLG_REPORT_BUG_STATUS_READY: "\u041E\u0442\u0447\u0451\u0442 \u0433\u043E\u0442\u043E\u0432.",
+            DLG_REPORT_BUG_STATUS_COPIED: "\u041E\u0442\u0447\u0451\u0442 \u0441\u043A\u043E\u043F\u0438\u0440\u043E\u0432\u0430\u043D \u0432 \u0431\u0443\u0444\u0435\u0440.",
+            DLG_REPORT_BUG_STATUS_FAILED: "\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0441\u043A\u043E\u043F\u0438\u0440\u043E\u0432\u0430\u0442\u044C. \u0421\u043A\u043E\u043F\u0438\u0440\u0443\u0439\u0442\u0435 \u0432\u0440\u0443\u0447\u043D\u0443\u044E.",
             DLG_VERBOSITY_CAPTION: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u044C \u044F\u0440\u043B\u044B\u043A, \u0435\u0441\u043B\u0438 \u0437\u0430\u043F\u0438\u0441\u044C \u0441\u043A\u0440\u044B\u0442\u0430",
             VERBOSITY_MESSAGE: ["\u043D\u0435\u0442 \u044F\u0440\u043B\u044B\u043A\u0430", "\u041F\u043E\u0441\u0442 \u0441\u043A\u0440\u044B\u0442. \u041F\u0440\u0430\u0432\u0438\u043B\u043E: ", " \u043F\u043E\u0441\u0442\u043E\u0432 \u0441\u043A\u0440\u044B\u0442\u043E", "7 \u043F\u043E\u0441\u0442\u043E\u0432 \u0441\u043A\u0440\u044B\u0442\u043E ~ (\u0442\u043E\u043B\u044C\u043A\u043E \u0432 \u041B\u0435\u043D\u0442\u0435 \u0413\u0440\u0443\u043F\u043F)"],
             VERBOSITY_MESSAGE_COLOUR: "\u0426\u0432\u0435\u0442 \u0442\u0435\u043A\u0441\u0442\u0430",
@@ -1791,6 +1953,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VERBOSITY: "Gizli G\xF6nderi Se\xE7enekleri",
             DLG_PREFERENCES: "Tercihler",
             DLG_PREFERENCES_DESC: "Etiketler, konum, renkler ve dil.",
+            DLG_REPORT_BUG: "Hata bildir",
+            DLG_REPORT_BUG_DESC: "Sorunlar i\xE7in tan\u0131lama raporu olu\u015Ftur.",
+            DLG_REPORT_BUG_NOTICE: "G\xF6nderi metinleri ve adlar gizlenir. Payla\u015Fmadan \xF6nce kontrol et.",
+            DLG_REPORT_BUG_GENERATE: "Rapor olu\u015Ftur",
+            DLG_REPORT_BUG_COPY: "Raporu kopyala",
+            DLG_REPORT_BUG_OPEN_ISSUES: "Sorunlar\u0131 a\xE7",
+            DLG_REPORT_BUG_STATUS_READY: "Rapor haz\u0131r.",
+            DLG_REPORT_BUG_STATUS_COPIED: "Rapor panoya kopyaland\u0131.",
+            DLG_REPORT_BUG_STATUS_FAILED: "Kopyalama ba\u015Far\u0131s\u0131z. Elle kopyalay\u0131n.",
             DLG_VERBOSITY_CAPTION: "Bir g\xF6nderi gizlenmi\u015Fse bir etiket g\xF6ster",
             VERBOSITY_MESSAGE: ["etiket yok", "G\xF6nderi gizlendi. Kural: ", " g\xF6nderi gizlendi", "7 g\xF6nderi gizlendi ~ (yaln\u0131zca Grup Beslemesi)"],
             VERBOSITY_MESSAGE_COLOUR: "Metin rengi",
@@ -1884,6 +2055,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VERBOSITY: "\u041F\u0430\u0440\u0430\u043C\u0435\u0442\u0440\u0438 \u043F\u0440\u0438\u0445\u043E\u0432\u0430\u043D\u0438\u0445 \u0434\u043E\u043F\u0438\u0441\u0456\u0432",
             DLG_PREFERENCES: "\u041D\u0430\u043B\u0430\u0448\u0442\u0443\u0432\u0430\u043D\u043D\u044F",
             DLG_PREFERENCES_DESC: "\u041C\u0456\u0442\u043A\u0438, \u0440\u043E\u0437\u0442\u0430\u0448\u0443\u0432\u0430\u043D\u043D\u044F, \u043A\u043E\u043B\u044C\u043E\u0440\u0438 \u0442\u0430 \u043C\u043E\u0432\u0430.",
+            DLG_REPORT_BUG: "\u041F\u043E\u0432\u0456\u0434\u043E\u043C\u0438\u0442\u0438 \u043F\u0440\u043E \u043F\u043E\u043C\u0438\u043B\u043A\u0443",
+            DLG_REPORT_BUG_DESC: "\u0421\u0442\u0432\u043E\u0440\u0456\u0442\u044C \u0434\u0456\u0430\u0433\u043D\u043E\u0441\u0442\u0438\u0447\u043D\u0438\u0439 \u0437\u0432\u0456\u0442.",
+            DLG_REPORT_BUG_NOTICE: "\u0422\u0435\u043A\u0441\u0442\u0438 \u0439 \u0456\u043C\u0435\u043D\u0430 \u043F\u0440\u0438\u0445\u043E\u0432\u0430\u043D\u043E. \u041F\u0435\u0440\u0435\u0432\u0456\u0440\u0442\u0435 \u043F\u0435\u0440\u0435\u0434 \u043D\u0430\u0434\u0441\u0438\u043B\u0430\u043D\u043D\u044F\u043C.",
+            DLG_REPORT_BUG_GENERATE: "\u0421\u0442\u0432\u043E\u0440\u0438\u0442\u0438 \u0437\u0432\u0456\u0442",
+            DLG_REPORT_BUG_COPY: "\u041A\u043E\u043F\u0456\u044E\u0432\u0430\u0442\u0438 \u0437\u0432\u0456\u0442",
+            DLG_REPORT_BUG_OPEN_ISSUES: "\u0412\u0456\u0434\u043A\u0440\u0438\u0442\u0438 \u0437\u0432\u0435\u0440\u043D\u0435\u043D\u043D\u044F",
+            DLG_REPORT_BUG_STATUS_READY: "\u0417\u0432\u0456\u0442 \u0433\u043E\u0442\u043E\u0432\u0438\u0439.",
+            DLG_REPORT_BUG_STATUS_COPIED: "\u0417\u0432\u0456\u0442 \u0441\u043A\u043E\u043F\u0456\u0439\u043E\u0432\u0430\u043D\u043E \u0434\u043E \u0431\u0443\u0444\u0435\u0440\u0430.",
+            DLG_REPORT_BUG_STATUS_FAILED: "\u041D\u0435 \u0432\u0434\u0430\u043B\u043E\u0441\u044F \u0441\u043A\u043E\u043F\u0456\u044E\u0432\u0430\u0442\u0438. \u0421\u043A\u043E\u043F\u0456\u044E\u0439\u0442\u0435 \u0432\u0440\u0443\u0447\u043D\u0443.",
             DLG_VERBOSITY_CAPTION: "\u0412\u0456\u0434\u043E\u0431\u0440\u0430\u0436\u0430\u0442\u0438 \u043C\u0456\u0442\u043A\u0443, \u044F\u043A\u0449\u043E \u043F\u0443\u0431\u043B\u0456\u043A\u0430\u0446\u0456\u044F \u043F\u0440\u0438\u0445\u043E\u0432\u0430\u043D\u0430",
             VERBOSITY_MESSAGE: ["\u0436\u043E\u0434\u043D\u043E\u0457 \u043C\u0456\u0442\u043A\u0438", "\u0414\u043E\u043F\u0438\u0441 \u043F\u0440\u0438\u0445\u043E\u0432\u0430\u043D\u0438\u0439. \u041F\u0440\u0430\u0432\u0438\u043B\u043E: ", " \u0434\u043E\u043F\u0438\u0441\u0438 \u043F\u0440\u0438\u0445\u043E\u0432\u0430\u043D\u043E", "7 \u0434\u043E\u043F\u0438\u0441\u0438 \u043F\u0440\u0438\u0445\u043E\u0432\u0430\u043D\u043E ~ (\u043B\u0438\u0448\u0435 \u0432 \u0441\u0442\u0440\u0456\u0447\u0446\u0456 \u0413\u0440\u0443\u043F)"],
             VERBOSITY_MESSAGE_COLOUR: "\u041A\u043E\u043B\u0456\u0440 \u0442\u0435\u043A\u0441\u0442\u0443",
@@ -1977,6 +2157,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             DLG_VERBOSITY: "T\xF9y ch\u1ECDn cho b\xE0i \u0111\u0103ng \u1EA9n",
             DLG_PREFERENCES: "T\xF9y ch\u1ECDn",
             DLG_PREFERENCES_DESC: "Nh\xE3n, v\u1ECB tr\xED, m\xE0u s\u1EAFc v\xE0 ng\xF4n ng\u1EEF.",
+            DLG_REPORT_BUG: "B\xE1o l\u1ED7i",
+            DLG_REPORT_BUG_DESC: "T\u1EA1o b\xE1o c\xE1o ch\u1EA9n \u0111o\xE1n cho s\u1EF1 c\u1ED1.",
+            DLG_REPORT_BUG_NOTICE: "N\u1ED9i dung v\xE0 t\xEAn \u0111\u01B0\u1EE3c \u1EA9n. Ki\u1EC3m tra tr\u01B0\u1EDBc khi chia s\u1EBB.",
+            DLG_REPORT_BUG_GENERATE: "T\u1EA1o b\xE1o c\xE1o",
+            DLG_REPORT_BUG_COPY: "Sao ch\xE9p b\xE1o c\xE1o",
+            DLG_REPORT_BUG_OPEN_ISSUES: "M\u1EDF issues",
+            DLG_REPORT_BUG_STATUS_READY: "B\xE1o c\xE1o \u0111\xE3 s\u1EB5n s\xE0ng.",
+            DLG_REPORT_BUG_STATUS_COPIED: "\u0110\xE3 sao ch\xE9p b\xE1o c\xE1o.",
+            DLG_REPORT_BUG_STATUS_FAILED: "Kh\xF4ng th\u1EC3 sao ch\xE9p. Vui l\xF2ng sao ch\xE9p th\u1EE7 c\xF4ng.",
             DLG_VERBOSITY_CAPTION: "Hi\u1EC3n th\u1ECB m\u1ED9t nh\xE3n n\u1EBFu m\u1ED9t b\xE0i \u0111\u0103ng b\u1ECB \u1EA9n",
             VERBOSITY_MESSAGE: ["kh\xF4ng c\xF3 nh\xE3n", "B\xE0i b\u1ECB \u1EA9n. Quy t\u1EAFc: ", " b\xE0i vi\u1EBFt \u1EA9n", "7 b\xE0i vi\u1EBFt \u1EA9n ~ (ch\u1EC9 \xE1p d\u1EE5ng cho B\u1EA3ng tin Nh\xF3m)"],
             VERBOSITY_MESSAGE_COLOUR: "M\xE0u v\u0103n b\u1EA3n",
@@ -2763,7 +2952,7 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         addToSS(
           state,
           ".fb-cmf ",
-          "position:fixed; top:56px; bottom:16px; left:16px; display:flex; flex-direction:column; width: 100%; max-width:30rem; padding:0.75rem; z-index:5;box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1); overflow:hidden;border:none; border-radius:12px; opacity:0; visibility:hidden; color:" + tColour + ";"
+          "position:fixed; top:56px; bottom:16px; left:16px; display:flex; flex-direction:column; width: 608px; max-width:608px; padding:0.75rem; z-index:5;box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1); overflow:hidden;border:none; border-radius:12px; opacity:0; visibility:hidden; color:" + tColour + ";"
         );
         addToSS(state, ".fb-cmf", "background-color: var(--comment-background);");
         addToSS(
@@ -2886,6 +3075,42 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
           state,
           ".fb-cmf fieldset legend .cmf-legend-subtext",
           "font-size:0.75rem; font-weight:400; line-height:1.05; color: var(--secondary-text); margin:0; padding:0;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf .cmf-report-actions",
+          "display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:0.35rem;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf .cmf-report-actions button",
+          "position:relative; overflow:hidden; border:none; border-radius:8px;background-color: var(--secondary-button-background); color: var(--primary-text);height:36px; padding:0 0.75rem; font-weight:600; cursor:pointer;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf .cmf-report-actions button::after",
+          'content:""; position:absolute; inset:0; border-radius:inherit; background-color: var(--hover-overlay);opacity:0; pointer-events:none; transition: opacity 0.1s cubic-bezier(0, 0, 1, 1);'
+        );
+        addToSS(state, ".fb-cmf .cmf-report-actions button:hover::after", "opacity:1;");
+        addToSS(
+          state,
+          ".fb-cmf .cmf-report-status",
+          "margin-top:0.35rem; font-size:0.75rem; color: var(--secondary-text);"
+        );
+        addToSS(
+          state,
+          ".fb-cmf .cmf-report-output",
+          'display:none; width:100%; max-width:100%; box-sizing:border-box; min-height:6rem; margin-top:0.5rem; padding:0.5rem;border-radius:8px; border:1px solid var(--divider);background-color: var(--comment-background); color: var(--primary-text);font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-size:0.75rem; line-height:1.3; resize:vertical;'
+        );
+        addToSS(
+          state,
+          ".fb-cmf .cmf-report-output.cmf-report-output--visible",
+          "display:block;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf fieldset.cmf-hidden .cmf-report-output",
+          "display:none !important;"
         );
         addToSS(
           state,
@@ -3905,7 +4130,15 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
           share.setAttribute(postAtt, "Shares");
         }
       }
+      function findNumberOfShares(post) {
+        if (!post) {
+          return 0;
+        }
+        const query = `div[data-visualcompletion="ignore-dynamic"] > div:not([class]) > div:not([class]) > div:not([class]) > div[class] > div:nth-of-type(1) > div > div > span > div:not([id]) > span[dir]:not(${postAtt})`;
+        return post.querySelectorAll(query).length;
+      }
       module.exports = {
+        findNumberOfShares,
         hideNumberOfShares
       };
     }
@@ -5913,6 +6146,707 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
     }
   });
 
+  // src/selectors/groups.js
+  var require_groups2 = __commonJS({
+    "src/selectors/groups.js"(exports, module) {
+      var groupsSelectors = {
+        mainColumn: 'div[role="navigation"] ~ div[role="main"]',
+        groupPageMainColumn: 'div[role="main"] div[role="feed"]',
+        dialog: 'div[role="dialog"]',
+        feedQueryRecent: 'h2[dir="auto"] + div > div',
+        feedQueryMultiple: 'div[role="feed"] > div',
+        feedQuerySingle: 'div[role="feed"] > div'
+      };
+      module.exports = {
+        groupsSelectors
+      };
+    }
+  });
+
+  // src/selectors/videos.js
+  var require_videos2 = __commonJS({
+    "src/selectors/videos.js"(exports, module) {
+      var videosSelectors = {
+        mainColumn: 'div[role="navigation"] ~ div[role="main"] div[role="main"] > div > div > div > div > div',
+        dialog: 'div[role="dialog"] div[role="main"]',
+        feedQueries: {
+          videos: ":scope > div > div:not([class]) > div",
+          search: 'div[role="feed"] > div[role="article"]',
+          item: 'div[id="watch_feed"] > div > div:nth-of-type(2) > div > div > div > div:nth-of-type(2) > div > div > div > div'
+        },
+        blockQueries: {
+          videos: ":scope > div > div > div > div > div:nth-of-type(2) > div",
+          search: ":scope > div > div > div > div > div > div > div:nth-of-type(2)",
+          item: ":scope > div > div > div > div > div:nth-of-type(2) > div"
+        }
+      };
+      module.exports = {
+        videosSelectors
+      };
+    }
+  });
+
+  // src/selectors/marketplace.js
+  var require_marketplace2 = __commonJS({
+    "src/selectors/marketplace.js"(exports, module) {
+      var marketplaceSelectors = {
+        mainColumn: 'div[role="navigation"] ~ div[role="main"]',
+        dialogItem: 'div[hidden] ~ div[class*="__"] div[role="dialog"]'
+      };
+      module.exports = {
+        marketplaceSelectors
+      };
+    }
+  });
+
+  // src/selectors/profile.js
+  var require_profile2 = __commonJS({
+    "src/selectors/profile.js"(exports, module) {
+      var profileSelectors = {
+        mainColumn: 'div[role="main"]',
+        dialog: 'div[role="dialog"]',
+        postsQuery: 'div[role="main"] > div > div > div > div:nth-of-type(2) > div:not([class]) > div > div[class]'
+      };
+      module.exports = {
+        profileSelectors
+      };
+    }
+  });
+
+  // src/ui/reporting/bug-report.js
+  var require_bug_report = __commonJS({
+    "src/ui/reporting/bug-report.js"(exports, module) {
+      var { postAtt } = require_attributes();
+      var { newsSelectors } = require_news();
+      var { groupsSelectors } = require_groups2();
+      var { videosSelectors } = require_videos2();
+      var { marketplaceSelectors } = require_marketplace2();
+      var { profileSelectors } = require_profile2();
+      var { searchSelectors } = require_search();
+      var { isSponsored } = require_sponsored();
+      var {
+        findGroupsBlockedText,
+        findNewsBlockedText,
+        findProfileBlockedText,
+        findVideosBlockedText
+      } = require_blocked_text2();
+      var { hasGroupsAnimatedGifContent, hasNewsAnimatedGifContent } = require_animated_gifs2();
+      var { findNumberOfShares } = require_shares();
+      var {
+        isNewsEventsYouMayLike,
+        isNewsFollow,
+        isNewsMetaAICard,
+        isNewsPaidPartnership,
+        isNewsParticipate,
+        isNewsPeopleYouMayKnow,
+        isNewsReelsAndShortVideos,
+        isNewsShortReelVideo,
+        isNewsSponsoredPaidBy,
+        isNewsStoriesPost,
+        isNewsSuggested,
+        postExceedsLikeCount
+      } = require_news2();
+      var { isGroupsShortReelVideo, isGroupsSuggested } = require_groups();
+      var { isInstagram, isVideoLive } = require_videos();
+      var { mpGetBlockedPrices, mpGetBlockedTextDescription } = require_marketplace();
+      var SUPPORT_URL_FALLBACK = "https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/issues";
+      var BLOCKED_TEXT_OPTION_KEYS = [
+        "NF_BLOCKED_TEXT",
+        "GF_BLOCKED_TEXT",
+        "VF_BLOCKED_TEXT",
+        "MP_BLOCKED_TEXT",
+        "MP_BLOCKED_TEXT_DESCRIPTION",
+        "PP_BLOCKED_TEXT"
+      ];
+      var BLOCKED_TEXT_FILTER_KEYS = [
+        "NF_BLOCKED_TEXT_LC",
+        "GF_BLOCKED_TEXT_LC",
+        "VF_BLOCKED_TEXT_LC",
+        "MP_BLOCKED_TEXT_LC",
+        "MP_BLOCKED_TEXT_DESCRIPTION_LC",
+        "PP_BLOCKED_TEXT_LC"
+      ];
+      function hashText(value) {
+        if (typeof value !== "string" || value.length === 0) {
+          return "";
+        }
+        let hash = 2166136261;
+        for (let i = 0; i < value.length; i += 1) {
+          hash ^= value.charCodeAt(i);
+          hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
+        }
+        return `fnv1a:${(hash >>> 0).toString(16)}`;
+      }
+      function getSupportUrl() {
+        const gm = typeof globalThis !== "undefined" ? globalThis.GM : void 0;
+        if (gm && gm.info && gm.info.script && gm.info.script.supportURL) {
+          return gm.info.script.supportURL;
+        }
+        return SUPPORT_URL_FALLBACK;
+      }
+      function getScriptInfo() {
+        const gm = typeof globalThis !== "undefined" ? globalThis.GM : void 0;
+        const script = gm && gm.info && gm.info.script ? gm.info.script : null;
+        return {
+          name: script && script.name ? script.name : "FB - Clean my feeds",
+          version: script && script.version ? script.version : "unknown",
+          supportURL: script && script.supportURL ? script.supportURL : getSupportUrl(),
+          handler: gm && gm.info && gm.info.scriptHandler ? gm.info.scriptHandler : "unknown"
+        };
+      }
+      function summarizeList(list, limit = 20) {
+        if (!Array.isArray(list)) {
+          return { count: 0, hashes: [], truncated: false };
+        }
+        const hashes = list.slice(0, limit).map((value) => hashText(String(value)));
+        return {
+          count: list.length,
+          hashes,
+          truncated: list.length > limit
+        };
+      }
+      function redactOptions(options) {
+        const redacted = { ...options };
+        for (const key of BLOCKED_TEXT_OPTION_KEYS) {
+          if (Object.prototype.hasOwnProperty.call(redacted, key)) {
+            redacted[key] = "[redacted]";
+          }
+        }
+        Object.keys(redacted).forEach((key) => {
+          if (!key || key.trim() === "") {
+            delete redacted[key];
+          }
+        });
+        return redacted;
+      }
+      function redactFilters(filters) {
+        const redacted = { ...filters };
+        for (const key of BLOCKED_TEXT_FILTER_KEYS) {
+          if (Object.prototype.hasOwnProperty.call(redacted, key)) {
+            redacted[key] = "[redacted]";
+          }
+        }
+        return redacted;
+      }
+      function summarizeBlockedFilters(filters) {
+        if (!filters || typeof filters !== "object") {
+          return {};
+        }
+        return {
+          NF_BLOCKED_TEXT_LC: summarizeList(filters.NF_BLOCKED_TEXT_LC),
+          GF_BLOCKED_TEXT_LC: summarizeList(filters.GF_BLOCKED_TEXT_LC),
+          VF_BLOCKED_TEXT_LC: summarizeList(filters.VF_BLOCKED_TEXT_LC),
+          MP_BLOCKED_TEXT_LC: summarizeList(filters.MP_BLOCKED_TEXT_LC),
+          MP_BLOCKED_TEXT_DESCRIPTION_LC: summarizeList(filters.MP_BLOCKED_TEXT_DESCRIPTION_LC),
+          PP_BLOCKED_TEXT_LC: summarizeList(filters.PP_BLOCKED_TEXT_LC)
+        };
+      }
+      function collectSafeReasons(keyWords) {
+        const safe = /* @__PURE__ */ new Set([
+          "",
+          "hidden",
+          "Sponsored Content",
+          "Survey",
+          "Shares",
+          "Stories | Reels | Rooms tabs list box"
+        ]);
+        if (!keyWords || typeof keyWords !== "object") {
+          return safe;
+        }
+        Object.values(keyWords).forEach((value) => {
+          if (typeof value === "string") {
+            safe.add(value);
+          } else if (Array.isArray(value)) {
+            value.forEach((item) => {
+              if (typeof item === "string") {
+                safe.add(item);
+              }
+            });
+          }
+        });
+        return safe;
+      }
+      function collectSignalCounts() {
+        const signals = [
+          "Sponsored",
+          "Suggested",
+          "Follow",
+          "Reels",
+          "Stories",
+          "People you may know",
+          "Paid partnership",
+          "Try Meta AI",
+          "Events you may like"
+        ];
+        const counts = {};
+        for (const signal of signals) {
+          counts[signal] = 0;
+        }
+        const spans = Array.from(document.querySelectorAll("span[dir], span, div")).filter(
+          (el) => typeof el.textContent === "string" && el.textContent.trim() !== ""
+        );
+        for (const el of spans) {
+          const text = el.textContent;
+          for (const signal of signals) {
+            if (text.includes(signal)) {
+              counts[signal] += 1;
+            }
+          }
+        }
+        return counts;
+      }
+      function getSanitizedReason(reason, safeReasons) {
+        if (!reason || reason.trim() === "") {
+          return "unlabeled";
+        }
+        return safeReasons.has(reason) ? reason : `hash:${hashText(reason)}`;
+      }
+      function collectReasonCounts(keyWords) {
+        const safeReasons = collectSafeReasons(keyWords);
+        const counts = {};
+        const nodes = document.querySelectorAll(`[${postAtt}]`);
+        nodes.forEach((node) => {
+          const reason = node.getAttribute(postAtt) || "";
+          const key = getSanitizedReason(reason, safeReasons);
+          counts[key] = (counts[key] || 0) + 1;
+        });
+        return counts;
+      }
+      function collectHiddenSample(keyWords, limit = 3) {
+        const sample = [];
+        const safeReasons = collectSafeReasons(keyWords);
+        const nodes = document.querySelectorAll(`[${postAtt}]`);
+        for (const node of nodes) {
+          if (sample.length >= limit) {
+            break;
+          }
+          const reason = node.getAttribute(postAtt) || "";
+          sample.push({
+            reason: getSanitizedReason(reason, safeReasons),
+            signature: buildDomSignature(node)
+          });
+        }
+        return sample;
+      }
+      function countSelectorMatches(selectors) {
+        return selectors.map((query) => ({
+          query,
+          count: document.querySelectorAll(query).length
+        }));
+      }
+      function getNewsPostCollection() {
+        const results = newsSelectors.postQueries.map((query) => {
+          const posts = document.querySelectorAll(query);
+          return { query, posts: Array.from(posts) };
+        });
+        const combined = [];
+        results.forEach((entry) => {
+          entry.posts.forEach((post) => {
+            if (!combined.includes(post)) {
+              combined.push(post);
+            }
+          });
+        });
+        return {
+          query: results.length > 0 ? "combined" : "",
+          queries: results.map((entry) => entry.query),
+          posts: combined
+        };
+      }
+      function getGroupsPostCollection(state) {
+        let query = groupsSelectors.feedQuerySingle;
+        if (state && (state.gfType === "groups" || state.gfType === "groups-recent" || state.gfType === "search")) {
+          query = state.gfType === "groups-recent" ? groupsSelectors.feedQueryRecent : groupsSelectors.feedQueryMultiple;
+        }
+        return { query, posts: Array.from(document.querySelectorAll(query)) };
+      }
+      function getVideosPostCollection(state) {
+        let query = "";
+        let queryBlocks = "";
+        if (state && state.vfType === "videos") {
+          query = ":scope > div > div:not([class]) > div";
+          queryBlocks = ":scope > div > div > div > div > div:nth-of-type(2) > div";
+        } else if (state && state.vfType === "search") {
+          query = 'div[role="feed"] > div[role="article"]';
+          queryBlocks = ":scope > div > div > div > div > div > div > div:nth-of-type(2)";
+        } else if (state && state.vfType === "item") {
+          query = 'div[id="watch_feed"] > div > div:nth-of-type(2) > div > div > div > div:nth-of-type(2) > div > div > div > div';
+          queryBlocks = ":scope > div > div > div > div > div:nth-of-type(2) > div";
+        }
+        let container = document.querySelector(videosSelectors.dialog);
+        if (!container) {
+          container = document.querySelector(videosSelectors.mainColumn);
+        }
+        if (!container || query === "") {
+          return { query, queryBlocks, posts: [] };
+        }
+        const posts = state && state.vfType === "search" ? Array.from(document.querySelectorAll(query)) : Array.from(container.querySelectorAll(query));
+        return { query, queryBlocks, posts };
+      }
+      function getMarketplaceItems() {
+        const queries = [
+          `div[style]:not([${postAtt}]) > div > div > span > div > div > div > div > a[href*="/marketplace/item/"]`,
+          `div[style]:not([${postAtt}]) > div > div > span > div > div > div > div > a[href*="/marketplace/np/item/"]`,
+          `div[style]:not([${postAtt}]) > div > span > div > div > a[href*="/marketplace/item/"]`,
+          `div[style]:not([${postAtt}]) > div > span > div > div > a[href*="/marketplace/np/item/"]`,
+          `div[style]:not([${postAtt}]) > div > div > span > div > div > a[href*="/marketplace/item/"]`,
+          `div[style]:not([${postAtt}]) > div > div > span > div > div > a[href*="/marketplace/np/item/"]`,
+          `div[style]:not([${postAtt}]) > div > span > div > div > a[href*="/marketplace/item/"]`,
+          `div[style]:not([${postAtt}]) > div > span > div > div > a[href*="/marketplace/np/item/"]`
+        ];
+        for (const query of queries) {
+          const items = document.querySelectorAll(query);
+          if (items.length > 0) {
+            return { query, items: Array.from(items) };
+          }
+        }
+        return { query: "", items: [] };
+      }
+      function getProfilePostCollection() {
+        const posts = document.querySelectorAll(profileSelectors.postsQuery);
+        return { query: profileSelectors.postsQuery, posts: Array.from(posts) };
+      }
+      function getSearchPostCollection() {
+        const posts = document.querySelectorAll(searchSelectors.postsQuery);
+        return { query: searchSelectors.postsQuery, posts: Array.from(posts) };
+      }
+      function buildDomSignature(post) {
+        if (!post) {
+          return null;
+        }
+        const className = typeof post.className === "string" ? post.className : "";
+        return {
+          tag: post.tagName,
+          role: post.getAttribute("role") || "",
+          classHash: className ? hashText(className) : "",
+          childCount: post.children ? post.children.length : 0,
+          hasReason: post.hasAttribute(postAtt)
+        };
+      }
+      function addMatch(matches, key, value) {
+        if (value) {
+          matches[key] = true;
+        }
+      }
+      function buildNewsMatches(post, context) {
+        const { options, filters, keyWords, state } = context;
+        const matches = {};
+        addMatch(matches, "NF_SPONSORED", options.NF_SPONSORED && isSponsored(post, state));
+        addMatch(matches, "NF_SUGGESTIONS", options.NF_SUGGESTIONS && isNewsSuggested(post, state, keyWords));
+        addMatch(matches, "NF_REELS_SHORT_VIDEOS", options.NF_REELS_SHORT_VIDEOS && isNewsReelsAndShortVideos(post, state, keyWords));
+        addMatch(matches, "NF_SHORT_REEL_VIDEO", options.NF_SHORT_REEL_VIDEO && isNewsShortReelVideo(post, keyWords));
+        addMatch(matches, "NF_META_AI", options.NF_META_AI && isNewsMetaAICard(post, keyWords));
+        addMatch(matches, "NF_PAID_PARTNERSHIP", options.NF_PAID_PARTNERSHIP && isNewsPaidPartnership(post, keyWords));
+        addMatch(matches, "NF_PEOPLE_YOU_MAY_KNOW", options.NF_PEOPLE_YOU_MAY_KNOW && isNewsPeopleYouMayKnow(post, keyWords));
+        addMatch(matches, "NF_FOLLOW", options.NF_FOLLOW && isNewsFollow(post, state, keyWords));
+        addMatch(matches, "NF_PARTICIPATE", options.NF_PARTICIPATE && isNewsParticipate(post, keyWords));
+        addMatch(matches, "NF_SPONSORED_PAID", options.NF_SPONSORED_PAID && isNewsSponsoredPaidBy(post, keyWords));
+        addMatch(matches, "NF_EVENTS_YOU_MAY_LIKE", options.NF_EVENTS_YOU_MAY_LIKE && isNewsEventsYouMayLike(post, keyWords));
+        addMatch(matches, "NF_STORIES", options.NF_STORIES && isNewsStoriesPost(post, keyWords));
+        addMatch(matches, "NF_ANIMATED_GIFS_POSTS", options.NF_ANIMATED_GIFS_POSTS && hasNewsAnimatedGifContent(post, keyWords));
+        if (options.NF_BLOCKED_ENABLED) {
+          const blockedText = findNewsBlockedText(post, options, filters);
+          if (blockedText) {
+            matches.NF_BLOCKED_TEXT_HASH = hashText(blockedText);
+          }
+        }
+        if (options.NF_LIKES_MAXIMUM && options.NF_LIKES_MAXIMUM !== "") {
+          const likesMatch = postExceedsLikeCount(post, options, keyWords);
+          if (likesMatch) {
+            matches.NF_LIKES_MAXIMUM = true;
+          }
+        }
+        if (options.NF_SHARES) {
+          const shareMatches = findNumberOfShares(post);
+          if (shareMatches > 0) {
+            matches.NF_SHARES = true;
+          }
+        }
+        return matches;
+      }
+      function buildGroupsMatches(post, context) {
+        const { options, filters, keyWords, state } = context;
+        const matches = {};
+        addMatch(matches, "GF_SPONSORED", options.GF_SPONSORED && isSponsored(post, state));
+        addMatch(matches, "GF_SUGGESTIONS", options.GF_SUGGESTIONS && isGroupsSuggested(post, keyWords));
+        addMatch(matches, "GF_SHORT_REEL_VIDEO", options.GF_SHORT_REEL_VIDEO && isGroupsShortReelVideo(post, keyWords));
+        addMatch(matches, "GF_ANIMATED_GIFS_POSTS", options.GF_ANIMATED_GIFS_POSTS && hasGroupsAnimatedGifContent(post, keyWords));
+        if (options.GF_BLOCKED_ENABLED) {
+          const blockedText = findGroupsBlockedText(post, options, filters);
+          if (blockedText) {
+            matches.GF_BLOCKED_TEXT_HASH = hashText(blockedText);
+          }
+        }
+        if (options.GF_SHARES) {
+          const shareMatches = findNumberOfShares(post);
+          if (shareMatches > 0) {
+            matches.GF_SHARES = true;
+          }
+        }
+        return matches;
+      }
+      function buildVideosMatches(post, queryBlocks, context) {
+        const { options, filters, keyWords, state } = context;
+        const matches = {};
+        addMatch(matches, "VF_SPONSORED", options.VF_SPONSORED && isSponsored(post, state));
+        addMatch(matches, "VF_LIVE", options.VF_LIVE && isVideoLive(post, keyWords));
+        addMatch(matches, "VF_INSTAGRAM", options.VF_INSTAGRAM && isInstagram(post, keyWords));
+        if (options.VF_BLOCKED_ENABLED && queryBlocks) {
+          const blockedText = findVideosBlockedText(post, options, filters, queryBlocks);
+          if (blockedText) {
+            matches.VF_BLOCKED_TEXT_HASH = hashText(blockedText);
+          }
+        }
+        return matches;
+      }
+      function buildProfileMatches(post, context) {
+        const { options, filters, keyWords } = context;
+        const matches = {};
+        addMatch(matches, "PP_ANIMATED_GIFS_POSTS", options.PP_ANIMATED_GIFS_POSTS && hasNewsAnimatedGifContent(post, keyWords));
+        if (options.PP_BLOCKED_ENABLED) {
+          const blockedText = findProfileBlockedText(post, options, filters);
+          if (blockedText) {
+            matches.PP_BLOCKED_TEXT_HASH = hashText(blockedText);
+          }
+        }
+        return matches;
+      }
+      function buildMarketplaceMatches(item, filters) {
+        const matches = {};
+        const queryTextBlock = ":scope > div > div:nth-of-type(2) > div";
+        const blocksOfText = item.querySelectorAll(queryTextBlock);
+        if (blocksOfText.length > 0) {
+          const blockedPrices = mpGetBlockedPrices(blocksOfText[0], filters);
+          if (blockedPrices) {
+            matches.MP_BLOCKED_TEXT_HASH = hashText(blockedPrices);
+          }
+          const blockedDesc = mpGetBlockedTextDescription(blocksOfText, filters, true);
+          if (blockedDesc) {
+            matches.MP_BLOCKED_TEXT_DESCRIPTION_HASH = hashText(blockedDesc);
+          }
+        }
+        return matches;
+      }
+      function isInViewport(element) {
+        if (!element || typeof element.getBoundingClientRect !== "function") {
+          return false;
+        }
+        const rect = element.getBoundingClientRect();
+        if (!rect || rect.width === 0 || rect.height === 0) {
+          return false;
+        }
+        return rect.bottom >= 0 && rect.top <= window.innerHeight;
+      }
+      function samplePosts(posts, maxSamples) {
+        const samples = [];
+        const inView = [];
+        const outOfView = [];
+        for (const post of posts) {
+          if (!post) {
+            continue;
+          }
+          if (isInViewport(post)) {
+            inView.push(post);
+          } else {
+            outOfView.push(post);
+          }
+        }
+        for (const post of inView) {
+          if (samples.length >= maxSamples) {
+            break;
+          }
+          samples.push(post);
+        }
+        for (const post of outOfView) {
+          if (samples.length >= maxSamples) {
+            break;
+          }
+          samples.push(post);
+        }
+        return samples;
+      }
+      function buildSamples(context, maxSamples = 20) {
+        const { state, filters } = context;
+        if (state.isNF) {
+          const { query, queries, posts } = getNewsPostCollection();
+          const samples = samplePosts(posts, maxSamples).map((post) => ({
+            signature: buildDomSignature(post),
+            matches: buildNewsMatches(post, context)
+          }));
+          return { feed: "news", query, queries, samples };
+        }
+        if (state.isGF) {
+          const { query, posts } = getGroupsPostCollection(state);
+          const samples = samplePosts(posts, maxSamples).map((post) => ({
+            signature: buildDomSignature(post),
+            matches: buildGroupsMatches(post, context)
+          }));
+          return { feed: "groups", query, samples };
+        }
+        if (state.isVF) {
+          const { query, queryBlocks, posts } = getVideosPostCollection(state);
+          const samples = samplePosts(posts, maxSamples).map((post) => ({
+            signature: buildDomSignature(post),
+            matches: buildVideosMatches(post, queryBlocks, context)
+          }));
+          return { feed: "videos", query, samples };
+        }
+        if (state.isMF) {
+          const { query, items } = getMarketplaceItems();
+          const samples = items.filter((item) => item && item.closest && item.closest("div[style]")).slice(0, maxSamples).map((item) => ({
+            signature: buildDomSignature(item),
+            matches: buildMarketplaceMatches(item, filters)
+          }));
+          return { feed: "marketplace", query, samples };
+        }
+        if (state.isSF) {
+          const { query, posts } = getSearchPostCollection();
+          const samples = samplePosts(posts, maxSamples).map((post) => ({
+            signature: buildDomSignature(post),
+            matches: buildNewsMatches(post, context)
+          }));
+          return { feed: "search", query, samples };
+        }
+        if (state.isPP) {
+          const { query, posts } = getProfilePostCollection();
+          const samples = samplePosts(posts, maxSamples).map((post) => ({
+            signature: buildDomSignature(post),
+            matches: buildProfileMatches(post, context)
+          }));
+          return { feed: "profile", query, samples };
+        }
+        return { feed: "unknown", query: "", samples: [] };
+      }
+      function buildMatchSummary(samples) {
+        const summary = {};
+        samples.forEach((sample) => {
+          const matches = sample.matches || {};
+          Object.keys(matches).forEach((key) => {
+            const value = matches[key];
+            if (value === true || typeof value === "string" && value.trim() !== "") {
+              summary[key] = (summary[key] || 0) + 1;
+            }
+          });
+        });
+        return summary;
+      }
+      function buildSelectorDiagnostics(state) {
+        return {
+          news: {
+            mainColumn: countSelectorMatches([newsSelectors.mainColumn])[0].count,
+            dialog: countSelectorMatches([newsSelectors.dialog])[0].count,
+            postQueries: countSelectorMatches(newsSelectors.postQueries)
+          },
+          groups: {
+            mainColumn: countSelectorMatches([groupsSelectors.mainColumn])[0].count,
+            dialog: countSelectorMatches([groupsSelectors.dialog])[0].count,
+            groupPageMainColumn: countSelectorMatches([groupsSelectors.groupPageMainColumn])[0].count,
+            feedQueries: countSelectorMatches([
+              groupsSelectors.feedQueryRecent,
+              groupsSelectors.feedQueryMultiple,
+              groupsSelectors.feedQuerySingle
+            ])
+          },
+          videos: {
+            mainColumn: countSelectorMatches([videosSelectors.mainColumn])[0].count,
+            dialog: countSelectorMatches([videosSelectors.dialog])[0].count,
+            feedQueries: countSelectorMatches(Object.values(videosSelectors.feedQueries)),
+            vfType: state.vfType || ""
+          },
+          marketplace: {
+            mainColumn: countSelectorMatches([marketplaceSelectors.mainColumn])[0].count,
+            dialogItem: countSelectorMatches([marketplaceSelectors.dialogItem])[0].count
+          },
+          search: {
+            mainColumn: countSelectorMatches([searchSelectors.mainColumn])[0].count,
+            postsQuery: countSelectorMatches([searchSelectors.postsQuery])[0].count
+          },
+          profile: {
+            mainColumn: countSelectorMatches([profileSelectors.mainColumn])[0].count,
+            postsQuery: countSelectorMatches([profileSelectors.postsQuery])[0].count
+          }
+        };
+      }
+      function buildHiddenCounts(state) {
+        if (!state) {
+          return {};
+        }
+        return {
+          hiddenContainers: document.querySelectorAll(`[${state.hideAtt}]`).length,
+          hiddenBlocks: document.querySelectorAll(`[${state.cssHideEl}]`).length,
+          hiddenShares: document.querySelectorAll(`[${state.cssHideNumberOfShares}]`).length
+        };
+      }
+      function buildEnvironmentSnapshot() {
+        return {
+          userAgent: navigator.userAgent,
+          platform: navigator.platform,
+          language: navigator.language,
+          languages: navigator.languages,
+          viewport: {
+            width: window.innerWidth,
+            height: window.innerHeight,
+            devicePixelRatio: window.devicePixelRatio
+          }
+        };
+      }
+      function buildFeedSnapshot(state) {
+        return {
+          isNF: !!state.isNF,
+          isGF: !!state.isGF,
+          isVF: !!state.isVF,
+          isMF: !!state.isMF,
+          isSF: !!state.isSF,
+          isRF: !!state.isRF,
+          isPP: !!state.isPP,
+          gfType: state.gfType || "",
+          vfType: state.vfType || "",
+          mpType: state.mpType || ""
+        };
+      }
+      function buildBugReport(context) {
+        if (!context) {
+          return { data: { error: "No context available." }, text: "" };
+        }
+        const { state, options, filters, keyWords, pathInfo } = context;
+        const now = /* @__PURE__ */ new Date();
+        const scriptInfo = getScriptInfo();
+        const data = {
+          generatedAt: now.toISOString(),
+          script: scriptInfo,
+          page: {
+            url: window.location.href,
+            pathname: window.location.pathname,
+            search: window.location.search
+          },
+          feed: buildFeedSnapshot(state),
+          environment: buildEnvironmentSnapshot(),
+          options: redactOptions(options || {}),
+          filters: redactFilters(filters || {}),
+          blockedFilters: summarizeBlockedFilters(filters || {}),
+          pathInfo: pathInfo || {},
+          selectors: buildSelectorDiagnostics(state),
+          hidden: {
+            reasonCounts: collectReasonCounts(keyWords),
+            hiddenElements: buildHiddenCounts(state),
+            sample: collectHiddenSample(keyWords)
+          },
+          signals: collectSignalCounts(),
+          samples: buildSamples(context),
+          notes: {
+            redaction: "Post text, names, and IDs are not included. Blocked keywords are hashed."
+          }
+        };
+        data.samples.summary = buildMatchSummary(data.samples.samples || []);
+        return { data, text: JSON.stringify(data, null, 2) };
+      }
+      module.exports = {
+        buildBugReport,
+        getSupportUrl
+      };
+    }
+  });
+
   // src/ui/dialog/sections.js
   var require_sections = __commonJS({
     "src/ui/dialog/sections.js"(exports, module) {
@@ -6295,6 +7229,43 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
         fs = document.createElement("fieldset");
         l = createLegend(
           state,
+          getKeyword(keyWords, translations, "DLG_REPORT_BUG"),
+          getKeyword(keyWords, translations, "DLG_REPORT_BUG_DESC")
+        );
+        fs.appendChild(l);
+        s = document.createElement("span");
+        s.appendChild(document.createTextNode(getKeyword(keyWords, translations, "DLG_REPORT_BUG_NOTICE")));
+        fs.appendChild(s);
+        const reportActions = document.createElement("div");
+        reportActions.className = "cmf-report-actions";
+        const btnGenerate = document.createElement("button");
+        btnGenerate.type = "button";
+        btnGenerate.id = "BTNReportGenerate";
+        btnGenerate.textContent = getKeyword(keyWords, translations, "DLG_REPORT_BUG_GENERATE");
+        reportActions.appendChild(btnGenerate);
+        const btnCopy = document.createElement("button");
+        btnCopy.type = "button";
+        btnCopy.id = "BTNReportCopy";
+        btnCopy.textContent = getKeyword(keyWords, translations, "DLG_REPORT_BUG_COPY");
+        reportActions.appendChild(btnCopy);
+        const btnOpen = document.createElement("button");
+        btnOpen.type = "button";
+        btnOpen.id = "BTNReportOpenIssues";
+        btnOpen.textContent = getKeyword(keyWords, translations, "DLG_REPORT_BUG_OPEN_ISSUES");
+        reportActions.appendChild(btnOpen);
+        fs.appendChild(reportActions);
+        const reportStatus = document.createElement("div");
+        reportStatus.className = "cmf-report-status";
+        fs.appendChild(reportStatus);
+        const reportOutput = document.createElement("textarea");
+        reportOutput.className = "cmf-report-output";
+        reportOutput.readOnly = true;
+        reportOutput.rows = 6;
+        fs.appendChild(reportOutput);
+        sections.push(fs);
+        fs = document.createElement("fieldset");
+        l = createLegend(
+          state,
           getKeyword(keyWords, translations, "DLG_TIPS"),
           getKeyword(keyWords, translations, "DLG_TIPS_DESC")
         );
@@ -6328,6 +7299,7 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
       var { createToggleButton } = require_toggle_button();
       var { buildDictionaries } = require_dictionaries();
       var { defaults, translations } = require_translations();
+      var { buildBugReport, getSupportUrl } = require_bug_report();
       var { buildDialogSections } = require_sections();
       function replaceObjectContents(target, source) {
         if (!target || !source) {
@@ -6456,6 +7428,73 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             }
           });
         }
+      }
+      function initReportBug(context) {
+        const dialog = document.getElementById("fbcmf");
+        if (!dialog || dialog.dataset.cmfReportInit === "1") {
+          return;
+        }
+        const btnGenerate = dialog.querySelector("#BTNReportGenerate");
+        const btnCopy = dialog.querySelector("#BTNReportCopy");
+        const btnOpenIssues = dialog.querySelector("#BTNReportOpenIssues");
+        const statusEl = dialog.querySelector(".cmf-report-status");
+        const outputEl = dialog.querySelector(".cmf-report-output");
+        if (!btnGenerate || !btnCopy || !btnOpenIssues || !statusEl || !outputEl) {
+          return;
+        }
+        const { state, keyWords } = context;
+        dialog.dataset.cmfReportInit = "1";
+        const setStatus = (key) => {
+          if (!keyWords || !keyWords[key]) {
+            statusEl.textContent = "";
+            return;
+          }
+          statusEl.textContent = keyWords[key];
+        };
+        const ensureReport = () => {
+          if (state && typeof state.cmfReportText === "string" && state.cmfReportText.length > 0) {
+            return state.cmfReportText;
+          }
+          const { text } = buildBugReport(context);
+          if (state) {
+            state.cmfReportText = text;
+          }
+          outputEl.value = text;
+          outputEl.classList.add("cmf-report-output--visible");
+          setStatus("DLG_REPORT_BUG_STATUS_READY");
+          return text;
+        };
+        btnGenerate.addEventListener("click", () => {
+          if (state) {
+            state.cmfReportText = "";
+          }
+          ensureReport();
+        });
+        btnCopy.addEventListener("click", async () => {
+          const reportText = ensureReport();
+          if (!reportText) {
+            setStatus("DLG_REPORT_BUG_STATUS_FAILED");
+            return;
+          }
+          try {
+            if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+              await navigator.clipboard.writeText(reportText);
+            } else {
+              outputEl.focus();
+              outputEl.select();
+              document.execCommand("copy");
+            }
+            setStatus("DLG_REPORT_BUG_STATUS_COPIED");
+          } catch (error) {
+            setStatus("DLG_REPORT_BUG_STATUS_FAILED");
+          }
+        });
+        btnOpenIssues.addEventListener("click", () => {
+          const url = getSupportUrl();
+          if (url) {
+            window.open(url, "_blank");
+          }
+        });
       }
       function updateLegendWidths(dialog) {
         if (!dialog) {
@@ -6794,6 +7833,7 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
             state.dictionaryReelsAndShortVideos = dictionaries.dictionaryReelsAndShortVideos;
             if (languageChanged) {
               buildDialog(context, handlers, true);
+              initReportBug(context);
             }
             setFeedSettings(true);
             addCSS(state, context.options, defaults);
@@ -6906,6 +7946,7 @@ Use the "Export" and "Import" buttons to backup and restore your customised sett
           if (document.body) {
             createToggleButton(state, context.keyWords, () => toggleDialog(state));
             buildDialog(context, handlers, false);
+            initReportBug(context);
             addLegendEvents();
             const dialog = document.getElementById("fbcmf");
             if (dialog && !dialog.dataset.cmfToggleSync) {

@@ -16,6 +16,15 @@ function hideNumberOfShares(post, state, options) {
   }
 }
 
+function findNumberOfShares(post) {
+  if (!post) {
+    return 0;
+  }
+  const query = `div[data-visualcompletion="ignore-dynamic"] > div:not([class]) > div:not([class]) > div:not([class]) > div[class] > div:nth-of-type(1) > div > div > span > div:not([id]) > span[dir]:not(${postAtt})`;
+  return post.querySelectorAll(query).length;
+}
+
 module.exports = {
+  findNumberOfShares,
   hideNumberOfShares,
 };

@@ -42,6 +42,10 @@ function createToggleButton(state, keyWords, onToggle) {
   let cachedBtnBg = "";
   let cachedHover = "";
   let cachedPress = "";
+  let lastMenuRect = null;
+  let observedMenuButton = null;
+  let updateScheduled = false;
+  let resizeObserver = null;
   const hexToRgba = (value, alpha) => {
     if (!value) {
       return "";
@@ -71,10 +75,17 @@ function createToggleButton(state, keyWords, onToggle) {
       btn.style.right = "0.5rem";
       btn.style.left = "auto";
       btn.style.zIndex = "999";
+      lastMenuRect = null;
       return false;
     }
 
     const rect = menuButton.getBoundingClientRect();
+    lastMenuRect = {
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height,
+    };
     const menuStyle = window.getComputedStyle(menuButton);
     const hoverOverlay = menuStyle.getPropertyValue("--hover-overlay");
     const pressOverlay = menuStyle.getPropertyValue("--press-overlay");
@@ -151,24 +162,81 @@ function createToggleButton(state, keyWords, onToggle) {
     btn.style.setProperty("--cmf-btn-press", cachedPress || pressOverlay || "var(--press-overlay)");
     return true;
   };
+  const scheduleUpdate = () => {
+    if (updateScheduled) {
+      return;
+    }
+    updateScheduled = true;
+    const runUpdate = () => {
+      updateScheduled = false;
+      updateTopRightPosition();
+    };
+    if (typeof window !== "undefined" && typeof window.requestAnimationFrame === "function") {
+      window.requestAnimationFrame(runUpdate);
+    } else {
+      setTimeout(runUpdate, 0);
+    }
+  };
+  const getMenuButton = () => document.querySelector('[role="banner"] [aria-label="Menu"]');
+  const observeMenuButton = () => {
+    const menuButton = getMenuButton();
+    if (menuButton === observedMenuButton) {
+      return;
+    }
+    if (resizeObserver && observedMenuButton) {
+      resizeObserver.unobserve(observedMenuButton);
+    }
+    observedMenuButton = menuButton;
+    if (resizeObserver && observedMenuButton) {
+      resizeObserver.observe(observedMenuButton);
+    }
+    cachedIconColor = "";
+    cachedBtnBg = "";
+    cachedHover = "";
+    cachedPress = "";
+    scheduleUpdate();
+  };
+  const needsMenuSync = () => {
+    const menuButton = getMenuButton();
+    if (!menuButton) {
+      return lastMenuRect !== null;
+    }
+    const rect = menuButton.getBoundingClientRect();
+    if (!lastMenuRect) {
+      return true;
+    }
+    return (
+      Math.abs(rect.left - lastMenuRect.left) > 1 ||
+      Math.abs(rect.top - lastMenuRect.top) > 1 ||
+      Math.abs(rect.width - lastMenuRect.width) > 1 ||
+      Math.abs(rect.height - lastMenuRect.height) > 1
+    );
+  };
   if (useTopRight) {
     if (!btn.isConnected) {
       document.body.appendChild(btn);
     }
-    updateTopRightPosition();
+    if (typeof ResizeObserver !== "undefined") {
+      resizeObserver = new ResizeObserver(() => {
+        scheduleUpdate();
+      });
+    }
+    observeMenuButton();
     const banner = document.querySelector('[role="banner"]');
     if (banner && typeof MutationObserver !== "undefined") {
       const observer = new MutationObserver(() => {
-        updateTopRightPosition();
+        observeMenuButton();
+        scheduleUpdate();
       });
       observer.observe(banner, { childList: true, subtree: true });
     }
     if (typeof window !== "undefined") {
-      window.addEventListener("resize", updateTopRightPosition);
-      const interval = setInterval(() => {
-        updateTopRightPosition();
-      }, 1000);
-      setTimeout(() => clearInterval(interval), 15000);
+      window.addEventListener("resize", scheduleUpdate);
+      setInterval(() => {
+        if (needsMenuSync()) {
+          scheduleUpdate();
+        }
+      }, 2000);
     }
   } else {
     document.body.appendChild(btn);

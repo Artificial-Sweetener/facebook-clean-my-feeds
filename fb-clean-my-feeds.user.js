@@ -2331,6 +2331,7 @@
           },
           // -- Türkçe (Turkey)
           tr: {
+            LANGUAGE_DIRECTION: "ltr",
             SPONSORED: "Sponsorlu",
             NF_TABLIST_STORIES_REELS_ROOMS: '"Hikayeler | Makaralar | Odalar" sekmeleri liste kutusu',
             NF_STORIES: "Hikayeler",
@@ -2750,15 +2751,22 @@
             OTHER_INFO_BOX_CLIMATE_SCIENCE: "\u6C14\u5019\u79D1\u5B66\uFF08\u4FE1\u606F\u6846\uFF09",
             OTHER_INFO_BOX_SUBSCRIBE: "\u8BA2\u9605\uFF08\u4FE1\u606F\u6846\uFF09",
             REELS_TITLE: "Reels",
+            DLG_REELS_DESC: "\u64AD\u653E\u63A7\u5236\u548C\u5FAA\u73AF\u64AD\u653E\u3002",
             REELS_CONTROLS: "\u663E\u793A\u89C6\u9891\u63A7\u5236",
             REELS_DISABLE_LOOPING: "\u7981\u7528\u5FAA\u73AF",
             DLG_TITLE: "\u6E05\u7406\u6211\u7684\u63D0\u8981",
             DLG_NF: "\u65B0\u95FB\u63D0\u8981",
+            DLG_NF_DESC: "\u6E05\u7406\u5EFA\u8BAE\u5E76\u8BBE\u7F6E\u52A8\u6001\u6D88\u606F\u7684\u4E25\u683C\u7A0B\u5EA6\u3002",
             DLG_GF: "\u7FA4\u7EC4\u63D0\u8981",
+            DLG_GF_DESC: "\u901A\u8FC7\u51CF\u5C11\u591A\u4F59\u5185\u5BB9\u548C\u566A\u97F3\u6765\u6574\u7406\u7FA4\u7EC4\u52A8\u6001\u3002",
             DLG_VF: "\u89C6\u9891\u63D0\u8981",
+            DLG_VF_DESC: "\u901A\u8FC7\u51CF\u5C11\u91CD\u590D\u548C\u6742\u4E71\u5185\u5BB9\uFF0C\u4FDD\u6301\u89C6\u9891\u52A8\u6001\u7684\u4E13\u6CE8\u3002",
             DLG_MP: "\u5E02\u573A\u63D0\u8981",
+            DLG_MP_DESC: "\u6309\u4EF7\u683C\u548C\u60A8\u5173\u5FC3\u7684\u5173\u952E\u8BCD\u8FC7\u6EE4\u5217\u8868\u3002",
             DLG_PP: "\u4E2A\u4EBA\u8D44\u6599 / \u9875\u9762",
-            DLG_OTHER: "Ghi ch\xFA b\u1ED5 sung",
+            DLG_PP_DESC: "\u8C03\u6574\u4E2A\u4EBA\u8D44\u6599\u548C\u9875\u9762\u4E0A\u663E\u793A\u7684\u5185\u5BB9\u3002",
+            DLG_OTHER: "\u5176\u4ED6\u8BF4\u660E",
+            DLG_OTHER_DESC: "\u9690\u85CF\u60A8\u4E0D\u9700\u8981\u7684\u989D\u5916\u6846\u3002",
             DLG_BLOCK_TEXT_FILTER_TITLE: "\u6587\u672C\u8FC7\u6EE4\u5668",
             DLG_BLOCK_NEW_LINE: "(\u4F7F\u7528\u6362\u884C\u7B26\u5206\u9694\u5355\u8BCD\u6216\u77ED\u8BED\uFF0C\u652F\u6301\u6B63\u5219\u8868\u8FBE\u5F0F)",
             NF_BLOCKED_ENABLED: "\u542F\u7528",
@@ -2772,6 +2780,8 @@
             MP_BLOCKED_RE: "\u6B63\u5219\u8868\u8FBE\u5F0F (RegExp)",
             PP_BLOCKED_RE: "\u6B63\u5219\u8868\u8FBE\u5F0F (RegExp)",
             DLG_VERBOSITY: "\u9690\u85CF\u5E16\u5B50\u9009\u9879",
+            DLG_PREFERENCES: "\u504F\u597D\u8BBE\u7F6E",
+            DLG_PREFERENCES_DESC: "\u6807\u7B7E\u3001\u4F4D\u7F6E\u3001\u989C\u8272\u548C\u8BED\u8A00\u3002",
             DLG_VERBOSITY_CAPTION: "\u5982\u679C\u6587\u7AE0\u88AB\u9690\u85CF\uFF0C\u5219\u663E\u793A\u6807\u7B7E",
             DLG_REPORT_BUG: "\u62A5\u544A\u9519\u8BEF",
             DLG_REPORT_BUG_DESC: "\u751F\u6210\u95EE\u9898\u8BCA\u65AD\u62A5\u544A\u3002",
@@ -2802,11 +2812,17 @@
             CMF_DIALOG_OPTION: ["\u5DE6\u8FB9", "\u53F3\u8FB9"],
             CMF_BORDER_COLOUR: "\u8FB9\u6846\u989C\u8272",
             DLG_TIPS: "\u5173\u4E8E",
+            DLG_TIPS_DESC: "\u9879\u76EE\u94FE\u63A5\u548C\u7EF4\u62A4\u8005\u4FE1\u606F\u3002",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "\u5982\u679C\u6709\u5E2E\u52A9\uFF0C\u5728 {github} \u70B9\u4E2A\u661F\u5BF9\u6211\u610F\u4E49\u5F88\u5927\u3002",
             DLG_TIPS_FACEBOOK: "\u6B22\u8FCE\u5230{facebook}\u6253\u4E2A\u62DB\u547C - \u6211\u5728\u90A3\u91CC\u5206\u4EAB\u827A\u672F\u548C\u8BD7\u6B4C\u3002",
             DLG_TIPS_SITE: "\u60F3\u770B\u770B\u6211\u5728\u7F51\u4E0A\u90FD\u5728\u505A\u4EC0\u4E48\uFF0C{site}\u662F\u6700\u597D\u7684\u8D77\u70B9\u3002",
             DLG_TIPS_CREDITS: "\u7279\u522B\u611F\u8C22 {zbluebugz} \u7684\u539F\u59CB\u9879\u76EE\uFF0C\u4EE5\u53CA {trinhquocviet} \u7684\u7B80\u5316 UI \u5206\u652F\uFF08\u6211\u6700\u521D\u5C31\u662F\u4ECE\u5B83 fork \u7684\uFF09- \u4E5F\u611F\u8C22\u90A3\u6BB5\u65F6\u95F4\u7684\u8FC7\u6EE4\u7EF4\u62A4\u3002",
+            DLG_TIPS_MAINTAINER: "\u5E0C\u671B\u8FD9\u4E2A\u811A\u672C\u80FD\u5E2E\u4F60\u627E\u56DE\u6E05\u723D\u7684\u52A8\u6001\u6D88\u606F\u3002\u6211\u627F\u8BFA\u5C06\u662F\u4F60\u5BF9\u6297\u4E0D\u60F3\u770B\u5230\u7684\u7F51\u7EDC\u5185\u5BB9\u7684\u76DF\u53CB\u3002",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "\u6211\u7684 Facebook",
+            DLG_TIPS_LINK_SITE: "\u6211\u7684\u7F51\u7AD9",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["\u8282\u7701", "\u5173", "\u51FA\u53E3", "\u8FDB\u53E3", "\u91CD\u7F6E"],
             DLG_BUTTON_TOOLTIPS: [
               "\u4FDD\u5B58\u5230\u6B64\u6D4F\u89C8\u5668\u3002\u6E05\u9664\u7AD9\u70B9\u6570\u636E/\u9690\u79C1\u6A21\u5F0F\u4F1A\u4E22\u5931\u3002",
@@ -2857,15 +2873,22 @@
             OTHER_INFO_BOX_CLIMATE_SCIENCE: "\u6C23\u5019\u79D1\u5B78\uFF08\u8CC7\u8A0A\u6846\uFF09",
             OTHER_INFO_BOX_SUBSCRIBE: "\u8A02\u95B1\uFF08\u8CC7\u8A0A\u6846\uFF09",
             REELS_TITLE: "Reels",
+            DLG_REELS_DESC: "\u64AD\u653E\u63A7\u5236\u548C\u5FAA\u74B0\u64AD\u653E\u3002",
             REELS_CONTROLS: "\u986F\u793A\u5F71\u7247\u63A7\u5236",
             REELS_DISABLE_LOOPING: "\u505C\u7528\u5FAA\u74B0",
             DLG_TITLE: "\u6E05\u7406\u6211\u7684\u52D5\u614B\u6D88\u606F",
             DLG_NF: "\u65B0\u805E\u52D5\u614B\u6D88\u606F",
+            DLG_NF_DESC: "\u6E05\u7406\u5EFA\u8B70\u4E26\u8A2D\u5B9A\u52D5\u614B\u6D88\u606F\u7684\u56B4\u683C\u7A0B\u5EA6\u3002",
             DLG_GF: "\u7FA4\u7D44\u52D5\u614B\u6D88\u606F",
+            DLG_GF_DESC: "\u900F\u904E\u6E1B\u5C11\u591A\u9918\u5167\u5BB9\u548C\u566A\u97F3\u4F86\u6574\u7406\u7FA4\u7D44\u52D5\u614B\u3002",
             DLG_VF: "\u5F71\u7247\u52D5\u614B\u6D88\u606F",
+            DLG_VF_DESC: "\u900F\u904E\u6E1B\u5C11\u91CD\u8907\u548C\u96DC\u4E82\u5167\u5BB9\uFF0C\u4FDD\u6301\u5F71\u7247\u52D5\u614B\u7684\u5C08\u6CE8\u3002",
             DLG_MP: "Marketplace \u52D5\u614B\u6D88\u606F",
+            DLG_MP_DESC: "\u6309\u50F9\u683C\u548C\u60A8\u95DC\u5FC3\u7684\u95DC\u9375\u5B57\u904E\u6FFE\u5217\u8868\u3002",
             DLG_PP: "\u500B\u4EBA\u6A94\u6848 / \u9801\u9762",
-            DLG_OTHER: "Ghi ch\xFA b\u1ED5 sung",
+            DLG_PP_DESC: "\u8ABF\u6574\u500B\u4EBA\u6A94\u6848\u548C\u9801\u9762\u4E0A\u986F\u793A\u7684\u5167\u5BB9\u3002",
+            DLG_OTHER: "\u5176\u4ED6\u8AAA\u660E",
+            DLG_OTHER_DESC: "\u96B1\u85CF\u60A8\u4E0D\u9700\u8981\u7684\u984D\u5916\u6846\u3002",
             DLG_BLOCK_TEXT_FILTER_TITLE: "\u6587\u5B57\u904E\u6FFE\u5668",
             DLG_BLOCK_NEW_LINE: "(\u4F7F\u7528\u63DB\u884C\u7B26\u5206\u9694\u55AE\u8A5E\u6216\u77ED\u8A9E\uFF0C\u652F\u6301\u6B63\u5247\u8868\u9054\u5F0F)",
             NF_BLOCKED_ENABLED: "\u555F\u7528",
@@ -2879,6 +2902,8 @@
             MP_BLOCKED_RE: "\u6B63\u5247\u8868\u9054\u5F0F (RegExp)",
             PP_BLOCKED_RE: "\u6B63\u5247\u8868\u9054\u5F0F (RegExp)",
             DLG_VERBOSITY: "\u96B1\u85CF\u5E16\u5B50\u9078\u9805",
+            DLG_PREFERENCES: "\u504F\u597D\u8A2D\u5B9A",
+            DLG_PREFERENCES_DESC: "\u6A19\u7C64\u3001\u4F4D\u7F6E\u3001\u984F\u8272\u548C\u8A9E\u8A00\u3002",
             DLG_VERBOSITY_CAPTION: "\u5982\u679C\u6587\u7AE0\u88AB\u96B1\u85CF\uFF0C\u5247\u986F\u793A\u6A19\u7C64",
             DLG_REPORT_BUG: "\u56DE\u5831\u932F\u8AA4",
             DLG_REPORT_BUG_DESC: "\u7522\u751F\u554F\u984C\u8A3A\u65B7\u5831\u544A\u3002",
@@ -2909,11 +2934,17 @@
             CMF_DIALOG_OPTION: ["\u5DE6\u908A", "\u53F3\u908A"],
             CMF_BORDER_COLOUR: "\u908A\u6846\u984F\u8272",
             DLG_TIPS: "\u95DC\u65BC",
+            DLG_TIPS_DESC: "\u5C08\u6848\u9023\u7D50\u548C\u7DAD\u8B77\u8005\u8CC7\u8A0A\u3002",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "\u5982\u679C\u6709\u5E6B\u52A9\uFF0C\u5728 {github} \u9EDE\u500B\u661F\u5C0D\u6211\u610F\u7FA9\u5F88\u5927\u3002",
             DLG_TIPS_FACEBOOK: "\u6B61\u8FCE\u5230{facebook}\u6253\u500B\u62DB\u547C - \u6211\u5728\u90A3\u88E1\u5206\u4EAB\u85DD\u8853\u548C\u8A69\u3002",
             DLG_TIPS_SITE: "\u60F3\u770B\u770B\u6211\u5728\u7DB2\u8DEF\u4E0A\u90FD\u5728\u505A\u4EC0\u9EBC\uFF0C{site}\u662F\u6700\u597D\u7684\u8D77\u9EDE\u3002",
             DLG_TIPS_CREDITS: "\u7279\u5225\u611F\u8B1D {zbluebugz} \u7684\u539F\u59CB\u5C08\u6848\uFF0C\u4EE5\u53CA {trinhquocviet} \u7684\u7C21\u5316 UI \u5206\u652F\uFF08\u6211\u6700\u521D\u5C31\u662F\u5F9E\u5B83 fork \u7684\uFF09- \u4E5F\u611F\u8B1D\u90A3\u6BB5\u6642\u9593\u7684\u904E\u6FFE\u7DAD\u8B77\u3002",
+            DLG_TIPS_MAINTAINER: "\u5E0C\u671B\u9019\u500B\u8173\u672C\u80FD\u5E6B\u4F60\u627E\u56DE\u6E05\u723D\u7684\u52D5\u614B\u6D88\u606F\u3002\u6211\u627F\u8AFE\u5C07\u662F\u4F60\u5C0D\u6297\u4E0D\u60F3\u770B\u5230\u7684\u7DB2\u8DEF\u5167\u5BB9\u7684\u76DF\u53CB\u3002",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "\u6211\u7684 Facebook",
+            DLG_TIPS_LINK_SITE: "\u6211\u7684\u7DB2\u7AD9",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["\u5132\u5B58", "\u95DC\u9589", "\u532F\u51FA", "\u532F\u5165", "\u91CD\u8A2D"],
             DLG_BUTTON_TOOLTIPS: [
               "\u5132\u5B58\u5728\u6B64\u700F\u89BD\u5668\u3002\u6E05\u9664\u7DB2\u7AD9\u8CC7\u6599/\u79C1\u5BC6\u6A21\u5F0F\u6703\u907A\u5931\u3002",
@@ -6783,6 +6814,10 @@
         let cachedBtnBg = "";
         let cachedHover = "";
         let cachedPress = "";
+        let lastMenuRect = null;
+        let observedMenuButton = null;
+        let updateScheduled = false;
+        let resizeObserver = null;
         const hexToRgba = (value, alpha) => {
           if (!value) {
             return "";
@@ -6811,9 +6846,16 @@
             btn.style.right = "0.5rem";
             btn.style.left = "auto";
             btn.style.zIndex = "999";
+            lastMenuRect = null;
             return false;
           }
           const rect = menuButton.getBoundingClientRect();
+          lastMenuRect = {
+            left: rect.left,
+            top: rect.top,
+            width: rect.width,
+            height: rect.height
+          };
           const menuStyle = window.getComputedStyle(menuButton);
           const hoverOverlay = menuStyle.getPropertyValue("--hover-overlay");
           const pressOverlay = menuStyle.getPropertyValue("--press-overlay");
@@ -6886,24 +6928,76 @@
           btn.style.setProperty("--cmf-btn-press", cachedPress || pressOverlay || "var(--press-overlay)");
           return true;
         };
+        const scheduleUpdate = () => {
+          if (updateScheduled) {
+            return;
+          }
+          updateScheduled = true;
+          const runUpdate = () => {
+            updateScheduled = false;
+            updateTopRightPosition();
+          };
+          if (typeof window !== "undefined" && typeof window.requestAnimationFrame === "function") {
+            window.requestAnimationFrame(runUpdate);
+          } else {
+            setTimeout(runUpdate, 0);
+          }
+        };
+        const getMenuButton = () => document.querySelector('[role="banner"] [aria-label="Menu"]');
+        const observeMenuButton = () => {
+          const menuButton = getMenuButton();
+          if (menuButton === observedMenuButton) {
+            return;
+          }
+          if (resizeObserver && observedMenuButton) {
+            resizeObserver.unobserve(observedMenuButton);
+          }
+          observedMenuButton = menuButton;
+          if (resizeObserver && observedMenuButton) {
+            resizeObserver.observe(observedMenuButton);
+          }
+          cachedIconColor = "";
+          cachedBtnBg = "";
+          cachedHover = "";
+          cachedPress = "";
+          scheduleUpdate();
+        };
+        const needsMenuSync = () => {
+          const menuButton = getMenuButton();
+          if (!menuButton) {
+            return lastMenuRect !== null;
+          }
+          const rect = menuButton.getBoundingClientRect();
+          if (!lastMenuRect) {
+            return true;
+          }
+          return Math.abs(rect.left - lastMenuRect.left) > 1 || Math.abs(rect.top - lastMenuRect.top) > 1 || Math.abs(rect.width - lastMenuRect.width) > 1 || Math.abs(rect.height - lastMenuRect.height) > 1;
+        };
         if (useTopRight) {
           if (!btn.isConnected) {
             document.body.appendChild(btn);
           }
-          updateTopRightPosition();
+          if (typeof ResizeObserver !== "undefined") {
+            resizeObserver = new ResizeObserver(() => {
+              scheduleUpdate();
+            });
+          }
+          observeMenuButton();
           const banner = document.querySelector('[role="banner"]');
           if (banner && typeof MutationObserver !== "undefined") {
             const observer = new MutationObserver(() => {
-              updateTopRightPosition();
+              observeMenuButton();
+              scheduleUpdate();
             });
             observer.observe(banner, { childList: true, subtree: true });
           }
           if (typeof window !== "undefined") {
-            window.addEventListener("resize", updateTopRightPosition);
-            const interval = setInterval(() => {
-              updateTopRightPosition();
-            }, 1e3);
-            setTimeout(() => clearInterval(interval), 15e3);
+            window.addEventListener("resize", scheduleUpdate);
+            setInterval(() => {
+              if (needsMenuSync()) {
+                scheduleUpdate();
+              }
+            }, 2e3);
           }
         } else {
           document.body.appendChild(btn);

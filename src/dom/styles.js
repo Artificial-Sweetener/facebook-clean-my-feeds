@@ -161,9 +161,20 @@ function addCSS(state, options, defaults) {
     state,
     ".fb-cmf-tooltip",
     "position:fixed; z-index:9999; pointer-events:none;" +
-      "background-color: rgba(255, 255, 255, 0.8); color: rgb(28, 30, 33);" +
+      "background-color: var(--tooltip-background, rgba(255, 255, 255, 0.8));" +
+      "color: var(--primary-text, rgb(28, 30, 33));" +
       "border-radius:12px; padding:12px; font-size:12px; font-weight:400; line-height:16.08px;" +
       "box-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px; max-width:334px; white-space:normal;"
+  );
+  addToSS(
+    state,
+    ".__fb-light-mode .fb-cmf-tooltip",
+    "background-color: rgba(0, 0, 0, 0.8); color: #f0f2f5;"
+  );
+  addToSS(
+    state,
+    ".__fb-dark-mode .fb-cmf-tooltip",
+    "background-color: rgba(255, 255, 255, 0.92); color: #1c1e21;"
   );
 
   addToSS(

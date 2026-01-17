@@ -2,6 +2,7 @@ const { hydrateOptions } = require("../core/options/hydrate");
 const { createState } = require("../core/state/vars");
 const { addCSS, addExtraCSS } = require("../dom/styles");
 const { initializeRuntimeAttributes } = require("../dom/attributes");
+const { watchDarkMode } = require("../dom/theme");
 const { mopGroupsFeed } = require("../feeds/groups");
 const { mopMarketplaceFeed } = require("../feeds/marketplace");
 const { mopNewsFeed } = require("../feeds/news");
@@ -325,6 +326,15 @@ async function startUserscript() {
 
   addCSS(state, options, defaults);
   setTimeout(() => addExtraCSS(state, options, defaults), 150);
+  watchDarkMode(state, () => {
+    const styleTag = addCSS(state, options, defaults);
+    if (styleTag) {
+      setTimeout(() => addExtraCSS(state, options, defaults), 150);
+    }
+    if (typeof state.syncToggleButtonTheme === "function") {
+      state.syncToggleButtonTheme();
+    }
+  });
 
   setFeedSettings(state, options, true);
 

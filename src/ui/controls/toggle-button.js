@@ -45,6 +45,7 @@ function createToggleButton(state, keyWords, onToggle) {
   let lastMenuRect = null;
   let observedMenuButton = null;
   let updateScheduled = false;
+  let themeDirty = false;
   let resizeObserver = null;
   const hexToRgba = (value, alpha) => {
     if (!value) {
@@ -66,6 +67,19 @@ function createToggleButton(state, keyWords, onToggle) {
       return "";
     }
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
+  const isUsableColor = (value) => {
+    if (!value) {
+      return false;
+    }
+    const normalized = value.trim().toLowerCase();
+    if (!normalized || normalized === "transparent" || normalized === "none") {
+      return false;
+    }
+    if (normalized.startsWith("rgba(") && normalized.endsWith(", 0)")) {
+      return false;
+    }
+    return true;
   };
   const updateTopRightPosition = () => {
     const menuButton = document.querySelector('[role="banner"] [aria-label="Menu"]');
@@ -106,13 +120,23 @@ function createToggleButton(state, keyWords, onToggle) {
     btn.style.boxShadow = menuStyle.boxShadow;
     const iconElement = menuButton.querySelector("svg, i, span");
     const iconStyle = iconElement ? window.getComputedStyle(iconElement) : null;
-    const iconColor = iconStyle && iconStyle.color ? iconStyle.color : "";
+    const iconColor = iconStyle ? iconStyle.color : "";
+    const iconFill = iconStyle ? iconStyle.getPropertyValue("fill") : "";
+    const menuColor = menuStyle.color;
+    const secondaryIcon = menuStyle.getPropertyValue("--secondary-icon");
     const resolvedIconColor =
-      iconColor && iconColor !== "rgba(0, 0, 0, 0)" ? iconColor : "var(--secondary-icon)";
-    if (!isMenuExpanded || !cachedIconColor) {
+      [iconColor, iconFill, menuColor, secondaryIcon].find(isUsableColor) ||
+      "var(--secondary-icon)";
+    if (themeDirty || !isMenuExpanded || !cachedIconColor) {
       cachedIconColor = resolvedIconColor;
     }
-    btn.style.setProperty("--cmf-icon-color", cachedIconColor || resolvedIconColor);
+    const finalIconColor = cachedIconColor || resolvedIconColor;
+    btn.style.setProperty("--cmf-icon-color", finalIconColor);
+    if (btn.getAttribute("data-cmf-open") === "true") {
+      btn.style.color = "";
+    } else {
+      btn.style.color = finalIconColor;
+    }
     const activeBg = hexToRgba(primaryButtonBg, 0.2);
     if (activeBg) {
       btn.style.setProperty("--cmf-active-bg", activeBg);
@@ -120,7 +144,6 @@ function createToggleButton(state, keyWords, onToggle) {
     if (accent) {
       btn.style.setProperty("--cmf-active-icon", accent);
     }
-    btn.style.color = "";
     const icon = btn.querySelector("svg, .cmf-icon");
     if (icon) {
       if (icon.tagName && icon.tagName.toLowerCase() === "svg") {
@@ -140,7 +163,7 @@ function createToggleButton(state, keyWords, onToggle) {
     }
     btn.style.padding = "0";
     btn.style.margin = "0";
-    if (!isMenuExpanded || !cachedBtnBg) {
+    if (themeDirty || !isMenuExpanded || !cachedBtnBg) {
       if (secondaryBg) {
         cachedBtnBg = secondaryBg;
       } else if (menuStyle.backgroundColor) {
@@ -152,14 +175,15 @@ function createToggleButton(state, keyWords, onToggle) {
     }
     btn.style.backgroundColor = "";
 
-    if (!isMenuExpanded || !cachedHover) {
+    if (themeDirty || !isMenuExpanded || !cachedHover) {
       cachedHover = hoverOverlay || "var(--hover-overlay)";
     }
-    if (!isMenuExpanded || !cachedPress) {
+    if (themeDirty || !isMenuExpanded || !cachedPress) {
       cachedPress = pressOverlay || "var(--press-overlay)";
     }
     btn.style.setProperty("--cmf-btn-hover", cachedHover || hoverOverlay || "var(--hover-overlay)");
     btn.style.setProperty("--cmf-btn-press", cachedPress || pressOverlay || "var(--press-overlay)");
+    themeDirty = false;
     return true;
   };
   const scheduleUpdate = () => {
@@ -238,6 +262,15 @@ function createToggleButton(state, keyWords, onToggle) {
         }
       }, 2000);
     }
+    if (typeof MutationObserver !== "undefined") {
+      const stateObserver = new MutationObserver(() => {
+        if (btn.getAttribute("data-cmf-open") === "true") {
+          btn.style.color = "";
+        }
+        scheduleUpdate();
+      });
+      stateObserver.observe(btn, { attributes: true, attributeFilter: ["data-cmf-open"] });
+    }
   } else {
     document.body.appendChild(btn);
   }
@@ -251,6 +284,15 @@ function createToggleButton(state, keyWords, onToggle) {
       btn.setAttribute("data-cmf-open", "true");
     }
   }
+  state.syncToggleButtonTheme = () => {
+    cachedIconColor = "";
+    cachedBtnBg = "";
+    cachedHover = "";
+    cachedPress = "";
+    themeDirty = true;
+    scheduleUpdate();
+    setTimeout(scheduleUpdate, 250);
+  };
   return btn;
 }
 

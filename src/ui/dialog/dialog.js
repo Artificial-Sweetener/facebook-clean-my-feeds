@@ -840,6 +840,10 @@ function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
   }
 
   const langEntry = translations[state.language];
+  const searchLabel =
+    (langEntry && langEntry.DLG_SEARCH_SETTINGS) ||
+    translations.en.DLG_SEARCH_SETTINGS ||
+    "Search Clean My Feeds";
   const direction = langEntry ? langEntry.LANGUAGE_DIRECTION : "ltr";
   let dlg;
   let cnt;
@@ -924,8 +928,8 @@ function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
   searchIcon.innerHTML = state.iconDialogSearchHTML;
   const searchInput = document.createElement("input");
   searchInput.type = "text";
-  searchInput.setAttribute("aria-label", "Search settings");
-  searchInput.setAttribute("placeholder", "Search settings");
+    searchInput.setAttribute("aria-label", searchLabel);
+    searchInput.setAttribute("placeholder", searchLabel);
   searchRow.appendChild(searchIcon);
   searchRow.appendChild(searchInput);
   cnt.appendChild(searchRow);

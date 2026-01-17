@@ -532,6 +532,20 @@ function buildDialogSections({ state, options, keyWords, translations }) {
     iconFor("DLG_PREFERENCES")
   );
   fs.appendChild(l);
+  fs.appendChild(createSelectLanguage(state, keyWords, translations));
+  s = document.createElement("span");
+  s.appendChild(document.createTextNode(`${keyWords.CMF_BTN_LOCATION}:`));
+  fs.appendChild(s);
+  let len = keyWords.CMF_BTN_OPTION.length;
+  for (let i = 0; i < len; i += 1) {
+    fs.appendChild(createRB(options, "CMF_BTN_OPTION", i.toString(), keyWords.CMF_BTN_OPTION[i]));
+  }
+  s = document.createElement("span");
+  s.appendChild(document.createTextNode(`${keyWords.CMF_DIALOG_LOCATION}:`));
+  fs.appendChild(s);
+  fs.appendChild(createRB(options, "CMF_DIALOG_OPTION", "0", keyWords.CMF_DIALOG_OPTION[0]));
+  fs.appendChild(createRB(options, "CMF_DIALOG_OPTION", "1", keyWords.CMF_DIALOG_OPTION[1]));
+  fs.appendChild(createInput(options, "CMF_BORDER_COLOUR", `${keyWords.CMF_BORDER_COLOUR}:`));
   s = document.createElement("span");
   s.className = "cmf-tips-content";
   s.appendChild(document.createTextNode(`${keyWords.DLG_VERBOSITY_CAPTION}:`));
@@ -548,20 +562,6 @@ function buildDialogSections({ state, options, keyWords, translations }) {
     createInput(options, "VERBOSITY_MESSAGE_BG_COLOUR", `${keyWords.VERBOSITY_MESSAGE_BG_COLOUR}:`)
   );
   fs.appendChild(createSingleCB(keyWords, options, "VERBOSITY_DEBUG"));
-  s = document.createElement("span");
-  s.appendChild(document.createTextNode(`${keyWords.CMF_BTN_LOCATION}:`));
-  fs.appendChild(s);
-  let len = keyWords.CMF_BTN_OPTION.length;
-  for (let i = 0; i < len; i += 1) {
-    fs.appendChild(createRB(options, "CMF_BTN_OPTION", i.toString(), keyWords.CMF_BTN_OPTION[i]));
-  }
-  s = document.createElement("span");
-  s.appendChild(document.createTextNode(`${keyWords.CMF_DIALOG_LOCATION}:`));
-  fs.appendChild(s);
-  fs.appendChild(createRB(options, "CMF_DIALOG_OPTION", "0", keyWords.CMF_DIALOG_OPTION[0]));
-  fs.appendChild(createRB(options, "CMF_DIALOG_OPTION", "1", keyWords.CMF_DIALOG_OPTION[1]));
-  fs.appendChild(createInput(options, "CMF_BORDER_COLOUR", `${keyWords.CMF_BORDER_COLOUR}:`));
-  fs.appendChild(createSelectLanguage(state, keyWords, translations));
   wrapFieldsetBody(fs);
   sections.push(fs);
 

@@ -132,17 +132,17 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "Background colour",
             VERBOSITY_DEBUG: 'Highlight "hidden" posts',
             CMF_CUSTOMISATIONS: "Customisations",
-            CMF_BTN_LOCATION: "Location of Clean My Feeds' button",
+            CMF_BTN_LOCATION: "Location of CMF button:",
             CMF_BTN_OPTION: [
               "bottom left",
               "top right",
               'disabled (use "Settings" in User Script Commands menu")'
             ],
-            CMF_DIALOG_LANGUAGE_LABEL: "Clean My Feeds' dialog-box language",
+            CMF_DIALOG_LANGUAGE_LABEL: "Clean My Feeds Language:",
             CMF_DIALOG_LANGUAGE: "English",
             CMF_DIALOG_LANGUAGE_DEFAULT: "Use site language",
             GM_MENU_SETTINGS: "Settings",
-            CMF_DIALOG_LOCATION: "Location of Clean My Feeds' dialog box",
+            CMF_DIALOG_LOCATION: "Location of this menu:",
             CMF_DIALOG_OPTION: ["left side", "right side"],
             CMF_BORDER_COLOUR: "Border colour",
             DLG_TIPS: "About",
@@ -259,17 +259,17 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "\u0644\u0648\u0646 \u0627\u0644\u062E\u0644\u0641\u064A\u0629",
             VERBOSITY_DEBUG: '\u062A\u0633\u0644\u064A\u0637 \u0627\u0644\u0636\u0648\u0621 \u0639\u0644\u0649 \u0627\u0644\u0645\u0634\u0627\u0631\u0643\u0627\u062A "\u0627\u0644\u0645\u062E\u0641\u064A\u0629"',
             CMF_CUSTOMISATIONS: "\u0627\u0644\u062A\u062E\u0635\u064A\u0635\u0627\u062A",
-            CMF_BTN_LOCATION: '\u0645\u0648\u0642\u0639 \u0627\u0644\u0632\u0631 "\u062A\u0646\u0638\u064A\u0641 \u062E\u0644\u0627\u0635\u0627\u062A\u064A"',
+            CMF_BTN_LOCATION: "\u0645\u0648\u0642\u0639 \u0632\u0631 CMF:",
             CMF_BTN_OPTION: [
               "\u0623\u0633\u0641\u0644 \u0627\u0644\u064A\u0633\u0627\u0631",
               "\u0623\u0639\u0644\u0649 \u0627\u0644\u064A\u0645\u064A\u0646",
               '\u0645\u0639\u0637\u0644 (\u0627\u0633\u062A\u062E\u062F\u0645 "\u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A" \u0641\u064A \u0642\u0627\u0626\u0645\u0629 \u0623\u0648\u0627\u0645\u0631 \u0627\u0644\u0628\u0631\u0646\u0627\u0645\u062C \u0627\u0644\u0646\u0635\u064A \u0644\u0644\u0645\u0633\u062A\u062E\u062F\u0645)'
             ],
-            CMF_DIALOG_LANGUAGE_LABEL: "\u0646\u0638\u0641 \u0644\u063A\u0629 \u0635\u0646\u062F\u0648\u0642 \u062D\u0648\u0627\u0631 \u062A\u063A\u0630\u064A\u062A\u064A",
+            CMF_DIALOG_LANGUAGE_LABEL: "\u0644\u063A\u0629 Clean My Feeds:",
             CMF_DIALOG_LANGUAGE: "\u0627\u0644\u0639\u0631\u0628\u064A\u0629",
             CMF_DIALOG_LANGUAGE_DEFAULT: "\u0627\u0633\u062A\u062E\u062F\u0645 \u0644\u063A\u0629 \u0627\u0644\u0645\u0648\u0642\u0639",
             GM_MENU_SETTINGS: "\u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A",
-            CMF_DIALOG_LOCATION: '\u0645\u0648\u0642\u0639 \u0645\u0631\u0628\u0639 \u0627\u0644\u062D\u0648\u0627\u0631 "\u062A\u0646\u0638\u064A\u0641 \u0645\u0648\u062C\u0632 \u0648\u064A\u0628\u0627\u062A\u064A"',
+            CMF_DIALOG_LOCATION: "\u0645\u0648\u0642\u0639 \u0647\u0630\u0647 \u0627\u0644\u0642\u0627\u0626\u0645\u0629:",
             CMF_DIALOG_OPTION: ["\u0627\u0644\u062C\u0647\u0647 \u0627\u0644\u064A\u0633\u0631\u0649", "\u0627\u0644\u062C\u0627\u0646\u0628 \u0627\u0644\u0635\u062D\u064A\u062D"],
             CMF_BORDER_COLOUR: "\u0644\u0648\u0646 \u0627\u0644\u062D\u062F\u0648\u062F",
             DLG_TIPS: "\u062D\u0648\u0644",
@@ -387,17 +387,17 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "\u0426\u0432\u044F\u0442 \u043D\u0430 \u0444\u043E\u043D\u0430",
             VERBOSITY_DEBUG: "\u041E\u0442\u043A\u0440\u043E\u044F\u0432\u0430\u043D\u0435 \u043D\u0430 \u0441\u043A\u0440\u0438\u0442\u0438\u0442\u0435 \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u0438",
             CMF_CUSTOMISATIONS: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438",
-            CMF_BTN_LOCATION: '\u041C\u0435\u0441\u0442\u043E\u043F\u043E\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043D\u0430 \u0431\u0443\u0442\u043E\u043D\u0430 "\u041F\u043E\u0447\u0438\u0441\u0442\u0438 \u043C\u043E\u0438\u0442\u0435 \u0435\u043C\u0438\u0441\u0438\u0438"',
+            CMF_BTN_LOCATION: "\u041C\u0435\u0441\u0442\u043E\u043F\u043E\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043D\u0430 \u0431\u0443\u0442\u043E\u043D\u0430 CMF:",
             CMF_BTN_OPTION: [
               "\u0434\u043E\u043B\u0443 \u0432\u043B\u044F\u0432\u043E",
               "\u0433\u043E\u0440\u0435 \u0432\u0434\u044F\u0441\u043D\u043E",
               '\u0434\u0435\u0430\u043A\u0442\u0438\u0432\u0438\u0440\u0430\u043D\u043E (\u0438\u0437\u043F\u043E\u043B\u0437\u0432\u0430\u0439\u0442\u0435 "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438" \u0432 \u043C\u0435\u043D\u044E\u0442\u043E \u0441 \u043A\u043E\u043C\u0430\u043D\u0434\u0438 \u0437\u0430 \u043F\u043E\u0442\u0440\u0435\u0431\u0438\u0442\u0435\u043B\u0441\u043A\u0438 \u0441\u0446\u0435\u043D\u0430\u0440\u0438\u0438)'
             ],
-            CMF_DIALOG_LANGUAGE_LABEL: "\u041F\u043E\u0447\u0438\u0441\u0442\u0435\u0442\u0435 \u0435\u0437\u0438\u043A\u0430 \u043D\u0430 \u043C\u043E\u0435\u0442\u043E \u0434\u0438\u0430\u043B\u043E\u0433\u043E\u0432\u043E \u043F\u043E\u043B\u0435 \u0437\u0430 \u043D\u043E\u0432\u0438\u043D\u0438",
+            CMF_DIALOG_LANGUAGE_LABEL: "\u0415\u0437\u0438\u043A \u043D\u0430 Clean My Feeds:",
             CMF_DIALOG_LANGUAGE: "\u0411\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438",
             CMF_DIALOG_LANGUAGE_DEFAULT: "\u0418\u0437\u043F\u043E\u043B\u0437\u0432\u0430\u043D\u0435 \u043D\u0430 \u0435\u0437\u0438\u043A\u0430 \u043D\u0430 \u0441\u0430\u0439\u0442\u0430",
             GM_MENU_SETTINGS: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438",
-            CMF_DIALOG_LOCATION: '\u041C\u0435\u0441\u0442\u043E\u043F\u043E\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043D\u0430 \u0434\u0438\u0430\u043B\u043E\u0433\u043E\u0432\u0438\u044F \u043F\u0440\u043E\u0437\u043E\u0440\u0435\u0446 "\u041F\u043E\u0447\u0438\u0441\u0442\u0438 \u043C\u043E\u0438\u0442\u0435 \u0435\u043C\u0438\u0441\u0438\u0438"',
+            CMF_DIALOG_LOCATION: "\u041C\u0435\u0441\u0442\u043E\u043F\u043E\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043D\u0430 \u0442\u043E\u0432\u0430 \u043C\u0435\u043D\u044E:",
             CMF_DIALOG_OPTION: ["\u043B\u044F\u0432\u0430 \u0441\u0442\u0440\u0430\u043D\u0430", "\u0434\u044F\u0441\u043D\u0430 \u0441\u0442\u0440\u0430\u043D\u0430"],
             CMF_BORDER_COLOUR: "\u0426\u0432\u044F\u0442 \u043D\u0430 \u0440\u0430\u043C\u043A\u0430\u0442\u0430",
             DLG_TIPS: "\u0417\u0430 \u043F\u0440\u043E\u0435\u043A\u0442\u0430",
@@ -514,17 +514,17 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "Barva pozad\xED",
             VERBOSITY_DEBUG: "Zv\xFDrazn\u011Bte \u201Eskryt\xE9\u201C p\u0159\xEDsp\u011Bvky",
             CMF_CUSTOMISATIONS: "P\u0159izp\u016Fsoben\xED",
-            CMF_BTN_LOCATION: "Um\xEDst\u011Bn\xED tla\u010D\xEDtka Vy\u010Dist\u011Bte m\xE9 kan\xE1ly",
+            CMF_BTN_LOCATION: "Um\xEDst\u011Bn\xED tla\u010D\xEDtka CMF:",
             CMF_BTN_OPTION: [
               "vlevo dole",
               "vpravo naho\u0159e",
               'zak\xE1z\xE1no (pou\u017Eijte "Nastaven\xED" v nab\xEDdce P\u0159\xEDkazy u\u017Eivatelsk\xE9ho skriptu)'
             ],
-            CMF_DIALOG_LANGUAGE_LABEL: "Vy\u010Distit jazyk m\xE9ho dialogov\xE9ho okna s feedy",
+            CMF_DIALOG_LANGUAGE_LABEL: "Jazyk Clean My Feeds:",
             CMF_DIALOG_LANGUAGE: "\u010Ce\u0161tina",
             CMF_DIALOG_LANGUAGE_DEFAULT: "Pou\u017E\xEDt jazyk webu",
             GM_MENU_SETTINGS: "Nastaven\xED",
-            CMF_DIALOG_LOCATION: "Um\xEDst\u011Bn\xED dialogov\xE9ho okna Vy\u010Dist\u011Bte m\xE9 kan\xE1ly",
+            CMF_DIALOG_LOCATION: "Um\xEDst\u011Bn\xED tohoto menu:",
             CMF_DIALOG_OPTION: ["lev\xE1 strana", "prav\xE1 strana"],
             CMF_BORDER_COLOUR: "Barva ohrani\u010Den\xED",
             DLG_TIPS: "O projektu",
@@ -642,17 +642,17 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "Hintergrundfarbe",
             VERBOSITY_DEBUG: 'Markieren Sie "versteckte" Beitr\xE4ge',
             CMF_CUSTOMISATIONS: "Anpassungen",
-            CMF_BTN_LOCATION: 'Position der Schaltfl\xE4che "Bereinige meine Feeds"',
+            CMF_BTN_LOCATION: "Position der CMF-Schaltfl\xE4che:",
             CMF_BTN_OPTION: [
               "unten links",
               "oben rechts",
               'deaktiviert (verwenden Sie "Einstellungen" im Men\xFC "Benutzerskriptbefehle")'
             ],
-            CMF_DIALOG_LANGUAGE_LABEL: "Sprache meines Feeds-Dialogfelds s\xE4ubern",
+            CMF_DIALOG_LANGUAGE_LABEL: "Sprache von Clean My Feeds:",
             CMF_DIALOG_LANGUAGE: "Deutsch",
             CMF_DIALOG_LANGUAGE_DEFAULT: "Website-Sprache verwenden",
             GM_MENU_SETTINGS: "Einstellungen",
-            CMF_DIALOG_LOCATION: 'Position des Dialogfelds "Bereinige meine Feeds"',
+            CMF_DIALOG_LOCATION: "Position dieses Men\xFCs:",
             CMF_DIALOG_OPTION: ["linke Seite", "rechte Seite"],
             CMF_BORDER_COLOUR: "Farbe der Umrandung",
             DLG_TIPS: "Info",
@@ -769,17 +769,17 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "\u03A7\u03C1\u03CE\u03BC\u03B1 \u03C6\u03CC\u03BD\u03C4\u03BF\u03C5",
             VERBOSITY_DEBUG: '\u0395\u03C0\u03B9\u03C3\u03AE\u03BC\u03B1\u03BD\u03C3\u03B7 "\u03BA\u03C1\u03C5\u03C6\u03CE\u03BD \u03B1\u03BD\u03B1\u03C1\u03C4\u03AE\u03C3\u03B5\u03C9\u03BD"',
             CMF_CUSTOMISATIONS: "\u03A0\u03C1\u03BF\u03C3\u03B1\u03C1\u03BC\u03BF\u03B3\u03AD\u03C2",
-            CMF_BTN_LOCATION: '\u03A4\u03BF\u03C0\u03BF\u03B8\u03B5\u03C3\u03AF\u03B1 \u03C4\u03BF\u03C5 \u03BA\u03BF\u03C5\u03BC\u03C0\u03B9\u03BF\u03CD "\u039A\u03B1\u03B8\u03B1\u03C1\u03B9\u03C3\u03BC\u03CC\u03C2 \u03C4\u03C9\u03BD \u03C1\u03BF\u03CE\u03BD \u03BC\u03BF\u03C5"',
+            CMF_BTN_LOCATION: "\u03A4\u03BF\u03C0\u03BF\u03B8\u03B5\u03C3\u03AF\u03B1 \u03C4\u03BF\u03C5 \u03BA\u03BF\u03C5\u03BC\u03C0\u03B9\u03BF\u03CD CMF:",
             CMF_BTN_OPTION: [
               "\u03BA\u03AC\u03C4\u03C9 \u03B1\u03C1\u03B9\u03C3\u03C4\u03B5\u03C1\u03AC",
               "\u03C0\u03AC\u03BD\u03C9 \u03B4\u03B5\u03BE\u03B9\u03AC",
               '\u03B1\u03C0\u03B5\u03BD\u03B5\u03C1\u03B3\u03BF\u03C0\u03BF\u03B9\u03B7\u03BC\u03AD\u03BD\u03BF (\u03C7\u03C1\u03B7\u03C3\u03B9\u03BC\u03BF\u03C0\u03BF\u03B9\u03AE\u03C3\u03C4\u03B5 "\u03A1\u03C5\u03B8\u03BC\u03AF\u03C3\u03B5\u03B9\u03C2" \u03C3\u03C4\u03BF \u03BC\u03B5\u03BD\u03BF\u03CD "\u0395\u03BD\u03C4\u03BF\u03BB\u03AD\u03C2 \u03C3\u03B5\u03BD\u03B1\u03C1\u03AF\u03BF\u03C5 \u03C7\u03C1\u03AE\u03C3\u03C4\u03B7")'
             ],
-            CMF_DIALOG_LANGUAGE_LABEL: "\u039A\u03B1\u03B8\u03B1\u03C1\u03AF\u03C3\u03C4\u03B5 \u03C4\u03B7 \u03B3\u03BB\u03CE\u03C3\u03C3\u03B1 \u03C4\u03BF\u03C5 \u03C0\u03B1\u03C1\u03B1\u03B8\u03CD\u03C1\u03BF\u03C5 \u03B4\u03B9\u03B1\u03BB\u03CC\u03B3\u03BF\u03C5 \u03BC\u03B5 \u03C4\u03B1 \u03C4\u03C1\u03BF\u03C6\u03BF\u03B4\u03BF\u03C4\u03BF\u03CD\u03BC\u03B5\u03BD\u03B1 \u03BC\u03BF\u03C5",
+            CMF_DIALOG_LANGUAGE_LABEL: "\u0393\u03BB\u03CE\u03C3\u03C3\u03B1 \u03C4\u03BF\u03C5 Clean My Feeds:",
             CMF_DIALOG_LANGUAGE: "\u0395\u03BB\u03BB\u03B7\u03BD\u03B9\u03BA\u03AC",
             CMF_DIALOG_LANGUAGE_DEFAULT: "\u03A7\u03C1\u03AE\u03C3\u03B7 \u03B3\u03BB\u03CE\u03C3\u03C3\u03B1\u03C2 \u03B9\u03C3\u03C4\u03CC\u03C4\u03BF\u03C0\u03BF\u03C5",
             GM_MENU_SETTINGS: "\u03A1\u03C5\u03B8\u03BC\u03AF\u03C3\u03B5\u03B9\u03C2",
-            CMF_DIALOG_LOCATION: '\u03A4\u03BF\u03C0\u03BF\u03B8\u03B5\u03C3\u03AF\u03B1 \u03C4\u03B7\u03C2 \u03B4\u03B9\u03B1\u03BB\u03CC\u03B3\u03BF\u03C5 "\u039A\u03B1\u03B8\u03B1\u03C1\u03B9\u03C3\u03BC\u03CC\u03C2 \u03C4\u03C9\u03BD \u03C1\u03BF\u03CE\u03BD \u03BC\u03BF\u03C5"',
+            CMF_DIALOG_LOCATION: "\u03A4\u03BF\u03C0\u03BF\u03B8\u03B5\u03C3\u03AF\u03B1 \u03B1\u03C5\u03C4\u03BF\u03CD \u03C4\u03BF\u03C5 \u03BC\u03B5\u03BD\u03BF\u03CD:",
             CMF_DIALOG_OPTION: ["\u03B1\u03C1\u03B9\u03C3\u03C4\u03B5\u03C1\u03AE \u03C0\u03BB\u03B5\u03C5\u03C1\u03AC", "\u03B4\u03B5\u03BE\u03B9\u03AC \u03C0\u03BB\u03B5\u03C5\u03C1\u03AC"],
             CMF_BORDER_COLOUR: "\u03A7\u03C1\u03CE\u03BC\u03B1 \u03C0\u03B5\u03C1\u03B9\u03B3\u03C1\u03AC\u03BC\u03BC\u03B1\u03C4\u03BF\u03C2",
             DLG_TIPS: "\u03A3\u03C7\u03B5\u03C4\u03B9\u03BA\u03AC",
@@ -896,17 +896,17 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "Color de fondo",
             VERBOSITY_DEBUG: 'Destacar publicaciones "ocultas"',
             CMF_CUSTOMISATIONS: "Personalizaciones",
-            CMF_BTN_LOCATION: "Ubicaci\xF3n del bot\xF3n Limpia mis feeds",
+            CMF_BTN_LOCATION: "Ubicaci\xF3n del bot\xF3n CMF:",
             CMF_BTN_OPTION: [
               "abajo a la izquierda",
               "arriba a la derecha",
               'deshabilitado (use "Configuraci\xF3n" en el men\xFA Comandos de script de usuario)'
             ],
-            CMF_DIALOG_LANGUAGE_LABEL: "Limpiar el idioma de mi cuadro de di\xE1logo de feeds",
+            CMF_DIALOG_LANGUAGE_LABEL: "Idioma de Clean My Feeds:",
             CMF_DIALOG_LANGUAGE: "Espa\xF1ol",
             CMF_DIALOG_LANGUAGE_DEFAULT: "Usar idioma del sitio",
             GM_MENU_SETTINGS: "Configuraci\xF3n",
-            CMF_DIALOG_LOCATION: "Ubicaci\xF3n del cuadro de di\xE1logo Limpia mis feeds",
+            CMF_DIALOG_LOCATION: "Ubicaci\xF3n de este men\xFA:",
             CMF_DIALOG_OPTION: ["lado izquierdo", "lado derecho"],
             CMF_BORDER_COLOUR: "Color de borde",
             DLG_TIPS: "Acerca de",
@@ -1023,17 +1023,17 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "Taustav\xE4ri",
             VERBOSITY_DEBUG: 'Korosta "piilotetut" postaus',
             CMF_CUSTOMISATIONS: "R\xE4\xE4t\xE4l\xF6innit",
-            CMF_BTN_LOCATION: "Puhdista sy\xF6tteeni -painikkeen sijainti",
+            CMF_BTN_LOCATION: "CMF-painikkeen sijainti:",
             CMF_BTN_OPTION: [
               "alhaalla vasemmalla",
               "ylh\xE4\xE4ll\xE4 oikealle",
               'pois k\xE4yt\xF6st\xE4 (k\xE4yt\xE4 "Asetukset" User Script Commands -valikossa)'
             ],
-            CMF_DIALOG_LANGUAGE_LABEL: "Puhdista sy\xF6tteideni keskusteluruudun kieli",
+            CMF_DIALOG_LANGUAGE_LABEL: "Clean My Feeds -kieli:",
             CMF_DIALOG_LANGUAGE: "Suomi",
             CMF_DIALOG_LANGUAGE_DEFAULT: "K\xE4yt\xE4 sivuston kielt\xE4",
             GM_MENU_SETTINGS: "Asetukset",
-            CMF_DIALOG_LOCATION: "Puhdista sy\xF6tteeni -valintaikkunan sijainti",
+            CMF_DIALOG_LOCATION: "T\xE4m\xE4n valikon sijainti:",
             CMF_DIALOG_OPTION: ["vasen puoli", "oikea puoli"],
             CMF_BORDER_COLOUR: "Reunuksen v\xE4ri",
             DLG_TIPS: "Tietoa",
@@ -1150,17 +1150,17 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "Couleur de fond",
             VERBOSITY_DEBUG: "Mettez en surbrillance les messages \xAB cach\xE9s \xBB",
             CMF_CUSTOMISATIONS: "Personnalisations",
-            CMF_BTN_LOCATION: "Emplacement du bouton Nettoyer mes flux",
+            CMF_BTN_LOCATION: "Emplacement du bouton CMF :",
             CMF_BTN_OPTION: [
               "en bas \xE0 gauche",
               "en haut \xE0 droite",
               'd\xE9sactiv\xE9 (utilisez "Param\xE8tres" dans le menu Commandes de script utilisateur)'
             ],
-            CMF_DIALOG_LANGUAGE_LABEL: "Nettoyer la langue de ma bo\xEEte de dialogue de flux",
+            CMF_DIALOG_LANGUAGE_LABEL: "Langue de Clean My Feeds :",
             CMF_DIALOG_LANGUAGE: "Fran\xE7ais",
             CMF_DIALOG_LANGUAGE_DEFAULT: "Utiliser la langue du site",
             GM_MENU_SETTINGS: "Param\xE8tres",
-            CMF_DIALOG_LOCATION: "Emplacement de la bo\xEEte de dialogue Nettoyer mes flux",
+            CMF_DIALOG_LOCATION: "Emplacement de ce menu :",
             CMF_DIALOG_OPTION: ["c\xF4t\xE9 gauche", "c\xF4t\xE9 droit"],
             CMF_BORDER_COLOUR: "Couleur de bordure",
             DLG_TIPS: "\xC0 propos",
@@ -1278,17 +1278,17 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "\u05E6\u05D1\u05E2 \u05D4\u05E8\u05E7\u05E2",
             VERBOSITY_DEBUG: '\u05D4\u05D3\u05D2\u05E9 \u05E4\u05D5\u05E1\u05D8\u05D9\u05DD "\u05DE\u05D5\u05E1\u05EA\u05E8\u05D9\u05DD"',
             CMF_CUSTOMISATIONS: "\u05D4\u05EA\u05D0\u05DE\u05D5\u05EA \u05D0\u05D9\u05E9\u05D9\u05D5\u05EA",
-            CMF_BTN_LOCATION: "\u05EA\u05E0\u05E7\u05D4 \u05D0\u05EA \u05D4\u05D6\u05E0\u05D5\u05EA \u05E9\u05DC\u05D9 \u05DE\u05D9\u05E7\u05D5\u05DD \u05D4\u05DB\u05E4\u05EA\u05D5\u05E8",
+            CMF_BTN_LOCATION: "\u05DE\u05D9\u05E7\u05D5\u05DD \u05DB\u05E4\u05EA\u05D5\u05E8 CMF:",
             CMF_BTN_OPTION: [
               "\u05E9\u05DE\u05D0\u05DC \u05DC\u05DE\u05D8\u05D4",
               "\u05D9\u05DE\u05D9\u05E0\u05D4 \u05DC\u05DE\u05E2\u05DC\u05D4",
               '\u05DE\u05D5\u05E9\u05D1\u05EA (\u05D4\u05E9\u05EA\u05DE\u05E9 \u05D1"\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA" \u05D1\u05EA\u05E4\u05E8\u05D9\u05D8 \u05E4\u05E7\u05D5\u05D3\u05D5\u05EA \u05E1\u05E7\u05E8\u05D9\u05E4\u05D8 \u05DE\u05E9\u05EA\u05DE\u05E9)'
             ],
-            CMF_DIALOG_LANGUAGE_LABEL: "\u05E0\u05E7\u05D4 \u05D0\u05EA \u05E9\u05E4\u05EA \u05EA\u05D9\u05E7\u05D9\u05D9\u05EA \u05D4\u05D3\u05D9\u05D0\u05DC\u05D5\u05D2 \u05E9\u05DC\u05D9",
+            CMF_DIALOG_LANGUAGE_LABEL: "\u05E9\u05E4\u05EA Clean My Feeds:",
             CMF_DIALOG_LANGUAGE: "\u05E2\u05B4\u05D1\u05B0\u05E8\u05B4\u05D9\u05EA",
             CMF_DIALOG_LANGUAGE_DEFAULT: "\u05D4\u05E9\u05EA\u05DE\u05E9 \u05D1\u05E9\u05E4\u05EA \u05D4\u05D0\u05EA\u05E8",
             GM_MENU_SETTINGS: "\u05D4\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA",
-            CMF_DIALOG_LOCATION: '\u05DE\u05D9\u05E7\u05D5\u05DD \u05EA\u05D9\u05D1\u05EA \u05D4\u05D3\u05D5-\u05E9\u05D9\u05D7 "\u05E0\u05E7\u05D4 \u05D0\u05EA \u05D4\u05D4\u05D6\u05E0\u05D5\u05EA \u05E9\u05DC\u05D9"',
+            CMF_DIALOG_LOCATION: "\u05DE\u05D9\u05E7\u05D5\u05DD \u05D4\u05EA\u05E4\u05E8\u05D9\u05D8 \u05D4\u05D6\u05D4:",
             CMF_DIALOG_OPTION: ["\u05E6\u05D3 \u05E9\u05DE\u05D0\u05DC", "\u05E6\u05D3 \u05D9\u05DE\u05D9\u05DF"],
             CMF_BORDER_COLOUR: "\u05E6\u05D1\u05E2 \u05D2\u05D1\u05D5\u05DC",
             DLG_TIPS: "\u05D0\u05D5\u05D3\u05D5\u05EA",
@@ -1405,17 +1405,17 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "Warna latar belakang",
             VERBOSITY_DEBUG: 'Sorot postingan "tersembunyi"',
             CMF_CUSTOMISATIONS: "Kustomisasi",
-            CMF_BTN_LOCATION: "Lokasi tombol Bersihkan umpan saya",
+            CMF_BTN_LOCATION: "Lokasi tombol CMF:",
             CMF_BTN_OPTION: [
               "kiri bawah",
               "kanan atas",
               'dinonaktifkan (gunakan "Pengaturan" di menu Perintah Skrip Pengguna)'
             ],
-            CMF_DIALOG_LANGUAGE_LABEL: "Bersihkan bahasa kotak dialog umpan saya",
+            CMF_DIALOG_LANGUAGE_LABEL: "Bahasa Clean My Feeds:",
             CMF_DIALOG_LANGUAGE: "Bahasa Indonesia",
             CMF_DIALOG_LANGUAGE_DEFAULT: "Gunakan bahasa situs",
             GM_MENU_SETTINGS: "Pengaturan",
-            CMF_DIALOG_LOCATION: "Lokasi kotak dialog Bersihkan umpan saya",
+            CMF_DIALOG_LOCATION: "Lokasi menu ini:",
             CMF_DIALOG_OPTION: ["sisi kiri", "sisi kanan"],
             CMF_BORDER_COLOUR: "Warna perbatasan",
             DLG_TIPS: "Tentang",
@@ -1532,17 +1532,17 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "Colore di sfondo",
             VERBOSITY_DEBUG: 'Evidenzia i post "nascosti"',
             CMF_CUSTOMISATIONS: "Personalizzazioni",
-            CMF_BTN_LOCATION: "Posizione del pulsante Pulisci i miei feed",
+            CMF_BTN_LOCATION: "Posizione del pulsante CMF:",
             CMF_BTN_OPTION: [
               "in basso a sinistra",
               "in alto a destra",
               'disabilitato (usa "Impostazioni" nel menu Comandi script utente)'
             ],
-            CMF_DIALOG_LANGUAGE_LABEL: "Pulisci la lingua della mia casella di dialogo feed",
+            CMF_DIALOG_LANGUAGE_LABEL: "Lingua di Clean My Feeds:",
             CMF_DIALOG_LANGUAGE: "Italiano",
             CMF_DIALOG_LANGUAGE_DEFAULT: "Usa la lingua del sito",
             GM_MENU_SETTINGS: "Impostazioni",
-            CMF_DIALOG_LOCATION: "Posizione della finestra di dialogo Pulisci i miei feed",
+            CMF_DIALOG_LOCATION: "Posizione di questo menu:",
             CMF_DIALOG_OPTION: ["lato sinistro", "lato destro"],
             CMF_BORDER_COLOUR: "Colore del bordo",
             DLG_TIPS: "Info",
@@ -1659,17 +1659,17 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "\u80CC\u666F\u8272",
             VERBOSITY_DEBUG: "\u300C\u975E\u8868\u793A\u300D\u306E\u6295\u7A3F\u3092\u5F37\u8ABF\u8868\u793A\u3059\u308B",
             CMF_CUSTOMISATIONS: "\u30AB\u30B9\u30BF\u30DE\u30A4\u30BA",
-            CMF_BTN_LOCATION: "\u300C\u30D5\u30A3\u30FC\u30C9\u3092\u30AF\u30EA\u30FC\u30F3\u30A2\u30C3\u30D7\u300D\u30DC\u30BF\u30F3\u306E\u914D\u7F6E",
+            CMF_BTN_LOCATION: "CMF\u30DC\u30BF\u30F3\u306E\u4F4D\u7F6E:",
             CMF_BTN_OPTION: [
               "\u4E0B\u5DE6",
               "\u4E0A\u53F3",
               "\u7121\u52B9 ([\u30E6\u30FC\u30B6\u30FC \u30B9\u30AF\u30EA\u30D7\u30C8 \u30B3\u30DE\u30F3\u30C9] \u30E1\u30CB\u30E5\u30FC\u306E [\u8A2D\u5B9A] \u3092\u4F7F\u7528)"
             ],
-            CMF_DIALOG_LANGUAGE_LABEL: "\u30D5\u30A3\u30FC\u30C9\u306E\u30C0\u30A4\u30A2\u30ED\u30B0\u30DC\u30C3\u30AF\u30B9\u8A00\u8A9E\u3092\u30AF\u30EA\u30FC\u30F3\u30A2\u30C3\u30D7",
+            CMF_DIALOG_LANGUAGE_LABEL: "Clean My Feeds\u306E\u8A00\u8A9E:",
             CMF_DIALOG_LANGUAGE: "\u65E5\u672C\u8A9E",
             CMF_DIALOG_LANGUAGE_DEFAULT: "\u30B5\u30A4\u30C8\u306E\u8A00\u8A9E\u3092\u4F7F\u7528",
             GM_MENU_SETTINGS: "\u8A2D\u5B9A",
-            CMF_DIALOG_LOCATION: "[\u30D5\u30A3\u30FC\u30C9\u306E\u6D88\u53BB] \u30C0\u30A4\u30A2\u30ED\u30B0 \u30DC\u30C3\u30AF\u30B9\u306E\u914D\u7F6E",
+            CMF_DIALOG_LOCATION: "\u3053\u306E\u30E1\u30CB\u30E5\u30FC\u306E\u4F4D\u7F6E:",
             CMF_DIALOG_OPTION: ["\u5DE6\u5074", "\u53F3\u5074"],
             CMF_BORDER_COLOUR: "\u30DC\u30FC\u30C0\u30FC\u30AB\u30E9\u30FC",
             DLG_TIPS: "\u6982\u8981",
@@ -1786,17 +1786,17 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "Fona kr\u0101sa",
             VERBOSITY_DEBUG: 'Izceliet "sl\u0113ptos" rakstus',
             CMF_CUSTOMISATIONS: "Personaliz\u0113\u0161ana",
-            CMF_BTN_LOCATION: "Pogas T\u012Br\u012Bt manas pl\u016Bsmas atra\u0161an\u0101s vieta",
+            CMF_BTN_LOCATION: "CMF pogas atra\u0161an\u0101s vieta:",
             CMF_BTN_OPTION: [
               "apak\u0161\u0113j\u0101 kreisaj\u0101 st\u016Br\u012B",
               "aug\u0161\u0113j\u0101 labaj\u0101 st\u016Br\u012B",
               "atsp\u0113jota (lietot\u0101ja skripta komandu izv\u0113ln\u0113 izmantojiet sada\u013Cu Iestat\u012Bjumi)"
             ],
-            CMF_DIALOG_LANGUAGE_LABEL: "T\u012Br\u012Bt manu baro\u0161anas kast\u0113 dialoga valodu",
+            CMF_DIALOG_LANGUAGE_LABEL: "Clean My Feeds valoda:",
             CMF_DIALOG_LANGUAGE: "Latvie\u0161u",
             CMF_DIALOG_LANGUAGE_DEFAULT: "Izmantot vietnes valodu",
             GM_MENU_SETTINGS: "Iestat\u012Bjumi",
-            CMF_DIALOG_LOCATION: "Dialoglodzi\u0146a T\u012Br\u012Bt manas pl\u016Bsmas atra\u0161an\u0101s vieta",
+            CMF_DIALOG_LOCATION: "\u0160\u012Bs izv\u0113lnes atra\u0161an\u0101s vieta:",
             CMF_DIALOG_OPTION: ["kreis\u0101 puse", "lab\u0101 puse"],
             CMF_BORDER_COLOUR: "Apmales kr\u0101sa",
             DLG_TIPS: "Par",
@@ -1913,17 +1913,17 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "Achtergrondkleur",
             VERBOSITY_DEBUG: 'Highlight "verborgen" artikelen',
             CMF_CUSTOMISATIONS: "Personalisaties",
-            CMF_BTN_LOCATION: "Locatie van de knop Mijn feeds opschonen",
+            CMF_BTN_LOCATION: "Locatie van de CMF-knop:",
             CMF_BTN_OPTION: [
               "linksonder",
               "rechtsboven",
               'uitgeschakeld (gebruik "Instellingen" in het menu Gebruikersscriptopdrachten)'
             ],
-            CMF_DIALOG_LANGUAGE_LABEL: "Maak mijn feeds dialoogvensterstaal schoon",
+            CMF_DIALOG_LANGUAGE_LABEL: "Taal van Clean My Feeds:",
             CMF_DIALOG_LANGUAGE: "Nederlands",
             CMF_DIALOG_LANGUAGE_DEFAULT: "Site-taal gebruiken",
             GM_MENU_SETTINGS: "Instellingen",
-            CMF_DIALOG_LOCATION: "Locatie van het dialoogvenster Mijn feeds opschonen",
+            CMF_DIALOG_LOCATION: "Locatie van dit menu:",
             CMF_DIALOG_OPTION: ["linkerkant", "rechterkant"],
             CMF_BORDER_COLOUR: "Randkleur",
             DLG_TIPS: "Over",
@@ -2040,17 +2040,17 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "Kolor t\u0142a",
             VERBOSITY_DEBUG: "Wyr\xF3\u017Cnij \u201Eukryte\u201D posty",
             CMF_CUSTOMISATIONS: "Personalizacja",
-            CMF_BTN_LOCATION: "Lokalizacja przycisku Wyczy\u015B\u0107 moje kana\u0142y",
+            CMF_BTN_LOCATION: "Lokalizacja przycisku CMF:",
             CMF_BTN_OPTION: [
               "lewy dolny r\xF3g",
               "prawy g\xF3rny r\xF3g",
               'wy\u0142\u0105czone (u\u017Cyj "Ustawienia" w menu Polecenia skryptu u\u017Cytkownika)'
             ],
-            CMF_DIALOG_LANGUAGE_LABEL: "Wyczy\u015B\u0107 j\u0119zyk mojego okna dialogowego z wiadomo\u015Bciami",
+            CMF_DIALOG_LANGUAGE_LABEL: "J\u0119zyk Clean My Feeds:",
             CMF_DIALOG_LANGUAGE: "Polski",
             CMF_DIALOG_LANGUAGE_DEFAULT: "U\u017Cyj j\u0119zyka witryny",
             GM_MENU_SETTINGS: "Ustawienia",
-            CMF_DIALOG_LOCATION: "Lokalizacja okna dialogowego Wyczy\u015B\u0107 moje kana\u0142y",
+            CMF_DIALOG_LOCATION: "Lokalizacja tego menu:",
             CMF_DIALOG_OPTION: ["lewa strona", "prawa strona"],
             CMF_BORDER_COLOUR: "Kolor obramowania",
             DLG_TIPS: "O projekcie",
@@ -2167,17 +2167,17 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "Cor de fundo",
             VERBOSITY_DEBUG: 'Destacar postagens "ocultas"',
             CMF_CUSTOMISATIONS: "Personaliza\xE7\xF5es",
-            CMF_BTN_LOCATION: "Localiza\xE7\xE3o do bot\xE3o Limpe meus feeds",
+            CMF_BTN_LOCATION: "Localiza\xE7\xE3o do bot\xE3o CMF:",
             CMF_BTN_OPTION: [
               "inferior esquerdo",
               "superior direito",
               'desativado (use "Configura\xE7\xF5es" no menu Comandos de script do usu\xE1rio)'
             ],
-            CMF_DIALOG_LANGUAGE_LABEL: "Limpar o idioma da caixa de di\xE1logo dos meus feeds",
+            CMF_DIALOG_LANGUAGE_LABEL: "Idioma do Clean My Feeds:",
             CMF_DIALOG_LANGUAGE: "Portugu\xEAs",
             CMF_DIALOG_LANGUAGE_DEFAULT: "Usar idioma do site",
             GM_MENU_SETTINGS: "Configura\xE7\xF5es",
-            CMF_DIALOG_LOCATION: "Localiza\xE7\xE3o da caixa de di\xE1logo Limpe meus feeds",
+            CMF_DIALOG_LOCATION: "Localiza\xE7\xE3o deste menu:",
             CMF_DIALOG_OPTION: ["lado esquerdo", "lado direito"],
             CMF_BORDER_COLOUR: "Cor da borda",
             DLG_TIPS: "Sobre",
@@ -2294,17 +2294,17 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "\u0426\u0432\u0435\u0442 \u0444\u043E\u043D\u0430",
             VERBOSITY_DEBUG: "\u0412\u044B\u0434\u0435\u043B\u0438\u0442\u044C \xAB\u0441\u043A\u0440\u044B\u0442\u044B\u0435\xBB \u043F\u043E\u0441\u0442\u044B",
             CMF_CUSTOMISATIONS: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438",
-            CMF_BTN_LOCATION: "\u0420\u0430\u0441\u043F\u043E\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043A\u043D\u043E\u043F\u043A\u0438 \xAB\u041E\u0447\u0438\u0441\u0442\u0438\u0442\u044C \u043C\u043E\u0438 \u043D\u043E\u0432\u043E\u0441\u0442\u043D\u044B\u0435 \u043B\u0435\u043D\u0442\u044B\xBB",
+            CMF_BTN_LOCATION: "\u0420\u0430\u0441\u043F\u043E\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043A\u043D\u043E\u043F\u043A\u0438 CMF:",
             CMF_BTN_OPTION: [
               "\u0432\u043D\u0438\u0437\u0443 \u0441\u043B\u0435\u0432\u0430",
               "\u0432\u0432\u0435\u0440\u0445\u0443 \u0441\u043F\u0440\u0430\u0432\u0430",
               "\u043E\u0442\u043A\u043B\u044E\u0447\u0435\u043D\u043E (\u0438\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0439\u0442\u0435 \xAB\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438\xBB \u0432 \u043C\u0435\u043D\u044E \xAB\u041F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044C\u0441\u043A\u0438\u0435 \u043A\u043E\u043C\u0430\u043D\u0434\u044B \u0441\u043A\u0440\u0438\u043F\u0442\u0430\xBB)"
             ],
-            CMF_DIALOG_LANGUAGE_LABEL: "\u041E\u0447\u0438\u0441\u0442\u0438\u0442\u044C \u044F\u0437\u044B\u043A \u043C\u043E\u0435\u0433\u043E \u0434\u0438\u0430\u043B\u043E\u0433\u043E\u0432\u043E\u0433\u043E \u043E\u043A\u043D\u0430 \u0441 \u043B\u0435\u043D\u0442\u0430\u043C\u0438",
+            CMF_DIALOG_LANGUAGE_LABEL: "\u042F\u0437\u044B\u043A Clean My Feeds:",
             CMF_DIALOG_LANGUAGE: "\u0420\u0443\u0441\u0441\u043A\u0438\u0439",
             CMF_DIALOG_LANGUAGE_DEFAULT: "\u0418\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C \u044F\u0437\u044B\u043A \u0441\u0430\u0439\u0442\u0430",
             GM_MENU_SETTINGS: "\u041D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438",
-            CMF_DIALOG_LOCATION: "\u0420\u0430\u0441\u043F\u043E\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u0434\u0438\u0430\u043B\u043E\u0433\u043E\u0432\u043E\u0433\u043E \u043E\u043A\u043D\u0430 \xAB\u041E\u0447\u0438\u0441\u0442\u0438\u0442\u044C \u043C\u043E\u0438 \u043B\u0435\u043D\u0442\u044B\xBB",
+            CMF_DIALOG_LOCATION: "\u0420\u0430\u0441\u043F\u043E\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u044D\u0442\u043E\u0433\u043E \u043C\u0435\u043D\u044E:",
             CMF_DIALOG_OPTION: ["\u043B\u0435\u0432\u0430\u044F \u0441\u0442\u043E\u0440\u043E\u043D\u0430", "\u043F\u0440\u0430\u0432\u0430\u044F \u0441\u0442\u043E\u0440\u043E\u043D\u0430"],
             CMF_BORDER_COLOUR: "\u0426\u0432\u0435\u0442 \u0433\u0440\u0430\u043D\u0438\u0446\u044B",
             DLG_TIPS: "\u041E \u043F\u0440\u043E\u0435\u043A\u0442\u0435",
@@ -2421,17 +2421,17 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "Arka plan rengi",
             VERBOSITY_DEBUG: '"Gizli" g\xF6nderileri vurgulay\u0131n',
             CMF_CUSTOMISATIONS: "\xF6zelle\u015Ftirmeler",
-            CMF_BTN_LOCATION: `"Feed'lerimi temizle" i\xE7in d\xFC\u011Fmenin konumu`,
+            CMF_BTN_LOCATION: "CMF d\xFC\u011Fmesinin konumu:",
             CMF_BTN_OPTION: [
               "sol alt",
               "sa\u011F \xFCst",
               'devre d\u0131\u015F\u0131 (Kullan\u0131c\u0131 Komut Dosyas\u0131 Komutlar\u0131 men\xFCs\xFCnde "Ayarlar"\u0131 kullan\u0131n)'
             ],
-            CMF_DIALOG_LANGUAGE_LABEL: "Beslemelerimin ileti\u015Fim kutusu dilini temizle",
+            CMF_DIALOG_LANGUAGE_LABEL: "Clean My Feeds dili:",
             CMF_DIALOG_LANGUAGE: "T\xFCrk\xE7e",
             CMF_DIALOG_LANGUAGE_DEFAULT: "Site dilini kullan",
             GM_MENU_SETTINGS: "Ayarlar",
-            CMF_DIALOG_LOCATION: `"Feed'lerimi temizle" ileti\u015Fim kutusunun konumu`,
+            CMF_DIALOG_LOCATION: "Bu men\xFCn\xFCn konumu:",
             CMF_DIALOG_OPTION: ["sol yan", "sa\u011F yan"],
             CMF_BORDER_COLOUR: "Kenarl\u0131k rengi",
             DLG_TIPS: "Hakk\u0131nda",
@@ -2548,17 +2548,17 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "\u041A\u043E\u043B\u0456\u0440 \u0444\u043E\u043D\u0443",
             VERBOSITY_DEBUG: "\xAB\u0412\u0438\u0434\u0456\u043B\u044F\u0442\u0438 \xAB\u043F\u0440\u0438\u0445\u043E\u0432\u0430\u043D\u0456\xBB \u0434\u043E\u043F\u0438\u0441\u0438\xBB",
             CMF_CUSTOMISATIONS: "\u041D\u0430\u043B\u0430\u0448\u0442\u0443\u0432\u0430\u043D\u043D\u044F",
-            CMF_BTN_LOCATION: "\u0420\u043E\u0437\u0442\u0430\u0448\u0443\u0432\u0430\u043D\u043D\u044F \u043A\u043D\u043E\u043F\u043A\u0438 \xAB\u041E\u0447\u0438\u0441\u0442\u0438\u0442\u0438 \u043C\u043E\u0457 \u0441\u0442\u0440\u0456\u0447\u043A\u0438\xBB",
+            CMF_BTN_LOCATION: "\u0420\u043E\u0437\u0442\u0430\u0448\u0443\u0432\u0430\u043D\u043D\u044F \u043A\u043D\u043E\u043F\u043A\u0438 CMF:",
             CMF_BTN_OPTION: [
               "\u0432\u043D\u0438\u0437\u0443 \u043B\u0456\u0432\u043E\u0440\u0443\u0447",
               "\u0432\u0433\u043E\u0440\u0456 \u043F\u0440\u0430\u0432\u043E\u0440\u0443\u0447",
               "\u0432\u0438\u043C\u043A\u043D\u0435\u043D\u043E (\u0432\u0438\u043A\u043E\u0440\u0438\u0441\u0442\u043E\u0432\u0443\u0439\u0442\u0435 \xAB\u041F\u0430\u0440\u0430\u043C\u0435\u0442\u0440\u0438\xBB \u0432 \u043C\u0435\u043D\u044E \u043A\u043E\u043C\u0430\u043D\u0434 \u0441\u0446\u0435\u043D\u0430\u0440\u0456\u044E \u043A\u043E\u0440\u0438\u0441\u0442\u0443\u0432\u0430\u0447\u0430\xBB)"
             ],
-            CMF_DIALOG_LANGUAGE_LABEL: "\u041E\u0447\u0438\u0441\u0442\u0438\u0442\u0438 \u043C\u043E\u0432\u0443 \u043C\u043E\u0433\u043E \u0432\u0456\u043A\u043D\u0430 \u0434\u0456\u0430\u043B\u043E\u0433\u0443",
+            CMF_DIALOG_LANGUAGE_LABEL: "\u041C\u043E\u0432\u0430 Clean My Feeds:",
             CMF_DIALOG_LANGUAGE: "\u0423\u043A\u0440\u0430\u0457\u043D\u0441\u044C\u043A\u0430",
             CMF_DIALOG_LANGUAGE_DEFAULT: "\u0412\u0438\u043A\u043E\u0440\u0438\u0441\u0442\u043E\u0432\u0443\u0432\u0430\u0442\u0438 \u043C\u043E\u0432\u0443 \u0441\u0430\u0439\u0442\u0443",
             GM_MENU_SETTINGS: "\u041F\u0430\u0440\u0430\u043C\u0435\u0442\u0440\u0438",
-            CMF_DIALOG_LOCATION: "\u0420\u043E\u0437\u0442\u0430\u0448\u0443\u0432\u0430\u043D\u043D\u044F \u0434\u0456\u0430\u043B\u043E\u0433\u043E\u0432\u043E\u0433\u043E \u0432\u0456\u043A\u043D\u0430 \xAB\u041E\u0447\u0438\u0441\u0442\u0438\u0442\u0438 \u043C\u043E\u0457 \u0441\u0442\u0440\u0456\u0447\u043A\u0438\xBB",
+            CMF_DIALOG_LOCATION: "\u0420\u043E\u0437\u0442\u0430\u0448\u0443\u0432\u0430\u043D\u043D\u044F \u0446\u044C\u043E\u0433\u043E \u043C\u0435\u043D\u044E:",
             CMF_DIALOG_OPTION: ["\u043B\u0456\u0432\u0430 \u0441\u0442\u043E\u0440\u043E\u043D\u0430", "\u043F\u0440\u0430\u0432\u0430 \u0441\u0442\u043E\u0440\u043E\u043D\u0430"],
             CMF_BORDER_COLOUR: "\u041A\u043E\u043B\u0456\u0440 \u043A\u043E\u0440\u0434\u043E\u043D\u0443",
             DLG_TIPS: "\u041F\u0440\u043E \u043F\u0440\u043E\u0454\u043A\u0442",
@@ -2675,17 +2675,17 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "M\xE0u n\u1EC1n",
             VERBOSITY_DEBUG: '\u0110\xE1nh d\u1EA5u c\xE1c b\xE0i \u0111\u0103ng "\u1EA9n"',
             CMF_CUSTOMISATIONS: "C\xE1c t\xF9y ch\u1EC9nh",
-            CMF_BTN_LOCATION: "V\u1ECB tr\xED c\u1EE7a n\xFAt L\xE0m s\u1EA1ch ngu\u1ED3n c\u1EA5p d\u1EEF li\u1EC7u c\u1EE7a t\xF4i",
+            CMF_BTN_LOCATION: "V\u1ECB tr\xED n\xFAt CMF:",
             CMF_BTN_OPTION: [
               "d\u01B0\u1EDBi c\xF9ng b\xEAn tr\xE1i",
               "tr\xEAn c\xF9ng b\xEAn ph\u1EA3i",
               'b\u1ECB v\xF4 hi\u1EC7u h\xF3a (s\u1EED d\u1EE5ng "C\xE0i \u0111\u1EB7t" trong menu L\u1EC7nh c\u1EE7a T\u1EADp l\u1EC7nh Ng\u01B0\u1EDDi d\xF9ng)'
             ],
-            CMF_DIALOG_LANGUAGE_LABEL: "L\xE0m s\u1EA1ch ng\xF4n ng\u1EEF c\u1EE7a h\u1ED9p tho\u1EA1i c\u1EE7a t\xF4i",
+            CMF_DIALOG_LANGUAGE_LABEL: "Ng\xF4n ng\u1EEF Clean My Feeds:",
             CMF_DIALOG_LANGUAGE: "Ti\u1EBFng Vi\u1EC7t",
             CMF_DIALOG_LANGUAGE_DEFAULT: "S\u1EED d\u1EE5ng ng\xF4n ng\u1EEF trang web",
             GM_MENU_SETTINGS: "C\xE0i \u0111\u1EB7t",
-            CMF_DIALOG_LOCATION: "V\u1ECB tr\xED c\u1EE7a h\u1ED9p tho\u1EA1i L\xE0m s\u1EA1ch ngu\u1ED3n c\u1EA5p d\u1EEF li\u1EC7u c\u1EE7a t\xF4i",
+            CMF_DIALOG_LOCATION: "V\u1ECB tr\xED menu n\xE0y:",
             CMF_DIALOG_OPTION: ["b\xEAn tr\xE1i", "b\xEAn ph\u1EA3i"],
             CMF_BORDER_COLOUR: "M\xE0u vi\u1EC1n",
             DLG_TIPS: "Gi\u1EDBi thi\u1EC7u",
@@ -2802,13 +2802,13 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "\u80CC\u666F\u989C\u8272",
             VERBOSITY_DEBUG: "\u7A81\u51FA\u663E\u793A\u201C\u9690\u85CF\u201D\u7684\u5E16\u5B50",
             CMF_CUSTOMISATIONS: "\u5B9A\u5236\u5316",
-            CMF_BTN_LOCATION: "\u201C\u6E05\u7406\u6211\u7684\u63D0\u8981\u201D\u6309\u94AE\u4F4D\u7F6E",
+            CMF_BTN_LOCATION: "CMF \u6309\u94AE\u4F4D\u7F6E\uFF1A",
             CMF_BTN_OPTION: ["\u5DE6\u4E0B\u65B9", "\u53F3\u4E0A", "\u7981\u7528\uFF08\u4F7F\u7528\u7528\u6237\u811A\u672C\u547D\u4EE4\u83DC\u5355\u4E2D\u7684\u201C\u8BBE\u7F6E\u201D\uFF09"],
-            CMF_DIALOG_LANGUAGE_LABEL: "\u6E05\u7406\u6211\u7684\u52A8\u6001\u6846\u8BED\u8A00",
+            CMF_DIALOG_LANGUAGE_LABEL: "Clean My Feeds \u8BED\u8A00\uFF1A",
             CMF_DIALOG_LANGUAGE: "\u4E2D\u6587\uFF08\u7B80\u4F53\uFF09",
             CMF_DIALOG_LANGUAGE_DEFAULT: "\u4F7F\u7528\u7F51\u7AD9\u8BED\u8A00",
             GM_MENU_SETTINGS: "\u8BBE\u7F6E",
-            CMF_DIALOG_LOCATION: "\u201C\u6E05\u7406\u6211\u7684\u63D0\u8981\u201D\u5BF9\u8BDD\u6846\u4F4D\u7F6E",
+            CMF_DIALOG_LOCATION: "\u6B64\u83DC\u5355\u7684\u4F4D\u7F6E\uFF1A",
             CMF_DIALOG_OPTION: ["\u5DE6\u8FB9", "\u53F3\u8FB9"],
             CMF_BORDER_COLOUR: "\u8FB9\u6846\u989C\u8272",
             DLG_TIPS: "\u5173\u4E8E",
@@ -2924,13 +2924,13 @@
             VERBOSITY_MESSAGE_BG_COLOUR: "\u80CC\u666F\u984F\u8272",
             VERBOSITY_DEBUG: "\u5F37\u8ABF\u986F\u793A\u300C\u96B1\u85CF\u300D\u7684\u8CBC\u6587",
             CMF_CUSTOMISATIONS: "\u5BA2\u88FD\u5316",
-            CMF_BTN_LOCATION: "\u300C\u6E05\u7406\u6211\u7684\u52D5\u614B\u6D88\u606F\u300D\u6309\u9215\u7684\u4F4D\u7F6E",
+            CMF_BTN_LOCATION: "CMF \u6309\u9215\u4F4D\u7F6E\uFF1A",
             CMF_BTN_OPTION: ["\u5DE6\u4E0B\u65B9", "\u53F3\u4E0A\u65B9", "\u7981\u7528\uFF08\u5728\u7528\u6237\u811A\u672C\u547D\u4EE4\u83DC\u5355\u4E2D\u4F7F\u7528\u201C\u8BBE\u7F6E\u201D\uFF09"],
-            CMF_DIALOG_LANGUAGE_LABEL: "\u6E05\u7406\u6211\u7684\u52D5\u614B\u6846\u8A9E\u8A00",
+            CMF_DIALOG_LANGUAGE_LABEL: "Clean My Feeds \u8A9E\u8A00\uFF1A",
             CMF_DIALOG_LANGUAGE: "\u4E2D\u6587\uFF08\u7E41\u9AD4\uFF09",
             CMF_DIALOG_LANGUAGE_DEFAULT: "\u4F7F\u7528\u7DB2\u7AD9\u8A9E\u8A00",
             GM_MENU_SETTINGS: "\u8A2D\u7F6E",
-            CMF_DIALOG_LOCATION: "\u300C\u6E05\u7406\u6211\u7684\u52D5\u614B\u6D88\u606F\u300D\u5C0D\u8A71\u6846\u7684\u4F4D\u7F6E",
+            CMF_DIALOG_LOCATION: "\u6B64\u9078\u55AE\u7684\u4F4D\u7F6E\uFF1A",
             CMF_DIALOG_OPTION: ["\u5DE6\u908A", "\u53F3\u908A"],
             CMF_BORDER_COLOUR: "\u908A\u6846\u984F\u8272",
             DLG_TIPS: "\u95DC\u65BC",
@@ -8315,6 +8315,20 @@
           iconFor("DLG_PREFERENCES")
         );
         fs.appendChild(l);
+        fs.appendChild(createSelectLanguage(state, keyWords, translations));
+        s = document.createElement("span");
+        s.appendChild(document.createTextNode(`${keyWords.CMF_BTN_LOCATION}:`));
+        fs.appendChild(s);
+        let len = keyWords.CMF_BTN_OPTION.length;
+        for (let i = 0; i < len; i += 1) {
+          fs.appendChild(createRB(options, "CMF_BTN_OPTION", i.toString(), keyWords.CMF_BTN_OPTION[i]));
+        }
+        s = document.createElement("span");
+        s.appendChild(document.createTextNode(`${keyWords.CMF_DIALOG_LOCATION}:`));
+        fs.appendChild(s);
+        fs.appendChild(createRB(options, "CMF_DIALOG_OPTION", "0", keyWords.CMF_DIALOG_OPTION[0]));
+        fs.appendChild(createRB(options, "CMF_DIALOG_OPTION", "1", keyWords.CMF_DIALOG_OPTION[1]));
+        fs.appendChild(createInput(options, "CMF_BORDER_COLOUR", `${keyWords.CMF_BORDER_COLOUR}:`));
         s = document.createElement("span");
         s.className = "cmf-tips-content";
         s.appendChild(document.createTextNode(`${keyWords.DLG_VERBOSITY_CAPTION}:`));
@@ -8331,20 +8345,6 @@
           createInput(options, "VERBOSITY_MESSAGE_BG_COLOUR", `${keyWords.VERBOSITY_MESSAGE_BG_COLOUR}:`)
         );
         fs.appendChild(createSingleCB(keyWords, options, "VERBOSITY_DEBUG"));
-        s = document.createElement("span");
-        s.appendChild(document.createTextNode(`${keyWords.CMF_BTN_LOCATION}:`));
-        fs.appendChild(s);
-        let len = keyWords.CMF_BTN_OPTION.length;
-        for (let i = 0; i < len; i += 1) {
-          fs.appendChild(createRB(options, "CMF_BTN_OPTION", i.toString(), keyWords.CMF_BTN_OPTION[i]));
-        }
-        s = document.createElement("span");
-        s.appendChild(document.createTextNode(`${keyWords.CMF_DIALOG_LOCATION}:`));
-        fs.appendChild(s);
-        fs.appendChild(createRB(options, "CMF_DIALOG_OPTION", "0", keyWords.CMF_DIALOG_OPTION[0]));
-        fs.appendChild(createRB(options, "CMF_DIALOG_OPTION", "1", keyWords.CMF_DIALOG_OPTION[1]));
-        fs.appendChild(createInput(options, "CMF_BORDER_COLOUR", `${keyWords.CMF_BORDER_COLOUR}:`));
-        fs.appendChild(createSelectLanguage(state, keyWords, translations));
         wrapFieldsetBody(fs);
         sections.push(fs);
         fs = document.createElement("fieldset");

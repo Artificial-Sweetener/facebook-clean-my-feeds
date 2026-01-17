@@ -168,6 +168,11 @@ function addCSS(state, options, defaults) {
 
   addToSS(
     state,
+    ".fb-cmf .cmf-report-notice",
+    "white-space: pre-wrap; line-height: 1.4;"
+  );
+  addToSS(
+    state,
     ".fb-cmf header",
     "display:flex; align-items:flex-start; justify-content:space-between; direction:ltr; padding:0 1rem 0.5rem 0;"
   );

@@ -574,6 +574,7 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   );
   fs.appendChild(l);
   s = document.createElement("span");
+  s.className = "cmf-report-notice";
   s.appendChild(
     document.createTextNode(getKeyword(keyWords, translations, "DLG_REPORT_BUG_NOTICE"))
   );

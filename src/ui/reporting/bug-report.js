@@ -669,16 +669,61 @@ function buildHiddenCounts(state) {
 }
 
 function buildEnvironmentSnapshot() {
+  const gm = typeof globalThis !== "undefined" ? globalThis.GM : undefined;
   return {
     userAgent: navigator.userAgent,
     platform: navigator.platform,
     language: navigator.language,
     languages: navigator.languages,
+    hasGM: !!gm,
+    hasGMInfo: !!(gm && gm.info),
+    readyState: document.readyState,
     viewport: {
       width: window.innerWidth,
       height: window.innerHeight,
       devicePixelRatio: window.devicePixelRatio,
     },
+  };
+}
+
+function getScriptsSample(limit = 20) {
+  const scripts = Array.from(document.scripts || []);
+  const samples = [];
+  for (const script of scripts) {
+    if (samples.length >= limit) {
+      break;
+    }
+    if (script && script.src) {
+      try {
+        const url = new URL(script.src, window.location.href);
+        samples.push(`${url.origin}${url.pathname}`);
+      } catch (error) {
+        samples.push(script.src);
+      }
+      continue;
+    }
+    samples.push("inline-script");
+  }
+  return samples;
+}
+
+function buildFeedDomSnapshot() {
+  const feedNodes = Array.from(document.querySelectorAll('[role="feed"]'));
+  const pageletSample = Array.from(document.querySelectorAll('[role="feed"] [data-pagelet]'))
+    .slice(0, 5)
+    .map((el) => el.getAttribute("data-pagelet"));
+  const mainNode = document.querySelector('div[role="main"]');
+  const feedRoot = feedNodes[0] || null;
+  const feedRootParent = feedRoot && feedRoot.parentElement ? feedRoot.parentElement : null;
+  const mainRootParent = mainNode && mainNode.parentElement ? mainNode.parentElement : null;
+  return {
+    feedCount: feedNodes.length,
+    pageletSample,
+    mainCount: document.querySelectorAll('div[role="main"]').length,
+    feedRoot: buildDomSignature(feedRoot),
+    feedRootParent: buildDomSignature(feedRootParent),
+    mainRoot: buildDomSignature(mainNode),
+    mainRootParent: buildDomSignature(mainRootParent),
   };
 }
 
@@ -697,6 +742,15 @@ function buildFeedSnapshot(state) {
   };
 }
 
+function buildSafeLocation() {
+  const location = window.location || {};
+  const origin = location.origin || "";
+  const pathname = location.pathname || "";
+  const href = location.href || "";
+  const url = origin && pathname ? `${origin}${pathname}` : href;
+  return { url, pathname, search: "" };
+}
+
 function buildBugReport(context) {
   if (!context) {
     return { data: { error: "No context available." }, text: "" };
@@ -705,13 +759,16 @@ function buildBugReport(context) {
   const { state, options, filters, keyWords, pathInfo } = context;
   const now = new Date();
   const scriptInfo = getScriptInfo();
+  const safeLocation = buildSafeLocation();
   const data = {
     generatedAt: now.toISOString(),
     script: scriptInfo,
     page: {
-      url: window.location.href,
-      pathname: window.location.pathname,
-      search: window.location.search,
+      url: safeLocation.url,
+      pathname: safeLocation.pathname,
+      search: safeLocation.search,
+      scriptsSample: getScriptsSample(),
+      feedDom: buildFeedDomSnapshot(),
     },
     feed: buildFeedSnapshot(state),
     environment: buildEnvironmentSnapshot(),

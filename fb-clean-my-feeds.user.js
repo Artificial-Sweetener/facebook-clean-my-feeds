@@ -114,7 +114,7 @@
             DLG_PREFERENCES_DESC: "Labels, placement, colors, and language.",
             DLG_REPORT_BUG: "Report a Bug",
             DLG_REPORT_BUG_DESC: "Generate a diagnostic report for issues.",
-            DLG_REPORT_BUG_NOTICE: "Post text and names are redacted. Review before sharing.",
+            DLG_REPORT_BUG_NOTICE: "Help us fix it:\n1. Scroll so the problematic post is visible.\n2. Click 'Generate report' then 'Copy report'.\n3. Click 'Open issues' and paste the report into a new issue.\n4. Add a short description of the problem.\n(We redact names/text, but please review before sharing!)",
             DLG_REPORT_BUG_GENERATE: "Generate report",
             DLG_REPORT_BUG_COPY: "Copy report",
             DLG_REPORT_BUG_OPEN_ISSUES: "Open issues",
@@ -241,7 +241,7 @@
             DLG_PREFERENCES_DESC: "\u0627\u0644\u062A\u0633\u0645\u064A\u0627\u062A\u060C \u0627\u0644\u0645\u0648\u0636\u0639\u060C \u0627\u0644\u0623\u0644\u0648\u0627\u0646\u060C \u0648\u0627\u0644\u0644\u063A\u0629.",
             DLG_REPORT_BUG: "\u0627\u0644\u0625\u0628\u0644\u0627\u063A \u0639\u0646 \u062E\u0637\u0623",
             DLG_REPORT_BUG_DESC: "\u0623\u0646\u0634\u0626 \u062A\u0642\u0631\u064A\u0631\u064B\u0627 \u062A\u0634\u062E\u064A\u0635\u064A\u064B\u0627 \u0644\u0644\u0645\u0634\u0643\u0644\u0627\u062A.",
-            DLG_REPORT_BUG_NOTICE: "\u064A\u062A\u0645 \u0625\u062E\u0641\u0627\u0621 \u0646\u0635\u0648\u0635 \u0627\u0644\u0645\u0646\u0634\u0648\u0631\u0627\u062A \u0648\u0627\u0644\u0623\u0633\u0645\u0627\u0621. \u0631\u0627\u062C\u0639 \u0642\u0628\u0644 \u0627\u0644\u0645\u0634\u0627\u0631\u0643\u0629.",
+            DLG_REPORT_BUG_NOTICE: "\u0633\u0627\u0639\u062F\u0646\u0627 \u0641\u064A \u0627\u0644\u0625\u0635\u0644\u0627\u062D:\n1. \u0645\u0631\u0631 \u0627\u0644\u0634\u0627\u0634\u0629 \u062D\u062A\u0649 \u064A\u0638\u0647\u0631 \u0627\u0644\u0645\u0646\u0634\u0648\u0631 \u0627\u0644\u0630\u064A \u0628\u0647 \u0645\u0634\u0643\u0644\u0629.\n2. \u0627\u0646\u0642\u0631 \u0639\u0644\u0649 '\u0625\u0646\u0634\u0627\u0621 \u0627\u0644\u062A\u0642\u0631\u064A\u0631' \u062B\u0645 '\u0646\u0633\u062E \u0627\u0644\u062A\u0642\u0631\u064A\u0631'.\n3. \u0627\u0646\u0642\u0631 \u0639\u0644\u0649 '\u0641\u062A\u062D \u0627\u0644\u0628\u0644\u0627\u063A\u0627\u062A' \u0648\u0627\u0644\u0635\u0642 \u0627\u0644\u062A\u0642\u0631\u064A\u0631 \u0641\u064A \u0645\u0634\u0643\u0644\u0629 \u062C\u062F\u064A\u062F\u0629.\n4. \u0623\u0636\u0641 \u0648\u0635\u0641\u064B\u0627 \u0645\u0648\u062C\u0632\u064B\u0627 \u0644\u0644\u0645\u0634\u0643\u0644\u0629.\n(\u0646\u0642\u0648\u0645 \u0628\u062D\u062C\u0628 \u0627\u0644\u0623\u0633\u0645\u0627\u0621/\u0627\u0644\u0646\u0635\u0648\u0635\u060C \u0644\u0643\u0646 \u064A\u0631\u062C\u0649 \u0627\u0644\u0645\u0631\u0627\u062C\u0639\u0629 \u0642\u0628\u0644 \u0627\u0644\u0645\u0634\u0627\u0631\u0643\u0629!)",
             DLG_REPORT_BUG_GENERATE: "\u0625\u0646\u0634\u0627\u0621 \u0627\u0644\u062A\u0642\u0631\u064A\u0631",
             DLG_REPORT_BUG_COPY: "\u0646\u0633\u062E \u0627\u0644\u062A\u0642\u0631\u064A\u0631",
             DLG_REPORT_BUG_OPEN_ISSUES: "\u0641\u062A\u062D \u0627\u0644\u0628\u0644\u0627\u063A\u0627\u062A",
@@ -369,7 +369,7 @@
             DLG_PREFERENCES_DESC: "\u0415\u0442\u0438\u043A\u0435\u0442\u0438, \u043F\u043E\u0437\u0438\u0446\u0438\u044F, \u0446\u0432\u0435\u0442\u043E\u0432\u0435 \u0438 \u0435\u0437\u0438\u043A.",
             DLG_REPORT_BUG: "\u0421\u044A\u043E\u0431\u0449\u0438 \u0437\u0430 \u0431\u044A\u0433",
             DLG_REPORT_BUG_DESC: "\u0421\u044A\u0437\u0434\u0430\u0439 \u0434\u0438\u0430\u0433\u043D\u043E\u0441\u0442\u0438\u0447\u0435\u043D \u043E\u0442\u0447\u0435\u0442 \u0437\u0430 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u0438.",
-            DLG_REPORT_BUG_NOTICE: "\u0422\u0435\u043A\u0441\u0442\u043E\u0432\u0435\u0442\u0435 \u0438 \u0438\u043C\u0435\u043D\u0430\u0442\u0430 \u0441\u0430 \u0441\u043A\u0440\u0438\u0442\u0438. \u041F\u0440\u043E\u0432\u0435\u0440\u0438 \u043F\u0440\u0435\u0434\u0438 \u0441\u043F\u043E\u0434\u0435\u043B\u044F\u043D\u0435.",
+            DLG_REPORT_BUG_NOTICE: "\u041F\u043E\u043C\u043E\u0433\u043D\u0435\u0442\u0435 \u043D\u0438 \u0434\u0430 \u0433\u043E \u043F\u043E\u043F\u0440\u0430\u0432\u0438\u043C:\n1. \u041F\u0440\u0435\u0432\u044A\u0440\u0442\u0435\u0442\u0435, \u0442\u0430\u043A\u0430 \u0447\u0435 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u043D\u0438\u044F\u0442 \u043F\u043E\u0441\u0442 \u0434\u0430 \u0435 \u0432\u0438\u0434\u0438\u043C.\n2. \u041A\u043B\u0438\u043A\u043D\u0435\u0442\u0435 '\u0421\u044A\u0437\u0434\u0430\u0439 \u043E\u0442\u0447\u0435\u0442', \u0441\u043B\u0435\u0434 \u0442\u043E\u0432\u0430 '\u041A\u043E\u043F\u0438\u0440\u0430\u0439 \u043E\u0442\u0447\u0435\u0442\u0430'.\n3. \u041A\u043B\u0438\u043A\u043D\u0435\u0442\u0435 '\u041E\u0442\u0432\u043E\u0440\u0438 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u0438\u0442\u0435' \u0438 \u043F\u043E\u0441\u0442\u0430\u0432\u0435\u0442\u0435 \u043E\u0442\u0447\u0435\u0442\u0430 \u0432 \u043D\u043E\u0432 \u043F\u0440\u043E\u0431\u043B\u0435\u043C.\n4. \u0414\u043E\u0431\u0430\u0432\u0435\u0442\u0435 \u043A\u0440\u0430\u0442\u043A\u043E \u043E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u043D\u0430 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u0430.\n(\u041D\u0438\u0435 \u0441\u043A\u0440\u0438\u0432\u0430\u043C\u0435 \u0438\u043C\u0435\u043D\u0430\u0442\u0430/\u0442\u0435\u043A\u0441\u0442\u0430, \u043D\u043E \u043C\u043E\u043B\u044F \u043F\u0440\u0435\u0433\u043B\u0435\u0434\u0430\u0439\u0442\u0435 \u043F\u0440\u0435\u0434\u0438 \u0441\u043F\u043E\u0434\u0435\u043B\u044F\u043D\u0435!)",
             DLG_REPORT_BUG_GENERATE: "\u0421\u044A\u0437\u0434\u0430\u0439 \u043E\u0442\u0447\u0435\u0442",
             DLG_REPORT_BUG_COPY: "\u041A\u043E\u043F\u0438\u0440\u0430\u0439 \u043E\u0442\u0447\u0435\u0442\u0430",
             DLG_REPORT_BUG_OPEN_ISSUES: "\u041E\u0442\u0432\u043E\u0440\u0438 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u0438\u0442\u0435",
@@ -496,7 +496,7 @@
             DLG_PREFERENCES_DESC: "\u0160t\xEDtky, um\xEDst\u011Bn\xED, barvy a jazyk.",
             DLG_REPORT_BUG: "Nahl\xE1sit chybu",
             DLG_REPORT_BUG_DESC: "Vytvo\u0159 diagnostickou zpr\xE1vu k probl\xE9mu.",
-            DLG_REPORT_BUG_NOTICE: "Texty p\u0159\xEDsp\u011Bvk\u016F a jm\xE9na jsou skryt\xE9. P\u0159ed sd\xEDlen\xEDm zkontroluj.",
+            DLG_REPORT_BUG_NOTICE: "Pomozte n\xE1m to opravit:\n1. Posu\u0148te zobrazen\xED tak, aby byl probl\xE9mov\xFD p\u0159\xEDsp\u011Bvek viditeln\xFD.\n2. Klikn\u011Bte na 'Vytvo\u0159it zpr\xE1vu' a pot\xE9 na 'Kop\xEDrovat zpr\xE1vu'.\n3. Klikn\u011Bte na 'Otev\u0159\xEDt hl\xE1\u0161en\xED' a vlo\u017Ete zpr\xE1vu do nov\xE9ho hl\xE1\u0161en\xED.\n4. P\u0159idejte stru\u010Dn\xFD popis probl\xE9mu.\n(Jm\xE9na/text redigujeme, ale p\u0159ed sd\xEDlen\xEDm zkontrolujte!)",
             DLG_REPORT_BUG_GENERATE: "Vytvo\u0159it zpr\xE1vu",
             DLG_REPORT_BUG_COPY: "Kop\xEDrovat zpr\xE1vu",
             DLG_REPORT_BUG_OPEN_ISSUES: "Otev\u0159\xEDt hl\xE1\u0161en\xED",
@@ -624,7 +624,7 @@
             DLG_PREFERENCES_DESC: "Labels, Position, Farben und Sprache.",
             DLG_REPORT_BUG: "Fehler melden",
             DLG_REPORT_BUG_DESC: "Erstelle einen Diagnosebericht f\xFCr Probleme.",
-            DLG_REPORT_BUG_NOTICE: "Beitragstexte und Namen werden ausgeblendet. Bitte vor dem Teilen pr\xFCfen.",
+            DLG_REPORT_BUG_NOTICE: "Hilf uns, es zu beheben:\n1. Scrolle so, dass der problematische Beitrag sichtbar ist.\n2. Klicke auf 'Bericht erstellen' und dann auf 'Bericht kopieren'.\n3. Klicke auf 'Issues \xF6ffnen' und f\xFCge den Bericht in ein neues Issue ein.\n4. F\xFCge eine kurze Beschreibung des Problems hinzu.\n(Wir schw\xE4rzen Namen/Texte, aber bitte vor dem Teilen \xFCberpr\xFCfen!)",
             DLG_REPORT_BUG_GENERATE: "Bericht erstellen",
             DLG_REPORT_BUG_COPY: "Bericht kopieren",
             DLG_REPORT_BUG_OPEN_ISSUES: "Issues \xF6ffnen",
@@ -751,7 +751,7 @@
             DLG_PREFERENCES_DESC: "\u0395\u03C4\u03B9\u03BA\u03AD\u03C4\u03B5\u03C2, \u03B8\u03AD\u03C3\u03B7, \u03C7\u03C1\u03CE\u03BC\u03B1\u03C4\u03B1 \u03BA\u03B1\u03B9 \u03B3\u03BB\u03CE\u03C3\u03C3\u03B1.",
             DLG_REPORT_BUG: "\u0391\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC \u03C3\u03C6\u03AC\u03BB\u03BC\u03B1\u03C4\u03BF\u03C2",
             DLG_REPORT_BUG_DESC: "\u0394\u03B7\u03BC\u03B9\u03BF\u03CD\u03C1\u03B3\u03B7\u03C3\u03B5 \u03B4\u03B9\u03B1\u03B3\u03BD\u03C9\u03C3\u03C4\u03B9\u03BA\u03AE \u03B1\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC \u03B3\u03B9\u03B1 \u03C0\u03C1\u03BF\u03B2\u03BB\u03AE\u03BC\u03B1\u03C4\u03B1.",
-            DLG_REPORT_BUG_NOTICE: "\u03A4\u03B1 \u03BA\u03B5\u03AF\u03BC\u03B5\u03BD\u03B1 \u03BA\u03B1\u03B9 \u03C4\u03B1 \u03BF\u03BD\u03CC\u03BC\u03B1\u03C4\u03B1 \u03B1\u03C0\u03BF\u03BA\u03C1\u03CD\u03C0\u03C4\u03BF\u03BD\u03C4\u03B1\u03B9. \u0388\u03BB\u03B5\u03B3\u03BE\u03B5 \u03C0\u03C1\u03B9\u03BD \u03C4\u03BF \u03BC\u03BF\u03B9\u03C1\u03B1\u03C3\u03C4\u03B5\u03AF\u03C2.",
+            DLG_REPORT_BUG_NOTICE: "\u0392\u03BF\u03B7\u03B8\u03AE\u03C3\u03C4\u03B5 \u03BC\u03B1\u03C2 \u03BD\u03B1 \u03C4\u03BF \u03B4\u03B9\u03BF\u03C1\u03B8\u03CE\u03C3\u03BF\u03C5\u03BC\u03B5:\n1. \u039A\u03AC\u03BD\u03C4\u03B5 \u03BA\u03CD\u03BB\u03B9\u03C3\u03B7 \u03CE\u03C3\u03C4\u03B5 \u03BD\u03B1 \u03B5\u03AF\u03BD\u03B1\u03B9 \u03BF\u03C1\u03B1\u03C4\u03AE \u03B7 \u03C0\u03C1\u03BF\u03B2\u03BB\u03B7\u03BC\u03B1\u03C4\u03B9\u03BA\u03AE \u03B4\u03B7\u03BC\u03BF\u03C3\u03AF\u03B5\u03C5\u03C3\u03B7.\n2. \u039A\u03AC\u03BD\u03C4\u03B5 \u03BA\u03BB\u03B9\u03BA \u03C3\u03C4\u03BF '\u0394\u03B7\u03BC\u03B9\u03BF\u03C5\u03C1\u03B3\u03AF\u03B1 \u03B1\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC\u03C2' \u03BA\u03B1\u03B9 \u03BC\u03B5\u03C4\u03AC \u03C3\u03C4\u03BF '\u0391\u03BD\u03C4\u03B9\u03B3\u03C1\u03B1\u03C6\u03AE \u03B1\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC\u03C2'.\n3. \u039A\u03AC\u03BD\u03C4\u03B5 \u03BA\u03BB\u03B9\u03BA \u03C3\u03C4\u03BF '\u0386\u03BD\u03BF\u03B9\u03B3\u03BC\u03B1 \u03B8\u03B5\u03BC\u03AC\u03C4\u03C9\u03BD' \u03BA\u03B1\u03B9 \u03B5\u03C0\u03B9\u03BA\u03BF\u03BB\u03BB\u03AE\u03C3\u03C4\u03B5 \u03C4\u03B7\u03BD \u03B1\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC \u03C3\u03B5 \u03AD\u03BD\u03B1 \u03BD\u03AD\u03BF \u03B8\u03AD\u03BC\u03B1.\n4. \u03A0\u03C1\u03BF\u03C3\u03B8\u03AD\u03C3\u03C4\u03B5 \u03BC\u03B9\u03B1 \u03C3\u03CD\u03BD\u03C4\u03BF\u03BC\u03B7 \u03C0\u03B5\u03C1\u03B9\u03B3\u03C1\u03B1\u03C6\u03AE \u03C4\u03BF\u03C5 \u03C0\u03C1\u03BF\u03B2\u03BB\u03AE\u03BC\u03B1\u03C4\u03BF\u03C2.\n(\u0391\u03C0\u03BF\u03BA\u03C1\u03CD\u03C0\u03C4\u03BF\u03C5\u03BC\u03B5 \u03BF\u03BD\u03CC\u03BC\u03B1\u03C4\u03B1/\u03BA\u03B5\u03AF\u03BC\u03B5\u03BD\u03BF, \u03B1\u03BB\u03BB\u03AC \u03C0\u03B1\u03C1\u03B1\u03BA\u03B1\u03BB\u03BF\u03CD\u03BC\u03B5 \u03B5\u03BB\u03AD\u03B3\u03BE\u03C4\u03B5 \u03C0\u03C1\u03B9\u03BD \u03C4\u03B7\u03BD \u03BA\u03BF\u03B9\u03BD\u03BF\u03C0\u03BF\u03AF\u03B7\u03C3\u03B7!)",
             DLG_REPORT_BUG_GENERATE: "\u0394\u03B7\u03BC\u03B9\u03BF\u03C5\u03C1\u03B3\u03AF\u03B1 \u03B1\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC\u03C2",
             DLG_REPORT_BUG_COPY: "\u0391\u03BD\u03C4\u03B9\u03B3\u03C1\u03B1\u03C6\u03AE \u03B1\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC\u03C2",
             DLG_REPORT_BUG_OPEN_ISSUES: "\u0386\u03BD\u03BF\u03B9\u03B3\u03BC\u03B1 \u03B8\u03B5\u03BC\u03AC\u03C4\u03C9\u03BD",
@@ -878,7 +878,7 @@
             DLG_PREFERENCES_DESC: "Etiquetas, ubicaci\xF3n, colores e idioma.",
             DLG_REPORT_BUG: "Reportar un error",
             DLG_REPORT_BUG_DESC: "Genera un informe de diagn\xF3stico para problemas.",
-            DLG_REPORT_BUG_NOTICE: "Los textos y nombres se ocultan. Revisa antes de compartir.",
+            DLG_REPORT_BUG_NOTICE: "Ay\xFAdanos a arreglarlo:\n1. Despl\xE1zate para que la publicaci\xF3n problem\xE1tica sea visible.\n2. Haz clic en 'Generar informe' y luego en 'Copiar informe'.\n3. Haz clic en 'Abrir incidencias' y pega el informe en una nueva incidencia.\n4. A\xF1ade una breve descripci\xF3n del problema.\n(Ocultamos nombres/texto, \xA1pero por favor revisa antes de compartir!)",
             DLG_REPORT_BUG_GENERATE: "Generar informe",
             DLG_REPORT_BUG_COPY: "Copiar informe",
             DLG_REPORT_BUG_OPEN_ISSUES: "Abrir incidencias",
@@ -1005,7 +1005,7 @@
             DLG_PREFERENCES_DESC: "Tunnisteet, sijainti, v\xE4rit ja kieli.",
             DLG_REPORT_BUG: "Ilmoita virhe",
             DLG_REPORT_BUG_DESC: "Luo diagnoosiraportti ongelmista.",
-            DLG_REPORT_BUG_NOTICE: "Julkaisujen teksti ja nimet peitet\xE4\xE4n. Tarkista ennen jakamista.",
+            DLG_REPORT_BUG_NOTICE: "Auta meit\xE4 korjaamaan se:\n1. Vierit\xE4 niin, ett\xE4 ongelmallinen julkaisu on n\xE4kyviss\xE4.\n2. Napsauta 'Luo raportti' ja sitten 'Kopioi raportti'.\n3. Napsauta 'Avaa tiketit' ja liit\xE4 raportti uuteen tikettiin.\n4. Lis\xE4\xE4 lyhyt kuvaus ongelmasta.\n(Muokkaamme nimet/tekstin pois, mutta tarkista ennen jakamista!)",
             DLG_REPORT_BUG_GENERATE: "Luo raportti",
             DLG_REPORT_BUG_COPY: "Kopioi raportti",
             DLG_REPORT_BUG_OPEN_ISSUES: "Avaa tiketit",
@@ -1132,7 +1132,7 @@
             DLG_PREFERENCES_DESC: "Libell\xE9s, emplacement, couleurs et langue.",
             DLG_REPORT_BUG: "Signaler un bug",
             DLG_REPORT_BUG_DESC: "G\xE9n\xE9rer un rapport de diagnostic.",
-            DLG_REPORT_BUG_NOTICE: "Les textes et noms sont masqu\xE9s. V\xE9rifiez avant de partager.",
+            DLG_REPORT_BUG_NOTICE: "Aidez-nous \xE0 corriger le probl\xE8me :\n1. Faites d\xE9filer pour que la publication probl\xE9matique soit visible.\n2. Cliquez sur 'G\xE9n\xE9rer le rapport' puis sur 'Copier le rapport'.\n3. Cliquez sur 'Ouvrir les issues' et collez le rapport dans une nouvelle issue.\n4. Ajoutez une br\xE8ve description du probl\xE8me.\n(Nous masquons les noms/textes, mais veuillez v\xE9rifier avant de partager !)",
             DLG_REPORT_BUG_GENERATE: "G\xE9n\xE9rer le rapport",
             DLG_REPORT_BUG_COPY: "Copier le rapport",
             DLG_REPORT_BUG_OPEN_ISSUES: "Ouvrir les issues",
@@ -1260,7 +1260,7 @@
             DLG_PREFERENCES_DESC: "\u05EA\u05D5\u05D5\u05D9\u05D5\u05EA, \u05DE\u05D9\u05E7\u05D5\u05DD, \u05E6\u05D1\u05E2\u05D9\u05DD \u05D5\u05E9\u05E4\u05D4.",
             DLG_REPORT_BUG: "\u05D3\u05D5\u05D5\u05D7 \u05E2\u05DC \u05D1\u05D0\u05D2",
             DLG_REPORT_BUG_DESC: "\u05E6\u05D5\u05E8 \u05D3\u05D5\u05D7 \u05D0\u05D1\u05D7\u05D5\u05DF \u05DC\u05D1\u05E2\u05D9\u05D5\u05EA.",
-            DLG_REPORT_BUG_NOTICE: "\u05D8\u05E7\u05E1\u05D8\u05D9\u05DD \u05D5\u05E9\u05DE\u05D5\u05EA \u05DE\u05D5\u05E1\u05EA\u05E8\u05D9\u05DD. \u05D1\u05D3\u05D5\u05E7 \u05DC\u05E4\u05E0\u05D9 \u05E9\u05D9\u05EA\u05D5\u05E3.",
+            DLG_REPORT_BUG_NOTICE: "\u05E2\u05D6\u05E8\u05D5 \u05DC\u05E0\u05D5 \u05DC\u05EA\u05E7\u05DF \u05D0\u05EA \u05D6\u05D4:\n1. \u05D2\u05DC\u05D5\u05DC \u05DB\u05DA \u05E9\u05D4\u05E4\u05D5\u05E1\u05D8 \u05D4\u05D1\u05E2\u05D9\u05D9\u05EA\u05D9 \u05D9\u05D4\u05D9\u05D4 \u05D2\u05DC\u05D5\u05D9.\n2. \u05DC\u05D7\u05E5 \u05E2\u05DC '\u05E6\u05D5\u05E8 \u05D3\u05D5\u05D7' \u05D5\u05D0\u05D6 '\u05D4\u05E2\u05EA\u05E7 \u05D3\u05D5\u05D7'.\n3. \u05DC\u05D7\u05E5 \u05E2\u05DC '\u05E4\u05EA\u05D7 \u05EA\u05E7\u05DC\u05D5\u05EA' \u05D5\u05D4\u05D3\u05D1\u05E7 \u05D0\u05EA \u05D4\u05D3\u05D5\u05D7 \u05DC\u05EA\u05E7\u05DC\u05D4 \u05D7\u05D3\u05E9\u05D4.\n4. \u05D4\u05D5\u05E1\u05E3 \u05EA\u05D9\u05D0\u05D5\u05E8 \u05E7\u05E6\u05E8 \u05E9\u05DC \u05D4\u05D1\u05E2\u05D9\u05D4.\n(\u05D0\u05E0\u05D5 \u05DE\u05E1\u05EA\u05D9\u05E8\u05D9\u05DD \u05E9\u05DE\u05D5\u05EA/\u05D8\u05E7\u05E1\u05D8, \u05D0\u05DA \u05D0\u05E0\u05D0 \u05D1\u05D3\u05D5\u05E7 \u05DC\u05E4\u05E0\u05D9 \u05D4\u05E9\u05D9\u05EA\u05D5\u05E3!)",
             DLG_REPORT_BUG_GENERATE: "\u05E6\u05D5\u05E8 \u05D3\u05D5\u05D7",
             DLG_REPORT_BUG_COPY: "\u05D4\u05E2\u05EA\u05E7 \u05D3\u05D5\u05D7",
             DLG_REPORT_BUG_OPEN_ISSUES: "\u05E4\u05EA\u05D7 \u05EA\u05E7\u05DC\u05D5\u05EA",
@@ -1387,7 +1387,7 @@
             DLG_PREFERENCES_DESC: "Label, penempatan, warna, dan bahasa.",
             DLG_REPORT_BUG: "Laporkan bug",
             DLG_REPORT_BUG_DESC: "Buat laporan diagnostik untuk masalah.",
-            DLG_REPORT_BUG_NOTICE: "Teks dan nama disamarkan. Tinjau sebelum membagikan.",
+            DLG_REPORT_BUG_NOTICE: "Bantu kami memperbaikinya:\n1. Gulir agar postingan yang bermasalah terlihat.\n2. Klik 'Buat laporan' lalu 'Salin laporan'.\n3. Klik 'Buka isu' dan tempel laporan ke dalam isu baru.\n4. Tambahkan deskripsi singkat tentang masalahnya.\n(Kami menyamarkan nama/teks, tetapi harap tinjau sebelum membagikan!)",
             DLG_REPORT_BUG_GENERATE: "Buat laporan",
             DLG_REPORT_BUG_COPY: "Salin laporan",
             DLG_REPORT_BUG_OPEN_ISSUES: "Buka isu",
@@ -1514,7 +1514,7 @@
             DLG_PREFERENCES_DESC: "Etichette, posizione, colori e lingua.",
             DLG_REPORT_BUG: "Segnala un bug",
             DLG_REPORT_BUG_DESC: "Genera un report diagnostico.",
-            DLG_REPORT_BUG_NOTICE: "Testi e nomi sono oscurati. Controlla prima di condividere.",
+            DLG_REPORT_BUG_NOTICE: "Aiutaci a risolvere il problema:\n1. Scorri in modo che il post problematico sia visibile.\n2. Clicca su 'Genera report' poi su 'Copia report'.\n3. Clicca su 'Apri segnalazioni' e incolla il report in una nuova segnalazione.\n4. Aggiungi una breve descrizione del problema.\n(Oscuriamo nomi/testo, ma controlla prima di condividere!)",
             DLG_REPORT_BUG_GENERATE: "Genera report",
             DLG_REPORT_BUG_COPY: "Copia report",
             DLG_REPORT_BUG_OPEN_ISSUES: "Apri segnalazioni",
@@ -1641,7 +1641,7 @@
             DLG_PREFERENCES_DESC: "\u30E9\u30D9\u30EB\u3001\u914D\u7F6E\u3001\u8272\u3001\u8A00\u8A9E\u3002",
             DLG_REPORT_BUG: "\u30D0\u30B0\u3092\u5831\u544A",
             DLG_REPORT_BUG_DESC: "\u554F\u984C\u306E\u8A3A\u65AD\u30EC\u30DD\u30FC\u30C8\u3092\u4F5C\u6210\u3057\u307E\u3059\u3002",
-            DLG_REPORT_BUG_NOTICE: "\u6295\u7A3F\u306E\u672C\u6587\u3068\u540D\u524D\u306F\u4F0F\u305B\u307E\u3059\u3002\u5171\u6709\u524D\u306B\u78BA\u8A8D\u3057\u3066\u304F\u3060\u3055\u3044\u3002",
+            DLG_REPORT_BUG_NOTICE: "\u4FEE\u6B63\u306B\u3054\u5354\u529B\u304F\u3060\u3055\u3044\uFF1A\n1. \u554F\u984C\u306E\u3042\u308B\u6295\u7A3F\u304C\u8868\u793A\u3055\u308C\u308B\u3088\u3046\u306B\u30B9\u30AF\u30ED\u30FC\u30EB\u3057\u307E\u3059\u3002\n2. '\u30EC\u30DD\u30FC\u30C8\u4F5C\u6210'\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3001\u6B21\u306B'\u30EC\u30DD\u30FC\u30C8\u3092\u30B3\u30D4\u30FC'\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u307E\u3059\u3002\n3. 'Issue \u3092\u958B\u304F'\u3092\u30AF\u30EA\u30C3\u30AF\u3057\u3001\u65B0\u3057\u3044Issue\u306B\u30EC\u30DD\u30FC\u30C8\u3092\u8CBC\u308A\u4ED8\u3051\u307E\u3059\u3002\n4. \u554F\u984C\u306E\u77ED\u3044\u8AAC\u660E\u3092\u8FFD\u52A0\u3057\u3066\u304F\u3060\u3055\u3044\u3002\n(\u540D\u524D\u3084\u30C6\u30AD\u30B9\u30C8\u306F\u4F0F\u305B\u5B57\u306B\u3057\u307E\u3059\u304C\u3001\u5171\u6709\u524D\u306B\u78BA\u8A8D\u3057\u3066\u304F\u3060\u3055\u3044\uFF01)",
             DLG_REPORT_BUG_GENERATE: "\u30EC\u30DD\u30FC\u30C8\u4F5C\u6210",
             DLG_REPORT_BUG_COPY: "\u30EC\u30DD\u30FC\u30C8\u3092\u30B3\u30D4\u30FC",
             DLG_REPORT_BUG_OPEN_ISSUES: "Issue \u3092\u958B\u304F",
@@ -1768,7 +1768,7 @@
             DLG_PREFERENCES_DESC: "Eti\u0137etes, novietojums, kr\u0101sas un valoda.",
             DLG_REPORT_BUG: "Zi\u0146ot par k\u013C\u016Bdu",
             DLG_REPORT_BUG_DESC: "Izveido diagnostikas atskaiti probl\u0113m\u0101m.",
-            DLG_REPORT_BUG_NOTICE: "Zi\u0146u teksti un v\u0101rdi tiek pasl\u0113pti. P\u0101rbaudi pirms kop\u012Bgo\u0161anas.",
+            DLG_REPORT_BUG_NOTICE: "Pal\u012Bdzi mums to salabot:\n1. Ritiniet, lai problem\u0101tiskais ieraksts b\u016Btu redzams.\n2. Noklik\u0161\u0137iniet uz 'Izveidot atskaiti', tad 'Kop\u0113t atskaiti'.\n3. Noklik\u0161\u0137iniet uz 'Atv\u0113rt pieteikumus' un iel\u012Bm\u0113jiet atskaiti jaun\u0101 pieteikum\u0101.\n4. Pievienojiet \u012Bsu probl\u0113mas aprakstu.\n(M\u0113s redi\u0123\u0113jam v\u0101rdus/tekstu, bet l\u016Bdzu p\u0101rskatiet pirms kop\u012Bgo\u0161anas!)",
             DLG_REPORT_BUG_GENERATE: "Izveidot atskaiti",
             DLG_REPORT_BUG_COPY: "Kop\u0113t atskaiti",
             DLG_REPORT_BUG_OPEN_ISSUES: "Atv\u0113rt pieteikumus",
@@ -1895,7 +1895,7 @@
             DLG_PREFERENCES_DESC: "Labels, plaatsing, kleuren en taal.",
             DLG_REPORT_BUG: "Bug melden",
             DLG_REPORT_BUG_DESC: "Maak een diagnostisch rapport voor problemen.",
-            DLG_REPORT_BUG_NOTICE: "Berichttekst en namen zijn verborgen. Controleer voor delen.",
+            DLG_REPORT_BUG_NOTICE: "Help ons het te repareren:\n1. Scroll zodat het problematische bericht zichtbaar is.\n2. Klik op 'Rapport maken' en vervolgens op 'Rapport kopi\xEBren'.\n3. Klik op 'Issues openen' en plak het rapport in een nieuwe issue.\n4. Voeg een korte beschrijving van het probleem toe.\n(We redigeren namen/tekst, maar controleer dit voordat je het deelt!)",
             DLG_REPORT_BUG_GENERATE: "Rapport maken",
             DLG_REPORT_BUG_COPY: "Rapport kopi\xEBren",
             DLG_REPORT_BUG_OPEN_ISSUES: "Issues openen",
@@ -2022,7 +2022,7 @@
             DLG_PREFERENCES_DESC: "Etykiety, po\u0142o\u017Cenie, kolory i j\u0119zyk.",
             DLG_REPORT_BUG: "Zg\u0142o\u015B b\u0142\u0105d",
             DLG_REPORT_BUG_DESC: "Utw\xF3rz raport diagnostyczny.",
-            DLG_REPORT_BUG_NOTICE: "Teksty i nazwy s\u0105 ukryte. Sprawd\u017A przed udost\u0119pnieniem.",
+            DLG_REPORT_BUG_NOTICE: "Pom\xF3\u017C nam to naprawi\u0107:\n1. Przewi\u0144, aby dany post by\u0142 widoczny.\n2. Kliknij \u201EGeneruj raport\u201D, a nast\u0119pnie \u201EKopiuj raport\u201D.\n3. Kliknij \u201EOtw\xF3rz zg\u0142oszenia\u201D i wklej raport do nowego zg\u0142oszenia.\n4. Dodaj kr\xF3tki opis problemu.\n(Ukrywamy nazwiska/tekst, ale sprawd\u017A przed udost\u0119pnieniem!)",
             DLG_REPORT_BUG_GENERATE: "Utw\xF3rz raport",
             DLG_REPORT_BUG_COPY: "Kopiuj raport",
             DLG_REPORT_BUG_OPEN_ISSUES: "Otw\xF3rz zg\u0142oszenia",
@@ -2149,7 +2149,7 @@
             DLG_PREFERENCES_DESC: "R\xF3tulos, posi\xE7\xE3o, cores e idioma.",
             DLG_REPORT_BUG: "Reportar bug",
             DLG_REPORT_BUG_DESC: "Gere um relat\xF3rio de diagn\xF3stico.",
-            DLG_REPORT_BUG_NOTICE: "Textos e nomes s\xE3o ocultados. Revise antes de compartilhar.",
+            DLG_REPORT_BUG_NOTICE: "Ajude-nos a corrigir:\n1. Role para que a postagem problem\xE1tica fique vis\xEDvel.\n2. Clique em 'Gerar relat\xF3rio' e depois em 'Copiar relat\xF3rio'.\n3. Clique em 'Abrir issues' e cole o relat\xF3rio em uma nova issue.\n4. Adicione uma breve descri\xE7\xE3o do problema.\n(Ocultamos nomes/texto, mas revise antes de compartilhar!)",
             DLG_REPORT_BUG_GENERATE: "Gerar relat\xF3rio",
             DLG_REPORT_BUG_COPY: "Copiar relat\xF3rio",
             DLG_REPORT_BUG_OPEN_ISSUES: "Abrir issues",
@@ -2276,7 +2276,7 @@
             DLG_PREFERENCES_DESC: "\u041C\u0435\u0442\u043A\u0438, \u0440\u0430\u0441\u043F\u043E\u043B\u043E\u0436\u0435\u043D\u0438\u0435, \u0446\u0432\u0435\u0442\u0430 \u0438 \u044F\u0437\u044B\u043A.",
             DLG_REPORT_BUG: "\u0421\u043E\u043E\u0431\u0449\u0438\u0442\u044C \u043E\u0431 \u043E\u0448\u0438\u0431\u043A\u0435",
             DLG_REPORT_BUG_DESC: "\u0421\u043E\u0437\u0434\u0430\u0439\u0442\u0435 \u0434\u0438\u0430\u0433\u043D\u043E\u0441\u0442\u0438\u0447\u0435\u0441\u043A\u0438\u0439 \u043E\u0442\u0447\u0451\u0442.",
-            DLG_REPORT_BUG_NOTICE: "\u0422\u0435\u043A\u0441\u0442\u044B \u0438 \u0438\u043C\u0435\u043D\u0430 \u0441\u043A\u0440\u044B\u0442\u044B. \u041F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435 \u043F\u0435\u0440\u0435\u0434 \u043E\u0442\u043F\u0440\u0430\u0432\u043A\u043E\u0439.",
+            DLG_REPORT_BUG_NOTICE: "\u041F\u043E\u043C\u043E\u0433\u0438\u0442\u0435 \u043D\u0430\u043C \u0438\u0441\u043F\u0440\u0430\u0432\u0438\u0442\u044C \u044D\u0442\u043E:\n1. \u041F\u0440\u043E\u043A\u0440\u0443\u0442\u0438\u0442\u0435 \u0442\u0430\u043A, \u0447\u0442\u043E\u0431\u044B \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u043D\u044B\u0439 \u043F\u043E\u0441\u0442 \u0431\u044B\u043B \u0432\u0438\u0434\u0435\u043D.\n2. \u041D\u0430\u0436\u043C\u0438\u0442\u0435 \xAB\u0421\u043E\u0437\u0434\u0430\u0442\u044C \u043E\u0442\u0447\u0451\u0442\xBB, \u0437\u0430\u0442\u0435\u043C \xAB\u041A\u043E\u043F\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u043E\u0442\u0447\u0451\u0442\xBB.\n3. \u041D\u0430\u0436\u043C\u0438\u0442\u0435 \xAB\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u0437\u0430\u0434\u0430\u0447\u0438\xBB \u0438 \u0432\u0441\u0442\u0430\u0432\u044C\u0442\u0435 \u043E\u0442\u0447\u0451\u0442 \u0432 \u043D\u043E\u0432\u0443\u044E \u0437\u0430\u0434\u0430\u0447\u0443.\n4. \u0414\u043E\u0431\u0430\u0432\u044C\u0442\u0435 \u043A\u0440\u0430\u0442\u043A\u043E\u0435 \u043E\u043F\u0438\u0441\u0430\u043D\u0438\u0435 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u044B.\n(\u041C\u044B \u0441\u043A\u0440\u044B\u0432\u0430\u0435\u043C \u0438\u043C\u0435\u043D\u0430/\u0442\u0435\u043A\u0441\u0442, \u043D\u043E \u043F\u043E\u0436\u0430\u043B\u0443\u0439\u0441\u0442\u0430, \u043F\u0440\u043E\u0432\u0435\u0440\u044C\u0442\u0435 \u043F\u0435\u0440\u0435\u0434 \u043E\u0442\u043F\u0440\u0430\u0432\u043A\u043E\u0439!)",
             DLG_REPORT_BUG_GENERATE: "\u0421\u043E\u0437\u0434\u0430\u0442\u044C \u043E\u0442\u0447\u0451\u0442",
             DLG_REPORT_BUG_COPY: "\u041A\u043E\u043F\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u043E\u0442\u0447\u0451\u0442",
             DLG_REPORT_BUG_OPEN_ISSUES: "\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u0437\u0430\u0434\u0430\u0447\u0438",
@@ -2402,7 +2402,7 @@
             DLG_PREFERENCES_DESC: "Etiketler, konum, renkler ve dil.",
             DLG_REPORT_BUG: "Hata bildir",
             DLG_REPORT_BUG_DESC: "Sorunlar i\xE7in tan\u0131lama raporu olu\u015Ftur.",
-            DLG_REPORT_BUG_NOTICE: "G\xF6nderi metinleri ve adlar gizlenir. Payla\u015Fmadan \xF6nce kontrol et.",
+            DLG_REPORT_BUG_NOTICE: "D\xFCzeltmemize yard\u0131m edin:\n1. Sorunlu g\xF6nderi g\xF6r\xFCn\xFCr olacak \u015Fekilde kayd\u0131r\u0131n.\n2. 'Rapor olu\u015Ftur'a ve ard\u0131ndan 'Raporu kopyala'ya t\u0131klay\u0131n.\n3. 'Sorunlar\u0131 a\xE7'a t\u0131klay\u0131n ve raporu yeni bir soruna yap\u0131\u015Ft\u0131r\u0131n.\n4. Sorunun k\u0131sa bir a\xE7\u0131klamas\u0131n\u0131 ekleyin.\n(\u0130simleri/metinleri gizliyoruz, ancak payla\u015Fmadan \xF6nce l\xFCtfen kontrol edin!)",
             DLG_REPORT_BUG_GENERATE: "Rapor olu\u015Ftur",
             DLG_REPORT_BUG_COPY: "Raporu kopyala",
             DLG_REPORT_BUG_OPEN_ISSUES: "Sorunlar\u0131 a\xE7",
@@ -2529,7 +2529,7 @@
             DLG_PREFERENCES_DESC: "\u041C\u0456\u0442\u043A\u0438, \u0440\u043E\u0437\u0442\u0430\u0448\u0443\u0432\u0430\u043D\u043D\u044F, \u043A\u043E\u043B\u044C\u043E\u0440\u0438 \u0442\u0430 \u043C\u043E\u0432\u0430.",
             DLG_REPORT_BUG: "\u041F\u043E\u0432\u0456\u0434\u043E\u043C\u0438\u0442\u0438 \u043F\u0440\u043E \u043F\u043E\u043C\u0438\u043B\u043A\u0443",
             DLG_REPORT_BUG_DESC: "\u0421\u0442\u0432\u043E\u0440\u0456\u0442\u044C \u0434\u0456\u0430\u0433\u043D\u043E\u0441\u0442\u0438\u0447\u043D\u0438\u0439 \u0437\u0432\u0456\u0442.",
-            DLG_REPORT_BUG_NOTICE: "\u0422\u0435\u043A\u0441\u0442\u0438 \u0439 \u0456\u043C\u0435\u043D\u0430 \u043F\u0440\u0438\u0445\u043E\u0432\u0430\u043D\u043E. \u041F\u0435\u0440\u0435\u0432\u0456\u0440\u0442\u0435 \u043F\u0435\u0440\u0435\u0434 \u043D\u0430\u0434\u0441\u0438\u043B\u0430\u043D\u043D\u044F\u043C.",
+            DLG_REPORT_BUG_NOTICE: "\u0414\u043E\u043F\u043E\u043C\u043E\u0436\u0456\u0442\u044C \u043D\u0430\u043C \u0446\u0435 \u0432\u0438\u043F\u0440\u0430\u0432\u0438\u0442\u0438:\n1. \u041F\u0440\u043E\u043A\u0440\u0443\u0442\u0456\u0442\u044C \u0442\u0430\u043A, \u0449\u043E\u0431 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u043D\u0438\u0439 \u0434\u043E\u043F\u0438\u0441 \u0431\u0443\u043B\u043E \u0432\u0438\u0434\u043D\u043E.\n2. \u041D\u0430\u0442\u0438\u0441\u043D\u0456\u0442\u044C \xAB\u0421\u0442\u0432\u043E\u0440\u0438\u0442\u0438 \u0437\u0432\u0456\u0442\xBB, \u0430 \u043F\u043E\u0442\u0456\u043C \xAB\u041A\u043E\u043F\u0456\u044E\u0432\u0430\u0442\u0438 \u0437\u0432\u0456\u0442\xBB.\n3. \u041D\u0430\u0442\u0438\u0441\u043D\u0456\u0442\u044C \xAB\u0412\u0456\u0434\u043A\u0440\u0438\u0442\u0438 \u0437\u0432\u0435\u0440\u043D\u0435\u043D\u043D\u044F\xBB \u0442\u0430 \u0432\u0441\u0442\u0430\u0432\u0442\u0435 \u0437\u0432\u0456\u0442 \u0443 \u043D\u043E\u0432\u0435 \u0437\u0432\u0435\u0440\u043D\u0435\u043D\u043D\u044F.\n4. \u0414\u043E\u0434\u0430\u0439\u0442\u0435 \u043A\u043E\u0440\u043E\u0442\u043A\u0438\u0439 \u043E\u043F\u0438\u0441 \u043F\u0440\u043E\u0431\u043B\u0435\u043C\u0438.\n(\u041C\u0438 \u043F\u0440\u0438\u0445\u043E\u0432\u0443\u0454\u043C\u043E \u0456\u043C\u0435\u043D\u0430/\u0442\u0435\u043A\u0441\u0442, \u0430\u043B\u0435, \u0431\u0443\u0434\u044C \u043B\u0430\u0441\u043A\u0430, \u043F\u0435\u0440\u0435\u0432\u0456\u0440\u0442\u0435 \u043F\u0435\u0440\u0435\u0434 \u043D\u0430\u0434\u0441\u0438\u043B\u0430\u043D\u043D\u044F\u043C!)",
             DLG_REPORT_BUG_GENERATE: "\u0421\u0442\u0432\u043E\u0440\u0438\u0442\u0438 \u0437\u0432\u0456\u0442",
             DLG_REPORT_BUG_COPY: "\u041A\u043E\u043F\u0456\u044E\u0432\u0430\u0442\u0438 \u0437\u0432\u0456\u0442",
             DLG_REPORT_BUG_OPEN_ISSUES: "\u0412\u0456\u0434\u043A\u0440\u0438\u0442\u0438 \u0437\u0432\u0435\u0440\u043D\u0435\u043D\u043D\u044F",
@@ -2656,7 +2656,7 @@
             DLG_PREFERENCES_DESC: "Nh\xE3n, v\u1ECB tr\xED, m\xE0u s\u1EAFc v\xE0 ng\xF4n ng\u1EEF.",
             DLG_REPORT_BUG: "B\xE1o l\u1ED7i",
             DLG_REPORT_BUG_DESC: "T\u1EA1o b\xE1o c\xE1o ch\u1EA9n \u0111o\xE1n cho s\u1EF1 c\u1ED1.",
-            DLG_REPORT_BUG_NOTICE: "N\u1ED9i dung v\xE0 t\xEAn \u0111\u01B0\u1EE3c \u1EA9n. Ki\u1EC3m tra tr\u01B0\u1EDBc khi chia s\u1EBB.",
+            DLG_REPORT_BUG_NOTICE: "H\xE3y gi\xFAp ch\xFAng t\xF4i s\u1EEDa l\u1ED7i:\n1. Cu\u1ED9n \u0111\u1EC3 b\xE0i vi\u1EBFt b\u1ECB l\u1ED7i hi\u1EC3n th\u1ECB.\n2. Nh\u1EA5p v\xE0o 'T\u1EA1o b\xE1o c\xE1o' r\u1ED3i 'Sao ch\xE9p b\xE1o c\xE1o'.\n3. Nh\u1EA5p v\xE0o 'M\u1EDF issues' v\xE0 d\xE1n b\xE1o c\xE1o v\xE0o issue m\u1EDBi.\n4. Th\xEAm m\xF4 t\u1EA3 ng\u1EAFn v\u1EC1 v\u1EA5n \u0111\u1EC1.\n(Ch\xFAng t\xF4i \u1EA9n t\xEAn/v\u0103n b\u1EA3n, nh\u01B0ng vui l\xF2ng ki\u1EC3m tra tr\u01B0\u1EDBc khi chia s\u1EBB!)",
             DLG_REPORT_BUG_GENERATE: "T\u1EA1o b\xE1o c\xE1o",
             DLG_REPORT_BUG_COPY: "Sao ch\xE9p b\xE1o c\xE1o",
             DLG_REPORT_BUG_OPEN_ISSUES: "M\u1EDF issues",
@@ -2773,6 +2773,15 @@
             PP_BLOCKED_RE: "\u6B63\u5219\u8868\u8FBE\u5F0F (RegExp)",
             DLG_VERBOSITY: "\u9690\u85CF\u5E16\u5B50\u9009\u9879",
             DLG_VERBOSITY_CAPTION: "\u5982\u679C\u6587\u7AE0\u88AB\u9690\u85CF\uFF0C\u5219\u663E\u793A\u6807\u7B7E",
+            DLG_REPORT_BUG: "\u62A5\u544A\u9519\u8BEF",
+            DLG_REPORT_BUG_DESC: "\u751F\u6210\u95EE\u9898\u8BCA\u65AD\u62A5\u544A\u3002",
+            DLG_REPORT_BUG_NOTICE: "\u5E2E\u52A9\u6211\u4EEC\u4FEE\u590D\u5B83\uFF1A\n1. \u6EDA\u52A8\u9875\u9762\u4EE5\u4F7F\u6709\u95EE\u9898\u7684\u5E16\u5B50\u53EF\u89C1\u3002\n2. \u70B9\u51FB\u201C\u751F\u6210\u62A5\u544A\u201D\uFF0C\u7136\u540E\u70B9\u51FB\u201C\u590D\u5236\u62A5\u544A\u201D\u3002\n3. \u70B9\u51FB\u201C\u6253\u5F00 Issue\u201D\u5E76\u5C06\u62A5\u544A\u7C98\u8D34\u5230\u65B0\u7684 Issue \u4E2D\u3002\n4. \u6DFB\u52A0\u7B80\u77ED\u7684\u95EE\u9898\u63CF\u8FF0\u3002\n(\u6211\u4EEC\u4F1A\u9690\u85CF\u59D3\u540D/\u6587\u672C\uFF0C\u4F46\u5728\u5206\u4EAB\u524D\u8BF7\u52A1\u5FC5\u68C0\u67E5\uFF01)",
+            DLG_REPORT_BUG_GENERATE: "\u751F\u6210\u62A5\u544A",
+            DLG_REPORT_BUG_COPY: "\u590D\u5236\u62A5\u544A",
+            DLG_REPORT_BUG_OPEN_ISSUES: "\u6253\u5F00 Issue",
+            DLG_REPORT_BUG_STATUS_READY: "\u62A5\u544A\u5C31\u7EEA\u3002",
+            DLG_REPORT_BUG_STATUS_COPIED: "\u62A5\u544A\u5DF2\u590D\u5236\u5230\u526A\u8D34\u677F\u3002",
+            DLG_REPORT_BUG_STATUS_FAILED: "\u590D\u5236\u5931\u8D25\u3002\u8BF7\u624B\u52A8\u590D\u5236\u3002",
             VERBOSITY_MESSAGE: [
               "\u6CA1\u6709\u6807\u7B7E",
               "\u5E16\u5B50\u5DF2\u9690\u85CF\u3002\u89C4\u5219\uFF1A",
@@ -2871,6 +2880,15 @@
             PP_BLOCKED_RE: "\u6B63\u5247\u8868\u9054\u5F0F (RegExp)",
             DLG_VERBOSITY: "\u96B1\u85CF\u5E16\u5B50\u9078\u9805",
             DLG_VERBOSITY_CAPTION: "\u5982\u679C\u6587\u7AE0\u88AB\u96B1\u85CF\uFF0C\u5247\u986F\u793A\u6A19\u7C64",
+            DLG_REPORT_BUG: "\u56DE\u5831\u932F\u8AA4",
+            DLG_REPORT_BUG_DESC: "\u7522\u751F\u554F\u984C\u8A3A\u65B7\u5831\u544A\u3002",
+            DLG_REPORT_BUG_NOTICE: "\u5354\u52A9\u6211\u5011\u4FEE\u5FA9\u5B83\uFF1A\n1. \u6372\u52D5\u9801\u9762\u4EE5\u4F7F\u6709\u554F\u984C\u7684\u8CBC\u6587\u53EF\u898B\u3002\n2. \u9EDE\u64CA\u300C\u751F\u6210\u5831\u544A\u300D\uFF0C\u7136\u5F8C\u9EDE\u64CA\u300C\u8907\u88FD\u5831\u544A\u300D\u3002\n3. \u9EDE\u64CA\u300C\u958B\u555F Issue\u300D\u4E26\u5C07\u5831\u544A\u8CBC\u4E0A\u5230\u65B0\u7684 Issue \u4E2D\u3002\n4. \u65B0\u589E\u7C21\u77ED\u7684\u554F\u984C\u63CF\u8FF0\u3002\n(\u6211\u5011\u6703\u96B1\u85CF\u59D3\u540D/\u6587\u5B57\uFF0C\u4F46\u5728\u5206\u4EAB\u524D\u8ACB\u52D9\u5FC5\u6AA2\u67E5\uFF01)",
+            DLG_REPORT_BUG_GENERATE: "\u751F\u6210\u5831\u544A",
+            DLG_REPORT_BUG_COPY: "\u8907\u88FD\u5831\u544A",
+            DLG_REPORT_BUG_OPEN_ISSUES: "\u958B\u555F Issue",
+            DLG_REPORT_BUG_STATUS_READY: "\u5831\u544A\u5C31\u7DD2\u3002",
+            DLG_REPORT_BUG_STATUS_COPIED: "\u5831\u544A\u5DF2\u8907\u88FD\u5230\u526A\u8CBC\u7C3F\u3002",
+            DLG_REPORT_BUG_STATUS_FAILED: "\u8907\u88FD\u5931\u6557\u3002\u8ACB\u624B\u52D5\u8907\u88FD\u3002",
             VERBOSITY_MESSAGE: [
               "\u6C92\u6709\u6A19\u7C64",
               "\u5E16\u5B50\u5DF2\u96B1\u85CF\u3002\u898F\u5247\uFF1A",
@@ -3525,6 +3543,11 @@
           state,
           ".fb-cmf-tooltip",
           "position:fixed; z-index:9999; pointer-events:none;background-color: rgba(255, 255, 255, 0.8); color: rgb(28, 30, 33);border-radius:12px; padding:12px; font-size:12px; font-weight:400; line-height:16.08px;box-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px; max-width:334px; white-space:normal;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf .cmf-report-notice",
+          "white-space: pre-wrap; line-height: 1.4;"
         );
         addToSS(
           state,
@@ -7582,16 +7605,57 @@
         };
       }
       function buildEnvironmentSnapshot() {
+        const gm = typeof globalThis !== "undefined" ? globalThis.GM : void 0;
         return {
           userAgent: navigator.userAgent,
           platform: navigator.platform,
           language: navigator.language,
           languages: navigator.languages,
+          hasGM: !!gm,
+          hasGMInfo: !!(gm && gm.info),
+          readyState: document.readyState,
           viewport: {
             width: window.innerWidth,
             height: window.innerHeight,
             devicePixelRatio: window.devicePixelRatio
           }
+        };
+      }
+      function getScriptsSample(limit = 20) {
+        const scripts = Array.from(document.scripts || []);
+        const samples = [];
+        for (const script of scripts) {
+          if (samples.length >= limit) {
+            break;
+          }
+          if (script && script.src) {
+            try {
+              const url = new URL(script.src, window.location.href);
+              samples.push(`${url.origin}${url.pathname}`);
+            } catch (error) {
+              samples.push(script.src);
+            }
+            continue;
+          }
+          samples.push("inline-script");
+        }
+        return samples;
+      }
+      function buildFeedDomSnapshot() {
+        const feedNodes = Array.from(document.querySelectorAll('[role="feed"]'));
+        const pageletSample = Array.from(document.querySelectorAll('[role="feed"] [data-pagelet]')).slice(0, 5).map((el) => el.getAttribute("data-pagelet"));
+        const mainNode = document.querySelector('div[role="main"]');
+        const feedRoot = feedNodes[0] || null;
+        const feedRootParent = feedRoot && feedRoot.parentElement ? feedRoot.parentElement : null;
+        const mainRootParent = mainNode && mainNode.parentElement ? mainNode.parentElement : null;
+        return {
+          feedCount: feedNodes.length,
+          pageletSample,
+          mainCount: document.querySelectorAll('div[role="main"]').length,
+          feedRoot: buildDomSignature(feedRoot),
+          feedRootParent: buildDomSignature(feedRootParent),
+          mainRoot: buildDomSignature(mainNode),
+          mainRootParent: buildDomSignature(mainRootParent)
         };
       }
       function buildFeedSnapshot(state) {
@@ -7608,6 +7672,14 @@
           mpType: state.mpType || ""
         };
       }
+      function buildSafeLocation() {
+        const location = window.location || {};
+        const origin = location.origin || "";
+        const pathname = location.pathname || "";
+        const href = location.href || "";
+        const url = origin && pathname ? `${origin}${pathname}` : href;
+        return { url, pathname, search: "" };
+      }
       function buildBugReport(context) {
         if (!context) {
           return { data: { error: "No context available." }, text: "" };
@@ -7615,13 +7687,16 @@
         const { state, options, filters, keyWords, pathInfo } = context;
         const now = /* @__PURE__ */ new Date();
         const scriptInfo = getScriptInfo();
+        const safeLocation = buildSafeLocation();
         const data = {
           generatedAt: now.toISOString(),
           script: scriptInfo,
           page: {
-            url: window.location.href,
-            pathname: window.location.pathname,
-            search: window.location.search
+            url: safeLocation.url,
+            pathname: safeLocation.pathname,
+            search: safeLocation.search,
+            scriptsSample: getScriptsSample(),
+            feedDom: buildFeedDomSnapshot()
           },
           feed: buildFeedSnapshot(state),
           environment: buildEnvironmentSnapshot(),
@@ -8187,6 +8262,7 @@
         );
         fs.appendChild(l);
         s = document.createElement("span");
+        s.className = "cmf-report-notice";
         s.appendChild(
           document.createTextNode(getKeyword(keyWords, translations, "DLG_REPORT_BUG_NOTICE"))
         );

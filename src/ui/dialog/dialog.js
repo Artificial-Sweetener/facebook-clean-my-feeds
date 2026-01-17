@@ -517,8 +517,7 @@ function addLegendEvents() {
   if (elFBCMF) {
     const fieldsets = elFBCMF.querySelectorAll("fieldset");
     fieldsets.forEach((fieldset) => {
-      fieldset.classList.add("cmf-hidden");
-      fieldset.classList.remove("cmf-visible");
+      updateFieldsetState(fieldset, false, { animateHeight: false });
     });
 
     if (elFBCMF.dataset.cmfLegendInit === "1") {
@@ -535,9 +534,58 @@ function addLegendEvents() {
       if (!fieldset) {
         return;
       }
-      fieldset.classList.toggle("cmf-hidden");
-      fieldset.classList.toggle("cmf-visible");
+      const isHidden = fieldset.classList.contains("cmf-hidden");
+      updateFieldsetState(fieldset, isHidden, { animateRock: isHidden });
     });
+  }
+}
+
+function updateFieldsetState(fieldset, expanded, options = {}) {
+  if (!fieldset) {
+    return;
+  }
+  const { animateRock = false, animateHeight = true } = options;
+  fieldset.classList.toggle("cmf-hidden", !expanded);
+  fieldset.classList.toggle("cmf-visible", expanded);
+  fieldset.classList.toggle("cmf-expanded", expanded);
+
+  const body = fieldset.querySelector(".cmf-section-body");
+  if (!body) {
+    return;
+  }
+
+  if (expanded) {
+    const height = body.scrollHeight;
+    fieldset.style.setProperty("--cmf-section-height", `${height}px`);
+  } else if (animateHeight) {
+    const height = body.scrollHeight;
+    fieldset.style.setProperty("--cmf-section-height", `${height}px`);
+    requestAnimationFrame(() => {
+      fieldset.style.setProperty("--cmf-section-height", "0px");
+    });
+  } else {
+    fieldset.style.setProperty("--cmf-section-height", "0px");
+  }
+
+  const icon = fieldset.querySelector("legend .cmf-legend-icon");
+  if (!icon) {
+    return;
+  }
+  if (!expanded) {
+    icon.classList.remove("cmf-legend-rock");
+    return;
+  }
+  if (animateRock) {
+    icon.classList.remove("cmf-legend-rock");
+    void icon.offsetWidth;
+    icon.classList.add("cmf-legend-rock");
+    icon.addEventListener(
+      "animationend",
+      () => {
+        icon.classList.remove("cmf-legend-rock");
+      },
+      { once: true }
+    );
   }
 }
 
@@ -546,6 +594,11 @@ function applySearchFilter(dialog, query) {
     return;
   }
   const normalized = query.trim().toLowerCase();
+  if (normalized.length > 0) {
+    dialog.classList.add("cmf-searching");
+  } else {
+    dialog.classList.remove("cmf-searching");
+  }
   const fieldsets = Array.from(dialog.querySelectorAll("fieldset"));
   fieldsets.forEach((fieldset) => {
     const legend = fieldset.querySelector("legend");
@@ -573,16 +626,17 @@ function applySearchFilter(dialog, query) {
           : "visible";
       }
       if (showFieldset) {
-        fieldset.classList.remove("cmf-hidden");
-        fieldset.classList.add("cmf-visible");
+        updateFieldsetState(fieldset, true, { animateHeight: false });
       }
       fieldset.style.display = showFieldset ? "" : "none";
+      if (!showFieldset) {
+        updateFieldsetState(fieldset, false, { animateHeight: false });
+      }
     } else {
       fieldset.style.display = "";
       if (fieldset.dataset.cmfPrevState) {
         const prev = fieldset.dataset.cmfPrevState;
-        fieldset.classList.remove("cmf-hidden", "cmf-visible");
-        fieldset.classList.add(prev === "hidden" ? "cmf-hidden" : "cmf-visible");
+        updateFieldsetState(fieldset, prev !== "hidden", { animateHeight: false });
         delete fieldset.dataset.cmfPrevState;
       }
     }
@@ -649,6 +703,10 @@ function initReportBug(context) {
     outputEl.value = text;
     outputEl.classList.add("cmf-report-output--visible");
     setStatus("DLG_REPORT_BUG_STATUS_READY");
+    const fieldset = outputEl.closest("fieldset");
+    if (fieldset && fieldset.classList.contains("cmf-visible")) {
+      updateFieldsetState(fieldset, true, { animateHeight: false });
+    }
     return text;
   };
 

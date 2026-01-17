@@ -246,6 +246,7 @@ function addCSS(state, options, defaults) {
     "flex:0 0 auto; overflow: visible; border:none; border-radius:12px; color: var(--primary-text); padding:0.75rem; background-color: var(--card-background);"
   );
   addToSS(state, ".fb-cmf fieldset", "margin:0.5rem 0; padding:0; border:none;");
+  addToSS(state, ".fb-cmf fieldset", "--cmf-section-height: 0px;");
   addToSS(state, ".fb-cmf fieldset *", "font-size: 0.8125rem;");
   addToSS(
     state,
@@ -260,6 +261,11 @@ function addCSS(state, options, defaults) {
     ".fb-cmf fieldset legend .cmf-legend-icon",
     "width:36px; height:36px; border-radius:50%; background-color: var(--secondary-button-background);" +
       "display:flex; align-items:center; justify-content:center; color: var(--primary-icon); flex-shrink:0;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf fieldset legend .cmf-legend-icon.cmf-legend-rock",
+    "transform-origin:center; animation: cmf-legend-rock 180ms ease-out;"
   );
   addToSS(
     state,
@@ -326,7 +332,6 @@ function addCSS(state, options, defaults) {
       "font-size:0.75rem; line-height:1.3; resize:vertical;"
   );
   addToSS(state, ".fb-cmf .cmf-report-output.cmf-report-output--visible", "display:block;");
-  addToSS(state, ".fb-cmf fieldset.cmf-hidden .cmf-report-output", "display:none !important;");
   addToSS(
     state,
     ".fb-cmf fieldset legend::after",
@@ -344,8 +349,16 @@ function addCSS(state, options, defaults) {
     ".fb-cmf fieldset.cmf-hidden,.fb-cmf fieldset.cmf-hidden legend ",
     "border-color: transparent;"
   );
-  addToSS(state, ".fb-cmf fieldset.cmf-hidden > :not(legend)", "display: none;");
   addToSS(state, ".fb-cmf fieldset legend::after", 'content: "";');
+  addToSS(
+    state,
+    ".fb-cmf .cmf-section-body",
+    "max-height: var(--cmf-section-height, 0px); overflow:hidden; opacity:0; transform: translateY(-4px);" +
+      "transition: max-height 200ms cubic-bezier(0.16, 1, 0.3, 1), opacity 140ms ease-out, transform 160ms ease-out;" +
+      "will-change: max-height, opacity, transform;"
+  );
+  addToSS(state, ".fb-cmf fieldset.cmf-visible .cmf-section-body", "opacity:1; transform: translateY(0);");
+  addToSS(state, ".fb-cmf.cmf-searching .cmf-section-body", "transition: none;");
   addToSS(
     state,
     ".fb-cmf fieldset label",
@@ -362,26 +375,30 @@ function addCSS(state, options, defaults) {
       "background-color: var(--comment-background); color: var(--primary-text);"
   );
   addToSS(state, ".fb-cmf fieldset label[disabled]", "color:darkgrey;");
-  addToSS(state, ".fb-cmf fieldset textarea", "width:100%; height:12rem;");
   addToSS(
     state,
-    ".fb-cmf fieldset > textarea",
+    ".fb-cmf fieldset textarea",
+    "width:100%; max-width:100%; height:12rem; box-sizing:border-box;"
+  );
+  addToSS(
+    state,
+    ".fb-cmf fieldset .cmf-section-body > textarea",
     "margin-left: calc(36px * 0.75); width: calc(100% - (36px * 0.75));"
   );
   addToSS(
     state,
-    ".fb-cmf fieldset strong",
+    ".fb-cmf fieldset .cmf-section-body > strong",
     "display:block; margin:0.35rem 0 0.15rem 0; font-weight:600; color: var(--primary-text);"
   );
   addToSS(
     state,
-    ".fb-cmf fieldset small",
+    ".fb-cmf fieldset .cmf-section-body > small",
     "display:block; margin:0.15rem 0 0.35rem 0; color: var(--secondary-text);"
   );
   addToSS(state, ".fb-cmf .cmf-row", "margin:0.1rem 0;");
   addToSS(
     state,
-    ".fb-cmf fieldset span",
+    ".fb-cmf fieldset .cmf-section-body > span",
     "display:block; margin:0.35rem 0 0.15rem 0; color: var(--secondary-text);"
   );
   addToSS(
@@ -391,7 +408,7 @@ function addCSS(state, options, defaults) {
   );
   addToSS(
     state,
-    ".fb-cmf fieldset > .cmf-row, .fb-cmf fieldset > .cmf-report-actions, .fb-cmf fieldset > .cmf-report-status, .fb-cmf fieldset > .cmf-report-output, .fb-cmf fieldset > .cmf-tips-content, .fb-cmf fieldset > strong, .fb-cmf fieldset > small, .fb-cmf fieldset > span",
+    ".fb-cmf fieldset .cmf-section-body > .cmf-row, .fb-cmf fieldset .cmf-section-body > .cmf-report-actions, .fb-cmf fieldset .cmf-section-body > .cmf-report-status, .fb-cmf fieldset .cmf-section-body > .cmf-report-output, .fb-cmf fieldset .cmf-section-body > .cmf-tips-content, .fb-cmf fieldset .cmf-section-body > strong, .fb-cmf fieldset .cmf-section-body > small, .fb-cmf fieldset .cmf-section-body > span",
     "margin-left: calc(36px * 0.75);"
   );
   addToSS(state, ".fb-cmf .cmf-tips-content a", "color:#4fa3ff; text-decoration: underline;");
@@ -446,6 +463,18 @@ function addCSS(state, options, defaults) {
     `.${state.iconNewWindowClass} svg`,
     "position: absolute; top: -13.5px; stroke: rgb(101, 103, 107);"
   );
+
+  state.tempStyleSheetCode +=
+    "@keyframes cmf-legend-rock {" +
+    "0% { transform: rotate(0deg); }" +
+    "35% { transform: rotate(-8deg); }" +
+    "70% { transform: rotate(6deg); }" +
+    "100% { transform: rotate(0deg); }" +
+    "}\n" +
+    "@media (prefers-reduced-motion: reduce) {" +
+    ".fb-cmf .cmf-section-body { transition: none; transform: none; }" +
+    ".fb-cmf fieldset legend .cmf-legend-icon.cmf-legend-rock { animation: none; }" +
+    "}\n";
 
   if (state.tempStyleSheetCode.length > 0) {
     styleTag.appendChild(document.createTextNode(state.tempStyleSheetCode));

@@ -306,6 +306,27 @@ function createTipsContent(keyWords, translations) {
   return wrap;
 }
 
+function wrapFieldsetBody(fieldset) {
+  if (!fieldset) {
+    return;
+  }
+  const existingBody = fieldset.querySelector(".cmf-section-body");
+  if (existingBody) {
+    return;
+  }
+  const legend = fieldset.querySelector("legend");
+  const body = document.createElement("div");
+  body.className = "cmf-section-body";
+  const children = Array.from(fieldset.children);
+  children.forEach((child) => {
+    if (child === legend) {
+      return;
+    }
+    body.appendChild(child);
+  });
+  fieldset.appendChild(body);
+}
+
 function buildDialogSections({ state, options, keyWords, translations }) {
   const sections = [];
   const dialogSectionIcons = state.dialogSectionIcons || {};
@@ -344,6 +365,7 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   ta.name = "NF_BLOCKED_TEXT";
   ta.textContent = options.NF_BLOCKED_TEXT.split(state.SEP).join("\n");
   fs.appendChild(ta);
+  wrapFieldsetBody(fs);
   sections.push(fs);
 
   fs = document.createElement("fieldset");
@@ -373,6 +395,7 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   ta.name = "GF_BLOCKED_TEXT";
   ta.textContent = options.GF_BLOCKED_TEXT.split(state.SEP).join("\n");
   fs.appendChild(ta);
+  wrapFieldsetBody(fs);
   sections.push(fs);
 
   fs = document.createElement("fieldset");
@@ -410,6 +433,7 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   ta.name = "MP_BLOCKED_TEXT_DESCRIPTION";
   ta.textContent = options.MP_BLOCKED_TEXT_DESCRIPTION.split(state.SEP).join("\n");
   fs.appendChild(ta);
+  wrapFieldsetBody(fs);
   sections.push(fs);
 
   fs = document.createElement("fieldset");
@@ -439,6 +463,7 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   ta.name = "VF_BLOCKED_TEXT";
   ta.textContent = options.VF_BLOCKED_TEXT.split(state.SEP).join("\n");
   fs.appendChild(ta);
+  wrapFieldsetBody(fs);
   sections.push(fs);
 
   fs = document.createElement("fieldset");
@@ -467,6 +492,7 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   ta.name = "PP_BLOCKED_TEXT";
   ta.textContent = options.PP_BLOCKED_TEXT.split(state.SEP).join("\n");
   fs.appendChild(ta);
+  wrapFieldsetBody(fs);
   sections.push(fs);
 
   fs = document.createElement("fieldset");
@@ -482,6 +508,7 @@ function buildDialogSections({ state, options, keyWords, translations }) {
       fs.appendChild(createSingleCB(keyWords, options, key));
     }
   });
+  wrapFieldsetBody(fs);
   sections.push(fs);
 
   fs = document.createElement("fieldset");
@@ -494,6 +521,7 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   fs.appendChild(l);
   fs.appendChild(createSingleCB(keyWords, options, "REELS_CONTROLS"), false);
   fs.appendChild(createSingleCB(keyWords, options, "REELS_DISABLE_LOOPING"), false);
+  wrapFieldsetBody(fs);
   sections.push(fs);
 
   fs = document.createElement("fieldset");
@@ -534,6 +562,7 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   fs.appendChild(createRB(options, "CMF_DIALOG_OPTION", "1", keyWords.CMF_DIALOG_OPTION[1]));
   fs.appendChild(createInput(options, "CMF_BORDER_COLOUR", `${keyWords.CMF_BORDER_COLOUR}:`));
   fs.appendChild(createSelectLanguage(state, keyWords, translations));
+  wrapFieldsetBody(fs);
   sections.push(fs);
 
   fs = document.createElement("fieldset");
@@ -575,6 +604,7 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   reportOutput.readOnly = true;
   reportOutput.rows = 6;
   fs.appendChild(reportOutput);
+  wrapFieldsetBody(fs);
   sections.push(fs);
 
   fs = document.createElement("fieldset");
@@ -586,6 +616,7 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   );
   fs.appendChild(l);
   fs.appendChild(createTipsContent(keyWords, translations));
+  wrapFieldsetBody(fs);
   sections.push(fs);
 
   return sections;

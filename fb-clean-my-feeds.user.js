@@ -3604,6 +3604,7 @@
           "flex:0 0 auto; overflow: visible; border:none; border-radius:12px; color: var(--primary-text); padding:0.75rem; background-color: var(--card-background);"
         );
         addToSS(state, ".fb-cmf fieldset", "margin:0.5rem 0; padding:0; border:none;");
+        addToSS(state, ".fb-cmf fieldset", "--cmf-section-height: 0px;");
         addToSS(state, ".fb-cmf fieldset *", "font-size: 0.8125rem;");
         addToSS(
           state,
@@ -3615,6 +3616,11 @@
           state,
           ".fb-cmf fieldset legend .cmf-legend-icon",
           "width:36px; height:36px; border-radius:50%; background-color: var(--secondary-button-background);display:flex; align-items:center; justify-content:center; color: var(--primary-icon); flex-shrink:0;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf fieldset legend .cmf-legend-icon.cmf-legend-rock",
+          "transform-origin:center; animation: cmf-legend-rock 180ms ease-out;"
         );
         addToSS(
           state,
@@ -3674,7 +3680,6 @@
           'display:none; width:100%; max-width:100%; box-sizing:border-box; min-height:6rem; margin-top:0.5rem; padding:0.5rem;border-radius:8px; border:1px solid var(--divider);background-color: var(--comment-background); color: var(--primary-text);font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-size:0.75rem; line-height:1.3; resize:vertical;'
         );
         addToSS(state, ".fb-cmf .cmf-report-output.cmf-report-output--visible", "display:block;");
-        addToSS(state, ".fb-cmf fieldset.cmf-hidden .cmf-report-output", "display:none !important;");
         addToSS(
           state,
           ".fb-cmf fieldset legend::after",
@@ -3691,8 +3696,14 @@
           ".fb-cmf fieldset.cmf-hidden,.fb-cmf fieldset.cmf-hidden legend ",
           "border-color: transparent;"
         );
-        addToSS(state, ".fb-cmf fieldset.cmf-hidden > :not(legend)", "display: none;");
         addToSS(state, ".fb-cmf fieldset legend::after", 'content: "";');
+        addToSS(
+          state,
+          ".fb-cmf .cmf-section-body",
+          "max-height: var(--cmf-section-height, 0px); overflow:hidden; opacity:0; transform: translateY(-4px);transition: max-height 200ms cubic-bezier(0.16, 1, 0.3, 1), opacity 140ms ease-out, transform 160ms ease-out;will-change: max-height, opacity, transform;"
+        );
+        addToSS(state, ".fb-cmf fieldset.cmf-visible .cmf-section-body", "opacity:1; transform: translateY(0);");
+        addToSS(state, ".fb-cmf.cmf-searching .cmf-section-body", "transition: none;");
         addToSS(
           state,
           ".fb-cmf fieldset label",
@@ -3706,26 +3717,30 @@
           "border: 1px solid var(--divider); border-radius: 8px; padding: 0.35rem 0.5rem;background-color: var(--comment-background); color: var(--primary-text);"
         );
         addToSS(state, ".fb-cmf fieldset label[disabled]", "color:darkgrey;");
-        addToSS(state, ".fb-cmf fieldset textarea", "width:100%; height:12rem;");
         addToSS(
           state,
-          ".fb-cmf fieldset > textarea",
+          ".fb-cmf fieldset textarea",
+          "width:100%; max-width:100%; height:12rem; box-sizing:border-box;"
+        );
+        addToSS(
+          state,
+          ".fb-cmf fieldset .cmf-section-body > textarea",
           "margin-left: calc(36px * 0.75); width: calc(100% - (36px * 0.75));"
         );
         addToSS(
           state,
-          ".fb-cmf fieldset strong",
+          ".fb-cmf fieldset .cmf-section-body > strong",
           "display:block; margin:0.35rem 0 0.15rem 0; font-weight:600; color: var(--primary-text);"
         );
         addToSS(
           state,
-          ".fb-cmf fieldset small",
+          ".fb-cmf fieldset .cmf-section-body > small",
           "display:block; margin:0.15rem 0 0.35rem 0; color: var(--secondary-text);"
         );
         addToSS(state, ".fb-cmf .cmf-row", "margin:0.1rem 0;");
         addToSS(
           state,
-          ".fb-cmf fieldset span",
+          ".fb-cmf fieldset .cmf-section-body > span",
           "display:block; margin:0.35rem 0 0.15rem 0; color: var(--secondary-text);"
         );
         addToSS(
@@ -3735,7 +3750,7 @@
         );
         addToSS(
           state,
-          ".fb-cmf fieldset > .cmf-row, .fb-cmf fieldset > .cmf-report-actions, .fb-cmf fieldset > .cmf-report-status, .fb-cmf fieldset > .cmf-report-output, .fb-cmf fieldset > .cmf-tips-content, .fb-cmf fieldset > strong, .fb-cmf fieldset > small, .fb-cmf fieldset > span",
+          ".fb-cmf fieldset .cmf-section-body > .cmf-row, .fb-cmf fieldset .cmf-section-body > .cmf-report-actions, .fb-cmf fieldset .cmf-section-body > .cmf-report-status, .fb-cmf fieldset .cmf-section-body > .cmf-report-output, .fb-cmf fieldset .cmf-section-body > .cmf-tips-content, .fb-cmf fieldset .cmf-section-body > strong, .fb-cmf fieldset .cmf-section-body > small, .fb-cmf fieldset .cmf-section-body > span",
           "margin-left: calc(36px * 0.75);"
         );
         addToSS(state, ".fb-cmf .cmf-tips-content a", "color:#4fa3ff; text-decoration: underline;");
@@ -3786,6 +3801,7 @@
           `.${state.iconNewWindowClass} svg`,
           "position: absolute; top: -13.5px; stroke: rgb(101, 103, 107);"
         );
+        state.tempStyleSheetCode += "@keyframes cmf-legend-rock {0% { transform: rotate(0deg); }35% { transform: rotate(-8deg); }70% { transform: rotate(6deg); }100% { transform: rotate(0deg); }}\n@media (prefers-reduced-motion: reduce) {.fb-cmf .cmf-section-body { transition: none; transform: none; }.fb-cmf fieldset legend .cmf-legend-icon.cmf-legend-rock { animation: none; }}\n";
         if (state.tempStyleSheetCode.length > 0) {
           styleTag.appendChild(document.createTextNode(state.tempStyleSheetCode));
           state.tempStyleSheetCode = "";
@@ -7913,6 +7929,26 @@
         }
         return wrap;
       }
+      function wrapFieldsetBody(fieldset) {
+        if (!fieldset) {
+          return;
+        }
+        const existingBody = fieldset.querySelector(".cmf-section-body");
+        if (existingBody) {
+          return;
+        }
+        const legend = fieldset.querySelector("legend");
+        const body = document.createElement("div");
+        body.className = "cmf-section-body";
+        const children = Array.from(fieldset.children);
+        children.forEach((child) => {
+          if (child === legend) {
+            return;
+          }
+          body.appendChild(child);
+        });
+        fieldset.appendChild(body);
+      }
       function buildDialogSections({ state, options, keyWords, translations }) {
         const sections = [];
         const dialogSectionIcons = state.dialogSectionIcons || {};
@@ -7950,6 +7986,7 @@
         ta.name = "NF_BLOCKED_TEXT";
         ta.textContent = options.NF_BLOCKED_TEXT.split(state.SEP).join("\n");
         fs.appendChild(ta);
+        wrapFieldsetBody(fs);
         sections.push(fs);
         fs = document.createElement("fieldset");
         l = createLegend(
@@ -7978,6 +8015,7 @@
         ta.name = "GF_BLOCKED_TEXT";
         ta.textContent = options.GF_BLOCKED_TEXT.split(state.SEP).join("\n");
         fs.appendChild(ta);
+        wrapFieldsetBody(fs);
         sections.push(fs);
         fs = document.createElement("fieldset");
         l = createLegend(
@@ -8014,6 +8052,7 @@
         ta.name = "MP_BLOCKED_TEXT_DESCRIPTION";
         ta.textContent = options.MP_BLOCKED_TEXT_DESCRIPTION.split(state.SEP).join("\n");
         fs.appendChild(ta);
+        wrapFieldsetBody(fs);
         sections.push(fs);
         fs = document.createElement("fieldset");
         l = createLegend(
@@ -8042,6 +8081,7 @@
         ta.name = "VF_BLOCKED_TEXT";
         ta.textContent = options.VF_BLOCKED_TEXT.split(state.SEP).join("\n");
         fs.appendChild(ta);
+        wrapFieldsetBody(fs);
         sections.push(fs);
         fs = document.createElement("fieldset");
         l = createLegend(
@@ -8069,6 +8109,7 @@
         ta.name = "PP_BLOCKED_TEXT";
         ta.textContent = options.PP_BLOCKED_TEXT.split(state.SEP).join("\n");
         fs.appendChild(ta);
+        wrapFieldsetBody(fs);
         sections.push(fs);
         fs = document.createElement("fieldset");
         l = createLegend(
@@ -8083,6 +8124,7 @@
             fs.appendChild(createSingleCB(keyWords, options, key));
           }
         });
+        wrapFieldsetBody(fs);
         sections.push(fs);
         fs = document.createElement("fieldset");
         l = createLegend(
@@ -8094,6 +8136,7 @@
         fs.appendChild(l);
         fs.appendChild(createSingleCB(keyWords, options, "REELS_CONTROLS"), false);
         fs.appendChild(createSingleCB(keyWords, options, "REELS_DISABLE_LOOPING"), false);
+        wrapFieldsetBody(fs);
         sections.push(fs);
         fs = document.createElement("fieldset");
         l = createLegend(
@@ -8133,6 +8176,7 @@
         fs.appendChild(createRB(options, "CMF_DIALOG_OPTION", "1", keyWords.CMF_DIALOG_OPTION[1]));
         fs.appendChild(createInput(options, "CMF_BORDER_COLOUR", `${keyWords.CMF_BORDER_COLOUR}:`));
         fs.appendChild(createSelectLanguage(state, keyWords, translations));
+        wrapFieldsetBody(fs);
         sections.push(fs);
         fs = document.createElement("fieldset");
         l = createLegend(
@@ -8173,6 +8217,7 @@
         reportOutput.readOnly = true;
         reportOutput.rows = 6;
         fs.appendChild(reportOutput);
+        wrapFieldsetBody(fs);
         sections.push(fs);
         fs = document.createElement("fieldset");
         l = createLegend(
@@ -8183,6 +8228,7 @@
         );
         fs.appendChild(l);
         fs.appendChild(createTipsContent(keyWords, translations));
+        wrapFieldsetBody(fs);
         sections.push(fs);
         return sections;
       }
@@ -8649,8 +8695,7 @@
         if (elFBCMF) {
           const fieldsets = elFBCMF.querySelectorAll("fieldset");
           fieldsets.forEach((fieldset) => {
-            fieldset.classList.add("cmf-hidden");
-            fieldset.classList.remove("cmf-visible");
+            updateFieldsetState(fieldset, false, { animateHeight: false });
           });
           if (elFBCMF.dataset.cmfLegendInit === "1") {
             return;
@@ -8666,9 +8711,54 @@
             if (!fieldset) {
               return;
             }
-            fieldset.classList.toggle("cmf-hidden");
-            fieldset.classList.toggle("cmf-visible");
+            const isHidden = fieldset.classList.contains("cmf-hidden");
+            updateFieldsetState(fieldset, isHidden, { animateRock: isHidden });
           });
+        }
+      }
+      function updateFieldsetState(fieldset, expanded, options = {}) {
+        if (!fieldset) {
+          return;
+        }
+        const { animateRock = false, animateHeight = true } = options;
+        fieldset.classList.toggle("cmf-hidden", !expanded);
+        fieldset.classList.toggle("cmf-visible", expanded);
+        fieldset.classList.toggle("cmf-expanded", expanded);
+        const body = fieldset.querySelector(".cmf-section-body");
+        if (!body) {
+          return;
+        }
+        if (expanded) {
+          const height = body.scrollHeight;
+          fieldset.style.setProperty("--cmf-section-height", `${height}px`);
+        } else if (animateHeight) {
+          const height = body.scrollHeight;
+          fieldset.style.setProperty("--cmf-section-height", `${height}px`);
+          requestAnimationFrame(() => {
+            fieldset.style.setProperty("--cmf-section-height", "0px");
+          });
+        } else {
+          fieldset.style.setProperty("--cmf-section-height", "0px");
+        }
+        const icon = fieldset.querySelector("legend .cmf-legend-icon");
+        if (!icon) {
+          return;
+        }
+        if (!expanded) {
+          icon.classList.remove("cmf-legend-rock");
+          return;
+        }
+        if (animateRock) {
+          icon.classList.remove("cmf-legend-rock");
+          void icon.offsetWidth;
+          icon.classList.add("cmf-legend-rock");
+          icon.addEventListener(
+            "animationend",
+            () => {
+              icon.classList.remove("cmf-legend-rock");
+            },
+            { once: true }
+          );
         }
       }
       function applySearchFilter(dialog, query) {
@@ -8676,6 +8766,11 @@
           return;
         }
         const normalized = query.trim().toLowerCase();
+        if (normalized.length > 0) {
+          dialog.classList.add("cmf-searching");
+        } else {
+          dialog.classList.remove("cmf-searching");
+        }
         const fieldsets = Array.from(dialog.querySelectorAll("fieldset"));
         fieldsets.forEach((fieldset) => {
           const legend = fieldset.querySelector("legend");
@@ -8697,16 +8792,17 @@
               fieldset.dataset.cmfPrevState = fieldset.classList.contains("cmf-hidden") ? "hidden" : "visible";
             }
             if (showFieldset) {
-              fieldset.classList.remove("cmf-hidden");
-              fieldset.classList.add("cmf-visible");
+              updateFieldsetState(fieldset, true, { animateHeight: false });
             }
             fieldset.style.display = showFieldset ? "" : "none";
+            if (!showFieldset) {
+              updateFieldsetState(fieldset, false, { animateHeight: false });
+            }
           } else {
             fieldset.style.display = "";
             if (fieldset.dataset.cmfPrevState) {
               const prev = fieldset.dataset.cmfPrevState;
-              fieldset.classList.remove("cmf-hidden", "cmf-visible");
-              fieldset.classList.add(prev === "hidden" ? "cmf-hidden" : "cmf-visible");
+              updateFieldsetState(fieldset, prev !== "hidden", { animateHeight: false });
               delete fieldset.dataset.cmfPrevState;
             }
           }
@@ -8767,6 +8863,10 @@
           outputEl.value = text;
           outputEl.classList.add("cmf-report-output--visible");
           setStatus("DLG_REPORT_BUG_STATUS_READY");
+          const fieldset = outputEl.closest("fieldset");
+          if (fieldset && fieldset.classList.contains("cmf-visible")) {
+            updateFieldsetState(fieldset, true, { animateHeight: false });
+          }
           return text;
         };
         btnGenerate.addEventListener("click", () => {

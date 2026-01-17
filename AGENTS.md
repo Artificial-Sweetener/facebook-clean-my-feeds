@@ -47,6 +47,16 @@ Do not change user-visible behavior unless explicitly requested. Internal refact
 
 Run the project’s lint, test, and build scripts when available. If no scripts exist yet, call that out clearly.
 
+### Localization Checks
+
+When adding new strings to `src/ui/i18n/translations.js`, ensure you add them to the English (`en`) block. To verify that other languages are up to date (or catch gaps), run:
+
+```bash
+node tools/check-locales.js
+```
+
+This tool compares all supported languages against the English baseline and reports missing keys.
+
 ## 7) Commit Messages
 
 When asked to draft a commit, use Conventional Commits: `type(scope): subject`.

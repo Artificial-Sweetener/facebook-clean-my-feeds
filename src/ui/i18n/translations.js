@@ -2969,7 +2969,7 @@ module.exports = {
     DLG_VERBOSITY: "0",
     VERBOSITY_DEBUG: false,
     VERBOSITY_MESSAGE_BG_COLOUR: "LightGrey",
-    CMF_BTN_OPTION: "0",
+    CMF_BTN_OPTION: "1",
     CMF_DIALOG_OPTION: "0",
     CMF_BORDER_COLOUR: "OrangeRed",
   },

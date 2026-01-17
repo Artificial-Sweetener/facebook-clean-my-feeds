@@ -464,7 +464,7 @@ function addExtraCSS(state, options, defaults) {
   } else if (cmfBtnLocation === "2") {
     styles = "display: none !important;";
   } else {
-    styles = "position: fixed; bottom: 1rem; left: 1rem; display:none; z-index: 999;";
+    styles = "position: fixed; bottom: 3rem; left: 1rem; display:none; z-index: 999;";
     styles +=
       "background: var(--secondary-button-background-floating); padding: 0.5rem; width: 3rem; height: 3rem; border: 0; border-radius: 1.5rem;";
     styles += "box-shadow: 0 2px 4px var(--shadow-1), 0 12px 28px var(--shadow-2);";
@@ -474,10 +474,23 @@ function addExtraCSS(state, options, defaults) {
     addToSS(state, ".fb-cmf-toggle svg", "height: 95%; aspect-ratio : 1 / 1;");
     addToSS(state, ".fb-cmf-toggle .cmf-icon", "height: 95%; aspect-ratio : 1 / 1;");
     addToSS(state, ".fb-cmf-toggle:hover", "cursor:pointer;");
+    addToSS(state, ".fb-cmf-toggle", "overflow: hidden;");
+    addToSS(
+      state,
+      ".fb-cmf-toggle:not(.fb-cmf-toggle-topbar)::after",
+      'content: ""; position: absolute; inset: 0; border-radius: inherit;' +
+        "background-color: rgba(255, 255, 255, 0.1); opacity: 0; pointer-events: none;"
+    );
+    addToSS(state, ".fb-cmf-toggle:not(.fb-cmf-toggle-topbar):hover::after", "opacity: 1;");
     addToSS(
       state,
       `.fb-cmf-toggle[${state.showAtt}]`,
       "display:flex; align-items:center; justify-content:center;"
+    );
+    addToSS(
+      state,
+      '.fb-cmf-toggle:not(.fb-cmf-toggle-topbar)[data-cmf-open="true"]',
+      "display:none;"
     );
     addToSS(
       state,

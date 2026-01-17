@@ -1,22 +1,25 @@
 {
   "name": "facebook-clean-my-feeds",
-  "version": "0.0.0",
+  "version": "6.0.0",
   "private": true,
   "type": "commonjs",
   "scripts": {
     "lint": "eslint -c tools/config/eslint.config.cjs \"src/**/*.js\" \"tools/**/*.js\" \"tools/config/**/*.cjs\"",
     "format:check": "prettier --config tools/config/prettier.config.cjs --check \"src/**/*.js\" \"tools/**/*.js\" \"tools/config/**/*.cjs\" \"*.md\" \"*.json\"",
     "build": "node tools/build.js",
-    "icons:optimize": "node tools/optimize-icons.js"
+    "icons:optimize": "node tools/optimize-icons.js",
+    "test": "jest -c tools/config/jest.config.cjs"
   },
   "engines": {
     "node": ">=18 <23"
   },
   "devDependencies": {
+    "esbuild": "^0.27.2",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
-    "esbuild": "^0.27.2",
+    "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.2.0",
     "prettier": "^3.2.5",
     "sharp": "^0.34.1"
   }

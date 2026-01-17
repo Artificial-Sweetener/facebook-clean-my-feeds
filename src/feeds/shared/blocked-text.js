@@ -8,9 +8,7 @@ function findNewsBlockedText(post, options, filters) {
     return "";
   }
 
-  const postTexts = extractTextContent(post, getNewsBlocksQuery(post), 3)
-    .join(" ")
-    .toLowerCase();
+  const postTexts = extractTextContent(post, getNewsBlocksQuery(post), 3).join(" ").toLowerCase();
   return findBlockedText(postTexts, filters.NF_BLOCKED_TEXT_LC, options.NF_BLOCKED_RE);
 }
 
@@ -19,9 +17,7 @@ function findGroupsBlockedText(post, options, filters) {
     return "";
   }
 
-  const postTexts = extractTextContent(post, getGroupsBlocksQuery(post), 3)
-    .join(" ")
-    .toLowerCase();
+  const postTexts = extractTextContent(post, getGroupsBlocksQuery(post), 3).join(" ").toLowerCase();
   return findBlockedText(postTexts, filters.GF_BLOCKED_TEXT_LC, options.GF_BLOCKED_RE);
 }
 
@@ -39,9 +35,7 @@ function findProfileBlockedText(post, options, filters) {
     return "";
   }
 
-  const postTexts = extractTextContent(post, getNewsBlocksQuery(post), 3)
-    .join(" ")
-    .toLowerCase();
+  const postTexts = extractTextContent(post, getNewsBlocksQuery(post), 3).join(" ").toLowerCase();
   return findBlockedText(postTexts, filters.PP_BLOCKED_TEXT_LC, options.PP_BLOCKED_RE);
 }
 

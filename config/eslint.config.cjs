@@ -2,7 +2,6 @@ module.exports = {
   env: {
     browser: true,
     node: true,
-    jest: true,
     es2022: true,
   },
   ignorePatterns: ["fb-clean-my-feeds.user.js", "node_modules/**"],

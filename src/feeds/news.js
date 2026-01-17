@@ -22,7 +22,9 @@ function isNewsDirty(state) {
   if (mainColumn) {
     if (!mainColumn.hasAttribute(mainColumnAtt)) {
       arrReturn[0] = mainColumn;
-    } else if (hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)) {
+    } else if (
+      hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)
+    ) {
       arrReturn[0] = mainColumn;
     }
   }
@@ -57,8 +59,8 @@ function getCollectionOfNewsPosts() {
 
 function isNewsSuggested(post, state, keyWords) {
   const queries = [
-    'div[aria-posinset] > div > div > div > div > div > div:nth-of-type(2) > div > div > div:nth-of-type(2) > div > div:nth-of-type(2) > div > div:nth-of-type(2) > span > div > span:nth-of-type(1)',
-    'div[aria-describedby] > div > div > div > div > div > div:nth-of-type(2) > div > div > div:nth-of-type(2) > div > div:nth-of-type(2) > div > div:nth-of-type(2) > span > div > span:nth-of-type(1)',
+    "div[aria-posinset] > div > div > div > div > div > div:nth-of-type(2) > div > div > div:nth-of-type(2) > div > div:nth-of-type(2) > div > div:nth-of-type(2) > span > div > span:nth-of-type(1)",
+    "div[aria-describedby] > div > div > div > div > div > div:nth-of-type(2) > div > div > div:nth-of-type(2) > div > div:nth-of-type(2) > div > div:nth-of-type(2) > span > div > span:nth-of-type(1)",
   ];
 
   const elSuggestion = querySelectorAllNoChildren(post, queries, 1);
@@ -96,7 +98,8 @@ function isNewsPaidPartnership(post, keyWords) {
 }
 
 function isNewsSponsoredPaidBy(post, keyWords) {
-  const querySPB = "div:nth-child(2) > div > div:nth-child(2) > span[class] > span[id] > div:nth-child(2)";
+  const querySPB =
+    "div:nth-child(2) > div > div:nth-child(2) > span[class] > span[id] > div:nth-child(2)";
   const sponsoredPaidBy = querySelectorAllNoChildren(post, querySPB, 1);
   return sponsoredPaidBy.length === 0 ? "" : keyWords.NF_SPONSORED_PAID;
 }
@@ -162,14 +165,18 @@ function isNewsFollow(post, state, keyWords) {
 
     const hasFollowKeyword = (value) => {
       const normalised = normaliseToLower(value);
-      return normalised !== "" && state.dictionaryFollow.some((keyword) => normalised.includes(keyword));
+      return (
+        normalised !== "" && state.dictionaryFollow.some((keyword) => normalised.includes(keyword))
+      );
     };
 
     const followButton = Array.from(
       post.querySelectorAll('a[role="button"], div[role="button"], span[role="button"]')
     ).find((button) => {
       const ariaLabel =
-        button && typeof button.getAttribute === "function" ? button.getAttribute("aria-label") : "";
+        button && typeof button.getAttribute === "function"
+          ? button.getAttribute("aria-label")
+          : "";
       const buttonText = button && typeof button.textContent === "string" ? button.textContent : "";
       return hasFollowKeyword(ariaLabel) || hasFollowKeyword(buttonText);
     });
@@ -180,7 +187,10 @@ function isNewsFollow(post, state, keyWords) {
     const blocks = post.querySelectorAll(getNewsBlocksQuery(post));
     if (blocks.length > 0) {
       const headerText = normaliseToLower(scanTreeForText(blocks[0]).join(" "));
-      if (headerText !== "" && state.dictionaryFollow.some((keyword) => headerText.includes(keyword))) {
+      if (
+        headerText !== "" &&
+        state.dictionaryFollow.some((keyword) => headerText.includes(keyword))
+      ) {
         return keyWords.NF_FOLLOW;
       }
     }
@@ -264,7 +274,8 @@ function cleanConsoleTable(findItem, context) {
     return;
   }
 
-  const query = 'div[role="complementary"] > div > div > div > div > div:not([data-visualcompletion])';
+  const query =
+    'div[role="complementary"] > div > div > div > div > div:not([data-visualcompletion])';
   const asideBoxes = document.querySelectorAll(query);
   if (asideBoxes.length === 0) {
     return;
@@ -320,7 +331,8 @@ function scrubTabbies(context) {
       ? keyWords.NF_TABLIST_STORIES_REELS_ROOMS[state.language]
       : keyWords.NF_TABLIST_STORIES_REELS_ROOMS;
 
-  const queryTabList = 'div[role="main"] > div > div > div > div > div > div > div > div[role="tablist"]';
+  const queryTabList =
+    'div[role="main"] > div > div > div > div > div > div > div > div[role="tablist"]';
   const elTabList = document.querySelector(queryTabList);
   if (elTabList) {
     if (elTabList.hasAttribute(postAttChildFlag)) {

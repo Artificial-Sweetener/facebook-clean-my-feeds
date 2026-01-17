@@ -85,7 +85,7 @@ function isSponsoredShadowRoot1(post, dictionarySponsored) {
   }
 
   let hasSponsoredText = false;
-  const elCanvas = post.querySelector('a > span > span[aria-labelledby] > canvas');
+  const elCanvas = post.querySelector("a > span > span[aria-labelledby] > canvas");
   if (elCanvas) {
     const elementId = elCanvas.parentElement.getAttribute("aria-labelledby");
     if (elementId && elementId.slice(0, 1) === ":") {
@@ -106,7 +106,7 @@ function isSponsoredShadowRoot2(post, dictionarySponsored) {
   }
 
   let hasSponsoredText = false;
-  const elUse = post.querySelector('a > span > span[aria-labelledby] svg > use[*|href]');
+  const elUse = post.querySelector("a > span > span[aria-labelledby] svg > use[*|href]");
   if (elUse) {
     const elementId = elUse.href.baseVal;
     if (elementId !== "" && elementId.slice(0, 1) === "#") {

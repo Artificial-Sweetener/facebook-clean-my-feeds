@@ -152,9 +152,10 @@ function getKeyword(keyWords, translations, key) {
   if (keyWords && typeof keyWords[key] === "string" && keyWords[key].trim() !== "") {
     return keyWords[key];
   }
-  const fallback = translations && translations.en && typeof translations.en[key] === "string"
-    ? translations.en[key]
-    : "";
+  const fallback =
+    translations && translations.en && typeof translations.en[key] === "string"
+      ? translations.en[key]
+      : "";
   return fallback;
 }
 
@@ -460,9 +461,13 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   s.appendChild(document.createTextNode(`${keyWords.DLG_VERBOSITY_CAPTION}:`));
   fs.appendChild(s);
   fs.appendChild(createRB(options, "VERBOSITY_LEVEL", "0", `${keyWords.VERBOSITY_MESSAGE[0]}`));
-  fs.appendChild(createRB(options, "VERBOSITY_LEVEL", "1", `${keyWords.VERBOSITY_MESSAGE[1]}______`));
+  fs.appendChild(
+    createRB(options, "VERBOSITY_LEVEL", "1", `${keyWords.VERBOSITY_MESSAGE[1]}______`)
+  );
   fs.appendChild(createRB(options, "VERBOSITY_LEVEL", "2", `${keyWords.VERBOSITY_MESSAGE[3]}`));
-  fs.appendChild(createInput(options, "VERBOSITY_MESSAGE_COLOUR", `${keyWords.VERBOSITY_MESSAGE_COLOUR}:`));
+  fs.appendChild(
+    createInput(options, "VERBOSITY_MESSAGE_COLOUR", `${keyWords.VERBOSITY_MESSAGE_COLOUR}:`)
+  );
   fs.appendChild(
     createInput(options, "VERBOSITY_MESSAGE_BG_COLOUR", `${keyWords.VERBOSITY_MESSAGE_BG_COLOUR}:`)
   );
@@ -492,7 +497,9 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   );
   fs.appendChild(l);
   s = document.createElement("span");
-  s.appendChild(document.createTextNode(getKeyword(keyWords, translations, "DLG_REPORT_BUG_NOTICE")));
+  s.appendChild(
+    document.createTextNode(getKeyword(keyWords, translations, "DLG_REPORT_BUG_NOTICE"))
+  );
   fs.appendChild(s);
   const reportActions = document.createElement("div");
   reportActions.className = "cmf-report-actions";

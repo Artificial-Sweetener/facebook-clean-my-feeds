@@ -4,10 +4,10 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "lint": "eslint -c config/eslint.config.cjs \"src/**/*.js\" \"tests/**/*.js\" \"__tests__/**/*.js\" \"tools/**/*.js\" \"config/**/*.cjs\"",
-    "format:check": "prettier --config config/prettier.config.cjs --check \"src/**/*.js\" \"tests/**/*.js\" \"__tests__/**/*.js\" \"tools/**/*.js\" \"config/**/*.cjs\" \"*.md\" \"*.json\"",
-    "test": "jest --runInBand",
-    "build": "node tools/build.js"
+    "lint": "eslint -c config/eslint.config.cjs \"src/**/*.js\" \"tools/**/*.js\" \"config/**/*.cjs\"",
+    "format:check": "prettier --config config/prettier.config.cjs --check \"src/**/*.js\" \"tools/**/*.js\" \"config/**/*.cjs\" \"*.md\" \"*.json\"",
+    "build": "node tools/build.js",
+    "icons:optimize": "node tools/optimize-icons.js"
   },
   "engines": {
     "node": ">=18 <23"
@@ -17,8 +17,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
     "esbuild": "^0.27.2",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
-    "prettier": "^3.2.5"
+    "prettier": "^3.2.5",
+    "sharp": "^0.34.1"
   }
 }

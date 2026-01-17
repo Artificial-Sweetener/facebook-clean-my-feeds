@@ -189,7 +189,15 @@ function hideGroupPost(post, reason, marker, context) {
       addCaptionForHiddenPost(elPostContent, reason, marker, keyWords, { postAtt }, state, options);
     } else {
       if (state.echoCount === 1) {
-        addCaptionForHiddenPost(elPostContent, reason, marker, keyWords, { postAtt }, state, options);
+        addCaptionForHiddenPost(
+          elPostContent,
+          reason,
+          marker,
+          keyWords,
+          { postAtt },
+          state,
+          options
+        );
         state.echoCPID = generateRandomString();
         state.echoEl = elPostContent;
         state.echoEl.setAttribute(postAttCPID, state.echoCPID);

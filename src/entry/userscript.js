@@ -177,7 +177,13 @@ function setFeedSettings(state, options, forceUpdate = false) {
     }
 
     state.isAF =
-      state.isNF || state.isGF || state.isVF || state.isMF || state.isSF || state.isRF || state.isPP;
+      state.isNF ||
+      state.isGF ||
+      state.isVF ||
+      state.isMF ||
+      state.isSF ||
+      state.isRF ||
+      state.isPP;
     state.echoCount = 0;
     state.noChangeCounter = 0;
     if (state.btnToggleEl) {
@@ -304,8 +310,7 @@ async function startUserscript() {
     BTNReset: ICON_FOOTER_RESET_HTML,
   };
   state.iconNewWindow = ICON_NEW_WINDOW;
-  const unsafeWindowRef =
-    typeof globalThis !== "undefined" ? globalThis.unsafeWindow : undefined;
+  const unsafeWindowRef = typeof globalThis !== "undefined" ? globalThis.unsafeWindow : undefined;
   state.isChromium =
     !!(unsafeWindowRef && unsafeWindowRef.chrome) && /Chrome|CriOS/.test(navigator.userAgent);
 

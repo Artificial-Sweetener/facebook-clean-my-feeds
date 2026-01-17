@@ -22,7 +22,12 @@ function safeQuerySelector(root, selector) {
   return root.querySelector(selector);
 }
 
-function querySelectorAllNoChildren(container = document, queries = [], minText = 0, executeAllQueries = false) {
+function querySelectorAllNoChildren(
+  container = document,
+  queries = [],
+  minText = 0,
+  executeAllQueries = false
+) {
   const queryList = Array.isArray(queries) ? queries : [queries];
 
   if (queryList.length === 0) {

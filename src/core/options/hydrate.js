@@ -290,7 +290,10 @@ function buildFilters(options, separator = SEPARATOR) {
   filters.MP_BLOCKED_TEXT_DESCRIPTION = [];
   filters.MP_BLOCKED_TEXT_DESCRIPTION_LC = [];
   filters.MP_BLOCKED_ENABLED = false;
-  if (options.MP_BLOCKED_ENABLED && (mpBlockedTextList.length > 0 || mpBlockedTextDescList.length > 0)) {
+  if (
+    options.MP_BLOCKED_ENABLED &&
+    (mpBlockedTextList.length > 0 || mpBlockedTextDescList.length > 0)
+  ) {
     filters.MP_BLOCKED_ENABLED = true;
     filters.MP_BLOCKED_TEXT = mpBlockedTextList.split(separator);
     filters.MP_BLOCKED_TEXT_LC = filters.MP_BLOCKED_TEXT.map((text) => text.toLowerCase());

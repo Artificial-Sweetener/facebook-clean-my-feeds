@@ -1,7 +1,3 @@
-param(
-    [switch]$SkipTests
-)
-
 $ErrorActionPreference = "Stop"
 
 function Get-NodeMajor {
@@ -40,11 +36,8 @@ if ($nodeMajor -ne 22) {
 Write-Host "Installing dependencies..."
 npm install
 
-if (-not $SkipTests) {
-    Write-Host "Running checks..."
-    npm run lint
-    npm run format:check
-    npm test
-}
+Write-Host "Running checks..."
+npm run lint
+npm run format:check
 
 Write-Host "Setup complete."

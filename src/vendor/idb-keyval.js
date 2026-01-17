@@ -5,10 +5,7 @@ function _typeof(n) {
     return typeof n;
   }
 
-  return n &&
-    "function" == typeof Symbol &&
-    n.constructor === Symbol &&
-    n !== Symbol.prototype
+  return n && "function" == typeof Symbol && n.constructor === Symbol && n !== Symbol.prototype
     ? "symbol"
     : typeof n;
 }
@@ -18,42 +15,46 @@ function _typeof(n) {
   "undefined" != typeof module
     ? t(exports)
     : "function" == typeof define && define.amd
-    ? define(["exports"], t)
-    : t((n = "undefined" != typeof globalThis ? globalThis : n || self).idbKeyval = {});
+      ? define(["exports"], t)
+      : t(((n = "undefined" != typeof globalThis ? globalThis : n || self).idbKeyval = {}));
 })(this, function (n) {
   "use strict";
   function t(n) {
     return new Promise(function (t, e) {
-      (n.oncomplete = n.onsuccess =
+      ((n.oncomplete = n.onsuccess =
         function () {
           return t(n.result);
         }),
         (n.onabort = n.onerror =
           function () {
             return e(n.error);
-          });
+          }));
     });
   }
   function e(n, e) {
     var r,
-      o = (!navigator.userAgentData &&
-      /Safari\//.test(navigator.userAgent) &&
-      !/Chrom(e|ium)\//.test(navigator.userAgent) &&
-      indexedDB.databases
-        ? new Promise(function (n) {
-            var t = function () {
-              return indexedDB.databases().finally(n);
-            };
-            (r = setInterval(t, 100)), t();
-          }).finally(function () {
-            return clearInterval(r);
-          })
-        : Promise.resolve()).then(function () {
+      o = (
+        !navigator.userAgentData &&
+        /Safari\//.test(navigator.userAgent) &&
+        !/Chrom(e|ium)\//.test(navigator.userAgent) &&
+        indexedDB.databases
+          ? new Promise(function (n) {
+              var t = function () {
+                return indexedDB.databases().finally(n);
+              };
+              ((r = setInterval(t, 100)), t());
+            }).finally(function () {
+              return clearInterval(r);
+            })
+          : Promise.resolve()
+      ).then(function () {
         var r = indexedDB.open(n);
-        return (r.onupgradeneeded = function () {
-          return r.result.createObjectStore(e);
-        }),
-          t(r);
+        return (
+          (r.onupgradeneeded = function () {
+            return r.result.createObjectStore(e);
+          }),
+          t(r)
+        );
       });
     return function (n, t) {
       return o.then(function (r) {
@@ -63,27 +64,29 @@ function _typeof(n) {
   }
   var r;
   function o() {
-    return r || (r = e("keyval-store", "keyval")), r;
+    return (r || (r = e("keyval-store", "keyval")), r);
   }
   function u(n, e) {
     return n("readonly", function (n) {
-      return (n.openCursor().onsuccess = function () {
-        this.result && (e(this.result), this.result.continue());
-      }),
-        t(n.transaction);
+      return (
+        (n.openCursor().onsuccess = function () {
+          this.result && (e(this.result), this.result.continue());
+        }),
+        t(n.transaction)
+      );
     });
   }
-  (n.clear = function () {
+  ((n.clear = function () {
     var n = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : o();
     return n("readwrite", function (n) {
-      return n.clear(), t(n.transaction);
+      return (n.clear(), t(n.transaction));
     });
   }),
     (n.createStore = e),
     (n.del = function (n) {
       var e = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : o();
       return e("readwrite", function (e) {
-        return e.delete(n), t(e.transaction);
+        return (e.delete(n), t(e.transaction));
       });
     }),
     (n.delMany = function (n) {
@@ -135,7 +138,7 @@ function _typeof(n) {
     (n.set = function (n, e) {
       var r = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : o();
       return r("readwrite", function (r) {
-        return r.put(e, n), t(r.transaction);
+        return (r.put(e, n), t(r.transaction));
       });
     }),
     (n.setMany = function (n) {
@@ -153,13 +156,13 @@ function _typeof(n) {
       var r = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : o();
       return r("readwrite", function (r) {
         return new Promise(function (o, u) {
-          (r.get(n).onsuccess = function () {
+          r.get(n).onsuccess = function () {
             try {
-              r.put(e(this.result), n), o(t(r.transaction));
+              (r.put(e(this.result), n), o(t(r.transaction)));
             } catch (n) {
               u(n);
             }
-          });
+          };
         });
       });
     }),
@@ -172,5 +175,5 @@ function _typeof(n) {
         return t;
       });
     }),
-    Object.defineProperty(n, "__esModule", { value: !0 });
+    Object.defineProperty(n, "__esModule", { value: !0 }));
 });

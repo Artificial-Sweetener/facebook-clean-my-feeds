@@ -87,7 +87,9 @@ function addCSS(state, options, defaults) {
     state,
     `details[${postAtt}] > summary`,
     "cursor: pointer; list-style: none; position: relative; margin:1.5rem auto; padding:0.5rem 1rem; border-radius:0.55rem; width:85%; font-style:italic;" +
-      (options.VERBOSITY_MESSAGE_COLOUR === "" ? "" : ` color: ${options.VERBOSITY_MESSAGE_COLOUR}; `) +
+      (options.VERBOSITY_MESSAGE_COLOUR === ""
+        ? ""
+        : ` color: ${options.VERBOSITY_MESSAGE_COLOUR}; `) +
       `background-color:${
         options.VERBOSITY_MESSAGE_BG_COLOUR === ""
           ? defaults.VERBOSITY_MESSAGE_BG_COLOUR
@@ -125,7 +127,9 @@ function addCSS(state, options, defaults) {
     state,
     `h6[${postAttTab}]`,
     "border-radius: 0.55rem 0.55rem 0 0; width:75%; margin:0 auto; padding: 0.45rem 0.25rem; font-style:italic; text-align:center; font-weight:normal;" +
-      (options.VERBOSITY_MESSAGE_COLOUR === "" ? "" : `  color: ${options.VERBOSITY_MESSAGE_COLOUR}; `) +
+      (options.VERBOSITY_MESSAGE_COLOUR === ""
+        ? ""
+        : `  color: ${options.VERBOSITY_MESSAGE_COLOUR}; `) +
       `background-color:${
         options.VERBOSITY_MESSAGE_BG_COLOUR === ""
           ? defaults.VERBOSITY_MESSAGE_BG_COLOUR
@@ -141,7 +145,9 @@ function addCSS(state, options, defaults) {
     ".fb-cmf ",
     "position:fixed; top:56px; bottom:16px; left:16px; display:flex; flex-direction:column; width: 608px; max-width:608px; padding:0.75rem; z-index:5;" +
       "box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1); overflow:hidden;" +
-      "border:none; border-radius:12px; opacity:0; visibility:hidden; color:" + tColour + ";"
+      "border:none; border-radius:12px; opacity:0; visibility:hidden; color:" +
+      tColour +
+      ";"
   );
   addToSS(state, ".fb-cmf", "background-color: var(--comment-background);");
   addToSS(
@@ -157,11 +163,7 @@ function addCSS(state, options, defaults) {
     ".fb-cmf header",
     "display:flex; align-items:flex-start; justify-content:space-between; direction:ltr; padding:0 1rem 0.5rem 0;"
   );
-  addToSS(
-    state,
-    ".fb-cmf header .fb-cmf-icon",
-    "display:none;"
-  );
+  addToSS(state, ".fb-cmf header .fb-cmf-icon", "display:none;");
   addToSS(state, ".fb-cmf header .fb-cmf-icon svg", "width:28px; height:28px; margin:0;");
   addToSS(state, ".fb-cmf header .fb-cmf-icon .cmf-icon", "width:28px; height:28px; margin:0;");
   addToSS(
@@ -197,7 +199,11 @@ function addCSS(state, options, defaults) {
     ".fb-cmf header .fb-cmf-close button",
     "width: 2.25rem; height: 2.25rem; transition-property: color, fill, stroke; transition-timing-function: var(--fds-soft); transition-duration: var(--fds-fast); cursor: pointer; background-color: transparent; border-radius: 50%; border: none; color: var(--secondary-icon);"
   );
-  addToSS(state, ".fb-cmf header .fb-cmf-close button:hover", "background-color: var(--hover-overlay);");
+  addToSS(
+    state,
+    ".fb-cmf header .fb-cmf-close button:hover",
+    "background-color: var(--hover-overlay);"
+  );
 
   addToSS(
     state,
@@ -209,16 +215,8 @@ function addCSS(state, options, defaults) {
     ".fb-cmf .fb-cmf-body",
     "scrollbar-width: thin; scrollbar-color: var(--secondary-icon) transparent;"
   );
-  addToSS(
-    state,
-    ".fb-cmf .fb-cmf-body::-webkit-scrollbar",
-    "width:4px; height:4px;"
-  );
-  addToSS(
-    state,
-    ".fb-cmf .fb-cmf-body::-webkit-scrollbar-track",
-    "background: transparent;"
-  );
+  addToSS(state, ".fb-cmf .fb-cmf-body::-webkit-scrollbar", "width:4px; height:4px;");
+  addToSS(state, ".fb-cmf .fb-cmf-body::-webkit-scrollbar-track", "background: transparent;");
   addToSS(
     state,
     ".fb-cmf .fb-cmf-body::-webkit-scrollbar-thumb",
@@ -248,11 +246,7 @@ function addCSS(state, options, defaults) {
       "border-radius: 8px; color: var(--primary-text); position: relative; overflow: hidden;" +
       "margin: 0; display:flex; align-items:center; gap:0.75rem; width:100%; box-sizing:border-box;"
   );
-  addToSS(
-    state,
-    ".fb-cmf fieldset legend.cmf-legend",
-    "cursor:pointer;"
-  );
+  addToSS(state, ".fb-cmf fieldset legend.cmf-legend", "cursor:pointer;");
   addToSS(
     state,
     ".fb-cmf fieldset legend .cmf-legend-icon",
@@ -264,11 +258,7 @@ function addCSS(state, options, defaults) {
     ".fb-cmf fieldset legend .cmf-legend-icon svg",
     "width:20px; height:20px; fill: currentColor;"
   );
-  addToSS(
-    state,
-    ".fb-cmf fieldset legend .cmf-legend-icon .cmf-icon",
-    "width:26px; height:26px;"
-  );
+  addToSS(state, ".fb-cmf fieldset legend .cmf-legend-icon .cmf-icon", "width:26px; height:26px;");
   addToSS(
     state,
     ".fb-cmf fieldset legend .cmf-legend-icon .cmf-icon--legend-report-bug",
@@ -309,7 +299,7 @@ function addCSS(state, options, defaults) {
   addToSS(
     state,
     ".fb-cmf .cmf-report-actions button::after",
-    "content:\"\"; position:absolute; inset:0; border-radius:inherit; background-color: var(--hover-overlay);" +
+    'content:""; position:absolute; inset:0; border-radius:inherit; background-color: var(--hover-overlay);' +
       "opacity:0; pointer-events:none; transition: opacity 0.1s cubic-bezier(0, 0, 1, 1);"
   );
   addToSS(state, ".fb-cmf .cmf-report-actions button:hover::after", "opacity:1;");
@@ -324,23 +314,15 @@ function addCSS(state, options, defaults) {
     "display:none; width:100%; max-width:100%; box-sizing:border-box; min-height:6rem; margin-top:0.5rem; padding:0.5rem;" +
       "border-radius:8px; border:1px solid var(--divider);" +
       "background-color: var(--comment-background); color: var(--primary-text);" +
-      "font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace;" +
+      'font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;' +
       "font-size:0.75rem; line-height:1.3; resize:vertical;"
   );
-  addToSS(
-    state,
-    ".fb-cmf .cmf-report-output.cmf-report-output--visible",
-    "display:block;"
-  );
-  addToSS(
-    state,
-    ".fb-cmf fieldset.cmf-hidden .cmf-report-output",
-    "display:none !important;"
-  );
+  addToSS(state, ".fb-cmf .cmf-report-output.cmf-report-output--visible", "display:block;");
+  addToSS(state, ".fb-cmf fieldset.cmf-hidden .cmf-report-output", "display:none !important;");
   addToSS(
     state,
     ".fb-cmf fieldset legend::after",
-    "content:\"\"; position:absolute; inset:0; border-radius:inherit; background-color: var(--hover-overlay);" +
+    'content:""; position:absolute; inset:0; border-radius:inherit; background-color: var(--hover-overlay);' +
       "opacity:0; pointer-events:none; transition: opacity 0.1s cubic-bezier(0, 0, 1, 1);"
   );
   addToSS(state, ".fb-cmf fieldset legend:hover::after", "opacity:1;");
@@ -364,11 +346,7 @@ function addCSS(state, options, defaults) {
       "border-radius:8px; position:relative; overflow:hidden;"
   );
   addToSS(state, ".fb-cmf fieldset label *", "color: inherit;");
-  addToSS(
-    state,
-    ".fb-cmf fieldset label input",
-    "margin: 0; vertical-align:middle;"
-  );
+  addToSS(state, ".fb-cmf fieldset label input", "margin: 0; vertical-align:middle;");
   addToSS(state, ".fb-cmf fieldset label[disabled]", "color:darkgrey;");
   addToSS(state, ".fb-cmf fieldset textarea", "width:100%; height:12rem;");
   addToSS(
@@ -381,11 +359,7 @@ function addCSS(state, options, defaults) {
     ".fb-cmf fieldset small",
     "display:block; margin:0.15rem 0 0.35rem 0; color: var(--secondary-text);"
   );
-  addToSS(
-    state,
-    ".fb-cmf .cmf-row",
-    "margin:0.1rem 0;"
-  );
+  addToSS(state, ".fb-cmf .cmf-row", "margin:0.1rem 0;");
   addToSS(
     state,
     ".fb-cmf fieldset span",
@@ -396,16 +370,8 @@ function addCSS(state, options, defaults) {
     ".fb-cmf .cmf-tips-content p",
     "margin:0.35rem 0 0.15rem 0; color: var(--secondary-text);"
   );
-  addToSS(
-    state,
-    ".fb-cmf .cmf-tips-content a",
-    "color:#4fa3ff; text-decoration: underline;"
-  );
-  addToSS(
-    state,
-    ".fb-cmf .cmf-tips-content a:hover",
-    "color:#7bbcff;"
-  );
+  addToSS(state, ".fb-cmf .cmf-tips-content a", "color:#4fa3ff; text-decoration: underline;");
+  addToSS(state, ".fb-cmf .cmf-tips-content a:hover", "color:#7bbcff;");
   addToSS(
     state,
     ".fb-cmf .fb-cmf-search",
@@ -417,16 +383,8 @@ function addCSS(state, options, defaults) {
     ".fb-cmf .fb-cmf-search-icon",
     "display:flex; align-items:center; justify-content:center; width:20px; height:20px; color: var(--secondary-icon); flex-shrink:0;"
   );
-  addToSS(
-    state,
-    ".fb-cmf .fb-cmf-search-icon svg",
-    "width:16px; height:16px; fill: currentColor;"
-  );
-  addToSS(
-    state,
-    ".fb-cmf .fb-cmf-search-icon .cmf-icon",
-    "width:22px; height:22px;"
-  );
+  addToSS(state, ".fb-cmf .fb-cmf-search-icon svg", "width:16px; height:16px; fill: currentColor;");
+  addToSS(state, ".fb-cmf .fb-cmf-search-icon .cmf-icon", "width:22px; height:22px;");
   addToSS(
     state,
     ".fb-cmf .fb-cmf-search input",
@@ -439,7 +397,7 @@ function addCSS(state, options, defaults) {
   );
   addToSS(
     state,
-    ".__fb-dark-mode .fb-cmf fieldset textarea,.__fb-dark-mode .fb-cmf fieldset input[type=\"input\"].__fb-dark-mode .fb-cmf fieldset select",
+    '.__fb-dark-mode .fb-cmf fieldset textarea,.__fb-dark-mode .fb-cmf fieldset input[type="input"].__fb-dark-mode .fb-cmf fieldset select',
     "background-color:var(--comment-background); color:var(--primary-text);"
   );
   addToSS(
@@ -460,13 +418,13 @@ function addCSS(state, options, defaults) {
     ".fb-cmf .fileResults",
     "grid-column-start: 1; grid-column-end: 6; font-style:italic; margin-top: 1rem;"
   );
+  addToSS(state, `.fb-cmf[${state.showAtt}]`, "opacity:1; transform:scale(1); visibility:visible;");
+  addToSS(state, `.${state.iconNewWindowClass}`, "width: 1rem; height: 1rem;");
   addToSS(
     state,
-    `.fb-cmf[${state.showAtt}]`,
-    "opacity:1; transform:scale(1); visibility:visible;"
+    `.${state.iconNewWindowClass} a`,
+    "width: 1rem; position: relative; display: inline-block;"
   );
-  addToSS(state, `.${state.iconNewWindowClass}`, "width: 1rem; height: 1rem;");
-  addToSS(state, `.${state.iconNewWindowClass} a`, "width: 1rem; position: relative; display: inline-block;");
   addToSS(
     state,
     `.${state.iconNewWindowClass} svg`,
@@ -526,36 +484,36 @@ function addExtraCSS(state, options, defaults) {
     addToSS(state, ".fb-cmf-toggle svg", "height: 95%; aspect-ratio : 1 / 1;");
     addToSS(state, ".fb-cmf-toggle .cmf-icon", "height: 95%; aspect-ratio : 1 / 1;");
     addToSS(state, ".fb-cmf-toggle:hover", "cursor:pointer;");
-    addToSS(state, `.fb-cmf-toggle[${state.showAtt}]`, "display:flex; align-items:center; justify-content:center;");
-      addToSS(
-        state,
-        ".fb-cmf-toggle.fb-cmf-toggle-topbar",
-        "border:none; outline:none; position: relative; overflow: hidden;" +
-          "color: var(--cmf-icon-color, var(--secondary-icon));" +
-          "background-color: var(--cmf-btn-bg, var(--secondary-button-background-floating));" +
-          "transition: background-color 100ms cubic-bezier(0, 0, 1, 1), color 100ms cubic-bezier(0, 0, 1, 1);"
-      );
-      addToSS(
-        state,
-        ".fb-cmf-toggle.fb-cmf-toggle-topbar::after",
-        "content: \"\"; position: absolute; inset: 0; border-radius: inherit;" +
-          "background-color: var(--cmf-btn-hover, var(--hover-overlay)); opacity: 0; pointer-events: none;" +
-          "transition: none;"
-      );
+    addToSS(
+      state,
+      `.fb-cmf-toggle[${state.showAtt}]`,
+      "display:flex; align-items:center; justify-content:center;"
+    );
+    addToSS(
+      state,
+      ".fb-cmf-toggle.fb-cmf-toggle-topbar",
+      "border:none; outline:none; position: relative; overflow: hidden;" +
+        "color: var(--cmf-icon-color, var(--secondary-icon));" +
+        "background-color: var(--cmf-btn-bg, var(--secondary-button-background-floating));" +
+        "transition: background-color 100ms cubic-bezier(0, 0, 1, 1), color 100ms cubic-bezier(0, 0, 1, 1);"
+    );
+    addToSS(
+      state,
+      ".fb-cmf-toggle.fb-cmf-toggle-topbar::after",
+      'content: ""; position: absolute; inset: 0; border-radius: inherit;' +
+        "background-color: var(--cmf-btn-hover, var(--hover-overlay)); opacity: 0; pointer-events: none;" +
+        "transition: none;"
+    );
     addToSS(state, ".fb-cmf-toggle.fb-cmf-toggle-topbar:hover::after", "opacity: 1;");
     addToSS(
       state,
       ".fb-cmf-toggle.fb-cmf-toggle-topbar:active::after",
       "background-color: var(--cmf-btn-press, var(--press-overlay)); opacity: 1;"
     );
+    addToSS(state, ".fb-cmf-toggle.fb-cmf-toggle-topbar:active", "color: var(--accent);");
     addToSS(
       state,
-      ".fb-cmf-toggle.fb-cmf-toggle-topbar:active",
-      "color: var(--accent);"
-    );
-    addToSS(
-      state,
-      ".fb-cmf-toggle.fb-cmf-toggle-topbar[data-cmf-open=\"true\"]",
+      '.fb-cmf-toggle.fb-cmf-toggle-topbar[data-cmf-open="true"]',
       "color: var(--cmf-active-icon, var(--accent)); background-color: var(--cmf-active-bg, var(--primary-button-background));"
     );
   }
@@ -581,20 +539,12 @@ function addExtraCSS(state, options, defaults) {
       "font-size: .9375rem; font-weight: 600;" +
       "color: var(--primary-text); position:relative; overflow:hidden;"
   );
-  addToSS(
-    state,
-    ".fb-cmf footer .cmf-action-text",
-    "padding-right: 0.5rem;"
-  );
-  addToSS(
-    state,
-    "#fbcmf footer > button:hover",
-    "font-family: inherit;"
-  );
+  addToSS(state, ".fb-cmf footer .cmf-action-text", "padding-right: 0.5rem;");
+  addToSS(state, "#fbcmf footer > button:hover", "font-family: inherit;");
   addToSS(
     state,
     "#fbcmf footer > button::after",
-    "content:\"\"; position:absolute; inset:0; border-radius:inherit;" +
+    'content:""; position:absolute; inset:0; border-radius:inherit;' +
       "background-color: var(--hover-overlay); opacity:0; pointer-events:none;" +
       "transition: opacity 0.1s cubic-bezier(0, 0, 1, 1);"
   );
@@ -610,11 +560,7 @@ function addExtraCSS(state, options, defaults) {
     ".fb-cmf footer .cmf-action-icon svg",
     "width:20px; height:20px; fill: currentColor;"
   );
-  addToSS(
-    state,
-    ".fb-cmf footer .cmf-action-icon .cmf-icon",
-    "width:32px; height:32px;"
-  );
+  addToSS(state, ".fb-cmf footer .cmf-action-icon .cmf-icon", "width:32px; height:32px;");
 
   if (state.tempStyleSheetCode.length > 0) {
     styleTag.appendChild(document.createTextNode(state.tempStyleSheetCode));

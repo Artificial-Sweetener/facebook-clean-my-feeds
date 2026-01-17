@@ -12,7 +12,10 @@ const {
   findProfileBlockedText,
   findVideosBlockedText,
 } = require("../../feeds/shared/blocked-text");
-const { hasGroupsAnimatedGifContent, hasNewsAnimatedGifContent } = require("../../feeds/shared/animated-gifs");
+const {
+  hasGroupsAnimatedGifContent,
+  hasNewsAnimatedGifContent,
+} = require("../../feeds/shared/animated-gifs");
 const { findNumberOfShares } = require("../../feeds/shared/shares");
 const {
   isNewsEventsYouMayLike,
@@ -177,8 +180,8 @@ function collectSignalCounts() {
   for (const signal of signals) {
     counts[signal] = 0;
   }
-  const spans = Array.from(document.querySelectorAll("span[dir], span, div")).filter((el) =>
-    typeof el.textContent === "string" && el.textContent.trim() !== ""
+  const spans = Array.from(document.querySelectorAll("span[dir], span, div")).filter(
+    (el) => typeof el.textContent === "string" && el.textContent.trim() !== ""
   );
   for (const el of spans) {
     const text = el.textContent;
@@ -256,8 +259,14 @@ function getNewsPostCollection() {
 
 function getGroupsPostCollection(state) {
   let query = groupsSelectors.feedQuerySingle;
-  if (state && (state.gfType === "groups" || state.gfType === "groups-recent" || state.gfType === "search")) {
-    query = state.gfType === "groups-recent" ? groupsSelectors.feedQueryRecent : groupsSelectors.feedQueryMultiple;
+  if (
+    state &&
+    (state.gfType === "groups" || state.gfType === "groups-recent" || state.gfType === "search")
+  ) {
+    query =
+      state.gfType === "groups-recent"
+        ? groupsSelectors.feedQueryRecent
+        : groupsSelectors.feedQueryMultiple;
   }
   return { query, posts: Array.from(document.querySelectorAll(query)) };
 }
@@ -286,9 +295,10 @@ function getVideosPostCollection(state) {
     return { query, queryBlocks, posts: [] };
   }
 
-  const posts = state && state.vfType === "search"
-    ? Array.from(document.querySelectorAll(query))
-    : Array.from(container.querySelectorAll(query));
+  const posts =
+    state && state.vfType === "search"
+      ? Array.from(document.querySelectorAll(query))
+      : Array.from(container.querySelectorAll(query));
   return { query, queryBlocks, posts };
 }
 
@@ -346,18 +356,50 @@ function buildNewsMatches(post, context) {
   const { options, filters, keyWords, state } = context;
   const matches = {};
   addMatch(matches, "NF_SPONSORED", options.NF_SPONSORED && isSponsored(post, state));
-  addMatch(matches, "NF_SUGGESTIONS", options.NF_SUGGESTIONS && isNewsSuggested(post, state, keyWords));
-  addMatch(matches, "NF_REELS_SHORT_VIDEOS", options.NF_REELS_SHORT_VIDEOS && isNewsReelsAndShortVideos(post, state, keyWords));
-  addMatch(matches, "NF_SHORT_REEL_VIDEO", options.NF_SHORT_REEL_VIDEO && isNewsShortReelVideo(post, keyWords));
+  addMatch(
+    matches,
+    "NF_SUGGESTIONS",
+    options.NF_SUGGESTIONS && isNewsSuggested(post, state, keyWords)
+  );
+  addMatch(
+    matches,
+    "NF_REELS_SHORT_VIDEOS",
+    options.NF_REELS_SHORT_VIDEOS && isNewsReelsAndShortVideos(post, state, keyWords)
+  );
+  addMatch(
+    matches,
+    "NF_SHORT_REEL_VIDEO",
+    options.NF_SHORT_REEL_VIDEO && isNewsShortReelVideo(post, keyWords)
+  );
   addMatch(matches, "NF_META_AI", options.NF_META_AI && isNewsMetaAICard(post, keyWords));
-  addMatch(matches, "NF_PAID_PARTNERSHIP", options.NF_PAID_PARTNERSHIP && isNewsPaidPartnership(post, keyWords));
-  addMatch(matches, "NF_PEOPLE_YOU_MAY_KNOW", options.NF_PEOPLE_YOU_MAY_KNOW && isNewsPeopleYouMayKnow(post, keyWords));
+  addMatch(
+    matches,
+    "NF_PAID_PARTNERSHIP",
+    options.NF_PAID_PARTNERSHIP && isNewsPaidPartnership(post, keyWords)
+  );
+  addMatch(
+    matches,
+    "NF_PEOPLE_YOU_MAY_KNOW",
+    options.NF_PEOPLE_YOU_MAY_KNOW && isNewsPeopleYouMayKnow(post, keyWords)
+  );
   addMatch(matches, "NF_FOLLOW", options.NF_FOLLOW && isNewsFollow(post, state, keyWords));
   addMatch(matches, "NF_PARTICIPATE", options.NF_PARTICIPATE && isNewsParticipate(post, keyWords));
-  addMatch(matches, "NF_SPONSORED_PAID", options.NF_SPONSORED_PAID && isNewsSponsoredPaidBy(post, keyWords));
-  addMatch(matches, "NF_EVENTS_YOU_MAY_LIKE", options.NF_EVENTS_YOU_MAY_LIKE && isNewsEventsYouMayLike(post, keyWords));
+  addMatch(
+    matches,
+    "NF_SPONSORED_PAID",
+    options.NF_SPONSORED_PAID && isNewsSponsoredPaidBy(post, keyWords)
+  );
+  addMatch(
+    matches,
+    "NF_EVENTS_YOU_MAY_LIKE",
+    options.NF_EVENTS_YOU_MAY_LIKE && isNewsEventsYouMayLike(post, keyWords)
+  );
   addMatch(matches, "NF_STORIES", options.NF_STORIES && isNewsStoriesPost(post, keyWords));
-  addMatch(matches, "NF_ANIMATED_GIFS_POSTS", options.NF_ANIMATED_GIFS_POSTS && hasNewsAnimatedGifContent(post, keyWords));
+  addMatch(
+    matches,
+    "NF_ANIMATED_GIFS_POSTS",
+    options.NF_ANIMATED_GIFS_POSTS && hasNewsAnimatedGifContent(post, keyWords)
+  );
 
   if (options.NF_BLOCKED_ENABLED) {
     const blockedText = findNewsBlockedText(post, options, filters);
@@ -388,8 +430,16 @@ function buildGroupsMatches(post, context) {
   const matches = {};
   addMatch(matches, "GF_SPONSORED", options.GF_SPONSORED && isSponsored(post, state));
   addMatch(matches, "GF_SUGGESTIONS", options.GF_SUGGESTIONS && isGroupsSuggested(post, keyWords));
-  addMatch(matches, "GF_SHORT_REEL_VIDEO", options.GF_SHORT_REEL_VIDEO && isGroupsShortReelVideo(post, keyWords));
-  addMatch(matches, "GF_ANIMATED_GIFS_POSTS", options.GF_ANIMATED_GIFS_POSTS && hasGroupsAnimatedGifContent(post, keyWords));
+  addMatch(
+    matches,
+    "GF_SHORT_REEL_VIDEO",
+    options.GF_SHORT_REEL_VIDEO && isGroupsShortReelVideo(post, keyWords)
+  );
+  addMatch(
+    matches,
+    "GF_ANIMATED_GIFS_POSTS",
+    options.GF_ANIMATED_GIFS_POSTS && hasGroupsAnimatedGifContent(post, keyWords)
+  );
 
   if (options.GF_BLOCKED_ENABLED) {
     const blockedText = findGroupsBlockedText(post, options, filters);
@@ -428,7 +478,11 @@ function buildVideosMatches(post, queryBlocks, context) {
 function buildProfileMatches(post, context) {
   const { options, filters, keyWords } = context;
   const matches = {};
-  addMatch(matches, "PP_ANIMATED_GIFS_POSTS", options.PP_ANIMATED_GIFS_POSTS && hasNewsAnimatedGifContent(post, keyWords));
+  addMatch(
+    matches,
+    "PP_ANIMATED_GIFS_POSTS",
+    options.PP_ANIMATED_GIFS_POSTS && hasNewsAnimatedGifContent(post, keyWords)
+  );
   if (options.PP_BLOCKED_ENABLED) {
     const blockedText = findProfileBlockedText(post, options, filters);
     if (blockedText) {

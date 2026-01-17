@@ -114,7 +114,9 @@ function applySearchFilter(dialog, query) {
 
     if (normalized.length > 0) {
       if (!fieldset.dataset.cmfPrevState) {
-        fieldset.dataset.cmfPrevState = fieldset.classList.contains("cmf-hidden") ? "hidden" : "visible";
+        fieldset.dataset.cmfPrevState = fieldset.classList.contains("cmf-hidden")
+          ? "hidden"
+          : "visible";
       }
       if (showFieldset) {
         fieldset.classList.remove("cmf-hidden");
@@ -284,7 +286,10 @@ function updateDialog(state) {
 
   const rbs = content.querySelectorAll('input[type="radio"]');
   rbs.forEach((rb) => {
-    if (Object.prototype.hasOwnProperty.call(state.options, rb.name) && rb.value === state.options[rb.name]) {
+    if (
+      Object.prototype.hasOwnProperty.call(state.options, rb.name) &&
+      rb.value === state.options[rb.name]
+    ) {
       rb.checked = true;
     }
   });
@@ -575,7 +580,7 @@ function initDialog(context, helpers) {
       }
 
       const md = document.getElementById("fbcmf");
-      const inputs = Array.from(md.querySelectorAll("input:not([type=\"file\"]), textarea, select"));
+      const inputs = Array.from(md.querySelectorAll('input:not([type="file"]), textarea, select'));
       const validNames = [];
       inputs.forEach((inp) => {
         if (!validNames.includes(inp.name)) {

@@ -46,7 +46,8 @@ function createToggleButton(state, keyWords, onToggle) {
     if (!hex.startsWith("#")) {
       return "";
     }
-    const normalized = hex.length === 4 ? `#${hex[1]}${hex[1]}${hex[2]}${hex[2]}${hex[3]}${hex[3]}` : hex;
+    const normalized =
+      hex.length === 4 ? `#${hex[1]}${hex[1]}${hex[2]}${hex[2]}${hex[3]}${hex[3]}` : hex;
     if (normalized.length !== 7) {
       return "";
     }

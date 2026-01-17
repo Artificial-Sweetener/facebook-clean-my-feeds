@@ -110,10 +110,14 @@ function mpDoBlockingByBlockedText(filters, keyWords, state, options) {
 
 function isMarketplaceDirty(state) {
   if (state.mpType === "item") {
-    const mainColumnDM = document.querySelector('div[hidden] ~ div[class*="__"] div[role="dialog"]');
+    const mainColumnDM = document.querySelector(
+      'div[hidden] ~ div[class*="__"] div[role="dialog"]'
+    );
     if (mainColumnDM) {
       if (mainColumnDM.hasAttribute(mainColumnAtt)) {
-        if (hasSizeChanged(mainColumnDM.getAttribute(mainColumnAtt), mainColumnDM.innerHTML.length)) {
+        if (
+          hasSizeChanged(mainColumnDM.getAttribute(mainColumnAtt), mainColumnDM.innerHTML.length)
+        ) {
           return mainColumnDM;
         }
       } else {

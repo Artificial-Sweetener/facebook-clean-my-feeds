@@ -23,7 +23,9 @@ function isVideosDirty(state) {
   if (mainColumn) {
     if (!mainColumn.hasAttribute(mainColumnAtt)) {
       arrReturn[0] = mainColumn;
-    } else if (hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)) {
+    } else if (
+      hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)
+    ) {
       arrReturn[0] = mainColumn;
     }
   }

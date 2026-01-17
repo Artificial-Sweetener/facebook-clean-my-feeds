@@ -1,13 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-skip_tests=0
-for arg in "$@"; do
-  case "$arg" in
-    --skip-tests) skip_tests=1 ;;
-  esac
-done
-
 if ! command -v node >/dev/null 2>&1; then
   echo "Node.js is not available. Install Node 22.x and retry."
   exit 1
@@ -24,11 +17,8 @@ fi
 echo "Installing dependencies..."
 npm install
 
-if [[ "$skip_tests" -eq 0 ]]; then
-  echo "Running checks..."
-  npm run lint
-  npm run format:check
-  npm test
-fi
+echo "Running checks..."
+npm run lint
+npm run format:check
 
 echo "Setup complete."

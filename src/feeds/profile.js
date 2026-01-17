@@ -13,7 +13,9 @@ function isProfileColumnDirty(state) {
   if (mainColumn) {
     if (!mainColumn.hasAttribute(mainColumnAtt)) {
       arrReturn[0] = mainColumn;
-    } else if (hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)) {
+    } else if (
+      hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)
+    ) {
       arrReturn[0] = mainColumn;
     }
   }
@@ -45,9 +47,7 @@ function mopProfileFeed(context) {
   }
 
   const proceed =
-    options.PP_BLOCKED_ENABLED ||
-    options.PP_ANIMATED_GIFS_POSTS ||
-    options.PP_ANIMATED_GIFS_PAUSE;
+    options.PP_BLOCKED_ENABLED || options.PP_ANIMATED_GIFS_POSTS || options.PP_ANIMATED_GIFS_PAUSE;
   if (!proceed) {
     return null;
   }

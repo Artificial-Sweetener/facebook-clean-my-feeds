@@ -18,7 +18,9 @@ function isGroupsColumnDirty(state) {
   if (mainColumn) {
     if (!mainColumn.hasAttribute(mainColumnAtt)) {
       arrReturn[0] = mainColumn;
-    } else if (hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)) {
+    } else if (
+      hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)
+    ) {
       arrReturn[0] = mainColumn;
     }
   } else {
@@ -27,7 +29,9 @@ function isGroupsColumnDirty(state) {
     if (mainColumnGP) {
       if (!mainColumnGP.hasAttribute(mainColumnAtt)) {
         arrReturn[0] = mainColumnGP;
-      } else if (hasSizeChanged(mainColumnGP.getAttribute(mainColumnAtt), mainColumnGP.innerHTML.length)) {
+      } else if (
+        hasSizeChanged(mainColumnGP.getAttribute(mainColumnAtt), mainColumnGP.innerHTML.length)
+      ) {
         arrReturn[0] = mainColumnGP;
       }
     }
@@ -178,13 +182,17 @@ function mopGroupsFeed(context) {
   }
 
   if (mainColumn) {
-    if (state.gfType === "groups" || state.gfType === "groups-recent" || state.gfType === "search") {
+    if (
+      state.gfType === "groups" ||
+      state.gfType === "groups-recent" ||
+      state.gfType === "search"
+    ) {
       if (options.GF_SUGGESTIONS) {
         cleanGroupsSuggestions("Suggestions", context);
       }
 
       const query =
-        state.gfType === "groups-recent" ? "h2[dir=\"auto\"] + div > div" : "div[role=\"feed\"] > div";
+        state.gfType === "groups-recent" ? 'h2[dir="auto"] + div > div' : 'div[role="feed"] > div';
       const posts = Array.from(document.querySelectorAll(query));
       if (posts.length > 0) {
         const count = posts.length;

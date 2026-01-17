@@ -4,8 +4,8 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "lint": "eslint -c config/eslint.config.cjs \"src/**/*.js\" \"tools/**/*.js\" \"config/**/*.cjs\"",
-    "format:check": "prettier --config config/prettier.config.cjs --check \"src/**/*.js\" \"tools/**/*.js\" \"config/**/*.cjs\" \"*.md\" \"*.json\"",
+    "lint": "eslint -c tools/config/eslint.config.cjs \"src/**/*.js\" \"tools/**/*.js\" \"tools/config/**/*.cjs\"",
+    "format:check": "prettier --config tools/config/prettier.config.cjs --check \"src/**/*.js\" \"tools/**/*.js\" \"tools/config/**/*.cjs\" \"*.md\" \"*.json\"",
     "build": "node tools/build.js",
     "icons:optimize": "node tools/optimize-icons.js"
   },

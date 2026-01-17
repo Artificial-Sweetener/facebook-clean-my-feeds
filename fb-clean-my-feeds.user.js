@@ -3532,7 +3532,7 @@
           ".fb-cmf .fileResults",
           "grid-column-start: 1; grid-column-end: 6; font-style:italic; margin-top: 1rem;"
         );
-        addToSS(state, `.fb-cmf[${state.showAtt}]`, "opacity:1; transform:scale(1); visibility:visible;");
+        addToSS(state, `.fb-cmf[${state.showAtt}]`, "opacity:1; visibility:visible;");
         addToSS(state, `.${state.iconNewWindowClass}`, "width: 1rem; height: 1rem;");
         addToSS(
           state,
@@ -3617,15 +3617,11 @@
           );
         }
         if (cmfDlgLocation === "1") {
-          styles = "right:0.35rem; margin-left:1rem; transform:scale(0);transform-origin:top right;";
+          styles = "right:16px; left:auto; margin-left:0; margin-right:0;";
         } else {
-          styles = "left:4.25rem; margin-right:1rem; transform:scale(0);transform-origin:center center;";
+          styles = "left:16px; right:auto; margin-left:0; margin-right:0;";
         }
-        addToSS(
-          state,
-          ".fb-cmf",
-          styles + "transition:transform .45s ease, opacity .25s ease, visibility 1s ease;"
-        );
+        addToSS(state, ".fb-cmf", styles);
         addToSS(
           state,
           "div#fbcmf footer > button",
@@ -7780,6 +7776,171 @@
         });
         Object.assign(target, source);
       }
+      function closeDialogIfOpen(state) {
+        const elDialog = document.getElementById("fbcmf");
+        if (!elDialog || !state) {
+          return;
+        }
+        if (elDialog.hasAttribute(state.showAtt)) {
+          elDialog.removeAttribute(state.showAtt);
+          if (state.btnToggleEl) {
+            state.btnToggleEl.removeAttribute("data-cmf-open");
+          }
+        }
+      }
+      function getTopbarMenuButtons() {
+        const banner = document.querySelector('[role="banner"]');
+        if (!banner) {
+          return [];
+        }
+        const candidates = Array.from(banner.querySelectorAll("[aria-label]"));
+        return candidates.filter((button) => {
+          const label = button.getAttribute("aria-label");
+          if (!label) {
+            return false;
+          }
+          const normalized = label.trim().toLowerCase();
+          const isTopbarMenu = normalized === "menu" || normalized === "messenger" || normalized === "messages" || normalized.startsWith("notifications");
+          if (!isTopbarMenu) {
+            return false;
+          }
+          const role = button.getAttribute("role");
+          const hasExpanded = button.getAttribute("aria-expanded") !== null;
+          return hasExpanded || role === "button" || button.tagName === "BUTTON";
+        });
+      }
+      function isTopbarMenuButton(element) {
+        if (!element || typeof element.getAttribute !== "function") {
+          return false;
+        }
+        const label = element.getAttribute("aria-label");
+        if (!label) {
+          return false;
+        }
+        const normalized = label.trim().toLowerCase();
+        const isTopbarMenu = normalized === "menu" || normalized === "messenger" || normalized === "messages" || normalized.startsWith("notifications");
+        if (!isTopbarMenu) {
+          return false;
+        }
+        const role = element.getAttribute("role");
+        const hasExpanded = element.getAttribute("aria-expanded") !== null;
+        const hasTabIndex = element.getAttribute("tabindex") !== null;
+        return hasExpanded || hasTabIndex || role === "button" || element.tagName === "BUTTON";
+      }
+      function closeFacebookMenus(exceptButton) {
+        const buttons = getTopbarMenuButtons();
+        buttons.forEach((button) => {
+          if (button === exceptButton) {
+            return;
+          }
+          if (button.getAttribute("aria-expanded") === "true") {
+            button.click();
+          }
+        });
+      }
+      function setupTopbarMenuSync(state) {
+        if (!state || state.cmfTopbarSyncInit) {
+          return;
+        }
+        const bindButtons = () => {
+          const buttons = getTopbarMenuButtons();
+          buttons.forEach((button) => {
+            if (button.dataset.cmfMenuSync === "1") {
+              return;
+            }
+            button.dataset.cmfMenuSync = "1";
+            button.addEventListener(
+              "click",
+              () => {
+                closeDialogIfOpen(state);
+              },
+              false
+            );
+            if (typeof MutationObserver !== "undefined") {
+              const observer = new MutationObserver(() => {
+                if (button.getAttribute("aria-expanded") === "true") {
+                  closeDialogIfOpen(state);
+                }
+              });
+              observer.observe(button, { attributes: true, attributeFilter: ["aria-expanded"] });
+            }
+          });
+        };
+        const banner = document.querySelector('[role="banner"]');
+        if (!banner) {
+          setTimeout(() => setupTopbarMenuSync(state), 200);
+          return;
+        }
+        state.cmfTopbarSyncInit = true;
+        bindButtons();
+        if (typeof MutationObserver !== "undefined") {
+          const observer = new MutationObserver((mutations) => {
+            bindButtons();
+            mutations.forEach((mutation) => {
+              const target = mutation.target instanceof Element ? mutation.target : null;
+              if (target && mutation.type === "attributes" && mutation.attributeName === "aria-expanded" && isTopbarMenuButton(target) && target.getAttribute("aria-expanded") === "true") {
+                closeDialogIfOpen(state);
+              }
+            });
+          });
+          observer.observe(banner, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ["aria-expanded", "aria-label", "role", "tabindex"]
+          });
+        }
+        if (typeof MutationObserver !== "undefined") {
+          const panelObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+              if (mutation.type !== "childList") {
+                return;
+              }
+              mutation.addedNodes.forEach((node) => {
+                if (!(node instanceof Element)) {
+                  return;
+                }
+                const dialog = node.matches('[role="dialog"][aria-label]') ? node : node.querySelector ? node.querySelector('[role="dialog"][aria-label]') : null;
+                if (dialog && isTopbarMenuButton(dialog)) {
+                  closeDialogIfOpen(state);
+                }
+              });
+            });
+          });
+          if (document.body) {
+            panelObserver.observe(document.body, { childList: true, subtree: true });
+          }
+        }
+        const getMenuButtonFromEvent = (event) => {
+          const path = typeof event.composedPath === "function" ? event.composedPath() : [];
+          for (const entry of path) {
+            if (entry instanceof Element && isTopbarMenuButton(entry)) {
+              return entry;
+            }
+          }
+          const target = event.target instanceof Element ? event.target : null;
+          if (!target) {
+            return null;
+          }
+          const closest = target.closest("[aria-label]");
+          return closest && isTopbarMenuButton(closest) ? closest : null;
+        };
+        const onTopbarActivate = (event) => {
+          const topbarButton = getMenuButtonFromEvent(event);
+          if (!topbarButton) {
+            return;
+          }
+          closeDialogIfOpen(state);
+        };
+        document.addEventListener("pointerdown", onTopbarActivate, true);
+        document.addEventListener("click", onTopbarActivate, true);
+        document.addEventListener("keydown", (event) => {
+          if (event.key !== "Enter" && event.key !== " ") {
+            return;
+          }
+          onTopbarActivate(event);
+        });
+      }
       function toggleDialog(state) {
         const elDialog = document.getElementById("fbcmf");
         if (!elDialog || !state) {
@@ -7791,6 +7952,8 @@
             state.btnToggleEl.removeAttribute("data-cmf-open");
           }
         } else {
+          setupTopbarMenuSync(state);
+          closeFacebookMenus();
           elDialog.setAttribute(state.showAtt, "");
           if (state.btnToggleEl) {
             state.btnToggleEl.setAttribute("data-cmf-open", "true");
@@ -8428,6 +8591,7 @@
                 observer.observe(dialog, { attributes: true, attributeFilter: [state.showAtt] });
               }
             }
+            setupTopbarMenuSync(state);
           } else {
             setTimeout(runInit, 50);
           }

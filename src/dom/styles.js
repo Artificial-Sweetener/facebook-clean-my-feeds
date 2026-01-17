@@ -418,7 +418,7 @@ function addCSS(state, options, defaults) {
     ".fb-cmf .fileResults",
     "grid-column-start: 1; grid-column-end: 6; font-style:italic; margin-top: 1rem;"
   );
-  addToSS(state, `.fb-cmf[${state.showAtt}]`, "opacity:1; transform:scale(1); visibility:visible;");
+  addToSS(state, `.fb-cmf[${state.showAtt}]`, "opacity:1; visibility:visible;");
   addToSS(state, `.${state.iconNewWindowClass}`, "width: 1rem; height: 1rem;");
   addToSS(
     state,
@@ -519,15 +519,11 @@ function addExtraCSS(state, options, defaults) {
   }
 
   if (cmfDlgLocation === "1") {
-    styles = "right:0.35rem; margin-left:1rem; transform:scale(0);transform-origin:top right;";
+    styles = "right:16px; left:auto; margin-left:0; margin-right:0;";
   } else {
-    styles = "left:4.25rem; margin-right:1rem; transform:scale(0);transform-origin:center center;";
+    styles = "left:16px; right:auto; margin-left:0; margin-right:0;";
   }
-  addToSS(
-    state,
-    ".fb-cmf",
-    styles + "transition:transform .45s ease, opacity .25s ease, visibility 1s ease;"
-  );
+  addToSS(state, ".fb-cmf", styles);
   addToSS(
     state,
     "div#fbcmf footer > button",

@@ -51,12 +51,15 @@ function createState() {
     iconDialogHeaderHTML: "",
     iconDialogSearchHTML: "",
     iconDialogFooterHTML: "",
+    iconFooterSaveHTML: "",
+    iconFooterCheckHTML: "",
     iconLegendHTML: "",
     dialogSectionIcons: {},
     dialogFooterIcons: {},
     iconNewWindow: "",
     iconNewWindowClass: "cmf-link-new",
     isChromium: false,
+    saveFeedbackTimeoutId: null,
   };
 }
 

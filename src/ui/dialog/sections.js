@@ -159,6 +159,38 @@ function getKeyword(keyWords, translations, key) {
   return fallback;
 }
 
+function appendTextWithLinks(container, template, links) {
+  if (!container || !template) {
+    return;
+  }
+  let remaining = template;
+  while (remaining.length > 0) {
+    let nextToken = null;
+    let nextIndex = -1;
+    links.forEach((link) => {
+      const idx = remaining.indexOf(link.token);
+      if (idx !== -1 && (nextIndex === -1 || idx < nextIndex)) {
+        nextIndex = idx;
+        nextToken = link;
+      }
+    });
+    if (!nextToken) {
+      container.appendChild(document.createTextNode(remaining));
+      break;
+    }
+    if (nextIndex > 0) {
+      container.appendChild(document.createTextNode(remaining.slice(0, nextIndex)));
+    }
+    const anchor = document.createElement("a");
+    anchor.href = nextToken.href;
+    anchor.target = "_blank";
+    anchor.rel = "noopener noreferrer";
+    anchor.textContent = nextToken.label;
+    container.appendChild(anchor);
+    remaining = remaining.slice(nextIndex + nextToken.token.length);
+  }
+}
+
 function createLegend(state, title, subtitle, iconHTML = "") {
   const legend = document.createElement("legend");
   legend.classList.add("cmf-legend");
@@ -195,56 +227,72 @@ function createTipsContent(keyWords, translations) {
   const wrap = document.createElement("div");
   wrap.className = "cmf-tips-content";
 
-  const tipsText = getKeyword(keyWords, translations, "DLG_TIPS_CONTENT");
-  if (tipsText) {
-    const p = document.createElement("p");
-    p.textContent = tipsText;
-    wrap.appendChild(p);
-  }
-
   const maintainerText = getKeyword(keyWords, translations, "DLG_TIPS_MAINTAINER");
   if (maintainerText) {
     const p = document.createElement("p");
-    const prefixText = getKeyword(keyWords, translations, "DLG_TIPS_MAINTAINER_PREFIX");
-    if (prefixText) {
-      const prefix = document.createElement("strong");
-      prefix.textContent = prefixText;
-      p.appendChild(prefix);
-      p.appendChild(document.createTextNode(` ${maintainerText}`));
-    } else {
-      p.textContent = maintainerText;
-    }
+    p.textContent = maintainerText;
     wrap.appendChild(p);
   }
 
-  const links = [
+  const linkLabels = {
+    github: getKeyword(keyWords, translations, "DLG_TIPS_LINK_REPO"),
+    facebook: getKeyword(keyWords, translations, "DLG_TIPS_LINK_FACEBOOK"),
+    site: getKeyword(keyWords, translations, "DLG_TIPS_LINK_SITE"),
+  };
+  const linkMap = [
     {
+      token: "{github}",
+      label: linkLabels.github || "GitHub",
       href: "https://github.com/Artificial-Sweetener/facebook-clean-my-feeds",
-      label: getKeyword(keyWords, translations, "DLG_TIPS_LINK_REPO"),
     },
     {
+      token: "{facebook}",
+      label: linkLabels.facebook || "Facebook",
       href: "https://www.facebook.com/artificialsweetenerai",
-      label: getKeyword(keyWords, translations, "DLG_TIPS_LINK_FACEBOOK"),
     },
     {
+      token: "{site}",
+      label: linkLabels.site || "website",
       href: "https://artificialsweetener.ai",
-      label: getKeyword(keyWords, translations, "DLG_TIPS_LINK_SITE"),
     },
   ];
-  const linkItems = links.filter((link) => link.label);
-  if (linkItems.length > 0) {
+
+  const starText = getKeyword(keyWords, translations, "DLG_TIPS_STAR");
+  if (starText) {
     const p = document.createElement("p");
-    linkItems.forEach((link, index) => {
-      const anchor = document.createElement("a");
-      anchor.href = link.href;
-      anchor.target = "_blank";
-      anchor.rel = "noopener noreferrer";
-      anchor.textContent = link.label;
-      p.appendChild(anchor);
-      if (index < linkItems.length - 1) {
-        p.appendChild(document.createTextNode(" | "));
-      }
-    });
+    appendTextWithLinks(p, starText, linkMap);
+    wrap.appendChild(p);
+  }
+
+  const facebookText = getKeyword(keyWords, translations, "DLG_TIPS_FACEBOOK");
+  if (facebookText) {
+    const p = document.createElement("p");
+    appendTextWithLinks(p, facebookText, linkMap);
+    wrap.appendChild(p);
+  }
+
+  const siteText = getKeyword(keyWords, translations, "DLG_TIPS_SITE");
+  if (siteText) {
+    const p = document.createElement("p");
+    appendTextWithLinks(p, siteText, linkMap);
+    wrap.appendChild(p);
+  }
+
+  const creditsText = getKeyword(keyWords, translations, "DLG_TIPS_CREDITS");
+  if (creditsText) {
+    const p = document.createElement("p");
+    appendTextWithLinks(p, creditsText, [
+      {
+        token: "{zbluebugz}",
+        label: "zbluebugz",
+        href: "https://github.com/zbluebugz",
+      },
+      {
+        token: "{trinhquocviet}",
+        label: "trinhquocviet",
+        href: "https://github.com/trinhquocviet",
+      },
+    ]);
     wrap.appendChild(p);
   }
 

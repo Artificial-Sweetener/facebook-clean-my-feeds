@@ -1,5 +1,6 @@
 const aboutIcon = require("../res/about.png");
 const bugIcon = require("../res/bug.png");
+const checkIcon = require("../res/check.png");
 const exportIcon = require("../res/export.png");
 const groupsIcon = require("../res/groups.png");
 const importIcon = require("../res/import.png");
@@ -18,6 +19,7 @@ const videosIcon = require("../res/videos.png");
 module.exports = {
   aboutIcon,
   bugIcon,
+  checkIcon,
   exportIcon,
   groupsIcon,
   importIcon,

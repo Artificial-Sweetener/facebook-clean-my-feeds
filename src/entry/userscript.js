@@ -15,9 +15,10 @@ const { buildIconHTML } = require("../ui/icon-html");
 const { initDialog, toggleDialog } = require("../ui/dialog/dialog");
 const { getOptions } = require("../storage/idb");
 const {
-  aboutIcon,
-  bugIcon,
-  exportIcon,
+    aboutIcon,
+    bugIcon,
+    checkIcon,
+    exportIcon,
   groupsIcon,
   importIcon,
   infoIcon,
@@ -42,8 +43,9 @@ const ICON_DIALOG_HEADER_HTML = buildIconHTML(mopIcon, "cmf-icon--dialog-header"
 const ICON_DIALOG_SEARCH_HTML = buildIconHTML(searchIcon, "cmf-icon--dialog-search");
 const ICON_DIALOG_FOOTER_HTML = buildIconHTML(mopIcon, "cmf-icon--dialog-footer");
 const ICON_LEGEND_HTML = buildIconHTML(mopIcon, "cmf-icon--legend");
-const ICON_FOOTER_SAVE_HTML = buildIconHTML(saveIcon, "cmf-icon--footer-save");
-const ICON_FOOTER_EXPORT_HTML = buildIconHTML(exportIcon, "cmf-icon--footer-export");
+  const ICON_FOOTER_SAVE_HTML = buildIconHTML(saveIcon, "cmf-icon--footer-save");
+  const ICON_FOOTER_CHECK_HTML = buildIconHTML(checkIcon, "cmf-icon--footer-check");
+  const ICON_FOOTER_EXPORT_HTML = buildIconHTML(exportIcon, "cmf-icon--footer-export");
 const ICON_FOOTER_IMPORT_HTML = buildIconHTML(importIcon, "cmf-icon--footer-import");
 const ICON_FOOTER_RESET_HTML = buildIconHTML(resetIcon, "cmf-icon--footer-reset");
 const ICON_LEGEND_NEWS_HTML = buildIconHTML(newsIcon, "cmf-icon--legend-news");
@@ -288,8 +290,10 @@ async function startUserscript() {
   state.iconClose = ICON_CLOSE;
   state.iconToggleHTML = ICON_TOGGLE_HTML;
   state.iconDialogHeaderHTML = ICON_DIALOG_HEADER_HTML;
-  state.iconDialogSearchHTML = ICON_DIALOG_SEARCH_HTML;
-  state.iconDialogFooterHTML = ICON_DIALOG_FOOTER_HTML;
+    state.iconDialogSearchHTML = ICON_DIALOG_SEARCH_HTML;
+    state.iconDialogFooterHTML = ICON_DIALOG_FOOTER_HTML;
+    state.iconFooterSaveHTML = ICON_FOOTER_SAVE_HTML;
+    state.iconFooterCheckHTML = ICON_FOOTER_CHECK_HTML;
   state.iconLegendHTML = ICON_LEGEND_HTML;
   state.dialogSectionIcons = {
     DLG_NF: ICON_LEGEND_NEWS_HTML,
@@ -303,8 +307,8 @@ async function startUserscript() {
     DLG_REPORT_BUG: ICON_LEGEND_REPORT_BUG_HTML,
     DLG_TIPS: ICON_LEGEND_TIPS_HTML,
   };
-  state.dialogFooterIcons = {
-    BTNSave: ICON_FOOTER_SAVE_HTML,
+    state.dialogFooterIcons = {
+      BTNSave: ICON_FOOTER_SAVE_HTML,
     BTNExport: ICON_FOOTER_EXPORT_HTML,
     BTNImport: ICON_FOOTER_IMPORT_HTML,
     BTNReset: ICON_FOOTER_RESET_HTML,

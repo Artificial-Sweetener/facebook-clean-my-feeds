@@ -406,18 +406,8 @@ function addCSS(state, options, defaults) {
     "display:flex; flex-direction:column; gap:0.5rem; padding:0.75rem; text-align:center; background-color: var(--card-background);" +
       "border-radius:12px;"
   );
-  addToSS(
-    state,
-    ".fb-cmf footer .fileResults",
-    "margin-top:0.25rem; font-size:0.75rem; color: var(--secondary-text);"
-  );
   addToSS(state, ".fb-cmf .buttons button", "margin-left: 0.25rem; margin-right: 0.25rem;");
   addToSS(state, ".fb-cmf .fileInput", "display:none;");
-  addToSS(
-    state,
-    ".fb-cmf .fileResults",
-    "grid-column-start: 1; grid-column-end: 6; font-style:italic; margin-top: 1rem;"
-  );
   addToSS(state, `.fb-cmf[${state.showAtt}]`, "opacity:1; visibility:visible;");
   addToSS(state, `.${state.iconNewWindowClass}`, "width: 1rem; height: 1rem;");
   addToSS(
@@ -532,8 +522,39 @@ function addExtraCSS(state, options, defaults) {
       "border: none; border-radius: 8px;" +
       "background-color: transparent;" +
       "display:flex; align-items:center; gap:0.5rem; justify-content:flex-start;" +
-      "font-size: .9375rem; font-weight: 600;" +
-      "color: var(--primary-text); position:relative; overflow:hidden;"
+        "font-size: .9375rem; font-weight: 600;" +
+        "color: var(--primary-text); position:relative; overflow:hidden;"
+  );
+  addToSS(
+    state,
+    "#fbcmf footer > button",
+    "transition: color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;"
+  );
+  addToSS(state, "#fbcmf footer > button.cmf-action--dirty", "color:#d93025;");
+  addToSS(
+    state,
+    "#fbcmf footer > button.cmf-action--dirty .cmf-action-icon",
+    "color:#d93025;"
+  );
+  addToSS(
+    state,
+    "#fbcmf footer > button.cmf-action--confirm-blue",
+    "color:#1877f2; animation: cmf-pulse-blue 0.6s ease-out;"
+  );
+  addToSS(
+    state,
+    "#fbcmf footer > button.cmf-action--confirm-blue .cmf-action-icon",
+    "color:#1877f2;"
+  );
+  addToSS(
+    state,
+    "#fbcmf footer > button.cmf-action--confirm-green",
+    "color:#2e7d32; animation: cmf-pulse-green 0.6s ease-out;"
+  );
+  addToSS(
+    state,
+    "#fbcmf footer > button.cmf-action--confirm-green .cmf-action-icon",
+    "color:#2e7d32;"
   );
   addToSS(state, ".fb-cmf footer .cmf-action-text", "padding-right: 0.5rem;");
   addToSS(state, "#fbcmf footer > button:hover", "font-family: inherit;");
@@ -559,6 +580,17 @@ function addExtraCSS(state, options, defaults) {
   addToSS(state, ".fb-cmf footer .cmf-action-icon .cmf-icon", "width:32px; height:32px;");
 
   if (state.tempStyleSheetCode.length > 0) {
+    state.tempStyleSheetCode +=
+      "@keyframes cmf-pulse-blue {" +
+      "0% { color: #1877f2; }" +
+      "50% { color: #66a3ff; }" +
+      "100% { color: #1877f2; }" +
+      "}\n" +
+      "@keyframes cmf-pulse-green {" +
+      "0% { color: #2e7d32; }" +
+      "50% { color: #66bb6a; }" +
+      "100% { color: #2e7d32; }" +
+      "}\n";
     styleTag.appendChild(document.createTextNode(state.tempStyleSheetCode));
     state.tempStyleSheetCode = "";
   }

@@ -26,6 +26,201 @@ function replaceObjectContents(target, source) {
   Object.assign(target, source);
 }
 
+function isPlainObject(value) {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function deepEqual(a, b) {
+  if (a === b) {
+    return true;
+  }
+  if (Array.isArray(a) && Array.isArray(b)) {
+    if (a.length !== b.length) {
+      return false;
+    }
+    for (let i = 0; i < a.length; i += 1) {
+      if (!deepEqual(a[i], b[i])) {
+        return false;
+      }
+    }
+    return true;
+  }
+  if (isPlainObject(a) && isPlainObject(b)) {
+    const keysA = Object.keys(a);
+    const keysB = Object.keys(b);
+    if (keysA.length !== keysB.length) {
+      return false;
+    }
+    for (const key of keysA) {
+      if (!Object.prototype.hasOwnProperty.call(b, key)) {
+        return false;
+      }
+      if (!deepEqual(a[key], b[key])) {
+        return false;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
+function getFooterButton(buttonId) {
+  if (!buttonId) {
+    return null;
+  }
+  const dialog = document.getElementById("fbcmf");
+  if (!dialog) {
+    return null;
+  }
+  const footer = dialog.querySelector("footer");
+  if (!footer) {
+    return null;
+  }
+  return footer.querySelector(`#${buttonId}`);
+}
+
+function setActionButtonIcon(state, button, iconHtml) {
+  if (!state || !button || !iconHtml) {
+    return;
+  }
+  const iconWrap = button.querySelector(".cmf-action-icon");
+  if (!iconWrap) {
+    return;
+  }
+  iconWrap.innerHTML = iconHtml;
+}
+
+function collectDialogOptions(state) {
+  if (!state) {
+    return null;
+  }
+  const md = document.getElementById("fbcmf");
+  if (!md) {
+    return null;
+  }
+  const options = JSON.parse(JSON.stringify(state.options));
+
+  let cbs = Array.from(md.querySelectorAll('input[type="checkbox"][cbtype="T"]'));
+  cbs.forEach((cb) => {
+    options[cb.name] = cb.checked;
+  });
+
+  const blockedFeeds = [
+    "NF_BLOCKED_FEED",
+    "GF_BLOCKED_FEED",
+    "VF_BLOCKED_FEED",
+    "MP_BLOCKED_FEED",
+    "PP_BLOCKED_FEED",
+  ];
+  blockedFeeds.forEach((cbName) => {
+    if (!Array.isArray(options[cbName])) {
+      options[cbName] = [];
+    }
+    cbs = Array.from(md.querySelectorAll(`input[type="checkbox"][name="${cbName}"]`));
+    cbs.forEach((cb) => {
+      options[cbName][parseInt(cb.value, 10)] = cb.checked ? "1" : "0";
+    });
+  });
+
+  const rbs = md.querySelectorAll('input[type="radio"]:checked');
+  rbs.forEach((rb) => {
+    options[rb.name] = rb.value;
+  });
+  const inputs = Array.from(md.querySelectorAll('input[type="text"]'));
+  inputs.forEach((inp) => {
+    options[inp.name] = inp.value;
+  });
+  const tas = md.querySelectorAll("textarea");
+  tas.forEach((ta) => {
+    const txtn = ta.value.split("\n");
+    const txts = [];
+    txtn.forEach((txt) => {
+      if (txt.trim().length > 0) {
+        txts.push(txt);
+      }
+    });
+    options[ta.name] = txts.join(state.SEP);
+  });
+  const selects = Array.from(md.querySelectorAll("select"));
+  selects.forEach((select) => {
+    options[select.name] = select.value;
+  });
+
+  const validInputs = Array.from(md.querySelectorAll('input:not([type="file"]), textarea, select'));
+  const validNames = [];
+  validInputs.forEach((inp) => {
+    if (!validNames.includes(inp.name)) {
+      validNames.push(inp.name);
+    }
+  });
+  Object.keys(options).forEach((key) => {
+    if (!validNames.includes(key)) {
+      delete options[key];
+    }
+  });
+
+  return options;
+}
+
+function syncSaveButtonState(state) {
+  const pendingOptions = collectDialogOptions(state);
+  if (!pendingOptions) {
+    return;
+  }
+  const button = getFooterButton("BTNSave");
+  if (!button) {
+    return;
+  }
+  const isDirty = !deepEqual(pendingOptions, state.options);
+  if (isDirty) {
+    button.classList.add("cmf-action--dirty");
+    button.classList.remove("cmf-action--confirm-blue");
+    button.classList.remove("cmf-action--confirm-green");
+    if (state.saveFeedbackTimeoutId) {
+      clearTimeout(state.saveFeedbackTimeoutId);
+      state.saveFeedbackTimeoutId = null;
+    }
+    setActionButtonIcon(state, button, state.iconFooterSaveHTML || state.iconDialogFooterHTML);
+    return;
+  }
+
+  button.classList.remove("cmf-action--dirty");
+  if (!button.classList.contains("cmf-action--confirm-blue")) {
+    setActionButtonIcon(state, button, state.iconFooterSaveHTML || state.iconDialogFooterHTML);
+  }
+}
+
+function triggerActionFeedback(state, buttonId, className) {
+  const button = getFooterButton(buttonId);
+  if (!button) {
+    return;
+  }
+  if (state.saveFeedbackTimeoutId) {
+    clearTimeout(state.saveFeedbackTimeoutId);
+  }
+  button.classList.add(className);
+  button.classList.remove("cmf-action--dirty");
+  setActionButtonIcon(
+    state,
+    button,
+    state.iconFooterCheckHTML || state.iconFooterSaveHTML || state.iconDialogFooterHTML
+  );
+  state.saveFeedbackTimeoutId = setTimeout(() => {
+    const currentButton = getFooterButton(buttonId);
+    if (!currentButton) {
+      return;
+    }
+    currentButton.classList.remove(className);
+    const footerIcons = state.dialogFooterIcons || {};
+    const defaultIcon =
+      buttonId === "BTNSave"
+        ? state.iconFooterSaveHTML || footerIcons.BTNSave || state.iconDialogFooterHTML
+        : footerIcons[buttonId] || state.iconDialogFooterHTML;
+    setActionButtonIcon(state, currentButton, defaultIcon);
+    state.saveFeedbackTimeoutId = null;
+  }, 600);
+}
+
 function closeDialogIfOpen(state) {
   const elDialog = document.getElementById("fbcmf");
   if (!elDialog || !state) {
@@ -514,6 +709,8 @@ function updateDialog(state) {
       }
     }
   });
+
+  syncSaveButtonState(state);
 }
 
 function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
@@ -620,11 +817,33 @@ function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
 
     const footer = document.createElement("footer");
     const dialogFooterIcons = state.dialogFooterIcons || {};
+    const baseTooltips = Array.isArray(keyWords.DLG_BUTTON_TOOLTIPS)
+      ? keyWords.DLG_BUTTON_TOOLTIPS
+      : translations.en.DLG_BUTTON_TOOLTIPS;
+    const tooltips =
+      Array.isArray(baseTooltips) && baseTooltips.length >= 4
+        ? baseTooltips
+        : translations.en.DLG_BUTTON_TOOLTIPS;
     const buttonDefinitions = [
-      { id: "BTNSave", text: keyWords.DLG_BUTTONS[0], handler: handlers.saveUserOptions },
-      { id: "BTNExport", text: keyWords.DLG_BUTTONS[2], handler: handlers.exportUserOptions },
-      { id: "BTNImport", text: keyWords.DLG_BUTTONS[3], handler: null },
-      { id: "BTNReset", text: keyWords.DLG_BUTTONS[4], handler: handlers.resetUserOptions },
+      {
+        id: "BTNSave",
+        text: keyWords.DLG_BUTTONS[0],
+        handler: handlers.saveUserOptions,
+        tooltipIndex: 0,
+      },
+      {
+        id: "BTNExport",
+        text: keyWords.DLG_BUTTONS[2],
+        handler: handlers.exportUserOptions,
+        tooltipIndex: 1,
+      },
+      { id: "BTNImport", text: keyWords.DLG_BUTTONS[3], handler: null, tooltipIndex: 2 },
+      {
+        id: "BTNReset",
+        text: keyWords.DLG_BUTTONS[4],
+        handler: handlers.resetUserOptions,
+        tooltipIndex: 3,
+      },
     ];
 
     buttonDefinitions.forEach((def) => {
@@ -640,6 +859,9 @@ function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
       textWrap.textContent = def.text;
       buttonEl.appendChild(iconWrap);
       buttonEl.appendChild(textWrap);
+      if (tooltips[def.tooltipIndex]) {
+        buttonEl.title = tooltips[def.tooltipIndex];
+      }
       if (typeof def.handler === "function") {
         buttonEl.addEventListener("click", def.handler, false);
       }
@@ -651,10 +873,6 @@ function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
     fileImport.setAttribute("id", `FI${postAtt}`);
     fileImport.classList.add("fileInput");
     footer.appendChild(fileImport);
-    const fileResults = document.createElement("div");
-    fileResults.classList.add("fileResults");
-    fileResults.innerHTML = "&nbsp;";
-    footer.appendChild(fileResults);
     const sideColumn = document.createElement("div");
     sideColumn.className = "fb-cmf-side";
     sideColumn.appendChild(footer);
@@ -676,20 +894,66 @@ function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
     );
   } else {
     const footer = dlg.querySelector("footer");
+    const baseTooltips = Array.isArray(keyWords.DLG_BUTTON_TOOLTIPS)
+      ? keyWords.DLG_BUTTON_TOOLTIPS
+      : translations.en.DLG_BUTTON_TOOLTIPS;
+    const tooltips =
+      Array.isArray(baseTooltips) && baseTooltips.length >= 4
+        ? baseTooltips
+        : translations.en.DLG_BUTTON_TOOLTIPS;
     let btn = footer.querySelector("#BTNSave");
-    btn.textContent = keyWords.DLG_BUTTONS[0];
+    let textEl = btn ? btn.querySelector(".cmf-action-text") : null;
+    if (textEl) {
+      textEl.textContent = keyWords.DLG_BUTTONS[0];
+    } else if (btn) {
+      btn.textContent = keyWords.DLG_BUTTONS[0];
+    }
+    if (btn && tooltips[0]) {
+      btn.title = tooltips[0];
+    }
     btn = footer.querySelector("#BTNExport");
-    btn.textContent = keyWords.DLG_BUTTONS[2];
+    textEl = btn ? btn.querySelector(".cmf-action-text") : null;
+    if (textEl) {
+      textEl.textContent = keyWords.DLG_BUTTONS[2];
+    } else if (btn) {
+      btn.textContent = keyWords.DLG_BUTTONS[2];
+    }
+    if (btn && tooltips[1]) {
+      btn.title = tooltips[1];
+    }
     btn = footer.querySelector("#BTNImport");
-    btn.textContent = keyWords.DLG_BUTTONS[3];
+    textEl = btn ? btn.querySelector(".cmf-action-text") : null;
+    if (textEl) {
+      textEl.textContent = keyWords.DLG_BUTTONS[3];
+    } else if (btn) {
+      btn.textContent = keyWords.DLG_BUTTONS[3];
+    }
+    if (btn && tooltips[2]) {
+      btn.title = tooltips[2];
+    }
     btn = footer.querySelector("#BTNReset");
-    btn.textContent = keyWords.DLG_BUTTONS[4];
+    textEl = btn ? btn.querySelector(".cmf-action-text") : null;
+    if (textEl) {
+      textEl.textContent = keyWords.DLG_BUTTONS[4];
+    } else if (btn) {
+      btn.textContent = keyWords.DLG_BUTTONS[4];
+    }
+    if (btn && tooltips[3]) {
+      btn.title = tooltips[3];
+    }
     addLegendEvents();
   }
 
   addLegendEvents();
   updateLegendWidths(dlg);
   addSearchEvents(state);
+  const content = dlg.querySelector(".content");
+  if (content && !content.dataset.cmfDirtyWatch) {
+    content.dataset.cmfDirtyWatch = "1";
+    content.addEventListener("input", () => syncSaveButtonState(state), true);
+    content.addEventListener("change", () => syncSaveButtonState(state), true);
+  }
+  syncSaveButtonState(state);
   return dlg;
 }
 
@@ -704,8 +968,12 @@ function initDialog(context, helpers) {
   const handlers = {
     saveUserOptions: async (event, source = "dialog") => {
       let languageChanged = false;
+      let hadUnsavedChanges = false;
       if (source === "dialog") {
         const md = document.getElementById("fbcmf");
+        if (!md) {
+          return;
+        }
         const elLikesMaximum = md.querySelector('input[name="NF_LIKES_MAXIMUM"]');
         if (elLikesMaximum.checked) {
           const elLikesMaximumCount = md.querySelector('input[name="NF_LIKES_MAXIMUM_COUNT"]');
@@ -716,60 +984,12 @@ function initDialog(context, helpers) {
           }
         }
 
-        let cbs = Array.from(md.querySelectorAll('input[type="checkbox"][cbtype="T"]'));
-        cbs.forEach((cb) => {
-          state.options[cb.name] = cb.checked;
-        });
-
-        let cbName = "NF_BLOCKED_FEED";
-        cbs = Array.from(md.querySelectorAll(`input[type="checkbox"][name="${cbName}"]`));
-        cbs.forEach((cb) => {
-          state.options[cbName][parseInt(cb.value, 10)] = cb.checked ? "1" : "0";
-        });
-        cbName = "GF_BLOCKED_FEED";
-        cbs = Array.from(md.querySelectorAll(`input[type="checkbox"][name="${cbName}"]`));
-        cbs.forEach((cb) => {
-          state.options[cbName][parseInt(cb.value, 10)] = cb.checked ? "1" : "0";
-        });
-        cbName = "VF_BLOCKED_FEED";
-        cbs = Array.from(md.querySelectorAll(`input[type="checkbox"][name="${cbName}"]`));
-        cbs.forEach((cb) => {
-          state.options[cbName][parseInt(cb.value, 10)] = cb.checked ? "1" : "0";
-        });
-        cbName = "MP_BLOCKED_FEED";
-        cbs = Array.from(md.querySelectorAll(`input[type="checkbox"][name="${cbName}"]`));
-        cbs.forEach((cb) => {
-          state.options[cbName][parseInt(cb.value, 10)] = cb.checked ? "1" : "0";
-        });
-        cbName = "PP_BLOCKED_FEED";
-        cbs = Array.from(md.querySelectorAll(`input[type="checkbox"][name="${cbName}"]`));
-        cbs.forEach((cb) => {
-          state.options[cbName][parseInt(cb.value, 10)] = cb.checked ? "1" : "0";
-        });
-
-        const rbs = md.querySelectorAll('input[type="radio"]:checked');
-        rbs.forEach((rb) => {
-          state.options[rb.name] = rb.value;
-        });
-        const inputs = Array.from(md.querySelectorAll('input[type="text"]'));
-        inputs.forEach((inp) => {
-          state.options[inp.name] = inp.value;
-        });
-        const tas = md.querySelectorAll("textarea");
-        tas.forEach((ta) => {
-          const txtn = ta.value.split("\n");
-          const txts = [];
-          txtn.forEach((txt) => {
-            if (txt.trim().length > 0) {
-              txts.push(txt);
-            }
-          });
-          state.options[ta.name] = txts.join(state.SEP);
-        });
-        const selects = Array.from(md.querySelectorAll("select"));
-        selects.forEach((select) => {
-          state.options[select.name] = select.value;
-        });
+        const pendingOptions = collectDialogOptions(state);
+        if (!pendingOptions) {
+          return;
+        }
+        hadUnsavedChanges = !deepEqual(pendingOptions, state.options);
+        replaceObjectContents(state.options, pendingOptions);
 
         languageChanged = state.language !== state.options.CMF_DIALOG_LANGUAGE;
       } else if (source === "reset") {
@@ -777,18 +997,20 @@ function initDialog(context, helpers) {
       }
 
       const md = document.getElementById("fbcmf");
-      const inputs = Array.from(md.querySelectorAll('input:not([type="file"]), textarea, select'));
-      const validNames = [];
-      inputs.forEach((inp) => {
-        if (!validNames.includes(inp.name)) {
-          validNames.push(inp.name);
-        }
-      });
-      Object.keys(state.options).forEach((key) => {
-        if (!validNames.includes(key)) {
-          delete state.options[key];
-        }
-      });
+      if (md) {
+        const inputs = Array.from(md.querySelectorAll('input:not([type="file"]), textarea, select'));
+        const validNames = [];
+        inputs.forEach((inp) => {
+          if (!validNames.includes(inp.name)) {
+            validNames.push(inp.name);
+          }
+        });
+        Object.keys(state.options).forEach((key) => {
+          if (!validNames.includes(key)) {
+            delete state.options[key];
+          }
+        });
+      }
 
       await setOptions(JSON.stringify(state.options));
 
@@ -822,9 +1044,11 @@ function initDialog(context, helpers) {
       }
       toggleHiddenElements(state, context.options);
 
-      const fileResults = document.querySelector("#fbcmf .fileResults");
-      if (fileResults) {
-        fileResults.textContent = `Last Saved @ ${new Date().toTimeString().slice(0, 8)}`;
+      if (source === "dialog") {
+        syncSaveButtonState(state);
+        if (hadUnsavedChanges) {
+          triggerActionFeedback(state, "BTNSave", "cmf-action--confirm-blue");
+        }
       }
 
       if (state.isAF) {
@@ -887,39 +1111,32 @@ function initDialog(context, helpers) {
       exportOptions.download = "fb - clean my feeds - settings.json";
       exportOptions.click();
       exportOptions.remove();
-      const fileResults = document.querySelector("#fbcmf .fileResults");
-      if (fileResults) {
-        fileResults.textContent = "Exported: fb - clean my feeds - settings.json";
-      }
+      triggerActionFeedback(state, "BTNExport", "cmf-action--confirm-green");
     },
     importUserOptions: (event) => {
-      const fileResults = document.querySelector("#fbcmf .fileResults");
-      const file = event.target.files[0];
-      const fileName = event.target.files[0] ? event.target.files[0].name : "";
+      const file = event && event.target ? event.target.files[0] : null;
+      if (!file) {
+        return;
+      }
       const reader = new FileReader();
       reader.onload = (fileEvent) => {
         try {
           const fileContent = JSON.parse(fileEvent.target.result);
-          if (
+          const isValid =
             Object.prototype.hasOwnProperty.call(fileContent, "NF_SPONSORED") &&
             Object.prototype.hasOwnProperty.call(fileContent, "GF_SPONSORED") &&
             Object.prototype.hasOwnProperty.call(fileContent, "VF_SPONSORED") &&
-            Object.prototype.hasOwnProperty.call(fileContent, "MP_SPONSORED")
-          ) {
-            state.options = fileContent;
-            handlers.saveUserOptions(null, "file").then(() => {
-              updateDialog(state);
-              if (fileResults) {
-                fileResults.textContent = `File imported: ${fileName}`;
-              }
-            });
-          } else if (fileResults) {
-            fileResults.textContent = `File NOT imported: ${fileName}`;
+            Object.prototype.hasOwnProperty.call(fileContent, "MP_SPONSORED");
+          if (!isValid) {
+            return;
           }
+          state.options = fileContent;
+          handlers.saveUserOptions(null, "file").then(() => {
+            updateDialog(state);
+            triggerActionFeedback(state, "BTNImport", "cmf-action--confirm-green");
+          });
         } catch (error) {
-          if (fileResults) {
-            fileResults.textContent = `File NOT imported: ${fileName}`;
-          }
+          void error;
         }
       };
       reader.readAsText(file);

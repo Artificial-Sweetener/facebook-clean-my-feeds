@@ -145,16 +145,25 @@
             CMF_DIALOG_LOCATION: "Location of Clean My Feeds' dialog box",
             CMF_DIALOG_OPTION: ["left side", "right side"],
             CMF_BORDER_COLOUR: "Border colour",
-            DLG_TIPS: "About / Tips",
-            DLG_TIPS_DESC: "Project links, maintainer info, and setup help.",
-            DLG_TIPS_CONTENT: "Save keeps your preferences right here in your browser and applies them instantly. Export/Import lets you carry them to another device. Private/incognito or cleared site data resets them.",
-            DLG_TIPS_MAINTAINER_PREFIX: "From the maintainer:",
+            DLG_TIPS: "About",
+            DLG_TIPS_DESC: "Project links and maintainer info.",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "If it helps, a star on {github} would mean a lot.",
+            DLG_TIPS_FACEBOOK: "Come say hi on {facebook} page - I share my art and poetry there.",
+            DLG_TIPS_SITE: "If you want to see what I'm up to around the web, {site} is the best place to start.",
+            DLG_TIPS_CREDITS: "Special thanks to {zbluebugz} for the original project, and to {trinhquocviet} for the simplified UI branch I originally forked from - plus the filter maintenance during that stretch.",
             DLG_TIPS_MAINTAINER: "I hope this script helps you reclaim your feed. I promise to be your ally in the fight against stuff you don't want to see online.",
-            DLG_TIPS_LINK_REPO: "Project repo",
-            DLG_TIPS_LINK_FACEBOOK: "Say hi on Facebook",
-            DLG_TIPS_LINK_SITE: "More from me",
-            DLG_TIPS_THANKS: "If this helps, a star on GitHub means a lot. Thank you! \u{1F496}",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "my Facebook",
+            DLG_TIPS_LINK_SITE: "my website",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Save", "Close", "Export", "Import", "Reset"],
+            DLG_BUTTON_TOOLTIPS: [
+              "Save changes to this browser. Clearing site data/private mode removes them.",
+              "Export a backup file to keep settings safe and move between devices.",
+              "Import a settings file to restore or move your setup.",
+              "Reset all settings to defaults."
+            ],
             DLG_FB_COLOUR_HINT: "Leave blank to use FB's colour scheme"
           },
           // -- العربية (Arabic)
@@ -263,16 +272,26 @@
             CMF_DIALOG_LOCATION: '\u0645\u0648\u0642\u0639 \u0645\u0631\u0628\u0639 \u0627\u0644\u062D\u0648\u0627\u0631 "\u062A\u0646\u0638\u064A\u0641 \u0645\u0648\u062C\u0632 \u0648\u064A\u0628\u0627\u062A\u064A"',
             CMF_DIALOG_OPTION: ["\u0627\u0644\u062C\u0647\u0647 \u0627\u0644\u064A\u0633\u0631\u0649", "\u0627\u0644\u062C\u0627\u0646\u0628 \u0627\u0644\u0635\u062D\u064A\u062D"],
             CMF_BORDER_COLOUR: "\u0644\u0648\u0646 \u0627\u0644\u062D\u062F\u0648\u062F",
-            DLG_TIPS: "\u062D\u0648\u0644 / \u0646\u0635\u0627\u0626\u062D",
-            DLG_TIPS_DESC: "\u0631\u0648\u0627\u0628\u0637 \u0627\u0644\u0645\u0634\u0631\u0648\u0639\u060C \u0645\u0639\u0644\u0648\u0645\u0627\u062A \u0627\u0644\u0645\u0634\u0631\u0641\u060C \u0648\u0645\u0633\u0627\u0639\u062F\u0629 \u0627\u0644\u0625\u0639\u062F\u0627\u062F.",
-            DLG_TIPS_CONTENT: "\u064A\u062D\u0641\u0638 \u0632\u0631 \u0627\u0644\u062D\u0641\u0638 \u062A\u0641\u0636\u064A\u0644\u0627\u062A\u0643 \u0641\u064A \u0645\u062A\u0635\u0641\u062D\u0643 \u0648\u064A\u0637\u0628\u0642\u0647\u0627 \u0641\u0648\u0631\u064B\u0627. \u064A\u062A\u064A\u062D \u0644\u0643 \u0627\u0644\u062A\u0635\u062F\u064A\u0631/\u0627\u0644\u0627\u0633\u062A\u064A\u0631\u0627\u062F \u0646\u0642\u0644\u0647\u0627 \u0625\u0644\u0649 \u062C\u0647\u0627\u0632 \u0622\u062E\u0631. \u0627\u0644\u062A\u0635\u0641\u062D \u0627\u0644\u062E\u0627\u0635/\u0627\u0644\u062E\u0641\u064A \u0623\u0648 \u0645\u0633\u062D \u0628\u064A\u0627\u0646\u0627\u062A \u0627\u0644\u0645\u0648\u0642\u0639 \u064A\u0639\u064A\u062F \u0636\u0628\u0637\u0647\u0627.",
+            DLG_TIPS: "\u062D\u0648\u0644",
+            DLG_TIPS_DESC: "\u0631\u0648\u0627\u0628\u0637 \u0627\u0644\u0645\u0634\u0631\u0648\u0639 \u0648\u0645\u0639\u0644\u0648\u0645\u0627\u062A \u0627\u0644\u0645\u0634\u0631\u0641.",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "\u0625\u0630\u0627 \u0643\u0627\u0646 \u0647\u0630\u0627 \u0645\u0641\u064A\u062F\u064B\u0627\u060C \u0641\u0625\u0646 \u0646\u062C\u0645\u0629 \u0639\u0644\u0649 {github} \u062A\u0639\u0646\u064A \u0627\u0644\u0643\u062B\u064A\u0631.",
+            DLG_TIPS_FACEBOOK: "\u0642\u0644 \u0645\u0631\u062D\u0628\u064B\u0627 \u0639\u0644\u0649 {facebook} - \u0623\u0634\u0627\u0631\u0643 \u0647\u0646\u0627\u0643 \u0623\u0639\u0645\u0627\u0644\u064A \u0627\u0644\u0641\u0646\u064A\u0629 \u0648\u0634\u0639\u0631\u064A.",
+            DLG_TIPS_SITE: "\u0625\u0630\u0627 \u0623\u0631\u062F\u062A \u0645\u0639\u0631\u0641\u0629 \u0645\u0627 \u0623\u0641\u0639\u0644\u0647 \u0639\u0644\u0649 \u0627\u0644\u0648\u064A\u0628\u060C \u0641\u0640{site} \u0647\u0648 \u0623\u0641\u0636\u0644 \u0645\u0643\u0627\u0646 \u0644\u0644\u0628\u062F\u0621.",
+            DLG_TIPS_CREDITS: "\u0634\u0643\u0631 \u062E\u0627\u0635 \u0644\u0640 {zbluebugz} \u0639\u0644\u0649 \u0627\u0644\u0645\u0634\u0631\u0648\u0639 \u0627\u0644\u0623\u0635\u0644\u064A\u060C \u0648\u0644\u0640 {trinhquocviet} \u0639\u0644\u0649 \u0641\u0631\u0639 \u0627\u0644\u0648\u0627\u062C\u0647\u0629 \u0627\u0644\u0645\u0628\u0633\u0637\u0629 \u0627\u0644\u0630\u064A \u0628\u062F\u0623\u062A \u0645\u0646\u0647 - \u0648\u0643\u0630\u0644\u0643 \u0639\u0644\u0649 \u0635\u064A\u0627\u0646\u0629 \u0627\u0644\u0641\u0644\u0627\u062A\u0631 \u062E\u0644\u0627\u0644 \u062A\u0644\u0643 \u0627\u0644\u0641\u062A\u0631\u0629.",
             DLG_TIPS_MAINTAINER_PREFIX: "\u0645\u0646 \u0627\u0644\u0645\u064F\u0634\u0631\u0641:",
             DLG_TIPS_MAINTAINER: "\u0622\u0645\u0644 \u0623\u0646 \u064A\u0633\u0627\u0639\u062F\u0643 \u0647\u0630\u0627 \u0627\u0644\u0633\u0643\u0631\u0628\u062A \u0639\u0644\u0649 \u0627\u0633\u062A\u0639\u0627\u062F\u0629 \u062A\u063A\u0630\u064A\u062A\u0643. \u0623\u0639\u062F\u0643 \u0623\u0646 \u0623\u0643\u0648\u0646 \u062D\u0644\u064A\u0641\u0643 \u0641\u064A \u0645\u0648\u0627\u062C\u0647\u0629 \u0627\u0644\u0623\u0634\u064A\u0627\u0621 \u0627\u0644\u062A\u064A \u0644\u0627 \u062A\u0631\u064A\u062F \u0631\u0624\u064A\u062A\u0647\u0627 \u0639\u0644\u0649 \u0627\u0644\u0625\u0646\u062A\u0631\u0646\u062A.",
-            DLG_TIPS_LINK_REPO: "\u0645\u0633\u062A\u0648\u062F\u0639 \u0627\u0644\u0645\u0634\u0631\u0648\u0639",
-            DLG_TIPS_LINK_FACEBOOK: "\u0642\u0644 \u0645\u0631\u062D\u0628\u064B\u0627 \u0639\u0644\u0649 \u0641\u064A\u0633\u0628\u0648\u0643",
-            DLG_TIPS_LINK_SITE: "\u0627\u0644\u0645\u0632\u064A\u062F \u0645\u0646\u064A",
-            DLG_TIPS_THANKS: "\u0625\u0646 \u0623\u0641\u0627\u062F\u0643 \u0647\u0630\u0627\u060C \u0641\u0646\u062C\u0645\u0629 \u0639\u0644\u0649 GitHub \u062A\u0639\u0646\u064A \u0627\u0644\u0643\u062B\u064A\u0631. \u0634\u0643\u0631\u064B\u0627 \u0644\u0643! \u{1F496}",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "\u0635\u0641\u062D\u062A\u064A \u0639\u0644\u0649 \u0641\u064A\u0633\u0628\u0648\u0643",
+            DLG_TIPS_LINK_SITE: "\u0645\u0648\u0642\u0639\u064A",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["\u062D\u0641\u0638", "\u0642\u0631\u064A\u0628", "\u064A\u0635\u062F\u0651\u0631", "\u064A\u0633\u062A\u0648\u0631\u062F", "\u0625\u0639\u0627\u062F\u0629 \u062A\u0639\u064A\u064A\u0646"],
+            DLG_BUTTON_TOOLTIPS: [
+              "\u0627\u062D\u0641\u0638 \u0627\u0644\u062A\u063A\u064A\u064A\u0631\u0627\u062A \u0641\u064A \u0647\u0630\u0627 \u0627\u0644\u0645\u062A\u0635\u0641\u062D. \u0645\u0633\u062D \u0628\u064A\u0627\u0646\u0627\u062A \u0627\u0644\u0645\u0648\u0642\u0639/\u0627\u0644\u062A\u0635\u0641\u062D \u0627\u0644\u062E\u0627\u0635 \u064A\u0632\u064A\u0644\u0647\u0627.",
+              "\u0635\u062F\u0651\u0631 \u0645\u0644\u0641\u064B\u0627 \u0627\u062D\u062A\u064A\u0627\u0637\u064A\u064B\u0627 \u0644\u062D\u0641\u0638 \u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A \u0648\u0646\u0642\u0644\u0647\u0627 \u0628\u064A\u0646 \u0627\u0644\u0623\u062C\u0647\u0632\u0629.",
+              "\u0627\u0633\u062A\u0648\u0631\u062F \u0645\u0644\u0641 \u0625\u0639\u062F\u0627\u062F\u0627\u062A \u0644\u0627\u0633\u062A\u0639\u0627\u062F\u0629 \u0623\u0648 \u0646\u0642\u0644 \u0625\u0639\u062F\u0627\u062F\u0627\u062A\u0643.",
+              "\u0623\u0639\u062F \u0636\u0628\u0637 \u062C\u0645\u064A\u0639 \u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A \u0625\u0644\u0649 \u0627\u0644\u0627\u0641\u062A\u0631\u0627\u0636\u064A."
+            ],
             DLG_FB_COLOUR_HINT: "\u0627\u062A\u0631\u0643\u0647 \u0641\u0627\u0631\u063A\u064B\u0627 \u0644\u0627\u0633\u062A\u062E\u062F\u0627\u0645 \u0646\u0638\u0627\u0645 \u0623\u0644\u0648\u0627\u0646 FB"
           },
           // -- България (Bulgaria)
@@ -381,16 +400,26 @@
             CMF_DIALOG_LOCATION: '\u041C\u0435\u0441\u0442\u043E\u043F\u043E\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043D\u0430 \u0434\u0438\u0430\u043B\u043E\u0433\u043E\u0432\u0438\u044F \u043F\u0440\u043E\u0437\u043E\u0440\u0435\u0446 "\u041F\u043E\u0447\u0438\u0441\u0442\u0438 \u043C\u043E\u0438\u0442\u0435 \u0435\u043C\u0438\u0441\u0438\u0438"',
             CMF_DIALOG_OPTION: ["\u043B\u044F\u0432\u0430 \u0441\u0442\u0440\u0430\u043D\u0430", "\u0434\u044F\u0441\u043D\u0430 \u0441\u0442\u0440\u0430\u043D\u0430"],
             CMF_BORDER_COLOUR: "\u0426\u0432\u044F\u0442 \u043D\u0430 \u0440\u0430\u043C\u043A\u0430\u0442\u0430",
-            DLG_TIPS: "\u0417\u0430 \u043F\u0440\u043E\u0435\u043A\u0442\u0430 / \u0421\u044A\u0432\u0435\u0442\u0438",
-            DLG_TIPS_DESC: "\u041B\u0438\u043D\u043A\u043E\u0432\u0435 \u043A\u044A\u043C \u043F\u0440\u043E\u0435\u043A\u0442\u0430, \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F \u0437\u0430 \u043F\u043E\u0434\u0434\u0440\u044A\u0436\u043D\u0438\u043A\u0430 \u0438 \u043F\u043E\u043C\u043E\u0449 \u0437\u0430 \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0430.",
-            DLG_TIPS_CONTENT: "Save \u0437\u0430\u043F\u0430\u0437\u0432\u0430 \u043F\u0440\u0435\u0434\u043F\u043E\u0447\u0438\u0442\u0430\u043D\u0438\u044F\u0442\u0430 \u0442\u0438 \u0432 \u0431\u0440\u0430\u0443\u0437\u044A\u0440\u0430 \u0438 \u0433\u0438 \u043F\u0440\u0438\u043B\u0430\u0433\u0430 \u0432\u0435\u0434\u043D\u0430\u0433\u0430. Export/Import \u0442\u0438 \u043F\u043E\u0437\u0432\u043E\u043B\u044F\u0432\u0430 \u0434\u0430 \u0433\u0438 \u043F\u0440\u0435\u0445\u0432\u044A\u0440\u043B\u0438\u0448 \u043D\u0430 \u0434\u0440\u0443\u0433\u043E \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u043E. \u0427\u0430\u0441\u0442\u043D\u0438\u044F\u0442/\u0438\u043D\u043A\u043E\u0433\u043D\u0438\u0442\u043E \u0440\u0435\u0436\u0438\u043C \u0438\u043B\u0438 \u0438\u0437\u0447\u0438\u0441\u0442\u0432\u0430\u043D\u0435\u0442\u043E \u043D\u0430 \u0434\u0430\u043D\u043D\u0438\u0442\u0435 \u043D\u0430 \u0441\u0430\u0439\u0442\u0430 \u0433\u0438 \u043D\u0443\u043B\u0438\u0440\u0430.",
+            DLG_TIPS: "\u0417\u0430 \u043F\u0440\u043E\u0435\u043A\u0442\u0430",
+            DLG_TIPS_DESC: "\u041B\u0438\u043D\u043A\u043E\u0432\u0435 \u043A\u044A\u043C \u043F\u0440\u043E\u0435\u043A\u0442\u0430 \u0438 \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F \u0437\u0430 \u043F\u043E\u0434\u0434\u0440\u044A\u0436\u043D\u0438\u043A\u0430.",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "\u0410\u043A\u043E \u0442\u043E\u0432\u0430 \u043F\u043E\u043C\u0430\u0433\u0430, \u0435\u0434\u043D\u0430 \u0437\u0432\u0435\u0437\u0434\u0430 \u0432 {github} \u0437\u043D\u0430\u0447\u0438 \u043C\u043D\u043E\u0433\u043E.",
+            DLG_TIPS_FACEBOOK: "\u041A\u0430\u0436\u0438 \u0437\u0434\u0440\u0430\u0441\u0442\u0438 \u043D\u0430 {facebook} - \u0442\u0430\u043C \u0441\u043F\u043E\u0434\u0435\u043B\u044F\u043C \u0438\u0437\u043A\u0443\u0441\u0442\u0432\u043E \u0438 \u043F\u043E\u0435\u0437\u0438\u044F.",
+            DLG_TIPS_SITE: "\u0410\u043A\u043E \u0438\u0441\u043A\u0430\u0448 \u0434\u0430 \u0432\u0438\u0434\u0438\u0448 \u043A\u0430\u043A\u0432\u043E \u043F\u0440\u0430\u0432\u044F \u0438\u0437 \u043C\u0440\u0435\u0436\u0430\u0442\u0430, {site} \u0435 \u043D\u0430\u0439-\u0434\u043E\u0431\u0440\u043E\u0442\u043E \u043C\u044F\u0441\u0442\u043E \u0434\u0430 \u0437\u0430\u043F\u043E\u0447\u043D\u0435\u0448.",
+            DLG_TIPS_CREDITS: "\u0421\u043F\u0435\u0446\u0438\u0430\u043B\u043D\u0438 \u0431\u043B\u0430\u0433\u043E\u0434\u0430\u0440\u043D\u043E\u0441\u0442\u0438 \u043D\u0430 {zbluebugz} \u0437\u0430 \u043E\u0440\u0438\u0433\u0438\u043D\u0430\u043B\u043D\u0438\u044F \u043F\u0440\u043E\u0435\u043A\u0442 \u0438 \u043D\u0430 {trinhquocviet} \u0437\u0430 \u043E\u043F\u0440\u043E\u0441\u0442\u0435\u043D\u0438\u044F UI branch, \u043E\u0442 \u043A\u043E\u0439\u0442\u043E \u043F\u044A\u0440\u0432\u043E\u043D\u0430\u0447\u0430\u043B\u043D\u043E \u0444\u043E\u0440\u043A\u043D\u0430\u0445 - \u0438 \u0437\u0430 \u043F\u043E\u0434\u0434\u0440\u044A\u0436\u043A\u0430\u0442\u0430 \u043D\u0430 \u0444\u0438\u043B\u0442\u0440\u0438\u0442\u0435 \u043F\u0440\u0435\u0437 \u0442\u043E\u0437\u0438 \u043F\u0435\u0440\u0438\u043E\u0434.",
             DLG_TIPS_MAINTAINER_PREFIX: "\u041E\u0442 \u043F\u043E\u0434\u0434\u0440\u044A\u0436\u043D\u0438\u043A\u0430:",
             DLG_TIPS_MAINTAINER: "\u041D\u0430\u0434\u044F\u0432\u0430\u043C \u0441\u0435 \u0442\u043E\u0437\u0438 \u0441\u043A\u0440\u0438\u043F\u0442 \u0434\u0430 \u0442\u0438 \u043F\u043E\u043C\u043E\u0433\u043D\u0435 \u0434\u0430 \u0441\u0438 \u0432\u044A\u0440\u043D\u0435\u0448 \u0435\u043C\u0438\u0441\u0438\u044F\u0442\u0430. \u041E\u0431\u0435\u0449\u0430\u0432\u0430\u043C \u0434\u0430 \u0431\u044A\u0434\u0430 \u0442\u0432\u043E\u0439 \u0441\u044A\u044E\u0437\u043D\u0438\u043A \u0432 \u0431\u0438\u0442\u043A\u0430\u0442\u0430 \u0441\u0440\u0435\u0449\u0443 \u043D\u0435\u0449\u0430\u0442\u0430, \u043A\u043E\u0438\u0442\u043E \u043D\u0435 \u0438\u0441\u043A\u0430\u0448 \u0434\u0430 \u0432\u0438\u0436\u0434\u0430\u0448 \u043E\u043D\u043B\u0430\u0439\u043D.",
-            DLG_TIPS_LINK_REPO: "\u0425\u0440\u0430\u043D\u0438\u043B\u0438\u0449\u0435 \u043D\u0430 \u043F\u0440\u043E\u0435\u043A\u0442\u0430",
-            DLG_TIPS_LINK_FACEBOOK: "\u041A\u0430\u0436\u0438 \u0437\u0434\u0440\u0430\u0441\u0442\u0438 \u0432\u044A\u0432 Facebook",
-            DLG_TIPS_LINK_SITE: "\u041E\u0449\u0435 \u043E\u0442 \u043C\u0435\u043D",
-            DLG_TIPS_THANKS: "\u0410\u043A\u043E \u0442\u043E\u0432\u0430 \u043F\u043E\u043C\u0430\u0433\u0430, \u0435\u0434\u043D\u0430 \u0437\u0432\u0435\u0437\u0434\u0430 \u0432 GitHub \u0437\u043D\u0430\u0447\u0438 \u043C\u043D\u043E\u0433\u043E. \u0411\u043B\u0430\u0433\u043E\u0434\u0430\u0440\u044F! \u{1F496}",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "\u043C\u043E\u044F Facebook \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0430",
+            DLG_TIPS_LINK_SITE: "\u043C\u043E\u044F\u0442 \u0441\u0430\u0439\u0442",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["\u0417\u0430\u043F\u0430\u0437\u0438", "\u0417\u0430\u0442\u0432\u043E\u0440\u0438", "\u0415\u043A\u0441\u043F\u043E\u0440\u0442", "\u0418\u043C\u043F\u043E\u0440\u0442", "\u041D\u0443\u043B\u0438\u0440\u0430\u043D\u0435"],
+            DLG_BUTTON_TOOLTIPS: [
+              "\u0417\u0430\u043F\u0430\u0437\u0432\u0430 \u043F\u0440\u043E\u043C\u0435\u043D\u0438\u0442\u0435 \u0432 \u0442\u043E\u0437\u0438 \u0431\u0440\u0430\u0443\u0437\u044A\u0440. \u0418\u0437\u0447\u0438\u0441\u0442\u0432\u0430\u043D\u0435 \u043D\u0430 \u0434\u0430\u043D\u043D\u0438/\u0438\u043D\u043A\u043E\u0433\u043D\u0438\u0442\u043E \u0433\u0438 \u043F\u0440\u0435\u043C\u0430\u0445\u0432\u0430.",
+              "\u0415\u043A\u0441\u043F\u043E\u0440\u0442\u0438\u0440\u0430 \u0440\u0435\u0437\u0435\u0440\u0432\u0435\u043D \u0444\u0430\u0439\u043B \u0437\u0430 \u0437\u0430\u043F\u0430\u0437\u0432\u0430\u043D\u0435 \u0438 \u043F\u0440\u0435\u0445\u0432\u044A\u0440\u043B\u044F\u043D\u0435 \u043C\u0435\u0436\u0434\u0443 \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u0430.",
+              "\u0418\u043C\u043F\u043E\u0440\u0442\u0438\u0440\u0430 \u0444\u0430\u0439\u043B \u0441 \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u0437\u0430 \u0432\u044A\u0437\u0441\u0442\u0430\u043D\u043E\u0432\u044F\u0432\u0430\u043D\u0435 \u0438\u043B\u0438 \u043F\u0440\u0435\u0445\u0432\u044A\u0440\u043B\u044F\u043D\u0435.",
+              "\u041D\u0443\u043B\u0438\u0440\u0430 \u0432\u0441\u0438\u0447\u043A\u0438 \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u0434\u043E \u043F\u043E\u0434\u0440\u0430\u0437\u0431\u0438\u0440\u0430\u043D\u0435."
+            ],
             DLG_FB_COLOUR_HINT: "\u041E\u0441\u0442\u0430\u0432\u0435\u0442\u0435 \u043F\u0440\u0430\u0437\u043D\u043E, \u0437\u0430 \u0434\u0430 \u0438\u0437\u043F\u043E\u043B\u0437\u0432\u0430\u0442\u0435 \u0446\u0432\u0435\u0442\u043E\u0432\u0430\u0442\u0430 \u0441\u0445\u0435\u043C\u0430 \u043D\u0430 FB"
           },
           // -- Čeština (Czechia)
@@ -498,16 +527,26 @@
             CMF_DIALOG_LOCATION: "Um\xEDst\u011Bn\xED dialogov\xE9ho okna Vy\u010Dist\u011Bte m\xE9 kan\xE1ly",
             CMF_DIALOG_OPTION: ["lev\xE1 strana", "prav\xE1 strana"],
             CMF_BORDER_COLOUR: "Barva ohrani\u010Den\xED",
-            DLG_TIPS: "O projektu / Tipy",
-            DLG_TIPS_DESC: "Odkazy na projekt, informace o spr\xE1vci a pomoc s nastaven\xEDm.",
-            DLG_TIPS_CONTENT: "Save ukl\xE1d\xE1 va\u0161e p\u0159edvolby do prohl\xED\u017Ee\u010De a hned je pou\u017Eije. Export/Import v\xE1m umo\u017En\xED p\u0159en\xE9st je na jin\xE9 za\u0159\xEDzen\xED. Soukrom\xE9/inkognito nebo vymaz\xE1n\xED dat webu je resetuje.",
+            DLG_TIPS: "O projektu",
+            DLG_TIPS_DESC: "Odkazy na projekt a informace o spr\xE1vci.",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "Pokud to pom\xE1h\xE1, hv\u011Bzda na {github} pro m\u011B hodn\u011B znamen\xE1.",
+            DLG_TIPS_FACEBOOK: "Pozdrav na {facebook} - sd\xEDl\xEDm tam sv\xE9 um\u011Bn\xED a poezii.",
+            DLG_TIPS_SITE: "Chce\u0161-li vid\u011Bt, co d\u011Bl\xE1m na webu, {site} je nejlep\u0161\xED start.",
+            DLG_TIPS_CREDITS: "Speci\xE1ln\xED pod\u011Bkov\xE1n\xED {zbluebugz} za p\u016Fvodn\xED projekt a {trinhquocviet} za zjednodu\u0161enou UI v\u011Btev, ze kter\xE9 jsem p\u016Fvodn\u011B forknul - i za \xFAdr\u017Ebu filtr\u016F v t\xE9 dob\u011B.",
             DLG_TIPS_MAINTAINER_PREFIX: "Od spr\xE1vce:",
             DLG_TIPS_MAINTAINER: "Douf\xE1m, \u017Ee v\xE1m tento skript pom\u016F\u017Ee z\xEDskat zp\u011Bt v\xE1\u0161 feed. Slibuji, \u017Ee budu va\u0161\xEDm spojencem v boji proti v\u011Bcem, kter\xE9 nechcete vid\u011Bt online.",
-            DLG_TIPS_LINK_REPO: "Repozit\xE1\u0159 projektu",
-            DLG_TIPS_LINK_FACEBOOK: "Pozdrav na Facebooku",
-            DLG_TIPS_LINK_SITE: "V\xEDce ode m\u011B",
-            DLG_TIPS_THANKS: "Pokud to pom\xE1h\xE1, hv\u011Bzda na GitHubu pro m\u011B hodn\u011B znamen\xE1. D\u011Bkuji! \u{1F496}",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "m\u016Fj Facebook",
+            DLG_TIPS_LINK_SITE: "m\u016Fj web",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Ulo\u017Eit", "Zav\u0159\xEDt", "Export", "Import", "Resetovat"],
+            DLG_BUTTON_TOOLTIPS: [
+              "Ulo\u017E\xED zm\u011Bny v tomto prohl\xED\u017Ee\u010Di. Smaz\xE1n\xED dat/inkognito je odstran\xED.",
+              "Exportuje z\xE1lo\u017En\xED soubor pro uchov\xE1n\xED a p\u0159enos mezi za\u0159\xEDzen\xEDmi.",
+              "Importuje soubor s nastaven\xEDm pro obnoven\xED nebo p\u0159enos.",
+              "Obnov\xED v\u0161echna nastaven\xED na v\xFDchoz\xED."
+            ],
             DLG_FB_COLOUR_HINT: "Chcete-li pou\u017E\xEDt barevn\xE9 sch\xE9ma FB, nechte pr\xE1zdn\xE9"
           },
           // -- Deutsch (Germany)
@@ -616,16 +655,26 @@
             CMF_DIALOG_LOCATION: 'Position des Dialogfelds "Bereinige meine Feeds"',
             CMF_DIALOG_OPTION: ["linke Seite", "rechte Seite"],
             CMF_BORDER_COLOUR: "Farbe der Umrandung",
-            DLG_TIPS: "Info / Tipps",
-            DLG_TIPS_DESC: "Projektlinks, Infos zum Betreuer und Einrichtungshilfe.",
-            DLG_TIPS_CONTENT: "Save speichert deine Einstellungen im Browser und wendet sie sofort an. Export/Import erm\xF6glicht dir, sie auf ein anderes Ger\xE4t mitzunehmen. Privates/Inkognito\u2011Surfen oder gel\xF6schte Websitedaten setzt sie zur\xFCck.",
+            DLG_TIPS: "Info",
+            DLG_TIPS_DESC: "Projektlinks und Infos zum Maintainer.",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "Wenn das hilft, bedeutet mir ein Stern auf {github} viel.",
+            DLG_TIPS_FACEBOOK: "Sag gern Hallo auf {facebook} - dort teile ich Kunst und Poesie.",
+            DLG_TIPS_SITE: "Wenn du sehen willst, was ich im Netz mache, ist meine {site} der beste Start.",
+            DLG_TIPS_CREDITS: "Besonderer Dank an {zbluebugz} f\xFCr das urspr\xFCngliche Projekt und an {trinhquocviet} f\xFCr den vereinfachten UI-Branch, von dem ich urspr\xFCnglich geforkt habe - plus die Filterpflege in dieser Phase.",
             DLG_TIPS_MAINTAINER_PREFIX: "Vom Maintainer:",
             DLG_TIPS_MAINTAINER: "Ich hoffe, dieses Skript hilft dir, deinen Feed zur\xFCckzuholen. Ich verspreche, dein Verb\xFCndeter im Kampf gegen Dinge zu sein, die du online nicht sehen willst.",
-            DLG_TIPS_LINK_REPO: "Projekt-Repo",
-            DLG_TIPS_LINK_FACEBOOK: "Sag Hallo auf Facebook",
-            DLG_TIPS_LINK_SITE: "Mehr von mir",
-            DLG_TIPS_THANKS: "Wenn dir das hilft, bedeutet ein Stern auf GitHub viel. Danke! \u{1F496}",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "meine Facebook-Seite",
+            DLG_TIPS_LINK_SITE: "meine Website",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Speichern", "Schlie\xDFen", "Exportieren", "Importieren", "Zur\xFCcksetzen"],
+            DLG_BUTTON_TOOLTIPS: [
+              "Speichert \xC4nderungen in diesem Browser. L\xF6schen von Daten/Inkognito entfernt sie.",
+              "Exportiert eine Sicherungsdatei zum Behalten und \xDCbertragen.",
+              "Importiert eine Einstellungsdatei zum Wiederherstellen oder \xDCbertragen.",
+              "Setzt alle Einstellungen auf Standard zur\xFCck."
+            ],
             DLG_FB_COLOUR_HINT: "Leer lassen, um das Farbschema von FB zu verwenden"
           },
           // -- Ελληνικά (Greece)
@@ -733,16 +782,26 @@
             CMF_DIALOG_LOCATION: '\u03A4\u03BF\u03C0\u03BF\u03B8\u03B5\u03C3\u03AF\u03B1 \u03C4\u03B7\u03C2 \u03B4\u03B9\u03B1\u03BB\u03CC\u03B3\u03BF\u03C5 "\u039A\u03B1\u03B8\u03B1\u03C1\u03B9\u03C3\u03BC\u03CC\u03C2 \u03C4\u03C9\u03BD \u03C1\u03BF\u03CE\u03BD \u03BC\u03BF\u03C5"',
             CMF_DIALOG_OPTION: ["\u03B1\u03C1\u03B9\u03C3\u03C4\u03B5\u03C1\u03AE \u03C0\u03BB\u03B5\u03C5\u03C1\u03AC", "\u03B4\u03B5\u03BE\u03B9\u03AC \u03C0\u03BB\u03B5\u03C5\u03C1\u03AC"],
             CMF_BORDER_COLOUR: "\u03A7\u03C1\u03CE\u03BC\u03B1 \u03C0\u03B5\u03C1\u03B9\u03B3\u03C1\u03AC\u03BC\u03BC\u03B1\u03C4\u03BF\u03C2",
-            DLG_TIPS: "\u03A3\u03C7\u03B5\u03C4\u03B9\u03BA\u03AC / \u03A3\u03C5\u03BC\u03B2\u03BF\u03C5\u03BB\u03AD\u03C2",
-            DLG_TIPS_DESC: "\u03A3\u03CD\u03BD\u03B4\u03B5\u03C3\u03BC\u03BF\u03B9 \u03AD\u03C1\u03B3\u03BF\u03C5, \u03C0\u03BB\u03B7\u03C1\u03BF\u03C6\u03BF\u03C1\u03AF\u03B5\u03C2 \u03C3\u03C5\u03BD\u03C4\u03B7\u03C1\u03B7\u03C4\u03AE \u03BA\u03B1\u03B9 \u03B2\u03BF\u03AE\u03B8\u03B5\u03B9\u03B1 \u03C1\u03CD\u03B8\u03BC\u03B9\u03C3\u03B7\u03C2.",
-            DLG_TIPS_CONTENT: "\u03A4\u03BF Save \u03B1\u03C0\u03BF\u03B8\u03B7\u03BA\u03B5\u03CD\u03B5\u03B9 \u03C4\u03B9\u03C2 \u03C0\u03C1\u03BF\u03C4\u03B9\u03BC\u03AE\u03C3\u03B5\u03B9\u03C2 \u03C3\u03BF\u03C5 \u03C3\u03C4\u03BF\u03BD browser \u03BA\u03B1\u03B9 \u03C4\u03B9\u03C2 \u03B5\u03C6\u03B1\u03C1\u03BC\u03CC\u03B6\u03B5\u03B9 \u03B1\u03BC\u03AD\u03C3\u03C9\u03C2. \u03A4\u03BF Export/Import \u03C3\u03BF\u03C5 \u03B5\u03C0\u03B9\u03C4\u03C1\u03AD\u03C0\u03B5\u03B9 \u03BD\u03B1 \u03C4\u03B9\u03C2 \u03BC\u03B5\u03C4\u03B1\u03C6\u03AD\u03C1\u03B5\u03B9\u03C2 \u03C3\u03B5 \u03AC\u03BB\u03BB\u03B7 \u03C3\u03C5\u03C3\u03BA\u03B5\u03C5\u03AE. \u0397 \u03B9\u03B4\u03B9\u03C9\u03C4\u03B9\u03BA\u03AE/\u03B1\u03BD\u03CE\u03BD\u03C5\u03BC\u03B7 \u03C0\u03B5\u03C1\u03B9\u03AE\u03B3\u03B7\u03C3\u03B7 \u03AE \u03B7 \u03B4\u03B9\u03B1\u03B3\u03C1\u03B1\u03C6\u03AE \u03B4\u03B5\u03B4\u03BF\u03BC\u03AD\u03BD\u03C9\u03BD \u03B9\u03C3\u03C4\u03CC\u03C4\u03BF\u03C0\u03BF\u03C5 \u03C4\u03B9\u03C2 \u03B5\u03C0\u03B1\u03BD\u03B1\u03C6\u03AD\u03C1\u03B5\u03B9.",
+            DLG_TIPS: "\u03A3\u03C7\u03B5\u03C4\u03B9\u03BA\u03AC",
+            DLG_TIPS_DESC: "\u03A3\u03CD\u03BD\u03B4\u03B5\u03C3\u03BC\u03BF\u03B9 \u03AD\u03C1\u03B3\u03BF\u03C5 \u03BA\u03B1\u03B9 \u03C0\u03BB\u03B7\u03C1\u03BF\u03C6\u03BF\u03C1\u03AF\u03B5\u03C2 \u03C3\u03C5\u03BD\u03C4\u03B7\u03C1\u03B7\u03C4\u03AE.",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "\u0391\u03BD \u03B2\u03BF\u03B7\u03B8\u03AC\u03B5\u03B9, \u03AD\u03BD\u03B1 \u03B1\u03C3\u03C4\u03AD\u03C1\u03B9 \u03C3\u03C4\u03BF {github} \u03C3\u03B7\u03BC\u03B1\u03AF\u03BD\u03B5\u03B9 \u03C0\u03BF\u03BB\u03BB\u03AC.",
+            DLG_TIPS_FACEBOOK: "\u03A0\u03B5\u03C2 \u03B3\u03B5\u03B9\u03B1 \u03C3\u03C4\u03B7 {facebook} - \u03B5\u03BA\u03B5\u03AF \u03BC\u03BF\u03B9\u03C1\u03AC\u03B6\u03BF\u03BC\u03B1\u03B9 \u03C4\u03AD\u03C7\u03BD\u03B7 \u03BA\u03B1\u03B9 \u03C0\u03BF\u03AF\u03B7\u03C3\u03B7.",
+            DLG_TIPS_SITE: "\u0391\u03BD \u03B8\u03AD\u03BB\u03B5\u03B9\u03C2 \u03BD\u03B1 \u03B4\u03B5\u03B9\u03C2 \u03C4\u03B9 \u03BA\u03AC\u03BD\u03C9 \u03B3\u03B5\u03BD\u03B9\u03BA\u03AC \u03C3\u03C4\u03BF \u03B4\u03B9\u03B1\u03B4\u03AF\u03BA\u03C4\u03C5\u03BF, \u03C4\u03BF {site} \u03B5\u03AF\u03BD\u03B1\u03B9 \u03C4\u03BF \u03BA\u03B1\u03BB\u03CD\u03C4\u03B5\u03C1\u03BF \u03C3\u03B7\u03BC\u03B5\u03AF\u03BF.",
+            DLG_TIPS_CREDITS: "\u0399\u03B4\u03B9\u03B1\u03AF\u03C4\u03B5\u03C1\u03B5\u03C2 \u03B5\u03C5\u03C7\u03B1\u03C1\u03B9\u03C3\u03C4\u03AF\u03B5\u03C2 \u03C3\u03C4\u03BF\u03BD {zbluebugz} \u03B3\u03B9\u03B1 \u03C4\u03BF \u03B1\u03C1\u03C7\u03B9\u03BA\u03CC project \u03BA\u03B1\u03B9 \u03C3\u03C4\u03BF\u03BD {trinhquocviet} \u03B3\u03B9\u03B1 \u03C4\u03BF simplified UI branch \u03B1\u03C0\u03CC \u03C4\u03BF \u03BF\u03C0\u03BF\u03AF\u03BF \u03AD\u03BA\u03B1\u03BD\u03B1 \u03B1\u03C1\u03C7\u03B9\u03BA\u03AC fork - \u03BA\u03B1\u03B8\u03CE\u03C2 \u03BA\u03B1\u03B9 \u03B3\u03B9\u03B1 \u03C4\u03B7 \u03C3\u03C5\u03BD\u03C4\u03AE\u03C1\u03B7\u03C3\u03B7 \u03C4\u03C9\u03BD \u03C6\u03AF\u03BB\u03C4\u03C1\u03C9\u03BD \u03C4\u03CC\u03C4\u03B5.",
             DLG_TIPS_MAINTAINER_PREFIX: "\u0391\u03C0\u03CC \u03C4\u03BF\u03BD \u03C3\u03C5\u03BD\u03C4\u03B7\u03C1\u03B7\u03C4\u03AE:",
             DLG_TIPS_MAINTAINER: "\u0395\u03BB\u03C0\u03AF\u03B6\u03C9 \u03B1\u03C5\u03C4\u03CC \u03C4\u03BF \u03C3\u03BA\u03C1\u03B9\u03C0\u03C4 \u03BD\u03B1 \u03C3\u03B5 \u03B2\u03BF\u03B7\u03B8\u03AE\u03C3\u03B5\u03B9 \u03BD\u03B1 \u03C0\u03AC\u03C1\u03B5\u03B9\u03C2 \u03C0\u03AF\u03C3\u03C9 \u03C4\u03BF feed \u03C3\u03BF\u03C5. \u03A5\u03C0\u03CC\u03C3\u03C7\u03BF\u03BC\u03B1\u03B9 \u03BD\u03B1 \u03B5\u03AF\u03BC\u03B1\u03B9 \u03C3\u03CD\u03BC\u03BC\u03B1\u03C7\u03CC\u03C2 \u03C3\u03BF\u03C5 \u03C3\u03C4\u03B7 \u03BC\u03AC\u03C7\u03B7 \u03B5\u03BD\u03AC\u03BD\u03C4\u03B9\u03B1 \u03C3\u03B5 \u03CC\u03C3\u03B1 \u03B4\u03B5\u03BD \u03B8\u03AD\u03BB\u03B5\u03B9\u03C2 \u03BD\u03B1 \u03B2\u03BB\u03AD\u03C0\u03B5\u03B9\u03C2 online.",
-            DLG_TIPS_LINK_REPO: "\u0391\u03C0\u03BF\u03B8\u03B5\u03C4\u03AE\u03C1\u03B9\u03BF \u03AD\u03C1\u03B3\u03BF\u03C5",
-            DLG_TIPS_LINK_FACEBOOK: "\u03A0\u03B5\u03C2 \u03B3\u03B5\u03B9\u03B1 \u03C3\u03C4\u03BF Facebook",
-            DLG_TIPS_LINK_SITE: "\u03A0\u03B5\u03C1\u03B9\u03C3\u03C3\u03CC\u03C4\u03B5\u03C1\u03B1 \u03B1\u03C0\u03CC \u03BC\u03AD\u03BD\u03B1",
-            DLG_TIPS_THANKS: "\u0391\u03BD \u03C3\u03B5 \u03B2\u03BF\u03B7\u03B8\u03AC\u03B5\u03B9, \u03AD\u03BD\u03B1 \u03B1\u03C3\u03C4\u03AD\u03C1\u03B9 \u03C3\u03C4\u03BF GitHub \u03C3\u03B7\u03BC\u03B1\u03AF\u03BD\u03B5\u03B9 \u03C0\u03BF\u03BB\u03BB\u03AC. \u0395\u03C5\u03C7\u03B1\u03C1\u03B9\u03C3\u03C4\u03CE! \u{1F496}",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "\u03C3\u03B5\u03BB\u03AF\u03B4\u03B1 \u03BC\u03BF\u03C5 \u03C3\u03C4\u03BF Facebook",
+            DLG_TIPS_LINK_SITE: "\u03B9\u03C3\u03C4\u03CC\u03C4\u03BF\u03C0\u03CC \u03BC\u03BF\u03C5",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["\u0391\u03C0\u03BF\u03B8\u03AE\u03BA\u03B5\u03C5\u03C3\u03B7", "\u039A\u03BB\u03B5\u03AF\u03C3\u03B9\u03BC\u03BF", "\u0395\u03BE\u03B1\u03B3\u03C9\u03B3\u03AE", "\u0395\u03B9\u03C3\u03B1\u03B3\u03C9\u03B3\u03AE", "\u0395\u03C0\u03B1\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC"],
+            DLG_BUTTON_TOOLTIPS: [
+              "\u0391\u03C0\u03BF\u03B8\u03B7\u03BA\u03B5\u03CD\u03B5\u03B9 \u03C4\u03B9\u03C2 \u03B1\u03BB\u03BB\u03B1\u03B3\u03AD\u03C2 \u03C3\u03B5 \u03B1\u03C5\u03C4\u03CC\u03BD \u03C4\u03BF\u03BD browser. \u0395\u03BA\u03BA\u03B1\u03B8\u03AC\u03C1\u03B9\u03C3\u03B7/\u03B9\u03B4\u03B9\u03C9\u03C4\u03B9\u03BA\u03AE \u03C0\u03B5\u03C1\u03B9\u03AE\u03B3\u03B7\u03C3\u03B7 \u03C4\u03B9\u03C2 \u03C7\u03AC\u03BD\u03B5\u03B9.",
+              "\u0395\u03BE\u03AC\u03B3\u03B5\u03B9 \u03B1\u03C1\u03C7\u03B5\u03AF\u03BF backup \u03B3\u03B9\u03B1 \u03B1\u03C3\u03C6\u03AC\u03BB\u03B5\u03B9\u03B1 \u03BA\u03B1\u03B9 \u03BC\u03B5\u03C4\u03B1\u03C6\u03BF\u03C1\u03AC \u03C3\u03B5 \u03C3\u03C5\u03C3\u03BA\u03B5\u03C5\u03AD\u03C2.",
+              "\u0395\u03B9\u03C3\u03AC\u03B3\u03B5\u03B9 \u03B1\u03C1\u03C7\u03B5\u03AF\u03BF \u03C1\u03C5\u03B8\u03BC\u03AF\u03C3\u03B5\u03C9\u03BD \u03B3\u03B9\u03B1 \u03B5\u03C0\u03B1\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC \u03AE \u03BC\u03B5\u03C4\u03B1\u03C6\u03BF\u03C1\u03AC.",
+              "\u0395\u03C0\u03B1\u03BD\u03B1\u03C6\u03AD\u03C1\u03B5\u03B9 \u03CC\u03BB\u03B5\u03C2 \u03C4\u03B9\u03C2 \u03C1\u03C5\u03B8\u03BC\u03AF\u03C3\u03B5\u03B9\u03C2 \u03C3\u03C4\u03B1 \u03C0\u03C1\u03BF\u03B5\u03C0\u03B9\u03BB\u03B5\u03B3\u03BC\u03AD\u03BD\u03B1."
+            ],
             DLG_FB_COLOUR_HINT: "\u0391\u03C6\u03AE\u03C3\u03C4\u03B5 \u03BA\u03B5\u03BD\u03CC \u03B3\u03B9\u03B1 \u03BD\u03B1 \u03C7\u03C1\u03B7\u03C3\u03B9\u03BC\u03BF\u03C0\u03BF\u03B9\u03AE\u03C3\u03B5\u03C4\u03B5 \u03C4\u03BF \u03C7\u03C1\u03C9\u03BC\u03B1\u03C4\u03B9\u03BA\u03CC \u03C3\u03C7\u03AE\u03BC\u03B1 \u03C4\u03BF\u03C5 FB"
           },
           // -- Espanol (Spain)
@@ -850,16 +909,26 @@
             CMF_DIALOG_LOCATION: "Ubicaci\xF3n del cuadro de di\xE1logo Limpia mis feeds",
             CMF_DIALOG_OPTION: ["lado izquierdo", "lado derecho"],
             CMF_BORDER_COLOUR: "Color de borde",
-            DLG_TIPS: "Acerca de / Consejos",
-            DLG_TIPS_DESC: "Enlaces del proyecto, info del mantenedor y ayuda de configuraci\xF3n.",
-            DLG_TIPS_CONTENT: "Save guarda tus preferencias en tu navegador y las aplica al instante. Export/Import te permite llevarlas a otro dispositivo. La navegaci\xF3n privada/inc\xF3gnito o borrar los datos del sitio las restablece.",
+            DLG_TIPS: "Acerca de",
+            DLG_TIPS_DESC: "Enlaces del proyecto e info del mantenedor.",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "Si te ayuda, una estrella en {github} significa mucho.",
+            DLG_TIPS_FACEBOOK: "P\xE1sate por {facebook} - all\xED comparto mi arte y poes\xEDa.",
+            DLG_TIPS_SITE: "Si quieres ver qu\xE9 hago por la web, {site} es el mejor lugar para empezar.",
+            DLG_TIPS_CREDITS: "Un agradecimiento especial a {zbluebugz} por el proyecto original y a {trinhquocviet} por la rama de UI simplificada de la que hice el fork originalmente - y por el mantenimiento de filtros durante ese periodo.",
             DLG_TIPS_MAINTAINER_PREFIX: "Del mantenedor:",
             DLG_TIPS_MAINTAINER: "Espero que este script te ayude a recuperar tu feed. Prometo ser tu aliado en la lucha contra lo que no quieres ver en l\xEDnea.",
-            DLG_TIPS_LINK_REPO: "Repo del proyecto",
-            DLG_TIPS_LINK_FACEBOOK: "Sal\xFAdame en Facebook",
-            DLG_TIPS_LINK_SITE: "M\xE1s de m\xED",
-            DLG_TIPS_THANKS: "Si te ayuda, una estrella en GitHub significa mucho. \xA1Gracias! \u{1F496}",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "mi Facebook",
+            DLG_TIPS_LINK_SITE: "mi sitio web",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Guardar", "Cerrar", "Exportar", "Importar", "Reajustar"],
+            DLG_BUTTON_TOOLTIPS: [
+              "Guarda cambios en este navegador. Borrar datos/modo privado los elimina.",
+              "Exporta un archivo de respaldo para conservar y mover entre dispositivos.",
+              "Importa un archivo de ajustes para restaurar o trasladar.",
+              "Restablece todos los ajustes a valores predeterminados."
+            ],
             DLG_FB_COLOUR_HINT: "Dejar en blanco para usar el esquema de color de FB"
           },
           // -- Suomi - Finnish (Finland)
@@ -967,16 +1036,26 @@
             CMF_DIALOG_LOCATION: "Puhdista sy\xF6tteeni -valintaikkunan sijainti",
             CMF_DIALOG_OPTION: ["vasen puoli", "oikea puoli"],
             CMF_BORDER_COLOUR: "Reunuksen v\xE4ri",
-            DLG_TIPS: "Tietoa / Vinkit",
-            DLG_TIPS_DESC: "Projektin linkit, yll\xE4pit\xE4j\xE4n tiedot ja ohjeet.",
-            DLG_TIPS_CONTENT: "Save tallentaa asetuksesi selaimeen ja ottaa ne k\xE4ytt\xF6\xF6n heti. Export/Import auttaa siirt\xE4m\xE4\xE4n ne toiselle laitteelle. Yksityinen/inkognito\u2011selailu tai sivustodatan tyhjennys nollaa ne.",
+            DLG_TIPS: "Tietoa",
+            DLG_TIPS_DESC: "Projektin linkit ja yll\xE4pit\xE4j\xE4n tiedot.",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "Jos t\xE4st\xE4 on apua, {github}-t\xE4hti merkitsee paljon.",
+            DLG_TIPS_FACEBOOK: "Tule moikkaamaan {facebook} - jaan siell\xE4 taidetta ja runoutta.",
+            DLG_TIPS_SITE: "Jos haluat n\xE4hd\xE4 mit\xE4 puuhailen verkossa, {site} on paras paikka aloittaa.",
+            DLG_TIPS_CREDITS: "Erityiskiitos {zbluebugz}:lle alkuper\xE4isest\xE4 projektista ja {trinhquocviet}:lle yksinkertaistetusta UI-haarasta, josta alun perin forkkasin - sek\xE4 suodattimien yll\xE4pidosta tuona aikana.",
             DLG_TIPS_MAINTAINER_PREFIX: "Yll\xE4pit\xE4j\xE4lt\xE4:",
             DLG_TIPS_MAINTAINER: "Toivon, ett\xE4 t\xE4m\xE4 skripti auttaa sinua saamaan feedisi takaisin. Lupaan olla liittolaisesi taistelussa sit\xE4 vastaan, mit\xE4 et halua n\xE4hd\xE4 verkossa.",
-            DLG_TIPS_LINK_REPO: "Projektin repo",
-            DLG_TIPS_LINK_FACEBOOK: "Sano hei Facebookissa",
-            DLG_TIPS_LINK_SITE: "Lis\xE4\xE4 minulta",
-            DLG_TIPS_THANKS: "Jos t\xE4st\xE4 on apua, t\xE4hti GitHubissa merkitsee paljon. Kiitos! \u{1F496}",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "Facebook-sivuni",
+            DLG_TIPS_LINK_SITE: "sivuni",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Tallentaa", "Sulkea", "Vienti", "Tuonti", "Nollaa"],
+            DLG_BUTTON_TOOLTIPS: [
+              "Tallentaa muutokset t\xE4h\xE4n selaimeen. Tietojen tyhjennys/yksityinen tila poistaa ne.",
+              "Vie varmuuskopiotiedoston asetusten s\xE4ilytt\xE4miseen ja siirtoon.",
+              "Tuo asetustiedoston palautusta tai siirtoa varten.",
+              "Palauttaa kaikki asetukset oletuksiin."
+            ],
             DLG_FB_COLOUR_HINT: "J\xE4t\xE4 tyhj\xE4ksi k\xE4ytt\xE4\xE4ksesi FB:n v\xE4rimaailmaa"
           },
           // -- Français (France)
@@ -1084,16 +1163,26 @@
             CMF_DIALOG_LOCATION: "Emplacement de la bo\xEEte de dialogue Nettoyer mes flux",
             CMF_DIALOG_OPTION: ["c\xF4t\xE9 gauche", "c\xF4t\xE9 droit"],
             CMF_BORDER_COLOUR: "Couleur de bordure",
-            DLG_TIPS: "\xC0 propos / Conseils",
-            DLG_TIPS_DESC: "Liens du projet, infos du mainteneur et aide \xE0 la configuration.",
-            DLG_TIPS_CONTENT: "Save conserve vos pr\xE9f\xE9rences dans votre navigateur et les applique imm\xE9diatement. Export/Import permet de les emporter sur un autre appareil. La navigation priv\xE9e/incognito ou l\u2019effacement des donn\xE9es du site les r\xE9initialise.",
+            DLG_TIPS: "\xC0 propos",
+            DLG_TIPS_DESC: "Liens du projet et infos du mainteneur.",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "Si cela vous aide, une \xE9toile sur {github} compte beaucoup.",
+            DLG_TIPS_FACEBOOK: "Passez dire bonjour sur {facebook} - j'y partage mon art et ma po\xE9sie.",
+            DLG_TIPS_SITE: "Si vous voulez voir ce que je fais sur le web, {site} est le meilleur point de d\xE9part.",
+            DLG_TIPS_CREDITS: "Remerciements particuliers \xE0 {zbluebugz} pour le projet original, et \xE0 {trinhquocviet} pour la branche UI simplifi\xE9e dont j'ai initialement fork\xE9 - ainsi que pour la maintenance des filtres pendant cette p\xE9riode.",
             DLG_TIPS_MAINTAINER_PREFIX: "De la part du mainteneur :",
             DLG_TIPS_MAINTAINER: "J\u2019esp\xE8re que ce script vous aidera \xE0 reprendre votre fil. Je promets d\u2019\xEAtre votre alli\xE9 dans la lutte contre ce que vous ne voulez pas voir en ligne.",
-            DLG_TIPS_LINK_REPO: "Repo du projet",
-            DLG_TIPS_LINK_FACEBOOK: "Dites bonjour sur Facebook",
-            DLG_TIPS_LINK_SITE: "Plus de moi",
-            DLG_TIPS_THANKS: "Si cela vous aide, une \xE9toile sur GitHub compte beaucoup. Merci ! \u{1F496}",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "ma page Facebook",
+            DLG_TIPS_LINK_SITE: "mon site",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Sauvegarder", "Fermer", "Exporter", "Importer", "R\xE9initialiser"],
+            DLG_BUTTON_TOOLTIPS: [
+              "Enregistre les changements dans ce navigateur. Effacer les donn\xE9es/priv\xE9 les supprime.",
+              "Exporte un fichier de sauvegarde pour conserver et d\xE9placer entre appareils.",
+              "Importe un fichier de r\xE9glages pour restaurer ou transf\xE9rer.",
+              "R\xE9initialise tous les r\xE9glages par d\xE9faut."
+            ],
             DLG_FB_COLOUR_HINT: "Laissez vide pour utiliser le jeu de couleurs de FB"
           },
           // -- עִברִית (Hebrew)
@@ -1202,16 +1291,26 @@
             CMF_DIALOG_LOCATION: '\u05DE\u05D9\u05E7\u05D5\u05DD \u05EA\u05D9\u05D1\u05EA \u05D4\u05D3\u05D5-\u05E9\u05D9\u05D7 "\u05E0\u05E7\u05D4 \u05D0\u05EA \u05D4\u05D4\u05D6\u05E0\u05D5\u05EA \u05E9\u05DC\u05D9"',
             CMF_DIALOG_OPTION: ["\u05E6\u05D3 \u05E9\u05DE\u05D0\u05DC", "\u05E6\u05D3 \u05D9\u05DE\u05D9\u05DF"],
             CMF_BORDER_COLOUR: "\u05E6\u05D1\u05E2 \u05D2\u05D1\u05D5\u05DC",
-            DLG_TIPS: "\u05D0\u05D5\u05D3\u05D5\u05EA / \u05D8\u05D9\u05E4\u05D9\u05DD",
-            DLG_TIPS_DESC: "\u05E7\u05D9\u05E9\u05D5\u05E8\u05D9 \u05D4\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8, \u05DE\u05D9\u05D3\u05E2 \u05E2\u05DC \u05D4\u05DE\u05EA\u05D7\u05D6\u05E7 \u05D5\u05E2\u05D6\u05E8\u05D4 \u05D1\u05D4\u05D2\u05D3\u05E8\u05D4.",
-            DLG_TIPS_CONTENT: "Save \u05E9\u05D5\u05DE\u05E8 \u05D0\u05EA \u05D4\u05D4\u05E2\u05D3\u05E4\u05D5\u05EA \u05E9\u05DC\u05DA \u05D1\u05D3\u05E4\u05D3\u05E4\u05DF \u05D5\u05DE\u05D7\u05D9\u05DC \u05D0\u05D5\u05EA\u05DF \u05DE\u05D9\u05D3. Export/Import \u05DE\u05D0\u05E4\u05E9\u05E8 \u05DC\u05D4\u05E2\u05D1\u05D9\u05E8 \u05D0\u05D5\u05EA\u05DF \u05DC\u05DE\u05DB\u05E9\u05D9\u05E8 \u05D0\u05D7\u05E8. \u05D2\u05DC\u05D9\u05E9\u05D4 \u05E4\u05E8\u05D8\u05D9\u05EA/\u05D0\u05D9\u05E0\u05E7\u05D5\u05D2\u05E0\u05D9\u05D8\u05D5 \u05D0\u05D5 \u05DE\u05D7\u05D9\u05E7\u05EA \u05E0\u05EA\u05D5\u05E0\u05D9 \u05D4\u05D0\u05EA\u05E8 \u05D9\u05D0\u05E4\u05E1\u05D5 \u05D0\u05D5\u05EA\u05DF.",
+            DLG_TIPS: "\u05D0\u05D5\u05D3\u05D5\u05EA",
+            DLG_TIPS_DESC: "\u05E7\u05D9\u05E9\u05D5\u05E8\u05D9 \u05D4\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D5\u05DE\u05D9\u05D3\u05E2 \u05E2\u05DC \u05D4\u05DE\u05EA\u05D7\u05D6\u05E7.",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "\u05D0\u05DD \u05D6\u05D4 \u05E2\u05D5\u05D6\u05E8, \u05DB\u05D5\u05DB\u05D1 \u05D1-{github} \u05E9\u05D5\u05D5\u05D4 \u05D4\u05E8\u05D1\u05D4.",
+            DLG_TIPS_FACEBOOK: "\u05D1\u05D5\u05D0\u05D5 \u05DC\u05D4\u05D2\u05D9\u05D3 \u05E9\u05DC\u05D5\u05DD \u05D1-{facebook} - \u05E9\u05DD \u05D0\u05E0\u05D9 \u05DE\u05E9\u05EA\u05E3 \u05D0\u05DE\u05E0\u05D5\u05EA \u05D5\u05E9\u05D9\u05E8\u05D4.",
+            DLG_TIPS_SITE: "\u05D0\u05DD \u05E8\u05D5\u05E6\u05D9\u05DD \u05DC\u05E8\u05D0\u05D5\u05EA \u05DE\u05D4 \u05D0\u05E0\u05D9 \u05E2\u05D5\u05E9\u05D4 \u05D1\u05E8\u05D7\u05D1\u05D9 \u05D4\u05E8\u05E9\u05EA, {site} \u05D4\u05D5\u05D0 \u05D4\u05DE\u05E7\u05D5\u05DD \u05D4\u05DB\u05D9 \u05D8\u05D5\u05D1 \u05DC\u05D4\u05EA\u05D7\u05D9\u05DC.",
+            DLG_TIPS_CREDITS: "\u05EA\u05D5\u05D3\u05D4 \u05DE\u05D9\u05D5\u05D7\u05D3\u05EA \u05DC-{zbluebugz} \u05E2\u05DC \u05D4\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D4\u05DE\u05E7\u05D5\u05E8\u05D9, \u05D5\u05DC-{trinhquocviet} \u05E2\u05DC \u05E2\u05E0\u05E3 \u05D4-UI \u05D4\u05DE\u05E4\u05D5\u05E9\u05D8 \u05E9\u05DE\u05DE\u05E0\u05D5 \u05E4\u05D5\u05E8\u05E7\u05EA\u05D9 \u05D1\u05EA\u05D7\u05D9\u05DC\u05D4 - \u05D5\u05D2\u05DD \u05E2\u05DC \u05EA\u05D7\u05D6\u05D5\u05E7\u05EA \u05D4\u05E4\u05D9\u05DC\u05D8\u05E8\u05D9\u05DD \u05D1\u05D0\u05D5\u05EA\u05D4 \u05EA\u05E7\u05D5\u05E4\u05D4.",
             DLG_TIPS_MAINTAINER_PREFIX: "\u05DE\u05D4\u05DE\u05EA\u05D7\u05D6\u05E7:",
             DLG_TIPS_MAINTAINER: "\u05D0\u05E0\u05D9 \u05DE\u05E7\u05D5\u05D5\u05D4 \u05E9\u05D4\u05E1\u05E7\u05E8\u05D9\u05E4\u05D8 \u05D4\u05D6\u05D4 \u05D9\u05E2\u05D6\u05D5\u05E8 \u05DC\u05DA \u05DC\u05D4\u05D7\u05D6\u05D9\u05E8 \u05DC\u05E2\u05E6\u05DE\u05DA \u05D0\u05EA \u05D4\u05E4\u05D9\u05D3. \u05D0\u05E0\u05D9 \u05DE\u05D1\u05D8\u05D9\u05D7 \u05DC\u05D4\u05D9\u05D5\u05EA \u05D1\u05DF \u05D1\u05E8\u05D9\u05EA \u05D1\u05DE\u05D0\u05D1\u05E7 \u05E0\u05D2\u05D3 \u05D3\u05D1\u05E8\u05D9\u05DD \u05E9\u05DC\u05D0 \u05EA\u05E8\u05E6\u05D4 \u05DC\u05E8\u05D0\u05D5\u05EA \u05D1\u05E8\u05E9\u05EA.",
-            DLG_TIPS_LINK_REPO: "\u05DE\u05D0\u05D2\u05E8 \u05D4\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8",
-            DLG_TIPS_LINK_FACEBOOK: "\u05EA\u05D2\u05D9\u05D3\u05D5 \u05E9\u05DC\u05D5\u05DD \u05D1\u05E4\u05D9\u05D9\u05E1\u05D1\u05D5\u05E7",
-            DLG_TIPS_LINK_SITE: "\u05E2\u05D5\u05D3 \u05DE\u05DE\u05E0\u05D9",
-            DLG_TIPS_THANKS: "\u05D0\u05DD \u05D6\u05D4 \u05E2\u05D5\u05D6\u05E8, \u05DB\u05D5\u05DB\u05D1 \u05D1\u2011GitHub \u05E9\u05D5\u05D5\u05D4 \u05D4\u05E8\u05D1\u05D4. \u05EA\u05D5\u05D3\u05D4! \u{1F496}",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "\u05E2\u05DE\u05D5\u05D3 \u05D4\u05E4\u05D9\u05D9\u05E1\u05D1\u05D5\u05E7 \u05E9\u05DC\u05D9",
+            DLG_TIPS_LINK_SITE: "\u05D4\u05D0\u05EA\u05E8 \u05E9\u05DC\u05D9",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["\u05E9\u05DE\u05D5\u05E8", "\u05E1\u05D2\u05D5\u05E8", "\u05D9\u05D9\u05E6\u05D0", "\u05D9\u05D9\u05D1\u05D0", "\u05D0\u05D9\u05E4\u05D5\u05E1"],
+            DLG_BUTTON_TOOLTIPS: [
+              "\u05E9\u05D5\u05DE\u05E8 \u05E9\u05D9\u05E0\u05D5\u05D9\u05D9\u05DD \u05D1\u05D3\u05E4\u05D3\u05E4\u05DF \u05D4\u05D6\u05D4. \u05E0\u05D9\u05E7\u05D5\u05D9 \u05E0\u05EA\u05D5\u05E0\u05D9\u05DD/\u05D2\u05DC\u05D9\u05E9\u05D4 \u05E4\u05E8\u05D8\u05D9\u05EA \u05DE\u05E1\u05D9\u05E8\u05D9\u05DD \u05D0\u05D5\u05EA\u05DD.",
+              "\u05DE\u05D9\u05D9\u05E6\u05D0 \u05E7\u05D5\u05D1\u05E5 \u05D2\u05D9\u05D1\u05D5\u05D9 \u05DC\u05E9\u05DE\u05D9\u05E8\u05D4 \u05D5\u05D4\u05E2\u05D1\u05E8\u05D4 \u05D1\u05D9\u05DF \u05DE\u05DB\u05E9\u05D9\u05E8\u05D9\u05DD.",
+              "\u05DE\u05D9\u05D9\u05D1\u05D0 \u05E7\u05D5\u05D1\u05E5 \u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05DC\u05E9\u05D7\u05D6\u05D5\u05E8 \u05D0\u05D5 \u05DC\u05D4\u05E2\u05D1\u05E8\u05D4.",
+              "\u05DE\u05D0\u05E4\u05E1 \u05D0\u05EA \u05DB\u05DC \u05D4\u05D4\u05D2\u05D3\u05E8\u05D5\u05EA \u05DC\u05D1\u05E8\u05D9\u05E8\u05EA \u05DE\u05D7\u05D3\u05DC."
+            ],
             DLG_FB_COLOUR_HINT: "\u05D4\u05E9\u05D0\u05E8 \u05E8\u05D9\u05E7 \u05DB\u05D3\u05D9 \u05DC\u05D4\u05E9\u05EA\u05DE\u05E9 \u05D1\u05E2\u05E8\u05DB\u05EA \u05D4\u05E6\u05D1\u05E2\u05D9\u05DD \u05E9\u05DC FB"
           },
           // -- Bahasa Indonesia (Indonesia)
@@ -1319,16 +1418,26 @@
             CMF_DIALOG_LOCATION: "Lokasi kotak dialog Bersihkan umpan saya",
             CMF_DIALOG_OPTION: ["sisi kiri", "sisi kanan"],
             CMF_BORDER_COLOUR: "Warna perbatasan",
-            DLG_TIPS: "Tentang / Tips",
-            DLG_TIPS_DESC: "Tautan proyek, info pengelola, dan bantuan pengaturan.",
-            DLG_TIPS_CONTENT: "Save menyimpan preferensi Anda di browser dan menerapkannya langsung. Export/Import memungkinkan Anda membawanya ke perangkat lain. Mode privat/inkognito atau menghapus data situs akan meresetnya.",
+            DLG_TIPS: "Tentang",
+            DLG_TIPS_DESC: "Tautan proyek dan info pengelola.",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "Jika ini membantu, bintang di {github} sangat berarti.",
+            DLG_TIPS_FACEBOOK: "Sapa di {facebook} - saya berbagi karya seni dan puisi di sana.",
+            DLG_TIPS_SITE: "Jika ingin melihat apa yang saya lakukan di web, {site} adalah tempat terbaik untuk mulai.",
+            DLG_TIPS_CREDITS: "Terima kasih khusus kepada {zbluebugz} untuk proyek asli, dan {trinhquocviet} untuk cabang UI sederhana yang pertama kali saya fork - serta pemeliharaan filter pada masa itu.",
             DLG_TIPS_MAINTAINER_PREFIX: "Dari pengelola:",
             DLG_TIPS_MAINTAINER: "Saya harap skrip ini membantu Anda merebut kembali feed Anda. Saya berjanji menjadi sekutu Anda melawan hal-hal yang tidak ingin Anda lihat online.",
-            DLG_TIPS_LINK_REPO: "Repo proyek",
-            DLG_TIPS_LINK_FACEBOOK: "Sapa di Facebook",
-            DLG_TIPS_LINK_SITE: "Lebih banyak dari saya",
-            DLG_TIPS_THANKS: "Jika ini membantu, bintang di GitHub sangat berarti. Terima kasih! \u{1F496}",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "Facebook saya",
+            DLG_TIPS_LINK_SITE: "situs saya",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Simpan", "Tutup", "Ekspor", "Impor", "Reset"],
+            DLG_BUTTON_TOOLTIPS: [
+              "Menyimpan perubahan di browser ini. Hapus data/privat menghapusnya.",
+              "Ekspor file cadangan untuk menyimpan dan memindahkan antar perangkat.",
+              "Impor file pengaturan untuk memulihkan atau memindahkan.",
+              "Atur ulang semua pengaturan ke default."
+            ],
             DLG_FB_COLOUR_HINT: "Biarkan kosong untuk menggunakan skema warna FB"
           },
           // -- Italino (Italy)
@@ -1436,16 +1545,26 @@
             CMF_DIALOG_LOCATION: "Posizione della finestra di dialogo Pulisci i miei feed",
             CMF_DIALOG_OPTION: ["lato sinistro", "lato destro"],
             CMF_BORDER_COLOUR: "Colore del bordo",
-            DLG_TIPS: "Info / Suggerimenti",
-            DLG_TIPS_DESC: "Link al progetto, info del manutentore e aiuto alla configurazione.",
-            DLG_TIPS_CONTENT: "Save salva le tue preferenze nel browser e le applica subito. Export/Import ti permette di portarle su un altro dispositivo. La navigazione privata/incognito o la pulizia dei dati del sito le reimposta.",
+            DLG_TIPS: "Info",
+            DLG_TIPS_DESC: "Link al progetto e info del maintainer.",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "Se ti \xE8 utile, una stella su {github} significa molto.",
+            DLG_TIPS_FACEBOOK: "Passa a salutarmi su {facebook} - l\xEC condivido la mia arte e poesia.",
+            DLG_TIPS_SITE: "Se vuoi vedere cosa faccio in giro per il web, {site} \xE8 il posto migliore da cui partire.",
+            DLG_TIPS_CREDITS: "Un grazie speciale a {zbluebugz} per il progetto originale e a {trinhquocviet} per il branch UI semplificato da cui ho fatto il fork iniziale - e per la manutenzione dei filtri in quel periodo.",
             DLG_TIPS_MAINTAINER_PREFIX: "Dal maintainer:",
             DLG_TIPS_MAINTAINER: "Spero che questo script ti aiuti a riprenderti il tuo feed. Prometto di essere il tuo alleato nella lotta contro ci\xF2 che non vuoi vedere online.",
-            DLG_TIPS_LINK_REPO: "Repo del progetto",
-            DLG_TIPS_LINK_FACEBOOK: "Saluta su Facebook",
-            DLG_TIPS_LINK_SITE: "Altro da me",
-            DLG_TIPS_THANKS: "Se ti \xE8 utile, una stella su GitHub significa molto. Grazie! \u{1F496}",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "la mia pagina Facebook",
+            DLG_TIPS_LINK_SITE: "il mio sito",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Salva", "Chiudi", "Esportare", "Importare", "Ripristina"],
+            DLG_BUTTON_TOOLTIPS: [
+              "Salva le modifiche in questo browser. Cancellare dati/privato le rimuove.",
+              "Esporta un file di backup per conservarle e spostarle tra dispositivi.",
+              "Importa un file di impostazioni per ripristinare o trasferire.",
+              "Reimposta tutte le impostazioni ai valori predefiniti."
+            ],
             DLG_FB_COLOUR_HINT: "Lascia vuoto per usare la combinazione di colori di FB"
           },
           // -- Japanese (Japan)
@@ -1553,16 +1672,26 @@
             CMF_DIALOG_LOCATION: "[\u30D5\u30A3\u30FC\u30C9\u306E\u6D88\u53BB] \u30C0\u30A4\u30A2\u30ED\u30B0 \u30DC\u30C3\u30AF\u30B9\u306E\u914D\u7F6E",
             CMF_DIALOG_OPTION: ["\u5DE6\u5074", "\u53F3\u5074"],
             CMF_BORDER_COLOUR: "\u30DC\u30FC\u30C0\u30FC\u30AB\u30E9\u30FC",
-            DLG_TIPS: "\u6982\u8981 / \u30D2\u30F3\u30C8",
-            DLG_TIPS_DESC: "\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u30EA\u30F3\u30AF\u3001\u30E1\u30F3\u30C6\u30CA\u60C5\u5831\u3001\u8A2D\u5B9A\u306E\u30D8\u30EB\u30D7\u3002",
-            DLG_TIPS_CONTENT: "Save \u306F\u8A2D\u5B9A\u3092\u30D6\u30E9\u30A6\u30B6\u306B\u4FDD\u5B58\u3057\u3066\u3059\u3050\u9069\u7528\u3057\u307E\u3059\u3002Export/Import \u3067\u4ED6\u306E\u30C7\u30D0\u30A4\u30B9\u3078\u6301\u3061\u904B\u3079\u307E\u3059\u3002\u30D7\u30E9\u30A4\u30D9\u30FC\u30C8/\u30B7\u30FC\u30AF\u30EC\u30C3\u30C8\u3084\u30B5\u30A4\u30C8\u30C7\u30FC\u30BF\u306E\u524A\u9664\u3067\u30EA\u30BB\u30C3\u30C8\u3055\u308C\u307E\u3059\u3002",
+            DLG_TIPS: "\u6982\u8981",
+            DLG_TIPS_DESC: "\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u30EA\u30F3\u30AF\u3068\u30E1\u30F3\u30C6\u30CA\u60C5\u5831\u3002",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "\u5F79\u306B\u7ACB\u3063\u305F\u3089 {github} \u306E\u30B9\u30BF\u30FC\u304C\u52B1\u307F\u306B\u306A\u308A\u307E\u3059\u3002",
+            DLG_TIPS_FACEBOOK: "{facebook}\u3067\u58F0\u3092\u304B\u3051\u3066\u304F\u3060\u3055\u3044 - \u305D\u3053\u3067\u30A2\u30FC\u30C8\u3068\u8A69\u3092\u5171\u6709\u3057\u3066\u3044\u307E\u3059\u3002",
+            DLG_TIPS_SITE: "\u6D3B\u52D5\u3092\u307E\u3068\u3081\u3066\u898B\u305F\u3044\u306A\u3089\u3001{site}\u304C\u3044\u3061\u3070\u3093\u306E\u5165\u53E3\u3067\u3059\u3002",
+            DLG_TIPS_CREDITS: "\u5143\u306E\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u306E {zbluebugz} \u3068\u3001\u79C1\u304C\u6700\u521D\u306B fork \u3057\u305F\u7C21\u6613 UI \u30D6\u30E9\u30F3\u30C1\u306E {trinhquocviet} \u306B\u7279\u5225\u306A\u611F\u8B1D\u3092\u3002\u3042\u306E\u671F\u9593\u306E\u30D5\u30A3\u30EB\u30BF\u30FC\u4FDD\u5B88\u306B\u3082\u611F\u8B1D\u3057\u307E\u3059\u3002",
             DLG_TIPS_MAINTAINER_PREFIX: "\u30E1\u30F3\u30C6\u30CA\u3088\u308A\uFF1A",
             DLG_TIPS_MAINTAINER: "\u3053\u306E\u30B9\u30AF\u30EA\u30D7\u30C8\u304C\u3042\u306A\u305F\u306E\u30D5\u30A3\u30FC\u30C9\u3092\u53D6\u308A\u623B\u3059\u52A9\u3051\u306B\u306A\u308C\u3070\u5B09\u3057\u3044\u3067\u3059\u3002\u30AA\u30F3\u30E9\u30A4\u30F3\u3067\u898B\u305F\u304F\u306A\u3044\u3082\u306E\u3068\u6226\u3046\u3042\u306A\u305F\u306E\u5473\u65B9\u3067\u3044\u308B\u3068\u7D04\u675F\u3057\u307E\u3059\u3002",
-            DLG_TIPS_LINK_REPO: "\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u306E\u30EA\u30DD\u30B8\u30C8\u30EA",
-            DLG_TIPS_LINK_FACEBOOK: "Facebook\u3067\u58F0\u3092\u304B\u3051\u3066",
-            DLG_TIPS_LINK_SITE: "\u3082\u3063\u3068\u77E5\u308B",
-            DLG_TIPS_THANKS: "\u5F79\u306B\u7ACB\u3063\u305F\u3089 GitHub \u306E\u30B9\u30BF\u30FC\u304C\u52B1\u307F\u306B\u306A\u308A\u307E\u3059\u3002\u3042\u308A\u304C\u3068\u3046\u3054\u3056\u3044\u307E\u3059\uFF01\u{1F496}",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "\u79C1\u306EFacebook",
+            DLG_TIPS_LINK_SITE: "\u79C1\u306E\u30B5\u30A4\u30C8",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["\u30BB\u30FC\u30D6", "\u30AF\u30ED\u30FC\u30BA", "\u8F38\u51FA\u3059\u308B", "\u8F38\u5165", "\u30EA\u30BB\u30C3\u30C8"],
+            DLG_BUTTON_TOOLTIPS: [
+              "\u3053\u306E\u30D6\u30E9\u30A6\u30B6\u306B\u4FDD\u5B58\u3057\u307E\u3059\u3002\u30C7\u30FC\u30BF\u524A\u9664/\u30D7\u30E9\u30A4\u30D9\u30FC\u30C8\u3067\u6D88\u3048\u307E\u3059\u3002",
+              "\u30D0\u30C3\u30AF\u30A2\u30C3\u30D7\u7528\u30D5\u30A1\u30A4\u30EB\u3092\u66F8\u304D\u51FA\u3057\u3001\u7AEF\u672B\u9593\u3067\u79FB\u884C\u3067\u304D\u307E\u3059\u3002",
+              "\u8A2D\u5B9A\u30D5\u30A1\u30A4\u30EB\u3092\u8AAD\u307F\u8FBC\u307F\u3001\u5FA9\u5143\u307E\u305F\u306F\u79FB\u884C\u3057\u307E\u3059\u3002",
+              "\u3059\u3079\u3066\u306E\u8A2D\u5B9A\u3092\u521D\u671F\u5316\u3057\u307E\u3059\u3002"
+            ],
             DLG_FB_COLOUR_HINT: "\u7A7A\u767D\u306E\u307E\u307E\u306B\u3059\u308B\u3068\u3001FB \u306E\u914D\u8272\u304C\u4F7F\u7528\u3055\u308C\u307E\u3059"
           },
           // -- Latviešu (Latvia)
@@ -1670,16 +1799,26 @@
             CMF_DIALOG_LOCATION: "Dialoglodzi\u0146a T\u012Br\u012Bt manas pl\u016Bsmas atra\u0161an\u0101s vieta",
             CMF_DIALOG_OPTION: ["kreis\u0101 puse", "lab\u0101 puse"],
             CMF_BORDER_COLOUR: "Apmales kr\u0101sa",
-            DLG_TIPS: "Par / Padomi",
-            DLG_TIPS_DESC: "Projekta saites, uztur\u0113t\u0101ja info un iestat\u012B\u0161anas pal\u012Bdz\u012Bba.",
-            DLG_TIPS_CONTENT: "Save saglab\u0101 j\u016Bsu preferences p\u0101rl\u016Bk\u0101 un uzreiz t\u0101s piem\u0113ro. Export/Import \u013Cauj t\u0101s p\u0101rnest uz citu ier\u012Bci. Priv\u0101t\u0101/inkognito p\u0101rl\u016Bko\u0161ana vai vietnes datu dz\u0113\u0161ana t\u0101s atiestata.",
+            DLG_TIPS: "Par",
+            DLG_TIPS_DESC: "Projekta saites un uztur\u0113t\u0101ja info.",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "Ja tas pal\u012Bdz, {github} zvaigzne man noz\u012Bm\u0113 daudz.",
+            DLG_TIPS_FACEBOOK: "Ien\u0101c uz {facebook} - tur dalos ar m\u0101kslu un dzeju.",
+            DLG_TIPS_SITE: "Ja gribi redz\u0113t, ar ko nodarbojos t\u012Bmekl\u012B, {site} ir lab\u0101k\u0101 vieta, kur s\u0101kt.",
+            DLG_TIPS_CREDITS: "\u012Apa\u0161s paldies {zbluebugz} par ori\u0123in\u0101lo projektu un {trinhquocviet} par vienk\u0101r\u0161oto UI zaru, no kura s\u0101kotn\u0113ji forkoju - un par filtru uztur\u0113\u0161anu taj\u0101 period\u0101.",
             DLG_TIPS_MAINTAINER_PREFIX: "No uztur\u0113t\u0101ja:",
             DLG_TIPS_MAINTAINER: "Ceru, ka \u0161is skripts pal\u012Bdz\u0113s atg\u016Bt savu pl\u016Bsmu. Es apsolu b\u016Bt tavs sabiedrotais c\u012B\u0146\u0101 pret to, ko nev\u0113lies redz\u0113t tie\u0161saist\u0113.",
-            DLG_TIPS_LINK_REPO: "Projekta repozitorijs",
-            DLG_TIPS_LINK_FACEBOOK: "Pasaki sveiki Facebook",
-            DLG_TIPS_LINK_SITE: "Vair\u0101k no manis",
-            DLG_TIPS_THANKS: "Ja tas pal\u012Bdz, zvaigzne GitHub\u0101 man noz\u012Bm\u0113 daudz. Paldies! \u{1F496}",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "mana Facebook lapa",
+            DLG_TIPS_LINK_SITE: "mana vietne",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Saglab\u0101jiet", "Aizveriet", "Eksport\u0113t", "Import\u0113t", "Atiestat\u012Bt"],
+            DLG_BUTTON_TOOLTIPS: [
+              "Saglab\u0101 izmai\u0146as \u0161aj\u0101 p\u0101rl\u016Bk\u0101. Datu t\u012Br\u012B\u0161ana/priv\u0101tais re\u017E\u012Bms t\u0101s dz\u0113\u0161.",
+              "Eksport\u0113 rezerves failu saglab\u0101\u0161anai un p\u0101rnesei starp ier\u012Bc\u0113m.",
+              "Import\u0113 iestat\u012Bjumu failu atjauno\u0161anai vai p\u0101rnesei.",
+              "Atiestata visus iestat\u012Bjumus uz noklus\u0113jumu."
+            ],
             DLG_FB_COLOUR_HINT: "Atst\u0101jiet tuk\u0161u, lai izmantotu FB kr\u0101su sh\u0113mu"
           },
           // -- Nederlands (Netherlands)
@@ -1787,16 +1926,26 @@
             CMF_DIALOG_LOCATION: "Locatie van het dialoogvenster Mijn feeds opschonen",
             CMF_DIALOG_OPTION: ["linkerkant", "rechterkant"],
             CMF_BORDER_COLOUR: "Randkleur",
-            DLG_TIPS: "Over / Tips",
-            DLG_TIPS_DESC: "Projectlinks, info over de beheerder en hulp bij instellen.",
-            DLG_TIPS_CONTENT: "Save bewaart je voorkeuren in je browser en past ze meteen toe. Export/Import laat je ze meenemen naar een ander apparaat. Priv\xE9/incognito of het wissen van sitegegevens reset ze.",
+            DLG_TIPS: "Over",
+            DLG_TIPS_DESC: "Projectlinks en info over de beheerder.",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "Als dit helpt, betekent een ster op {github} veel.",
+            DLG_TIPS_FACEBOOK: "Zeg hallo op {facebook} - daar deel ik mijn kunst en po\xEBzie.",
+            DLG_TIPS_SITE: "Als je wilt zien wat ik online doe, is {site} de beste plek om te beginnen.",
+            DLG_TIPS_CREDITS: "Speciale dank aan {zbluebugz} voor het originele project, en aan {trinhquocviet} voor de vereenvoudigde UI-branch waar ik oorspronkelijk van heb geforkt - plus het filteronderhoud in die periode.",
             DLG_TIPS_MAINTAINER_PREFIX: "Van de maintainer:",
             DLG_TIPS_MAINTAINER: "Ik hoop dat dit script je helpt je feed terug te krijgen. Ik beloof je bondgenoot te zijn in de strijd tegen dingen die je online niet wilt zien.",
-            DLG_TIPS_LINK_REPO: "Projectrepo",
-            DLG_TIPS_LINK_FACEBOOK: "Zeg hallo op Facebook",
-            DLG_TIPS_LINK_SITE: "Meer van mij",
-            DLG_TIPS_THANKS: "Als dit helpt, betekent een ster op GitHub veel. Dank je! \u{1F496}",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "mijn Facebook-pagina",
+            DLG_TIPS_LINK_SITE: "mijn website",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Opslaan", "Sluiten", "Exporteren", "Importeren", "Reset"],
+            DLG_BUTTON_TOOLTIPS: [
+              "Slaat wijzigingen op in deze browser. Gegevens wissen/priv\xE9 verwijdert ze.",
+              "Exporteert een back-upbestand om te bewaren en te verplaatsen.",
+              "Importeert een instellingenbestand om te herstellen of over te zetten.",
+              "Herstelt alle instellingen naar standaard."
+            ],
             DLG_FB_COLOUR_HINT: "Laat leeg om het kleurenschema van FB te gebruiken"
           },
           // -- Polski (Poland)
@@ -1904,16 +2053,26 @@
             CMF_DIALOG_LOCATION: "Lokalizacja okna dialogowego Wyczy\u015B\u0107 moje kana\u0142y",
             CMF_DIALOG_OPTION: ["lewa strona", "prawa strona"],
             CMF_BORDER_COLOUR: "Kolor obramowania",
-            DLG_TIPS: "O projekcie / Wskaz\xF3wki",
-            DLG_TIPS_DESC: "Linki do projektu, informacje o opiekunie i pomoc w konfiguracji.",
-            DLG_TIPS_CONTENT: "Save zapisuje preferencje w przegl\u0105darce i od razu je stosuje. Export/Import pozwala przenie\u015B\u0107 je na inne urz\u0105dzenie. Tryb prywatny/incognito lub wyczyszczenie danych witryny je zresetuje.",
+            DLG_TIPS: "O projekcie",
+            DLG_TIPS_DESC: "Linki do projektu i informacje o opiekunie.",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "Je\u015Bli to pomaga, gwiazdka na {github} wiele dla mnie znaczy.",
+            DLG_TIPS_FACEBOOK: "Wpadnij na {facebook} - dziel\u0119 si\u0119 tam sztuk\u0105 i poezj\u0105.",
+            DLG_TIPS_SITE: "Je\u015Bli chcesz zobaczy\u0107, co robi\u0119 w sieci, {site} to najlepszy start.",
+            DLG_TIPS_CREDITS: "Specjalne podzi\u0119kowania dla {zbluebugz} za oryginalny projekt oraz dla {trinhquocviet} za uproszczon\u0105 ga\u0142\u0105\u017A UI, z kt\xF3rej pierwotnie zrobi\u0142em fork - i za utrzymanie filtr\xF3w w tym czasie.",
             DLG_TIPS_MAINTAINER_PREFIX: "Od opiekuna:",
             DLG_TIPS_MAINTAINER: "Mam nadziej\u0119, \u017Ce ten skrypt pomo\u017Ce ci odzyska\u0107 feed. Obiecuj\u0119 by\u0107 twoim sojusznikiem w walce z tym, czego nie chcesz widzie\u0107 online.",
-            DLG_TIPS_LINK_REPO: "Repo projektu",
-            DLG_TIPS_LINK_FACEBOOK: "Powiedz cze\u015B\u0107 na Facebooku",
-            DLG_TIPS_LINK_SITE: "Wi\u0119cej ode mnie",
-            DLG_TIPS_THANKS: "Je\u015Bli to pomaga, gwiazdka na GitHubie wiele dla mnie znaczy. Dzi\u0119kuj\u0119! \u{1F496}",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "moja strona na Facebooku",
+            DLG_TIPS_LINK_SITE: "moja strona",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Zapisz", "Zamknij", "Eksport", "Import", "Przesk\u0142ada\u0107"],
+            DLG_BUTTON_TOOLTIPS: [
+              "Zapisuje zmiany w tej przegl\u0105darce. Czyszczenie danych/tryb prywatny usuwa je.",
+              "Eksportuje plik kopii zapasowej do zachowania i przenoszenia.",
+              "Importuje plik ustawie\u0144 do przywr\xF3cenia lub przeniesienia.",
+              "Resetuje wszystkie ustawienia do domy\u015Blnych."
+            ],
             DLG_FB_COLOUR_HINT: "Pozostaw puste, aby u\u017Cy\u0107 schematu kolor\xF3w FB"
           },
           // -- Português (Portugal and Brazil)
@@ -2021,16 +2180,26 @@
             CMF_DIALOG_LOCATION: "Localiza\xE7\xE3o da caixa de di\xE1logo Limpe meus feeds",
             CMF_DIALOG_OPTION: ["lado esquerdo", "lado direito"],
             CMF_BORDER_COLOUR: "Cor da borda",
-            DLG_TIPS: "Sobre / Dicas",
-            DLG_TIPS_DESC: "Links do projeto, info do mantenedor e ajuda de configura\xE7\xE3o.",
-            DLG_TIPS_CONTENT: "Save guarda as suas prefer\xEAncias no navegador e aplica-as imediatamente. Export/Import permite lev\xE1-las para outro dispositivo. Navega\xE7\xE3o privada/inc\xF3gnito ou apagar os dados do site reinicia-as.",
+            DLG_TIPS: "Sobre",
+            DLG_TIPS_DESC: "Links do projeto e info do mantenedor.",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "Se isso ajudar, uma estrela no {github} significa muito.",
+            DLG_TIPS_FACEBOOK: "Diga oi na {facebook} - l\xE1 compartilho minha arte e poesia.",
+            DLG_TIPS_SITE: "Se quiser ver o que ando fazendo pela web, {site} \xE9 o melhor lugar para come\xE7ar.",
+            DLG_TIPS_CREDITS: "Agradecimento especial a {zbluebugz} pelo projeto original e a {trinhquocviet} pelo branch de UI simplificada de onde eu inicialmente fiz o fork - al\xE9m da manuten\xE7\xE3o dos filtros naquele per\xEDodo.",
             DLG_TIPS_MAINTAINER_PREFIX: "Do mantenedor:",
             DLG_TIPS_MAINTAINER: "Espero que este script ajude voc\xEA a recuperar o seu feed. Prometo ser seu aliado na luta contra o que voc\xEA n\xE3o quer ver online.",
-            DLG_TIPS_LINK_REPO: "Repo do projeto",
-            DLG_TIPS_LINK_FACEBOOK: "Diga oi no Facebook",
-            DLG_TIPS_LINK_SITE: "Mais de mim",
-            DLG_TIPS_THANKS: "Se isso ajudar, uma estrela no GitHub significa muito. Obrigado! \u{1F496}",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "minha p\xE1gina do Facebook",
+            DLG_TIPS_LINK_SITE: "meu site",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Salvar", "Fechar", "Exportar", "Importar", "Redefinir"],
+            DLG_BUTTON_TOOLTIPS: [
+              "Salva mudan\xE7as neste navegador. Limpar dados/modo privado remove.",
+              "Exporta um arquivo de backup para manter e mover entre dispositivos.",
+              "Importa um arquivo de configura\xE7\xF5es para restaurar ou transferir.",
+              "Redefine todas as configura\xE7\xF5es para o padr\xE3o."
+            ],
             DLG_FB_COLOUR_HINT: "Deixe em branco para usar o esquema de cores do FB"
           },
           // -- Русский (Russia)
@@ -2138,16 +2307,26 @@
             CMF_DIALOG_LOCATION: "\u0420\u0430\u0441\u043F\u043E\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u0434\u0438\u0430\u043B\u043E\u0433\u043E\u0432\u043E\u0433\u043E \u043E\u043A\u043D\u0430 \xAB\u041E\u0447\u0438\u0441\u0442\u0438\u0442\u044C \u043C\u043E\u0438 \u043B\u0435\u043D\u0442\u044B\xBB",
             CMF_DIALOG_OPTION: ["\u043B\u0435\u0432\u0430\u044F \u0441\u0442\u043E\u0440\u043E\u043D\u0430", "\u043F\u0440\u0430\u0432\u0430\u044F \u0441\u0442\u043E\u0440\u043E\u043D\u0430"],
             CMF_BORDER_COLOUR: "\u0426\u0432\u0435\u0442 \u0433\u0440\u0430\u043D\u0438\u0446\u044B",
-            DLG_TIPS: "\u041E \u043F\u0440\u043E\u0435\u043A\u0442\u0435 / \u0421\u043E\u0432\u0435\u0442\u044B",
-            DLG_TIPS_DESC: "\u0421\u0441\u044B\u043B\u043A\u0438 \u043F\u0440\u043E\u0435\u043A\u0442\u0430, \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F \u043E \u0441\u043E\u043F\u0440\u043E\u0432\u043E\u0436\u0434\u0430\u044E\u0449\u0435\u043C \u0438 \u043F\u043E\u043C\u043E\u0449\u044C \u0441 \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u043E\u0439.",
-            DLG_TIPS_CONTENT: "Save \u0441\u043E\u0445\u0440\u0430\u043D\u044F\u0435\u0442 \u0432\u0430\u0448\u0438 \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u0432 \u0431\u0440\u0430\u0443\u0437\u0435\u0440\u0435 \u0438 \u0441\u0440\u0430\u0437\u0443 \u043F\u0440\u0438\u043C\u0435\u043D\u044F\u0435\u0442 \u0438\u0445. Export/Import \u043F\u043E\u0437\u0432\u043E\u043B\u044F\u0435\u0442 \u043F\u0435\u0440\u0435\u043D\u0435\u0441\u0442\u0438 \u0438\u0445 \u043D\u0430 \u0434\u0440\u0443\u0433\u043E\u0435 \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u043E. \u041F\u0440\u0438\u0432\u0430\u0442\u043D\u044B\u0439/\u0438\u043D\u043A\u043E\u0433\u043D\u0438\u0442\u043E \u0440\u0435\u0436\u0438\u043C \u0438\u043B\u0438 \u043E\u0447\u0438\u0441\u0442\u043A\u0430 \u0434\u0430\u043D\u043D\u044B\u0445 \u0441\u0430\u0439\u0442\u0430 \u0441\u0431\u0440\u043E\u0441\u0438\u0442 \u0438\u0445.",
+            DLG_TIPS: "\u041E \u043F\u0440\u043E\u0435\u043A\u0442\u0435",
+            DLG_TIPS_DESC: "\u0421\u0441\u044B\u043B\u043A\u0438 \u043F\u0440\u043E\u0435\u043A\u0442\u0430 \u0438 \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F \u043E \u0441\u043E\u043F\u0440\u043E\u0432\u043E\u0436\u0434\u0430\u044E\u0449\u0435\u043C.",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "\u0415\u0441\u043B\u0438 \u044D\u0442\u043E \u043F\u043E\u043C\u043E\u0433\u0430\u0435\u0442, \u0437\u0432\u0435\u0437\u0434\u0430 \u043D\u0430 {github} \u043E\u0447\u0435\u043D\u044C \u043C\u043D\u043E\u0433\u043E\u0435 \u0434\u043B\u044F \u043C\u0435\u043D\u044F \u0437\u043D\u0430\u0447\u0438\u0442.",
+            DLG_TIPS_FACEBOOK: "\u0417\u0430\u0433\u043B\u044F\u043D\u0438\u0442\u0435 \u043D\u0430 {facebook} - \u0442\u0430\u043C \u044F \u0434\u0435\u043B\u044E\u0441\u044C \u0438\u0441\u043A\u0443\u0441\u0441\u0442\u0432\u043E\u043C \u0438 \u043F\u043E\u044D\u0437\u0438\u0435\u0439.",
+            DLG_TIPS_SITE: "\u0415\u0441\u043B\u0438 \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0432\u0438\u0434\u0435\u0442\u044C, \u0447\u0435\u043C \u044F \u0437\u0430\u043D\u0438\u043C\u0430\u044E\u0441\u044C \u0432 \u0441\u0435\u0442\u0438, {site} \u2014 \u043B\u0443\u0447\u0448\u0435\u0435 \u043C\u0435\u0441\u0442\u043E \u043D\u0430\u0447\u0430\u0442\u044C.",
+            DLG_TIPS_CREDITS: "\u041E\u0441\u043E\u0431\u0430\u044F \u0431\u043B\u0430\u0433\u043E\u0434\u0430\u0440\u043D\u043E\u0441\u0442\u044C {zbluebugz} \u0437\u0430 \u043E\u0440\u0438\u0433\u0438\u043D\u0430\u043B\u044C\u043D\u044B\u0439 \u043F\u0440\u043E\u0435\u043A\u0442 \u0438 {trinhquocviet} \u0437\u0430 \u0443\u043F\u0440\u043E\u0449\u0451\u043D\u043D\u0443\u044E UI-\u0432\u0435\u0442\u043A\u0443, \u043E\u0442 \u043A\u043E\u0442\u043E\u0440\u043E\u0439 \u044F \u0438\u0437\u043D\u0430\u0447\u0430\u043B\u044C\u043D\u043E \u0444\u043E\u0440\u043A\u043D\u0443\u043B - \u0438 \u0437\u0430 \u043F\u043E\u0434\u0434\u0435\u0440\u0436\u043A\u0443 \u0444\u0438\u043B\u044C\u0442\u0440\u043E\u0432 \u0432 \u0442\u043E\u0442 \u043F\u0435\u0440\u0438\u043E\u0434.",
             DLG_TIPS_MAINTAINER_PREFIX: "\u041E\u0442 \u0441\u043E\u043F\u0440\u043E\u0432\u043E\u0436\u0434\u0430\u044E\u0449\u0435\u0433\u043E:",
             DLG_TIPS_MAINTAINER: "\u041D\u0430\u0434\u0435\u044E\u0441\u044C, \u044D\u0442\u043E\u0442 \u0441\u043A\u0440\u0438\u043F\u0442 \u043F\u043E\u043C\u043E\u0436\u0435\u0442 \u0432\u0430\u043C \u0432\u0435\u0440\u043D\u0443\u0442\u044C \u0441\u0432\u043E\u044E \u043B\u0435\u043D\u0442\u0443. \u042F \u043E\u0431\u0435\u0449\u0430\u044E \u0431\u044B\u0442\u044C \u0432\u0430\u0448\u0438\u043C \u0441\u043E\u044E\u0437\u043D\u0438\u043A\u043E\u043C \u0432 \u0431\u043E\u0440\u044C\u0431\u0435 \u0441 \u0442\u0435\u043C, \u0447\u0442\u043E \u0432\u044B \u043D\u0435 \u0445\u043E\u0442\u0438\u0442\u0435 \u0432\u0438\u0434\u0435\u0442\u044C \u0432 \u0441\u0435\u0442\u0438.",
-            DLG_TIPS_LINK_REPO: "\u0420\u0435\u043F\u043E\u0437\u0438\u0442\u043E\u0440\u0438\u0439 \u043F\u0440\u043E\u0435\u043A\u0442\u0430",
-            DLG_TIPS_LINK_FACEBOOK: "\u041D\u0430\u043F\u0438\u0448\u0438\u0442\u0435 \u043D\u0430 Facebook",
-            DLG_TIPS_LINK_SITE: "\u0415\u0449\u0451 \u043E\u0442 \u043C\u0435\u043D\u044F",
-            DLG_TIPS_THANKS: "\u0415\u0441\u043B\u0438 \u044D\u0442\u043E \u043F\u043E\u043C\u043E\u0433\u0430\u0435\u0442, \u0437\u0432\u0435\u0437\u0434\u0430 \u043D\u0430 GitHub \u0437\u043D\u0430\u0447\u0438\u0442 \u043E\u0447\u0435\u043D\u044C \u043C\u043D\u043E\u0433\u043E. \u0421\u043F\u0430\u0441\u0438\u0431\u043E! \u{1F496}",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "\u043C\u043E\u044E \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0443 \u043D\u0430 Facebook",
+            DLG_TIPS_LINK_SITE: "\u043C\u043E\u0439 \u0441\u0430\u0439\u0442",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C", "\u0417\u0430\u043A\u0440\u044B\u0442\u044C", "\u042D\u043A\u0441\u043F\u043E\u0440\u0442", "\u0418\u043C\u043F\u043E\u0440\u0442", "\u0421\u0431\u0440\u043E\u0441"],
+            DLG_BUTTON_TOOLTIPS: [
+              "\u0421\u043E\u0445\u0440\u0430\u043D\u044F\u0435\u0442 \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u044F \u0432 \u044D\u0442\u043E\u043C \u0431\u0440\u0430\u0443\u0437\u0435\u0440\u0435. \u041E\u0447\u0438\u0441\u0442\u043A\u0430 \u0434\u0430\u043D\u043D\u044B\u0445/\u0438\u043D\u043A\u043E\u0433\u043D\u0438\u0442\u043E \u0443\u0434\u0430\u043B\u0438\u0442 \u0438\u0445.",
+              "\u042D\u043A\u0441\u043F\u043E\u0440\u0442\u0438\u0440\u0443\u0435\u0442 \u0444\u0430\u0439\u043B-\u0440\u0435\u0437\u0435\u0440\u0432 \u0434\u043B\u044F \u0441\u043E\u0445\u0440\u0430\u043D\u0435\u043D\u0438\u044F \u0438 \u043F\u0435\u0440\u0435\u043D\u043E\u0441\u0430 \u043C\u0435\u0436\u0434\u0443 \u0443\u0441\u0442\u0440\u043E\u0439\u0441\u0442\u0432\u0430\u043C\u0438.",
+              "\u0418\u043C\u043F\u043E\u0440\u0442\u0438\u0440\u0443\u0435\u0442 \u0444\u0430\u0439\u043B \u043D\u0430\u0441\u0442\u0440\u043E\u0435\u043A \u0434\u043B\u044F \u0432\u043E\u0441\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u044F \u0438\u043B\u0438 \u043F\u0435\u0440\u0435\u043D\u043E\u0441\u0430.",
+              "\u0421\u0431\u0440\u0430\u0441\u044B\u0432\u0430\u0435\u0442 \u0432\u0441\u0435 \u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438 \u043A \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u044F\u043C \u043F\u043E \u0443\u043C\u043E\u043B\u0447\u0430\u043D\u0438\u044E."
+            ],
             DLG_FB_COLOUR_HINT: "\u041E\u0441\u0442\u0430\u0432\u044C\u0442\u0435 \u043F\u0443\u0441\u0442\u044B\u043C, \u0447\u0442\u043E\u0431\u044B \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C \u0446\u0432\u0435\u0442\u043E\u0432\u0443\u044E \u0441\u0445\u0435\u043C\u0443 FB"
           },
           // -- Türkçe (Turkey)
@@ -2254,16 +2433,26 @@
             CMF_DIALOG_LOCATION: `"Feed'lerimi temizle" ileti\u015Fim kutusunun konumu`,
             CMF_DIALOG_OPTION: ["sol yan", "sa\u011F yan"],
             CMF_BORDER_COLOUR: "Kenarl\u0131k rengi",
-            DLG_TIPS: "Hakk\u0131nda / \u0130pu\xE7lar\u0131",
-            DLG_TIPS_DESC: "Proje ba\u011Flant\u0131lar\u0131, bak\u0131m sorumlusu bilgisi ve kurulum yard\u0131m\u0131.",
-            DLG_TIPS_CONTENT: "Save, tercihlerinizi taray\u0131c\u0131n\u0131zda saklar ve hemen uygular. Export/Import onlar\u0131 ba\u015Fka bir cihaza ta\u015F\u0131man\u0131za yard\u0131mc\u0131 olur. Gizli/inkognito gezinti veya site verilerini temizlemek s\u0131f\u0131rlar.",
+            DLG_TIPS: "Hakk\u0131nda",
+            DLG_TIPS_DESC: "Proje ba\u011Flant\u0131lar\u0131 ve bak\u0131m sorumlusu bilgisi.",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "Bu i\u015Fe yararsa, {github} \xFCzerinde bir y\u0131ld\u0131z \xE7ok \u015Fey ifade eder.",
+            DLG_TIPS_FACEBOOK: "{facebook} u\u011Fray\u0131p selam verin - orada sanat\u0131m\u0131 ve \u015Fiirimi payla\u015F\u0131yorum.",
+            DLG_TIPS_SITE: "Webde neler yapt\u0131\u011F\u0131m\u0131 g\xF6rmek isterseniz, {site} en iyi ba\u015Flang\u0131\xE7.",
+            DLG_TIPS_CREDITS: "Orijinal proje i\xE7in {zbluebugz}'a ve ilk fork ald\u0131\u011F\u0131m sadele\u015Ftirilmi\u015F UI branch'i i\xE7in {trinhquocviet}'e \xF6zel te\u015Fekk\xFCrler - o d\xF6nemdeki filtre bak\u0131m\u0131na da.",
             DLG_TIPS_MAINTAINER_PREFIX: "Geli\u015Ftiriciden:",
             DLG_TIPS_MAINTAINER: "Bu beti\u011Fin feed\u2019inizi geri alman\u0131za yard\u0131mc\u0131 olmas\u0131n\u0131 umuyorum. \u0130nternette g\xF6rmek istemedi\u011Finiz \u015Feylere kar\u015F\u0131 m\xFCttefikiniz olaca\u011F\u0131ma s\xF6z veriyorum.",
-            DLG_TIPS_LINK_REPO: "Proje deposu",
-            DLG_TIPS_LINK_FACEBOOK: "Facebook'ta selam ver",
-            DLG_TIPS_LINK_SITE: "Benden daha fazlas\u0131",
-            DLG_TIPS_THANKS: "Bu i\u015Fe yararsa, GitHub\u2019da bir y\u0131ld\u0131z \xE7ok \u015Fey ifade eder. Te\u015Fekk\xFCrler! \u{1F496}",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "Facebook sayfam",
+            DLG_TIPS_LINK_SITE: "web sitem",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Kaydetmek", "Kapat", "\u0130hracat", "\u0130\xE7e aktarmak", "S\u0131f\u0131rla"],
+            DLG_BUTTON_TOOLTIPS: [
+              "De\u011Fi\u015Fiklikleri bu taray\u0131c\u0131ya kaydeder. Veri temizleme/gizli mod siler.",
+              "Ayarlar\u0131 korumak ve ta\u015F\u0131mak i\xE7in yedek dosyas\u0131 d\u0131\u015Fa aktar\u0131r.",
+              "Ayar dosyas\u0131n\u0131 i\xE7e aktar\u0131r; geri y\xFCkleme veya ta\u015F\u0131ma i\xE7in.",
+              "T\xFCm ayarlar\u0131 varsay\u0131lana d\xF6nd\xFCr\xFCr."
+            ],
             DLG_FB_COLOUR_HINT: "FB'un renk d\xFCzenini kullanmak i\xE7in bo\u015F b\u0131rak\u0131n"
           },
           // -- Україна (Ukraine)
@@ -2371,16 +2560,26 @@
             CMF_DIALOG_LOCATION: "\u0420\u043E\u0437\u0442\u0430\u0448\u0443\u0432\u0430\u043D\u043D\u044F \u0434\u0456\u0430\u043B\u043E\u0433\u043E\u0432\u043E\u0433\u043E \u0432\u0456\u043A\u043D\u0430 \xAB\u041E\u0447\u0438\u0441\u0442\u0438\u0442\u0438 \u043C\u043E\u0457 \u0441\u0442\u0440\u0456\u0447\u043A\u0438\xBB",
             CMF_DIALOG_OPTION: ["\u043B\u0456\u0432\u0430 \u0441\u0442\u043E\u0440\u043E\u043D\u0430", "\u043F\u0440\u0430\u0432\u0430 \u0441\u0442\u043E\u0440\u043E\u043D\u0430"],
             CMF_BORDER_COLOUR: "\u041A\u043E\u043B\u0456\u0440 \u043A\u043E\u0440\u0434\u043E\u043D\u0443",
-            DLG_TIPS: "\u041F\u0440\u043E \u043F\u0440\u043E\u0454\u043A\u0442 / \u041F\u043E\u0440\u0430\u0434\u0438",
-            DLG_TIPS_DESC: "\u041F\u043E\u0441\u0438\u043B\u0430\u043D\u043D\u044F \u043D\u0430 \u043F\u0440\u043E\u0454\u043A\u0442, \u0456\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0456\u044F \u043F\u0440\u043E \u0441\u0443\u043F\u0440\u043E\u0432\u0456\u0434\u043D\u0438\u043A\u0430 \u0442\u0430 \u0434\u043E\u043F\u043E\u043C\u043E\u0433\u0430 \u0437 \u043D\u0430\u043B\u0430\u0448\u0442\u0443\u0432\u0430\u043D\u043D\u044F\u043C.",
-            DLG_TIPS_CONTENT: "Save \u0437\u0431\u0435\u0440\u0456\u0433\u0430\u0454 \u0432\u0430\u0448\u0456 \u043D\u0430\u043B\u0430\u0448\u0442\u0443\u0432\u0430\u043D\u043D\u044F \u0432 \u0431\u0440\u0430\u0443\u0437\u0435\u0440\u0456 \u0442\u0430 \u043E\u0434\u0440\u0430\u0437\u0443 \u0457\u0445 \u0437\u0430\u0441\u0442\u043E\u0441\u043E\u0432\u0443\u0454. Export/Import \u0434\u043E\u0437\u0432\u043E\u043B\u044F\u0454 \u043F\u0435\u0440\u0435\u043D\u0435\u0441\u0442\u0438 \u0457\u0445 \u043D\u0430 \u0456\u043D\u0448\u0438\u0439 \u043F\u0440\u0438\u0441\u0442\u0440\u0456\u0439. \u041F\u0440\u0438\u0432\u0430\u0442\u043D\u0438\u0439/\u0456\u043D\u043A\u043E\u0433\u043D\u0456\u0442\u043E \u0440\u0435\u0436\u0438\u043C \u0430\u0431\u043E \u043E\u0447\u0438\u0449\u0435\u043D\u043D\u044F \u0434\u0430\u043D\u0438\u0445 \u0441\u0430\u0439\u0442\u0443 \u0441\u043A\u0438\u0434\u0430\u0454 \u0457\u0445.",
+            DLG_TIPS: "\u041F\u0440\u043E \u043F\u0440\u043E\u0454\u043A\u0442",
+            DLG_TIPS_DESC: "\u041F\u043E\u0441\u0438\u043B\u0430\u043D\u043D\u044F \u043F\u0440\u043E\u0454\u043A\u0442\u0443 \u0442\u0430 \u0456\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0456\u044F \u043F\u0440\u043E \u0441\u0443\u043F\u0440\u043E\u0432\u0456\u0434\u043D\u0438\u043A\u0430.",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "\u042F\u043A\u0449\u043E \u0446\u0435 \u0434\u043E\u043F\u043E\u043C\u0430\u0433\u0430\u0454, \u0437\u0456\u0440\u043A\u0430 \u043D\u0430 {github} \u0434\u0443\u0436\u0435 \u0431\u0430\u0433\u0430\u0442\u043E \u0434\u043B\u044F \u043C\u0435\u043D\u0435 \u043E\u0437\u043D\u0430\u0447\u0430\u0454.",
+            DLG_TIPS_FACEBOOK: "\u0417\u0430\u0432\u0456\u0442\u0430\u0439\u0442\u0435 \u043D\u0430 {facebook} - \u0442\u0430\u043C \u044F \u0434\u0456\u043B\u044E\u0441\u044F \u043C\u0438\u0441\u0442\u0435\u0446\u0442\u0432\u043E\u043C \u0456 \u043F\u043E\u0435\u0437\u0456\u0454\u044E.",
+            DLG_TIPS_SITE: "\u042F\u043A\u0449\u043E \u0445\u043E\u0447\u0435\u0442\u0435 \u043F\u043E\u0431\u0430\u0447\u0438\u0442\u0438, \u0447\u0438\u043C \u044F \u0437\u0430\u0439\u043C\u0430\u044E\u0441\u044F \u0432 \u043C\u0435\u0440\u0435\u0436\u0456, {site} \u2014 \u043D\u0430\u0439\u043A\u0440\u0430\u0449\u0435 \u043C\u0456\u0441\u0446\u0435 \u043F\u043E\u0447\u0430\u0442\u0438.",
+            DLG_TIPS_CREDITS: "\u041E\u043A\u0440\u0435\u043C\u0430 \u043F\u043E\u0434\u044F\u043A\u0430 {zbluebugz} \u0437\u0430 \u043E\u0440\u0438\u0433\u0456\u043D\u0430\u043B\u044C\u043D\u0438\u0439 \u043F\u0440\u043E\u0454\u043A\u0442 \u0456 {trinhquocviet} \u0437\u0430 \u0441\u043F\u0440\u043E\u0449\u0435\u043D\u0443 UI-\u0433\u0456\u043B\u043A\u0443, \u0437 \u044F\u043A\u043E\u0457 \u044F \u0441\u043F\u0435\u0440\u0448\u0443 \u0444\u043E\u0440\u043A\u043D\u0443\u0432 - \u0456 \u0437\u0430 \u043F\u0456\u0434\u0442\u0440\u0438\u043C\u043A\u0443 \u0444\u0456\u043B\u044C\u0442\u0440\u0456\u0432 \u0443 \u0442\u043E\u0439 \u043F\u0435\u0440\u0456\u043E\u0434.",
             DLG_TIPS_MAINTAINER_PREFIX: "\u0412\u0456\u0434 \u0441\u0443\u043F\u0440\u043E\u0432\u0456\u0434\u043D\u0438\u043A\u0430:",
             DLG_TIPS_MAINTAINER: "\u0421\u043F\u043E\u0434\u0456\u0432\u0430\u044E\u0441\u044F, \u0446\u0435\u0439 \u0441\u043A\u0440\u0438\u043F\u0442 \u0434\u043E\u043F\u043E\u043C\u043E\u0436\u0435 \u0432\u0430\u043C \u043F\u043E\u0432\u0435\u0440\u043D\u0443\u0442\u0438 \u0441\u0432\u043E\u044E \u0441\u0442\u0440\u0456\u0447\u043A\u0443. \u041E\u0431\u0456\u0446\u044F\u044E \u0431\u0443\u0442\u0438 \u0432\u0430\u0448\u0438\u043C \u0441\u043E\u044E\u0437\u043D\u0438\u043A\u043E\u043C \u0443 \u0431\u043E\u0440\u043E\u0442\u044C\u0431\u0456 \u0437 \u0442\u0438\u043C, \u0449\u043E \u0432\u0438 \u043D\u0435 \u0445\u043E\u0447\u0435\u0442\u0435 \u0431\u0430\u0447\u0438\u0442\u0438 \u043E\u043D\u043B\u0430\u0439\u043D.",
-            DLG_TIPS_LINK_REPO: "\u0420\u0435\u043F\u043E\u0437\u0438\u0442\u043E\u0440\u0456\u0439 \u043F\u0440\u043E\u0454\u043A\u0442\u0443",
-            DLG_TIPS_LINK_FACEBOOK: "\u041F\u0440\u0438\u0432\u0456\u0442\u0430\u0439\u0442\u0435\u0441\u044F \u0443 Facebook",
-            DLG_TIPS_LINK_SITE: "\u0411\u0456\u043B\u044C\u0448\u0435 \u0432\u0456\u0434 \u043C\u0435\u043D\u0435",
-            DLG_TIPS_THANKS: "\u042F\u043A\u0449\u043E \u0446\u0435 \u0434\u043E\u043F\u043E\u043C\u0430\u0433\u0430\u0454, \u0437\u0456\u0440\u043A\u0430 \u043D\u0430 GitHub \u0434\u0443\u0436\u0435 \u0431\u0430\u0433\u0430\u0442\u043E \u0434\u043B\u044F \u043C\u0435\u043D\u0435 \u043E\u0437\u043D\u0430\u0447\u0430\u0454. \u0414\u044F\u043A\u0443\u044E! \u{1F496}",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "\u043C\u043E\u044E \u0441\u0442\u043E\u0440\u0456\u043D\u043A\u0443 \u0443 Facebook",
+            DLG_TIPS_LINK_SITE: "\u043C\u0456\u0439 \u0441\u0430\u0439\u0442",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438", "\u0417\u0430\u043A\u0440\u0438\u0442\u0438", "\u0415\u043A\u0441\u043F\u043E\u0440\u0442", "\u0406\u043C\u043F\u043E\u0440\u0442", "\u0421\u043A\u0438\u043D\u0443\u0442\u0438"],
+            DLG_BUTTON_TOOLTIPS: [
+              "\u0417\u0431\u0435\u0440\u0456\u0433\u0430\u0454 \u0437\u043C\u0456\u043D\u0438 \u0432 \u0446\u044C\u043E\u043C\u0443 \u0431\u0440\u0430\u0443\u0437\u0435\u0440\u0456. \u041E\u0447\u0438\u0449\u0435\u043D\u043D\u044F \u0434\u0430\u043D\u0438\u0445/\u0456\u043D\u043A\u043E\u0433\u043D\u0456\u0442\u043E \u0457\u0445 \u0432\u0438\u0434\u0430\u043B\u0438\u0442\u044C.",
+              "\u0415\u043A\u0441\u043F\u043E\u0440\u0442\u0443\u0454 \u0444\u0430\u0439\u043B-\u0440\u0435\u0437\u0435\u0440\u0432 \u0434\u043B\u044F \u0437\u0431\u0435\u0440\u0435\u0436\u0435\u043D\u043D\u044F \u0456 \u043F\u0435\u0440\u0435\u043D\u0435\u0441\u0435\u043D\u043D\u044F \u043C\u0456\u0436 \u043F\u0440\u0438\u0441\u0442\u0440\u043E\u044F\u043C\u0438.",
+              "\u0406\u043C\u043F\u043E\u0440\u0442\u0443\u0454 \u0444\u0430\u0439\u043B \u043D\u0430\u043B\u0430\u0448\u0442\u0443\u0432\u0430\u043D\u044C \u0434\u043B\u044F \u0432\u0456\u0434\u043D\u043E\u0432\u043B\u0435\u043D\u043D\u044F \u0430\u0431\u043E \u043F\u0435\u0440\u0435\u043D\u0435\u0441\u0435\u043D\u043D\u044F.",
+              "\u0421\u043A\u0438\u0434\u0430\u0454 \u0432\u0441\u0456 \u043D\u0430\u043B\u0430\u0448\u0442\u0443\u0432\u0430\u043D\u043D\u044F \u0434\u043E \u0442\u0438\u043F\u043E\u0432\u0438\u0445."
+            ],
             DLG_FB_COLOUR_HINT: "\u0417\u0430\u043B\u0438\u0448\u0442\u0435 \u043F\u043E\u0440\u043E\u0436\u043D\u0456\u043C, \u0449\u043E\u0431 \u0432\u0438\u043A\u043E\u0440\u0438\u0441\u0442\u043E\u0432\u0443\u0432\u0430\u0442\u0438 \u043A\u043E\u043B\u0456\u0440\u043D\u0443 \u0441\u0445\u0435\u043C\u0443 FB"
           },
           // -- Tiếng Việt (Vietnam)
@@ -2488,16 +2687,26 @@
             CMF_DIALOG_LOCATION: "V\u1ECB tr\xED c\u1EE7a h\u1ED9p tho\u1EA1i L\xE0m s\u1EA1ch ngu\u1ED3n c\u1EA5p d\u1EEF li\u1EC7u c\u1EE7a t\xF4i",
             CMF_DIALOG_OPTION: ["b\xEAn tr\xE1i", "b\xEAn ph\u1EA3i"],
             CMF_BORDER_COLOUR: "M\xE0u vi\u1EC1n",
-            DLG_TIPS: "Gi\u1EDBi thi\u1EC7u / M\u1EB9o",
-            DLG_TIPS_DESC: "Li\xEAn k\u1EBFt d\u1EF1 \xE1n, th\xF4ng tin ng\u01B0\u1EDDi b\u1EA3o tr\xEC v\xE0 tr\u1EE3 gi\xFAp thi\u1EBFt l\u1EADp.",
-            DLG_TIPS_CONTENT: "Save l\u01B0u c\xE1c tu\u1EF3 ch\u1ECDn c\u1EE7a b\u1EA1n ngay trong tr\xECnh duy\u1EC7t v\xE0 \xE1p d\u1EE5ng ngay l\u1EADp t\u1EE9c. Export/Import gi\xFAp b\u1EA1n mang ch\xFAng sang thi\u1EBFt b\u1ECB kh\xE1c. Ch\u1EBF \u0111\u1ED9 ri\xEAng t\u01B0/\u1EA9n danh ho\u1EB7c xo\xE1 d\u1EEF li\u1EC7u trang web s\u1EBD \u0111\u1EB7t l\u1EA1i ch\xFAng.",
+            DLG_TIPS: "Gi\u1EDBi thi\u1EC7u",
+            DLG_TIPS_DESC: "Li\xEAn k\u1EBFt d\u1EF1 \xE1n v\xE0 th\xF4ng tin ng\u01B0\u1EDDi b\u1EA3o tr\xEC.",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "N\u1EBFu th\u1EA5y h\u1EEFu \xEDch, m\u1ED9t ng\xF4i sao tr\xEAn {github} c\xF3 \xFD ngh\u0129a r\u1EA5t l\u1EDBn.",
+            DLG_TIPS_FACEBOOK: "Gh\xE9 {facebook} - m\xECnh chia s\u1EBB ngh\u1EC7 thu\u1EADt v\xE0 th\u01A1 \u1EDF \u0111\xF3.",
+            DLG_TIPS_SITE: "N\u1EBFu mu\u1ED1n xem m\xECnh l\xE0m g\xEC tr\xEAn web, {site} l\xE0 n\u01A1i b\u1EAFt \u0111\u1EA7u t\u1ED1t nh\u1EA5t.",
+            DLG_TIPS_CREDITS: "Xin c\u1EA3m \u01A1n \u0111\u1EB7c bi\u1EC7t t\u1EDBi {zbluebugz} cho d\u1EF1 \xE1n g\u1ED1c v\xE0 {trinhquocviet} cho nh\xE1nh UI \u0111\u01A1n gi\u1EA3n h\xF3a m\xE0 m\xECnh \u0111\xE3 fork ban \u0111\u1EA7u - c\xF9ng vi\u1EC7c b\u1EA3o tr\xEC b\u1ED9 l\u1ECDc trong giai \u0111o\u1EA1n \u0111\xF3.",
             DLG_TIPS_MAINTAINER_PREFIX: "T\u1EEB ng\u01B0\u1EDDi b\u1EA3o tr\xEC:",
             DLG_TIPS_MAINTAINER: "M\xECnh hy v\u1ECDng script n\xE0y gi\xFAp b\u1EA1n gi\xE0nh l\u1EA1i b\u1EA3ng tin. M\xECnh h\u1EE9a s\u1EBD l\xE0 \u0111\u1ED3ng minh c\u1EE7a b\u1EA1n trong cu\u1ED9c chi\u1EBFn v\u1EDBi nh\u1EEFng th\u1EE9 b\u1EA1n kh\xF4ng mu\u1ED1n th\u1EA5y tr\xEAn m\u1EA1ng.",
-            DLG_TIPS_LINK_REPO: "Repo d\u1EF1 \xE1n",
-            DLG_TIPS_LINK_FACEBOOK: "Ch\xE0o tr\xEAn Facebook",
-            DLG_TIPS_LINK_SITE: "Th\xEAm t\u1EEB m\xECnh",
-            DLG_TIPS_THANKS: "N\u1EBFu th\u1EA5y h\u1EEFu \xEDch, m\u1ED9t ng\xF4i sao tr\xEAn GitHub c\xF3 \xFD ngh\u0129a r\u1EA5t l\u1EDBn. C\u1EA3m \u01A1n! \u{1F496}",
+            DLG_TIPS_LINK_REPO: "GitHub",
+            DLG_TIPS_LINK_FACEBOOK: "trang Facebook c\u1EE7a m\xECnh",
+            DLG_TIPS_LINK_SITE: "trang web c\u1EE7a m\xECnh",
+            DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["L\u01B0u", "\u0110\xF3ng", "Xu\u1EA5t", "Nh\u1EADp", "\u0110\u1EB7t l\u1EA1i"],
+            DLG_BUTTON_TOOLTIPS: [
+              "L\u01B0u thay \u0111\u1ED5i trong tr\xECnh duy\u1EC7t n\xE0y. X\xF3a d\u1EEF li\u1EC7u/ch\u1EBF \u0111\u1ED9 ri\xEAng t\u01B0 s\u1EBD m\u1EA5t.",
+              "Xu\u1EA5t t\u1EC7p sao l\u01B0u \u0111\u1EC3 gi\u1EEF v\xE0 chuy\u1EC3n gi\u1EEFa thi\u1EBFt b\u1ECB/tr\xECnh duy\u1EC7t.",
+              "Nh\u1EADp t\u1EC7p c\xE0i \u0111\u1EB7t \u0111\u1EC3 kh\xF4i ph\u1EE5c ho\u1EB7c chuy\u1EC3n.",
+              "\u0110\u1EB7t l\u1EA1i t\u1EA5t c\u1EA3 c\xE0i \u0111\u1EB7t v\u1EC1 m\u1EB7c \u0111\u1ECBnh."
+            ],
             DLG_FB_COLOUR_HINT: "\u0110\u1EC3 tr\u1ED1ng \u0111\u1EC3 s\u1EED d\u1EE5ng b\u1EA3ng m\xE0u c\u1EE7a FB"
           },
           // -- 简体中文 (Chinese (Simplified))
@@ -2583,9 +2792,19 @@
             CMF_DIALOG_LOCATION: "\u201C\u6E05\u7406\u6211\u7684\u63D0\u8981\u201D\u5BF9\u8BDD\u6846\u4F4D\u7F6E",
             CMF_DIALOG_OPTION: ["\u5DE6\u8FB9", "\u53F3\u8FB9"],
             CMF_BORDER_COLOUR: "\u8FB9\u6846\u989C\u8272",
-            DLG_TIPS: "Gi\u1EDBi thi\u1EC7u / M\u1EB9o",
-            DLG_TIPS_CONTENT: "\u6E05\u9664\u6D4F\u89C8\u5668\u7F13\u5B58\u4F1A\u5C06\u60A8\u7684\u8BBE\u7F6E\u91CD\u7F6E\u4E3A\u9ED8\u8BA4\u503C\u3002\n\n\u4F7F\u7528\u201C\u5BFC\u51FA\u201D\u548C\u201C\u5BFC\u5165\u201D\u6309\u94AE\u6765\u5907\u4EFD\u548C\u6062\u590D\u60A8\u7684\u81EA\u5B9A\u4E49\u8BBE\u7F6E\u3002",
+            DLG_TIPS: "\u5173\u4E8E",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "\u5982\u679C\u6709\u5E2E\u52A9\uFF0C\u5728 {github} \u70B9\u4E2A\u661F\u5BF9\u6211\u610F\u4E49\u5F88\u5927\u3002",
+            DLG_TIPS_FACEBOOK: "\u6B22\u8FCE\u5230{facebook}\u6253\u4E2A\u62DB\u547C - \u6211\u5728\u90A3\u91CC\u5206\u4EAB\u827A\u672F\u548C\u8BD7\u6B4C\u3002",
+            DLG_TIPS_SITE: "\u60F3\u770B\u770B\u6211\u5728\u7F51\u4E0A\u90FD\u5728\u505A\u4EC0\u4E48\uFF0C{site}\u662F\u6700\u597D\u7684\u8D77\u70B9\u3002",
+            DLG_TIPS_CREDITS: "\u7279\u522B\u611F\u8C22 {zbluebugz} \u7684\u539F\u59CB\u9879\u76EE\uFF0C\u4EE5\u53CA {trinhquocviet} \u7684\u7B80\u5316 UI \u5206\u652F\uFF08\u6211\u6700\u521D\u5C31\u662F\u4ECE\u5B83 fork \u7684\uFF09- \u4E5F\u611F\u8C22\u90A3\u6BB5\u65F6\u95F4\u7684\u8FC7\u6EE4\u7EF4\u62A4\u3002",
             DLG_BUTTONS: ["\u8282\u7701", "\u5173", "\u51FA\u53E3", "\u8FDB\u53E3", "\u91CD\u7F6E"],
+            DLG_BUTTON_TOOLTIPS: [
+              "\u4FDD\u5B58\u5230\u6B64\u6D4F\u89C8\u5668\u3002\u6E05\u9664\u7AD9\u70B9\u6570\u636E/\u9690\u79C1\u6A21\u5F0F\u4F1A\u4E22\u5931\u3002",
+              "\u5BFC\u51FA\u5907\u4EFD\u6587\u4EF6\uFF0C\u7528\u4E8E\u4FDD\u7559\u8BBE\u7F6E\u5E76\u5728\u8BBE\u5907\u95F4\u8FC1\u79FB\u3002",
+              "\u5BFC\u5165\u8BBE\u7F6E\u6587\u4EF6\u4EE5\u6062\u590D\u6216\u8FC1\u79FB\u3002",
+              "\u5C06\u6240\u6709\u8BBE\u7F6E\u91CD\u7F6E\u4E3A\u9ED8\u8BA4\u503C\u3002"
+            ],
             DLG_FB_COLOUR_HINT: "\u7559\u7A7A\u4EE5\u4F7F\u7528 FB \u7684\u914D\u8272\u65B9\u6848"
           },
           // -- 中國傳統的 (Chinese (Traditional))
@@ -2671,9 +2890,19 @@
             CMF_DIALOG_LOCATION: "\u300C\u6E05\u7406\u6211\u7684\u52D5\u614B\u6D88\u606F\u300D\u5C0D\u8A71\u6846\u7684\u4F4D\u7F6E",
             CMF_DIALOG_OPTION: ["\u5DE6\u908A", "\u53F3\u908A"],
             CMF_BORDER_COLOUR: "\u908A\u6846\u984F\u8272",
-            DLG_TIPS: "Gi\u1EDBi thi\u1EC7u / M\u1EB9o",
-            DLG_TIPS_CONTENT: "\u6E05\u9664\u700F\u89BD\u5668\u5FEB\u53D6\u6703\u5C07\u60A8\u7684\u8A2D\u5B9A\u91CD\u7F6E\u70BA\u9810\u8A2D\u503C\u3002\n\n\u4F7F\u7528\u300C\u532F\u51FA\u300D\u548C\u300C\u532F\u5165\u300D\u6309\u9215\u4F86\u5099\u4EFD\u548C\u56DE\u5FA9\u60A8\u7684\u81EA\u5B9A\u7FA9\u8A2D\u5B9A\u3002",
+            DLG_TIPS: "\u95DC\u65BC",
+            DLG_TIPS_CONTENT: "",
+            DLG_TIPS_STAR: "\u5982\u679C\u6709\u5E6B\u52A9\uFF0C\u5728 {github} \u9EDE\u500B\u661F\u5C0D\u6211\u610F\u7FA9\u5F88\u5927\u3002",
+            DLG_TIPS_FACEBOOK: "\u6B61\u8FCE\u5230{facebook}\u6253\u500B\u62DB\u547C - \u6211\u5728\u90A3\u88E1\u5206\u4EAB\u85DD\u8853\u548C\u8A69\u3002",
+            DLG_TIPS_SITE: "\u60F3\u770B\u770B\u6211\u5728\u7DB2\u8DEF\u4E0A\u90FD\u5728\u505A\u4EC0\u9EBC\uFF0C{site}\u662F\u6700\u597D\u7684\u8D77\u9EDE\u3002",
+            DLG_TIPS_CREDITS: "\u7279\u5225\u611F\u8B1D {zbluebugz} \u7684\u539F\u59CB\u5C08\u6848\uFF0C\u4EE5\u53CA {trinhquocviet} \u7684\u7C21\u5316 UI \u5206\u652F\uFF08\u6211\u6700\u521D\u5C31\u662F\u5F9E\u5B83 fork \u7684\uFF09- \u4E5F\u611F\u8B1D\u90A3\u6BB5\u6642\u9593\u7684\u904E\u6FFE\u7DAD\u8B77\u3002",
             DLG_BUTTONS: ["\u5132\u5B58", "\u95DC\u9589", "\u532F\u51FA", "\u532F\u5165", "\u91CD\u8A2D"],
+            DLG_BUTTON_TOOLTIPS: [
+              "\u5132\u5B58\u5728\u6B64\u700F\u89BD\u5668\u3002\u6E05\u9664\u7DB2\u7AD9\u8CC7\u6599/\u79C1\u5BC6\u6A21\u5F0F\u6703\u907A\u5931\u3002",
+              "\u532F\u51FA\u5099\u4EFD\u6A94\u4EE5\u4FDD\u7559\u8A2D\u5B9A\u4E26\u5728\u88DD\u7F6E\u9593\u79FB\u8F49\u3002",
+              "\u532F\u5165\u8A2D\u5B9A\u6A94\u4EE5\u9084\u539F\u6216\u79FB\u8F49\u3002",
+              "\u5C07\u6240\u6709\u8A2D\u5B9A\u91CD\u8A2D\u70BA\u9810\u8A2D\u503C\u3002"
+            ],
             DLG_FB_COLOUR_HINT: "\u7559\u7A7A\u4EE5\u4F7F\u7528 FB \u7684\u914D\u8272\u65B9\u6848"
           }
         },
@@ -2799,12 +3028,15 @@
           iconDialogHeaderHTML: "",
           iconDialogSearchHTML: "",
           iconDialogFooterHTML: "",
+          iconFooterSaveHTML: "",
+          iconFooterCheckHTML: "",
           iconLegendHTML: "",
           dialogSectionIcons: {},
           dialogFooterIcons: {},
           iconNewWindow: "",
           iconNewWindowClass: "cmf-link-new",
-          isChromium: false
+          isChromium: false,
+          saveFeedbackTimeoutId: null
         };
       }
       module.exports = {
@@ -3520,18 +3752,8 @@
           ".fb-cmf footer",
           "display:flex; flex-direction:column; gap:0.5rem; padding:0.75rem; text-align:center; background-color: var(--card-background);border-radius:12px;"
         );
-        addToSS(
-          state,
-          ".fb-cmf footer .fileResults",
-          "margin-top:0.25rem; font-size:0.75rem; color: var(--secondary-text);"
-        );
         addToSS(state, ".fb-cmf .buttons button", "margin-left: 0.25rem; margin-right: 0.25rem;");
         addToSS(state, ".fb-cmf .fileInput", "display:none;");
-        addToSS(
-          state,
-          ".fb-cmf .fileResults",
-          "grid-column-start: 1; grid-column-end: 6; font-style:italic; margin-top: 1rem;"
-        );
         addToSS(state, `.fb-cmf[${state.showAtt}]`, "opacity:1; visibility:visible;");
         addToSS(state, `.${state.iconNewWindowClass}`, "width: 1rem; height: 1rem;");
         addToSS(
@@ -3627,6 +3849,37 @@
           "div#fbcmf footer > button",
           "font-family: inherit; cursor: pointer;height: 48px; padding: 0 0.5rem;border: none; border-radius: 8px;background-color: transparent;display:flex; align-items:center; gap:0.5rem; justify-content:flex-start;font-size: .9375rem; font-weight: 600;color: var(--primary-text); position:relative; overflow:hidden;"
         );
+        addToSS(
+          state,
+          "#fbcmf footer > button",
+          "transition: color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;"
+        );
+        addToSS(state, "#fbcmf footer > button.cmf-action--dirty", "color:#d93025;");
+        addToSS(
+          state,
+          "#fbcmf footer > button.cmf-action--dirty .cmf-action-icon",
+          "color:#d93025;"
+        );
+        addToSS(
+          state,
+          "#fbcmf footer > button.cmf-action--confirm-blue",
+          "color:#1877f2; animation: cmf-pulse-blue 0.6s ease-out;"
+        );
+        addToSS(
+          state,
+          "#fbcmf footer > button.cmf-action--confirm-blue .cmf-action-icon",
+          "color:#1877f2;"
+        );
+        addToSS(
+          state,
+          "#fbcmf footer > button.cmf-action--confirm-green",
+          "color:#2e7d32; animation: cmf-pulse-green 0.6s ease-out;"
+        );
+        addToSS(
+          state,
+          "#fbcmf footer > button.cmf-action--confirm-green .cmf-action-icon",
+          "color:#2e7d32;"
+        );
         addToSS(state, ".fb-cmf footer .cmf-action-text", "padding-right: 0.5rem;");
         addToSS(state, "#fbcmf footer > button:hover", "font-family: inherit;");
         addToSS(
@@ -3647,6 +3900,7 @@
         );
         addToSS(state, ".fb-cmf footer .cmf-action-icon .cmf-icon", "width:32px; height:32px;");
         if (state.tempStyleSheetCode.length > 0) {
+          state.tempStyleSheetCode += "@keyframes cmf-pulse-blue {0% { color: #1877f2; }50% { color: #66a3ff; }100% { color: #1877f2; }}\n@keyframes cmf-pulse-green {0% { color: #2e7d32; }50% { color: #66bb6a; }100% { color: #2e7d32; }}\n";
           styleTag.appendChild(document.createTextNode(state.tempStyleSheetCode));
           state.tempStyleSheetCode = "";
         }
@@ -7380,6 +7634,37 @@
         const fallback = translations && translations.en && typeof translations.en[key] === "string" ? translations.en[key] : "";
         return fallback;
       }
+      function appendTextWithLinks(container, template, links) {
+        if (!container || !template) {
+          return;
+        }
+        let remaining = template;
+        while (remaining.length > 0) {
+          let nextToken = null;
+          let nextIndex = -1;
+          links.forEach((link) => {
+            const idx = remaining.indexOf(link.token);
+            if (idx !== -1 && (nextIndex === -1 || idx < nextIndex)) {
+              nextIndex = idx;
+              nextToken = link;
+            }
+          });
+          if (!nextToken) {
+            container.appendChild(document.createTextNode(remaining));
+            break;
+          }
+          if (nextIndex > 0) {
+            container.appendChild(document.createTextNode(remaining.slice(0, nextIndex)));
+          }
+          const anchor = document.createElement("a");
+          anchor.href = nextToken.href;
+          anchor.target = "_blank";
+          anchor.rel = "noopener noreferrer";
+          anchor.textContent = nextToken.label;
+          container.appendChild(anchor);
+          remaining = remaining.slice(nextIndex + nextToken.token.length);
+        }
+      }
       function createLegend(state, title, subtitle, iconHTML = "") {
         const legend = document.createElement("legend");
         legend.classList.add("cmf-legend");
@@ -7411,54 +7696,67 @@
       function createTipsContent(keyWords, translations) {
         const wrap = document.createElement("div");
         wrap.className = "cmf-tips-content";
-        const tipsText = getKeyword(keyWords, translations, "DLG_TIPS_CONTENT");
-        if (tipsText) {
-          const p = document.createElement("p");
-          p.textContent = tipsText;
-          wrap.appendChild(p);
-        }
         const maintainerText = getKeyword(keyWords, translations, "DLG_TIPS_MAINTAINER");
         if (maintainerText) {
           const p = document.createElement("p");
-          const prefixText = getKeyword(keyWords, translations, "DLG_TIPS_MAINTAINER_PREFIX");
-          if (prefixText) {
-            const prefix = document.createElement("strong");
-            prefix.textContent = prefixText;
-            p.appendChild(prefix);
-            p.appendChild(document.createTextNode(` ${maintainerText}`));
-          } else {
-            p.textContent = maintainerText;
-          }
+          p.textContent = maintainerText;
           wrap.appendChild(p);
         }
-        const links = [
+        const linkLabels = {
+          github: getKeyword(keyWords, translations, "DLG_TIPS_LINK_REPO"),
+          facebook: getKeyword(keyWords, translations, "DLG_TIPS_LINK_FACEBOOK"),
+          site: getKeyword(keyWords, translations, "DLG_TIPS_LINK_SITE")
+        };
+        const linkMap = [
           {
-            href: "https://github.com/Artificial-Sweetener/facebook-clean-my-feeds",
-            label: getKeyword(keyWords, translations, "DLG_TIPS_LINK_REPO")
+            token: "{github}",
+            label: linkLabels.github || "GitHub",
+            href: "https://github.com/Artificial-Sweetener/facebook-clean-my-feeds"
           },
           {
-            href: "https://www.facebook.com/artificialsweetenerai",
-            label: getKeyword(keyWords, translations, "DLG_TIPS_LINK_FACEBOOK")
+            token: "{facebook}",
+            label: linkLabels.facebook || "Facebook",
+            href: "https://www.facebook.com/artificialsweetenerai"
           },
           {
-            href: "https://artificialsweetener.ai",
-            label: getKeyword(keyWords, translations, "DLG_TIPS_LINK_SITE")
+            token: "{site}",
+            label: linkLabels.site || "website",
+            href: "https://artificialsweetener.ai"
           }
         ];
-        const linkItems = links.filter((link) => link.label);
-        if (linkItems.length > 0) {
+        const starText = getKeyword(keyWords, translations, "DLG_TIPS_STAR");
+        if (starText) {
           const p = document.createElement("p");
-          linkItems.forEach((link, index) => {
-            const anchor = document.createElement("a");
-            anchor.href = link.href;
-            anchor.target = "_blank";
-            anchor.rel = "noopener noreferrer";
-            anchor.textContent = link.label;
-            p.appendChild(anchor);
-            if (index < linkItems.length - 1) {
-              p.appendChild(document.createTextNode(" | "));
+          appendTextWithLinks(p, starText, linkMap);
+          wrap.appendChild(p);
+        }
+        const facebookText = getKeyword(keyWords, translations, "DLG_TIPS_FACEBOOK");
+        if (facebookText) {
+          const p = document.createElement("p");
+          appendTextWithLinks(p, facebookText, linkMap);
+          wrap.appendChild(p);
+        }
+        const siteText = getKeyword(keyWords, translations, "DLG_TIPS_SITE");
+        if (siteText) {
+          const p = document.createElement("p");
+          appendTextWithLinks(p, siteText, linkMap);
+          wrap.appendChild(p);
+        }
+        const creditsText = getKeyword(keyWords, translations, "DLG_TIPS_CREDITS");
+        if (creditsText) {
+          const p = document.createElement("p");
+          appendTextWithLinks(p, creditsText, [
+            {
+              token: "{zbluebugz}",
+              label: "zbluebugz",
+              href: "https://github.com/zbluebugz"
+            },
+            {
+              token: "{trinhquocviet}",
+              label: "trinhquocviet",
+              href: "https://github.com/trinhquocviet"
             }
-          });
+          ]);
           wrap.appendChild(p);
         }
         const thanksText = getKeyword(keyWords, translations, "DLG_TIPS_THANKS");
@@ -7775,6 +8073,185 @@
           delete target[key];
         });
         Object.assign(target, source);
+      }
+      function isPlainObject(value) {
+        return value !== null && typeof value === "object" && !Array.isArray(value);
+      }
+      function deepEqual(a, b) {
+        if (a === b) {
+          return true;
+        }
+        if (Array.isArray(a) && Array.isArray(b)) {
+          if (a.length !== b.length) {
+            return false;
+          }
+          for (let i = 0; i < a.length; i += 1) {
+            if (!deepEqual(a[i], b[i])) {
+              return false;
+            }
+          }
+          return true;
+        }
+        if (isPlainObject(a) && isPlainObject(b)) {
+          const keysA = Object.keys(a);
+          const keysB = Object.keys(b);
+          if (keysA.length !== keysB.length) {
+            return false;
+          }
+          for (const key of keysA) {
+            if (!Object.prototype.hasOwnProperty.call(b, key)) {
+              return false;
+            }
+            if (!deepEqual(a[key], b[key])) {
+              return false;
+            }
+          }
+          return true;
+        }
+        return false;
+      }
+      function getFooterButton(buttonId) {
+        if (!buttonId) {
+          return null;
+        }
+        const dialog = document.getElementById("fbcmf");
+        if (!dialog) {
+          return null;
+        }
+        const footer = dialog.querySelector("footer");
+        if (!footer) {
+          return null;
+        }
+        return footer.querySelector(`#${buttonId}`);
+      }
+      function setActionButtonIcon(state, button, iconHtml) {
+        if (!state || !button || !iconHtml) {
+          return;
+        }
+        const iconWrap = button.querySelector(".cmf-action-icon");
+        if (!iconWrap) {
+          return;
+        }
+        iconWrap.innerHTML = iconHtml;
+      }
+      function collectDialogOptions(state) {
+        if (!state) {
+          return null;
+        }
+        const md = document.getElementById("fbcmf");
+        if (!md) {
+          return null;
+        }
+        const options = JSON.parse(JSON.stringify(state.options));
+        let cbs = Array.from(md.querySelectorAll('input[type="checkbox"][cbtype="T"]'));
+        cbs.forEach((cb) => {
+          options[cb.name] = cb.checked;
+        });
+        const blockedFeeds = [
+          "NF_BLOCKED_FEED",
+          "GF_BLOCKED_FEED",
+          "VF_BLOCKED_FEED",
+          "MP_BLOCKED_FEED",
+          "PP_BLOCKED_FEED"
+        ];
+        blockedFeeds.forEach((cbName) => {
+          if (!Array.isArray(options[cbName])) {
+            options[cbName] = [];
+          }
+          cbs = Array.from(md.querySelectorAll(`input[type="checkbox"][name="${cbName}"]`));
+          cbs.forEach((cb) => {
+            options[cbName][parseInt(cb.value, 10)] = cb.checked ? "1" : "0";
+          });
+        });
+        const rbs = md.querySelectorAll('input[type="radio"]:checked');
+        rbs.forEach((rb) => {
+          options[rb.name] = rb.value;
+        });
+        const inputs = Array.from(md.querySelectorAll('input[type="text"]'));
+        inputs.forEach((inp) => {
+          options[inp.name] = inp.value;
+        });
+        const tas = md.querySelectorAll("textarea");
+        tas.forEach((ta) => {
+          const txtn = ta.value.split("\n");
+          const txts = [];
+          txtn.forEach((txt) => {
+            if (txt.trim().length > 0) {
+              txts.push(txt);
+            }
+          });
+          options[ta.name] = txts.join(state.SEP);
+        });
+        const selects = Array.from(md.querySelectorAll("select"));
+        selects.forEach((select) => {
+          options[select.name] = select.value;
+        });
+        const validInputs = Array.from(md.querySelectorAll('input:not([type="file"]), textarea, select'));
+        const validNames = [];
+        validInputs.forEach((inp) => {
+          if (!validNames.includes(inp.name)) {
+            validNames.push(inp.name);
+          }
+        });
+        Object.keys(options).forEach((key) => {
+          if (!validNames.includes(key)) {
+            delete options[key];
+          }
+        });
+        return options;
+      }
+      function syncSaveButtonState(state) {
+        const pendingOptions = collectDialogOptions(state);
+        if (!pendingOptions) {
+          return;
+        }
+        const button = getFooterButton("BTNSave");
+        if (!button) {
+          return;
+        }
+        const isDirty = !deepEqual(pendingOptions, state.options);
+        if (isDirty) {
+          button.classList.add("cmf-action--dirty");
+          button.classList.remove("cmf-action--confirm-blue");
+          button.classList.remove("cmf-action--confirm-green");
+          if (state.saveFeedbackTimeoutId) {
+            clearTimeout(state.saveFeedbackTimeoutId);
+            state.saveFeedbackTimeoutId = null;
+          }
+          setActionButtonIcon(state, button, state.iconFooterSaveHTML || state.iconDialogFooterHTML);
+          return;
+        }
+        button.classList.remove("cmf-action--dirty");
+        if (!button.classList.contains("cmf-action--confirm-blue")) {
+          setActionButtonIcon(state, button, state.iconFooterSaveHTML || state.iconDialogFooterHTML);
+        }
+      }
+      function triggerActionFeedback(state, buttonId, className) {
+        const button = getFooterButton(buttonId);
+        if (!button) {
+          return;
+        }
+        if (state.saveFeedbackTimeoutId) {
+          clearTimeout(state.saveFeedbackTimeoutId);
+        }
+        button.classList.add(className);
+        button.classList.remove("cmf-action--dirty");
+        setActionButtonIcon(
+          state,
+          button,
+          state.iconFooterCheckHTML || state.iconFooterSaveHTML || state.iconDialogFooterHTML
+        );
+        state.saveFeedbackTimeoutId = setTimeout(() => {
+          const currentButton = getFooterButton(buttonId);
+          if (!currentButton) {
+            return;
+          }
+          currentButton.classList.remove(className);
+          const footerIcons = state.dialogFooterIcons || {};
+          const defaultIcon = buttonId === "BTNSave" ? state.iconFooterSaveHTML || footerIcons.BTNSave || state.iconDialogFooterHTML : footerIcons[buttonId] || state.iconDialogFooterHTML;
+          setActionButtonIcon(state, currentButton, defaultIcon);
+          state.saveFeedbackTimeoutId = null;
+        }, 600);
       }
       function closeDialogIfOpen(state) {
         const elDialog = document.getElementById("fbcmf");
@@ -8204,6 +8681,7 @@
             }
           }
         });
+        syncSaveButtonState(state);
       }
       function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
         if (!state || !keyWords || !document.body) {
@@ -8295,11 +8773,28 @@
           mainColumn.appendChild(cnt);
           const footer = document.createElement("footer");
           const dialogFooterIcons = state.dialogFooterIcons || {};
+          const baseTooltips = Array.isArray(keyWords.DLG_BUTTON_TOOLTIPS) ? keyWords.DLG_BUTTON_TOOLTIPS : translations.en.DLG_BUTTON_TOOLTIPS;
+          const tooltips = Array.isArray(baseTooltips) && baseTooltips.length >= 4 ? baseTooltips : translations.en.DLG_BUTTON_TOOLTIPS;
           const buttonDefinitions = [
-            { id: "BTNSave", text: keyWords.DLG_BUTTONS[0], handler: handlers.saveUserOptions },
-            { id: "BTNExport", text: keyWords.DLG_BUTTONS[2], handler: handlers.exportUserOptions },
-            { id: "BTNImport", text: keyWords.DLG_BUTTONS[3], handler: null },
-            { id: "BTNReset", text: keyWords.DLG_BUTTONS[4], handler: handlers.resetUserOptions }
+            {
+              id: "BTNSave",
+              text: keyWords.DLG_BUTTONS[0],
+              handler: handlers.saveUserOptions,
+              tooltipIndex: 0
+            },
+            {
+              id: "BTNExport",
+              text: keyWords.DLG_BUTTONS[2],
+              handler: handlers.exportUserOptions,
+              tooltipIndex: 1
+            },
+            { id: "BTNImport", text: keyWords.DLG_BUTTONS[3], handler: null, tooltipIndex: 2 },
+            {
+              id: "BTNReset",
+              text: keyWords.DLG_BUTTONS[4],
+              handler: handlers.resetUserOptions,
+              tooltipIndex: 3
+            }
           ];
           buttonDefinitions.forEach((def) => {
             const buttonEl = document.createElement("button");
@@ -8314,6 +8809,9 @@
             textWrap.textContent = def.text;
             buttonEl.appendChild(iconWrap);
             buttonEl.appendChild(textWrap);
+            if (tooltips[def.tooltipIndex]) {
+              buttonEl.title = tooltips[def.tooltipIndex];
+            }
             if (typeof def.handler === "function") {
               buttonEl.addEventListener("click", def.handler, false);
             }
@@ -8324,10 +8822,6 @@
           fileImport.setAttribute("id", `FI${postAtt}`);
           fileImport.classList.add("fileInput");
           footer.appendChild(fileImport);
-          const fileResults = document.createElement("div");
-          fileResults.classList.add("fileResults");
-          fileResults.innerHTML = "&nbsp;";
-          footer.appendChild(fileResults);
           const sideColumn = document.createElement("div");
           sideColumn.className = "fb-cmf-side";
           sideColumn.appendChild(footer);
@@ -8347,19 +8841,60 @@
           );
         } else {
           const footer = dlg.querySelector("footer");
+          const baseTooltips = Array.isArray(keyWords.DLG_BUTTON_TOOLTIPS) ? keyWords.DLG_BUTTON_TOOLTIPS : translations.en.DLG_BUTTON_TOOLTIPS;
+          const tooltips = Array.isArray(baseTooltips) && baseTooltips.length >= 4 ? baseTooltips : translations.en.DLG_BUTTON_TOOLTIPS;
           let btn = footer.querySelector("#BTNSave");
-          btn.textContent = keyWords.DLG_BUTTONS[0];
+          let textEl = btn ? btn.querySelector(".cmf-action-text") : null;
+          if (textEl) {
+            textEl.textContent = keyWords.DLG_BUTTONS[0];
+          } else if (btn) {
+            btn.textContent = keyWords.DLG_BUTTONS[0];
+          }
+          if (btn && tooltips[0]) {
+            btn.title = tooltips[0];
+          }
           btn = footer.querySelector("#BTNExport");
-          btn.textContent = keyWords.DLG_BUTTONS[2];
+          textEl = btn ? btn.querySelector(".cmf-action-text") : null;
+          if (textEl) {
+            textEl.textContent = keyWords.DLG_BUTTONS[2];
+          } else if (btn) {
+            btn.textContent = keyWords.DLG_BUTTONS[2];
+          }
+          if (btn && tooltips[1]) {
+            btn.title = tooltips[1];
+          }
           btn = footer.querySelector("#BTNImport");
-          btn.textContent = keyWords.DLG_BUTTONS[3];
+          textEl = btn ? btn.querySelector(".cmf-action-text") : null;
+          if (textEl) {
+            textEl.textContent = keyWords.DLG_BUTTONS[3];
+          } else if (btn) {
+            btn.textContent = keyWords.DLG_BUTTONS[3];
+          }
+          if (btn && tooltips[2]) {
+            btn.title = tooltips[2];
+          }
           btn = footer.querySelector("#BTNReset");
-          btn.textContent = keyWords.DLG_BUTTONS[4];
+          textEl = btn ? btn.querySelector(".cmf-action-text") : null;
+          if (textEl) {
+            textEl.textContent = keyWords.DLG_BUTTONS[4];
+          } else if (btn) {
+            btn.textContent = keyWords.DLG_BUTTONS[4];
+          }
+          if (btn && tooltips[3]) {
+            btn.title = tooltips[3];
+          }
           addLegendEvents();
         }
         addLegendEvents();
         updateLegendWidths(dlg);
         addSearchEvents(state);
+        const content = dlg.querySelector(".content");
+        if (content && !content.dataset.cmfDirtyWatch) {
+          content.dataset.cmfDirtyWatch = "1";
+          content.addEventListener("input", () => syncSaveButtonState(state), true);
+          content.addEventListener("change", () => syncSaveButtonState(state), true);
+        }
+        syncSaveButtonState(state);
         return dlg;
       }
       function initDialog(context, helpers) {
@@ -8371,8 +8906,12 @@
         const handlers = {
           saveUserOptions: async (event, source = "dialog") => {
             let languageChanged = false;
+            let hadUnsavedChanges = false;
             if (source === "dialog") {
               const md2 = document.getElementById("fbcmf");
+              if (!md2) {
+                return;
+              }
               const elLikesMaximum = md2.querySelector('input[name="NF_LIKES_MAXIMUM"]');
               if (elLikesMaximum.checked) {
                 const elLikesMaximumCount = md2.querySelector('input[name="NF_LIKES_MAXIMUM_COUNT"]');
@@ -8382,75 +8921,31 @@
                   return;
                 }
               }
-              let cbs = Array.from(md2.querySelectorAll('input[type="checkbox"][cbtype="T"]'));
-              cbs.forEach((cb) => {
-                state.options[cb.name] = cb.checked;
-              });
-              let cbName = "NF_BLOCKED_FEED";
-              cbs = Array.from(md2.querySelectorAll(`input[type="checkbox"][name="${cbName}"]`));
-              cbs.forEach((cb) => {
-                state.options[cbName][parseInt(cb.value, 10)] = cb.checked ? "1" : "0";
-              });
-              cbName = "GF_BLOCKED_FEED";
-              cbs = Array.from(md2.querySelectorAll(`input[type="checkbox"][name="${cbName}"]`));
-              cbs.forEach((cb) => {
-                state.options[cbName][parseInt(cb.value, 10)] = cb.checked ? "1" : "0";
-              });
-              cbName = "VF_BLOCKED_FEED";
-              cbs = Array.from(md2.querySelectorAll(`input[type="checkbox"][name="${cbName}"]`));
-              cbs.forEach((cb) => {
-                state.options[cbName][parseInt(cb.value, 10)] = cb.checked ? "1" : "0";
-              });
-              cbName = "MP_BLOCKED_FEED";
-              cbs = Array.from(md2.querySelectorAll(`input[type="checkbox"][name="${cbName}"]`));
-              cbs.forEach((cb) => {
-                state.options[cbName][parseInt(cb.value, 10)] = cb.checked ? "1" : "0";
-              });
-              cbName = "PP_BLOCKED_FEED";
-              cbs = Array.from(md2.querySelectorAll(`input[type="checkbox"][name="${cbName}"]`));
-              cbs.forEach((cb) => {
-                state.options[cbName][parseInt(cb.value, 10)] = cb.checked ? "1" : "0";
-              });
-              const rbs = md2.querySelectorAll('input[type="radio"]:checked');
-              rbs.forEach((rb) => {
-                state.options[rb.name] = rb.value;
-              });
-              const inputs2 = Array.from(md2.querySelectorAll('input[type="text"]'));
-              inputs2.forEach((inp) => {
-                state.options[inp.name] = inp.value;
-              });
-              const tas = md2.querySelectorAll("textarea");
-              tas.forEach((ta) => {
-                const txtn = ta.value.split("\n");
-                const txts = [];
-                txtn.forEach((txt) => {
-                  if (txt.trim().length > 0) {
-                    txts.push(txt);
-                  }
-                });
-                state.options[ta.name] = txts.join(state.SEP);
-              });
-              const selects = Array.from(md2.querySelectorAll("select"));
-              selects.forEach((select) => {
-                state.options[select.name] = select.value;
-              });
+              const pendingOptions = collectDialogOptions(state);
+              if (!pendingOptions) {
+                return;
+              }
+              hadUnsavedChanges = !deepEqual(pendingOptions, state.options);
+              replaceObjectContents(state.options, pendingOptions);
               languageChanged = state.language !== state.options.CMF_DIALOG_LANGUAGE;
             } else if (source === "reset") {
               languageChanged = true;
             }
             const md = document.getElementById("fbcmf");
-            const inputs = Array.from(md.querySelectorAll('input:not([type="file"]), textarea, select'));
-            const validNames = [];
-            inputs.forEach((inp) => {
-              if (!validNames.includes(inp.name)) {
-                validNames.push(inp.name);
-              }
-            });
-            Object.keys(state.options).forEach((key) => {
-              if (!validNames.includes(key)) {
-                delete state.options[key];
-              }
-            });
+            if (md) {
+              const inputs = Array.from(md.querySelectorAll('input:not([type="file"]), textarea, select'));
+              const validNames = [];
+              inputs.forEach((inp) => {
+                if (!validNames.includes(inp.name)) {
+                  validNames.push(inp.name);
+                }
+              });
+              Object.keys(state.options).forEach((key) => {
+                if (!validNames.includes(key)) {
+                  delete state.options[key];
+                }
+              });
+            }
             await setOptions(JSON.stringify(state.options));
             const siteLanguage = document.documentElement ? document.documentElement.lang : "en";
             const hydrated = hydrateOptions(state.options, siteLanguage);
@@ -8477,9 +8972,11 @@
               element.removeAttribute(mainColumnAtt);
             }
             toggleHiddenElements(state, context.options);
-            const fileResults = document.querySelector("#fbcmf .fileResults");
-            if (fileResults) {
-              fileResults.textContent = `Last Saved @ ${(/* @__PURE__ */ new Date()).toTimeString().slice(0, 8)}`;
+            if (source === "dialog") {
+              syncSaveButtonState(state);
+              if (hadUnsavedChanges) {
+                triggerActionFeedback(state, "BTNSave", "cmf-action--confirm-blue");
+              }
             }
             if (state.isAF) {
               state.scanCountStart += 100;
@@ -8535,34 +9032,28 @@
             exportOptions.download = "fb - clean my feeds - settings.json";
             exportOptions.click();
             exportOptions.remove();
-            const fileResults = document.querySelector("#fbcmf .fileResults");
-            if (fileResults) {
-              fileResults.textContent = "Exported: fb - clean my feeds - settings.json";
-            }
+            triggerActionFeedback(state, "BTNExport", "cmf-action--confirm-green");
           },
           importUserOptions: (event) => {
-            const fileResults = document.querySelector("#fbcmf .fileResults");
-            const file = event.target.files[0];
-            const fileName = event.target.files[0] ? event.target.files[0].name : "";
+            const file = event && event.target ? event.target.files[0] : null;
+            if (!file) {
+              return;
+            }
             const reader = new FileReader();
             reader.onload = (fileEvent) => {
               try {
                 const fileContent = JSON.parse(fileEvent.target.result);
-                if (Object.prototype.hasOwnProperty.call(fileContent, "NF_SPONSORED") && Object.prototype.hasOwnProperty.call(fileContent, "GF_SPONSORED") && Object.prototype.hasOwnProperty.call(fileContent, "VF_SPONSORED") && Object.prototype.hasOwnProperty.call(fileContent, "MP_SPONSORED")) {
-                  state.options = fileContent;
-                  handlers.saveUserOptions(null, "file").then(() => {
-                    updateDialog(state);
-                    if (fileResults) {
-                      fileResults.textContent = `File imported: ${fileName}`;
-                    }
-                  });
-                } else if (fileResults) {
-                  fileResults.textContent = `File NOT imported: ${fileName}`;
+                const isValid = Object.prototype.hasOwnProperty.call(fileContent, "NF_SPONSORED") && Object.prototype.hasOwnProperty.call(fileContent, "GF_SPONSORED") && Object.prototype.hasOwnProperty.call(fileContent, "VF_SPONSORED") && Object.prototype.hasOwnProperty.call(fileContent, "MP_SPONSORED");
+                if (!isValid) {
+                  return;
                 }
+                state.options = fileContent;
+                handlers.saveUserOptions(null, "file").then(() => {
+                  updateDialog(state);
+                  triggerActionFeedback(state, "BTNImport", "cmf-action--confirm-green");
+                });
               } catch (error) {
-                if (fileResults) {
-                  fileResults.textContent = `File NOT imported: ${fileName}`;
-                }
+                void error;
               }
             };
             reader.readAsText(file);
@@ -8610,112 +9101,119 @@
   // src/res/about.png
   var require_about = __commonJS({
     "src/res/about.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAALVBMVEVMaXH+//7+/v6tr7D39/fd3t7r6+vExsbt7u7Nzs/S09Tk5OTy8/Py8vL///8p+RCjAAAADnRSTlMA/fsd9nKuOMpKWY3n2sqKdkoAAAAJcEhZcwAACxMAAAsTAQCanBgAAANfSURBVHja7VbLYuQoDCwhXnbD/P9/QmwDFtqDOzM7SSfp7GUv0c0CyqVCBQA/8f8HPUpy0P1ZAH6QcghbVtL/CLB4dwwEd/JTEO9KcLpWKAiaZ5vyXQDmWAh6jWhW2b5VAlsslRS5X+AtGGJ5mgGbYAoBSUH1Kp80b+GQZxiwtVjrICXtZthOAHLPvSM6kq8BQvD2GACBsja2jY2iI3RQD+YzhFcG4iqBQJQ2I8EENesgarkDI8zzYwBzX889paTQNLlhUwiAlFCQkap3TzA4p7YURPoAoIMd+U341jtC9yz69TbOk2jKefVA0NH4JHUDCG0EHt812ZIC/C8iIvpF5pflb7kRAMOzKQCAjEJJXj4X8V2IOUxFzgBQADT+JsBtoZL+fNY1fg+AGxTl+jkA/ZjCBxq4pSoAUtwPhQ9VsJ/sLmkCUPJF4wNfPiYW5ACQRQbGreYOYASZX2rAr3B2JUI+2JIRTfVKRv6qBKeIfLYLNulgS3sMkwECEnYrXwCwrx7NUwsvmg6JjEKXiAnYDLcnRKzA2vlk1wVNKN/Zb0a1h8gvn4touSfvNzaLzOiFbr1rUB1khzgf9xUPTPnvPvCxGmsVvMchGse06rEP9id5A1SkfQQzDSZwQt6XoNDYtEUZE+IPtepLNjcuGSgEzZXBxgEoTEvTKe80oJdcnCgLeBp2KKikTBWgBHTX0IwKKSRj5P4WwANU8+a4C3jycJWQxgloBjZDjR3NEwSAKgjzUSsnxDGnx2RatoRyTdfGKiaeC1BwFzJ1eQCQZhvOn8YOHqLDJMAdPDeo6wta/S295kPk7S4sYzkGczw6wLRulnZ2QxCseUkoBChBQYDmObe3u8DYeQt0jqgAJGK2LB3eGAK0Xu+F+/Jt/31v29d7kea6j2h35DnZn1MAlKxzrPeGVoCUgIQpev7diSthPZw2mIPIH36etznPG7kJoLXXhwYB2Xf00fTvTvQRhQ2dlsWwOWQxhdI4eUQ6VpSMcs27LLW/MxNPVJozBcA208WZCmC4zlxyAQoRNAGY3Wp/5AWnK1ABIKmMSDUVUKpmrffWALBZnl0+OlTZ8LnejTuV7sbIJV+p2J02+eJmYn+ScTskv44URqQGdQ3y7COLAWvuGZ0nIPiJn/iJn3g6/gHEI80sgWt7vwAAAABJRU5ErkJggg==";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAHlBMVEX///9MaXHNzs+tr7D39/fd3t7y8/Pr6+vt7u7k5OTWemhzAAAACnRSTlP+AEcd9nLhrsqNB5RNfQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAopJREFUeNrtVtuWmzAMHF1s2P//2AVblz4QihOSLtmePnV5wmCPx9KMZCL83cP4Afg3AEzXcyPnqVzSszLyEsB5L9IGAFCK+A6Apu2vNS9APACwruOwWr4FwHxsf3vmlpcBmGk7fUUbjlRaXMkCi6b59p7ix4Swkhd0QNLXnf2UAFR/T2lKFwAOmtrR7wDQ6tcAEfMe+EhkhY+TFr2gRC8VAS2eAJiDHFr0hqOvZXlIOZyIcEt8AvHh2IXks13xQmLfKEGSNiaQ8k07k6MMorT6hht3Lfg9Yr7HYO7345cUXjDgsw9fUHjBgE9Rf0XhBYCcPzm/cQTK2JzIqHssXeNLBryPJgOAKTpPB3XirxgoqBa/qQA1Q82Niv0ximNFmhYAKj0pUMnqJwB8rBtzlf4U4OQzs7mjuBEGJahENJpouZIFbcW5hPPObSrszWuJ5VkixiPUFaoh+CzEnmzidUExTuHcqmSxfTohzkGkgIabaEd4CURdtrocuy8kSC0zU0iUkA8MtANAQWaASXoAgBydYm55V/nn9SEGW0DTWQFF337ljapOvJJW6jbWjydZAIdxhQdYjyZHPU3E+tmwd0IyoLJpdUmHOGhmp6xMGaI97E7L0zYcY0DMaazr1AAmU23JpQdo8vbI83fXPAAYwciyAsV2WU6N88nqsfXfAJjZrdi0AKiOlOAtJUHnelxlqLZCAKimeY2AOAAO9qguMQel4NHEM8XoCiKgroBKpwSgbTJpAFikV4+H/c+WIgIPLHnKXhYA0KD7ywZQqVM888J4qzGhNmT12FpppXhVD5jF7Mmq2ycmfr54TCOnMEXARmUzCOGEuHxHwtiFCYjv3BN/bus/AD8A/yvALxxhPAk52TxTAAAAAElFTkSuQmCC";
     }
   });
 
   // src/res/bug.png
   var require_bug = __commonJS({
     "src/res/bug.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAM1BMVEVMaXHm5ufe3t7w8fH19favsLHLy8yrrKz9/f2Gh4jAwcLt7e2CgoTd3t46OjvT09T///8ZZZnkAAAAEHRSTlMAy6Hp/Ex7Av0lZNk5thOXriDaYgAAAAlwSFlzAAALEwAACxMBAJqcGAAAAyVJREFUeNrtVsmWozAMLK8yJED+/y/pELBshOcQOkPSWTrz5hjdbL+SS1LJFvCxj/0HU48OCLxdbFe/NaIN/n20qy4eCJWr3vNCqA+2WUGE2hwehmru7lqxydtiI1lr2Ycc7ULyhgPBLNoalUQsu13W2cl9POzDKBipc3bW7REpP06AfnTAxA4l78qp6/WTKurHDGpBEeEQO1/x25Uk+IP1FQjk1EFV72qB4KzZg4iIQPqgf+uALvJTB7eCCO1mQa96gRgAcZWlgDSMwDHXvvTrwVMdkFS7ZSaBFbUnvRtLrW1Ms5dlhACAeMpPqyDqIowhq67knIvq6hL2IIDgakXX6bhxYI6mZiJuBY2Mc7WcTBVOX8DomIjbGZmvw7gKQShWZjKK21IdlS1RJNjJJOPGNtkkla56K1aeJJG4U9FkMn2QZQ8MjlsA/W5J2C3Tvg/TTR7trYD7mqlG3wwtIgIARKAblPcwpfzA/+hGoTKrlGod4hwskhGawzzXy+yUlJOx/KobmaB2Zdyt168WQ05JuTtNpX8qsXWQMziuuyEgOmX2ckeJ+sdTzIvrMQFhwyECMAUEMN+40Nc10HXxIxTvgRguDBAAjDSMvniH69a2V3iXGo8IC8QQ8c0ghnPByQGA6KtKbB2wXxphzGvxYrjcv1IZNODc4rZi1Jv4qwXjUaWwokLcpuBc9JSW3sn9HDAmrxIBGXPBJoKVSkEsDjT59LiZxkwM2FhouLoYAcCCZvkiJozTVg3XVSAG4Iw5N/93DGcmbkELgG+kcOWAGcTV0e0XB+CvDmJEGPyEUwcQMz9TIrex6zH5YZvEEIAKdCyqvP4Xpq5v+o71JgQghmEeA2m49vaH0D+/Rfdl4UMf4kUIEfBz29vcu+k5A+JKDQb5yw1Nf9FPDGEsC+wXHORVCKqRCaC+VY2ElUEYxhCbMRPKoG5/uVsHEQ5EU+jVoNL5BZ/FGelKIkBLo148KKYYgGmqpD3SctKLGd3smbMiBrEr5XdTGjEZ5fIyEdgVyzbTgx9ePZjuCEx61mCCnu30vf/OvEd3J75/GhT/Ef6xj33sLfsDl6F79wetpdYAAAAASUVORK5CYII=";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAHlBMVEVMaXF+f4Dc3Nz19fakpKbv8PDLy8zm5ufAwcL///+F1WMiAAAACXRSTlMAIaT8RuJ7y2QGvN9ZAAAACXBIWXMAAAsTAAALEwEAmpwYAAACIElEQVR42u1Wy3asMAyTbCdM//9nS/DjLpieW4YBOl32jFc8EmFZsgnwjnf87TB+u+HmbhN68Pym+X/PjU3iRYAgO2q97uKOfJ2EfMhK5qPxZNXxq8zJaKSi6qRWJykUSlpzScevMrgVxOYERE4o6OGbLg73igSb5OsAloVlrUVki3oZoFn8py7tUMajGtDTAdJIonhsg4fykHfJrM3F5h0YIpUt56/KfJ7K2HT+YqvZIQ5IGuJeDpj6eQ0S3RwAYcIMRBSZToUkADZWnNagFIsB5OQ1oDSymJKzVQdIyXHhxE+ZQPqUTlHIADoMGoUQsO/2762cVQbNQf3GTtwbAZ/3XbHvhU9YgZy2tsSS05w/9IH0wrTTu5z8GQALT7xvE3v7GYBa4sm3RsKv5wGnhGOR/gS3hhrwOBzsYRRToc+nTFIMgOZWiQ2FXjZH3F0/nrCICJ/MjjJgIHLg9qXcPpYCxeajDKpxAHD4owhjXSkA6sFMm2ZaN5ZJxf15FG3ouqraKoNfTmVP2saFa3721dMXAOyC2htpkOQTg8mT/Ynad11BXKZ+DaCSI2U3bEcltFC8BEhUBbjk46ybcvY0vQKgjgU+G8cGIWYiCrWfzro7F9ABSIsIW2UEBpausQAMrYsMBgpAjZxYtSo+5lxM5gHAzaaLDNTj/j+bIEtpKAK8+d0+dD//sXwnE+ZeAKx6hv/mnHX348kJ6x3veMdfin8XxwaPqxEB2QAAAABJRU5ErkJggg==";
+    }
+  });
+
+  // src/res/check.png
+  var require_check = __commonJS({
+    "src/res/check.png"(exports, module) {
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAElBMVEVMaXH7/fzk5eWBgoLR09K7vbsB1S3IAAAABnRSTlMA/OUpqWuQ+snYAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAxElEQVR42u2WQRaDIAwF/wdz/wOXhi7UPn0mmOKymYUrZwQFFUiSJEl26q/nV3DRB9crJCnTI6i9A8B6XCkT/oky4x+HzRm/TQVsPx5w/HDA86MB1w8GfD8WGPihwMiPBIZ+IDD2rUAt0HfUNwK1d7C+gr6xndkBqGjMv+7Grdgk5l9H0LdJqWjEN6awv/FUGPCtpyDteDdufHMdyFkY+vZCOhXGvrMSD4Ub31vK38Kd7yIkSS7z3yB56ANSiuS/Q5L8Ex9MmVJ1TTZLlQAAAABJRU5ErkJggg==";
     }
   });
 
   // src/res/export.png
   var require_export = __commonJS({
     "src/res/export.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAKlBMVEVMaXHa29qcnZ3+//5wcXLz8/PX19jl5eW7u7ze39/s7OzIycnOz8////8ck2CIAAAADXRSTlMAAjv7Gfu/0G/S5YulwigXkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAg9JREFUeNrtVsmWnDAMrLLF0uT//zRDDLalHFi6MTMsueSCLt0PU0WVLEsGnnjiif8RvPDkCGkg7D7BGyRAKhblAoEBoqg9M6Mg0e4R0KTNjKgAgYel+wqEY+f7HgDgcrHoLhCkWAcAQIeuKgH+AoEmaFVHIKLS+A8KwOTGSQG88X4OaFJJD6BHWQWXFCz4zgEoc3ghBys+UZHTbQsrflA0PpverMTVv0aY8ymXWXCX8J2rvgAk2zk4OUwLPgflfgPOLSz4FJU2fc2u9ANOJ3DFD5po69NTBavWJX8ajbZQ4rQOaFI3HsoJ32X5QxqAtvH6jeDdLpi4KlQtYOKk73IONAMhzsVfzW4TdgqIV5WdjkrUdd/loLNszawZsWPwpQFnkkNWEKqvIeXVtqWI1kF5rEDqehg5pzx+NkASdOLjIQHx8iHbhKKZbdJO9X4oTfidAYsESQL8/DxJMNvOhJSFN8S5Dmj2sTL/aBaXDgpJJHgS6xR6763OJgiTzWSQwpC21fS3777s7cy/lld6p4el3AxLhbEZ1gS5erSfhkZZmeN07qzt8XorG3OiATRx58eZAMDQuvcIsKj8oXWUBONyZhk+luZ+8B3HliA70TnHth3k64CvwjaL3NaBr/d9dzvmWvu9Kc9PBcakZu1hlww6bPsSi8NIfygALtEO2+jplad8g3dvXfZcVZ944tv4C6NI/asFAJvfAAAAAElFTkSuQmCC";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAHlBMVEVMaXH///+cnZ1wcXLi4+Pz8/PX19jLzMy7u7zs7OywcrgNAAAACnRSTlMA/jsZ0fu/lG/lbP0X7wAAAAlwSFlzAAALEwAACxMBAJqcGAAAAXVJREFUeNrtVcuyrCAM7CSAzP//7KiE3MXI6OALrTqbW/YKle68Ki3w4MGD/wR06bYAek9ADMGgPpnpdQFx6hPS56F7XxeI/Xx2mldVncICpNBCthsCiXKYSq9bAG7qoZLtBWwTEBr3PnEbXwHAbTWd2/kigBtuCEx8b2OEW2XgWvmhBxSql5dFHBGRjwDAHd/kv/juNn7yF9vPnBv43vSmWXzy764ainijUUt8J9P+RqMhN4UNU1QJy/bJi4jipklVCGMUlwzoBiD2JajlTpRgpwmwL3HYU/jVD+SkoW/hq8XVdXmtO1qP0alL5ZxzNT41ZG4tYBtnRSwL2L6wKuJ3G33vuOSYq//CNAuw6P4YReeyu8U95iKnwK8v134QC82G+P6qyyglsfHEUHLxrJj61/ftW2woXWp1pHekNJeWd7egFrBF1GViaBMgyNzjTRPwfeWrVBtIHI/XP4X+yA/YWToUcJz02FDkeGHprrs9ePDgr/EPW1p3azN8pKUAAAAASUVORK5CYII=";
     }
   });
 
   // src/res/groups.png
   var require_groups3 = __commonJS({
     "src/res/groups.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAMFBMVEX+//5MaXFpa2v5+fnOzs+mp6jq6urj4+P09fWen5/s7OzZ2trJysrz8/O0tbb///9VkrmcAAAAD3RSTlP9ABn+bj3GqPcq55BT6FMK4wn1AAAACXBIWXMAAAsTAAALEwEAmpwYAAADEUlEQVR42u1XyZajMAwsb2AI/fT/n6mZEGO8aA4sHTJZmDfXdi4OxOWSVFqiFP5vafwA/AAA9nurzPlTUfZTuxJNdzt/bzuXRwbmwsTfv6B9xwRenzAxMUBMuA3jkYHy7lq+j/EHBmYI6cigrSig4JZv2QxMxyNHyAKb5dGJoJoToCBAA1zd8c7yMQprJAwKsgXl0N69iJ3lEwDS29EhX8Zooe39nVZwhoGas1NwwWkwde+c8NIE6BG+VA3EXaR12r3E7wHKMHoZkJyeLeWwy30/xx8Y1FRv/gYb0IC/9lftyVwAU2pQNWojGdDdg/n01AubEr20jOdKfKoASpM8c+LfqfBs8cso5HgqFe+NOQCY6M8AyOsw0n9VJJy2+zVAeN0pfXsimYy/vgY4w6D8OtbVxSdsAOB2ygTazSWAKWaFySzVic8k06bZZUchDyWZtibaRMqfGwuBvkYp2YNSdmrsotJSCT6LjOlJmI3amNgIAJEC3FyyXJQ2DSMiDjI1TcolN1MdNqn6ml8wiFLsPF+akJJe7dEqhuYyz9ZKpI+9UbqOAS69cppBBLBuTV8AcNfKZyXa2wUgbkd4AzAIwATIhGXzkUH2q7dbHdeIXPu2f1mcNidm7bIA8Dqij6AAzBgiYgSVhFkPEVRLdWtD8pIeurNXbilrU5sjjKguGOWYmJJUH0QV9CJ263hhBbpr70qvOm5/W2TbpC6HLtnsQmeDq5NFaXXe5oMqf80H24NhGR5cMCitA1I0KF0CAFWqvCqq32PG4taYXdLtbQCufaxKtscmyNswmqwZAAXjVQMUBqA7RDM6z6YA5OZ3DJR3DICSaLsl1pKGITu/7MbyRge9W7xsk2UQEbY85M6mNZXMOyFNax5fu6020PrhTs/L8bc+6BfOzitehqt1wmIAWq70pCI8ROEiCTYqXPYSQluJqpMzJavipndRGAFk1H6vULTfmewEAVA+9gW5r2/7sMYe8q47H9fX3B7MJTBNM84DwOtk65677HVxI/4FAIBq3Toc+Xg3XJ8H+PnL8wPwD+sPSVFpDlclIOgAAAAASUVORK5CYII=";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAIVBMVEVMaXH////4+PijpKVpa2vv7+/Ozs/Cw8Pq6urj4+PZ2tpk7XwrAAAAC3RSTlMA/vw0GehuU8aokBrAERkAAAAJcEhZcwAACxMAAAsTAQCanBgAAAKFSURBVHja7VbLkuIwDOy2FBvm/791ILFk7SEJkOcMtbs3VBxcjt20Wi8DH/vYPzA+lxpvXLN5JY+9jPZ7gKS+ZpDre9RzP0E9+fMtz7liIBEAyoQX/YkejPEfRxn09ZOaAQoDrvcNoQAYYGCJrctTGmgQOIHL8HqS+QYExtuMIwD7unUB1mxAXX6qLw7ETh5IBKAReVBYV8tt33nGqQZAh3LHpWUAfKSIx0OFABALF9LivgysETVZAJeYTdc5G0ciemvfktC+oa8a+DIKjMMohOQ5DwCzjQgx/U6iYIeJswI60GDXzot0yeBqvykEvR0B0Ph2Q1mKWN/vSOlvW9pSg3LswlGBLzWIYxHFnuVwmAcxcC+AnNeMeNb0fj9Y8uTFEfIkH2+KWJILpVGX5c/lMNiRhYTcA2rdHQAug9pIJgwbH7YMSlPSqEj5DgC4F0JppEb5KYwAWLsbgKupzYOmNrLcAJTKWFeXrJlcOACAi3LOy9blGDe7zp7U274LE3y8pkTY3NT85ygEH849hg+VS4+5dSGKT7suDUAxizz932OtLc2nUPrVdA4ZfWoFDJbaWa7jlnq2XHOjpjGuAFBqW5PRNIG1XuBSWn8dcnNJQ76V1LuAUebktmbbB8aEIykAIA0BhgLGAHMDAHqzkxfKOPYn9akuyT0AijSXefsyrCBkdX9yrTSB+aSKN2QvBgKwYmcMdHr7aFsPx2KzgN1wkgcywSdZD9de50klZ4k0iVx8W/l94sg4zgA4E9hpbWMOxXk19kUa3Hc7o0MAodfzMAJQ2NdtW2EkYb/oB9g7FUcfjnqic0uy+E9v5UU8S/OXUFC09XgHAICGTtRpL4/rj33sv9gfg5w2a3AP/scAAAAASUVORK5CYII=";
     }
   });
 
   // src/res/import.png
   var require_import = __commonJS({
     "src/res/import.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAKlBMVEVMaXH8/fzKy8uen59ra2xkZGXn5+fd3t7x8vLW1tbOz8+xsrK0tbX///9ZkBoWAAAADXRSTlMA/Yo7HwPp0vu6rWF1xg2JEQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAc9JREFUeNrtVdFy4yAMXIGApOb+/0dJEwyIewhp4pzBaW760BnvjB9sZtditSBgx44dvw+mPf8B/pevv0N34FqNLD6q1zegFSdmTnhTwGoXEOjZBvWqfb64APhKSO/YbxQREf2x+rkPNGYKZQBgqwMAHyV/rwtHAgnAhnt88FCgGtQArfr8sYmmAAVauz5/XEGtQPHZBAB+XuWPTDSJ2YT24ueyyh93QX+ltssfe3D0m/yxwOc2fyxw+HJTdO8iGAZJ6RkAMIsHob5WgdFKTa3Fd0qI1mJSSm/noExA5AyYdFX3ABBMNFwmpMNpo43axOmMchVXDkAS0upMyEZQpyjZpIEAa1s+72oW8XghSuvLawJqWk882m+1MXIamKgt7HrHWxFlRuLFnbKwldnmJO0q6aXbqSTdHBxjbgV0+BCAFy7y4+FTYGmK9GS2qS0UREic1wQSqgu4HZ8kS36xt40HuNINkqtzC3/yC7cdpfk2H+ZBEkXy9UdJoRwfFnL8OLWVp/nInX6pgsvjFujUGSi9OzGTPEZEdK8tC4HkaniqZOWSoEi4t2gR5Q+d1GVjzB3EnKRXwWyin7YG5Vkp6R4mI3Vz0pJ6Yzzv2LHj5/EXn2m32nrltqQAAAAASUVORK5CYII=";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAHlBMVEVMaXHKy8uen59ra2zn5+fT1NTx8vLd3t6ztLT+//688J39AAAACXRSTlMAijsf6bX70mpB6+u5AAAACXBIWXMAAAsTAAALEwEAmpwYAAABfklEQVR42u1WyXbEIAyTbZjh/792GrDdQ1bSQJKe+l6j28BIGHkhwIMHD/4l5NJSmx4g8N1iuM5nCgAX3a1e5ieOwI8ArgskiwBA+ssrEAkAZMM9AR5PFB7/l93uZSERyLd8xb0INIjraH+Df2IiAwrm2Ob3ryAu0Nd0vpkeutsVkFXfiraCbMPP+X2B1+hkj98X+AIUkB6/LxBmk9X4RoeviARAGZBAwf1iBEyUJnFdjxAWJCI+r0R6A3mkbtUzglmC8ufkChzZh6llGAJAlZQGILtreRXybiFJ4JJXNUF5D5sRUG8fCVA6rvhFMoh/OiZyROjxYRlF2h5IlDKcTGaL9VCp5WI27ws4KITSSKMQlkz/GJ4yKZOjiB4L+Gv9qbtQaNPZXJqFpHNSNNZuJ1I79r0WsCWHOr0D84YsJSh1PbeGKhfabuXs7Y49nsda3ZQcVwQ0bsrQmj2eqSFgDovl5I0LJuqtXphfoD5KNd93zcR+/sza86X24MGfxDcH75WTwcJufQAAAABJRU5ErkJggg==";
     }
   });
 
   // src/res/info.png
   var require_info = __commonJS({
     "src/res/info.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAIVBMVEX///9MaXH////9/f39/f39/v78/Pz+/v78/f38/Pz8/Pw1An4cAAAAC3RSTlP+AATAP99pG41+p9N9qK0AAAAJcEhZcwAACxMAAAsTAQCanBgAAAGASURBVHja7ZZJjtwwDEX/F0U5yP3PWoMpilnU0OWKC5bcWXQAcyUY4DNnksT3JOEAHICfAMiPx1hJx/NF/iMLmDT6tRrnNwtKnepI5Jy2BCSxIcNLC/8CMCQaH5GhbmlbMDSfGS8xmM4IMKVkCW0LIGjlmYlnGjWyGaBAjzMOwdIFvQDQ3CxQIjoY0hZpdAcg6QKKzODv055S1jwTU61gnGW8lAHODJjKNRgEIG9ebwGUCFA8gKCL66LPXG3TAgOgrd6yM51sTztzjt3tDOj88v2KLxd46QJYAYNaE50hFSZdQ+fFgigzUhVkD8Zr3L0TYAV0oFUUOe2JARoUFtRo111BRIGZtnQdysK9merwLHxrpltD945k/xBE6Z6IH2LgnQD/VIkbLtC26mDDhbqZRge+sRsXsjrZrR+Q1xZmU+sFaMxry8h/+oGxkF9rWUzeCzBdsyuWdTDdl+tjvQ/XQPYb4P6vLIP6xR/XAJ8nzoC6/3Xi/M9n3nFsH4ADcJM/p2GQbp0tMikAAAAASUVORK5CYII=";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAG1BMVEX///9MaXH9/f38/f39/f39/v78/Pz+/v78/PyAA8P4AAAACXRSTlP+AMCHP99pG6cZPLOkAAAACXBIWXMAAAsTAAALEwEAmpwYAAABVElEQVR42u2Wy27EIAxFDy+r//+1E4jtLjJth2lGgcymlcIKIXGwL9fgEHhvRC7ABbgAAPlrknxiVwr1axq2apQmNgHQGFoPCLlNBS7m+ghI9pCAHO2uQIlLp4EsACmqJ+xYNw0an0UUj9qgwFgyTp9CUKBYriDuA4zoXQQGEONaSanCx23eB1BihbgasEQ7AQgVCMUciPZsUjsElE0NzRXQaKUDaGqHEVRAbN2Okls7VUzVTxcTSO3c9pPCqkOAJps/kiuklfYNSGMAXCopOH7X3I4u4BnQBBRWkHDKSBhCBXFrp0QkZ21F0zJ1C/diWucfU/9dC6MeMHsh4ugLneyliIMRvCrngxRCO/JBnDj4rRReAh6y2Vts44C81zxaaaOA4nXvM1r/+vfee21Pg2SjgFb2Vmu/X5b+e5/2QNZOgzKrhWjfYLzd4lyN5gW4AP8f8Ak+JnxsPLzHBAAAAABJRU5ErkJggg==";
     }
   });
 
   // src/res/marketplace.png
   var require_marketplace3 = __commonJS({
     "src/res/marketplace.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAP1BMVEVMaXHf39/MzM2pqqrq6uvx8fGRkZL+//79/f01NTWnqKh6e3zl5eXAwcHr6+vQ0ND39/fe39+LjI1sbW3///9v1fJ9AAAAFHRSTlMAxo5x3/ZO/fsNYCHbeuup/bIvPaie/l0AAAAJcEhZcwAACxMAAAsTAQCanBgAAAPPSURBVHja7ZZbc6s6DIU/m0uA4NLC//+JyQmVA4ZgfB7IBdJmX173VDMMA9jL0tKSEPzYj/0TpjZP+d9s7b8CFH30Z3szBxh1fAIwu79xQMwYHyFe+a+wBLNaYwnXA8JTrICy5YUNgO5TynZY7W+EcF0dwnIDVWKXBz63AAsN7UJmDxQC5tlxggAYub6IvwaX4xP8mPdTEbv/nvDnajleDPICoJ7kLSFcEn0BHbYf9Z3wG/9fAWxRdZBGfYorh/rpqxaMgEJMeAEw7hZCh3OawXR/7xY2SxGDBLlG8A3AR5eFBJ+loYeku/s8NGLEiNxDeMFBPSUzLfvQGg/D3YNjfNtiBJRgvufAR550gK4sfIil2khv8VuAcL2+AIhpc6YMmKI+BXkIMBgBI0aMgCpvn1YK3Y/Vs2heF3Ew2PIQth7k7WbR3oj5VTWtQ8g1kMm2YLpLc8iH7zfv+sau0zi8nWHcrtm3dRu5F6e7mwNXgBDvwWUOglougktll70OQsxaB/UnQMc6QYEoQdnySeirYngAFEPKuZ4lc7kfM5dGfebSSEX60EzH/VYnlWDucrimMY8yWx70B2K6JLGl//wQ48YiPtRDdtkk06jYloIKRlD3NKaJBf3GRPvWvoN/H40t50BzqF1Wf6ONoMTIPY1pp1U5RrZy5oQioOXSgI7bqjnULrNh11EMaiF3KaewJjFPLKjdThRetCAmnkDMp8c2h3os/TnF5ck9I2YtUn3tMvMZBSqZUYopA8UuBtuIZcqLYr5M11pa+DfmUQtpqBj9bkoZ46OuxXiHaxjjo2o4JUPtz5NJhmFTd30jC4kKqC9ddom0Zj5DOmWhJ1fRfE6TEE16eLdxcs7Gad1bJQnVo5iO+6BSP8/oPcxjl+9hnjR5CPOg3224ZDtVrkQpKf5DVg1lN2anJFVngATyqYd9m5Oe0hoBhdUfWK4qR1FqVNj2aXQcVZWuAHRV6TgCmKyACcTRaCjLYEIZAmU7hNtfT2+Ebm8FvapspayylVeEW0MNlD61aiFwQ235pebi4qq/2X4owCqrgM+ZYHD5+QGQ+cFxBN67NcDkXAYkJ6K2evzXo/mUuSicVx64t36ZDoY9tlggofA+8QBJoqPxOn0UPow5/lrZN4BYNsOLEVzymGOAND8k93j350eQtw5Z/WYgScZGilsM3XbIyvV3rW8XvN+p+e7CXuMBiLoo6tce5Gn4djrTEehI3U4LDjUCurZpzxpAd9XL3mnLuyCigm4EKoxnA8B04vQq9PE+YUz4DkANw/g0aOZ/ME/+2I/96/Y/O/rK8I9nd/8AAAAASUVORK5CYII=";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAJ1BMVEVMaXH8/Pzr6+s1NTWoqanIyMnf39+NjY7x8fGBgoPl5eXQ0ND///+TVIAfAAAADHRSTlMA/OMNaYbBS/Yl26nQarbRAAAACXBIWXMAAAsTAAALEwEAmpwYAAADSElEQVR42u2WyZakOgxErwdsQP//qQZsPLwFM1nVr3rbp7QBnOlwKCQFwG/8xj8R6vFk/mZr+dxiTf3Z3j4DncsvBp3/O/aTn8He+BcCcv9HQMJ2J4RPAGk8AFwDyeWmj3AABpHtAkEI2wMroF+oZl3Xda11Xde1cp4r52XbH85f7Cczg13x0RQTZFheRTMSRAiC7KD6Y//QjB3H6toALOoZbk8ocLD7ZFDbqix6dQDj+9doDwl2Bp8AsQPWqnP28IX4ewpBNpxPAOdaUY42SYbqzvXm9soCEuRbDYZcEzkHurlAbWdoCCDhZBXeszA0G6Q2oG7I2X/B/6AfBFL6TEHndOaS/V0D2dtpF/HQ8gkgYK8VyyH4od52tNxX7ylE9yyH/N80pXQAGLdn/ojm0rfjrV2QmwZ68W9vIXYq5z84jNxnQck5NXupkOhWPf7U0r52kmzcyyBuVZG7BtZBVi33i2m1X7Qq/aJVsaq58KqzsbeWSGnrROP0rClu1GPz4zzqNurR6eaaqvKsjIscgyjXNPYqQNUEyWYeIXfTGCSNuFTQ/lO8IKctYcEXi0ydAlLnEBoWcFlZlwo6yASMm0FeY3hVwaoAQ/KAxQKyKECXYoOkskjqCqYdBilc/bzNzAqQIEDTmRAwDQJVQ3AYmu37NYZ3JqcGKguTZxImP3dWSIUkTH5uwqQ0Klc3Rrc8O/EamDjE5mv2ET+z6tpagUX52etFKRdZh5bX9mhUq7K9OnEesjI5AQOkghkgNbCzsTmOQXBxeDZ6Kv3D1o2eVD/5trWmi44uFsM4tX4TTMX+Xnxp/lDxsrRVorWbGzRrrWQAEwggaDOBiCAigmQ93xvp3uhyNeq9/WUZ9tcSBKHWMQDtDfDpIOU039ifL5MgVSNQ7XoB9LFGG4EuP2anLj3AYk2+4KeuTT2qzTcGi09td7bdmvoI6KgigCouppOtiUbF/QvlWGyt22+O1/qiru8YoI5JnQ/DfHfeb9J/m+A00h0Pt6a0gCHnL3a0XDTmOHUeIluSqpn2sDTTz/1XZy49LOgD21paBDqfSnkwcOVr7xyBJu0AUHZjrsh+fjAYSv5D7mY9bvSGNWQdX65sfvA9+Ru/8a/Hf6OnlFLuL7WDAAAAAElFTkSuQmCC";
     }
   });
 
   // src/res/mop.png
   var require_mop = __commonJS({
     "src/res/mop.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAMFBMVEVMaXH7/Pzy8PDGyMj19fXU1dbl5ubv8PDr6+v4+fl5e320tbaoqare3+Dc3d7////UttetAAAAD3RSTlMA/QND8Wai2r77ETAhjHsBlyIzAAAACXBIWXMAAAsTAAALEwEAmpwYAAAD00lEQVR42p1W23brKgwciYttnJL//0127GAu0nnIPt1N4zRu8IsXIDHMSEIGvxmBHMn9lPmFOStN1omwfp38hb3MgoL3B8Of6WxP32cPDzkJRkwXftMBg+bkF4W86UBOBQBf+G0G3JnOdv5+5GEZNcCS6ZnlPRIZdUy+9J2FgwzAYIT2bxQedsAwGzLq4346yoGfit8y3rwCYzbI6Dvbj6lASmMJ2VZ9E4GcBBmy8ptXYPCcYnYPEhx1IGEDMOwBOMQBK6YSFlMU76pAyA95/BsEH7T6zVTFOwgYM9FmzLg8W3856pzmaeUnW184YJZZgFRi2dPwQAAAZqDzmc7uyVn0cyE3hs1iHPls1v09P6qgH0NR2Op5Gy+sv+GAmQF4XsgMcK7Y9owC3rWGiDA+psQ8JKegVp8dZXYCVzV4WA8PpREqE0w3jehQIDEkON8lDKQoPCYQAZkVIjiQTCynoU3OLt20sNCQYmmmmyqm+WDLKwTMEjMXpG0e6limDqQ8S10wSxDu5lVJI3G+1g+4VVsoTacUG8MNqq5l00cZHjHYL/+zkQodVukfjNwCF4BFAQEYdV7mFfz8XWBU2jqw9o5+WV3g5KPoXAsUIAM1GH8ikdTZaq1AgEq9a3Ode+8aQFX7aNuEqzxo+dWB1pBrqBZTVWjXgf8M3fmVVm2kLWCvrv9zoFBpU5XgMrtJDU2qgxjWpiclp2w3t7zIxlC4nDYuEQDSWAEAzgO4KnVAd/LBfg0imq9oU2+aqbsI/3ehVFbrs93wKMKdjMgnQGlz6EApjAnAFQKUDwYy7dVF+9BJoc84lWpIoAAITnUoxWi40k5O3zkYoRCMCYj/w8cEbEZ6oI3NXkmwX5sQzXy6RVb69Jnjxm2q2TbQ+iKZeFXPC3yMABBjBOChLNMFfnxSfu45cKWOl1BbvIGIQA699AryCftFje6rQaRsNow51DYDRbsznN3V+xRT1PSo4j0oQRKtJ98M1fF6XdlOha+GxacI4HqkJrZmnLGOfK4gXEeFEbttERiw6U5ZNA/dkLRePGD9cMXcudKQEIE0LGPdcWAfGsqoQpcZyTAP2dCEFD/5kpeRCBZwE3MVz2AJwO34mAAjR95GFhc+j/wrZYoAUtxrMx8RAFLiZxzeLP8ikJ1c3HudT3n+B+EfASnKHz7U5l3MDfzti59/yEf7g3HYR7DWQwgYDuMOgpjkGAIWQ3PJ8R5BGp/1KLTT1zid06cIt9IQkVvfu8EeByzGkf9iC2Bhf8HhJosFZi7a5xt6Y6gPl90geNalsQAIlMGAYJIVz8yB/wCy0fVfgjr5AwAAAABJRU5ErkJggg==";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAIVBMVEVMaXH7/PzGyMivsLH19fXU1dbd3uDl5ubv8PDr6+v///8zVrECAAAACnRSTlMA/UMo8WaEotq+aCzdfQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAw9JREFUeNqdl9uS4yoMRZckIGH+/1/lGITOQ3r6TGbciRPyEMpVkhdo62LjrXVpsh6f2Hv2JsajB33H3gL/+1l5x0Ex73vyMYEFoPE5gZV/Ad4hMP1N8SGB6gHAWwRHAG+s+kt+yb/vO09QgOv63IFuwO3Y77kTmPdcfExgOzD5nKCY9zX4mMACCD4nsPIDwFkCBRafE9RDFb9BoAd5/LXkjHmJvIyMT49gUlbZCT49QmnebNmTFHklAcPpyacEWbz3YxmfINCq+6a5/aCil1FoZZeCYyX3TxxcbJciOesYTwvdz+/3quqSRtH1HoGp3mploSwRpqi/EYV6ua6alvhNHdkgNTkbBTNVYKyq+0W9u+GdUbkc3+PfBE3KDU9dVV0nOO1iO20R5aqvL7HWiCtyKxQvpXhP3bXqsgwT1fn8CGZhrCWxWmGJiIPFNVigjCWtjqcOiuVsMGCftkrxzsy2NRZsuuJ6FDN93FeaAqyRuvC5Z6CsyCJclHyuA1Wd2nYb6/f9hOmwXIDWaKztlZBUsil+kUhCAguMNJGoSzT3eKUDtdtQQykws0CB6ABT9+O6/ODAWtBiyBSZdzsA3GzNLkOOPDw4SCDLajFANkOAJGTN1iFFXktZEaKV4lZkkYBSMm/qtsp6mQtCsgyH/iDSrQ9NK0dBeHQQ62b3UP+RvD39Iot2q/I6G7PPWfrd/v7Xfe5dNlJPFRRblllstDtEhzWQELQ5PW4vszFb1ZHBRMa1Vi9zr02SvHqfdcXrdA5BL6MpA8kgVGrcanTvzBrrVE2sFYAx1MrWc6eJ0wG2daoqr5BpkNb2LCPKrE4Hr/tRMh50psZkK+yaktk2695fDcB/j0OjaUaravMi1WcHr06Vca43JihWAen3UHrvdP+hhfzrIGb/1mEHvIN3/2nIkoOBpP1x6u+t97mf60xR7slw//XvHXm2N3Y5JhhnB804JOh+esxTbV/S+5/A6YfV4Li912z+HYR7aeis/fyoOzQfbIHd5nprwNCvNge4FZnrx6+1JzOSJQaBPP3U+w836Imm1xDP2QAAAABJRU5ErkJggg==";
     }
   });
 
   // src/res/news.png
   var require_news3 = __commonJS({
     "src/res/news.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAJ1BMVEVMaXH+/v7///+rq63i4uL39/f09PRMTE3n5+fo6Og9QEDY2Nn///+rQnVfAAAADHRSTlMA+wMzj/bTC+HAHXsA4AwqAAAACXBIWXMAAAsTAAALEwEAmpwYAAABkUlEQVR42u1W0ZKDIAxckIqd/P+n7lQtyj14VRAFnLm+3JgHJYjLkmwA4Lbb/sBU7OrC8PnbDKwZsqNtP+27TPRdqy4/n8ak5zMAPRvFAmGZXnOGwdABkNUlBBQKIRQABODtkAEAIBw/zbeAv3AUAgI5ILgHQLdStKAAFCxPHC8vAcBK8blQWp9yCGFO4z0D3SvuqlpCqDmnykIyuY9OYp9XAUo/FwFMIFxjl2ReAxhDEfOQRVq/9vP26PVmNhJphkH/aJeGH034A6UyBtu4NqbMyiwwgNpnsSaIZ0xxEoK0Gt37fPfqapYwddd2VHOWxQNrqgCGpIC8ywUhAVBJzyjctrQywDZfuPMLKKzTQRoDOoAikLpi4nEts3ZDyQmpCkAGH5RqC+cityYLc5R45a/qYDdL80TptMzEkElB18RAhR8319vKk6kJOHnAqK1dBzCYqHz61W2EvK6D2C0q0aaR2kdR9TmAXud0SAGgsbviqOhAbh5TPustC/dE6/LCHy7KqmKAugTxhYvqbbf9F/sBuSN6mWJBMsQAAAAASUVORK5CYII=";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAGFBMVEX///9MaXHg4ODw8PCrq6339/fo6Og9QEBDIN89AAAACHRSTlP+AIrYM/bAHaCDtEUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAD+SURBVHja7ZbBEsMgCEQRpP//vVKxtya2FUjspD3oKc6Y57KsjinB3EBYgAX4B0Dup16wsdoALg6AqFolJO9/EJz1wCkBAICGayMmAtzkSaqTbaRzCjo12vdYjgKa+pJMwMuOekWU+8G7ZDc5AUjqn5Jsha7w0I8NnF53tJNI6ioY5o9lsgsC17SRxpeSagSA4zOYS6gLzp3mdoHfICiHPNAcc3/swd1VbQMknqzDOeBZgIRK4J3iVIFaN410AbtQ7R38mLHpIH3/MO2TiLJNUU4ksQGkvH3HALUvqrBTwuUmknkBEbkSmlkCUHMUVQfgPQqqY+J6Ky/AAvwQ8ACGXEWLM0pbdgAAAABJRU5ErkJggg==";
     }
   });
 
   // src/res/pref.png
   var require_pref = __commonJS({
     "src/res/pref.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAM1BMVEVMaXHh4uL09PTv7/D7+/u+v8Da29v+//7o6elkZWapqaqYmpvr6+vm5+fHyMnO0ND///8j6Z9eAAAAEHRSTlMAuPjt+0+a/AMTOCnezmp9JslCRAAAAAlwSFlzAAALEwAACxMBAJqcGAAABAZJREFUeNrtl1G3qygMhT8IWFDb/v+feasVlCDz0HNO29t2Zl5mzcvNkwrZayfZhAh/7I/9PxYI/y+BwRj/8Go/0fxk0Z7P+3B/d++35QiQXoGzt7PwTwwCJxERMcMrcIMo1/AJ4LaQaa44V87l60P4WdZtlov7zCATCIHYqCnVL99A/lnWSHRLyD8ej/EEjSYmVAd/3S1x60yTDDpw0NsGb6pNXXH6jkHIgxuypzfJeCKMyQ2b6TnlIUcCZHSszwQwTxV2KV6aOT2kPzL1W0yx7ldC7rOnhCcAefKfrcp4mCtQmwVQHayudg3NF6dmXIeaH/3vOgi59LMAiTFViQCkKjFVEWQeG3nIyCVsT2n/YeB0MPXGOjGsdtrLUtqoigXqeLEFM86/E7gDKOs6KhBTXFPYS62Elr6ybH03E/VQn0vwm5T76ZiIKU62LYSblI0eExC1QneYx7Y8E3hIYlBEQeN0WINTB2hwW1wGBS1tj9hXAvcyhhydzAJFSrjHGbKvHupYp5Odx2X7jcBjCFpEILYtZHL0mVASOeQuJmCmvZbgUYnidQTixZMDvdi+t9ITMjLFKjgv6TcRPgJEk2yXoNKukKN1y7YtzsZMSAKxOoXLm+7hboGqCFVA8Fsgd2bZNqCXFKABxkqKrQ3XjyF8FyRC5kIjBBoXMvjLOJUycpEqL83uAaD+TUMUNEWHvq78ANQv/wRwRGPOUTkRgH7y9cQk9fQhB+Dz7QxXDluG4s6/PPlclQwLca/Exexv2qzczkFxyedxtdbPsQRVT+y6UPcFgvpmpKmly116ieJbyntYTmaz6LhWpxRZPQsLoNH3/roP+2J05T2DW7+16aigu2xBQ97XdVcgqNGOfTRXbzW8ZtE8tMSuT0CcbAnfTZiQe9DOkWAvLzp8PI1KWIbVokM+XlXV3fx92TdrVq2DMfqmjI8MfPuCi9WUBASyr5jj3MQ1n8q7W+wupDzs49djErsdjTEmn+vJRWrrNzHvr1F7l185zt+iShzF0BtjTkt00+k0SzH69s5+kHK7fDMYS12uh77kM4ubkAS1EN8y+OGVQ/aX0ywR+BX21u9pJDWxp0uwjPppXnjIQSgyjbFeq4aaBiMj0y7O4YpLbNcPB+0hhByK/dW0aPW9B3Tv2AQVvTmaL2l80gEoO6sGcvNrOpS9ZeP8xZVjipMcbKpmONApPAryeT4IIZChzaNfVOpZogZ2KrIvt2YDMT7ReJp3UFVQdpHVDGvZglEtxzRMvjuo7mur5bB2h7bfOZiPwxjN7GlYzqQy1MXjSNEJkOLj7fAe4Gc9KtBdGRbbaAGNhqYt/buRNtxVGjtjzOndLvOPg/FT6b6nuH8P8OSZ//xp/LH/yv4C9u0hi2zsRzgAAAAASUVORK5CYII=";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAHlBMVEX///9MaXHBwsPy8vNkZWaio6Tp6ura29vh4uLO0NBObmBCAAAACnRSTlP+AFb0EzDWmrh9qy16KAAAAAlwSFlzAAALEwAACxMBAJqcGAAAArRJREFUeNrtlsFy4zgMRB8IkPL//+zYFAHsgXJsOXKUzF52q+KDqkxSLaDRDUKEf/cr/AL8AvwXAOznbyg9H3/lp17Q0tEyTiNQAD/YiPGtFKQAmI+jALB+CrAdWQ4D0Ditgr6loAE23gKoGIDVLfsUBTC5I8r1JQD0uQpWhoBVv9fJU5qEEI25sgxo646tJwCTDlrXPfmqHWg5AAvf1XAPYNK/qH/LAe0GS38n5fLV+3Sb7O0Z2JVxl1oriTwnowPKutfAK4mXj+Qukqu7F5bHUkcjUeI9gEhuayMSIPFS5lrzZOmvJXgByNjUGrsDudlC8c8BPJOokw/NXZlG6kZW9BcRvgLEpMdyfri1qb+07aB9LsFzCpZtTBvE1KR72kxGEggZBwx8AGjzzejLOk27FK3dJCGrQ6OOAwYeEaz3LqUOLLelR/jSlwFEQpYOLT7nUA4XcqpqnRZSRUsBdfW/7crG2B6nAAHQaQra2BjSUD8O4A6gHz0oAUq7mohdJ+tjlRxgcjvqnhuJ0sJ96nB8WHs2AaRleM2o+XwhvOrAYxonqwMhXGrMvq56c2mr+PAvIgA054Hy8hnZLGJ+AkC7bUD50jFK9iPkd3bOXWWE0VZo5L2xvo9APmTWRvHHvqMWGYfvP0dgjxOeYtWMvIQ38UusYTVPAZ6tlp7qUq+5lJtaBx9vbuEHQDxI0mpZsvjKEiNbOmjKGcCD5ksyFlZPFi9DwWnF5XRCSdRpwxg64s9URunYGl8MIrrfWKqHZIwEWpZk0KIOSB2XQxYOkduNi4wUvYIWD9AifeliyKscDweMFbLX7Cu0RADzeMwOfhoBYu6gqK4hDir1TxuJVAlXxjemNBUg3fQKqjmEgut2/z5f0Cdjnsa8V01XqINg4Xa37U/mRFWBnt+twu+4/wvw/wP4B50IUBaay0+qAAAAAElFTkSuQmCC";
     }
   });
 
   // src/res/profile.png
   var require_profile3 = __commonJS({
     "src/res/profile.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAKlBMVEVMaXH+/v7m5+fU1Nbr7e3x8vK+v8H7+/vo6er09fXu7/D3+Pja3N3////NoIt9AAAADXRSTlMA+2ApkHYXyNWwn+44hnRPQgAAAAlwSFlzAAALEwAACxMBAJqcGAAAAeNJREFUeNrtlluzqjAMhb+mBQXz/39pxD1Q2vMAyM19Ad/OuGYcUJvVZCVdAB988AGAG6/l0cB2RVD441v33UwQLg93ND5XuQEIgGaXjmfwdZUEeCBJc0K9HIoOkDMCjvJlRoK3EBb3ZbzkjETXniIoY+G6VDfe++j83OhvUJIXBF5CautHoiS0nVSSwCE4WkcP1PAAKqDBU+QUmks/EbQ9NQSXkMJ1ISaXZJK2Gvaz4XJXuO1HOVQG+tXhr2LKPSE3Qzc5m2Jqix+0bxYaaHKQxdRUEqlVG0d1gqyCX4iY2ilXB/TQ9WuC8d8tT1jWkqKaJjd8u+5KsDl6pnkSZIA+Xh+y758B6BBlS1FXJQBlFEdWgwCP+YDVYsooq27KeBK0akVxgQqrGy/oLGIes7ZpY3tRgmlEZMg1lUFM/dJkFNNtG9cEahpyj4LF1nlT1mtVMZ0F3GtgmEa53X3vfBls2BAF02G5qRobAZeTOGhTeujbb0Zmi/UkouMHX+6mmNeN3XShO2IjtdjOD/ybjnTMGF+UYO96Yhl/W+rz1X4gCL/7c/oxA/mLwetehbB52J7WwB9lqGVDUB0kmFw3jOfhTBfbyStd0hPhmq7PFwypTjxj0+B5ASB18YT8iQ8++OC/wj/2zbt+0MePOgAAAABJRU5ErkJggg==";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAHlBMVEX///9MaXHm5+fz8/TW1tjy8/Pr7e3x8vK+v8H3+Phzjy7VAAAACnRSTlP9AGDOK6mQdhfuZYrtkQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAX9JREFUeNrtlstypDAMRY/8gPL/f6wDtqVZNIEm0xnAvchUCjbe4CPJVy8R3vscN+AG/ApAWM7x6sVpOUUAhtphet48iM4uh6Iu1E+A98XaZQ9KbAZ4gaCt4/UMp4sK9l/ICDDOXsE5mboA4ywi5tTVQVzYhP7mG2lPAO9VP9JkOtZhYhpzBId75EnZR6pEFJVMXDJJBgBSEHEJBpGQTnkfRUS2ELThY4bZWdOON0gGmgFCwXwj7gWq7QBQ13IQwDdc2f0oJ2TEYnm4gvxThZS/AeCdih1nQX7lgQLjHMB8A92V+JhPPGILbRCdAWL1oWBxK5tTmSjrQwffMpSrxVRifNiMRQ8uP+eZF/APy03MMZiIHBmvkCp4XXpinDcV4Hx3ifUvGVvr7wf+Ul/ahN08iG92pNZ+uif6w30vvKySFXA83V63mfCqwnpC8Fcvti8Ad3XlHfIeUHhjtPXu27ICUtf9pJ+DRVwPITlZB4tZR0KaPe1I96Z6A27ALwD8AbSmfeRMwUe+AAAAAElFTkSuQmCC";
     }
   });
 
   // src/res/reels.png
   var require_reels2 = __commonJS({
     "src/res/reels.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAALVBMVEVMaXH+//79/v3k5OXDw8Xp6emZmZvS09Td3d709PRmaGnu7u7i4+Pw8fH///+1QuNdAAAADnRSTlMA/fwDTMQocJH1ENis6KFnPv8AAAAJcEhZcwAACxMAAAsTAQCanBgAAAKmSURBVHja7Zbddus4CIU/hH6aHPv9H9QeN5aFmIs0aY46TTv34cbLLDYCBFvAS17yEgD5pZ0CYP/XwQhT+5WDK+wBd250VNzrt8YPCsevwlkkpPTmGhMtJ+Eo7WcHN5zoSWmekpu9/XPSJlsO2br63/ZxwJ97atqmI1hx2afebSunFVo1Nky+1HFwkEUOl2kNjSSwhsZZYDIF1DQdY8Th73xysMtuaFO6rpM2xXRx2qZ2zY9nEdjZeiUajuUEONCR6T1hnJvSjOcpAMT83tRE1um9qcXTItCnHSltJ469MDiIlSw4pUWAaQ9xEZYZTkBKbD800h+5vIWjkcPKfNeuJfZaGm7k7VkKavVkgZQAKX4DEc2Q2lGV9kMN1ON7aY7dQagQ9xzaPsEy709rYIRduIDGTxDACdJlBfk6O0MKpjyALqyP1fL/Gr3xGtMyLzczn1kEnxcQv9vbk2EKLumoggPI1PvhU66H3O9L8qXz1EHY/eMw8dJ3iT2UvCMfQUkO4zSMRUxpfdRUQpW3tNwVXb4fJgVivJdMEFDd2mF9voXA3r53YMDWP4mFCGao1gu3Gi70gYPCUJH6iWfHUKyUhPhH109P+QAoj+xyRu1cpFzWm0/5woGjg/YwZAGIUnQV/57G4xdOvX19mS3KiUX8rnb5Ahj/jWvbicMC8wrX9P3j6B17zkir36MQZwVxBBcmYIVyPI8gpLT6dXDcwWdYmGCZj1ZkWjmGeY5DAlGBGVh8XplWq8hUe5/wVP00mQ4pjLdyZKnzIUf9k981qrRkWcWzbV3LpdhxGZ4mHRmp7144XLUF0bDl/Y8iKlpqDL3LZ1N++zqXkB7YlNjrleMCcfvNgqGWg+VKaW6MqF/tB2pw3p7uCz8uGPZZG3ttgS95yUt+K/8C7ZNQwuRpF4IAAAAASUVORK5CYII=";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAG1BMVEVMaXH///+OjpDg4OHv8PDDw8Xp6enS09T09PS3xe4uAAAACXRSTlMA/h2c4EzEcPV4cNdMAAAACXBIWXMAAAsTAAALEwEAmpwYAAABr0lEQVR42u2WUbOjMAiFPyBp/v/PtQmwD/b2arXa7sPOPnhmMjoTIJyDEOHChQv/B+QTIwVDR+mx3SuHfoYOjKBMbYik+ScZzH6zG22gHbAgVKL0swxUpDDRBBd39E40ABsQ3LbH2Yu/VteRyHCRBPNU5udsEDv6rBndfTJqB3GoHarPDOZ89TiAVgtqJ0EFyMeqHVDVHc13qhDUO7+rA4g9RJWTAMPQOiWKA5ihA+gzeX9yeVvGkhrRgmBV8TZQhxL4SYBb33F6BDOUkScBTBSnPDMw0AEWlGk+YToOoHtOKwM/DtCE6biv/KSM07ftXF6/gQWq5KZ3zL9oZ5lQkbVHaBz2greXjDxKbUcHvlZhKdLPu8riVDnOIPaohL7v/0177thqswOhNnu5pJegN8ZSx+KfVwGg5v2lX0/KWBb2fgvpX35IaxXve5z9WMRT+JmIzd94NkXzMWMPAkjmer9YoBTJDCx+5/s7CpFAU61YEaXFyAYShbhlxyLOKJQAksybi6S3EU5mOhRK2YzEnbuxyWImNAb6nHHx2fWuYqH4zziNv/lrUC5cuHDh3+MPAm65j2POSWwAAAAASUVORK5CYII=";
     }
   });
 
   // src/res/reset.png
   var require_reset = __commonJS({
     "src/res/reset.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAMFBMVEVMaXHn5+jl5ube39/Fx8elp6g2Nzm8vb7z9PTu7u7o6eltbnCwsrPU1dXNzs////8hSGAWAAAAD3RSTlMAA8uybi0IUfrr3hhBmIp5IPNQAAAACXBIWXMAAAsTAAALEwEAmpwYAAACV0lEQVR42u2Wy7riOAyEf9mOTEiY93/OPgTiq2ZB9zQQONCzmMV81MaJHZXKsl0OfPDBB/9/iMjP9tIgfxZ+y/X0O/80XMcuIiJu7mNGCGiTF4l+95r2rvHXa86uzDV+dd4kEJtPB0guAbFHSLrMZLe8RyAWQqSEs2RAzfrhMtCOYu8QaHQkbQtwCdA+aIqw1C2Be6ApOnL4sYiAASIZI5Kwd2ogFiZKKVe5NDpIEUrNvFRg00By1/E0B0QS3bYJ3UaRV/SmWPrzORK3EyZsBNShyM1s89RKG08Y4ni1CmJhwn7Io3Kh5NcKGEntYRYjywPizVloatb+4NDdK9DAGp58q9LL62WERzMFhN2uv17GS7EewTi+4wetq4TykGHyfkivFAgT+tC8hKokXtcgPTMZKl9p8MPdsN/OyRdpDzximAqjjHBrbPcE0kx9sq0IbYUOLtguy3cEjEvU1u+3ODKt+2j13MZ6w3BfA9Nlnwh/2bWVCybSnMMiddE22DMFwiw9YVFqaCAil9tl8G3f95bovvU25iuB9wRtDLn77tVGC5daqpsHZ7Gmc9tZbGPV8g2BxHOXKmv00n2fd1FbH1a/zqVWkSzmGHtvz/xAzB1ORTDtOvzT+zWeD8fdIibYwaVav/UDAJNMXKtFAyT5euhtwbBpdSWswaffxrAliAVBWEArkaQhB04B31X6fNwdGc/fKBBWfhlfhgIF5OsApG7RGntbr++XLUHYb4+MWxhPpvHYKI0ba5XNjp2f21euZeOKm02v3exJ/LSW/+bX6F+MfPDBB/wNgJcSByNmw6MAAAAASUVORK5CYII=";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAIVBMVEVMaXGlpqeqrK3l5ubs7Oze39/Fx8fR0tPz9PS8vb7///91sIfVAAAACnRSTlMABTTL5bJukfpRDzMgNgAAAAlwSFlzAAALEwAACxMBAJqcGAAAAg9JREFUeNrtVsuS2zAMA0hJ3v7/x2Zji0QPTmYSS26ynZ464cVjW4QJPkADH/vYx/5/I3m77hfwZ+7PWO+de3gskEUJwEybQLVoF2o4WU78WaPa/TYZaVauGP3nAJSxFGQnABVrcKWBkwCmFKhmhtU3CQBZYtlffOcI4TOApTCzd+34CrB7EkDwDQpUc6yZIAQBIIQCQ9qEAezMn9DtvLAUQ8KgSRIGADGR+US2OABDokyayYaktgY9+TPvR20ZKfhYFl/74Vl4KLKHNr0qI9UK4jor+J7N11Ugcpt+RdCskwYK5lv+ZOhsnCKdDt4ve6MPgBMEotFfl/F8xIX+DgWdCw+J1xQIQ5tiEF8N7+TAgDqPoON6sWoH9KGMIe+TNFK2rGlWE+KfAKhirhw50BS1WB4RfGzELM6jchDN16VsvfOA4BM9NcL7o5QToMIrQgrWfKToxyK4h8EMEEBy3y5G0Zegee3B+ihtR4DSEFE396z3pqY1j9YYa08VpnkGT7qO8uU7KeMCZKcByKzRS91Vzqz0Fqte7YVkz2btFuM1rW4hisxqpa8vF4uolerJAqBLX4xtF4Tqa2bzhx03jwCELiDXXUiiZINfRatbCIzTyaNq7eugO8YFQPZicaXjSbPL8HFbbDYHzKy2bbdldT77LPVcvtYcl+MxAnXqTBNL5rne/ctfo79487GPfQy/AYHu/dyW2FASAAAAAElFTkSuQmCC";
     }
   });
 
   // src/res/save.png
   var require_save = __commonJS({
     "src/res/save.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAALVBMVEVMaXH8/fxiYmTBwcLc3N3t7u7z8/P19fXOzs7m5+epqqu0tbW+v7/l5ub///+GK1KgAAAADnRSTlMA/hVKjPLa8mXFN22Fq5kG1AMAAAAJcEhZcwAACxMAAAsTAQCanBgAAAFPSURBVHja7ZbNkoMgEIR7EDBL4vs/aBKiAsMespqoaGD3sgf6xtTUV20PPwJVVVVVT9G6ILTfadU2VRWrtZGaiIKhpUyg8JApQLPluRg6ogFxVkBUji468BawomrtJ6NTsxDKMcC4SmP9J4APYRuTYh0AwNsEQeQkPZnx1shfAeYmb83pLw4A74IoBbDyqp9Xo6fDEH/0MONrvgMg2rjHTwPYmWWhl4WAYVTvaxfHMgAYIfMwpQFmSBQj5wLE+ZZs1X3GaQQAMU2qW5S/oskEzPldF+Vry5mAIlXA7k5cTXA7ko+A/uP9fww4P9Y3T7xQQQaKRWObN9mmsUUOBrn+aF86hXRmUmY6aEO3xj1DGfMcOCF5oTOPAgB8i/bQQTSWAeCuNo/oDR0Akv3xeKWJjk/pVLroSN3DMUAI8nov2BFq83ZS2eng+ktWVfVv9Q03vYVFFbPZFwAAAABJRU5ErkJggg==";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAHlBMVEVMaXHx8fFiYmTBwcLc3N3Dw8Pz8/Pm5+epqqv+/v67FBq+AAAACXRSTlMA8hVKjG/avTcrlG0vAAAACXBIWXMAAAsTAAALEwEAmpwYAAABJUlEQVR42u2WwW7EIAxExwYS///X0sU2Pay2qyWQBKmVemBuWM7DHicBYGlpaekpagMc6iA15m60WYuHDAiaZEEWRO0AQrM/gZxqoKBMP6qs7MYRfllBCPW19yuZOZgDjq+YcKyBP5c1Pw4pxrYBALSkeOnBqRTHGqYAUCQqpy1cElx5FuB73d/GqNCdFoz1Pd8CcPIRvw9wTy1xElDo4wmvkxXAYTdt7QOkdIL9KnoATrR1wjn1sD1zuO+YqNwEhEG7YjcBU1qAXwCMfiiHiRWZAqi3pe3OEwAL2r7MrtuMB+WvTIx+E5BGW8k9D4IezkGPAKAUk50BqhQHgHgYY3hWwJnOj/eY3Gn0PbszP+wcwGySRxYKzOzqgnE+F19XsqWlf6tvBRdfhPY0CBQAAAAASUVORK5CYII=";
     }
   });
 
   // src/res/search.png
   var require_search3 = __commonJS({
     "src/res/search.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAIVBMVEVMaXH+///z9PTf4OG0t7n3+Pjm6OjJy8zr6+zv8PD///9QuG0xAAAACnRSTlMA+85TFel2KJmykSvebQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAZVJREFUeNrtVs2a4yAMkzEO4Pd/V5ryt4fpfDMtzi5p9xidEohkY7AIcOHChf8C+uusH8w7EEah+oaAd0O+nwuP/awAO/n9mkO1svCH/OhyTcW3BkDuEXA97CeKk5RUNv+TjpJKWOdHJXVhGvGrfDa+3pQ0LhbR94ji9rkqcG1JYPM57W0adhEjL63AqTp7YfRaR7b4oVXBnABGS9Jfxq1AqAnZXNs2RzQFGMk3a6ID+4oAgGY2T1vMAACvHhl3EMiuLmOqrSngc5Z6IBBWBHZKEEu4zhnYS92AZvSu83mKyHYJ9xpQZ+9gaX1pF/aQspu0RfI/PPS3HSrRs4JPZjvzgRtLCzUyfhLmITndRl+Nz0GUVOLXgfKcaLKo4wx8jzn2UVIOVBhRutuo1jRGWbJ132MG0sjPvl7ofnC2TD6kteEq17sAyCiwwh/WX0m3xyvztjGv+7l3SkTWfq0hPPjpQ/76BWLwT15hr3z9gI8Hn/hNPisREek5/tTOqba3/5ESAei3k3k/qdVON3wC73HhwoX38AeihXKrQkJMhgAAAABJRU5ErkJggg==";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAM1BMVEVMaXH29/fx8vKFhorg4eLu7u/m6Ojv7/D+/v74+fnV1tf09PW5urvP0dLZ2tvp6uv///8XpKx9AAAAEHRSTlMA578JXKd2Avv1PdQYLEmSjzXjlgAAAAlwSFlzAAALEwAACxMBAJqcGAAAAkdJREFUeNrtVtGSokAM7MAMCSOu/P9fqqiJELmHdfc8GFc86x6uyjxQaE06yfR0D8A73vEfBD9cQT8n2/X5PADfpvEPEOW9fENNBZKHtaeTc/BnOmBYc44u1582xOPdJiifH3xz+4+yd2xLR2BDaDCErQ9l76c4lBiiy5F9KXNlbKWlqvmq8bFqpaV1nlPKNLAhlV3qvtdb2ZBKT9kpwjw/kMqOuu9tY8a2SiqHRZvIVkrEpBrD4kpR7TItFPNtjarjn90awFuRLkfllAXHyMFsUsr5VEUN9XnORDGlYM3QGllysydhNsKJYbnt2ptgXAKwAshnwxqjBHwJwBEos0cmISvs4lWDKTKFPKu8fV77M4ADMDazSmxlnZfuDKAy3Whm4Soq5DGAwQrBJbPwBOkPCzpg76EfwXiqsJWi90VaqHqBr/9AYFs7pK8WEhVaaSmBma9qZqypFfnIHo8ZM849R22GwnsHB4c7IlYqGoJmXG1OrfPBk6IuKJE5ygYswyCdHEKVQcicjRDOFxLl2JdOVHtdqhwqOm7CkEG4Y+uJ4i25VUeNAmJxZkr5q42tJBpYAChZ4D3SaZNHoPtXW3M5F7ikS/fZ08hZBLpPp92+soUAiM4Q6LF07TpVlRSiYv1wi0DLrcA2pAAmCOViAOeDpwEYZET/m82nHOmyEwiU443Y6Bk/s2aMn1PQ8WuKZzow7oqtAFDu/85Ujfe1ybdF52/nBwjHMApgz6VN7ILqIi34gPzhA6bBC/kAA/xK/svp73jHP4lfbHT2Wy9iy64AAAAASUVORK5CYII=";
     }
   });
 
   // src/res/videos.png
   var require_videos3 = __commonJS({
     "src/res/videos.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAALVBMVEVMaXH+/v77/PzU1NSIiYnk5OXIyMjt7e2xsrLZ2drp6enx8fHh4eKrrK3///9AGRjGAAAADnRSTlMA+/t9GL5t6UKS0PSvNTz8iLMAAAAJcEhZcwAACxMAAAsTAQCanBgAAAJ1SURBVHja7ZbdkqsgEIQ/BDXmMO//oOPGaETOhYo/YXeTqr3MVCqWKM3Q3TMIn/jEJ/4kDMDF9W9NcvF+AGjKt9d9dAkMbKkmPYmGiCGauF8jmggmpteihGEDqDFeJbOMshtVUbyKioK0uA3ABRdVepsWtLqDAFhwBJ1RlUhwY8oAjA9VmlVZMumozPkIqgv1OwAYQxopWgnxqJRFZZ0uCPoMcNL2qKppVFAQUREA0V8Abs3htkNmHhRUQOW3DPzpdp6VlBLiLwDtLgOrIKAgKjpDHVyZA7i2abjp55XTRD1pVOQAYmnWCI/NDqiIzjqeMogM/5KOxqs0ez5mBTX9HURIWyiKg4e3WHOXdCtZGduTE+LyQ80MaKA1tGDyJPo3avmAsACYRwgvTq/6HAcR7IsAA7liEl7vShkZv383Nyj6ZGVDe81QMNSyU3+vrD4ZiS5DgV1J7+xpgz6mBrSS6L8VTKWL5l4fH/TTmUSde26cdxQXN825W1Pejx2ChvtwAFCizJWmJIriutexREEWu0YweHuWESaMJ9vfaxDa0XjU+KSOi3UfVhWmofryeuma69cCvVPFhAaV8ubKQlI/GC7Wwi115SFI5I4py0cFcHD2osE4uuhk9ZErWv/cUAJTPU3TNFVZVcYQvq7HTS4ZBFuop3KuX5YeN19Ujz0EQ5PpBypAV15QqTMdbvO7K5zTUwbjZaZVmvncW/rJdpHdd4GtdyxGAjgwvd8OY/nhq8IWdquCqqsvfQEOVLqqm0uKb48ZwdpFf0ml6vq1Nbgfq/rui5ZoDrTIamXzSgu52KdaHYfxDQDkdq70afx8oH7iE38b/wHwJf9GiMTPgAAAAABJRU5ErkJggg==";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAIVBMVEX+/v5MaXHv7+/j4+TU1NSIiYmvsLHIyMjZ2drp6en///8Zp0rrAAAACnRSTlP7AO25fRg9bZLQVvLV2gAAAAlwSFlzAAALEwAACxMBAJqcGAAAAiVJREFUeNrtV93OrCAMHKCo6fs/ayPKz7kAFJTd/cy5lWTNgjKUmWlRpfB/TeMFeAFeAAAgALDh2SQb9+O/UsD8PIzomgiMlscAPG0ngAVYePCUoBkVFrCwsAAsJ3cEcguE17mOuEUaiLxeuUpGFQCOfEMieKW1TpqAQTjCOR6GyF0FAOkYSW04JSYI1+lcIrkCdE35vgthCMAszADyJr4BhNRrBs7bEkA4/74D8I0AQE6lGL8ApHHWIgADArCw3AIYA5h4DKs1r3xMlEt8QxcnHWsz8bQDhFmuOpalojqUU70tGVlBOS6dCMcW5t7DHaF1D6XLQxk/5pOcN6X0hiTyg1Qc+iCmvxYVWnlsZfNHAI9RMj3YgfHy00hDOU5dRgBi7CBYy436rbIDGVUaBFtJd1d+Jk/7BWD6KJiw03q/lYwriWMj5diN1uHGcth6DkrO9uWqdvY5P9DcY3WX0ZWa9yEWSY5rMgsAULJ7qACOfJj2yc16K4SFfr/CeqW4HRDw1i+wB4DZDHvsCNCBAKBzdika3tMWuZaDsAjfjRSgrOtYvtiYNr2MjBRMkgmTVmsI+pIaFGILoUdlXRiA02bMYTOftFbXk8nrIuNcz72PRZ5SsAeLlIUjwKx8HsZf0nJS23JagZxd1smBgN26FL/UtVxIseQz4lxjB7n8hgLQ16+GXc83aK5WVn/54LB+uR0d3j8AgI23s8vjCcD7qvsCvAA/2z+4ZeL1XyzIewAAAABJRU5ErkJggg==";
     }
   });
 
@@ -8724,6 +9222,7 @@
     "src/core/assets.js"(exports, module) {
       var aboutIcon = require_about();
       var bugIcon = require_bug();
+      var checkIcon = require_check();
       var exportIcon = require_export();
       var groupsIcon = require_groups3();
       var importIcon = require_import();
@@ -8741,6 +9240,7 @@
       module.exports = {
         aboutIcon,
         bugIcon,
+        checkIcon,
         exportIcon,
         groupsIcon,
         importIcon,
@@ -8781,6 +9281,7 @@
       var {
         aboutIcon,
         bugIcon,
+        checkIcon,
         exportIcon,
         groupsIcon,
         importIcon,
@@ -8804,6 +9305,7 @@
       var ICON_DIALOG_FOOTER_HTML = buildIconHTML(mopIcon, "cmf-icon--dialog-footer");
       var ICON_LEGEND_HTML = buildIconHTML(mopIcon, "cmf-icon--legend");
       var ICON_FOOTER_SAVE_HTML = buildIconHTML(saveIcon, "cmf-icon--footer-save");
+      var ICON_FOOTER_CHECK_HTML = buildIconHTML(checkIcon, "cmf-icon--footer-check");
       var ICON_FOOTER_EXPORT_HTML = buildIconHTML(exportIcon, "cmf-icon--footer-export");
       var ICON_FOOTER_IMPORT_HTML = buildIconHTML(importIcon, "cmf-icon--footer-import");
       var ICON_FOOTER_RESET_HTML = buildIconHTML(resetIcon, "cmf-icon--footer-reset");
@@ -9014,6 +9516,8 @@
         state.iconDialogHeaderHTML = ICON_DIALOG_HEADER_HTML;
         state.iconDialogSearchHTML = ICON_DIALOG_SEARCH_HTML;
         state.iconDialogFooterHTML = ICON_DIALOG_FOOTER_HTML;
+        state.iconFooterSaveHTML = ICON_FOOTER_SAVE_HTML;
+        state.iconFooterCheckHTML = ICON_FOOTER_CHECK_HTML;
         state.iconLegendHTML = ICON_LEGEND_HTML;
         state.dialogSectionIcons = {
           DLG_NF: ICON_LEGEND_NEWS_HTML,

@@ -12,7 +12,7 @@ Thank you to **[trinhquocviet](https://github.com/trinhquocviet)** for their [si
 2. Add the script (your preference of method):
    - From this repo: open [`fb-clean-my-feeds.user.js`](https://raw.githubusercontent.com/Artificial-Sweetener/facebook-clean-my-feeds/main/fb-clean-my-feeds.user.js) and let your userscript manager import it.
    - Visit the [GreasyFork release page](https://greasyfork.org/en/scripts/552339-fb-clean-my-feeds-5-05) and click **install this script**.
-3. Reload Facebook. The mop icon appears bottom-left by default. You can set it to appear in the top-right or hide it completely.
+3. Reload Facebook. You can set the mop icon to appear in the bottom-left, top-right, or hide it completely.
 
 ## <img src="src/res/check.png" alt="features" width="36"/> Features
 

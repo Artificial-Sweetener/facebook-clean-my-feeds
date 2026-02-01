@@ -22,7 +22,10 @@ function positionTooltip(target, tooltip, placement = "auto") {
     if (left + tooltipRect.width + edgePadding > window.innerWidth) {
       left = rect.left - tooltipRect.width - gap;
     }
-    top = Math.max(edgePadding, Math.min(top, window.innerHeight - tooltipRect.height - edgePadding));
+    top = Math.max(
+      edgePadding,
+      Math.min(top, window.innerHeight - tooltipRect.height - edgePadding)
+    );
   } else {
     if (top + tooltipRect.height + edgePadding > window.innerHeight) {
       top = rect.top - tooltipRect.height - gap;
@@ -43,8 +46,7 @@ function attachTooltip(target, text, options = {}) {
   let tooltip = null;
   let showTimer = null;
   const placement = options && options.placement ? options.placement : "auto";
-  const tooltipId =
-    target.dataset.cmfTooltipId || `fbcmf-tooltip-${generateRandomString(8)}`;
+  const tooltipId = target.dataset.cmfTooltipId || `fbcmf-tooltip-${generateRandomString(8)}`;
   target.dataset.cmfTooltipId = tooltipId;
   target.setAttribute("aria-describedby", tooltipId);
 

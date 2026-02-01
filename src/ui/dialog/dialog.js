@@ -928,8 +928,8 @@ function buildDialog({ state, keyWords }, handlers, languageChanged = false) {
   searchIcon.innerHTML = state.iconDialogSearchHTML;
   const searchInput = document.createElement("input");
   searchInput.type = "text";
-    searchInput.setAttribute("aria-label", searchLabel);
-    searchInput.setAttribute("placeholder", searchLabel);
+  searchInput.setAttribute("aria-label", searchLabel);
+  searchInput.setAttribute("placeholder", searchLabel);
   searchRow.appendChild(searchIcon);
   searchRow.appendChild(searchInput);
   cnt.appendChild(searchRow);
@@ -1125,7 +1125,9 @@ function initDialog(context, helpers) {
 
       const md = document.getElementById("fbcmf");
       if (md) {
-        const inputs = Array.from(md.querySelectorAll('input:not([type="file"]), textarea, select'));
+        const inputs = Array.from(
+          md.querySelectorAll('input:not([type="file"]), textarea, select')
+        );
         const validNames = [];
         inputs.forEach((inp) => {
           if (!validNames.includes(inp.name)) {

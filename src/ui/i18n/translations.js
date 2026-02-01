@@ -122,8 +122,10 @@ module.exports = {
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "If it helps, a star on {github} would mean a lot.",
       DLG_TIPS_FACEBOOK: "Come say hi on {facebook} page - I share my art and poetry there.",
-      DLG_TIPS_SITE: "If you want to see what I'm up to around the web, {site} is the best place to start.",
-      DLG_TIPS_CREDITS: "Special thanks to {zbluebugz} for the original project, and to {trinhquocviet} for the simplified UI branch I originally forked from - plus the filter maintenance during that stretch.",
+      DLG_TIPS_SITE:
+        "If you want to see what I'm up to around the web, {site} is the best place to start.",
+      DLG_TIPS_CREDITS:
+        "Special thanks to {zbluebugz} for the original project, and to {trinhquocviet} for the simplified UI branch I originally forked from - plus the filter maintenance during that stretch.",
       DLG_TIPS_MAINTAINER:
         "I hope this script helps you reclaim your feed. I promise to be your ally in the fight against stuff you don't want to see online.",
       DLG_TIPS_LINK_REPO: "GitHub",
@@ -213,7 +215,8 @@ module.exports = {
       DLG_PREFERENCES_DESC: "التسميات، الموضع، الألوان، واللغة.",
       DLG_REPORT_BUG: "الإبلاغ عن خطأ",
       DLG_REPORT_BUG_DESC: "أنشئ تقريرًا تشخيصيًا للمشكلات.",
-      DLG_REPORT_BUG_NOTICE: "ساعدنا في الإصلاح:\n1. مرر الشاشة حتى يظهر المنشور الذي به مشكلة.\n2. انقر على 'إنشاء التقرير' ثم 'نسخ التقرير'.\n3. انقر على 'فتح البلاغات' والصق التقرير في مشكلة جديدة.\n4. أضف وصفًا موجزًا للمشكلة.\n(نقوم بحجب الأسماء/النصوص، لكن يرجى المراجعة قبل المشاركة!)",
+      DLG_REPORT_BUG_NOTICE:
+        "ساعدنا في الإصلاح:\n1. مرر الشاشة حتى يظهر المنشور الذي به مشكلة.\n2. انقر على 'إنشاء التقرير' ثم 'نسخ التقرير'.\n3. انقر على 'فتح البلاغات' والصق التقرير في مشكلة جديدة.\n4. أضف وصفًا موجزًا للمشكلة.\n(نقوم بحجب الأسماء/النصوص، لكن يرجى المراجعة قبل المشاركة!)",
       DLG_REPORT_BUG_GENERATE: "إنشاء التقرير",
       DLG_REPORT_BUG_COPY: "نسخ التقرير",
       DLG_REPORT_BUG_OPEN_ISSUES: "فتح البلاغات",
@@ -250,7 +253,8 @@ module.exports = {
       DLG_TIPS_STAR: "إذا كان هذا مفيدًا، فإن نجمة على {github} تعني الكثير.",
       DLG_TIPS_FACEBOOK: "قل مرحبًا على {facebook} - أشارك هناك أعمالي الفنية وشعري.",
       DLG_TIPS_SITE: "إذا أردت معرفة ما أفعله على الويب، فـ{site} هو أفضل مكان للبدء.",
-      DLG_TIPS_CREDITS: "شكر خاص لـ {zbluebugz} على المشروع الأصلي، ولـ {trinhquocviet} على فرع الواجهة المبسطة الذي بدأت منه - وكذلك على صيانة الفلاتر خلال تلك الفترة.",
+      DLG_TIPS_CREDITS:
+        "شكر خاص لـ {zbluebugz} على المشروع الأصلي، ولـ {trinhquocviet} على فرع الواجهة المبسطة الذي بدأت منه - وكذلك على صيانة الفلاتر خلال تلك الفترة.",
       DLG_TIPS_MAINTAINER_PREFIX: "من المُشرف:",
       DLG_TIPS_MAINTAINER:
         "آمل أن يساعدك هذا السكربت على استعادة تغذيتك. أعدك أن أكون حليفك في مواجهة الأشياء التي لا تريد رؤيتها على الإنترنت.",
@@ -342,7 +346,8 @@ module.exports = {
       DLG_PREFERENCES_DESC: "Етикети, позиция, цветове и език.",
       DLG_REPORT_BUG: "Съобщи за бъг",
       DLG_REPORT_BUG_DESC: "Създай диагностичен отчет за проблеми.",
-      DLG_REPORT_BUG_NOTICE: "Помогнете ни да го поправим:\n1. Превъртете, така че проблемният пост да е видим.\n2. Кликнете 'Създай отчет', след това 'Копирай отчета'.\n3. Кликнете 'Отвори проблемите' и поставете отчета в нов проблем.\n4. Добавете кратко описание на проблема.\n(Ние скриваме имената/текста, но моля прегледайте преди споделяне!)",
+      DLG_REPORT_BUG_NOTICE:
+        "Помогнете ни да го поправим:\n1. Превъртете, така че проблемният пост да е видим.\n2. Кликнете 'Създай отчет', след това 'Копирай отчета'.\n3. Кликнете 'Отвори проблемите' и поставете отчета в нов проблем.\n4. Добавете кратко описание на проблема.\n(Ние скриваме имената/текста, но моля прегледайте преди споделяне!)",
       DLG_REPORT_BUG_GENERATE: "Създай отчет",
       DLG_REPORT_BUG_COPY: "Копирай отчета",
       DLG_REPORT_BUG_OPEN_ISSUES: "Отвори проблемите",
@@ -378,8 +383,10 @@ module.exports = {
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Ако това помага, една звезда в {github} значи много.",
       DLG_TIPS_FACEBOOK: "Кажи здрасти на {facebook} - там споделям изкуство и поезия.",
-      DLG_TIPS_SITE: "Ако искаш да видиш какво правя из мрежата, {site} е най-доброто място да започнеш.",
-      DLG_TIPS_CREDITS: "Специални благодарности на {zbluebugz} за оригиналния проект и на {trinhquocviet} за опростения UI branch, от който първоначално форкнах - и за поддръжката на филтрите през този период.",
+      DLG_TIPS_SITE:
+        "Ако искаш да видиш какво правя из мрежата, {site} е най-доброто място да започнеш.",
+      DLG_TIPS_CREDITS:
+        "Специални благодарности на {zbluebugz} за оригиналния проект и на {trinhquocviet} за опростения UI branch, от който първоначално форкнах - и за поддръжката на филтрите през този период.",
       DLG_TIPS_MAINTAINER_PREFIX: "От поддръжника:",
       DLG_TIPS_MAINTAINER:
         "Надявам се този скрипт да ти помогне да си върнеш емисията. Обещавам да бъда твой съюзник в битката срещу нещата, които не искаш да виждаш онлайн.",
@@ -471,7 +478,8 @@ module.exports = {
       DLG_PREFERENCES_DESC: "Štítky, umístění, barvy a jazyk.",
       DLG_REPORT_BUG: "Nahlásit chybu",
       DLG_REPORT_BUG_DESC: "Vytvoř diagnostickou zprávu k problému.",
-      DLG_REPORT_BUG_NOTICE: "Pomozte nám to opravit:\n1. Posuňte zobrazení tak, aby byl problémový příspěvek viditelný.\n2. Klikněte na 'Vytvořit zprávu' a poté na 'Kopírovat zprávu'.\n3. Klikněte na 'Otevřít hlášení' a vložte zprávu do nového hlášení.\n4. Přidejte stručný popis problému.\n(Jména/text redigujeme, ale před sdílením zkontrolujte!)",
+      DLG_REPORT_BUG_NOTICE:
+        "Pomozte nám to opravit:\n1. Posuňte zobrazení tak, aby byl problémový příspěvek viditelný.\n2. Klikněte na 'Vytvořit zprávu' a poté na 'Kopírovat zprávu'.\n3. Klikněte na 'Otevřít hlášení' a vložte zprávu do nového hlášení.\n4. Přidejte stručný popis problému.\n(Jména/text redigujeme, ale před sdílením zkontrolujte!)",
       DLG_REPORT_BUG_GENERATE: "Vytvořit zprávu",
       DLG_REPORT_BUG_COPY: "Kopírovat zprávu",
       DLG_REPORT_BUG_OPEN_ISSUES: "Otevřít hlášení",
@@ -508,7 +516,8 @@ module.exports = {
       DLG_TIPS_STAR: "Pokud to pomáhá, hvězda na {github} pro mě hodně znamená.",
       DLG_TIPS_FACEBOOK: "Pozdrav na {facebook} - sdílím tam své umění a poezii.",
       DLG_TIPS_SITE: "Chceš-li vidět, co dělám na webu, {site} je nejlepší start.",
-      DLG_TIPS_CREDITS: "Speciální poděkování {zbluebugz} za původní projekt a {trinhquocviet} za zjednodušenou UI větev, ze které jsem původně forknul - i za údržbu filtrů v té době.",
+      DLG_TIPS_CREDITS:
+        "Speciální poděkování {zbluebugz} za původní projekt a {trinhquocviet} za zjednodušenou UI větev, ze které jsem původně forknul - i za údržbu filtrů v té době.",
       DLG_TIPS_MAINTAINER_PREFIX: "Od správce:",
       DLG_TIPS_MAINTAINER:
         "Doufám, že vám tento skript pomůže získat zpět váš feed. Slibuji, že budu vaším spojencem v boji proti věcem, které nechcete vidět online.",
@@ -601,7 +610,8 @@ module.exports = {
       DLG_PREFERENCES_DESC: "Labels, Position, Farben und Sprache.",
       DLG_REPORT_BUG: "Fehler melden",
       DLG_REPORT_BUG_DESC: "Erstelle einen Diagnosebericht für Probleme.",
-      DLG_REPORT_BUG_NOTICE: "Hilf uns, es zu beheben:\n1. Scrolle so, dass der problematische Beitrag sichtbar ist.\n2. Klicke auf 'Bericht erstellen' und dann auf 'Bericht kopieren'.\n3. Klicke auf 'Issues öffnen' und füge den Bericht in ein neues Issue ein.\n4. Füge eine kurze Beschreibung des Problems hinzu.\n(Wir schwärzen Namen/Texte, aber bitte vor dem Teilen überprüfen!)",
+      DLG_REPORT_BUG_NOTICE:
+        "Hilf uns, es zu beheben:\n1. Scrolle so, dass der problematische Beitrag sichtbar ist.\n2. Klicke auf 'Bericht erstellen' und dann auf 'Bericht kopieren'.\n3. Klicke auf 'Issues öffnen' und füge den Bericht in ein neues Issue ein.\n4. Füge eine kurze Beschreibung des Problems hinzu.\n(Wir schwärzen Namen/Texte, aber bitte vor dem Teilen überprüfen!)",
       DLG_REPORT_BUG_GENERATE: "Bericht erstellen",
       DLG_REPORT_BUG_COPY: "Bericht kopieren",
       DLG_REPORT_BUG_OPEN_ISSUES: "Issues öffnen",
@@ -637,8 +647,10 @@ module.exports = {
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Wenn das hilft, bedeutet mir ein Stern auf {github} viel.",
       DLG_TIPS_FACEBOOK: "Sag gern Hallo auf {facebook} - dort teile ich Kunst und Poesie.",
-      DLG_TIPS_SITE: "Wenn du sehen willst, was ich im Netz mache, ist meine {site} der beste Start.",
-      DLG_TIPS_CREDITS: "Besonderer Dank an {zbluebugz} für das ursprüngliche Projekt und an {trinhquocviet} für den vereinfachten UI-Branch, von dem ich ursprünglich geforkt habe - plus die Filterpflege in dieser Phase.",
+      DLG_TIPS_SITE:
+        "Wenn du sehen willst, was ich im Netz mache, ist meine {site} der beste Start.",
+      DLG_TIPS_CREDITS:
+        "Besonderer Dank an {zbluebugz} für das ursprüngliche Projekt und an {trinhquocviet} für den vereinfachten UI-Branch, von dem ich ursprünglich geforkt habe - plus die Filterpflege in dieser Phase.",
       DLG_TIPS_MAINTAINER_PREFIX: "Vom Maintainer:",
       DLG_TIPS_MAINTAINER:
         "Ich hoffe, dieses Skript hilft dir, deinen Feed zurückzuholen. Ich verspreche, dein Verbündeter im Kampf gegen Dinge zu sein, die du online nicht sehen willst.",
@@ -755,8 +767,7 @@ module.exports = {
         "πάνω δεξιά",
         'απενεργοποιημένο (χρησιμοποιήστε "Ρυθμίσεις" στο μενού "Εντολές σεναρίου χρήστη")',
       ],
-      CMF_DIALOG_LANGUAGE_LABEL:
-        "Γλώσσα του Clean My Feeds:",
+      CMF_DIALOG_LANGUAGE_LABEL: "Γλώσσα του Clean My Feeds:",
       CMF_DIALOG_LANGUAGE: "Ελληνικά",
       CMF_DIALOG_LANGUAGE_DEFAULT: "Χρήση γλώσσας ιστότοπου",
       GM_MENU_SETTINGS: "Ρυθμίσεις",
@@ -768,8 +779,10 @@ module.exports = {
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Αν βοηθάει, ένα αστέρι στο {github} σημαίνει πολλά.",
       DLG_TIPS_FACEBOOK: "Πες γεια στη {facebook} - εκεί μοιράζομαι τέχνη και ποίηση.",
-      DLG_TIPS_SITE: "Αν θέλεις να δεις τι κάνω γενικά στο διαδίκτυο, το {site} είναι το καλύτερο σημείο.",
-      DLG_TIPS_CREDITS: "Ιδιαίτερες ευχαριστίες στον {zbluebugz} για το αρχικό project και στον {trinhquocviet} για το simplified UI branch από το οποίο έκανα αρχικά fork - καθώς και για τη συντήρηση των φίλτρων τότε.",
+      DLG_TIPS_SITE:
+        "Αν θέλεις να δεις τι κάνω γενικά στο διαδίκτυο, το {site} είναι το καλύτερο σημείο.",
+      DLG_TIPS_CREDITS:
+        "Ιδιαίτερες ευχαριστίες στον {zbluebugz} για το αρχικό project και στον {trinhquocviet} για το simplified UI branch από το οποίο έκανα αρχικά fork - καθώς και για τη συντήρηση των φίλτρων τότε.",
       DLG_TIPS_MAINTAINER_PREFIX: "Από τον συντηρητή:",
       DLG_TIPS_MAINTAINER:
         "Ελπίζω αυτό το σκριπτ να σε βοηθήσει να πάρεις πίσω το feed σου. Υπόσχομαι να είμαι σύμμαχός σου στη μάχη ενάντια σε όσα δεν θέλεις να βλέπεις online.",
@@ -899,7 +912,8 @@ module.exports = {
       DLG_TIPS_STAR: "Si te ayuda, una estrella en {github} significa mucho.",
       DLG_TIPS_FACEBOOK: "Pásate por {facebook} - allí comparto mi arte y poesía.",
       DLG_TIPS_SITE: "Si quieres ver qué hago por la web, {site} es el mejor lugar para empezar.",
-      DLG_TIPS_CREDITS: "Un agradecimiento especial a {zbluebugz} por el proyecto original y a {trinhquocviet} por la rama de UI simplificada de la que hice el fork originalmente - y por el mantenimiento de filtros durante ese periodo.",
+      DLG_TIPS_CREDITS:
+        "Un agradecimiento especial a {zbluebugz} por el proyecto original y a {trinhquocviet} por la rama de UI simplificada de la que hice el fork originalmente - y por el mantenimiento de filtros durante ese periodo.",
       DLG_TIPS_MAINTAINER_PREFIX: "Del mantenedor:",
       DLG_TIPS_MAINTAINER:
         "Espero que este script te ayude a recuperar tu feed. Prometo ser tu aliado en la lucha contra lo que no quieres ver en línea.",
@@ -1029,7 +1043,8 @@ module.exports = {
       DLG_TIPS_STAR: "Jos tästä on apua, {github}-tähti merkitsee paljon.",
       DLG_TIPS_FACEBOOK: "Tule moikkaamaan {facebook} - jaan siellä taidetta ja runoutta.",
       DLG_TIPS_SITE: "Jos haluat nähdä mitä puuhailen verkossa, {site} on paras paikka aloittaa.",
-      DLG_TIPS_CREDITS: "Erityiskiitos {zbluebugz}:lle alkuperäisestä projektista ja {trinhquocviet}:lle yksinkertaistetusta UI-haarasta, josta alun perin forkkasin - sekä suodattimien ylläpidosta tuona aikana.",
+      DLG_TIPS_CREDITS:
+        "Erityiskiitos {zbluebugz}:lle alkuperäisestä projektista ja {trinhquocviet}:lle yksinkertaistetusta UI-haarasta, josta alun perin forkkasin - sekä suodattimien ylläpidosta tuona aikana.",
       DLG_TIPS_MAINTAINER_PREFIX: "Ylläpitäjältä:",
       DLG_TIPS_MAINTAINER:
         "Toivon, että tämä skripti auttaa sinua saamaan feedisi takaisin. Lupaan olla liittolaisesi taistelussa sitä vastaan, mitä et halua nähdä verkossa.",
@@ -1121,7 +1136,8 @@ module.exports = {
       DLG_PREFERENCES_DESC: "Libellés, emplacement, couleurs et langue.",
       DLG_REPORT_BUG: "Signaler un bug",
       DLG_REPORT_BUG_DESC: "Générer un rapport de diagnostic.",
-      DLG_REPORT_BUG_NOTICE: "Aidez-nous à corriger le problème :\n1. Faites défiler pour que la publication problématique soit visible.\n2. Cliquez sur 'Générer le rapport' puis sur 'Copier le rapport'.\n3. Cliquez sur 'Ouvrir les issues' et collez le rapport dans une nouvelle issue.\n4. Ajoutez une brève description du problème.\n(Nous masquons les noms/textes, mais veuillez vérifier avant de partager !)",
+      DLG_REPORT_BUG_NOTICE:
+        "Aidez-nous à corriger le problème :\n1. Faites défiler pour que la publication problématique soit visible.\n2. Cliquez sur 'Générer le rapport' puis sur 'Copier le rapport'.\n3. Cliquez sur 'Ouvrir les issues' et collez le rapport dans une nouvelle issue.\n4. Ajoutez une brève description du problème.\n(Nous masquons les noms/textes, mais veuillez vérifier avant de partager !)",
       DLG_REPORT_BUG_GENERATE: "Générer le rapport",
       DLG_REPORT_BUG_COPY: "Copier le rapport",
       DLG_REPORT_BUG_OPEN_ISSUES: "Ouvrir les issues",
@@ -1157,8 +1173,10 @@ module.exports = {
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Si cela vous aide, une étoile sur {github} compte beaucoup.",
       DLG_TIPS_FACEBOOK: "Passez dire bonjour sur {facebook} - j'y partage mon art et ma poésie.",
-      DLG_TIPS_SITE: "Si vous voulez voir ce que je fais sur le web, {site} est le meilleur point de départ.",
-      DLG_TIPS_CREDITS: "Remerciements particuliers à {zbluebugz} pour le projet original, et à {trinhquocviet} pour la branche UI simplifiée dont j'ai initialement forké - ainsi que pour la maintenance des filtres pendant cette période.",
+      DLG_TIPS_SITE:
+        "Si vous voulez voir ce que je fais sur le web, {site} est le meilleur point de départ.",
+      DLG_TIPS_CREDITS:
+        "Remerciements particuliers à {zbluebugz} pour le projet original, et à {trinhquocviet} pour la branche UI simplifiée dont j'ai initialement forké - ainsi que pour la maintenance des filtres pendant cette période.",
       DLG_TIPS_MAINTAINER_PREFIX: "De la part du mainteneur :",
       DLG_TIPS_MAINTAINER:
         "J’espère que ce script vous aidera à reprendre votre fil. Je promets d’être votre allié dans la lutte contre ce que vous ne voulez pas voir en ligne.",
@@ -1249,7 +1267,8 @@ module.exports = {
       DLG_PREFERENCES_DESC: "תוויות, מיקום, צבעים ושפה.",
       DLG_REPORT_BUG: "דווח על באג",
       DLG_REPORT_BUG_DESC: "צור דוח אבחון לבעיות.",
-      DLG_REPORT_BUG_NOTICE: "עזרו לנו לתקן את זה:\n1. גלול כך שהפוסט הבעייתי יהיה גלוי.\n2. לחץ על 'צור דוח' ואז 'העתק דוח'.\n3. לחץ על 'פתח תקלות' והדבק את הדוח לתקלה חדשה.\n4. הוסף תיאור קצר של הבעיה.\n(אנו מסתירים שמות/טקסט, אך אנא בדוק לפני השיתוף!)",
+      DLG_REPORT_BUG_NOTICE:
+        "עזרו לנו לתקן את זה:\n1. גלול כך שהפוסט הבעייתי יהיה גלוי.\n2. לחץ על 'צור דוח' ואז 'העתק דוח'.\n3. לחץ על 'פתח תקלות' והדבק את הדוח לתקלה חדשה.\n4. הוסף תיאור קצר של הבעיה.\n(אנו מסתירים שמות/טקסט, אך אנא בדוק לפני השיתוף!)",
       DLG_REPORT_BUG_GENERATE: "צור דוח",
       DLG_REPORT_BUG_COPY: "העתק דוח",
       DLG_REPORT_BUG_OPEN_ISSUES: "פתח תקלות",
@@ -1286,7 +1305,8 @@ module.exports = {
       DLG_TIPS_STAR: "אם זה עוזר, כוכב ב-{github} שווה הרבה.",
       DLG_TIPS_FACEBOOK: "בואו להגיד שלום ב-{facebook} - שם אני משתף אמנות ושירה.",
       DLG_TIPS_SITE: "אם רוצים לראות מה אני עושה ברחבי הרשת, {site} הוא המקום הכי טוב להתחיל.",
-      DLG_TIPS_CREDITS: "תודה מיוחדת ל-{zbluebugz} על הפרויקט המקורי, ול-{trinhquocviet} על ענף ה-UI המפושט שממנו פורקתי בתחילה - וגם על תחזוקת הפילטרים באותה תקופה.",
+      DLG_TIPS_CREDITS:
+        "תודה מיוחדת ל-{zbluebugz} על הפרויקט המקורי, ול-{trinhquocviet} על ענף ה-UI המפושט שממנו פורקתי בתחילה - וגם על תחזוקת הפילטרים באותה תקופה.",
       DLG_TIPS_MAINTAINER_PREFIX: "מהמתחזק:",
       DLG_TIPS_MAINTAINER:
         "אני מקווה שהסקריפט הזה יעזור לך להחזיר לעצמך את הפיד. אני מבטיח להיות בן ברית במאבק נגד דברים שלא תרצה לראות ברשת.",
@@ -1377,7 +1397,8 @@ module.exports = {
       DLG_PREFERENCES_DESC: "Label, penempatan, warna, dan bahasa.",
       DLG_REPORT_BUG: "Laporkan bug",
       DLG_REPORT_BUG_DESC: "Buat laporan diagnostik untuk masalah.",
-      DLG_REPORT_BUG_NOTICE: "Bantu kami memperbaikinya:\n1. Gulir agar postingan yang bermasalah terlihat.\n2. Klik 'Buat laporan' lalu 'Salin laporan'.\n3. Klik 'Buka isu' dan tempel laporan ke dalam isu baru.\n4. Tambahkan deskripsi singkat tentang masalahnya.\n(Kami menyamarkan nama/teks, tetapi harap tinjau sebelum membagikan!)",
+      DLG_REPORT_BUG_NOTICE:
+        "Bantu kami memperbaikinya:\n1. Gulir agar postingan yang bermasalah terlihat.\n2. Klik 'Buat laporan' lalu 'Salin laporan'.\n3. Klik 'Buka isu' dan tempel laporan ke dalam isu baru.\n4. Tambahkan deskripsi singkat tentang masalahnya.\n(Kami menyamarkan nama/teks, tetapi harap tinjau sebelum membagikan!)",
       DLG_REPORT_BUG_GENERATE: "Buat laporan",
       DLG_REPORT_BUG_COPY: "Salin laporan",
       DLG_REPORT_BUG_OPEN_ISSUES: "Buka isu",
@@ -1413,8 +1434,10 @@ module.exports = {
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Jika ini membantu, bintang di {github} sangat berarti.",
       DLG_TIPS_FACEBOOK: "Sapa di {facebook} - saya berbagi karya seni dan puisi di sana.",
-      DLG_TIPS_SITE: "Jika ingin melihat apa yang saya lakukan di web, {site} adalah tempat terbaik untuk mulai.",
-      DLG_TIPS_CREDITS: "Terima kasih khusus kepada {zbluebugz} untuk proyek asli, dan {trinhquocviet} untuk cabang UI sederhana yang pertama kali saya fork - serta pemeliharaan filter pada masa itu.",
+      DLG_TIPS_SITE:
+        "Jika ingin melihat apa yang saya lakukan di web, {site} adalah tempat terbaik untuk mulai.",
+      DLG_TIPS_CREDITS:
+        "Terima kasih khusus kepada {zbluebugz} untuk proyek asli, dan {trinhquocviet} untuk cabang UI sederhana yang pertama kali saya fork - serta pemeliharaan filter pada masa itu.",
       DLG_TIPS_MAINTAINER_PREFIX: "Dari pengelola:",
       DLG_TIPS_MAINTAINER:
         "Saya harap skrip ini membantu Anda merebut kembali feed Anda. Saya berjanji menjadi sekutu Anda melawan hal-hal yang tidak ingin Anda lihat online.",
@@ -1506,7 +1529,8 @@ module.exports = {
       DLG_PREFERENCES_DESC: "Etichette, posizione, colori e lingua.",
       DLG_REPORT_BUG: "Segnala un bug",
       DLG_REPORT_BUG_DESC: "Genera un report diagnostico.",
-      DLG_REPORT_BUG_NOTICE: "Aiutaci a risolvere il problema:\n1. Scorri in modo che il post problematico sia visibile.\n2. Clicca su 'Genera report' poi su 'Copia report'.\n3. Clicca su 'Apri segnalazioni' e incolla il report in una nuova segnalazione.\n4. Aggiungi una breve descrizione del problema.\n(Oscuriamo nomi/testo, ma controlla prima di condividere!)",
+      DLG_REPORT_BUG_NOTICE:
+        "Aiutaci a risolvere il problema:\n1. Scorri in modo che il post problematico sia visibile.\n2. Clicca su 'Genera report' poi su 'Copia report'.\n3. Clicca su 'Apri segnalazioni' e incolla il report in una nuova segnalazione.\n4. Aggiungi una breve descrizione del problema.\n(Oscuriamo nomi/testo, ma controlla prima di condividere!)",
       DLG_REPORT_BUG_GENERATE: "Genera report",
       DLG_REPORT_BUG_COPY: "Copia report",
       DLG_REPORT_BUG_OPEN_ISSUES: "Apri segnalazioni",
@@ -1542,8 +1566,10 @@ module.exports = {
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Se ti è utile, una stella su {github} significa molto.",
       DLG_TIPS_FACEBOOK: "Passa a salutarmi su {facebook} - lì condivido la mia arte e poesia.",
-      DLG_TIPS_SITE: "Se vuoi vedere cosa faccio in giro per il web, {site} è il posto migliore da cui partire.",
-      DLG_TIPS_CREDITS: "Un grazie speciale a {zbluebugz} per il progetto originale e a {trinhquocviet} per il branch UI semplificato da cui ho fatto il fork iniziale - e per la manutenzione dei filtri in quel periodo.",
+      DLG_TIPS_SITE:
+        "Se vuoi vedere cosa faccio in giro per il web, {site} è il posto migliore da cui partire.",
+      DLG_TIPS_CREDITS:
+        "Un grazie speciale a {zbluebugz} per il progetto originale e a {trinhquocviet} per il branch UI semplificato da cui ho fatto il fork iniziale - e per la manutenzione dei filtri in quel periodo.",
       DLG_TIPS_MAINTAINER_PREFIX: "Dal maintainer:",
       DLG_TIPS_MAINTAINER:
         "Spero che questo script ti aiuti a riprenderti il tuo feed. Prometto di essere il tuo alleato nella lotta contro ciò che non vuoi vedere online.",
@@ -1635,7 +1661,8 @@ module.exports = {
       DLG_PREFERENCES_DESC: "ラベル、配置、色、言語。",
       DLG_REPORT_BUG: "バグを報告",
       DLG_REPORT_BUG_DESC: "問題の診断レポートを作成します。",
-      DLG_REPORT_BUG_NOTICE: "修正にご協力ください：\n1. 問題のある投稿が表示されるようにスクロールします。\n2. 'レポート作成'をクリックし、次に'レポートをコピー'をクリックします。\n3. 'Issue を開く'をクリックし、新しいIssueにレポートを貼り付けます。\n4. 問題の短い説明を追加してください。\n(名前やテキストは伏せ字にしますが、共有前に確認してください！)",
+      DLG_REPORT_BUG_NOTICE:
+        "修正にご協力ください：\n1. 問題のある投稿が表示されるようにスクロールします。\n2. 'レポート作成'をクリックし、次に'レポートをコピー'をクリックします。\n3. 'Issue を開く'をクリックし、新しいIssueにレポートを貼り付けます。\n4. 問題の短い説明を追加してください。\n(名前やテキストは伏せ字にしますが、共有前に確認してください！)",
       DLG_REPORT_BUG_GENERATE: "レポート作成",
       DLG_REPORT_BUG_COPY: "レポートをコピー",
       DLG_REPORT_BUG_OPEN_ISSUES: "Issue を開く",
@@ -1672,7 +1699,8 @@ module.exports = {
       DLG_TIPS_STAR: "役に立ったら {github} のスターが励みになります。",
       DLG_TIPS_FACEBOOK: "{facebook}で声をかけてください - そこでアートと詩を共有しています。",
       DLG_TIPS_SITE: "活動をまとめて見たいなら、{site}がいちばんの入口です。",
-      DLG_TIPS_CREDITS: "元のプロジェクトの {zbluebugz} と、私が最初に fork した簡易 UI ブランチの {trinhquocviet} に特別な感謝を。あの期間のフィルター保守にも感謝します。",
+      DLG_TIPS_CREDITS:
+        "元のプロジェクトの {zbluebugz} と、私が最初に fork した簡易 UI ブランチの {trinhquocviet} に特別な感謝を。あの期間のフィルター保守にも感謝します。",
       DLG_TIPS_MAINTAINER_PREFIX: "メンテナより：",
       DLG_TIPS_MAINTAINER:
         "このスクリプトがあなたのフィードを取り戻す助けになれば嬉しいです。オンラインで見たくないものと戦うあなたの味方でいると約束します。",
@@ -1764,7 +1792,8 @@ module.exports = {
       DLG_PREFERENCES_DESC: "Etiķetes, novietojums, krāsas un valoda.",
       DLG_REPORT_BUG: "Ziņot par kļūdu",
       DLG_REPORT_BUG_DESC: "Izveido diagnostikas atskaiti problēmām.",
-      DLG_REPORT_BUG_NOTICE: "Palīdzi mums to salabot:\n1. Ritiniet, lai problemātiskais ieraksts būtu redzams.\n2. Noklikšķiniet uz 'Izveidot atskaiti', tad 'Kopēt atskaiti'.\n3. Noklikšķiniet uz 'Atvērt pieteikumus' un ielīmējiet atskaiti jaunā pieteikumā.\n4. Pievienojiet īsu problēmas aprakstu.\n(Mēs rediģējam vārdus/tekstu, bet lūdzu pārskatiet pirms kopīgošanas!)",
+      DLG_REPORT_BUG_NOTICE:
+        "Palīdzi mums to salabot:\n1. Ritiniet, lai problemātiskais ieraksts būtu redzams.\n2. Noklikšķiniet uz 'Izveidot atskaiti', tad 'Kopēt atskaiti'.\n3. Noklikšķiniet uz 'Atvērt pieteikumus' un ielīmējiet atskaiti jaunā pieteikumā.\n4. Pievienojiet īsu problēmas aprakstu.\n(Mēs rediģējam vārdus/tekstu, bet lūdzu pārskatiet pirms kopīgošanas!)",
       DLG_REPORT_BUG_GENERATE: "Izveidot atskaiti",
       DLG_REPORT_BUG_COPY: "Kopēt atskaiti",
       DLG_REPORT_BUG_OPEN_ISSUES: "Atvērt pieteikumus",
@@ -1801,7 +1830,8 @@ module.exports = {
       DLG_TIPS_STAR: "Ja tas palīdz, {github} zvaigzne man nozīmē daudz.",
       DLG_TIPS_FACEBOOK: "Ienāc uz {facebook} - tur dalos ar mākslu un dzeju.",
       DLG_TIPS_SITE: "Ja gribi redzēt, ar ko nodarbojos tīmeklī, {site} ir labākā vieta, kur sākt.",
-      DLG_TIPS_CREDITS: "Īpašs paldies {zbluebugz} par oriģinālo projektu un {trinhquocviet} par vienkāršoto UI zaru, no kura sākotnēji forkoju - un par filtru uzturēšanu tajā periodā.",
+      DLG_TIPS_CREDITS:
+        "Īpašs paldies {zbluebugz} par oriģinālo projektu un {trinhquocviet} par vienkāršoto UI zaru, no kura sākotnēji forkoju - un par filtru uzturēšanu tajā periodā.",
       DLG_TIPS_MAINTAINER_PREFIX: "No uzturētāja:",
       DLG_TIPS_MAINTAINER:
         "Ceru, ka šis skripts palīdzēs atgūt savu plūsmu. Es apsolu būt tavs sabiedrotais cīņā pret to, ko nevēlies redzēt tiešsaistē.",
@@ -1893,7 +1923,8 @@ module.exports = {
       DLG_PREFERENCES_DESC: "Labels, plaatsing, kleuren en taal.",
       DLG_REPORT_BUG: "Bug melden",
       DLG_REPORT_BUG_DESC: "Maak een diagnostisch rapport voor problemen.",
-      DLG_REPORT_BUG_NOTICE: "Help ons het te repareren:\n1. Scroll zodat het problematische bericht zichtbaar is.\n2. Klik op 'Rapport maken' en vervolgens op 'Rapport kopiëren'.\n3. Klik op 'Issues openen' en plak het rapport in een nieuwe issue.\n4. Voeg een korte beschrijving van het probleem toe.\n(We redigeren namen/tekst, maar controleer dit voordat je het deelt!)",
+      DLG_REPORT_BUG_NOTICE:
+        "Help ons het te repareren:\n1. Scroll zodat het problematische bericht zichtbaar is.\n2. Klik op 'Rapport maken' en vervolgens op 'Rapport kopiëren'.\n3. Klik op 'Issues openen' en plak het rapport in een nieuwe issue.\n4. Voeg een korte beschrijving van het probleem toe.\n(We redigeren namen/tekst, maar controleer dit voordat je het deelt!)",
       DLG_REPORT_BUG_GENERATE: "Rapport maken",
       DLG_REPORT_BUG_COPY: "Rapport kopiëren",
       DLG_REPORT_BUG_OPEN_ISSUES: "Issues openen",
@@ -1930,7 +1961,8 @@ module.exports = {
       DLG_TIPS_STAR: "Als dit helpt, betekent een ster op {github} veel.",
       DLG_TIPS_FACEBOOK: "Zeg hallo op {facebook} - daar deel ik mijn kunst en poëzie.",
       DLG_TIPS_SITE: "Als je wilt zien wat ik online doe, is {site} de beste plek om te beginnen.",
-      DLG_TIPS_CREDITS: "Speciale dank aan {zbluebugz} voor het originele project, en aan {trinhquocviet} voor de vereenvoudigde UI-branch waar ik oorspronkelijk van heb geforkt - plus het filteronderhoud in die periode.",
+      DLG_TIPS_CREDITS:
+        "Speciale dank aan {zbluebugz} voor het originele project, en aan {trinhquocviet} voor de vereenvoudigde UI-branch waar ik oorspronkelijk van heb geforkt - plus het filteronderhoud in die periode.",
       DLG_TIPS_MAINTAINER_PREFIX: "Van de maintainer:",
       DLG_TIPS_MAINTAINER:
         "Ik hoop dat dit script je helpt je feed terug te krijgen. Ik beloof je bondgenoot te zijn in de strijd tegen dingen die je online niet wilt zien.",
@@ -2022,7 +2054,8 @@ module.exports = {
       DLG_PREFERENCES_DESC: "Etykiety, położenie, kolory i język.",
       DLG_REPORT_BUG: "Zgłoś błąd",
       DLG_REPORT_BUG_DESC: "Utwórz raport diagnostyczny.",
-      DLG_REPORT_BUG_NOTICE: "Pomóż nam to naprawić:\n1. Przewiń, aby dany post był widoczny.\n2. Kliknij „Generuj raport”, a następnie „Kopiuj raport”.\n3. Kliknij „Otwórz zgłoszenia” i wklej raport do nowego zgłoszenia.\n4. Dodaj krótki opis problemu.\n(Ukrywamy nazwiska/tekst, ale sprawdź przed udostępnieniem!)",
+      DLG_REPORT_BUG_NOTICE:
+        "Pomóż nam to naprawić:\n1. Przewiń, aby dany post był widoczny.\n2. Kliknij „Generuj raport”, a następnie „Kopiuj raport”.\n3. Kliknij „Otwórz zgłoszenia” i wklej raport do nowego zgłoszenia.\n4. Dodaj krótki opis problemu.\n(Ukrywamy nazwiska/tekst, ale sprawdź przed udostępnieniem!)",
       DLG_REPORT_BUG_GENERATE: "Utwórz raport",
       DLG_REPORT_BUG_COPY: "Kopiuj raport",
       DLG_REPORT_BUG_OPEN_ISSUES: "Otwórz zgłoszenia",
@@ -2059,7 +2092,8 @@ module.exports = {
       DLG_TIPS_STAR: "Jeśli to pomaga, gwiazdka na {github} wiele dla mnie znaczy.",
       DLG_TIPS_FACEBOOK: "Wpadnij na {facebook} - dzielę się tam sztuką i poezją.",
       DLG_TIPS_SITE: "Jeśli chcesz zobaczyć, co robię w sieci, {site} to najlepszy start.",
-      DLG_TIPS_CREDITS: "Specjalne podziękowania dla {zbluebugz} za oryginalny projekt oraz dla {trinhquocviet} za uproszczoną gałąź UI, z której pierwotnie zrobiłem fork - i za utrzymanie filtrów w tym czasie.",
+      DLG_TIPS_CREDITS:
+        "Specjalne podziękowania dla {zbluebugz} za oryginalny projekt oraz dla {trinhquocviet} za uproszczoną gałąź UI, z której pierwotnie zrobiłem fork - i za utrzymanie filtrów w tym czasie.",
       DLG_TIPS_MAINTAINER_PREFIX: "Od opiekuna:",
       DLG_TIPS_MAINTAINER:
         "Mam nadzieję, że ten skrypt pomoże ci odzyskać feed. Obiecuję być twoim sojusznikiem w walce z tym, czego nie chcesz widzieć online.",
@@ -2189,8 +2223,10 @@ module.exports = {
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Se isso ajudar, uma estrela no {github} significa muito.",
       DLG_TIPS_FACEBOOK: "Diga oi na {facebook} - lá compartilho minha arte e poesia.",
-      DLG_TIPS_SITE: "Se quiser ver o que ando fazendo pela web, {site} é o melhor lugar para começar.",
-      DLG_TIPS_CREDITS: "Agradecimento especial a {zbluebugz} pelo projeto original e a {trinhquocviet} pelo branch de UI simplificada de onde eu inicialmente fiz o fork - além da manutenção dos filtros naquele período.",
+      DLG_TIPS_SITE:
+        "Se quiser ver o que ando fazendo pela web, {site} é o melhor lugar para começar.",
+      DLG_TIPS_CREDITS:
+        "Agradecimento especial a {zbluebugz} pelo projeto original e a {trinhquocviet} pelo branch de UI simplificada de onde eu inicialmente fiz o fork - além da manutenção dos filtros naquele período.",
       DLG_TIPS_MAINTAINER_PREFIX: "Do mantenedor:",
       DLG_TIPS_MAINTAINER:
         "Espero que este script ajude você a recuperar o seu feed. Prometo ser seu aliado na luta contra o que você não quer ver online.",
@@ -2320,7 +2356,8 @@ module.exports = {
       DLG_TIPS_STAR: "Если это помогает, звезда на {github} очень многое для меня значит.",
       DLG_TIPS_FACEBOOK: "Загляните на {facebook} - там я делюсь искусством и поэзией.",
       DLG_TIPS_SITE: "Если хотите увидеть, чем я занимаюсь в сети, {site} — лучшее место начать.",
-      DLG_TIPS_CREDITS: "Особая благодарность {zbluebugz} за оригинальный проект и {trinhquocviet} за упрощённую UI-ветку, от которой я изначально форкнул - и за поддержку фильтров в тот период.",
+      DLG_TIPS_CREDITS:
+        "Особая благодарность {zbluebugz} за оригинальный проект и {trinhquocviet} за упрощённую UI-ветку, от которой я изначально форкнул - и за поддержку фильтров в тот период.",
       DLG_TIPS_MAINTAINER_PREFIX: "От сопровождающего:",
       DLG_TIPS_MAINTAINER:
         "Надеюсь, этот скрипт поможет вам вернуть свою ленту. Я обещаю быть вашим союзником в борьбе с тем, что вы не хотите видеть в сети.",
@@ -2450,7 +2487,8 @@ module.exports = {
       DLG_TIPS_STAR: "Bu işe yararsa, {github} üzerinde bir yıldız çok şey ifade eder.",
       DLG_TIPS_FACEBOOK: "{facebook} uğrayıp selam verin - orada sanatımı ve şiirimi paylaşıyorum.",
       DLG_TIPS_SITE: "Webde neler yaptığımı görmek isterseniz, {site} en iyi başlangıç.",
-      DLG_TIPS_CREDITS: "Orijinal proje için {zbluebugz}'a ve ilk fork aldığım sadeleştirilmiş UI branch'i için {trinhquocviet}'e özel teşekkürler - o dönemdeki filtre bakımına da.",
+      DLG_TIPS_CREDITS:
+        "Orijinal proje için {zbluebugz}'a ve ilk fork aldığım sadeleştirilmiş UI branch'i için {trinhquocviet}'e özel teşekkürler - o dönemdeki filtre bakımına da.",
       DLG_TIPS_MAINTAINER_PREFIX: "Geliştiriciden:",
       DLG_TIPS_MAINTAINER:
         "Bu betiğin feed’inizi geri almanıza yardımcı olmasını umuyorum. İnternette görmek istemediğiniz şeylere karşı müttefikiniz olacağıma söz veriyorum.",
@@ -2579,8 +2617,10 @@ module.exports = {
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Якщо це допомагає, зірка на {github} дуже багато для мене означає.",
       DLG_TIPS_FACEBOOK: "Завітайте на {facebook} - там я ділюся мистецтвом і поезією.",
-      DLG_TIPS_SITE: "Якщо хочете побачити, чим я займаюся в мережі, {site} — найкраще місце почати.",
-      DLG_TIPS_CREDITS: "Окрема подяка {zbluebugz} за оригінальний проєкт і {trinhquocviet} за спрощену UI-гілку, з якої я спершу форкнув - і за підтримку фільтрів у той період.",
+      DLG_TIPS_SITE:
+        "Якщо хочете побачити, чим я займаюся в мережі, {site} — найкраще місце почати.",
+      DLG_TIPS_CREDITS:
+        "Окрема подяка {zbluebugz} за оригінальний проєкт і {trinhquocviet} за спрощену UI-гілку, з якої я спершу форкнув - і за підтримку фільтрів у той період.",
       DLG_TIPS_MAINTAINER_PREFIX: "Від супровідника:",
       DLG_TIPS_MAINTAINER:
         "Сподіваюся, цей скрипт допоможе вам повернути свою стрічку. Обіцяю бути вашим союзником у боротьбі з тим, що ви не хочете бачити онлайн.",
@@ -2710,7 +2750,8 @@ module.exports = {
       DLG_TIPS_STAR: "Nếu thấy hữu ích, một ngôi sao trên {github} có ý nghĩa rất lớn.",
       DLG_TIPS_FACEBOOK: "Ghé {facebook} - mình chia sẻ nghệ thuật và thơ ở đó.",
       DLG_TIPS_SITE: "Nếu muốn xem mình làm gì trên web, {site} là nơi bắt đầu tốt nhất.",
-      DLG_TIPS_CREDITS: "Xin cảm ơn đặc biệt tới {zbluebugz} cho dự án gốc và {trinhquocviet} cho nhánh UI đơn giản hóa mà mình đã fork ban đầu - cùng việc bảo trì bộ lọc trong giai đoạn đó.",
+      DLG_TIPS_CREDITS:
+        "Xin cảm ơn đặc biệt tới {zbluebugz} cho dự án gốc và {trinhquocviet} cho nhánh UI đơn giản hóa mà mình đã fork ban đầu - cùng việc bảo trì bộ lọc trong giai đoạn đó.",
       DLG_TIPS_MAINTAINER_PREFIX: "Từ người bảo trì:",
       DLG_TIPS_MAINTAINER:
         "Mình hy vọng script này giúp bạn giành lại bảng tin. Mình hứa sẽ là đồng minh của bạn trong cuộc chiến với những thứ bạn không muốn thấy trên mạng.",
@@ -2835,8 +2876,10 @@ module.exports = {
       DLG_TIPS_STAR: "如果有帮助，在 {github} 点个星对我意义很大。",
       DLG_TIPS_FACEBOOK: "欢迎到{facebook}打个招呼 - 我在那里分享艺术和诗歌。",
       DLG_TIPS_SITE: "想看看我在网上都在做什么，{site}是最好的起点。",
-      DLG_TIPS_CREDITS: "特别感谢 {zbluebugz} 的原始项目，以及 {trinhquocviet} 的简化 UI 分支（我最初就是从它 fork 的）- 也感谢那段时间的过滤维护。",
-      DLG_TIPS_MAINTAINER: "希望这个脚本能帮你找回清爽的动态消息。我承诺将是你对抗不想看到的网络内容的盟友。",
+      DLG_TIPS_CREDITS:
+        "特别感谢 {zbluebugz} 的原始项目，以及 {trinhquocviet} 的简化 UI 分支（我最初就是从它 fork 的）- 也感谢那段时间的过滤维护。",
+      DLG_TIPS_MAINTAINER:
+        "希望这个脚本能帮你找回清爽的动态消息。我承诺将是你对抗不想看到的网络内容的盟友。",
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "我的 Facebook",
       DLG_TIPS_LINK_SITE: "我的网站",
@@ -2958,8 +3001,10 @@ module.exports = {
       DLG_TIPS_STAR: "如果有幫助，在 {github} 點個星對我意義很大。",
       DLG_TIPS_FACEBOOK: "歡迎到{facebook}打個招呼 - 我在那裡分享藝術和詩。",
       DLG_TIPS_SITE: "想看看我在網路上都在做什麼，{site}是最好的起點。",
-      DLG_TIPS_CREDITS: "特別感謝 {zbluebugz} 的原始專案，以及 {trinhquocviet} 的簡化 UI 分支（我最初就是從它 fork 的）- 也感謝那段時間的過濾維護。",
-      DLG_TIPS_MAINTAINER: "希望這個腳本能幫你找回清爽的動態消息。我承諾將是你對抗不想看到的網路內容的盟友。",
+      DLG_TIPS_CREDITS:
+        "特別感謝 {zbluebugz} 的原始專案，以及 {trinhquocviet} 的簡化 UI 分支（我最初就是從它 fork 的）- 也感謝那段時間的過濾維護。",
+      DLG_TIPS_MAINTAINER:
+        "希望這個腳本能幫你找回清爽的動態消息。我承諾將是你對抗不想看到的網路內容的盟友。",
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "我的 Facebook",
       DLG_TIPS_LINK_SITE: "我的網站",
@@ -3038,4 +3083,3 @@ module.exports = {
     OTHER_INFO_BOX_SUBSCRIBE: "/support/",
   },
 };
-

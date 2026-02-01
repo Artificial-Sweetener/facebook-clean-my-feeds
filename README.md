@@ -18,11 +18,11 @@ Thank you to **[trinhquocviet](https://github.com/trinhquocviet)** for their [si
 
 "FB - Clean My Feeds" is designed to make your browsing experience calm, clean, and completely under your control.
 
-*   **Nuke the Ads:** We automatically scrub "Sponsored" posts, "Paid Partnership" labels, and "Suggested for you" sections across News, Groups, Watch, Marketplace, Search, and Reels.
-*   **Tame the Layout:** Hide Reels, "Short Videos," and those massive "Stories" shelves that eat up your screen. You can even toggle off entire sections like Marketplace if you never use them.
-*   **Filter the Noise:** Create custom blocklists for specific words or phrases (with regex support!). You can also cap viral posts by "Like" count to keep your feed personal.
-*   **Quiet Down:** We strip out "People You May Know," "Follow" suggestions, survey promos, and other engagement traps. Plus, you can pause autoplaying GIFs and videos so you're not ambushed by motion.
-*   **Easy Controls:** Enjoy a refined, dark-mode friendly settings menu with translated labels. Just click the mop icon, flip a switch, and see the results instantly.
+- **Nuke the Ads:** We automatically scrub "Sponsored" posts, "Paid Partnership" labels, and "Suggested for you" sections across News, Groups, Watch, Marketplace, Search, and Reels.
+- **Tame the Layout:** Hide Reels, "Short Videos," and those massive "Stories" shelves that eat up your screen. You can even toggle off entire sections like Marketplace if you never use them.
+- **Filter the Noise:** Create custom blocklists for specific words or phrases (with regex support!). You can also cap viral posts by "Like" count to keep your feed personal.
+- **Quiet Down:** We strip out "People You May Know," "Follow" suggestions, survey promos, and other engagement traps. Plus, you can pause autoplaying GIFs and videos so you're not ambushed by motion.
+- **Easy Controls:** Enjoy a refined, dark-mode friendly settings menu with translated labels. Just click the mop icon, flip a switch, and see the results instantly.
 
 ## <img src="src/res/pref.png" alt="options" width="36"/> Using the Control Panel
 
@@ -65,7 +65,6 @@ The dialog and detection dictionaries ship with many UI languages so localized f
 </details>
 
 If you spot gaps or mistranslations, open an issue. I'd love to make this even friendlier for non-English feeds.
-
 
 ## <img src="src/res/bug.png" alt="bugs" width="36"/> Contributing & Support
 

@@ -12,6 +12,26 @@ describe("dom/styles", () => {
     expect(style.id).toBe("test-style");
   });
 
+  test("ensureStyleTag mounts to document head when available", () => {
+    const doc = document.implementation.createHTMLDocument("cmf-test");
+    const style = ensureStyleTag("test-style", doc);
+
+    expect(style).not.toBeNull();
+    expect(doc.head.contains(style)).toBe(true);
+    expect(doc.querySelectorAll("#test-style").length).toBe(1);
+  });
+
+  test("ensureStyleTag mounts to documentElement when head is missing", () => {
+    const doc = document.implementation.createHTMLDocument("cmf-test");
+    doc.documentElement.removeChild(doc.head);
+
+    const style = ensureStyleTag("test-style", doc);
+
+    expect(style).not.toBeNull();
+    expect(doc.head).toBeNull();
+    expect(doc.documentElement.contains(style)).toBe(true);
+  });
+
   test("addToSS appends formatted CSS to state", () => {
     const state = { tempStyleSheetCode: "" };
     addToSS(state, ".a, .b", "color: red; height: 10px;");

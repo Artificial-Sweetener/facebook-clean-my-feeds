@@ -3467,8 +3467,11 @@
           styleTag = doc.createElement("style");
           styleTag.setAttribute("type", "text/css");
           styleTag.setAttribute("id", id);
-          if (doc.head) {
-            doc.head.appendChild(styleTag);
+        }
+        if (!styleTag.isConnected) {
+          const mountTarget = doc.head || doc.documentElement;
+          if (mountTarget && typeof mountTarget.appendChild === "function") {
+            mountTarget.appendChild(styleTag);
           }
         }
         return styleTag;
@@ -3565,6 +3568,12 @@
           "position:fixed; top:56px; bottom:16px; left:16px; display:flex; flex-direction:column; width: 608px; max-width:608px; padding:0.75rem; z-index:5;box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1); overflow:hidden;border:none; border-radius:12px; opacity:0; visibility:hidden; color:" + tColour + ";"
         );
         addToSS(state, ".fb-cmf", "background-color: var(--comment-background);");
+        addToSS(state, ".fb-cmf", "-webkit-user-select: none; -ms-user-select: none; user-select: none;");
+        addToSS(
+          state,
+          '.fb-cmf input, .fb-cmf textarea, .fb-cmf [contenteditable="true"]',
+          "-webkit-user-select: text; -ms-user-select: text; user-select: text;"
+        );
         addToSS(
           state,
           ".cmf-icon",
@@ -3585,11 +3594,7 @@
           ".__fb-dark-mode .fb-cmf-tooltip",
           "background-color: rgba(255, 255, 255, 0.92); color: #1c1e21;"
         );
-        addToSS(
-          state,
-          ".fb-cmf .cmf-report-notice",
-          "white-space: pre-wrap; line-height: 1.4;"
-        );
+        addToSS(state, ".fb-cmf .cmf-report-notice", "white-space: pre-wrap; line-height: 1.4;");
         addToSS(
           state,
           ".fb-cmf header",
@@ -3766,7 +3771,11 @@
           ".fb-cmf .cmf-section-body",
           "max-height: var(--cmf-section-height, 0px); overflow:hidden; opacity:0; transform: translateY(-4px);transition: max-height 200ms cubic-bezier(0.16, 1, 0.3, 1), opacity 140ms ease-out, transform 160ms ease-out;will-change: max-height, opacity, transform;"
         );
-        addToSS(state, ".fb-cmf fieldset.cmf-visible .cmf-section-body", "opacity:1; transform: translateY(0);");
+        addToSS(
+          state,
+          ".fb-cmf fieldset.cmf-visible .cmf-section-body",
+          "opacity:1; transform: translateY(0);"
+        );
         addToSS(state, ".fb-cmf.cmf-searching .cmf-section-body", "transition: none;");
         addToSS(
           state,
@@ -3969,11 +3978,7 @@
           "transition: color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;"
         );
         addToSS(state, "#fbcmf footer > button.cmf-action--dirty", "color:#d93025;");
-        addToSS(
-          state,
-          "#fbcmf footer > button.cmf-action--dirty .cmf-action-icon",
-          "color:#d93025;"
-        );
+        addToSS(state, "#fbcmf footer > button.cmf-action--dirty .cmf-action-icon", "color:#d93025;");
         addToSS(
           state,
           "#fbcmf footer > button.cmf-action--confirm-blue",
@@ -6772,7 +6777,10 @@
           if (left + tooltipRect.width + edgePadding > window.innerWidth) {
             left = rect.left - tooltipRect.width - gap;
           }
-          top = Math.max(edgePadding, Math.min(top, window.innerHeight - tooltipRect.height - edgePadding));
+          top = Math.max(
+            edgePadding,
+            Math.min(top, window.innerHeight - tooltipRect.height - edgePadding)
+          );
         } else {
           if (top + tooltipRect.height + edgePadding > window.innerHeight) {
             top = rect.top - tooltipRect.height - gap;
@@ -9530,7 +9538,9 @@
             }
             const md = document.getElementById("fbcmf");
             if (md) {
-              const inputs = Array.from(md.querySelectorAll('input:not([type="file"]), textarea, select'));
+              const inputs = Array.from(
+                md.querySelectorAll('input:not([type="file"]), textarea, select')
+              );
               const validNames = [];
               inputs.forEach((inp) => {
                 if (!validNames.includes(inp.name)) {

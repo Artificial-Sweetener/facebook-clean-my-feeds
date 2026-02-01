@@ -12,8 +12,12 @@ function ensureStyleTag(id, doc = document) {
     styleTag = doc.createElement("style");
     styleTag.setAttribute("type", "text/css");
     styleTag.setAttribute("id", id);
-    if (doc.head) {
-      doc.head.appendChild(styleTag);
+  }
+
+  if (!styleTag.isConnected) {
+    const mountTarget = doc.head || doc.documentElement;
+    if (mountTarget && typeof mountTarget.appendChild === "function") {
+      mountTarget.appendChild(styleTag);
     }
   }
 
@@ -150,6 +154,12 @@ function addCSS(state, options, defaults) {
       ";"
   );
   addToSS(state, ".fb-cmf", "background-color: var(--comment-background);");
+  addToSS(state, ".fb-cmf", "-webkit-user-select: none; -ms-user-select: none; user-select: none;");
+  addToSS(
+    state,
+    '.fb-cmf input, .fb-cmf textarea, .fb-cmf [contenteditable="true"]',
+    "-webkit-user-select: text; -ms-user-select: text; user-select: text;"
+  );
   addToSS(
     state,
     ".cmf-icon",
@@ -177,11 +187,7 @@ function addCSS(state, options, defaults) {
     "background-color: rgba(255, 255, 255, 0.92); color: #1c1e21;"
   );
 
-  addToSS(
-    state,
-    ".fb-cmf .cmf-report-notice",
-    "white-space: pre-wrap; line-height: 1.4;"
-  );
+  addToSS(state, ".fb-cmf .cmf-report-notice", "white-space: pre-wrap; line-height: 1.4;");
   addToSS(
     state,
     ".fb-cmf header",
@@ -373,7 +379,11 @@ function addCSS(state, options, defaults) {
       "transition: max-height 200ms cubic-bezier(0.16, 1, 0.3, 1), opacity 140ms ease-out, transform 160ms ease-out;" +
       "will-change: max-height, opacity, transform;"
   );
-  addToSS(state, ".fb-cmf fieldset.cmf-visible .cmf-section-body", "opacity:1; transform: translateY(0);");
+  addToSS(
+    state,
+    ".fb-cmf fieldset.cmf-visible .cmf-section-body",
+    "opacity:1; transform: translateY(0);"
+  );
   addToSS(state, ".fb-cmf.cmf-searching .cmf-section-body", "transition: none;");
   addToSS(
     state,
@@ -608,8 +618,8 @@ function addExtraCSS(state, options, defaults) {
       "border: none; border-radius: 8px;" +
       "background-color: transparent;" +
       "display:flex; align-items:center; gap:0.5rem; justify-content:flex-start;" +
-        "font-size: .9375rem; font-weight: 600;" +
-        "color: var(--primary-text); position:relative; overflow:hidden;"
+      "font-size: .9375rem; font-weight: 600;" +
+      "color: var(--primary-text); position:relative; overflow:hidden;"
   );
   addToSS(
     state,
@@ -617,11 +627,7 @@ function addExtraCSS(state, options, defaults) {
     "transition: color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;"
   );
   addToSS(state, "#fbcmf footer > button.cmf-action--dirty", "color:#d93025;");
-  addToSS(
-    state,
-    "#fbcmf footer > button.cmf-action--dirty .cmf-action-icon",
-    "color:#d93025;"
-  );
+  addToSS(state, "#fbcmf footer > button.cmf-action--dirty .cmf-action-icon", "color:#d93025;");
   addToSS(
     state,
     "#fbcmf footer > button.cmf-action--confirm-blue",

@@ -1,3 +1,17 @@
+# [6.1.0](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.0.0...v6.1.0) (2026-02-02)
+
+
+### Bug Fixes
+
+* **ui:** prevent menu text selection ([869d661](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/869d6614682403951937536d5a92e2efbbb0bc19))
+
+
+### Features
+
+* **news:** add locale-agnostic follow/join and sponsored detection ([8eb9e22](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/8eb9e22d19301d1e772faaf9cf362e27dbb439a0))
+* **news:** add top cards filter for pages ([f7cb92f](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/f7cb92faba6ff936cd6d51bfac274a3a62df7000))
+* **news:** add verified badge hide and filter options ([9828dd5](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/9828dd555f84f9b58b88515b943d250ece25ee9d))
+
 # Changelog
 
 ### v6.0.0 - January 2026

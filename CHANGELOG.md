@@ -4,6 +4,7 @@
 ### Bug Fixes
 
 * **ui:** prevent menu text selection ([869d661](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/869d6614682403951937536d5a92e2efbbb0bc19))
+* **ui:** mount CMF styles when `<head>` is unavailable to avoid early-init misses (Firefox) ([869d661](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/869d6614682403951937536d5a92e2efbbb0bc19))
 
 
 ### Features
@@ -12,19 +13,21 @@
 * **news:** add top cards filter for pages ([f7cb92f](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/f7cb92faba6ff936cd6d51bfac274a3a62df7000))
 * **news:** add verified badge hide and filter options ([9828dd5](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/9828dd555f84f9b58b88515b943d250ece25ee9d))
 
-# Changelog
+# [6.0.0](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v5.07...v6.0.0) (2026-01-17)
 
-### v6.0.0 - January 2026
+### Features
 
-- Fully modularized the source tree to separate core logic, feeds, DOM helpers, UI, and storage.
-- Rebuilt the settings dialog with refreshed menus, labels, animations, and feedback.
-- Added diagnostics tooling for bug reports and expanded UI controls.
-- Improved topbar toggle positioning, styling, and menu sync behavior.
-- Added localization verification tooling and expanded translation coverage.
-- Introduced build tooling for icon optimization and userscript banner syncing.
-- Added automated release workflow (semantic-release) and Conventional Commit guidance.
-- Added a Jest test suite with expanded UI coverage.
-- Updated tooltips and UI styling to respond to light/dark theme changes.
+* **core:** modularize source tree for core logic, feeds, DOM helpers, UI, and storage
+* **ui:** rebuild settings dialog with refreshed menus, labels, animations, and feedback
+* **ui:** add diagnostics tooling for bug reports and expanded UI controls
+* **ui:** improve topbar toggle positioning, styling, and menu sync behavior
+* **tooling:** add localization verification tooling and expand translation coverage
+* **tooling:** add icon optimization and userscript banner sync tooling
+* **release:** add semantic-release workflow and Conventional Commit guidance
+* **tests:** add Jest test suite with expanded UI coverage
+* **ui:** update tooltips and styling for light/dark theme changes
+
+# Old Changelog
 
 ### v5.07 - December 2025
 

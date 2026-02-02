@@ -173,6 +173,7 @@
             SPONSORED: "\u0645\u064F\u0645\u0648\u064E\u0651\u0644",
             NF_TABLIST_STORIES_REELS_ROOMS: '"\u0627\u0644\u0642\u0635\u0635 | \u0631\u064A\u0644\u0632 | \u0627\u0644\u063A\u0631\u0641" \u0645\u0631\u0628\u0639 \u0642\u0627\u0626\u0645\u0629 \u0639\u0644\u0627\u0645\u0627\u062A \u062A\u0628\u0648\u064A\u0628',
             NF_STORIES: "\u0627\u0644\u0642\u0635\u0635",
+            NF_TOP_CARDS_PAGES: "\u0628\u0637\u0627\u0642\u0627\u062A \u0641\u064A \u0627\u0644\u0623\u0639\u0644\u0649 (\u0644\u0644\u0635\u0641\u062D\u0627\u062A)",
             NF_SURVEY: "\u0627\u0633\u062A\u0628\u064A\u0627\u0646",
             NF_PEOPLE_YOU_MAY_KNOW: "\u0623\u0634\u062E\u0627\u0635 \u0642\u062F \u062A\u0639\u0631\u0641\u0647\u0645",
             NF_PAID_PARTNERSHIP: "\u0634\u0631\u0627\u0643\u0629 \u0645\u062F\u0641\u0648\u0639\u0629",
@@ -301,6 +302,7 @@
             SPONSORED: "\u0421\u043F\u043E\u043D\u0441\u043E\u0440\u0438\u0440\u0430\u043D\u043E",
             NF_TABLIST_STORIES_REELS_ROOMS: "\u0421\u043F\u0438\u0441\u044A\u0447\u043D\u043E \u043F\u043E\u043B\u0435 \u043D\u0430 \u0440\u0430\u0437\u0434\u0435\u043B\u0430 \u201E\u0418\u0441\u0442\u043E\u0440\u0438\u0438 | \u041C\u0430\u043A\u0430\u0440\u0438 | \u0421\u0442\u0430\u0438\u201C",
             NF_STORIES: "\u0418\u0441\u0442\u043E\u0440\u0438\u0438",
+            NF_TOP_CARDS_PAGES: "\u0413\u043E\u0440\u043D\u0438 \u043A\u0430\u0440\u0442\u0438 (\u0437\u0430 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0438)",
             NF_SURVEY: "\u0410\u043D\u043A\u0435\u0442\u0430",
             NF_PEOPLE_YOU_MAY_KNOW: "\u0425\u043E\u0440\u0430, \u043A\u043E\u0438\u0442\u043E \u043C\u043E\u0436\u0435 \u0431\u0438 \u043F\u043E\u0437\u043D\u0430\u0432\u0430\u0442\u0435",
             NF_PAID_PARTNERSHIP: "\u041F\u043B\u0430\u0442\u0435\u043D\u043E \u043F\u0430\u0440\u0442\u043D\u044C\u043E\u0440\u0441\u0442\u0432\u043E",
@@ -429,6 +431,7 @@
             SPONSORED: "Sponzorov\xE1no",
             NF_TABLIST_STORIES_REELS_ROOMS: 'Seznam karet "Stories | Reels | M\xEDstnosti"',
             NF_STORIES: "Stories",
+            NF_TOP_CARDS_PAGES: "Horn\xED karty (pro str\xE1nky)",
             NF_SURVEY: "Pr\u016Fzkum",
             NF_PEOPLE_YOU_MAY_KNOW: "Koho mo\u017En\xE1 zn\xE1te",
             NF_PAID_PARTNERSHIP: "Placen\xE9 partnerstv\xED",
@@ -557,6 +560,7 @@
             SPONSORED_EXTRA: "Anzeige",
             NF_TABLIST_STORIES_REELS_ROOMS: 'Listenfeld der Registerkarte "Stories | Reels | Rooms"',
             NF_STORIES: "Stories",
+            NF_TOP_CARDS_PAGES: "Top-Karten (f\xFCr Seiten)",
             NF_SURVEY: "Umfrage",
             NF_PEOPLE_YOU_MAY_KNOW: "Personen, die du kennen k\xF6nntest",
             NF_PAID_PARTNERSHIP: "Bezahlte Werbepartnerschaft",
@@ -684,6 +688,7 @@
             SPONSORED: "\u03A7\u03BF\u03C1\u03B7\u03B3\u03BF\u03CD\u03BC\u03B5\u03BD\u03B7",
             NF_TABLIST_STORIES_REELS_ROOMS: '\u039B\u03AF\u03C3\u03C4\u03B1 \u03BA\u03B1\u03C1\u03C4\u03B5\u03BB\u03CE\u03BD "\u0399\u03C3\u03C4\u03BF\u03C1\u03AF\u03B5\u03C2 | Reels | \u0394\u03C9\u03BC\u03AC\u03C4\u03B9\u03B1"',
             NF_STORIES: "\u0399\u03C3\u03C4\u03BF\u03C1\u03AF\u03B5\u03C2",
+            NF_TOP_CARDS_PAGES: "\u039A\u03BF\u03C1\u03C5\u03C6\u03B1\u03AF\u03B5\u03C2 \u03BA\u03AC\u03C1\u03C4\u03B5\u03C2 (\u03B3\u03B9\u03B1 \u03A3\u03B5\u03BB\u03AF\u03B4\u03B5\u03C2)",
             NF_SURVEY: "\u03A4\u03BF\u03C0\u03BF\u03B3\u03C1\u03AC\u03C6\u03B7\u03C3\u03B7",
             NF_PEOPLE_YOU_MAY_KNOW: "\u0386\u03C4\u03BF\u03BC\u03B1 \u03C0\u03BF\u03C5 \u03AF\u03C3\u03C9\u03C2 \u03B3\u03BD\u03C9\u03C1\u03AF\u03B6\u03B5\u03C4\u03B5",
             NF_PAID_PARTNERSHIP: "\u03A0\u03BB\u03B7\u03C1\u03C9\u03BC\u03AD\u03BD\u03B7 \u03C3\u03C5\u03BD\u03B5\u03C1\u03B3\u03B1\u03C3\u03AF\u03B1",
@@ -811,6 +816,7 @@
             SPONSORED: "Publicidad",
             NF_TABLIST_STORIES_REELS_ROOMS: 'Cuadro de lista de la pesta\xF1a "Historias | Reels | Salas"',
             NF_STORIES: "Historias",
+            NF_TOP_CARDS_PAGES: "Tarjetas principales (para p\xE1ginas)",
             NF_SURVEY: "Encuesta",
             NF_PEOPLE_YOU_MAY_KNOW: "Personas que quiz\xE1 conozcas",
             NF_PAID_PARTNERSHIP: "Colaboraci\xF3n pagada",
@@ -938,6 +944,7 @@
             SPONSORED: "Sponsoroitu",
             NF_TABLIST_STORIES_REELS_ROOMS: '"Tarinat | Reels | Rooms" -v\xE4lilehtien luetteloruutu',
             NF_STORIES: "Tarinat",
+            NF_TOP_CARDS_PAGES: "Yl\xE4kortit (sivuja varten)",
             NF_SURVEY: "Kysely",
             NF_PEOPLE_YOU_MAY_KNOW: "Ihmiset, jotka saatat tuntea",
             NF_PAID_PARTNERSHIP: "Maksettu kumppanuus",
@@ -1065,6 +1072,7 @@
             SPONSORED: "Sponsoris\xE9",
             NF_TABLIST_STORIES_REELS_ROOMS: `Zone de liste de l'onglet "Stories | Reels | Salons"`,
             NF_STORIES: "Stories",
+            NF_TOP_CARDS_PAGES: "Cartes principales (pour les Pages)",
             NF_SURVEY: "Enqu\xEAte",
             NF_PEOPLE_YOU_MAY_KNOW: "Connaissez-vous...",
             NF_PAID_PARTNERSHIP: "Partenariat r\xE9mun\xE9r\xE9",
@@ -1192,6 +1200,7 @@
             SPONSORED: "\u05DE\u05DE\u05D5\u05DE\u05DF",
             NF_TABLIST_STORIES_REELS_ROOMS: '\u05EA\u05D9\u05D1\u05EA \u05E8\u05E9\u05D9\u05DE\u05D4 \u05E9\u05DC \u05DB\u05E8\u05D8\u05D9\u05E1\u05D9\u05D5\u05EA "\u05E1\u05D8\u05D5\u05E8\u05D9\u05D6 | Reels | \u05D7\u05D3\u05E8\u05D9\u05DD"',
             NF_STORIES: "\u05E1\u05D8\u05D5\u05E8\u05D9\u05D6 ",
+            NF_TOP_CARDS_PAGES: "\u05DB\u05E8\u05D8\u05D9\u05E1\u05D9\u05DD \u05DE\u05D5\u05D1\u05D9\u05DC\u05D9\u05DD (\u05DC\u05D3\u05E4\u05D9\u05DD)",
             NF_SURVEY: "\u05E1\u05E7\u05E8",
             NF_PEOPLE_YOU_MAY_KNOW: "\u05D0\u05E0\u05E9\u05D9\u05DD \u05E9\u05D0\u05D5\u05DC\u05D9 \u05D0\u05EA\u05D4 \u05DE\u05DB\u05D9\u05E8",
             NF_PAID_PARTNERSHIP: "\u05E9\u05D5\u05EA\u05E4\u05D5\u05EA \u05D1\u05EA\u05E9\u05DC\u05D5\u05DD",
@@ -1320,6 +1329,7 @@
             SPONSORED: "Bersponsor",
             NF_TABLIST_STORIES_REELS_ROOMS: 'Kotak daftar tab "Cerita | Reels | Forum"',
             NF_STORIES: "Cerita",
+            NF_TOP_CARDS_PAGES: "Kartu teratas (untuk Halaman)",
             NF_SURVEY: "Survei",
             NF_PEOPLE_YOU_MAY_KNOW: "Orang yang Mungkin Anda Kenal",
             NF_PAID_PARTNERSHIP: "Kemitraan berbayar",
@@ -1447,6 +1457,7 @@
             SPONSORED: "Sponsorizzato",
             NF_TABLIST_STORIES_REELS_ROOMS: 'Casella di riepilogo della scheda "Storie | Reels | Stanze"',
             NF_STORIES: "Storie",
+            NF_TOP_CARDS_PAGES: "Schede principali (per Pagine)",
             NF_SURVEY: "Sondaggio",
             NF_PEOPLE_YOU_MAY_KNOW: "Persone che potresti conoscere",
             NF_PAID_PARTNERSHIP: "Partnership pubblicizzata",
@@ -1574,6 +1585,7 @@
             SPONSORED: "\u5E83\u544A",
             NF_TABLIST_STORIES_REELS_ROOMS: "\u300CStories | Reels | Rooms\u300D\u30BF\u30D6\u306E\u30EA\u30B9\u30C8\u30DC\u30C3\u30AF\u30B9",
             NF_STORIES: "Stories",
+            NF_TOP_CARDS_PAGES: "\u30C8\u30C3\u30D7\u30AB\u30FC\u30C9\uFF08\u30DA\u30FC\u30B8\u5411\u3051\uFF09",
             NF_SURVEY: "\u30A2\u30F3\u30B1\u30FC\u30C8",
             NF_PEOPLE_YOU_MAY_KNOW: "\u3042\u306A\u305F\u304C\u77E5\u3063\u3066\u3044\u308B\u304B\u3082\u3057\u308C\u306A\u3044\u4EBA\u3005",
             NF_PAID_PARTNERSHIP: "\u6709\u511F\u30D1\u30FC\u30C8\u30CA\u30FC\u30B7\u30C3\u30D7",
@@ -1701,6 +1713,7 @@
             SPONSORED: "Apmaks\u0101ta rekl\u0101ma",
             NF_TABLIST_STORIES_REELS_ROOMS: 'Cilnes "St\u0101sti | Video rull\u012B\u0161i | Rooms" sarakstlodzi\u0146\u0161',
             NF_STORIES: "St\u0101sti",
+            NF_TOP_CARDS_PAGES: "Aug\u0161\u0113j\u0101s kart\u012Btes (lap\u0101m)",
             NF_SURVEY: "Aptauja",
             NF_PEOPLE_YOU_MAY_KNOW: "Cilv\u0113ki, kurus tu var\u0113tu paz\u012Bt",
             NF_PAID_PARTNERSHIP: "Apmaks\u0101ta sadarb\u012Bba",
@@ -1828,6 +1841,7 @@
             SPONSORED: "Gesponsord",
             NF_TABLIST_STORIES_REELS_ROOMS: 'Keuzelijst tabblad "Verhalen | Reels | Ruimtes"',
             NF_STORIES: "Verhalen",
+            NF_TOP_CARDS_PAGES: "Topkaarten (voor Pagina's)",
             NF_SURVEY: "Vragenlijst",
             NF_PEOPLE_YOU_MAY_KNOW: "Mensen die je misschien kent",
             NF_PAID_PARTNERSHIP: "Betaald partnerschap",
@@ -1955,6 +1969,7 @@
             SPONSORED: "Sponsorowane",
             NF_TABLIST_STORIES_REELS_ROOMS: 'Pole listy zak\u0142adki "Relacje | Reels | Pokoje"',
             NF_STORIES: "Relacje",
+            NF_TOP_CARDS_PAGES: "G\xF3rne karty (dla stron)",
             NF_SURVEY: "Badanie",
             NF_PEOPLE_YOU_MAY_KNOW: "Osoby, kt\xF3re mo\u017Cesz zna\u0107",
             NF_PAID_PARTNERSHIP: "Post sponsorowany",
@@ -2082,6 +2097,7 @@
             SPONSORED: "Patrocinado",
             NF_TABLIST_STORIES_REELS_ROOMS: 'Caixa de listagem da guia "Stories | V\xEDdeos do Reels | Salas"',
             NF_STORIES: "Stories",
+            NF_TOP_CARDS_PAGES: "Cart\xF5es principais (para P\xE1ginas)",
             NF_SURVEY: "Enquete",
             NF_PEOPLE_YOU_MAY_KNOW: "Pessoas que talvez conhe\xE7as",
             NF_PAID_PARTNERSHIP: "Parceria paga",
@@ -2209,6 +2225,7 @@
             SPONSORED: "\u0420\u0435\u043A\u043B\u0430\u043C\u0430",
             NF_TABLIST_STORIES_REELS_ROOMS: '\u0421\u043F\u0438\u0441\u043E\u043A \u0432\u043A\u043B\u0430\u0434\u043E\u043A "\u0418\u0441\u0442\u043E\u0440\u0438\u0438 | Reels | \u041A\u043E\u043C\u043D\u0430\u0442\u044B"',
             NF_STORIES: "\u0418\u0441\u0442\u043E\u0440\u0438\u0438",
+            NF_TOP_CARDS_PAGES: "\u0412\u0435\u0440\u0445\u043D\u0438\u0435 \u043A\u0430\u0440\u0442\u043E\u0447\u043A\u0438 (\u0434\u043B\u044F \u0421\u0442\u0440\u0430\u043D\u0438\u0446)",
             NF_SURVEY: "\u041E\u043F\u0440\u043E\u0441",
             NF_PEOPLE_YOU_MAY_KNOW: "\u041B\u044E\u0434\u0438, \u043A\u043E\u0442\u043E\u0440\u044B\u0445 \u0432\u044B \u043C\u043E\u0436\u0435\u0442\u0435 \u0437\u043D\u0430\u0442\u044C",
             NF_PAID_PARTNERSHIP: "\u041F\u043B\u0430\u0442\u043D\u043E\u0435 \u043F\u0430\u0440\u0442\u043D\u0435\u0440\u0441\u0442\u0432\u043E",
@@ -2336,6 +2353,7 @@
             SPONSORED: "Sponsorlu",
             NF_TABLIST_STORIES_REELS_ROOMS: '"Hikayeler | Makaralar | Odalar" sekmeleri liste kutusu',
             NF_STORIES: "Hikayeler",
+            NF_TOP_CARDS_PAGES: "\xDCst kartlar (Sayfalar i\xE7in)",
             NF_SURVEY: "Anket",
             NF_PEOPLE_YOU_MAY_KNOW: "Tan\u0131yor olabilece\u011Fin ki\u015Filer",
             NF_PAID_PARTNERSHIP: "\xFCcretli ortakl\u0131k",
@@ -2463,6 +2481,7 @@
             SPONSORED: "\u0421\u043F\u043E\u043D\u0441\u043E\u0440\u043E\u0432\u0430\u043D\u0430",
             NF_TABLIST_STORIES_REELS_ROOMS: "\u041F\u043E\u043B\u0435 \u0441\u043F\u0438\u0441\u043A\u0443 \u0432\u043A\u043B\u0430\u0434\u043E\u043A \xAB\u0406\u0441\u0442\u043E\u0440\u0456\u0457 | Reels | \u041A\u0456\u043C\u043D\u0430\u0442\u0438\xBB",
             NF_STORIES: "\u0406\u0441\u0442\u043E\u0440\u0456\u0457",
+            NF_TOP_CARDS_PAGES: "\u0412\u0435\u0440\u0445\u043D\u0456 \u043A\u0430\u0440\u0442\u043A\u0438 (\u0434\u043B\u044F \u0421\u0442\u043E\u0440\u0456\u043D\u043E\u043A)",
             NF_SURVEY: "\u041E\u043F\u0438\u0442\u0443\u0432\u0430\u043D\u043D\u044F",
             NF_PEOPLE_YOU_MAY_KNOW: "\u041B\u044E\u0434\u0438, \u044F\u043A\u0438\u0445 \u0412\u0438 \u043C\u043E\u0436\u0435\u0442\u0435 \u0437\u043D\u0430\u0442\u0438",
             NF_PAID_PARTNERSHIP: "\u041E\u043F\u043B\u0430\u0447\u0443\u0432\u0430\u043D\u0435 \u043F\u0430\u0440\u0442\u043D\u0435\u0440\u0441\u0442\u0432\u043E",
@@ -2590,6 +2609,7 @@
             SPONSORED: "\u0110\u01B0\u1EE3c t\xE0i tr\u1EE3",
             NF_TABLIST_STORIES_REELS_ROOMS: 'H\u1ED9p danh s\xE1ch tab "Tin | Reels | Ph\xF2ng h\u1ECDp m\u1EB7t"',
             NF_STORIES: "Tin",
+            NF_TOP_CARDS_PAGES: "Th\u1EBB tr\xEAn c\xF9ng (cho Trang)",
             NF_SURVEY: "Kh\u1EA3o s\xE1t",
             NF_PEOPLE_YOU_MAY_KNOW: "Nh\u1EEFng ng\u01B0\u1EDDi b\u1EA1n c\xF3 th\u1EC3 bi\u1EBFt",
             NF_PAID_PARTNERSHIP: "M\u1ED1i quan h\u1EC7 t\xE0i tr\u1EE3",
@@ -2717,6 +2737,7 @@
             SPONSORED: "\u8D5E\u52A9\u5185\u5BB9",
             NF_TABLIST_STORIES_REELS_ROOMS: "\u201C\u5FEB\u62CD|Reels|\u7545\u804A\u5BA4\u201D\u9009\u9879\u5361\u5217\u8868\u6846",
             NF_STORIES: "\u6545\u4E8B",
+            NF_TOP_CARDS_PAGES: "\u9876\u90E8\u5361\u7247\uFF08\u7528\u4E8E\u9875\u9762\uFF09",
             NF_SURVEY: "\u8C03\u67E5",
             NF_PEOPLE_YOU_MAY_KNOW: "\u4F60\u53EF\u80FD\u8BA4\u8BC6\u7684\u4EBA",
             NF_PAID_PARTNERSHIP: "\u4ED8\u8D39\u5408\u4F19",
@@ -2839,6 +2860,7 @@
             SPONSORED: "\u8D0A\u52A9",
             NF_TABLIST_STORIES_REELS_ROOMS: '"\u9650\u6642\u52D5\u614B | Reels | \u5305\u5EC2" \u5206\u9801\u5217\u8868\u6846',
             NF_STORIES: "\u6545\u4E8B",
+            NF_TOP_CARDS_PAGES: "\u9802\u90E8\u5361\u7247\uFF08\u7528\u65BC\u9801\u9762\uFF09",
             NF_SURVEY: "\u8ABF\u67E5",
             NF_PEOPLE_YOU_MAY_KNOW: "\u4F60\u53EF\u80FD\u8A8D\u8B58\u7684\u4EBA",
             NF_PAID_PARTNERSHIP: "\u4ED8\u8CBB\u5408\u4F5C",
@@ -4776,8 +4798,15 @@
         if (!post || !state) {
           return false;
         }
+        if (post.querySelector('a[href*="/ads/about/"]')) {
+          return true;
+        }
         let isSponsoredPost = false;
         if (state.isNF) {
+          isSponsoredPost = isSponsoredAriaLabelledBy(post, state.dictionarySponsored);
+          if (isSponsoredPost) {
+            return true;
+          }
           isSponsoredPost = isSponsoredPlain(post, state.dictionarySponsored);
           if (!isSponsoredPost) {
             isSponsoredPost = isSponsoredShadowRoot1(post, state.dictionarySponsored);
@@ -4825,6 +4854,27 @@
           }
         }
         return isSponsoredPost;
+      }
+      function isSponsoredAriaLabelledBy(post, dictionarySponsored) {
+        if (!Array.isArray(dictionarySponsored)) {
+          return false;
+        }
+        const labelled = post.querySelectorAll("[aria-labelledby]");
+        for (const node of labelled) {
+          const idValue = node.getAttribute("aria-labelledby");
+          if (!idValue) {
+            continue;
+          }
+          const label = document.getElementById(idValue);
+          if (!label) {
+            continue;
+          }
+          const lcText = label.textContent.trim().toLowerCase();
+          if (dictionarySponsored.includes(lcText)) {
+            return true;
+          }
+        }
+        return false;
       }
       function isSponsoredPlain(post, dictionarySponsored) {
         if (!Array.isArray(dictionarySponsored)) {
@@ -5619,6 +5669,18 @@
         return events.length === 0 ? "" : keyWords.NF_EVENTS_YOU_MAY_LIKE;
       }
       function isNewsFollow(post, state, keyWords) {
+        const header = post.querySelector("h4");
+        if (header) {
+          const headerButtons = header.querySelectorAll('[role="button"]');
+          if (headerButtons.length > 0) {
+            const headerLinks = Array.from(header.querySelectorAll("a[href]")).map((link) => link.getAttribute("href")).filter((href) => typeof href === "string" && href !== "");
+            const hasGroupLink = headerLinks.some((href) => href.includes("/groups/"));
+            const hasPageLink = headerLinks.some((href) => !href.includes("/groups/"));
+            if (hasPageLink && !hasGroupLink) {
+              return keyWords.NF_FOLLOW;
+            }
+          }
+        }
         const queryFollow = [
           ":scope h4[id] > span > div > span",
           ":scope h4[id] > span > span > div > span",
@@ -5664,6 +5726,17 @@
         return "";
       }
       function isNewsParticipate(post, keyWords) {
+        const header = post.querySelector("h4");
+        if (header) {
+          const headerButtons = header.querySelectorAll('[role="button"]');
+          if (headerButtons.length > 0) {
+            const headerLinks = Array.from(header.querySelectorAll("a[href]")).map((link) => link.getAttribute("href")).filter((href) => typeof href === "string" && href !== "");
+            const hasGroupLink = headerLinks.some((href) => href.includes("/groups/"));
+            if (hasGroupLink) {
+              return keyWords.NF_PARTICIPATE;
+            }
+          }
+        }
         const query = ":scope h4 > span > span[class] > span";
         const elements = querySelectorAllNoChildren(post, query, 0);
         if (elements.length === 1) {

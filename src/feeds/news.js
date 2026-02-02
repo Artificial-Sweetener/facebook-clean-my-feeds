@@ -549,6 +549,63 @@ function scrubVerifiedBadges(context) {
   }
 }
 
+function getSidePanelAiTargets() {
+  const targets = new Set();
+
+  const navs = Array.from(document.querySelectorAll('div[role="navigation"]'));
+  navs.forEach((nav) => {
+    const metaLinks = nav.querySelectorAll('a[href*="meta.ai"]');
+    metaLinks.forEach((link) => {
+      const li = link.closest("li");
+      targets.add(li || link);
+    });
+
+    const navItems = Array.from(nav.querySelectorAll("li"));
+    navItems.forEach((li) => {
+      const text = li.textContent ? li.textContent.trim() : "";
+      if (text === "Manus AI") {
+        targets.add(li);
+      }
+    });
+  });
+
+  const rightPanel = document.querySelector('div[role="complementary"]');
+  if (rightPanel) {
+    const metaThreads = rightPanel.querySelectorAll(
+      'a[href*="/messages/t/36327,2227039302/"]'
+    );
+    metaThreads.forEach((link) => {
+      const li = link.closest("li");
+      targets.add(li || link);
+    });
+
+    const rightItems = Array.from(rightPanel.querySelectorAll("li"));
+    rightItems.forEach((li) => {
+      const text = li.textContent ? li.textContent.trim() : "";
+      if (text.includes("Meta AI")) {
+        targets.add(li);
+      }
+    });
+  }
+
+  return Array.from(targets);
+}
+
+function scrubSidePanelAi(context) {
+  const { state } = context;
+  if (!state) {
+    return;
+  }
+
+  const targets = getSidePanelAiTargets();
+  targets.forEach((target) => {
+    target.setAttribute(state.hideAtt, "");
+    target.style.display = "none";
+    target.style.margin = "0";
+    target.style.padding = "0";
+  });
+}
+
 function postExceedsLikeCount(post, options, keyWords) {
   const queryLikes =
     'span[role="toolbar"] ~ div div[role="button"] > span[class][aria-hidden] > span:not([class]) > span[class]';
@@ -588,6 +645,9 @@ function mopNewsFeed(context) {
     }
     if (options.NF_HIDE_VERIFIED_BADGE) {
       scrubVerifiedBadges(context);
+    }
+    if (options.NF_AI_SIDE_PANELS) {
+      scrubSidePanelAi(context);
     }
 
     if (options.NF_SPONSORED) {
@@ -716,6 +776,7 @@ module.exports = {
   isNewsSponsoredPaidBy,
   isNewsStoriesPost,
   isNewsVerifiedBadge,
+  getSidePanelAiTargets,
   findTopCardsForPagesContainer,
   mopNewsFeed,
   postExceedsLikeCount,

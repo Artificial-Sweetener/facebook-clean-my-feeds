@@ -19,5 +19,6 @@ describe("dom/attributes", () => {
     expect(state.showAtt).toBe("token");
     expect(state.cssHideEl).toBe("token");
     expect(state.cssHideNumberOfShares).toBe("token");
+    expect(state.cssHideVerifiedBadge).toBe("token");
   });
 });

@@ -46,6 +46,8 @@
             NF_TABLIST_STORIES_REELS_ROOMS: '"Stories | Reels | Rooms" tabs list box',
             NF_STORIES: "Stories",
             NF_TOP_CARDS_PAGES: "Top Cards (for Pages)",
+            NF_HIDE_VERIFIED_BADGE: "Hide verified badges",
+            NF_FILTER_VERIFIED_BADGE: "Filter verified accounts",
             NF_SURVEY: "Survey",
             NF_PEOPLE_YOU_MAY_KNOW: "People you may know",
             NF_PAID_PARTNERSHIP: "Paid partnership",
@@ -2998,6 +3000,8 @@
           NF_SHARES: false,
           NF_LIKES_MAXIMUM: false,
           NF_TOP_CARDS_PAGES: false,
+          NF_HIDE_VERIFIED_BADGE: false,
+          NF_FILTER_VERIFIED_BADGE: false,
           GF_PAID_PARTNERSHIP: true,
           GF_SUGGESTIONS: false,
           GF_SHORT_REEL_VIDEO: false,
@@ -3462,6 +3466,7 @@
         state.showAtt = generateRandomString();
         state.cssHideEl = generateRandomString();
         state.cssHideNumberOfShares = generateRandomString();
+        state.cssHideVerifiedBadge = generateRandomString();
       }
       module.exports = {
         initializeRuntimeAttributes,
@@ -3585,6 +3590,12 @@
           "border-radius: 0.55rem 0.55rem 0 0; width:75%; margin:0 auto; padding: 0.45rem 0.25rem; font-style:italic; text-align:center; font-weight:normal;" + (options.VERBOSITY_MESSAGE_COLOUR === "" ? "" : `  color: ${options.VERBOSITY_MESSAGE_COLOUR}; `) + `background-color:${options.VERBOSITY_MESSAGE_BG_COLOUR === "" ? defaults.VERBOSITY_MESSAGE_BG_COLOUR : options.VERBOSITY_MESSAGE_BG_COLOUR}; `
         );
         addToSS(state, `[${state.cssHideNumberOfShares}]`, "display:none !important;");
+        addToSS(state, `[${state.cssHideVerifiedBadge}]`, "display:none !important;");
+        addToSS(
+          state,
+          `h4 [${state.cssHideVerifiedBadge}]`,
+          "margin:0 !important; padding:0 !important; width:0 !important; height:0 !important;"
+        );
         const tColour = "var(--primary-text)";
         addToSS(
           state,
@@ -5792,6 +5803,13 @@
         const elStory = post.querySelector(queryForStory);
         return elStory ? keyWords.NF_STORIES : "";
       }
+      function isNewsVerifiedBadge(post, keyWords) {
+        const headerBadge = post.querySelector("h4 svg, h5 svg");
+        if (!headerBadge) {
+          return "";
+        }
+        return keyWords.NF_FILTER_VERIFIED_BADGE;
+      }
       function findTopCardsForPagesContainer(mainColumn) {
         if (!mainColumn) {
           return null;
@@ -5949,6 +5967,50 @@
         hideFeature(container, keyWords.NF_TOP_CARDS_PAGES, false, context);
         container.setAttribute(postAttChildFlag, keyWords.NF_TOP_CARDS_PAGES);
       }
+      function scrubVerifiedBadges(context) {
+        const { state } = context;
+        if (!state) {
+          return;
+        }
+        const hideBadge = (badge) => {
+          badge.setAttribute(state.cssHideVerifiedBadge, "");
+          badge.style.display = "none";
+          badge.style.width = "0";
+          badge.style.height = "0";
+          badge.style.margin = "0";
+          badge.style.padding = "0";
+          let wrapper = badge.parentElement;
+          let candidate = null;
+          while (wrapper && wrapper.tagName === "SPAN") {
+            const hasLink = wrapper.querySelector("a[href]");
+            const hasButton = wrapper.getAttribute("role") === "button" || wrapper.querySelector('[role="button"]');
+            if (!hasLink && !hasButton) {
+              candidate = wrapper;
+            }
+            wrapper = wrapper.parentElement;
+          }
+          if (candidate) {
+            candidate.setAttribute(state.cssHideVerifiedBadge, "");
+            candidate.style.display = "none";
+            candidate.style.margin = "0";
+            candidate.style.padding = "0";
+          }
+        };
+        const mainColumn = document.querySelector(newsSelectors.mainColumn);
+        if (mainColumn) {
+          const badges = mainColumn.querySelectorAll(
+            'div[role="article"] h4 svg, div[aria-posinset] h4 svg, div[role="article"] h5 svg, div[aria-posinset] h5 svg'
+          );
+          badges.forEach(hideBadge);
+        }
+        const elDialog = document.querySelector(newsSelectors.dialog);
+        if (elDialog) {
+          const badges = elDialog.querySelectorAll(
+            'div[role="article"] h4 svg, div[aria-posinset] h4 svg, div[role="article"] h5 svg, div[aria-posinset] h5 svg'
+          );
+          badges.forEach(hideBadge);
+        }
+      }
       function postExceedsLikeCount(post, options, keyWords) {
         const queryLikes = 'span[role="toolbar"] ~ div div[role="button"] > span[class][aria-hidden] > span:not([class]) > span[class]';
         const elLikes = post.querySelectorAll(queryLikes);
@@ -5980,6 +6042,9 @@
           }
           if (options.NF_TOP_CARDS_PAGES) {
             scrubTopCardsForPages(context);
+          }
+          if (options.NF_HIDE_VERIFIED_BADGE) {
+            scrubVerifiedBadges(context);
           }
           if (options.NF_SPONSORED) {
             cleanConsoleTable("Sponsored", context);
@@ -6027,6 +6092,9 @@
               }
               if (hideReason === "" && options.NF_EVENTS_YOU_MAY_LIKE) {
                 hideReason = isNewsEventsYouMayLike(post, keyWords);
+              }
+              if (hideReason === "" && options.NF_FILTER_VERIFIED_BADGE) {
+                hideReason = isNewsVerifiedBadge(post, keyWords);
               }
               if (hideReason === "" && options.NF_STORIES) {
                 hideReason = isNewsStoriesPost(post, keyWords);
@@ -6094,6 +6162,7 @@
         isNewsShortReelVideo,
         isNewsSponsoredPaidBy,
         isNewsStoriesPost,
+        isNewsVerifiedBadge,
         findTopCardsForPagesContainer,
         mopNewsFeed,
         postExceedsLikeCount

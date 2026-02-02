@@ -1,4 +1,9 @@
-const { findTopCardsForPagesContainer, isNewsFollow, isNewsParticipate } = require("../../src/feeds/news");
+const {
+  findTopCardsForPagesContainer,
+  isNewsFollow,
+  isNewsParticipate,
+  isNewsVerifiedBadge,
+} = require("../../src/feeds/news");
 const { newsSelectors } = require("../../src/selectors/news");
 
 describe("feeds/news", () => {
@@ -74,5 +79,29 @@ describe("feeds/news", () => {
     const keyWords = { NF_PARTICIPATE: "Participate / Join" };
 
     expect(isNewsParticipate(post, keyWords)).toBe("Participate / Join");
+  });
+
+  test("isNewsVerifiedBadge detects verified badge in header", () => {
+    const post = document.createElement("div");
+    const header = document.createElement("h4");
+    const badge = document.createElement("svg");
+    header.appendChild(badge);
+    post.appendChild(header);
+
+    const keyWords = { NF_FILTER_VERIFIED_BADGE: "Filter verified accounts" };
+
+    expect(isNewsVerifiedBadge(post, keyWords)).toBe("Filter verified accounts");
+  });
+
+  test("isNewsVerifiedBadge detects verified badge in shared header", () => {
+    const post = document.createElement("div");
+    const header = document.createElement("h5");
+    const badge = document.createElement("svg");
+    header.appendChild(badge);
+    post.appendChild(header);
+
+    const keyWords = { NF_FILTER_VERIFIED_BADGE: "Filter verified accounts" };
+
+    expect(isNewsVerifiedBadge(post, keyWords)).toBe("Filter verified accounts");
   });
 });

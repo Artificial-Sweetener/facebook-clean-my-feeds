@@ -142,6 +142,12 @@ function addCSS(state, options, defaults) {
   );
 
   addToSS(state, `[${state.cssHideNumberOfShares}]`, "display:none !important;");
+  addToSS(state, `[${state.cssHideVerifiedBadge}]`, "display:none !important;");
+  addToSS(
+    state,
+    `h4 [${state.cssHideVerifiedBadge}]`,
+    "margin:0 !important; padding:0 !important; width:0 !important; height:0 !important;"
+  );
 
   const tColour = "var(--primary-text)";
   addToSS(

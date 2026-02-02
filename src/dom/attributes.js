@@ -19,6 +19,7 @@ function initializeRuntimeAttributes(state) {
   state.showAtt = generateRandomString();
   state.cssHideEl = generateRandomString();
   state.cssHideNumberOfShares = generateRandomString();
+  state.cssHideVerifiedBadge = generateRandomString();
 }
 
 module.exports = {

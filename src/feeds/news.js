@@ -268,6 +268,68 @@ function isNewsStoriesPost(post, keyWords) {
   return elStory ? keyWords.NF_STORIES : "";
 }
 
+function findTopCardsForPagesContainer(mainColumn) {
+  if (!mainColumn) {
+    return null;
+  }
+
+  const labelledRegion = mainColumn.querySelector(
+    'div[role="region"][aria-label="profile plus top of feed cards"]'
+  );
+  if (labelledRegion) {
+    return labelledRegion;
+  }
+
+  const anchors = Array.from(mainColumn.querySelectorAll('a[href="/reel/"], a[href="/stories/"]'));
+  if (anchors.length === 0) {
+    return null;
+  }
+
+  const candidates = new Set();
+  anchors.forEach((anchor) => {
+    if (anchor.closest('div[role="article"], div[aria-posinset]')) {
+      return;
+    }
+    const region = anchor.closest('div[role="region"]');
+    if (region && mainColumn.contains(region)) {
+      candidates.add(region);
+    }
+  });
+
+  for (const region of candidates) {
+    if (
+      region.querySelector('a[href="/reel/"]') &&
+      region.querySelector('a[href="/stories/"]')
+    ) {
+      return region;
+    }
+  }
+
+  const reelsLink = anchors.find(
+    (anchor) =>
+      anchor.getAttribute("href") === "/reel/" &&
+      !anchor.closest('div[role="article"], div[aria-posinset]')
+  );
+  const storiesLink = anchors.find(
+    (anchor) =>
+      anchor.getAttribute("href") === "/stories/" &&
+      !anchor.closest('div[role="article"], div[aria-posinset]')
+  );
+  if (!reelsLink || !storiesLink) {
+    return null;
+  }
+
+  let node = reelsLink.parentElement;
+  while (node && node !== mainColumn) {
+    if (node.contains(storiesLink)) {
+      return node;
+    }
+    node = node.parentElement;
+  }
+
+  return null;
+}
+
 function cleanConsoleTable(findItem, context) {
   const { keyWords, state, options } = context;
   if (!keyWords || !state || !options) {
@@ -384,6 +446,22 @@ function scrubSurvey(context) {
   }
 }
 
+function scrubTopCardsForPages(context) {
+  const { keyWords } = context;
+  const mainColumn = document.querySelector(newsSelectors.mainColumn);
+  if (!mainColumn) {
+    return;
+  }
+
+  const container = findTopCardsForPagesContainer(mainColumn);
+  if (!container || container.hasAttribute(postAttChildFlag)) {
+    return;
+  }
+
+  hideFeature(container, keyWords.NF_TOP_CARDS_PAGES, false, context);
+  container.setAttribute(postAttChildFlag, keyWords.NF_TOP_CARDS_PAGES);
+}
+
 function postExceedsLikeCount(post, options, keyWords) {
   const queryLikes =
     'span[role="toolbar"] ~ div div[role="button"] > span[class][aria-hidden] > span:not([class]) > span[class]';
@@ -417,6 +495,9 @@ function mopNewsFeed(context) {
     }
     if (options.NF_SURVEY) {
       scrubSurvey(context);
+    }
+    if (options.NF_TOP_CARDS_PAGES) {
+      scrubTopCardsForPages(context);
     }
 
     if (options.NF_SPONSORED) {
@@ -541,6 +622,7 @@ module.exports = {
   isNewsShortReelVideo,
   isNewsSponsoredPaidBy,
   isNewsStoriesPost,
+  findTopCardsForPagesContainer,
   mopNewsFeed,
   postExceedsLikeCount,
 };

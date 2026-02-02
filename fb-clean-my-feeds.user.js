@@ -6313,19 +6313,34 @@
     }
   });
 
-  // src/feeds/profile.js
+  // src/selectors/profile.js
   var require_profile = __commonJS({
+    "src/selectors/profile.js"(exports, module) {
+      var profileSelectors = {
+        mainColumn: 'div[role="main"]',
+        dialog: 'div[role="dialog"]',
+        postsQuery: 'div[role="main"] > div > div > div > div:nth-of-type(2) > div:not([class]) > div > div[class]'
+      };
+      module.exports = {
+        profileSelectors
+      };
+    }
+  });
+
+  // src/feeds/profile.js
+  var require_profile2 = __commonJS({
     "src/feeds/profile.js"(exports, module) {
       var { mainColumnAtt, postAtt, postAttTab } = require_attributes();
       var { swatTheMosquitos } = require_animated_gifs();
       var { hasSizeChanged } = require_dirty_check();
       var { hidePost } = require_hide();
       var { scrubInfoBoxes } = require_info_boxes();
+      var { profileSelectors } = require_profile();
       var { findProfileBlockedText } = require_blocked_text2();
       var { hasNewsAnimatedGifContent } = require_animated_gifs2();
       function isProfileColumnDirty(state) {
         const arrReturn = [null, null];
-        const mainColumn = document.querySelector('div[role="main"]');
+        const mainColumn = document.querySelector(profileSelectors.mainColumn);
         if (mainColumn) {
           if (!mainColumn.hasAttribute(mainColumnAtt)) {
             arrReturn[0] = mainColumn;
@@ -6333,7 +6348,7 @@
             arrReturn[0] = mainColumn;
           }
         }
-        const elDialog = document.querySelector('div[role="dialog"]');
+        const elDialog = document.querySelector(profileSelectors.dialog);
         if (elDialog) {
           if (!elDialog.hasAttribute(mainColumnAtt)) {
             arrReturn[1] = elDialog;
@@ -6345,6 +6360,40 @@
           state.noChangeCounter += 1;
         }
         return arrReturn;
+      }
+      var profilePermalinkSelectors = [
+        'a[href*="/posts/"]',
+        'a[href*="/story.php"]',
+        'a[href*="/permalink/"]',
+        'a[href*="permalink.php"]'
+      ];
+      function getProfilePostsFromPermalinks(mainColumn) {
+        if (!mainColumn) {
+          return [];
+        }
+        const selector = profilePermalinkSelectors.join(",");
+        const permalinks = Array.from(mainColumn.querySelectorAll(selector));
+        if (permalinks.length === 0) {
+          return [];
+        }
+        const containers = /* @__PURE__ */ new Set();
+        for (const link of permalinks) {
+          let node = link.parentElement;
+          let lastSingle = null;
+          while (node && node !== mainColumn) {
+            const count = node.querySelectorAll(selector).length;
+            if (count === 1) {
+              lastSingle = node;
+            } else {
+              break;
+            }
+            node = node.parentElement;
+          }
+          if (lastSingle) {
+            containers.add(lastSingle);
+          }
+        }
+        return Array.from(containers);
       }
       function mopProfileFeed(context) {
         if (!context) {
@@ -6363,8 +6412,10 @@
           return null;
         }
         if (mainColumn) {
-          const query = 'div[role="main"] > div > div > div > div:nth-of-type(2) > div:not([class]) > div > div[class]';
-          const posts = Array.from(document.querySelectorAll(query));
+          const posts = getProfilePostsFromPermalinks(mainColumn);
+          if (posts.length === 0) {
+            return { mainColumn, elDialog };
+          }
           for (const post of posts) {
             if (post.innerHTML.length === 0) {
               continue;
@@ -6415,6 +6466,7 @@
         return { mainColumn, elDialog };
       }
       module.exports = {
+        getProfilePostsFromPermalinks,
         mopProfileFeed
       };
     }
@@ -7193,8 +7245,6 @@
         };
         target.addEventListener("pointerenter", onEnter);
         target.addEventListener("pointerleave", onLeave);
-        target.addEventListener("focus", onEnter);
-        target.addEventListener("blur", onLeave);
         if (typeof window !== "undefined") {
           window.addEventListener("scroll", updatePosition, true);
           window.addEventListener("resize", updatePosition);
@@ -7203,8 +7253,6 @@
           hide();
           target.removeEventListener("pointerenter", onEnter);
           target.removeEventListener("pointerleave", onLeave);
-          target.removeEventListener("focus", onEnter);
-          target.removeEventListener("blur", onLeave);
           if (typeof window !== "undefined") {
             window.removeEventListener("scroll", updatePosition, true);
             window.removeEventListener("resize", updatePosition);
@@ -7560,20 +7608,6 @@
     }
   });
 
-  // src/selectors/profile.js
-  var require_profile2 = __commonJS({
-    "src/selectors/profile.js"(exports, module) {
-      var profileSelectors = {
-        mainColumn: 'div[role="main"]',
-        dialog: 'div[role="dialog"]',
-        postsQuery: 'div[role="main"] > div > div > div > div:nth-of-type(2) > div:not([class]) > div > div[class]'
-      };
-      module.exports = {
-        profileSelectors
-      };
-    }
-  });
-
   // src/ui/reporting/bug-report.js
   var require_bug_report = __commonJS({
     "src/ui/reporting/bug-report.js"(exports, module) {
@@ -7582,7 +7616,7 @@
       var { groupsSelectors } = require_groups2();
       var { videosSelectors } = require_videos2();
       var { marketplaceSelectors } = require_marketplace2();
-      var { profileSelectors } = require_profile2();
+      var { profileSelectors } = require_profile();
       var { searchSelectors } = require_search();
       var { isSponsored } = require_sponsored();
       var {
@@ -10260,7 +10294,7 @@
       var { mopGroupsFeed } = require_groups();
       var { mopMarketplaceFeed } = require_marketplace();
       var { mopNewsFeed } = require_news2();
-      var { mopProfileFeed } = require_profile();
+      var { mopProfileFeed } = require_profile2();
       var { mopReelsFeed } = require_reels();
       var { mopSearchFeed } = require_search2();
       var { mopVideosFeed } = require_videos();

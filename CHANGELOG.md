@@ -1,3 +1,11 @@
+## [6.1.2](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.1.1...v6.1.2) (2026-02-02)
+
+
+### Bug Fixes
+
+* **dom:** only show tooltips on hover ([7d0fec8](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/7d0fec88b2d7fed659eefacfc6778e98cbd25eea))
+* **feeds:** tighten profile post targeting ([0f5ae6f](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/0f5ae6f542d7c17352b7939cd88b30476096f680))
+
 # [6.1.2](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.1.1...v6.1.2) (2026-02-02)
 
 

@@ -297,6 +297,15 @@ function isNewsStoriesPost(post, keyWords) {
   return elStory ? keyWords.NF_STORIES : "";
 }
 
+function isNewsVerifiedBadge(post, keyWords) {
+  const headerBadge = post.querySelector("h4 svg, h5 svg");
+  if (!headerBadge) {
+    return "";
+  }
+
+  return keyWords.NF_FILTER_VERIFIED_BADGE;
+}
+
 function findTopCardsForPagesContainer(mainColumn) {
   if (!mainColumn) {
     return null;
@@ -491,6 +500,55 @@ function scrubTopCardsForPages(context) {
   container.setAttribute(postAttChildFlag, keyWords.NF_TOP_CARDS_PAGES);
 }
 
+function scrubVerifiedBadges(context) {
+  const { state } = context;
+  if (!state) {
+    return;
+  }
+
+  const hideBadge = (badge) => {
+    badge.setAttribute(state.cssHideVerifiedBadge, "");
+    badge.style.display = "none";
+    badge.style.width = "0";
+    badge.style.height = "0";
+    badge.style.margin = "0";
+    badge.style.padding = "0";
+    let wrapper = badge.parentElement;
+    let candidate = null;
+    while (wrapper && wrapper.tagName === "SPAN") {
+      const hasLink = wrapper.querySelector("a[href]");
+      const hasButton =
+        wrapper.getAttribute("role") === "button" || wrapper.querySelector('[role="button"]');
+      if (!hasLink && !hasButton) {
+        candidate = wrapper;
+      }
+      wrapper = wrapper.parentElement;
+    }
+    if (candidate) {
+      candidate.setAttribute(state.cssHideVerifiedBadge, "");
+      candidate.style.display = "none";
+      candidate.style.margin = "0";
+      candidate.style.padding = "0";
+    }
+  };
+
+  const mainColumn = document.querySelector(newsSelectors.mainColumn);
+  if (mainColumn) {
+    const badges = mainColumn.querySelectorAll(
+      'div[role="article"] h4 svg, div[aria-posinset] h4 svg, div[role="article"] h5 svg, div[aria-posinset] h5 svg'
+    );
+    badges.forEach(hideBadge);
+  }
+
+  const elDialog = document.querySelector(newsSelectors.dialog);
+  if (elDialog) {
+    const badges = elDialog.querySelectorAll(
+      'div[role="article"] h4 svg, div[aria-posinset] h4 svg, div[role="article"] h5 svg, div[aria-posinset] h5 svg'
+    );
+    badges.forEach(hideBadge);
+  }
+}
+
 function postExceedsLikeCount(post, options, keyWords) {
   const queryLikes =
     'span[role="toolbar"] ~ div div[role="button"] > span[class][aria-hidden] > span:not([class]) > span[class]';
@@ -527,6 +585,9 @@ function mopNewsFeed(context) {
     }
     if (options.NF_TOP_CARDS_PAGES) {
       scrubTopCardsForPages(context);
+    }
+    if (options.NF_HIDE_VERIFIED_BADGE) {
+      scrubVerifiedBadges(context);
     }
 
     if (options.NF_SPONSORED) {
@@ -579,6 +640,9 @@ function mopNewsFeed(context) {
         }
         if (hideReason === "" && options.NF_EVENTS_YOU_MAY_LIKE) {
           hideReason = isNewsEventsYouMayLike(post, keyWords);
+        }
+        if (hideReason === "" && options.NF_FILTER_VERIFIED_BADGE) {
+          hideReason = isNewsVerifiedBadge(post, keyWords);
         }
         if (hideReason === "" && options.NF_STORIES) {
           hideReason = isNewsStoriesPost(post, keyWords);
@@ -651,6 +715,7 @@ module.exports = {
   isNewsShortReelVideo,
   isNewsSponsoredPaidBy,
   isNewsStoriesPost,
+  isNewsVerifiedBadge,
   findTopCardsForPagesContainer,
   mopNewsFeed,
   postExceedsLikeCount,

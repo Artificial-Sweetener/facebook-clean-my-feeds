@@ -1,4 +1,4 @@
-const { findTopCardsForPagesContainer } = require("../../src/feeds/news");
+const { findTopCardsForPagesContainer, isNewsFollow, isNewsParticipate } = require("../../src/feeds/news");
 const { newsSelectors } = require("../../src/selectors/news");
 
 describe("feeds/news", () => {
@@ -37,5 +37,42 @@ describe("feeds/news", () => {
     const container = findTopCardsForPagesContainer(mainColumn);
 
     expect(container).toBeNull();
+  });
+
+  test("isNewsFollow detects header follow posts without group links", () => {
+    const post = document.createElement("div");
+    const header = document.createElement("h4");
+    const headerLink = document.createElement("a");
+    headerLink.href = "https://www.facebook.com/StupidFish";
+    headerLink.textContent = "Stupid Fish";
+    const followButton = document.createElement("div");
+    followButton.setAttribute("role", "button");
+    followButton.textContent = "Follow";
+    header.appendChild(headerLink);
+    header.appendChild(followButton);
+    post.appendChild(header);
+
+    const state = { dictionaryFollow: [] };
+    const keyWords = { NF_FOLLOW: "Follow" };
+
+    expect(isNewsFollow(post, state, keyWords)).toBe("Follow");
+  });
+
+  test("isNewsParticipate detects header join posts with group links", () => {
+    const post = document.createElement("div");
+    const header = document.createElement("h4");
+    const groupLink = document.createElement("a");
+    groupLink.href = "/groups/2211776349135268/";
+    groupLink.textContent = "Elden Ring: The Community";
+    const joinButton = document.createElement("div");
+    joinButton.setAttribute("role", "button");
+    joinButton.textContent = "Join";
+    header.appendChild(groupLink);
+    header.appendChild(joinButton);
+    post.appendChild(header);
+
+    const keyWords = { NF_PARTICIPATE: "Participate / Join" };
+
+    expect(isNewsParticipate(post, keyWords)).toBe("Participate / Join");
   });
 });

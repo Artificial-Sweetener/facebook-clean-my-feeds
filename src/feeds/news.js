@@ -141,6 +141,21 @@ function isNewsEventsYouMayLike(post, keyWords) {
 }
 
 function isNewsFollow(post, state, keyWords) {
+  const header = post.querySelector("h4");
+  if (header) {
+    const headerButtons = header.querySelectorAll('[role="button"]');
+    if (headerButtons.length > 0) {
+      const headerLinks = Array.from(header.querySelectorAll("a[href]"))
+        .map((link) => link.getAttribute("href"))
+        .filter((href) => typeof href === "string" && href !== "");
+      const hasGroupLink = headerLinks.some((href) => href.includes("/groups/"));
+      const hasPageLink = headerLinks.some((href) => !href.includes("/groups/"));
+      if (hasPageLink && !hasGroupLink) {
+        return keyWords.NF_FOLLOW;
+      }
+    }
+  }
+
   const queryFollow = [
     ":scope h4[id] > span > div > span",
     ":scope h4[id] > span > span > div > span",
@@ -200,6 +215,20 @@ function isNewsFollow(post, state, keyWords) {
 }
 
 function isNewsParticipate(post, keyWords) {
+  const header = post.querySelector("h4");
+  if (header) {
+    const headerButtons = header.querySelectorAll('[role="button"]');
+    if (headerButtons.length > 0) {
+      const headerLinks = Array.from(header.querySelectorAll("a[href]"))
+        .map((link) => link.getAttribute("href"))
+        .filter((href) => typeof href === "string" && href !== "");
+      const hasGroupLink = headerLinks.some((href) => href.includes("/groups/"));
+      if (hasGroupLink) {
+        return keyWords.NF_PARTICIPATE;
+      }
+    }
+  }
+
   const query = ":scope h4 > span > span[class] > span";
   const elements = querySelectorAllNoChildren(post, query, 0);
   if (elements.length === 1) {

@@ -3,9 +3,17 @@ function isSponsored(post, state) {
     return false;
   }
 
+  if (post.querySelector('a[href*="/ads/about/"]')) {
+    return true;
+  }
+
   let isSponsoredPost = false;
 
   if (state.isNF) {
+    isSponsoredPost = isSponsoredAriaLabelledBy(post, state.dictionarySponsored);
+    if (isSponsoredPost) {
+      return true;
+    }
     isSponsoredPost = isSponsoredPlain(post, state.dictionarySponsored);
     if (!isSponsoredPost) {
       isSponsoredPost = isSponsoredShadowRoot1(post, state.dictionarySponsored);
@@ -58,6 +66,30 @@ function isSponsored(post, state) {
   }
 
   return isSponsoredPost;
+}
+
+function isSponsoredAriaLabelledBy(post, dictionarySponsored) {
+  if (!Array.isArray(dictionarySponsored)) {
+    return false;
+  }
+
+  const labelled = post.querySelectorAll("[aria-labelledby]");
+  for (const node of labelled) {
+    const idValue = node.getAttribute("aria-labelledby");
+    if (!idValue) {
+      continue;
+    }
+    const label = document.getElementById(idValue);
+    if (!label) {
+      continue;
+    }
+    const lcText = label.textContent.trim().toLowerCase();
+    if (dictionarySponsored.includes(lcText)) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 function isSponsoredPlain(post, dictionarySponsored) {

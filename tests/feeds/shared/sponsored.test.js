@@ -20,6 +20,35 @@ describe("feeds/shared/sponsored", () => {
     expect(isSponsored(post, state)).toBe(true);
   });
 
+  test("isSponsored detects ads about links", () => {
+    const post = document.createElement("div");
+    const link = document.createElement("a");
+    link.setAttribute("href", "/ads/about/?foo=bar");
+    post.appendChild(link);
+
+    const state = { isNF: true, dictionarySponsored: null };
+
+    expect(isSponsored(post, state)).toBe(true);
+  });
+
+  test("isSponsored detects aria-labelledby sponsored labels", () => {
+    const post = document.createElement("div");
+    const label = document.createElement("span");
+    label.id = "sponsored-label";
+    label.textContent = "Sponsored";
+    document.body.appendChild(label);
+
+    const labelled = document.createElement("span");
+    labelled.setAttribute("aria-labelledby", "sponsored-label");
+    post.appendChild(labelled);
+
+    const state = { isNF: true, dictionarySponsored: ["sponsored"] };
+
+    expect(isSponsored(post, state)).toBe(true);
+
+    label.remove();
+  });
+
   test("isSponsored returns false when dictionary missing", () => {
     const post = document.createElement("div");
     const state = { isNF: true, dictionarySponsored: null };

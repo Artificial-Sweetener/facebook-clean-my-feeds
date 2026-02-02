@@ -96,8 +96,6 @@ function attachTooltip(target, text, options = {}) {
 
   target.addEventListener("pointerenter", onEnter);
   target.addEventListener("pointerleave", onLeave);
-  target.addEventListener("focus", onEnter);
-  target.addEventListener("blur", onLeave);
 
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", updatePosition, true);
@@ -108,8 +106,6 @@ function attachTooltip(target, text, options = {}) {
     hide();
     target.removeEventListener("pointerenter", onEnter);
     target.removeEventListener("pointerleave", onLeave);
-    target.removeEventListener("focus", onEnter);
-    target.removeEventListener("blur", onLeave);
     if (typeof window !== "undefined") {
       window.removeEventListener("scroll", updatePosition, true);
       window.removeEventListener("resize", updatePosition);

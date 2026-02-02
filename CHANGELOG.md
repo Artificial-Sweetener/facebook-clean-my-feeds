@@ -1,3 +1,11 @@
+# [6.1.2](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.1.1...v6.1.2) (2026-02-02)
+
+
+### Bug Fixes
+
+* **dom:** only show tooltips on hover
+* **profile:** target page timeline posts without catching right column blocks
+
 # [6.1.1](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.1.0...v6.1.1) (2026-02-02)
 
 

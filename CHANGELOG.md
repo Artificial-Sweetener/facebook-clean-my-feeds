@@ -1,17 +1,9 @@
-# [6.1.0](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.0.0...v6.1.0) (2026-02-02)
+# [6.1.1](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.1.0...v6.1.1) (2026-02-02)
 
 
 ### Bug Fixes
 
 * **i18n:** add missing translations for verified and ai options ([d65cb46](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/d65cb460d435df0e467551b1e70cd99c17681e8f))
-* **ui:** prevent menu text selection and mount styles early ([343421d](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/343421d540a02df844e8ce4c59506d648aa078f1))
-
-
-### Features
-
-* **news:** add locale-agnostic follow/join and sponsored detection ([307f0b2](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/307f0b281e6bfebe3b26b51ff6ee66e479a03a82))
-* **news:** add top cards filter for pages ([4e2600a](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/4e2600ad801d1713f179d47a2054105ddb0f6e00))
-* **news:** add verified badge hide and filter options ([7c728cc](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/7c728cc62f3a5170136542e68596f7cd5da3c9bd))
 
 # [6.1.0](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.0.0...v6.1.0) (2026-02-02)
 
@@ -26,21 +18,6 @@
 * **news:** add locale-agnostic follow/join and sponsored detection ([307f0b2](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/307f0b281e6bfebe3b26b51ff6ee66e479a03a82))
 * **news:** add top cards filter for pages ([4e2600a](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/4e2600ad801d1713f179d47a2054105ddb0f6e00))
 * **news:** add verified badge hide and filter options ([7c728cc](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/7c728cc62f3a5170136542e68596f7cd5da3c9bd))
-
-# [6.1.0](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.0.0...v6.1.0) (2026-02-02)
-
-
-### Bug Fixes
-
-* **ui:** prevent menu text selection ([869d661](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/869d6614682403951937536d5a92e2efbbb0bc19))
-* **ui:** mount CMF styles when `<head>` is unavailable to avoid early-init misses (Firefox) ([869d661](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/869d6614682403951937536d5a92e2efbbb0bc19))
-
-
-### Features
-
-* **news:** add locale-agnostic follow/join and sponsored detection ([8eb9e22](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/8eb9e22d19301d1e772faaf9cf362e27dbb439a0))
-* **news:** add top cards filter for pages ([f7cb92f](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/f7cb92faba6ff936cd6d51bfac274a3a62df7000))
-* **news:** add verified badge hide and filter options ([9828dd5](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/9828dd555f84f9b58b88515b943d250ece25ee9d))
 
 # [6.0.0](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v5.07...v6.0.0) (2026-01-17)
 

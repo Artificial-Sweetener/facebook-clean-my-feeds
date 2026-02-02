@@ -3,13 +3,14 @@ const { swatTheMosquitos } = require("../dom/animated-gifs");
 const { hasSizeChanged } = require("../dom/dirty-check");
 const { hidePost } = require("../dom/hide");
 const { scrubInfoBoxes } = require("../dom/info-boxes");
+const { profileSelectors } = require("../selectors/profile");
 
 const { findProfileBlockedText } = require("./shared/blocked-text");
 const { hasNewsAnimatedGifContent } = require("./shared/animated-gifs");
 
 function isProfileColumnDirty(state) {
   const arrReturn = [null, null];
-  const mainColumn = document.querySelector('div[role="main"]');
+  const mainColumn = document.querySelector(profileSelectors.mainColumn);
   if (mainColumn) {
     if (!mainColumn.hasAttribute(mainColumnAtt)) {
       arrReturn[0] = mainColumn;
@@ -20,7 +21,7 @@ function isProfileColumnDirty(state) {
     }
   }
 
-  const elDialog = document.querySelector('div[role="dialog"]');
+  const elDialog = document.querySelector(profileSelectors.dialog);
   if (elDialog) {
     if (!elDialog.hasAttribute(mainColumnAtt)) {
       arrReturn[1] = elDialog;
@@ -34,6 +35,48 @@ function isProfileColumnDirty(state) {
   }
 
   return arrReturn;
+}
+
+const profilePermalinkSelectors = [
+  'a[href*="/posts/"]',
+  'a[href*="/story.php"]',
+  'a[href*="/permalink/"]',
+  'a[href*="permalink.php"]',
+];
+
+function getProfilePostsFromPermalinks(mainColumn) {
+  if (!mainColumn) {
+    return [];
+  }
+
+  const selector = profilePermalinkSelectors.join(",");
+  const permalinks = Array.from(mainColumn.querySelectorAll(selector));
+  if (permalinks.length === 0) {
+    return [];
+  }
+
+  const containers = new Set();
+
+  for (const link of permalinks) {
+    let node = link.parentElement;
+    let lastSingle = null;
+
+    while (node && node !== mainColumn) {
+      const count = node.querySelectorAll(selector).length;
+      if (count === 1) {
+        lastSingle = node;
+      } else {
+        break;
+      }
+      node = node.parentElement;
+    }
+
+    if (lastSingle) {
+      containers.add(lastSingle);
+    }
+  }
+
+  return Array.from(containers);
 }
 
 function mopProfileFeed(context) {
@@ -58,9 +101,10 @@ function mopProfileFeed(context) {
   }
 
   if (mainColumn) {
-    const query =
-      'div[role="main"] > div > div > div > div:nth-of-type(2) > div:not([class]) > div > div[class]';
-    const posts = Array.from(document.querySelectorAll(query));
+    const posts = getProfilePostsFromPermalinks(mainColumn);
+    if (posts.length === 0) {
+      return { mainColumn, elDialog };
+    }
 
     for (const post of posts) {
       if (post.innerHTML.length === 0) {
@@ -119,5 +163,6 @@ function mopProfileFeed(context) {
 }
 
 module.exports = {
+  getProfilePostsFromPermalinks,
   mopProfileFeed,
 };

@@ -341,15 +341,45 @@ function buildDialogSections({ state, options, keyWords, translations }) {
   );
   fs.appendChild(l);
   fs.appendChild(createSingleCB(keyWords, options, "NF_SPONSORED", false));
-  Object.keys(keyWords).forEach((key) => {
-    if (key.startsWith("NF_") && !key.startsWith("NF_BLOCK")) {
-      if (key.startsWith("NF_LIKES")) {
-        if (key === "NF_LIKES_MAXIMUM") {
-          fs.appendChild(createCheckboxAndInput(keyWords, options, key, "NF_LIKES_MAXIMUM_COUNT"));
-        }
-      } else {
-        fs.appendChild(createSingleCB(keyWords, options, key));
+  const newsFeedOrder = [
+    "NF_TABLIST_STORIES_REELS_ROOMS",
+    "NF_STORIES",
+    "NF_TOP_CARDS_PAGES",
+    "NF_REELS_SHORT_VIDEOS",
+    "NF_SHORT_REEL_VIDEO",
+    "NF_FOLLOW",
+    "NF_PARTICIPATE",
+    "NF_PEOPLE_YOU_MAY_KNOW",
+    "NF_SUGGESTIONS",
+    "NF_EVENTS_YOU_MAY_LIKE",
+    "NF_SURVEY",
+    "NF_PAID_PARTNERSHIP",
+    "NF_SPONSORED_PAID",
+    "NF_META_AI",
+    "NF_AI_SIDE_PANELS",
+    "NF_HIDE_VERIFIED_BADGE",
+    "NF_FILTER_VERIFIED_BADGE",
+    "NF_ANIMATED_GIFS_POSTS",
+    "NF_ANIMATED_GIFS_PAUSE",
+    "NF_SHARES",
+    "NF_LIKES_MAXIMUM",
+  ];
+  const newsFeedKeys = Object.keys(keyWords).filter(
+    (key) => key.startsWith("NF_") && !key.startsWith("NF_BLOCK")
+  );
+  const orderedNewsFeedKeys = [
+    ...newsFeedOrder.filter((key) => newsFeedKeys.includes(key)),
+    ...newsFeedKeys.filter((key) => !newsFeedOrder.includes(key) && key !== "NF_SPONSORED"),
+  ];
+  orderedNewsFeedKeys.forEach((key) => {
+    if (key.startsWith("NF_LIKES")) {
+      if (key === "NF_LIKES_MAXIMUM") {
+        fs.appendChild(createCheckboxAndInput(keyWords, options, key, "NF_LIKES_MAXIMUM_COUNT"));
       }
+      return;
+    }
+    if (key !== "NF_SPONSORED") {
+      fs.appendChild(createSingleCB(keyWords, options, key));
     }
   });
   l = document.createElement("strong");

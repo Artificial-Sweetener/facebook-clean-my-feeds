@@ -3,6 +3,7 @@ const {
   isNewsFollow,
   isNewsParticipate,
   isNewsVerifiedBadge,
+  getSidePanelAiTargets,
 } = require("../../src/feeds/news");
 const { newsSelectors } = require("../../src/selectors/news");
 
@@ -103,5 +104,26 @@ describe("feeds/news", () => {
     const keyWords = { NF_FILTER_VERIFIED_BADGE: "Filter verified accounts" };
 
     expect(isNewsVerifiedBadge(post, keyWords)).toBe("Filter verified accounts");
+  });
+
+  test("getSidePanelAiTargets finds Meta AI and Manus AI items", () => {
+    document.body.innerHTML = `
+      <div role="navigation">
+        <ul>
+          <li><a href="https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.meta.ai%2F">Meta AI</a></li>
+          <li>Manus AI</li>
+          <li>Friends</li>
+        </ul>
+      </div>
+      <div role="complementary">
+        <ul>
+          <li><a href="/messages/t/36327,2227039302/">Meta AI</a></li>
+          <li><a href="/messages/t/12345/">Someone Else</a></li>
+        </ul>
+      </div>
+    `;
+
+    const targets = getSidePanelAiTargets();
+    expect(targets.length).toBe(3);
   });
 });

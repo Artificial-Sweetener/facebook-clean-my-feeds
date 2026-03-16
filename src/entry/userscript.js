@@ -11,7 +11,6 @@ const { mopReelsFeed } = require("../feeds/reels");
 const { mopSearchFeed } = require("../feeds/search");
 const { mopVideosFeed } = require("../feeds/videos");
 const { defaults, pathInfo } = require("../ui/i18n/translations");
-const { buildDictionaries } = require("../ui/i18n/dictionaries");
 const { buildIconHTML } = require("../ui/icon-html");
 const { initDialog, toggleDialog } = require("../ui/dialog/dialog");
 const { getOptions } = require("../storage/idb");
@@ -84,11 +83,6 @@ async function loadOptions(state) {
   state.language = language;
   state.hideAnInfoBox = hideAnInfoBox;
   state.optionsReady = true;
-
-  const dictionaries = buildDictionaries();
-  state.dictionarySponsored = dictionaries.dictionarySponsored;
-  state.dictionaryReelsAndShortVideos = dictionaries.dictionaryReelsAndShortVideos;
-  state.dictionaryFollow = dictionaries.dictionaryFollow;
 
   return { options, filters, keyWords };
 }

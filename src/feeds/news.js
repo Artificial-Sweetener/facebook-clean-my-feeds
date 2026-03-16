@@ -6,7 +6,7 @@ const { hasSizeChanged } = require("../dom/dirty-check");
 const { doLightDusting } = require("../dom/dusting");
 const { hideNewsPost, hideFeature, hideFeatureNoCaption } = require("../dom/hide");
 const { scrubInfoBoxes } = require("../dom/info-boxes");
-const { extractTextContent, scanTreeForText } = require("../dom/walker");
+const { extractTextContent } = require("../dom/walker");
 const { climbUpTheTree, querySelectorAllNoChildren } = require("../utils/dom");
 const { newsSelectors } = require("../selectors/news");
 
@@ -132,7 +132,7 @@ function isNewsSponsoredPaidBy(post, keyWords) {
   return sponsoredPaidBy.length === 0 ? "" : keyWords.NF_SPONSORED_PAID;
 }
 
-function isNewsReelsAndShortVideos(post, state, keyWords) {
+function isNewsReelsAndShortVideos(post, keyWords) {
   const queryReelsAndShortVideos = 'a[href="/reel/?s=ifu_see_more"]';
   const elReelsAndShortVideos = post.querySelector(queryReelsAndShortVideos);
   if (elReelsAndShortVideos !== null) {
@@ -143,14 +143,6 @@ function isNewsReelsAndShortVideos(post, state, keyWords) {
   const manyReels = post.querySelectorAll(queryManyReels);
   if (manyReels.length > 4) {
     return keyWords.NF_REELS_SHORT_VIDEOS;
-  }
-
-  const buttonDiv = post.querySelector('div[role="button"] > i ~ div');
-  if (buttonDiv && buttonDiv.textContent) {
-    const buttonText = buttonDiv.textContent.trim().toLowerCase();
-    if (state.dictionaryReelsAndShortVideos.find((item) => item === buttonText)) {
-      return keyWords.NF_REELS_SHORT_VIDEOS;
-    }
   }
 
   return "";
@@ -168,7 +160,7 @@ function isNewsEventsYouMayLike(post, keyWords) {
   return events.length === 0 ? "" : keyWords.NF_EVENTS_YOU_MAY_LIKE;
 }
 
-function isNewsFollow(post, state, keyWords) {
+function isNewsFollow(post, keyWords) {
   const header = post.querySelector("h4");
   if (header) {
     const headerButtons = header.querySelectorAll('[role="button"]');
@@ -194,51 +186,6 @@ function isNewsFollow(post, state, keyWords) {
     return keyWords.NF_FOLLOW;
   }
 
-  if (Array.isArray(state.dictionaryFollow) && state.dictionaryFollow.length > 0) {
-    const normaliseToLower = (value) => {
-      if (!value || typeof value !== "string") {
-        return "";
-      }
-      try {
-        return value.normalize("NFKC").toLowerCase();
-      } catch (err) {
-        return value.toLowerCase();
-      }
-    };
-
-    const hasFollowKeyword = (value) => {
-      const normalised = normaliseToLower(value);
-      return (
-        normalised !== "" && state.dictionaryFollow.some((keyword) => normalised.includes(keyword))
-      );
-    };
-
-    const followButton = Array.from(
-      post.querySelectorAll('a[role="button"], div[role="button"], span[role="button"]')
-    ).find((button) => {
-      const ariaLabel =
-        button && typeof button.getAttribute === "function"
-          ? button.getAttribute("aria-label")
-          : "";
-      const buttonText = button && typeof button.textContent === "string" ? button.textContent : "";
-      return hasFollowKeyword(ariaLabel) || hasFollowKeyword(buttonText);
-    });
-    if (followButton) {
-      return keyWords.NF_FOLLOW;
-    }
-
-    const blocks = post.querySelectorAll(getNewsBlocksQuery(post));
-    if (blocks.length > 0) {
-      const headerText = normaliseToLower(scanTreeForText(blocks[0]).join(" "));
-      if (
-        headerText !== "" &&
-        state.dictionaryFollow.some((keyword) => headerText.includes(keyword))
-      ) {
-        return keyWords.NF_FOLLOW;
-      }
-    }
-  }
-
   return "";
 }
 
@@ -261,41 +208,6 @@ function isNewsParticipate(post, keyWords) {
   const elements = querySelectorAllNoChildren(post, query, 0);
   if (elements.length === 1) {
     return keyWords.NF_PARTICIPATE;
-  }
-
-  const keywords = [keyWords.NF_PARTICIPATE, "Join"]
-    .filter((value) => typeof value === "string" && value.trim() !== "")
-    .map((value) => value.toLowerCase());
-  if (keywords.length === 0) {
-    return "";
-  }
-
-  const hasKeyword = (value) => {
-    if (!value || typeof value !== "string") {
-      return false;
-    }
-    const normalised = value.toLowerCase();
-    return keywords.some((keyword) => normalised.includes(keyword));
-  };
-
-  const participateButton = Array.from(
-    post.querySelectorAll('a[role="button"], div[role="button"], span[role="button"]')
-  ).find((button) => {
-    const ariaLabel =
-      button && typeof button.getAttribute === "function" ? button.getAttribute("aria-label") : "";
-    const buttonText = button && typeof button.textContent === "string" ? button.textContent : "";
-    return hasKeyword(ariaLabel) || hasKeyword(buttonText);
-  });
-  if (participateButton) {
-    return keyWords.NF_PARTICIPATE;
-  }
-
-  const blocks = post.querySelectorAll(getNewsBlocksQuery(post));
-  if (blocks.length > 0) {
-    const headerText = scanTreeForText(blocks[0]).join(" ").toLowerCase();
-    if (headerText && keywords.some((keyword) => headerText.includes(keyword))) {
-      return keyWords.NF_PARTICIPATE;
-    }
   }
 
   return "";
@@ -978,7 +890,7 @@ function mopNewsFeed(context) {
         doLightDusting(post, state);
 
         if (hideReason === "" && options.NF_REELS_SHORT_VIDEOS) {
-          hideReason = isNewsReelsAndShortVideos(post, state, keyWords);
+          hideReason = isNewsReelsAndShortVideos(post, keyWords);
         }
         if (hideReason === "" && options.NF_SHORT_REEL_VIDEO) {
           hideReason = isNewsShortReelVideo(post, keyWords);
@@ -996,7 +908,7 @@ function mopNewsFeed(context) {
           hideReason = isNewsSuggested(post, state, keyWords);
         }
         if (hideReason === "" && options.NF_FOLLOW) {
-          hideReason = isNewsFollow(post, state, keyWords);
+          hideReason = isNewsFollow(post, keyWords);
         }
         if (hideReason === "" && options.NF_PARTICIPATE) {
           hideReason = isNewsParticipate(post, keyWords);

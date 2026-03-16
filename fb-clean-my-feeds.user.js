@@ -3225,9 +3225,6 @@
           language: "",
           filters: {},
           hideAnInfoBox: false,
-          dictionarySponsored: [],
-          dictionaryReelsAndShortVideos: [],
-          dictionaryFollow: [],
           isNF: false,
           isGF: false,
           isVF: false,
@@ -5168,132 +5165,47 @@
         if (post.querySelector('a[href*="/ads/about/"]')) {
           return true;
         }
-        let isSponsoredPost = false;
-        if (state.isNF) {
-          isSponsoredPost = isSponsoredAriaLabelledBy(post, state.dictionarySponsored);
-          if (isSponsoredPost) {
-            return true;
-          }
-          isSponsoredPost = isSponsoredPlain(post, state.dictionarySponsored);
-          if (!isSponsoredPost) {
-            isSponsoredPost = isSponsoredShadowRoot1(post, state.dictionarySponsored);
-            if (!isSponsoredPost) {
-              isSponsoredPost = isSponsoredShadowRoot2(post, state.dictionarySponsored);
-            }
-          }
+        if (hasSponsoredLinkSignature(post, state)) {
+          return true;
         }
-        if (!isSponsoredPost) {
-          const paramFind = "__cft__[0]=";
-          const paramMinSize = state.isSF ? 250 : state.isVF ? 299 : 311;
-          let elLinks = [];
-          if (state.isNF || state.isGF) {
+        return false;
+      }
+      function hasSponsoredLinkSignature(post, state) {
+        const paramFind = "__cft__[0]=";
+        const paramMinSize = state.isSF ? 250 : state.isVF ? 299 : 311;
+        let elLinks = [];
+        if (state.isNF || state.isGF) {
+          elLinks = Array.from(
+            post.querySelectorAll(
+              `div[aria-posinset] span > a[href*="${paramFind}"]:not([href^="/groups/"]):not([href*="section_header_type"])`
+            )
+          );
+          if (elLinks.length === 0) {
             elLinks = Array.from(
               post.querySelectorAll(
-                `div[aria-posinset] span > a[href*="${paramFind}"]:not([href^="/groups/"]):not([href*="section_header_type"])`
+                `div[aria-describedby] span > a[href*="${paramFind}"]:not([href^="/groups/"]):not([href*="section_header_type"])`
               )
             );
-            if (elLinks.length === 0) {
-              elLinks = Array.from(
-                post.querySelectorAll(
-                  `div[aria-describedby] span > a[href*="${paramFind}"]:not([href^="/groups/"]):not([href*="section_header_type"])`
-                )
-              );
-            }
-          } else if (state.isVF) {
-            elLinks = Array.from(
-              post.querySelectorAll(`div > div > div > div > span > span > div > a[href*="${paramFind}"]`)
-            );
-          } else if (state.isSF) {
-            elLinks = Array.from(
-              post.querySelectorAll(`div[role="article"] span > a[href*="${paramFind}"]`)
-            );
           }
-          if (elLinks.length > 0 && elLinks.length < 10) {
-            const elMax = Math.min(2, elLinks.length);
-            for (let i = 0; i < elMax; i += 1) {
-              const el = elLinks[i];
-              const pos = el.href.indexOf(paramFind);
-              if (pos >= 0 && el.href.slice(pos).length >= paramMinSize) {
-                isSponsoredPost = true;
-                break;
-              }
-            }
-          }
+        } else if (state.isVF) {
+          elLinks = Array.from(
+            post.querySelectorAll(`div > div > div > div > span > span > div > a[href*="${paramFind}"]`)
+          );
+        } else if (state.isSF) {
+          elLinks = Array.from(post.querySelectorAll(`div[role="article"] span > a[href*="${paramFind}"]`));
         }
-        return isSponsoredPost;
-      }
-      function isSponsoredAriaLabelledBy(post, dictionarySponsored) {
-        if (!Array.isArray(dictionarySponsored)) {
+        if (elLinks.length === 0 || elLinks.length >= 10) {
           return false;
         }
-        const labelled = post.querySelectorAll("[aria-labelledby]");
-        for (const node of labelled) {
-          const idValue = node.getAttribute("aria-labelledby");
-          if (!idValue) {
-            continue;
-          }
-          const label = document.getElementById(idValue);
-          if (!label) {
-            continue;
-          }
-          const lcText = label.textContent.trim().toLowerCase();
-          if (dictionarySponsored.includes(lcText)) {
+        const elMax = Math.min(2, elLinks.length);
+        for (let i = 0; i < elMax; i += 1) {
+          const el = elLinks[i];
+          const pos = el.href.indexOf(paramFind);
+          if (pos >= 0 && el.href.slice(pos).length >= paramMinSize) {
             return true;
           }
         }
         return false;
-      }
-      function isSponsoredPlain(post, dictionarySponsored) {
-        if (!Array.isArray(dictionarySponsored)) {
-          return false;
-        }
-        let hasSponsoredText = false;
-        const queryElement = 'div[id] > span > a[role="link"] > span';
-        const elSpans = post.querySelectorAll(queryElement);
-        elSpans.forEach((elSpan) => {
-          if (!elSpan.querySelector("svg")) {
-            const lcText = elSpan.textContent.trim().toLowerCase();
-            hasSponsoredText = dictionarySponsored.includes(lcText);
-          }
-        });
-        return hasSponsoredText;
-      }
-      function isSponsoredShadowRoot1(post, dictionarySponsored) {
-        if (!Array.isArray(dictionarySponsored)) {
-          return false;
-        }
-        let hasSponsoredText = false;
-        const elCanvas = post.querySelector("a > span > span[aria-labelledby] > canvas");
-        if (elCanvas) {
-          const elementId = elCanvas.parentElement.getAttribute("aria-labelledby");
-          if (elementId && elementId.slice(0, 1) === ":") {
-            const escapedId = elementId.replace(/(:)/g, "\\$1");
-            const elSpan = document.querySelector(`[id="${escapedId}"]`);
-            if (elSpan) {
-              const lcText = elSpan.textContent.trim().toLowerCase();
-              hasSponsoredText = dictionarySponsored.includes(lcText);
-            }
-          }
-        }
-        return hasSponsoredText;
-      }
-      function isSponsoredShadowRoot2(post, dictionarySponsored) {
-        if (!Array.isArray(dictionarySponsored)) {
-          return false;
-        }
-        let hasSponsoredText = false;
-        const elUse = post.querySelector("a > span > span[aria-labelledby] svg > use[*|href]");
-        if (elUse) {
-          const elementId = elUse.href.baseVal;
-          if (elementId !== "" && elementId.slice(0, 1) === "#") {
-            const elText = document.querySelector(`${elementId}`);
-            if (elText) {
-              const lcText = elText.textContent.trim().toLowerCase();
-              hasSponsoredText = dictionarySponsored.includes(lcText);
-            }
-          }
-        }
-        return hasSponsoredText;
       }
       module.exports = {
         isSponsored
@@ -6019,7 +5931,7 @@
       var { doLightDusting } = require_dusting();
       var { hideNewsPost, hideFeature, hideFeatureNoCaption } = require_hide();
       var { scrubInfoBoxes } = require_info_boxes();
-      var { extractTextContent, scanTreeForText } = require_walker();
+      var { extractTextContent } = require_walker();
       var { climbUpTheTree, querySelectorAllNoChildren } = require_dom();
       var { newsSelectors } = require_news();
       var { findNewsBlockedText } = require_blocked_text2();
@@ -6122,7 +6034,7 @@
         const sponsoredPaidBy = querySelectorAllNoChildren(post, querySPB, 1);
         return sponsoredPaidBy.length === 0 ? "" : keyWords.NF_SPONSORED_PAID;
       }
-      function isNewsReelsAndShortVideos(post, state, keyWords) {
+      function isNewsReelsAndShortVideos(post, keyWords) {
         const queryReelsAndShortVideos = 'a[href="/reel/?s=ifu_see_more"]';
         const elReelsAndShortVideos = post.querySelector(queryReelsAndShortVideos);
         if (elReelsAndShortVideos !== null) {
@@ -6132,13 +6044,6 @@
         const manyReels = post.querySelectorAll(queryManyReels);
         if (manyReels.length > 4) {
           return keyWords.NF_REELS_SHORT_VIDEOS;
-        }
-        const buttonDiv = post.querySelector('div[role="button"] > i ~ div');
-        if (buttonDiv && buttonDiv.textContent) {
-          const buttonText = buttonDiv.textContent.trim().toLowerCase();
-          if (state.dictionaryReelsAndShortVideos.find((item) => item === buttonText)) {
-            return keyWords.NF_REELS_SHORT_VIDEOS;
-          }
         }
         return "";
       }
@@ -6152,7 +6057,7 @@
         const events = querySelectorAllNoChildren(post, query, 0);
         return events.length === 0 ? "" : keyWords.NF_EVENTS_YOU_MAY_LIKE;
       }
-      function isNewsFollow(post, state, keyWords) {
+      function isNewsFollow(post, keyWords) {
         const header = post.querySelector("h4");
         if (header) {
           const headerButtons = header.querySelectorAll('[role="button"]');
@@ -6174,39 +6079,6 @@
         if (elementsFollow.length === 1) {
           return keyWords.NF_FOLLOW;
         }
-        if (Array.isArray(state.dictionaryFollow) && state.dictionaryFollow.length > 0) {
-          const normaliseToLower = (value) => {
-            if (!value || typeof value !== "string") {
-              return "";
-            }
-            try {
-              return value.normalize("NFKC").toLowerCase();
-            } catch (err) {
-              return value.toLowerCase();
-            }
-          };
-          const hasFollowKeyword = (value) => {
-            const normalised = normaliseToLower(value);
-            return normalised !== "" && state.dictionaryFollow.some((keyword) => normalised.includes(keyword));
-          };
-          const followButton = Array.from(
-            post.querySelectorAll('a[role="button"], div[role="button"], span[role="button"]')
-          ).find((button) => {
-            const ariaLabel = button && typeof button.getAttribute === "function" ? button.getAttribute("aria-label") : "";
-            const buttonText = button && typeof button.textContent === "string" ? button.textContent : "";
-            return hasFollowKeyword(ariaLabel) || hasFollowKeyword(buttonText);
-          });
-          if (followButton) {
-            return keyWords.NF_FOLLOW;
-          }
-          const blocks = post.querySelectorAll(getNewsBlocksQuery(post));
-          if (blocks.length > 0) {
-            const headerText = normaliseToLower(scanTreeForText(blocks[0]).join(" "));
-            if (headerText !== "" && state.dictionaryFollow.some((keyword) => headerText.includes(keyword))) {
-              return keyWords.NF_FOLLOW;
-            }
-          }
-        }
         return "";
       }
       function isNewsParticipate(post, keyWords) {
@@ -6225,34 +6097,6 @@
         const elements = querySelectorAllNoChildren(post, query, 0);
         if (elements.length === 1) {
           return keyWords.NF_PARTICIPATE;
-        }
-        const keywords = [keyWords.NF_PARTICIPATE, "Join"].filter((value) => typeof value === "string" && value.trim() !== "").map((value) => value.toLowerCase());
-        if (keywords.length === 0) {
-          return "";
-        }
-        const hasKeyword = (value) => {
-          if (!value || typeof value !== "string") {
-            return false;
-          }
-          const normalised = value.toLowerCase();
-          return keywords.some((keyword) => normalised.includes(keyword));
-        };
-        const participateButton = Array.from(
-          post.querySelectorAll('a[role="button"], div[role="button"], span[role="button"]')
-        ).find((button) => {
-          const ariaLabel = button && typeof button.getAttribute === "function" ? button.getAttribute("aria-label") : "";
-          const buttonText = button && typeof button.textContent === "string" ? button.textContent : "";
-          return hasKeyword(ariaLabel) || hasKeyword(buttonText);
-        });
-        if (participateButton) {
-          return keyWords.NF_PARTICIPATE;
-        }
-        const blocks = post.querySelectorAll(getNewsBlocksQuery(post));
-        if (blocks.length > 0) {
-          const headerText = scanTreeForText(blocks[0]).join(" ").toLowerCase();
-          if (headerText && keywords.some((keyword) => headerText.includes(keyword))) {
-            return keyWords.NF_PARTICIPATE;
-          }
         }
         return "";
       }
@@ -6805,7 +6649,7 @@
             } else {
               doLightDusting(post, state);
               if (hideReason === "" && options.NF_REELS_SHORT_VIDEOS) {
-                hideReason = isNewsReelsAndShortVideos(post, state, keyWords);
+                hideReason = isNewsReelsAndShortVideos(post, keyWords);
               }
               if (hideReason === "" && options.NF_SHORT_REEL_VIDEO) {
                 hideReason = isNewsShortReelVideo(post, keyWords);
@@ -6823,7 +6667,7 @@
                 hideReason = isNewsSuggested(post, state, keyWords);
               }
               if (hideReason === "" && options.NF_FOLLOW) {
-                hideReason = isNewsFollow(post, state, keyWords);
+                hideReason = isNewsFollow(post, keyWords);
               }
               if (hideReason === "" && options.NF_PARTICIPATE) {
                 hideReason = isNewsParticipate(post, keyWords);
@@ -7659,46 +7503,6 @@
         isInstagram,
         isVideoLive,
         mopVideosFeed
-      };
-    }
-  });
-
-  // src/ui/i18n/dictionaries.js
-  var require_dictionaries = __commonJS({
-    "src/ui/i18n/dictionaries.js"(exports, module) {
-      var { translations } = require_translations();
-      function normaliseToLower(value) {
-        if (!value || typeof value !== "string") {
-          return "";
-        }
-        try {
-          return value.normalize("NFKC").toLowerCase();
-        } catch (error) {
-          return value.toLowerCase();
-        }
-      }
-      function buildDictionaries() {
-        const dictionarySponsored = Object.values(translations).flatMap((translation) => [
-          translation.SPONSORED ? translation.SPONSORED.toLowerCase() : void 0,
-          translation.SPONSORED_EXTRA ? translation.SPONSORED_EXTRA.toLowerCase() : void 0
-        ]).filter(Boolean);
-        const dictionaryFollow = Array.from(
-          new Set(
-            Object.values(translations).map((translation) => translation.NF_FOLLOW).filter((keyword) => typeof keyword === "string" && keyword.trim() !== "").map(normaliseToLower)
-          )
-        );
-        const dictionaryReelsAndShortVideos = Object.values(translations).map(
-          (translation) => translation.NF_REELS_SHORT_VIDEOS
-        );
-        return {
-          dictionarySponsored,
-          dictionaryFollow,
-          dictionaryReelsAndShortVideos
-        };
-      }
-      module.exports = {
-        buildDictionaries,
-        normaliseToLower
       };
     }
   });
@@ -9721,7 +9525,6 @@
       var { addCSS, addExtraCSS } = require_styles();
       var { deleteOptions, setOptions } = require_idb();
       var { createToggleButton } = require_toggle_button();
-      var { buildDictionaries } = require_dictionaries();
       var { defaults, translations } = require_translations();
       var { buildBugReport, getSupportUrl } = require_bug_report();
       var { buildDialogSections } = require_sections();
@@ -10725,10 +10528,6 @@
             replaceObjectContents(context.options, hydrated.options);
             replaceObjectContents(context.filters, hydrated.filters);
             replaceObjectContents(context.keyWords, hydrated.keyWords);
-            const dictionaries = buildDictionaries();
-            state.dictionarySponsored = dictionaries.dictionarySponsored;
-            state.dictionaryFollow = dictionaries.dictionaryFollow;
-            state.dictionaryReelsAndShortVideos = dictionaries.dictionaryReelsAndShortVideos;
             if (languageChanged) {
               buildDialog(context, handlers, true);
               initReportBug(context);
@@ -11048,7 +10847,6 @@
       var { mopSearchFeed } = require_search2();
       var { mopVideosFeed } = require_videos();
       var { defaults, pathInfo } = require_translations();
-      var { buildDictionaries } = require_dictionaries();
       var { buildIconHTML } = require_icon_html();
       var { initDialog, toggleDialog } = require_dialog();
       var { getOptions } = require_idb();
@@ -11115,10 +10913,6 @@
         state.language = language;
         state.hideAnInfoBox = hideAnInfoBox;
         state.optionsReady = true;
-        const dictionaries = buildDictionaries();
-        state.dictionarySponsored = dictionaries.dictionarySponsored;
-        state.dictionaryReelsAndShortVideos = dictionaries.dictionaryReelsAndShortVideos;
-        state.dictionaryFollow = dictionaries.dictionaryFollow;
         return { options, filters, keyWords };
       }
       function setFeedSettings(state, options, forceUpdate = false) {

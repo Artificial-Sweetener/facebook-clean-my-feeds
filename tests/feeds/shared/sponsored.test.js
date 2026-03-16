@@ -1,6 +1,16 @@
 const { isSponsored } = require("../../../src/feeds/shared/sponsored");
 
 describe("feeds/shared/sponsored", () => {
+  test("isSponsored prioritizes locale-agnostic cft link signatures", () => {
+    const post = document.createElement("div");
+    post.innerHTML =
+      '<div aria-posinset="1"><span><a href="/foo?__cft__[0]=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"></a></span></div>';
+
+    const state = { isNF: true };
+
+    expect(isSponsored(post, state)).toBe(true);
+  });
+
   test("isSponsored detects plain sponsored labels", () => {
     const post = document.createElement("div");
     const wrapper = document.createElement("div");
@@ -15,9 +25,9 @@ describe("feeds/shared/sponsored", () => {
     wrapper.appendChild(span1);
     post.appendChild(wrapper);
 
-    const state = { isNF: true, dictionarySponsored: ["sponsored"] };
+    const state = { isNF: true };
 
-    expect(isSponsored(post, state)).toBe(true);
+    expect(isSponsored(post, state)).toBe(false);
   });
 
   test("isSponsored detects ads about links", () => {
@@ -26,12 +36,12 @@ describe("feeds/shared/sponsored", () => {
     link.setAttribute("href", "/ads/about/?foo=bar");
     post.appendChild(link);
 
-    const state = { isNF: true, dictionarySponsored: null };
+    const state = { isNF: true };
 
     expect(isSponsored(post, state)).toBe(true);
   });
 
-  test("isSponsored detects aria-labelledby sponsored labels", () => {
+  test("isSponsored ignores aria-labelledby sponsored labels without an agnostic signal", () => {
     const post = document.createElement("div");
     const label = document.createElement("span");
     label.id = "sponsored-label";
@@ -42,16 +52,16 @@ describe("feeds/shared/sponsored", () => {
     labelled.setAttribute("aria-labelledby", "sponsored-label");
     post.appendChild(labelled);
 
-    const state = { isNF: true, dictionarySponsored: ["sponsored"] };
+    const state = { isNF: true };
 
-    expect(isSponsored(post, state)).toBe(true);
+    expect(isSponsored(post, state)).toBe(false);
 
     label.remove();
   });
 
-  test("isSponsored returns false when dictionary missing", () => {
+  test("isSponsored returns false when no agnostic signal exists", () => {
     const post = document.createElement("div");
-    const state = { isNF: true, dictionarySponsored: null };
+    const state = { isNF: true };
     expect(isSponsored(post, state)).toBe(false);
   });
 });

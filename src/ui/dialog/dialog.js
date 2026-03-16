@@ -10,7 +10,6 @@ const { toggleHiddenElements } = require("../../dom/hide");
 const { addCSS, addExtraCSS } = require("../../dom/styles");
 const { deleteOptions, setOptions } = require("../../storage/idb");
 const { createToggleButton } = require("../controls/toggle-button");
-const { buildDictionaries } = require("../i18n/dictionaries");
 const { defaults, translations } = require("../i18n/translations");
 const { buildBugReport, getSupportUrl } = require("../reporting/bug-report");
 
@@ -1152,11 +1151,6 @@ function initDialog(context, helpers) {
       replaceObjectContents(context.options, hydrated.options);
       replaceObjectContents(context.filters, hydrated.filters);
       replaceObjectContents(context.keyWords, hydrated.keyWords);
-
-      const dictionaries = buildDictionaries();
-      state.dictionarySponsored = dictionaries.dictionarySponsored;
-      state.dictionaryFollow = dictionaries.dictionaryFollow;
-      state.dictionaryReelsAndShortVideos = dictionaries.dictionaryReelsAndShortVideos;
 
       if (languageChanged) {
         buildDialog(context, handlers, true);

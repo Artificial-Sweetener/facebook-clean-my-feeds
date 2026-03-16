@@ -6,7 +6,7 @@
 // @version      VERSION
 // @author       Artificial Sweetener - Current Maintainer (https://github.com/Artificial-Sweetener/)
 // @author       zbluebugz - Founder (https://github.com/zbluebugz/)
-// @author       Quoc Viet Rtinh - Simplified UI Branch (merged/forked from) (https://github.com/trinhquocviet/)
+// @author       Quoc Viet Rtinh - Filter maintenance in 2025 (https://github.com/trinhquocviet/)
 // @match        https://www.facebook.com/*
 // @match        https://web.facebook.com/*
 // @match        https://facebook.com/*

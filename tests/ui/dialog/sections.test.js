@@ -173,4 +173,48 @@ describe("ui/dialog/sections", () => {
     const anchors = tipsSection.querySelectorAll("a");
     expect(anchors.length).toBeGreaterThan(0);
   });
+
+  test("tips content renders the Threads filter link between GitHub and Facebook paragraphs", () => {
+    const state = buildState();
+    const options = {
+      ...defaults,
+      NF_BLOCKED_TEXT: "",
+      GF_BLOCKED_TEXT: "",
+      VF_BLOCKED_TEXT: "",
+      MP_BLOCKED_TEXT: "",
+      MP_BLOCKED_TEXT_DESCRIPTION: "",
+      PP_BLOCKED_TEXT: "",
+      NF_LIKES_MAXIMUM_COUNT: "",
+      VERBOSITY_MESSAGE_COLOUR: "",
+      VERBOSITY_MESSAGE_BG_COLOUR: defaults.VERBOSITY_MESSAGE_BG_COLOUR,
+      VERBOSITY_DEBUG: false,
+      CMF_BORDER_COLOUR: defaults.CMF_BORDER_COLOUR,
+      CMF_DIALOG_LANGUAGE: "en",
+      CMF_BTN_OPTION: "0",
+      CMF_DIALOG_OPTION: "0",
+    };
+    const sections = buildDialogSections({
+      state,
+      options,
+      keyWords: translations.en,
+      translations,
+    });
+
+    const tipsSection = sections[9];
+    const paragraphs = Array.from(tipsSection.querySelectorAll("p")).map((p) => p.textContent.trim());
+    const starIndex = paragraphs.findIndex((text) => text.includes("GitHub"));
+    const threadsIndex = paragraphs.findIndex((text) => text.includes("Bobbin Threads Filter"));
+    const facebookIndex = paragraphs.findIndex((text) => text.includes("my Facebook"));
+    const threadsAnchor = Array.from(tipsSection.querySelectorAll("a")).find(
+      (anchor) => anchor.textContent.trim() === translations.en.DLG_TIPS_LINK_THREADS
+    );
+
+    expect(threadsAnchor).toBeTruthy();
+    expect(threadsAnchor.href).toBe(
+      "https://github.com/Artificial-Sweetener/bobbin-threads-filter"
+    );
+    expect(starIndex).toBeGreaterThan(-1);
+    expect(threadsIndex).toBeGreaterThan(starIndex);
+    expect(facebookIndex).toBeGreaterThan(threadsIndex);
+  });
 });

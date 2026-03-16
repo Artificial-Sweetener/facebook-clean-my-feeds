@@ -154,6 +154,7 @@
             DLG_TIPS_DESC: "Project links and maintainer info.",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "If it helps, a star on {github} would mean a lot.",
+            DLG_TIPS_THREADS: "If you use Threads on desktop too, I maintain a filter for that as well: {threads}.",
             DLG_TIPS_FACEBOOK: "Come say hi on {facebook} page - I share my art and poetry there.",
             DLG_TIPS_SITE: "If you want to see what I'm up to around the web, {site} is the best place to start.",
             DLG_TIPS_CREDITS: "Special thanks to {zbluebugz} for the original project, and to {trinhquocviet} for helping maintain filters in 2025.",
@@ -161,6 +162,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "my Facebook",
             DLG_TIPS_LINK_SITE: "my website",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Save", "Close", "Export", "Import", "Reset"],
             DLG_BUTTON_TOOLTIPS: [
@@ -179,6 +181,7 @@
             NF_STORIES: "\u0627\u0644\u0642\u0635\u0635",
             NF_TOP_CARDS_PAGES: "\u0628\u0637\u0627\u0642\u0627\u062A \u0641\u064A \u0627\u0644\u0623\u0639\u0644\u0649 (\u0644\u0644\u0635\u0641\u062D\u0627\u062A)",
             NF_META_AI: "\u062C\u0631\u0651\u0628 Meta AI",
+            NF_META_AI_PROMPTS: "\u0627\u0642\u062A\u0631\u0627\u062D\u0627\u062A \u0645\u0637\u0627\u0644\u0628\u0627\u062A Meta AI",
             NF_HIDE_VERIFIED_BADGE: "\u0625\u062E\u0641\u0627\u0621 \u0627\u0644\u0634\u0627\u0631\u0627\u062A \u0627\u0644\u0645\u0648\u062B\u0642\u0629",
             NF_FILTER_VERIFIED_BADGE: "\u062A\u0635\u0641\u064A\u0629 \u0627\u0644\u062D\u0633\u0627\u0628\u0627\u062A \u0627\u0644\u0645\u0648\u062B\u0642\u0629",
             NF_AI_SIDE_PANELS: "\u0627\u0644\u0630\u0643\u0627\u0621 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064A \u0641\u064A \u0627\u0644\u0644\u0648\u062D\u0627\u062A \u0627\u0644\u062C\u0627\u0646\u0628\u064A\u0629",
@@ -286,6 +289,7 @@
             DLG_TIPS_DESC: "\u0631\u0648\u0627\u0628\u0637 \u0627\u0644\u0645\u0634\u0631\u0648\u0639 \u0648\u0645\u0639\u0644\u0648\u0645\u0627\u062A \u0627\u0644\u0645\u0634\u0631\u0641.",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "\u0625\u0630\u0627 \u0643\u0627\u0646 \u0647\u0630\u0627 \u0645\u0641\u064A\u062F\u064B\u0627\u060C \u0641\u0625\u0646 \u0646\u062C\u0645\u0629 \u0639\u0644\u0649 {github} \u062A\u0639\u0646\u064A \u0627\u0644\u0643\u062B\u064A\u0631.",
+            DLG_TIPS_THREADS: "\u0625\u0630\u0627 \u0643\u0646\u062A \u062A\u0633\u062A\u062E\u062F\u0645 Threads \u0639\u0644\u0649 \u0633\u0637\u062D \u0627\u0644\u0645\u0643\u062A\u0628 \u0623\u064A\u0636\u064B\u0627\u060C \u0641\u0623\u0646\u0627 \u0623\u064F\u062F\u064A\u0631 \u0623\u062F\u0627\u0629 \u062A\u0635\u0641\u064A\u0629 \u0644\u0647 \u0623\u064A\u0636\u064B\u0627: {threads}.",
             DLG_TIPS_FACEBOOK: "\u0642\u0644 \u0645\u0631\u062D\u0628\u064B\u0627 \u0639\u0644\u0649 {facebook} - \u0623\u0634\u0627\u0631\u0643 \u0647\u0646\u0627\u0643 \u0623\u0639\u0645\u0627\u0644\u064A \u0627\u0644\u0641\u0646\u064A\u0629 \u0648\u0634\u0639\u0631\u064A.",
             DLG_TIPS_SITE: "\u0625\u0630\u0627 \u0623\u0631\u062F\u062A \u0645\u0639\u0631\u0641\u0629 \u0645\u0627 \u0623\u0641\u0639\u0644\u0647 \u0639\u0644\u0649 \u0627\u0644\u0648\u064A\u0628\u060C \u0641\u0640{site} \u0647\u0648 \u0623\u0641\u0636\u0644 \u0645\u0643\u0627\u0646 \u0644\u0644\u0628\u062F\u0621.",
             DLG_TIPS_CREDITS: "\u0634\u0643\u0631 \u062E\u0627\u0635 \u0644\u0640 {zbluebugz} \u0639\u0644\u0649 \u0627\u0644\u0645\u0634\u0631\u0648\u0639 \u0627\u0644\u0623\u0635\u0644\u064A\u060C \u0648\u0644\u0640 {trinhquocviet} \u0639\u0644\u0649 \u0641\u0631\u0639 \u0627\u0644\u0648\u0627\u062C\u0647\u0629 \u0627\u0644\u0645\u0628\u0633\u0637\u0629 \u0627\u0644\u0630\u064A \u0628\u062F\u0623\u062A \u0645\u0646\u0647 - \u0648\u0643\u0630\u0644\u0643 \u0639\u0644\u0649 \u0635\u064A\u0627\u0646\u0629 \u0627\u0644\u0641\u0644\u0627\u062A\u0631 \u062E\u0644\u0627\u0644 \u062A\u0644\u0643 \u0627\u0644\u0641\u062A\u0631\u0629.",
@@ -294,6 +298,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "\u0635\u0641\u062D\u062A\u064A \u0639\u0644\u0649 \u0641\u064A\u0633\u0628\u0648\u0643",
             DLG_TIPS_LINK_SITE: "\u0645\u0648\u0642\u0639\u064A",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["\u062D\u0641\u0638", "\u0642\u0631\u064A\u0628", "\u064A\u0635\u062F\u0651\u0631", "\u064A\u0633\u062A\u0648\u0631\u062F", "\u0625\u0639\u0627\u062F\u0629 \u062A\u0639\u064A\u064A\u0646"],
             DLG_BUTTON_TOOLTIPS: [
@@ -312,6 +317,7 @@
             NF_STORIES: "\u0418\u0441\u0442\u043E\u0440\u0438\u0438",
             NF_TOP_CARDS_PAGES: "\u0413\u043E\u0440\u043D\u0438 \u043A\u0430\u0440\u0442\u0438 (\u0437\u0430 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0438)",
             NF_META_AI: "\u041E\u043F\u0438\u0442\u0430\u0439 Meta AI",
+            NF_META_AI_PROMPTS: "\u041F\u043E\u0434\u0441\u043A\u0430\u0437\u043A\u0438 \u043D\u0430 Meta AI",
             NF_HIDE_VERIFIED_BADGE: "\u0421\u043A\u0440\u0438\u0432\u0430\u043D\u0435 \u043D\u0430 \u043F\u043E\u0442\u0432\u044A\u0440\u0434\u0435\u043D\u0438 \u0437\u043D\u0430\u0447\u043A\u0438",
             NF_FILTER_VERIFIED_BADGE: "\u0424\u0438\u043B\u0442\u0440\u0438\u0440\u0430\u043D\u0435 \u043D\u0430 \u043F\u043E\u0442\u0432\u044A\u0440\u0434\u0435\u043D\u0438 \u0430\u043A\u0430\u0443\u043D\u0442\u0438",
             NF_AI_SIDE_PANELS: "AI \u0432 \u0441\u0442\u0440\u0430\u043D\u0438\u0447\u043D\u0438\u0442\u0435 \u043F\u0430\u043D\u0435\u043B\u0438",
@@ -419,6 +425,7 @@
             DLG_TIPS_DESC: "\u041B\u0438\u043D\u043A\u043E\u0432\u0435 \u043A\u044A\u043C \u043F\u0440\u043E\u0435\u043A\u0442\u0430 \u0438 \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F \u0437\u0430 \u043F\u043E\u0434\u0434\u0440\u044A\u0436\u043D\u0438\u043A\u0430.",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "\u0410\u043A\u043E \u0442\u043E\u0432\u0430 \u043F\u043E\u043C\u0430\u0433\u0430, \u0435\u0434\u043D\u0430 \u0437\u0432\u0435\u0437\u0434\u0430 \u0432 {github} \u0437\u043D\u0430\u0447\u0438 \u043C\u043D\u043E\u0433\u043E.",
+            DLG_TIPS_THREADS: "\u0410\u043A\u043E \u043F\u043E\u043B\u0437\u0432\u0430\u0448 Threads \u0438 \u043D\u0430 \u043D\u0430\u0441\u0442\u043E\u043B\u0435\u043D \u043A\u043E\u043C\u043F\u044E\u0442\u044A\u0440, \u043F\u043E\u0434\u0434\u044A\u0440\u0436\u0430\u043C \u0444\u0438\u043B\u0442\u044A\u0440 \u0438 \u0437\u0430 \u043D\u0435\u0433\u043E: {threads}.",
             DLG_TIPS_FACEBOOK: "\u041A\u0430\u0436\u0438 \u0437\u0434\u0440\u0430\u0441\u0442\u0438 \u043D\u0430 {facebook} - \u0442\u0430\u043C \u0441\u043F\u043E\u0434\u0435\u043B\u044F\u043C \u0438\u0437\u043A\u0443\u0441\u0442\u0432\u043E \u0438 \u043F\u043E\u0435\u0437\u0438\u044F.",
             DLG_TIPS_SITE: "\u0410\u043A\u043E \u0438\u0441\u043A\u0430\u0448 \u0434\u0430 \u0432\u0438\u0434\u0438\u0448 \u043A\u0430\u043A\u0432\u043E \u043F\u0440\u0430\u0432\u044F \u0438\u0437 \u043C\u0440\u0435\u0436\u0430\u0442\u0430, {site} \u0435 \u043D\u0430\u0439-\u0434\u043E\u0431\u0440\u043E\u0442\u043E \u043C\u044F\u0441\u0442\u043E \u0434\u0430 \u0437\u0430\u043F\u043E\u0447\u043D\u0435\u0448.",
             DLG_TIPS_CREDITS: "\u0421\u043F\u0435\u0446\u0438\u0430\u043B\u043D\u0438 \u0431\u043B\u0430\u0433\u043E\u0434\u0430\u0440\u043D\u043E\u0441\u0442\u0438 \u043D\u0430 {zbluebugz} \u0437\u0430 \u043E\u0440\u0438\u0433\u0438\u043D\u0430\u043B\u043D\u0438\u044F \u043F\u0440\u043E\u0435\u043A\u0442 \u0438 \u043D\u0430 {trinhquocviet} \u0437\u0430 \u043E\u043F\u0440\u043E\u0441\u0442\u0435\u043D\u0438\u044F UI branch, \u043E\u0442 \u043A\u043E\u0439\u0442\u043E \u043F\u044A\u0440\u0432\u043E\u043D\u0430\u0447\u0430\u043B\u043D\u043E \u0444\u043E\u0440\u043A\u043D\u0430\u0445 - \u0438 \u0437\u0430 \u043F\u043E\u0434\u0434\u0440\u044A\u0436\u043A\u0430\u0442\u0430 \u043D\u0430 \u0444\u0438\u043B\u0442\u0440\u0438\u0442\u0435 \u043F\u0440\u0435\u0437 \u0442\u043E\u0437\u0438 \u043F\u0435\u0440\u0438\u043E\u0434.",
@@ -427,6 +434,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "\u043C\u043E\u044F Facebook \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0430",
             DLG_TIPS_LINK_SITE: "\u043C\u043E\u044F\u0442 \u0441\u0430\u0439\u0442",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["\u0417\u0430\u043F\u0430\u0437\u0438", "\u0417\u0430\u0442\u0432\u043E\u0440\u0438", "\u0415\u043A\u0441\u043F\u043E\u0440\u0442", "\u0418\u043C\u043F\u043E\u0440\u0442", "\u041D\u0443\u043B\u0438\u0440\u0430\u043D\u0435"],
             DLG_BUTTON_TOOLTIPS: [
@@ -445,6 +453,7 @@
             NF_STORIES: "Stories",
             NF_TOP_CARDS_PAGES: "Horn\xED karty (pro str\xE1nky)",
             NF_META_AI: "Vyzkou\u0161ejte Meta AI",
+            NF_META_AI_PROMPTS: "N\xE1vrhy prompt\u016F Meta AI",
             NF_HIDE_VERIFIED_BADGE: "Skr\xFDt ov\u011B\u0159en\xE9 odznaky",
             NF_FILTER_VERIFIED_BADGE: "Filtrovat ov\u011B\u0159en\xE9 \xFA\u010Dty",
             NF_AI_SIDE_PANELS: "AI v postrann\xEDch panelech",
@@ -551,6 +560,7 @@
             DLG_TIPS_DESC: "Odkazy na projekt a informace o spr\xE1vci.",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "Pokud to pom\xE1h\xE1, hv\u011Bzda na {github} pro m\u011B hodn\u011B znamen\xE1.",
+            DLG_TIPS_THREADS: "Pokud pou\u017E\xEDv\xE1\u0161 Threads i na po\u010D\xEDta\u010Di, spravuji pro n\u011Bj tak\xE9 filtr: {threads}.",
             DLG_TIPS_FACEBOOK: "Pozdrav na {facebook} - sd\xEDl\xEDm tam sv\xE9 um\u011Bn\xED a poezii.",
             DLG_TIPS_SITE: "Chce\u0161-li vid\u011Bt, co d\u011Bl\xE1m na webu, {site} je nejlep\u0161\xED start.",
             DLG_TIPS_CREDITS: "Speci\xE1ln\xED pod\u011Bkov\xE1n\xED {zbluebugz} za p\u016Fvodn\xED projekt a {trinhquocviet} za zjednodu\u0161enou UI v\u011Btev, ze kter\xE9 jsem p\u016Fvodn\u011B forknul - i za \xFAdr\u017Ebu filtr\u016F v t\xE9 dob\u011B.",
@@ -559,6 +569,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "m\u016Fj Facebook",
             DLG_TIPS_LINK_SITE: "m\u016Fj web",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Ulo\u017Eit", "Zav\u0159\xEDt", "Export", "Import", "Resetovat"],
             DLG_BUTTON_TOOLTIPS: [
@@ -578,6 +589,7 @@
             NF_STORIES: "Stories",
             NF_TOP_CARDS_PAGES: "Top-Karten (f\xFCr Seiten)",
             NF_META_AI: "Meta AI ausprobieren",
+            NF_META_AI_PROMPTS: "Meta AI Prompt-Vorschl\xE4ge",
             NF_HIDE_VERIFIED_BADGE: "Verifizierte Abzeichen ausblenden",
             NF_FILTER_VERIFIED_BADGE: "Verifizierte Konten filtern",
             NF_AI_SIDE_PANELS: "KI in Seitenleisten",
@@ -684,6 +696,7 @@
             DLG_TIPS_DESC: "Projektlinks und Infos zum Maintainer.",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "Wenn das hilft, bedeutet mir ein Stern auf {github} viel.",
+            DLG_TIPS_THREADS: "Wenn du Threads auch am Desktop nutzt, pflege ich daf\xFCr ebenfalls einen Filter: {threads}.",
             DLG_TIPS_FACEBOOK: "Sag gern Hallo auf {facebook} - dort teile ich Kunst und Poesie.",
             DLG_TIPS_SITE: "Wenn du sehen willst, was ich im Netz mache, ist meine {site} der beste Start.",
             DLG_TIPS_CREDITS: "Besonderer Dank an {zbluebugz} f\xFCr das urspr\xFCngliche Projekt und an {trinhquocviet} f\xFCr den vereinfachten UI-Branch, von dem ich urspr\xFCnglich geforkt habe - plus die Filterpflege in dieser Phase.",
@@ -692,6 +705,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "meine Facebook-Seite",
             DLG_TIPS_LINK_SITE: "meine Website",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Speichern", "Schlie\xDFen", "Exportieren", "Importieren", "Zur\xFCcksetzen"],
             DLG_BUTTON_TOOLTIPS: [
@@ -710,6 +724,7 @@
             NF_STORIES: "\u0399\u03C3\u03C4\u03BF\u03C1\u03AF\u03B5\u03C2",
             NF_TOP_CARDS_PAGES: "\u039A\u03BF\u03C1\u03C5\u03C6\u03B1\u03AF\u03B5\u03C2 \u03BA\u03AC\u03C1\u03C4\u03B5\u03C2 (\u03B3\u03B9\u03B1 \u03A3\u03B5\u03BB\u03AF\u03B4\u03B5\u03C2)",
             NF_META_AI: "\u0394\u03BF\u03BA\u03B9\u03BC\u03AC\u03C3\u03C4\u03B5 \u03C4\u03BF Meta AI",
+            NF_META_AI_PROMPTS: "\u03A0\u03C1\u03BF\u03C4\u03AC\u03C3\u03B5\u03B9\u03C2 prompt \u03C4\u03BF\u03C5 Meta AI",
             NF_HIDE_VERIFIED_BADGE: "\u0391\u03C0\u03CC\u03BA\u03C1\u03C5\u03C8\u03B7 \u03B5\u03C0\u03B1\u03BB\u03B7\u03B8\u03B5\u03C5\u03BC\u03AD\u03BD\u03C9\u03BD \u03C3\u03B7\u03BC\u03AC\u03C4\u03C9\u03BD",
             NF_FILTER_VERIFIED_BADGE: "\u03A6\u03B9\u03BB\u03C4\u03C1\u03AC\u03C1\u03B9\u03C3\u03BC\u03B1 \u03B5\u03C0\u03B1\u03BB\u03B7\u03B8\u03B5\u03C5\u03BC\u03AD\u03BD\u03C9\u03BD \u03BB\u03BF\u03B3\u03B1\u03C1\u03B9\u03B1\u03C3\u03BC\u03CE\u03BD",
             NF_AI_SIDE_PANELS: "AI \u03C3\u03C4\u03B1 \u03C0\u03BB\u03B5\u03C5\u03C1\u03B9\u03BA\u03AC \u03C0\u03AC\u03BD\u03B5\u03BB",
@@ -816,6 +831,7 @@
             DLG_TIPS_DESC: "\u03A3\u03CD\u03BD\u03B4\u03B5\u03C3\u03BC\u03BF\u03B9 \u03AD\u03C1\u03B3\u03BF\u03C5 \u03BA\u03B1\u03B9 \u03C0\u03BB\u03B7\u03C1\u03BF\u03C6\u03BF\u03C1\u03AF\u03B5\u03C2 \u03C3\u03C5\u03BD\u03C4\u03B7\u03C1\u03B7\u03C4\u03AE.",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "\u0391\u03BD \u03B2\u03BF\u03B7\u03B8\u03AC\u03B5\u03B9, \u03AD\u03BD\u03B1 \u03B1\u03C3\u03C4\u03AD\u03C1\u03B9 \u03C3\u03C4\u03BF {github} \u03C3\u03B7\u03BC\u03B1\u03AF\u03BD\u03B5\u03B9 \u03C0\u03BF\u03BB\u03BB\u03AC.",
+            DLG_TIPS_THREADS: "\u0391\u03BD \u03C7\u03C1\u03B7\u03C3\u03B9\u03BC\u03BF\u03C0\u03BF\u03B9\u03B5\u03AF\u03C2 \u03BA\u03B1\u03B9 \u03C4\u03BF Threads \u03C3\u03B5 \u03C5\u03C0\u03BF\u03BB\u03BF\u03B3\u03B9\u03C3\u03C4\u03AE, \u03B4\u03B9\u03B1\u03C4\u03B7\u03C1\u03CE \u03BA\u03B1\u03B9 \u03B3\u03B9\u2019 \u03B1\u03C5\u03C4\u03CC \u03AD\u03BD\u03B1 \u03C6\u03AF\u03BB\u03C4\u03C1\u03BF: {threads}.",
             DLG_TIPS_FACEBOOK: "\u03A0\u03B5\u03C2 \u03B3\u03B5\u03B9\u03B1 \u03C3\u03C4\u03B7 {facebook} - \u03B5\u03BA\u03B5\u03AF \u03BC\u03BF\u03B9\u03C1\u03AC\u03B6\u03BF\u03BC\u03B1\u03B9 \u03C4\u03AD\u03C7\u03BD\u03B7 \u03BA\u03B1\u03B9 \u03C0\u03BF\u03AF\u03B7\u03C3\u03B7.",
             DLG_TIPS_SITE: "\u0391\u03BD \u03B8\u03AD\u03BB\u03B5\u03B9\u03C2 \u03BD\u03B1 \u03B4\u03B5\u03B9\u03C2 \u03C4\u03B9 \u03BA\u03AC\u03BD\u03C9 \u03B3\u03B5\u03BD\u03B9\u03BA\u03AC \u03C3\u03C4\u03BF \u03B4\u03B9\u03B1\u03B4\u03AF\u03BA\u03C4\u03C5\u03BF, \u03C4\u03BF {site} \u03B5\u03AF\u03BD\u03B1\u03B9 \u03C4\u03BF \u03BA\u03B1\u03BB\u03CD\u03C4\u03B5\u03C1\u03BF \u03C3\u03B7\u03BC\u03B5\u03AF\u03BF.",
             DLG_TIPS_CREDITS: "\u0399\u03B4\u03B9\u03B1\u03AF\u03C4\u03B5\u03C1\u03B5\u03C2 \u03B5\u03C5\u03C7\u03B1\u03C1\u03B9\u03C3\u03C4\u03AF\u03B5\u03C2 \u03C3\u03C4\u03BF\u03BD {zbluebugz} \u03B3\u03B9\u03B1 \u03C4\u03BF \u03B1\u03C1\u03C7\u03B9\u03BA\u03CC project \u03BA\u03B1\u03B9 \u03C3\u03C4\u03BF\u03BD {trinhquocviet} \u03B3\u03B9\u03B1 \u03C4\u03B7 \u03B2\u03BF\u03AE\u03B8\u03B5\u03B9\u03B1 \u03C3\u03C4\u03B7 \u03C3\u03C5\u03BD\u03C4\u03AE\u03C1\u03B7\u03C3\u03B7 \u03C4\u03C9\u03BD \u03C6\u03AF\u03BB\u03C4\u03C1\u03C9\u03BD \u03C3\u03B5 \u03AD\u03BD\u03B1 \u03C0\u03B1\u03BB\u03B1\u03B9\u03CC\u03C4\u03B5\u03C1\u03BF \u03C3\u03C4\u03AC\u03B4\u03B9\u03BF \u03B1\u03C5\u03C4\u03BF\u03CD \u03C4\u03BF\u03C5 fork.",
@@ -824,6 +840,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "\u03C3\u03B5\u03BB\u03AF\u03B4\u03B1 \u03BC\u03BF\u03C5 \u03C3\u03C4\u03BF Facebook",
             DLG_TIPS_LINK_SITE: "\u03B9\u03C3\u03C4\u03CC\u03C4\u03BF\u03C0\u03CC \u03BC\u03BF\u03C5",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["\u0391\u03C0\u03BF\u03B8\u03AE\u03BA\u03B5\u03C5\u03C3\u03B7", "\u039A\u03BB\u03B5\u03AF\u03C3\u03B9\u03BC\u03BF", "\u0395\u03BE\u03B1\u03B3\u03C9\u03B3\u03AE", "\u0395\u03B9\u03C3\u03B1\u03B3\u03C9\u03B3\u03AE", "\u0395\u03C0\u03B1\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC"],
             DLG_BUTTON_TOOLTIPS: [
@@ -842,6 +859,7 @@
             NF_STORIES: "Historias",
             NF_TOP_CARDS_PAGES: "Tarjetas principales (para p\xE1ginas)",
             NF_META_AI: "Probar Meta AI",
+            NF_META_AI_PROMPTS: "Sugerencias de prompts de Meta AI",
             NF_HIDE_VERIFIED_BADGE: "Ocultar insignias verificadas",
             NF_FILTER_VERIFIED_BADGE: "Filtrar cuentas verificadas",
             NF_AI_SIDE_PANELS: "IA en paneles laterales",
@@ -948,6 +966,7 @@
             DLG_TIPS_DESC: "Enlaces del proyecto e info del mantenedor.",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "Si te ayuda, una estrella en {github} significa mucho.",
+            DLG_TIPS_THREADS: "Si tambi\xE9n usas Threads en el escritorio, mantengo un filtro para eso: {threads}.",
             DLG_TIPS_FACEBOOK: "P\xE1sate por {facebook} - all\xED comparto mi arte y poes\xEDa.",
             DLG_TIPS_SITE: "Si quieres ver qu\xE9 hago por la web, {site} es el mejor lugar para empezar.",
             DLG_TIPS_CREDITS: "Un agradecimiento especial a {zbluebugz} por el proyecto original y a {trinhquocviet} por la rama de UI simplificada de la que hice el fork originalmente - y por el mantenimiento de filtros durante ese periodo.",
@@ -956,6 +975,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "mi Facebook",
             DLG_TIPS_LINK_SITE: "mi sitio web",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Guardar", "Cerrar", "Exportar", "Importar", "Reajustar"],
             DLG_BUTTON_TOOLTIPS: [
@@ -974,6 +994,7 @@
             NF_STORIES: "Tarinat",
             NF_TOP_CARDS_PAGES: "Yl\xE4kortit (sivuja varten)",
             NF_META_AI: "Kokeile Meta AI:ta",
+            NF_META_AI_PROMPTS: "Meta AI -kehote-ehdotukset",
             NF_HIDE_VERIFIED_BADGE: "Piilota varmennusmerkit",
             NF_FILTER_VERIFIED_BADGE: "Suodata varmennetut tilit",
             NF_AI_SIDE_PANELS: "Teko\xE4ly sivupaneeleissa",
@@ -1080,6 +1101,7 @@
             DLG_TIPS_DESC: "Projektin linkit ja yll\xE4pit\xE4j\xE4n tiedot.",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "Jos t\xE4st\xE4 on apua, {github}-t\xE4hti merkitsee paljon.",
+            DLG_TIPS_THREADS: "Jos k\xE4yt\xE4t my\xF6s Threadsia ty\xF6p\xF6yd\xE4ll\xE4, yll\xE4pid\xE4n siihenkin suodatinta: {threads}.",
             DLG_TIPS_FACEBOOK: "Tule moikkaamaan {facebook} - jaan siell\xE4 taidetta ja runoutta.",
             DLG_TIPS_SITE: "Jos haluat n\xE4hd\xE4 mit\xE4 puuhailen verkossa, {site} on paras paikka aloittaa.",
             DLG_TIPS_CREDITS: "Erityiskiitos {zbluebugz}:lle alkuper\xE4isest\xE4 projektista ja {trinhquocviet}:lle yksinkertaistetusta UI-haarasta, josta alun perin forkkasin - sek\xE4 suodattimien yll\xE4pidosta tuona aikana.",
@@ -1088,6 +1110,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "Facebook-sivuni",
             DLG_TIPS_LINK_SITE: "sivuni",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Tallentaa", "Sulkea", "Vienti", "Tuonti", "Nollaa"],
             DLG_BUTTON_TOOLTIPS: [
@@ -1106,6 +1129,7 @@
             NF_STORIES: "Stories",
             NF_TOP_CARDS_PAGES: "Cartes principales (pour les Pages)",
             NF_META_AI: "Essayer Meta AI",
+            NF_META_AI_PROMPTS: "Suggestions de prompts Meta AI",
             NF_HIDE_VERIFIED_BADGE: "Masquer les badges v\xE9rifi\xE9s",
             NF_FILTER_VERIFIED_BADGE: "Filtrer les comptes v\xE9rifi\xE9s",
             NF_AI_SIDE_PANELS: "IA dans les panneaux lat\xE9raux",
@@ -1212,6 +1236,7 @@
             DLG_TIPS_DESC: "Liens du projet et infos du mainteneur.",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "Si cela vous aide, une \xE9toile sur {github} compte beaucoup.",
+            DLG_TIPS_THREADS: "Si vous utilisez aussi Threads sur ordinateur, j\u2019entretiens aussi un filtre pour \xE7a : {threads}.",
             DLG_TIPS_FACEBOOK: "Passez dire bonjour sur {facebook} - j'y partage mon art et ma po\xE9sie.",
             DLG_TIPS_SITE: "Si vous voulez voir ce que je fais sur le web, {site} est le meilleur point de d\xE9part.",
             DLG_TIPS_CREDITS: "Remerciements particuliers \xE0 {zbluebugz} pour le projet original, et \xE0 {trinhquocviet} pour la branche UI simplifi\xE9e dont j'ai initialement fork\xE9 - ainsi que pour la maintenance des filtres pendant cette p\xE9riode.",
@@ -1220,6 +1245,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "ma page Facebook",
             DLG_TIPS_LINK_SITE: "mon site",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Sauvegarder", "Fermer", "Exporter", "Importer", "R\xE9initialiser"],
             DLG_BUTTON_TOOLTIPS: [
@@ -1238,6 +1264,7 @@
             NF_STORIES: "\u05E1\u05D8\u05D5\u05E8\u05D9\u05D6 ",
             NF_TOP_CARDS_PAGES: "\u05DB\u05E8\u05D8\u05D9\u05E1\u05D9\u05DD \u05DE\u05D5\u05D1\u05D9\u05DC\u05D9\u05DD (\u05DC\u05D3\u05E4\u05D9\u05DD)",
             NF_META_AI: "\u05E0\u05E1\u05D4 \u05D0\u05EA Meta AI",
+            NF_META_AI_PROMPTS: "\u05D4\u05E6\u05E2\u05D5\u05EA \u05E4\u05E8\u05D5\u05DE\u05E4\u05D8\u05D9\u05DD \u05E9\u05DC Meta AI",
             NF_HIDE_VERIFIED_BADGE: "\u05D4\u05E1\u05EA\u05E8 \u05EA\u05D2\u05D9 \u05D0\u05D9\u05DE\u05D5\u05EA",
             NF_FILTER_VERIFIED_BADGE: "\u05E1\u05E0\u05DF \u05D7\u05E9\u05D1\u05D5\u05E0\u05D5\u05EA \u05DE\u05D0\u05D5\u05DE\u05EA\u05D9\u05DD",
             NF_AI_SIDE_PANELS: "\u05D1\u05D9\u05E0\u05D4 \u05DE\u05DC\u05D0\u05DB\u05D5\u05EA\u05D9\u05EA \u05D1\u05DC\u05D5\u05D7\u05D5\u05EA \u05D4\u05E6\u05D3",
@@ -1345,6 +1372,7 @@
             DLG_TIPS_DESC: "\u05E7\u05D9\u05E9\u05D5\u05E8\u05D9 \u05D4\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D5\u05DE\u05D9\u05D3\u05E2 \u05E2\u05DC \u05D4\u05DE\u05EA\u05D7\u05D6\u05E7.",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "\u05D0\u05DD \u05D6\u05D4 \u05E2\u05D5\u05D6\u05E8, \u05DB\u05D5\u05DB\u05D1 \u05D1-{github} \u05E9\u05D5\u05D5\u05D4 \u05D4\u05E8\u05D1\u05D4.",
+            DLG_TIPS_THREADS: "\u05D0\u05DD \u05D2\u05DD \u05D0\u05EA\u05DD \u05DE\u05E9\u05EA\u05DE\u05E9\u05D9\u05DD \u05D1-Threads \u05D1\u05DE\u05D7\u05E9\u05D1, \u05D0\u05E0\u05D9 \u05DE\u05EA\u05D7\u05D6\u05E7 \u05D2\u05DD \u05DE\u05E1\u05E0\u05DF \u05D1\u05E9\u05D1\u05D9\u05DC \u05D6\u05D4: {threads}.",
             DLG_TIPS_FACEBOOK: "\u05D1\u05D5\u05D0\u05D5 \u05DC\u05D4\u05D2\u05D9\u05D3 \u05E9\u05DC\u05D5\u05DD \u05D1-{facebook} - \u05E9\u05DD \u05D0\u05E0\u05D9 \u05DE\u05E9\u05EA\u05E3 \u05D0\u05DE\u05E0\u05D5\u05EA \u05D5\u05E9\u05D9\u05E8\u05D4.",
             DLG_TIPS_SITE: "\u05D0\u05DD \u05E8\u05D5\u05E6\u05D9\u05DD \u05DC\u05E8\u05D0\u05D5\u05EA \u05DE\u05D4 \u05D0\u05E0\u05D9 \u05E2\u05D5\u05E9\u05D4 \u05D1\u05E8\u05D7\u05D1\u05D9 \u05D4\u05E8\u05E9\u05EA, {site} \u05D4\u05D5\u05D0 \u05D4\u05DE\u05E7\u05D5\u05DD \u05D4\u05DB\u05D9 \u05D8\u05D5\u05D1 \u05DC\u05D4\u05EA\u05D7\u05D9\u05DC.",
             DLG_TIPS_CREDITS: "\u05EA\u05D5\u05D3\u05D4 \u05DE\u05D9\u05D5\u05D7\u05D3\u05EA \u05DC-{zbluebugz} \u05E2\u05DC \u05D4\u05E4\u05E8\u05D5\u05D9\u05E7\u05D8 \u05D4\u05DE\u05E7\u05D5\u05E8\u05D9, \u05D5\u05DC-{trinhquocviet} \u05E2\u05DC \u05E2\u05E0\u05E3 \u05D4-UI \u05D4\u05DE\u05E4\u05D5\u05E9\u05D8 \u05E9\u05DE\u05DE\u05E0\u05D5 \u05E4\u05D5\u05E8\u05E7\u05EA\u05D9 \u05D1\u05EA\u05D7\u05D9\u05DC\u05D4 - \u05D5\u05D2\u05DD \u05E2\u05DC \u05EA\u05D7\u05D6\u05D5\u05E7\u05EA \u05D4\u05E4\u05D9\u05DC\u05D8\u05E8\u05D9\u05DD \u05D1\u05D0\u05D5\u05EA\u05D4 \u05EA\u05E7\u05D5\u05E4\u05D4.",
@@ -1353,6 +1381,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "\u05E2\u05DE\u05D5\u05D3 \u05D4\u05E4\u05D9\u05D9\u05E1\u05D1\u05D5\u05E7 \u05E9\u05DC\u05D9",
             DLG_TIPS_LINK_SITE: "\u05D4\u05D0\u05EA\u05E8 \u05E9\u05DC\u05D9",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["\u05E9\u05DE\u05D5\u05E8", "\u05E1\u05D2\u05D5\u05E8", "\u05D9\u05D9\u05E6\u05D0", "\u05D9\u05D9\u05D1\u05D0", "\u05D0\u05D9\u05E4\u05D5\u05E1"],
             DLG_BUTTON_TOOLTIPS: [
@@ -1371,6 +1400,7 @@
             NF_STORIES: "Cerita",
             NF_TOP_CARDS_PAGES: "Kartu teratas (untuk Halaman)",
             NF_META_AI: "Coba Meta AI",
+            NF_META_AI_PROMPTS: "Saran prompt Meta AI",
             NF_HIDE_VERIFIED_BADGE: "Sembunyikan lencana terverifikasi",
             NF_FILTER_VERIFIED_BADGE: "Filter akun terverifikasi",
             NF_AI_SIDE_PANELS: "AI di panel samping",
@@ -1477,6 +1507,7 @@
             DLG_TIPS_DESC: "Tautan proyek dan info pengelola.",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "Jika ini membantu, bintang di {github} sangat berarti.",
+            DLG_TIPS_THREADS: "Kalau Anda juga memakai Threads di desktop, saya juga mengelola filter untuk itu: {threads}.",
             DLG_TIPS_FACEBOOK: "Sapa di {facebook} - saya berbagi karya seni dan puisi di sana.",
             DLG_TIPS_SITE: "Jika ingin melihat apa yang saya lakukan di web, {site} adalah tempat terbaik untuk mulai.",
             DLG_TIPS_CREDITS: "Terima kasih khusus kepada {zbluebugz} untuk proyek asli, dan {trinhquocviet} untuk cabang UI sederhana yang pertama kali saya fork - serta pemeliharaan filter pada masa itu.",
@@ -1485,6 +1516,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "Facebook saya",
             DLG_TIPS_LINK_SITE: "situs saya",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Simpan", "Tutup", "Ekspor", "Impor", "Reset"],
             DLG_BUTTON_TOOLTIPS: [
@@ -1503,6 +1535,7 @@
             NF_STORIES: "Storie",
             NF_TOP_CARDS_PAGES: "Schede principali (per Pagine)",
             NF_META_AI: "Prova Meta AI",
+            NF_META_AI_PROMPTS: "Suggerimenti di prompt di Meta AI",
             NF_HIDE_VERIFIED_BADGE: "Nascondi badge verificati",
             NF_FILTER_VERIFIED_BADGE: "Filtra account verificati",
             NF_AI_SIDE_PANELS: "IA nei pannelli laterali",
@@ -1609,6 +1642,7 @@
             DLG_TIPS_DESC: "Link al progetto e info del maintainer.",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "Se ti \xE8 utile, una stella su {github} significa molto.",
+            DLG_TIPS_THREADS: "Se usi Threads anche da desktop, mantengo anche un filtro per quello: {threads}.",
             DLG_TIPS_FACEBOOK: "Passa a salutarmi su {facebook} - l\xEC condivido la mia arte e poesia.",
             DLG_TIPS_SITE: "Se vuoi vedere cosa faccio in giro per il web, {site} \xE8 il posto migliore da cui partire.",
             DLG_TIPS_CREDITS: "Un grazie speciale a {zbluebugz} per il progetto originale e a {trinhquocviet} per il branch UI semplificato da cui ho fatto il fork iniziale - e per la manutenzione dei filtri in quel periodo.",
@@ -1617,6 +1651,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "la mia pagina Facebook",
             DLG_TIPS_LINK_SITE: "il mio sito",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Salva", "Chiudi", "Esportare", "Importare", "Ripristina"],
             DLG_BUTTON_TOOLTIPS: [
@@ -1635,6 +1670,7 @@
             NF_STORIES: "Stories",
             NF_TOP_CARDS_PAGES: "\u30C8\u30C3\u30D7\u30AB\u30FC\u30C9\uFF08\u30DA\u30FC\u30B8\u5411\u3051\uFF09",
             NF_META_AI: "Meta AI \u3092\u8A66\u3059",
+            NF_META_AI_PROMPTS: "Meta AI \u306E\u30D7\u30ED\u30F3\u30D7\u30C8\u5019\u88DC",
             NF_HIDE_VERIFIED_BADGE: "\u8A8D\u8A3C\u30D0\u30C3\u30B8\u3092\u975E\u8868\u793A",
             NF_FILTER_VERIFIED_BADGE: "\u8A8D\u8A3C\u6E08\u307F\u30A2\u30AB\u30A6\u30F3\u30C8\u3092\u30D5\u30A3\u30EB\u30BF\u30FC",
             NF_AI_SIDE_PANELS: "\u30B5\u30A4\u30C9\u30D1\u30CD\u30EB\u306EAI",
@@ -1741,6 +1777,7 @@
             DLG_TIPS_DESC: "\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u30EA\u30F3\u30AF\u3068\u30E1\u30F3\u30C6\u30CA\u60C5\u5831\u3002",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "\u5F79\u306B\u7ACB\u3063\u305F\u3089 {github} \u306E\u30B9\u30BF\u30FC\u304C\u52B1\u307F\u306B\u306A\u308A\u307E\u3059\u3002",
+            DLG_TIPS_THREADS: "Threads \u3092\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7\u3067\u3082\u4F7F\u3063\u3066\u3044\u308B\u306A\u3089\u3001\u305D\u3061\u3089\u5411\u3051\u306E\u30D5\u30A3\u30EB\u30BF\u30FC\u3082\u30E1\u30F3\u30C6\u30CA\u30F3\u30B9\u3057\u3066\u3044\u307E\u3059: {threads}\u3002",
             DLG_TIPS_FACEBOOK: "{facebook}\u3067\u58F0\u3092\u304B\u3051\u3066\u304F\u3060\u3055\u3044 - \u305D\u3053\u3067\u30A2\u30FC\u30C8\u3068\u8A69\u3092\u5171\u6709\u3057\u3066\u3044\u307E\u3059\u3002",
             DLG_TIPS_SITE: "\u6D3B\u52D5\u3092\u307E\u3068\u3081\u3066\u898B\u305F\u3044\u306A\u3089\u3001{site}\u304C\u3044\u3061\u3070\u3093\u306E\u5165\u53E3\u3067\u3059\u3002",
             DLG_TIPS_CREDITS: "\u5143\u306E\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u306E {zbluebugz} \u3068\u3001\u79C1\u304C\u6700\u521D\u306B fork \u3057\u305F\u7C21\u6613 UI \u30D6\u30E9\u30F3\u30C1\u306E {trinhquocviet} \u306B\u7279\u5225\u306A\u611F\u8B1D\u3092\u3002\u3042\u306E\u671F\u9593\u306E\u30D5\u30A3\u30EB\u30BF\u30FC\u4FDD\u5B88\u306B\u3082\u611F\u8B1D\u3057\u307E\u3059\u3002",
@@ -1749,6 +1786,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "\u79C1\u306EFacebook",
             DLG_TIPS_LINK_SITE: "\u79C1\u306E\u30B5\u30A4\u30C8",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["\u30BB\u30FC\u30D6", "\u30AF\u30ED\u30FC\u30BA", "\u8F38\u51FA\u3059\u308B", "\u8F38\u5165", "\u30EA\u30BB\u30C3\u30C8"],
             DLG_BUTTON_TOOLTIPS: [
@@ -1767,6 +1805,7 @@
             NF_STORIES: "St\u0101sti",
             NF_TOP_CARDS_PAGES: "Aug\u0161\u0113j\u0101s kart\u012Btes (lap\u0101m)",
             NF_META_AI: "Izm\u0113\u0123iniet Meta AI",
+            NF_META_AI_PROMPTS: "Meta AI uzved\u0146u ieteikumi",
             NF_HIDE_VERIFIED_BADGE: "Sl\u0113pt verific\u0113t\u0101s noz\u012Bm\u012Btes",
             NF_FILTER_VERIFIED_BADGE: "Filtr\u0113t verific\u0113tos kontus",
             NF_AI_SIDE_PANELS: "AI s\u0101nu pane\u013Cos",
@@ -1873,6 +1912,7 @@
             DLG_TIPS_DESC: "Projekta saites un uztur\u0113t\u0101ja info.",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "Ja tas pal\u012Bdz, {github} zvaigzne man noz\u012Bm\u0113 daudz.",
+            DLG_TIPS_THREADS: "Ja lieto Threads ar\u012B dator\u0101, es uzturu filtru ar\u012B tam: {threads}.",
             DLG_TIPS_FACEBOOK: "Ien\u0101c uz {facebook} - tur dalos ar m\u0101kslu un dzeju.",
             DLG_TIPS_SITE: "Ja gribi redz\u0113t, ar ko nodarbojos t\u012Bmekl\u012B, {site} ir lab\u0101k\u0101 vieta, kur s\u0101kt.",
             DLG_TIPS_CREDITS: "\u012Apa\u0161s paldies {zbluebugz} par ori\u0123in\u0101lo projektu un {trinhquocviet} par vienk\u0101r\u0161oto UI zaru, no kura s\u0101kotn\u0113ji forkoju - un par filtru uztur\u0113\u0161anu taj\u0101 period\u0101.",
@@ -1881,6 +1921,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "mana Facebook lapa",
             DLG_TIPS_LINK_SITE: "mana vietne",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Saglab\u0101jiet", "Aizveriet", "Eksport\u0113t", "Import\u0113t", "Atiestat\u012Bt"],
             DLG_BUTTON_TOOLTIPS: [
@@ -1899,6 +1940,7 @@
             NF_STORIES: "Verhalen",
             NF_TOP_CARDS_PAGES: "Topkaarten (voor Pagina's)",
             NF_META_AI: "Probeer Meta AI",
+            NF_META_AI_PROMPTS: "Meta AI-promptsuggesties",
             NF_HIDE_VERIFIED_BADGE: "Geverifieerde badges verbergen",
             NF_FILTER_VERIFIED_BADGE: "Geverifieerde accounts filteren",
             NF_AI_SIDE_PANELS: "AI in zijpanelen",
@@ -2005,6 +2047,7 @@
             DLG_TIPS_DESC: "Projectlinks en info over de beheerder.",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "Als dit helpt, betekent een ster op {github} veel.",
+            DLG_TIPS_THREADS: "Als je Threads ook op desktop gebruikt, onderhoud ik daar ook een filter voor: {threads}.",
             DLG_TIPS_FACEBOOK: "Zeg hallo op {facebook} - daar deel ik mijn kunst en po\xEBzie.",
             DLG_TIPS_SITE: "Als je wilt zien wat ik online doe, is {site} de beste plek om te beginnen.",
             DLG_TIPS_CREDITS: "Speciale dank aan {zbluebugz} voor het originele project, en aan {trinhquocviet} voor de vereenvoudigde UI-branch waar ik oorspronkelijk van heb geforkt - plus het filteronderhoud in die periode.",
@@ -2013,6 +2056,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "mijn Facebook-pagina",
             DLG_TIPS_LINK_SITE: "mijn website",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Opslaan", "Sluiten", "Exporteren", "Importeren", "Reset"],
             DLG_BUTTON_TOOLTIPS: [
@@ -2031,6 +2075,7 @@
             NF_STORIES: "Relacje",
             NF_TOP_CARDS_PAGES: "G\xF3rne karty (dla stron)",
             NF_META_AI: "Wypr\xF3buj Meta AI",
+            NF_META_AI_PROMPTS: "Sugestie prompt\xF3w Meta AI",
             NF_HIDE_VERIFIED_BADGE: "Ukryj zweryfikowane odznaki",
             NF_FILTER_VERIFIED_BADGE: "Filtruj zweryfikowane konta",
             NF_AI_SIDE_PANELS: "AI w panelach bocznych",
@@ -2137,6 +2182,7 @@
             DLG_TIPS_DESC: "Linki do projektu i informacje o opiekunie.",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "Je\u015Bli to pomaga, gwiazdka na {github} wiele dla mnie znaczy.",
+            DLG_TIPS_THREADS: "Je\u015Bli korzystasz z Threads tak\u017Ce na komputerze, utrzymuj\u0119 te\u017C filtr do tego: {threads}.",
             DLG_TIPS_FACEBOOK: "Wpadnij na {facebook} - dziel\u0119 si\u0119 tam sztuk\u0105 i poezj\u0105.",
             DLG_TIPS_SITE: "Je\u015Bli chcesz zobaczy\u0107, co robi\u0119 w sieci, {site} to najlepszy start.",
             DLG_TIPS_CREDITS: "Specjalne podzi\u0119kowania dla {zbluebugz} za oryginalny projekt oraz dla {trinhquocviet} za uproszczon\u0105 ga\u0142\u0105\u017A UI, z kt\xF3rej pierwotnie zrobi\u0142em fork - i za utrzymanie filtr\xF3w w tym czasie.",
@@ -2145,6 +2191,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "moja strona na Facebooku",
             DLG_TIPS_LINK_SITE: "moja strona",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Zapisz", "Zamknij", "Eksport", "Import", "Przesk\u0142ada\u0107"],
             DLG_BUTTON_TOOLTIPS: [
@@ -2163,6 +2210,7 @@
             NF_STORIES: "Stories",
             NF_TOP_CARDS_PAGES: "Cart\xF5es principais (para P\xE1ginas)",
             NF_META_AI: "Experimente o Meta AI",
+            NF_META_AI_PROMPTS: "Sugest\xF5es de prompts do Meta AI",
             NF_HIDE_VERIFIED_BADGE: "Ocultar selos verificados",
             NF_FILTER_VERIFIED_BADGE: "Filtrar contas verificadas",
             NF_AI_SIDE_PANELS: "IA nos pain\xE9is laterais",
@@ -2269,6 +2317,7 @@
             DLG_TIPS_DESC: "Links do projeto e info do mantenedor.",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "Se isso ajudar, uma estrela no {github} significa muito.",
+            DLG_TIPS_THREADS: "Se voc\xEA tamb\xE9m usa o Threads no desktop, eu tamb\xE9m mantenho um filtro para isso: {threads}.",
             DLG_TIPS_FACEBOOK: "Diga oi na {facebook} - l\xE1 compartilho minha arte e poesia.",
             DLG_TIPS_SITE: "Se quiser ver o que ando fazendo pela web, {site} \xE9 o melhor lugar para come\xE7ar.",
             DLG_TIPS_CREDITS: "Agradecimento especial a {zbluebugz} pelo projeto original e a {trinhquocviet} pelo branch de UI simplificada de onde eu inicialmente fiz o fork - al\xE9m da manuten\xE7\xE3o dos filtros naquele per\xEDodo.",
@@ -2277,6 +2326,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "minha p\xE1gina do Facebook",
             DLG_TIPS_LINK_SITE: "meu site",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Salvar", "Fechar", "Exportar", "Importar", "Redefinir"],
             DLG_BUTTON_TOOLTIPS: [
@@ -2295,6 +2345,7 @@
             NF_STORIES: "\u0418\u0441\u0442\u043E\u0440\u0438\u0438",
             NF_TOP_CARDS_PAGES: "\u0412\u0435\u0440\u0445\u043D\u0438\u0435 \u043A\u0430\u0440\u0442\u043E\u0447\u043A\u0438 (\u0434\u043B\u044F \u0421\u0442\u0440\u0430\u043D\u0438\u0446)",
             NF_META_AI: "\u041F\u043E\u043F\u0440\u043E\u0431\u0443\u0439\u0442\u0435 Meta AI",
+            NF_META_AI_PROMPTS: "\u041F\u043E\u0434\u0441\u043A\u0430\u0437\u043A\u0438 \u0437\u0430\u043F\u0440\u043E\u0441\u043E\u0432 Meta AI",
             NF_HIDE_VERIFIED_BADGE: "\u0421\u043A\u0440\u044B\u0442\u044C \u0437\u043D\u0430\u0447\u043A\u0438 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u044F",
             NF_FILTER_VERIFIED_BADGE: "\u0424\u0438\u043B\u044C\u0442\u0440\u043E\u0432\u0430\u0442\u044C \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u043D\u044B\u0435 \u0430\u043A\u043A\u0430\u0443\u043D\u0442\u044B",
             NF_AI_SIDE_PANELS: "\u0418\u0418 \u0432 \u0431\u043E\u043A\u043E\u0432\u044B\u0445 \u043F\u0430\u043D\u0435\u043B\u044F\u0445",
@@ -2401,6 +2452,7 @@
             DLG_TIPS_DESC: "\u0421\u0441\u044B\u043B\u043A\u0438 \u043F\u0440\u043E\u0435\u043A\u0442\u0430 \u0438 \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F \u043E \u0441\u043E\u043F\u0440\u043E\u0432\u043E\u0436\u0434\u0430\u044E\u0449\u0435\u043C.",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "\u0415\u0441\u043B\u0438 \u044D\u0442\u043E \u043F\u043E\u043C\u043E\u0433\u0430\u0435\u0442, \u0437\u0432\u0435\u0437\u0434\u0430 \u043D\u0430 {github} \u043E\u0447\u0435\u043D\u044C \u043C\u043D\u043E\u0433\u043E\u0435 \u0434\u043B\u044F \u043C\u0435\u043D\u044F \u0437\u043D\u0430\u0447\u0438\u0442.",
+            DLG_TIPS_THREADS: "\u0415\u0441\u043B\u0438 \u0432\u044B \u0442\u043E\u0436\u0435 \u043F\u043E\u043B\u044C\u0437\u0443\u0435\u0442\u0435\u0441\u044C Threads \u043D\u0430 \u043A\u043E\u043C\u043F\u044C\u044E\u0442\u0435\u0440\u0435, \u044F \u043F\u043E\u0434\u0434\u0435\u0440\u0436\u0438\u0432\u0430\u044E \u0438 \u0434\u043B\u044F \u043D\u0435\u0433\u043E \u0444\u0438\u043B\u044C\u0442\u0440: {threads}.",
             DLG_TIPS_FACEBOOK: "\u0417\u0430\u0433\u043B\u044F\u043D\u0438\u0442\u0435 \u043D\u0430 {facebook} - \u0442\u0430\u043C \u044F \u0434\u0435\u043B\u044E\u0441\u044C \u0438\u0441\u043A\u0443\u0441\u0441\u0442\u0432\u043E\u043C \u0438 \u043F\u043E\u044D\u0437\u0438\u0435\u0439.",
             DLG_TIPS_SITE: "\u0415\u0441\u043B\u0438 \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0432\u0438\u0434\u0435\u0442\u044C, \u0447\u0435\u043C \u044F \u0437\u0430\u043D\u0438\u043C\u0430\u044E\u0441\u044C \u0432 \u0441\u0435\u0442\u0438, {site} \u2014 \u043B\u0443\u0447\u0448\u0435\u0435 \u043C\u0435\u0441\u0442\u043E \u043D\u0430\u0447\u0430\u0442\u044C.",
             DLG_TIPS_CREDITS: "\u041E\u0441\u043E\u0431\u0430\u044F \u0431\u043B\u0430\u0433\u043E\u0434\u0430\u0440\u043D\u043E\u0441\u0442\u044C {zbluebugz} \u0437\u0430 \u043E\u0440\u0438\u0433\u0438\u043D\u0430\u043B\u044C\u043D\u044B\u0439 \u043F\u0440\u043E\u0435\u043A\u0442 \u0438 {trinhquocviet} \u0437\u0430 \u0443\u043F\u0440\u043E\u0449\u0451\u043D\u043D\u0443\u044E UI-\u0432\u0435\u0442\u043A\u0443, \u043E\u0442 \u043A\u043E\u0442\u043E\u0440\u043E\u0439 \u044F \u0438\u0437\u043D\u0430\u0447\u0430\u043B\u044C\u043D\u043E \u0444\u043E\u0440\u043A\u043D\u0443\u043B - \u0438 \u0437\u0430 \u043F\u043E\u0434\u0434\u0435\u0440\u0436\u043A\u0443 \u0444\u0438\u043B\u044C\u0442\u0440\u043E\u0432 \u0432 \u0442\u043E\u0442 \u043F\u0435\u0440\u0438\u043E\u0434.",
@@ -2409,6 +2461,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "\u043C\u043E\u044E \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0443 \u043D\u0430 Facebook",
             DLG_TIPS_LINK_SITE: "\u043C\u043E\u0439 \u0441\u0430\u0439\u0442",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C", "\u0417\u0430\u043A\u0440\u044B\u0442\u044C", "\u042D\u043A\u0441\u043F\u043E\u0440\u0442", "\u0418\u043C\u043F\u043E\u0440\u0442", "\u0421\u0431\u0440\u043E\u0441"],
             DLG_BUTTON_TOOLTIPS: [
@@ -2427,6 +2480,7 @@
             NF_STORIES: "Hikayeler",
             NF_TOP_CARDS_PAGES: "\xDCst kartlar (Sayfalar i\xE7in)",
             NF_META_AI: "Meta AI'yi dene",
+            NF_META_AI_PROMPTS: "Meta AI istem \xF6nerileri",
             NF_HIDE_VERIFIED_BADGE: "Do\u011Frulanm\u0131\u015F rozetleri gizle",
             NF_FILTER_VERIFIED_BADGE: "Do\u011Frulanm\u0131\u015F hesaplar\u0131 filtrele",
             NF_AI_SIDE_PANELS: "Yan panellerde Yapay Zeka",
@@ -2533,6 +2587,7 @@
             DLG_TIPS_DESC: "Proje ba\u011Flant\u0131lar\u0131 ve bak\u0131m sorumlusu bilgisi.",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "Bu i\u015Fe yararsa, {github} \xFCzerinde bir y\u0131ld\u0131z \xE7ok \u015Fey ifade eder.",
+            DLG_TIPS_THREADS: "Threads'i masa\xFCst\xFCnde de kullan\u0131yorsan\u0131z, onun i\xE7in de bak\u0131m\u0131n\u0131 yapt\u0131\u011F\u0131m bir filtre var: {threads}.",
             DLG_TIPS_FACEBOOK: "{facebook} u\u011Fray\u0131p selam verin - orada sanat\u0131m\u0131 ve \u015Fiirimi payla\u015F\u0131yorum.",
             DLG_TIPS_SITE: "Webde neler yapt\u0131\u011F\u0131m\u0131 g\xF6rmek isterseniz, {site} en iyi ba\u015Flang\u0131\xE7.",
             DLG_TIPS_CREDITS: "Orijinal proje i\xE7in {zbluebugz}'a ve ilk fork ald\u0131\u011F\u0131m sadele\u015Ftirilmi\u015F UI branch'i i\xE7in {trinhquocviet}'e \xF6zel te\u015Fekk\xFCrler - o d\xF6nemdeki filtre bak\u0131m\u0131na da.",
@@ -2541,6 +2596,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "Facebook sayfam",
             DLG_TIPS_LINK_SITE: "web sitem",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["Kaydetmek", "Kapat", "\u0130hracat", "\u0130\xE7e aktarmak", "S\u0131f\u0131rla"],
             DLG_BUTTON_TOOLTIPS: [
@@ -2559,6 +2615,7 @@
             NF_STORIES: "\u0406\u0441\u0442\u043E\u0440\u0456\u0457",
             NF_TOP_CARDS_PAGES: "\u0412\u0435\u0440\u0445\u043D\u0456 \u043A\u0430\u0440\u0442\u043A\u0438 (\u0434\u043B\u044F \u0421\u0442\u043E\u0440\u0456\u043D\u043E\u043A)",
             NF_META_AI: "\u0421\u043F\u0440\u043E\u0431\u0443\u0432\u0430\u0442\u0438 Meta AI",
+            NF_META_AI_PROMPTS: "\u041F\u0456\u0434\u043A\u0430\u0437\u043A\u0438 \u0437\u0430\u043F\u0438\u0442\u0456\u0432 Meta AI",
             NF_HIDE_VERIFIED_BADGE: "\u041F\u0440\u0438\u0445\u043E\u0432\u0430\u0442\u0438 \u0437\u043D\u0430\u0447\u043A\u0438 \u043F\u0456\u0434\u0442\u0432\u0435\u0440\u0434\u0436\u0435\u043D\u043D\u044F",
             NF_FILTER_VERIFIED_BADGE: "\u0424\u0456\u043B\u044C\u0442\u0440\u0443\u0432\u0430\u0442\u0438 \u043F\u0456\u0434\u0442\u0432\u0435\u0440\u0434\u0436\u0435\u043D\u0456 \u043E\u0431\u043B\u0456\u043A\u043E\u0432\u0456 \u0437\u0430\u043F\u0438\u0441\u0438",
             NF_AI_SIDE_PANELS: "\u0428\u0406 \u0432 \u0431\u0456\u0447\u043D\u0438\u0445 \u043F\u0430\u043D\u0435\u043B\u044F\u0445",
@@ -2665,6 +2722,7 @@
             DLG_TIPS_DESC: "\u041F\u043E\u0441\u0438\u043B\u0430\u043D\u043D\u044F \u043F\u0440\u043E\u0454\u043A\u0442\u0443 \u0442\u0430 \u0456\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0456\u044F \u043F\u0440\u043E \u0441\u0443\u043F\u0440\u043E\u0432\u0456\u0434\u043D\u0438\u043A\u0430.",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "\u042F\u043A\u0449\u043E \u0446\u0435 \u0434\u043E\u043F\u043E\u043C\u0430\u0433\u0430\u0454, \u0437\u0456\u0440\u043A\u0430 \u043D\u0430 {github} \u0434\u0443\u0436\u0435 \u0431\u0430\u0433\u0430\u0442\u043E \u0434\u043B\u044F \u043C\u0435\u043D\u0435 \u043E\u0437\u043D\u0430\u0447\u0430\u0454.",
+            DLG_TIPS_THREADS: "\u042F\u043A\u0449\u043E \u0432\u0438 \u0442\u0435\u0436 \u043A\u043E\u0440\u0438\u0441\u0442\u0443\u0454\u0442\u0435\u0441\u044F Threads \u043D\u0430 \u043A\u043E\u043C\u043F\u2019\u044E\u0442\u0435\u0440\u0456, \u044F \u043F\u0456\u0434\u0442\u0440\u0438\u043C\u0443\u044E \u0444\u0456\u043B\u044C\u0442\u0440 \u0456 \u0434\u043B\u044F \u043D\u044C\u043E\u0433\u043E: {threads}.",
             DLG_TIPS_FACEBOOK: "\u0417\u0430\u0432\u0456\u0442\u0430\u0439\u0442\u0435 \u043D\u0430 {facebook} - \u0442\u0430\u043C \u044F \u0434\u0456\u043B\u044E\u0441\u044F \u043C\u0438\u0441\u0442\u0435\u0446\u0442\u0432\u043E\u043C \u0456 \u043F\u043E\u0435\u0437\u0456\u0454\u044E.",
             DLG_TIPS_SITE: "\u042F\u043A\u0449\u043E \u0445\u043E\u0447\u0435\u0442\u0435 \u043F\u043E\u0431\u0430\u0447\u0438\u0442\u0438, \u0447\u0438\u043C \u044F \u0437\u0430\u0439\u043C\u0430\u044E\u0441\u044F \u0432 \u043C\u0435\u0440\u0435\u0436\u0456, {site} \u2014 \u043D\u0430\u0439\u043A\u0440\u0430\u0449\u0435 \u043C\u0456\u0441\u0446\u0435 \u043F\u043E\u0447\u0430\u0442\u0438.",
             DLG_TIPS_CREDITS: "\u041E\u043A\u0440\u0435\u043C\u0430 \u043F\u043E\u0434\u044F\u043A\u0430 {zbluebugz} \u0437\u0430 \u043E\u0440\u0438\u0433\u0456\u043D\u0430\u043B\u044C\u043D\u0438\u0439 \u043F\u0440\u043E\u0454\u043A\u0442 \u0456 {trinhquocviet} \u0437\u0430 \u0441\u043F\u0440\u043E\u0449\u0435\u043D\u0443 UI-\u0433\u0456\u043B\u043A\u0443, \u0437 \u044F\u043A\u043E\u0457 \u044F \u0441\u043F\u0435\u0440\u0448\u0443 \u0444\u043E\u0440\u043A\u043D\u0443\u0432 - \u0456 \u0437\u0430 \u043F\u0456\u0434\u0442\u0440\u0438\u043C\u043A\u0443 \u0444\u0456\u043B\u044C\u0442\u0440\u0456\u0432 \u0443 \u0442\u043E\u0439 \u043F\u0435\u0440\u0456\u043E\u0434.",
@@ -2673,6 +2731,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "\u043C\u043E\u044E \u0441\u0442\u043E\u0440\u0456\u043D\u043A\u0443 \u0443 Facebook",
             DLG_TIPS_LINK_SITE: "\u043C\u0456\u0439 \u0441\u0430\u0439\u0442",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438", "\u0417\u0430\u043A\u0440\u0438\u0442\u0438", "\u0415\u043A\u0441\u043F\u043E\u0440\u0442", "\u0406\u043C\u043F\u043E\u0440\u0442", "\u0421\u043A\u0438\u043D\u0443\u0442\u0438"],
             DLG_BUTTON_TOOLTIPS: [
@@ -2691,6 +2750,7 @@
             NF_STORIES: "Tin",
             NF_TOP_CARDS_PAGES: "Th\u1EBB tr\xEAn c\xF9ng (cho Trang)",
             NF_META_AI: "Th\u1EED Meta AI",
+            NF_META_AI_PROMPTS: "G\u1EE3i \xFD prompt c\u1EE7a Meta AI",
             NF_HIDE_VERIFIED_BADGE: "\u1EA8n huy hi\u1EC7u \u0111\xE3 x\xE1c minh",
             NF_FILTER_VERIFIED_BADGE: "L\u1ECDc t\xE0i kho\u1EA3n \u0111\xE3 x\xE1c minh",
             NF_AI_SIDE_PANELS: "AI \u1EDF b\u1EA3ng b\xEAn",
@@ -2797,6 +2857,7 @@
             DLG_TIPS_DESC: "Li\xEAn k\u1EBFt d\u1EF1 \xE1n v\xE0 th\xF4ng tin ng\u01B0\u1EDDi b\u1EA3o tr\xEC.",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "N\u1EBFu th\u1EA5y h\u1EEFu \xEDch, m\u1ED9t ng\xF4i sao tr\xEAn {github} c\xF3 \xFD ngh\u0129a r\u1EA5t l\u1EDBn.",
+            DLG_TIPS_THREADS: "N\u1EBFu b\u1EA1n c\u0169ng d\xF9ng Threads tr\xEAn m\xE1y t\xEDnh, m\xECnh c\u0169ng duy tr\xEC m\u1ED9t b\u1ED9 l\u1ECDc cho n\xF3: {threads}.",
             DLG_TIPS_FACEBOOK: "Gh\xE9 {facebook} - m\xECnh chia s\u1EBB ngh\u1EC7 thu\u1EADt v\xE0 th\u01A1 \u1EDF \u0111\xF3.",
             DLG_TIPS_SITE: "N\u1EBFu mu\u1ED1n xem m\xECnh l\xE0m g\xEC tr\xEAn web, {site} l\xE0 n\u01A1i b\u1EAFt \u0111\u1EA7u t\u1ED1t nh\u1EA5t.",
             DLG_TIPS_CREDITS: "Xin c\u1EA3m \u01A1n \u0111\u1EB7c bi\u1EC7t t\u1EDBi {zbluebugz} cho d\u1EF1 \xE1n g\u1ED1c v\xE0 {trinhquocviet} cho nh\xE1nh UI \u0111\u01A1n gi\u1EA3n h\xF3a m\xE0 m\xECnh \u0111\xE3 fork ban \u0111\u1EA7u - c\xF9ng vi\u1EC7c b\u1EA3o tr\xEC b\u1ED9 l\u1ECDc trong giai \u0111o\u1EA1n \u0111\xF3.",
@@ -2805,6 +2866,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "trang Facebook c\u1EE7a m\xECnh",
             DLG_TIPS_LINK_SITE: "trang web c\u1EE7a m\xECnh",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["L\u01B0u", "\u0110\xF3ng", "Xu\u1EA5t", "Nh\u1EADp", "\u0110\u1EB7t l\u1EA1i"],
             DLG_BUTTON_TOOLTIPS: [
@@ -2823,6 +2885,7 @@
             NF_STORIES: "\u6545\u4E8B",
             NF_TOP_CARDS_PAGES: "\u9876\u90E8\u5361\u7247\uFF08\u7528\u4E8E\u9875\u9762\uFF09",
             NF_META_AI: "\u8BD5\u7528 Meta AI",
+            NF_META_AI_PROMPTS: "Meta AI \u63D0\u793A\u5EFA\u8BAE",
             NF_HIDE_VERIFIED_BADGE: "\u9690\u85CF\u5DF2\u9A8C\u8BC1\u5FBD\u7AE0",
             NF_FILTER_VERIFIED_BADGE: "\u8FC7\u6EE4\u5DF2\u9A8C\u8BC1\u5E10\u6237",
             NF_AI_SIDE_PANELS: "\u4FA7\u8FB9\u680F\u4E2D\u7684 AI",
@@ -2925,6 +2988,7 @@
             DLG_TIPS_DESC: "\u9879\u76EE\u94FE\u63A5\u548C\u7EF4\u62A4\u8005\u4FE1\u606F\u3002",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "\u5982\u679C\u6709\u5E2E\u52A9\uFF0C\u5728 {github} \u70B9\u4E2A\u661F\u5BF9\u6211\u610F\u4E49\u5F88\u5927\u3002",
+            DLG_TIPS_THREADS: "\u5982\u679C\u4F60\u4E5F\u5728\u684C\u9762\u7AEF\u4F7F\u7528 Threads\uFF0C\u6211\u4E5F\u5728\u7EF4\u62A4\u4E00\u4E2A\u9002\u7528\u4E8E\u5B83\u7684\u8FC7\u6EE4\u5668\uFF1A{threads}\u3002",
             DLG_TIPS_FACEBOOK: "\u6B22\u8FCE\u5230{facebook}\u6253\u4E2A\u62DB\u547C - \u6211\u5728\u90A3\u91CC\u5206\u4EAB\u827A\u672F\u548C\u8BD7\u6B4C\u3002",
             DLG_TIPS_SITE: "\u60F3\u770B\u770B\u6211\u5728\u7F51\u4E0A\u90FD\u5728\u505A\u4EC0\u4E48\uFF0C{site}\u662F\u6700\u597D\u7684\u8D77\u70B9\u3002",
             DLG_TIPS_CREDITS: "\u7279\u522B\u611F\u8C22 {zbluebugz} \u7684\u539F\u59CB\u9879\u76EE\uFF0C\u4EE5\u53CA {trinhquocviet} \u7684\u7B80\u5316 UI \u5206\u652F\uFF08\u6211\u6700\u521D\u5C31\u662F\u4ECE\u5B83 fork \u7684\uFF09- \u4E5F\u611F\u8C22\u90A3\u6BB5\u65F6\u95F4\u7684\u8FC7\u6EE4\u7EF4\u62A4\u3002",
@@ -2932,6 +2996,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "\u6211\u7684 Facebook",
             DLG_TIPS_LINK_SITE: "\u6211\u7684\u7F51\u7AD9",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["\u8282\u7701", "\u5173", "\u51FA\u53E3", "\u8FDB\u53E3", "\u91CD\u7F6E"],
             DLG_BUTTON_TOOLTIPS: [
@@ -2953,6 +3018,7 @@
             NF_FILTER_VERIFIED_BADGE: "\u904E\u6FFE\u5DF2\u9A57\u8B49\u5E33\u6236",
             NF_AI_SIDE_PANELS: "\u5074\u908A\u6B04\u4E2D\u7684 AI",
             NF_META_AI: "\u8A66\u7528 Meta AI",
+            NF_META_AI_PROMPTS: "Meta AI \u63D0\u793A\u5EFA\u8B70",
             NF_SURVEY: "\u8ABF\u67E5",
             NF_PEOPLE_YOU_MAY_KNOW: "\u4F60\u53EF\u80FD\u8A8D\u8B58\u7684\u4EBA",
             NF_PAID_PARTNERSHIP: "\u4ED8\u8CBB\u5408\u4F5C",
@@ -3052,6 +3118,7 @@
             DLG_TIPS_DESC: "\u5C08\u6848\u9023\u7D50\u548C\u7DAD\u8B77\u8005\u8CC7\u8A0A\u3002",
             DLG_TIPS_CONTENT: "",
             DLG_TIPS_STAR: "\u5982\u679C\u6709\u5E6B\u52A9\uFF0C\u5728 {github} \u9EDE\u500B\u661F\u5C0D\u6211\u610F\u7FA9\u5F88\u5927\u3002",
+            DLG_TIPS_THREADS: "\u5982\u679C\u4F60\u4E5F\u5728\u684C\u9762\u7248\u4F7F\u7528 Threads\uFF0C\u6211\u4E5F\u6709\u5728\u7DAD\u8B77\u4E00\u500B\u9069\u7528\u65BC\u5B83\u7684\u904E\u6FFE\u5668\uFF1A{threads}\u3002",
             DLG_TIPS_FACEBOOK: "\u6B61\u8FCE\u5230{facebook}\u6253\u500B\u62DB\u547C - \u6211\u5728\u90A3\u88E1\u5206\u4EAB\u85DD\u8853\u548C\u8A69\u3002",
             DLG_TIPS_SITE: "\u60F3\u770B\u770B\u6211\u5728\u7DB2\u8DEF\u4E0A\u90FD\u5728\u505A\u4EC0\u9EBC\uFF0C{site}\u662F\u6700\u597D\u7684\u8D77\u9EDE\u3002",
             DLG_TIPS_CREDITS: "\u7279\u5225\u611F\u8B1D {zbluebugz} \u7684\u539F\u59CB\u5C08\u6848\uFF0C\u4EE5\u53CA {trinhquocviet} \u7684\u7C21\u5316 UI \u5206\u652F\uFF08\u6211\u6700\u521D\u5C31\u662F\u5F9E\u5B83 fork \u7684\uFF09- \u4E5F\u611F\u8B1D\u90A3\u6BB5\u6642\u9593\u7684\u904E\u6FFE\u7DAD\u8B77\u3002",
@@ -3059,6 +3126,7 @@
             DLG_TIPS_LINK_REPO: "GitHub",
             DLG_TIPS_LINK_FACEBOOK: "\u6211\u7684 Facebook",
             DLG_TIPS_LINK_SITE: "\u6211\u7684\u7DB2\u7AD9",
+            DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
             DLG_TIPS_THANKS: "",
             DLG_BUTTONS: ["\u5132\u5B58", "\u95DC\u9589", "\u532F\u51FA", "\u532F\u5165", "\u91CD\u8A2D"],
             DLG_BUTTON_TOOLTIPS: [
@@ -9268,7 +9336,8 @@
         const linkLabels = {
           github: getKeyword(keyWords, translations, "DLG_TIPS_LINK_REPO"),
           facebook: getKeyword(keyWords, translations, "DLG_TIPS_LINK_FACEBOOK"),
-          site: getKeyword(keyWords, translations, "DLG_TIPS_LINK_SITE")
+          site: getKeyword(keyWords, translations, "DLG_TIPS_LINK_SITE"),
+          threads: getKeyword(keyWords, translations, "DLG_TIPS_LINK_THREADS")
         };
         const linkMap = [
           {
@@ -9285,12 +9354,23 @@
             token: "{site}",
             label: linkLabels.site || "website",
             href: "https://artificialsweetener.ai"
+          },
+          {
+            token: "{threads}",
+            label: linkLabels.threads || "Bobbin Threads Filter",
+            href: "https://github.com/Artificial-Sweetener/bobbin-threads-filter"
           }
         ];
         const starText = getKeyword(keyWords, translations, "DLG_TIPS_STAR");
         if (starText) {
           const p = document.createElement("p");
           appendTextWithLinks(p, starText, linkMap);
+          wrap.appendChild(p);
+        }
+        const threadsText = getKeyword(keyWords, translations, "DLG_TIPS_THREADS");
+        if (threadsText) {
+          const p = document.createElement("p");
+          appendTextWithLinks(p, threadsText, linkMap);
           wrap.appendChild(p);
         }
         const facebookText = getKeyword(keyWords, translations, "DLG_TIPS_FACEBOOK");

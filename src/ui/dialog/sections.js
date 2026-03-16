@@ -238,6 +238,7 @@ function createTipsContent(keyWords, translations) {
     github: getKeyword(keyWords, translations, "DLG_TIPS_LINK_REPO"),
     facebook: getKeyword(keyWords, translations, "DLG_TIPS_LINK_FACEBOOK"),
     site: getKeyword(keyWords, translations, "DLG_TIPS_LINK_SITE"),
+    threads: getKeyword(keyWords, translations, "DLG_TIPS_LINK_THREADS"),
   };
   const linkMap = [
     {
@@ -255,12 +256,24 @@ function createTipsContent(keyWords, translations) {
       label: linkLabels.site || "website",
       href: "https://artificialsweetener.ai",
     },
+    {
+      token: "{threads}",
+      label: linkLabels.threads || "Bobbin Threads Filter",
+      href: "https://github.com/Artificial-Sweetener/bobbin-threads-filter",
+    },
   ];
 
   const starText = getKeyword(keyWords, translations, "DLG_TIPS_STAR");
   if (starText) {
     const p = document.createElement("p");
     appendTextWithLinks(p, starText, linkMap);
+    wrap.appendChild(p);
+  }
+
+  const threadsText = getKeyword(keyWords, translations, "DLG_TIPS_THREADS");
+  if (threadsText) {
+    const p = document.createElement("p");
+    appendTextWithLinks(p, threadsText, linkMap);
     wrap.appendChild(p);
   }
 

@@ -70,6 +70,18 @@ function hideBlock(block, link, reason, state, options, attributes) {
   }
 }
 
+function syncDebugVisibility(element, state, options) {
+  if (!element || !state || !options) {
+    return;
+  }
+
+  if (options.VERBOSITY_DEBUG) {
+    element.setAttribute(state.showAtt, "");
+  } else {
+    element.removeAttribute(state.showAtt);
+  }
+}
+
 function hidePost(post, reason, marker, context) {
   if (!post || !context) {
     return;
@@ -122,15 +134,31 @@ function hideFeature(post, reason, marker, context) {
   }
 }
 
+function hideFeatureNoCaption(feature, reason, context) {
+  if (!feature || !context) {
+    return;
+  }
+
+  const { options, state } = context;
+  if (!options || !state) {
+    return;
+  }
+
+  feature.setAttribute(postAtt, sanitizeReason(reason));
+  feature.setAttribute(state.hideWithNoCaptionAtt, "");
+  syncDebugVisibility(feature, state, options);
+}
+
 function toggleHiddenElements(state, options) {
   if (!state || !options) {
     return;
   }
 
   const containers = Array.from(document.querySelectorAll(`[${state.hideAtt}]`));
+  const noCaptionRows = Array.from(document.querySelectorAll(`[${state.hideWithNoCaptionAtt}]`));
   const blocks = Array.from(document.querySelectorAll(`[${state.cssHideEl}]`));
   const shares = Array.from(document.querySelectorAll(`[${state.cssHideNumberOfShares}]`));
-  const elements = [...containers, ...blocks, ...shares];
+  const elements = [...containers, ...noCaptionRows, ...blocks, ...shares];
 
   if (options.VERBOSITY_DEBUG) {
     for (const element of elements) {
@@ -243,6 +271,7 @@ module.exports = {
   addMiniCaption,
   hideBlock,
   hideFeature,
+  hideFeatureNoCaption,
   hideGroupPost,
   hideNewsPost,
   hidePost,

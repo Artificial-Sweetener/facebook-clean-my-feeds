@@ -102,6 +102,7 @@ function setFeedSettings(state, options, forceUpdate = false) {
     state.prevURL = window.location.href;
     state.prevPathname = window.location.pathname;
     state.prevQuery = window.location.search;
+    state.forceProcess = true;
 
     state.isNF = false;
     state.isGF = false;
@@ -109,12 +110,14 @@ function setFeedSettings(state, options, forceUpdate = false) {
     state.isMF = false;
     state.isSF = false;
     state.isRF = false;
-    state.isPP = false;
-    state.gfType = "";
-    state.vfType = "";
-    state.mpType = "";
+     state.isPP = false;
+     state.gfType = "";
+     state.vfType = "";
+     state.mpType = "";
+     state.newsPostQuery = "";
+     state.lastNewsPostCount = 0;
 
-    if (state.prevPathname === "/" || state.prevPathname === "/home.php") {
+     if (state.prevPathname === "/" || state.prevPathname === "/home.php") {
       if (state.prevQuery.indexOf("?filter=groups") < 0) {
         state.isNF = true;
       } else {
@@ -223,24 +226,30 @@ function processPage(state, options, filters, keyWords, context, eventType = "ti
   } else if (state.isPP) {
     mopProfileFeed(context);
   }
+
+  if (state.forceProcess) {
+    state.forceProcess = false;
+  }
 }
 
 function startLoop(state, options, filters, keyWords, context) {
   let prevScrollY = window.scrollY;
   let lastCleaningTime = 0;
   let sleepDuration = 50;
+  let mutationTimeoutId = null;
 
   const run = (eventType = "timing") => {
     const currentTime = new Date().getTime();
     const elapsedTime = currentTime - lastCleaningTime;
+    const shouldForce = state.forceProcess === true;
 
     if (eventType === "url-changed") {
       setFeedSettings(state, options);
     } else if (eventType === "scrolling") {
-      if (sleepDuration < 151) {
+      if (sleepDuration < 151 && !shouldForce) {
         return;
       }
-    } else if (elapsedTime < sleepDuration) {
+    } else if (elapsedTime < sleepDuration && !shouldForce) {
       return;
     }
 
@@ -269,6 +278,7 @@ function startLoop(state, options, filters, keyWords, context) {
     const scrollingDistance = Math.abs(currentScrollY - prevScrollY);
     prevScrollY = currentScrollY;
     if (scrollingDistance > 20) {
+      state.forceProcess = true;
       run("scrolling");
     }
   });
@@ -282,6 +292,23 @@ function startLoop(state, options, filters, keyWords, context) {
       run("url-changed");
     }
   }, 500);
+
+  if (typeof MutationObserver !== "undefined") {
+    const observer = new MutationObserver(() => {
+      if (!state.isAF) {
+        return;
+      }
+      if (mutationTimeoutId !== null) {
+        return;
+      }
+      mutationTimeoutId = window.setTimeout(() => {
+        mutationTimeoutId = null;
+        state.forceProcess = true;
+        run("mutations");
+      }, 75);
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
 
   run("url-changed");
 }

@@ -1,7 +1,18 @@
 const { cleanText } = require("../core/filters/text-normalize");
 
+const { postAtt } = require("./attributes");
+
 function countDescendants(element) {
   return element.querySelectorAll("div, span").length;
+}
+
+function isNestedMarkedNode(node, root) {
+  if (!node || !root || typeof node.closest !== "function") {
+    return false;
+  }
+
+  const markedAncestor = node.closest(`[${postAtt}]`);
+  return !!markedAncestor && markedAncestor !== root;
 }
 
 function scanTreeForText(node) {
@@ -9,6 +20,10 @@ function scanTreeForText(node) {
   const elements = node.querySelectorAll(":scope > div, :scope > blockquote, :scope > span");
 
   for (const element of elements) {
+    if (isNestedMarkedNode(element, node)) {
+      continue;
+    }
+
     if (element.hasAttribute("aria-hidden") && element.getAttribute("aria-hidden") === "false") {
       continue;
     }
@@ -19,6 +34,10 @@ function scanTreeForText(node) {
       const elParent = currentNode.parentElement;
       const elParentTN = elParent.tagName.toLowerCase();
       const val = cleanText(currentNode.textContent).trim();
+
+      if (isNestedMarkedNode(elParent, node)) {
+        continue;
+      }
 
       if (val === "" || val.toLowerCase() === "facebook") {
         continue;
@@ -72,6 +91,10 @@ function scanImagesForAltText(node) {
   const arrayAltTextValues = [];
   const images = node.querySelectorAll("img[alt]");
   for (const img of images) {
+    if (isNestedMarkedNode(img, node)) {
+      continue;
+    }
+
     if (img.alt.length > 0 && img.naturalWidth > 32) {
       const altText = cleanText(img.alt);
       if (!arrayAltTextValues.includes(altText)) {
@@ -89,6 +112,10 @@ function extractTextContent(post, selector, maxBlocks) {
 
   for (let b = 0; b < Math.min(maxBlocks, blocks.length); b++) {
     const block = blocks[b];
+    if (isNestedMarkedNode(block, post)) {
+      continue;
+    }
+
     if (countDescendants(block) > 0) {
       arrayTextValues.push(...scanTreeForText(block));
       arrayTextValues.push(...scanImagesForAltText(block));
@@ -101,6 +128,7 @@ function extractTextContent(post, selector, maxBlocks) {
 module.exports = {
   countDescendants,
   extractTextContent,
+  isNestedMarkedNode,
   mpScanTreeForText,
   scanImagesForAltText,
   scanTreeForText,

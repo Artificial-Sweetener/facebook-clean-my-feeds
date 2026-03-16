@@ -21,6 +21,7 @@ const {
   isNewsEventsYouMayLike,
   isNewsFollow,
   isNewsMetaAICard,
+  hasMetaAiPromptSuggestionRow,
   isNewsPaidPartnership,
   isNewsParticipate,
   isNewsPeopleYouMayKnow,
@@ -374,6 +375,11 @@ function buildNewsMatches(post, context) {
   addMatch(matches, "NF_META_AI", options.NF_META_AI && isNewsMetaAICard(post, keyWords));
   addMatch(
     matches,
+    "NF_META_AI_PROMPTS",
+    options.NF_META_AI_PROMPTS && hasMetaAiPromptSuggestionRow(post)
+  );
+  addMatch(
+    matches,
     "NF_PAID_PARTNERSHIP",
     options.NF_PAID_PARTNERSHIP && isNewsPaidPartnership(post, keyWords)
   );
@@ -663,6 +669,7 @@ function buildHiddenCounts(state) {
   }
   return {
     hiddenContainers: document.querySelectorAll(`[${state.hideAtt}]`).length,
+    hiddenNoCaptionRows: document.querySelectorAll(`[${state.hideWithNoCaptionAtt}]`).length,
     hiddenBlocks: document.querySelectorAll(`[${state.cssHideEl}]`).length,
     hiddenShares: document.querySelectorAll(`[${state.cssHideNumberOfShares}]`).length,
   };

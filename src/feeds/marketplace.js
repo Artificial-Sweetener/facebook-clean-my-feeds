@@ -1,6 +1,12 @@
 const { findFirstMatch } = require("../core/filters/matching");
 const { mainColumnAtt, postAtt, postAttMPSkip } = require("../dom/attributes");
-const { hasSizeChanged } = require("../dom/dirty-check");
+const {
+  ensureDirtyObserver,
+  getDirtyToken,
+  isElementDirty,
+  markElementCleanIfUnchanged,
+  markElementDirty,
+} = require("../dom/dirty-check");
 const { mpScanTreeForText } = require("../dom/walker");
 const { sanitizeReason } = require("../dom/hide");
 const { climbUpTheTree } = require("../utils/dom");
@@ -114,41 +120,63 @@ function isMarketplaceDirty(state) {
       'div[hidden] ~ div[class*="__"] div[role="dialog"]'
     );
     if (mainColumnDM) {
-      if (mainColumnDM.hasAttribute(mainColumnAtt)) {
-        if (
-          hasSizeChanged(mainColumnDM.getAttribute(mainColumnAtt), mainColumnDM.innerHTML.length)
-        ) {
-          return mainColumnDM;
-        }
-      } else {
+      ensureDirtyObserver(mainColumnDM);
+      if (!mainColumnDM.hasAttribute(mainColumnAtt)) {
+        mainColumnDM.setAttribute(mainColumnAtt, "1");
+        markElementDirty(mainColumnDM);
+      }
+      if (state && state.forceProcess) {
+        markElementDirty(mainColumnDM);
+      }
+      if (state && state.forceProcess) {
+        return mainColumnDM;
+      }
+      if (isElementDirty(mainColumnDM)) {
         return mainColumnDM;
       }
     }
     const mainColumnPM = document.querySelector('div[role="navigation"] ~ div[role="main"]');
     if (mainColumnPM) {
-      if (mainColumnPM.hasAttribute(mainColumnAtt)) {
-        if (
-          hasSizeChanged(
-            mainColumnPM.getAttribute(mainColumnAtt),
-            mainColumnPM.innerHTML.length.toString()
-          )
-        ) {
-          return mainColumnPM;
-        }
-      } else {
+      ensureDirtyObserver(mainColumnPM);
+      if (!mainColumnPM.hasAttribute(mainColumnAtt)) {
+        mainColumnPM.setAttribute(mainColumnAtt, "1");
+        markElementDirty(mainColumnPM);
+      }
+      if (state && state.forceProcess) {
+        markElementDirty(mainColumnPM);
+      }
+      if (state && state.forceProcess) {
+        return mainColumnPM;
+      }
+      if (isElementDirty(mainColumnPM)) {
         return mainColumnPM;
       }
     }
   } else {
     const mainColumn = document.querySelector(`[${mainColumnAtt}]`);
     if (mainColumn) {
-      if (hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)) {
+      ensureDirtyObserver(mainColumn);
+      if (state && state.forceProcess) {
+        markElementDirty(mainColumn);
+      }
+      if (state && state.forceProcess) {
+        return mainColumn;
+      }
+      if (isElementDirty(mainColumn)) {
         return mainColumn;
       }
     } else {
       const query = 'div[role="navigation"] ~ div[role="main"]';
       const mainColumn = document.querySelector(query);
       if (mainColumn) {
+        ensureDirtyObserver(mainColumn);
+        if (!mainColumn.hasAttribute(mainColumnAtt)) {
+          mainColumn.setAttribute(mainColumnAtt, "1");
+          markElementDirty(mainColumn);
+        }
+        if (state && state.forceProcess) {
+          markElementDirty(mainColumn);
+        }
         return mainColumn;
       }
     }
@@ -175,6 +203,7 @@ function mopMarketplaceFeed(context) {
   if (!mainColumn) {
     return null;
   }
+  const mainColumnToken = getDirtyToken(mainColumn);
 
   mpStopTrackingDirtIntoMyHouse();
 
@@ -238,7 +267,10 @@ function mopMarketplaceFeed(context) {
     }
   }
 
-  mainColumn.setAttribute(mainColumnAtt, mainColumn.innerHTML.length.toString());
+  if (!mainColumn.hasAttribute(mainColumnAtt)) {
+    mainColumn.setAttribute(mainColumnAtt, "1");
+  }
+  markElementCleanIfUnchanged(mainColumn, mainColumnToken);
   state.noChangeCounter = 0;
 
   return mainColumn;

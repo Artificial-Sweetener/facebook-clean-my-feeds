@@ -1,6 +1,15 @@
 const { mainColumnAtt, postAtt, postAttTab } = require("../dom/attributes");
 const { swatTheMosquitos } = require("../dom/animated-gifs");
-const { hasSizeChanged } = require("../dom/dirty-check");
+const {
+  ensureDirtyObserver,
+  getDirtyToken,
+  hasPostChanged,
+  isElementDirty,
+  markElementCleanIfUnchanged,
+  markElementDirty,
+  resetPostState,
+  trackPostSignature,
+} = require("../dom/dirty-check");
 const { hidePost } = require("../dom/hide");
 const { scrubInfoBoxes } = require("../dom/info-boxes");
 const { searchSelectors } = require("../selectors/search");
@@ -11,10 +20,18 @@ const { isSponsored } = require("./shared/sponsored");
 function isSearchColumnDirty(state) {
   const mainColumn = document.querySelector(searchSelectors.mainColumn);
   if (mainColumn) {
+    ensureDirtyObserver(mainColumn);
     if (!mainColumn.hasAttribute(mainColumnAtt)) {
+      mainColumn.setAttribute(mainColumnAtt, "1");
+      markElementDirty(mainColumn);
+    }
+    if (state && state.forceProcess) {
+      markElementDirty(mainColumn);
+    }
+    if (state && state.forceProcess) {
       return mainColumn;
     }
-    if (hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)) {
+    if (isElementDirty(mainColumn)) {
       return mainColumn;
     }
   }
@@ -41,6 +58,8 @@ function mopSearchFeed(context) {
     return null;
   }
 
+  const mainColumnToken = getDirtyToken(mainColumn);
+
   if (options.NF_BLOCKED_ENABLED) {
     const posts = Array.from(document.querySelectorAll(searchSelectors.postsQuery));
 
@@ -51,6 +70,11 @@ function mopSearchFeed(context) {
 
       let hideReason = "";
       let isSponsoredPost = false;
+
+      const postChanged = hasPostChanged(post);
+      if (postChanged) {
+        resetPostState(post, state);
+      }
 
       if (post.hasAttribute(postAtt)) {
         hideReason = "hidden";
@@ -86,10 +110,17 @@ function mopSearchFeed(context) {
           scrubInfoBoxes(post, options, keyWords, pathInfo, state);
         }
       }
+
+      if (!postChanged) {
+        trackPostSignature(post);
+      }
     }
   }
 
-  mainColumn.setAttribute(mainColumnAtt, mainColumn.innerHTML.length.toString());
+  if (!mainColumn.hasAttribute(mainColumnAtt)) {
+    mainColumn.setAttribute(mainColumnAtt, "1");
+  }
+  markElementCleanIfUnchanged(mainColumn, mainColumnToken);
   state.noChangeCounter = 0;
 
   return mainColumn;

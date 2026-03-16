@@ -4,6 +4,7 @@ const {
   scanImagesForAltText,
   scanTreeForText,
 } = require("../../src/dom/walker");
+const { postAtt } = require("../../src/dom/attributes");
 
 function setNaturalWidth(img, width) {
   Object.defineProperty(img, "naturalWidth", {
@@ -72,5 +73,21 @@ describe("dom/walker", () => {
     const values = extractTextContent(post, ".block", 1);
 
     expect(values).toEqual(["First", "Img"]);
+  });
+
+  test("extractTextContent skips text inside nested hidden subfeatures", () => {
+    const post = document.createElement("div");
+    post.innerHTML = `
+      <div class="block">
+        <span>Visible</span>
+        <div ${postAtt}="Meta AI prompt suggestions">
+          <span>Why should we stop praising billionaires?</span>
+        </div>
+      </div>
+    `;
+
+    const values = extractTextContent(post, ".block", 1);
+
+    expect(values).toEqual(["Visible"]);
   });
 });

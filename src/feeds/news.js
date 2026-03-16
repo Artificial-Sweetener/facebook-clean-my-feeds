@@ -2,9 +2,18 @@ const { cleanText } = require("../core/filters/text-normalize");
 const { getFullNumber } = require("../core/filters/classifiers/shares-likes");
 const { mainColumnAtt, postAtt, postAttChildFlag, postAttTab } = require("../dom/attributes");
 const { swatTheMosquitos } = require("../dom/animated-gifs");
-const { hasSizeChanged } = require("../dom/dirty-check");
+const {
+  ensureDirtyObserver,
+  getDirtyToken,
+  hasPostChanged,
+  isElementDirty,
+  markElementCleanIfUnchanged,
+  markElementDirty,
+  resetPostState,
+  trackPostSignature,
+} = require("../dom/dirty-check");
 const { doLightDusting } = require("../dom/dusting");
-const { hideNewsPost, hideFeature } = require("../dom/hide");
+const { hideNewsPost, hideFeature, hideFeatureNoCaption } = require("../dom/hide");
 const { scrubInfoBoxes } = require("../dom/info-boxes");
 const { extractTextContent, scanTreeForText } = require("../dom/walker");
 const { climbUpTheTree, querySelectorAllNoChildren } = require("../utils/dom");
@@ -20,20 +29,41 @@ function isNewsDirty(state) {
   const arrReturn = [null, null];
   const mainColumn = document.querySelector(newsSelectors.mainColumn);
   if (mainColumn) {
+    ensureDirtyObserver(mainColumn);
     if (!mainColumn.hasAttribute(mainColumnAtt)) {
+      mainColumn.setAttribute(mainColumnAtt, "1");
+      markElementDirty(mainColumn);
+    }
+    if (state && state.forceProcess) {
+      markElementDirty(mainColumn);
+    }
+    if (state && state.forceProcess) {
       arrReturn[0] = mainColumn;
-    } else if (
-      hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)
-    ) {
+    } else if (isElementDirty(mainColumn)) {
       arrReturn[0] = mainColumn;
+    } else if (state) {
+      const currentCount = getNewsPostCount(state);
+      if (currentCount !== state.lastNewsPostCount) {
+        state.lastNewsPostCount = currentCount;
+        markElementDirty(mainColumn);
+        arrReturn[0] = mainColumn;
+      }
     }
   }
 
   const elDialog = document.querySelector(newsSelectors.dialog);
   if (elDialog) {
+    ensureDirtyObserver(elDialog);
     if (!elDialog.hasAttribute(mainColumnAtt)) {
+      elDialog.setAttribute(mainColumnAtt, "1");
+      markElementDirty(elDialog);
+    }
+    if (state && state.forceProcess) {
+      markElementDirty(elDialog);
+    }
+    if (state && state.forceProcess) {
       arrReturn[1] = elDialog;
-    } else if (hasSizeChanged(elDialog.getAttribute(mainColumnAtt), elDialog.innerHTML.length)) {
+    } else if (isElementDirty(elDialog)) {
       arrReturn[1] = elDialog;
     }
   }
@@ -45,16 +75,39 @@ function isNewsDirty(state) {
   return arrReturn;
 }
 
-function getCollectionOfNewsPosts() {
+function getCollectionOfNewsPosts(state) {
+  if (state && typeof state.newsPostQuery === "string" && state.newsPostQuery !== "") {
+    const cachedNodeList = document.querySelectorAll(state.newsPostQuery);
+    if (cachedNodeList.length > 0) {
+      return Array.from(cachedNodeList);
+    }
+  }
+
   let posts = [];
   for (const query of newsSelectors.postQueries) {
     const nodeList = document.querySelectorAll(query);
     if (nodeList.length > 0) {
       posts = Array.from(nodeList);
+      if (state) {
+        state.newsPostQuery = query;
+      }
       break;
     }
   }
+  if (posts.length === 0 && state) {
+    state.newsPostQuery = "";
+  }
   return posts;
+}
+
+function getNewsPostCount(state) {
+  if (state && typeof state.newsPostQuery === "string" && state.newsPostQuery !== "") {
+    return document.querySelectorAll(state.newsPostQuery).length;
+  }
+
+  return document.querySelectorAll(
+    'div[role="main"] div[aria-posinset], div[role="main"] div[role="article"]'
+  ).length;
 }
 
 function isNewsSuggested(post, state, keyWords) {
@@ -335,10 +388,7 @@ function findTopCardsForPagesContainer(mainColumn) {
   });
 
   for (const region of candidates) {
-    if (
-      region.querySelector('a[href="/reel/"]') &&
-      region.querySelector('a[href="/stories/"]')
-    ) {
+    if (region.querySelector('a[href="/reel/"]') && region.querySelector('a[href="/stories/"]')) {
       return region;
     }
   }
@@ -533,6 +583,7 @@ function scrubVerifiedBadges(context) {
   };
 
   const mainColumn = document.querySelector(newsSelectors.mainColumn);
+
   if (mainColumn) {
     const badges = mainColumn.querySelectorAll(
       'div[role="article"] h4 svg, div[aria-posinset] h4 svg, div[role="article"] h5 svg, div[aria-posinset] h5 svg'
@@ -571,9 +622,7 @@ function getSidePanelAiTargets() {
 
   const rightPanel = document.querySelector('div[role="complementary"]');
   if (rightPanel) {
-    const metaThreads = rightPanel.querySelectorAll(
-      'a[href*="/messages/t/36327,2227039302/"]'
-    );
+    const metaThreads = rightPanel.querySelectorAll('a[href*="/messages/t/36327,2227039302/"]');
     metaThreads.forEach((link) => {
       const li = link.closest("li");
       targets.add(li || link);
@@ -606,6 +655,276 @@ function scrubSidePanelAi(context) {
   });
 }
 
+function getReactFiberFromElement(element) {
+  let current = element;
+  let depth = 0;
+
+  while (current && depth < 4) {
+    const reactFiberKey = Object.getOwnPropertyNames(current).find(
+      (key) => key.startsWith("__reactFiber$") || key.startsWith("__reactInternalInstance$")
+    );
+    if (reactFiberKey && current[reactFiberKey]) {
+      return current[reactFiberKey];
+    }
+    current = current.parentElement;
+    depth += 1;
+  }
+
+  return null;
+}
+
+function findAncestorFiber(fiber, predicate) {
+  let current = fiber;
+  let safetyCounter = 0;
+
+  while (current && safetyCounter < 50) {
+    if (predicate(current)) {
+      return current;
+    }
+    current = current.return;
+    safetyCounter += 1;
+  }
+
+  return null;
+}
+
+function isMetaAiSuggestionFiber(fiber) {
+  if (!fiber || typeof fiber.key !== "string" || !fiber.key.startsWith("suggestion-")) {
+    return false;
+  }
+
+  const props = fiber.memoizedProps || fiber.pendingProps;
+  if (!props || typeof props !== "object") {
+    return false;
+  }
+
+  return (
+    Object.prototype.hasOwnProperty.call(props, "promptId") &&
+    Object.prototype.hasOwnProperty.call(props, "genAISessionID")
+  );
+}
+
+function getMetaAiSuggestionChipSignal(button) {
+  const fiber = getReactFiberFromElement(button);
+  if (!fiber) {
+    return null;
+  }
+
+  const suggestionFiber = findAncestorFiber(fiber, isMetaAiSuggestionFiber);
+  const props = suggestionFiber ? suggestionFiber.memoizedProps || suggestionFiber.pendingProps : null;
+  if (!suggestionFiber || !props) {
+    return null;
+  }
+
+  const { promptId, genAISessionID } = props;
+  if (!promptId || !genAISessionID) {
+    return null;
+  }
+
+  return {
+    promptId,
+    genAISessionID,
+    suggestionKey: suggestionFiber.key,
+  };
+}
+
+function isButtonLike(element) {
+  if (!element || typeof element.getAttribute !== "function") {
+    return false;
+  }
+
+  return element.tagName === "BUTTON" || element.getAttribute("role") === "button";
+}
+
+function getMetaAiPromptChipButtons(row) {
+  if (!row || typeof row.querySelectorAll !== "function") {
+    return [];
+  }
+
+  return Array.from(
+    row.querySelectorAll(
+      '[data-type="hscroll-child"] button, [data-type="hscroll-child"] [role="button"]'
+    )
+  );
+}
+
+function getMetaAiPromptButtonText(button) {
+  if (!button || typeof button.textContent !== "string") {
+    return "";
+  }
+
+  return cleanText(button.textContent).trim();
+}
+
+function hasMetaAiPromptButtonIcon(button) {
+  if (!button || typeof button.querySelector !== "function") {
+    return false;
+  }
+
+  return button.querySelector("i, img, svg") !== null;
+}
+
+function hasMetaAiPromptButtonLabel(button) {
+  if (!button || typeof button.getAttribute !== "function") {
+    return false;
+  }
+
+  return ["aria-label", "title"].some((attributeName) => {
+    const attributeValue = button.getAttribute(attributeName);
+    return typeof attributeValue === "string" && attributeValue.trim() !== "";
+  });
+}
+
+// Fallback for userscript sandboxes where Facebook's React fibers are not readable.
+function hasMetaAiPromptDomSignature(row) {
+  const chipButtons = getMetaAiPromptChipButtons(row);
+  if (chipButtons.length !== 3) {
+    return false;
+  }
+
+  const buttonTexts = chipButtons.map((button) => getMetaAiPromptButtonText(button));
+  if (buttonTexts[0] === "" || buttonTexts[1] === "" || buttonTexts[2] !== "") {
+    return false;
+  }
+
+  const firstButtonHasIcon = hasMetaAiPromptButtonIcon(chipButtons[0]);
+  const lastButtonHasIcon = hasMetaAiPromptButtonIcon(chipButtons[2]);
+  const lastButtonHasLabel = hasMetaAiPromptButtonLabel(chipButtons[2]);
+
+  return firstButtonHasIcon && (lastButtonHasIcon || lastButtonHasLabel);
+}
+
+function isMetaAiPromptCandidateRow(row, root) {
+  if (!row || !root || row === root || typeof row.querySelectorAll !== "function") {
+    return false;
+  }
+
+  const hscrollChildren = row.querySelectorAll('[data-type="hscroll-child"]');
+  if (hscrollChildren.length < 2) {
+    return false;
+  }
+
+  const chipButtons = getMetaAiPromptChipButtons(row);
+  if (chipButtons.length < 2) {
+    return false;
+  }
+
+  const contentLinks = Array.from(row.querySelectorAll("a[href]")).filter((link) => {
+    if (isButtonLike(link)) {
+      return false;
+    }
+
+    const buttonAncestor = link.closest('[role="button"], button');
+    return !buttonAncestor;
+  });
+
+  return contentLinks.length === 0;
+}
+
+function findMetaAiPromptCandidateRows(root) {
+  if (!root || typeof root.querySelectorAll !== "function") {
+    return [];
+  }
+
+  const candidateRows = new Set();
+  const chips = root.querySelectorAll('[data-type="hscroll-child"]');
+
+  chips.forEach((chip) => {
+    let current = chip.parentElement;
+    while (current && current !== root) {
+      if (isMetaAiPromptCandidateRow(current, root)) {
+        candidateRows.add(current);
+      }
+      current = current.parentElement;
+    }
+  });
+
+  const rows = Array.from(candidateRows);
+  return rows.filter((row) => !rows.some((other) => other !== row && other.contains(row)));
+}
+
+function isMetaAiPromptSuggestionRow(row) {
+  const sessionMatches = new Map();
+  const signals = getMetaAiPromptChipButtons(row)
+    .map((button) => getMetaAiSuggestionChipSignal(button))
+    .filter(Boolean);
+
+  signals.forEach((signal) => {
+    if (!sessionMatches.has(signal.genAISessionID)) {
+      sessionMatches.set(signal.genAISessionID, new Set());
+    }
+
+    sessionMatches.get(signal.genAISessionID).add(`${signal.suggestionKey}:${signal.promptId}`);
+  });
+
+  if (Array.from(sessionMatches.values()).some((signalSet) => signalSet.size >= 2)) {
+    return true;
+  }
+
+  return hasMetaAiPromptDomSignature(row);
+}
+
+function inspectMetaAiPromptRows(root) {
+  const candidateRows = findMetaAiPromptCandidateRows(root);
+  if (candidateRows.length === 0) {
+    return {
+      candidateRows: [],
+      confirmedRows: [],
+      hasUnresolvedCandidates: false,
+    };
+  }
+
+  const confirmedRows = candidateRows.filter((row) => isMetaAiPromptSuggestionRow(row));
+  const confirmedSet = new Set(confirmedRows);
+
+  return {
+    candidateRows,
+    confirmedRows,
+    hasUnresolvedCandidates: candidateRows.some((row) => !confirmedSet.has(row)),
+  };
+}
+
+function findMetaAiPromptSuggestionRows(root) {
+  return inspectMetaAiPromptRows(root).confirmedRows;
+}
+
+function hideMetaAiPromptSuggestionRows(rows, context) {
+  if (!Array.isArray(rows) || !context || rows.length === 0) {
+    return false;
+  }
+
+  const { keyWords } = context;
+  if (!keyWords) {
+    return false;
+  }
+
+  rows.forEach((row) => hideFeatureNoCaption(row, keyWords.NF_META_AI_PROMPTS, context));
+  return true;
+}
+
+function hasMetaAiPromptSuggestionRow(root) {
+  return findMetaAiPromptSuggestionRows(root).length > 0;
+}
+
+function scrubMetaAiPromptSuggestions(context, root = null) {
+  if (!context) {
+    return false;
+  }
+
+  const { options } = context;
+  if (!options || options.NF_META_AI_PROMPTS !== true) {
+    return false;
+  }
+
+  const scanRoot = root || document.querySelector(newsSelectors.mainColumn);
+  if (!scanRoot) {
+    return false;
+  }
+
+  const promptInspection = inspectMetaAiPromptRows(scanRoot);
+  return hideMetaAiPromptSuggestionRows(promptInspection.confirmedRows, context);
+}
+
 function postExceedsLikeCount(post, options, keyWords) {
   const queryLikes =
     'span[role="toolbar"] ~ div div[role="button"] > span[class][aria-hidden] > span:not([class]) > span[class]';
@@ -632,6 +951,8 @@ function mopNewsFeed(context) {
   if (!mainColumn && !elDialog) {
     return null;
   }
+  const mainColumnToken = mainColumn ? getDirtyToken(mainColumn) : null;
+  const dialogToken = elDialog ? getDirtyToken(elDialog) : null;
 
   if (mainColumn) {
     if (options.NF_TABLIST_STORIES_REELS_ROOMS) {
@@ -649,6 +970,9 @@ function mopNewsFeed(context) {
     if (options.NF_AI_SIDE_PANELS) {
       scrubSidePanelAi(context);
     }
+    if (options.NF_META_AI_PROMPTS) {
+      scrubMetaAiPromptSuggestions(context, mainColumn);
+    }
 
     if (options.NF_SPONSORED) {
       cleanConsoleTable("Sponsored", context);
@@ -657,7 +981,10 @@ function mopNewsFeed(context) {
       cleanConsoleTable("Suggestions", context);
     }
 
-    const posts = getCollectionOfNewsPosts();
+    const posts = getCollectionOfNewsPosts(state);
+    if (state) {
+      state.lastNewsPostCount = posts.length;
+    }
     for (const post of posts) {
       if (post.innerHTML.length === 0) {
         continue;
@@ -665,6 +992,11 @@ function mopNewsFeed(context) {
 
       let hideReason = "";
       let isSponsoredPost = false;
+
+      const postChanged = hasPostChanged(post);
+      if (postChanged) {
+        resetPostState(post, state);
+      }
 
       if (post.hasAttribute(postAtt)) {
         hideReason = "hidden";
@@ -745,9 +1077,18 @@ function mopNewsFeed(context) {
           hideNumberOfShares(post, state, options);
         }
       }
+
+      if (!postChanged) {
+        trackPostSignature(post);
+      }
     }
 
-    mainColumn.setAttribute(mainColumnAtt, mainColumn.innerHTML.length.toString());
+    if (!mainColumn.hasAttribute(mainColumnAtt)) {
+      mainColumn.setAttribute(mainColumnAtt, "1");
+    }
+    if (mainColumnToken !== null) {
+      markElementCleanIfUnchanged(mainColumn, mainColumnToken);
+    }
     state.noChangeCounter = 0;
   }
 
@@ -755,7 +1096,12 @@ function mopNewsFeed(context) {
     if (options.NF_ANIMATED_GIFS_PAUSE) {
       swatTheMosquitos(elDialog);
     }
-    elDialog.setAttribute(mainColumnAtt, elDialog.innerHTML.length.toString());
+    if (!elDialog.hasAttribute(mainColumnAtt)) {
+      elDialog.setAttribute(mainColumnAtt, "1");
+    }
+    if (dialogToken !== null) {
+      markElementCleanIfUnchanged(elDialog, dialogToken);
+    }
     state.noChangeCounter = 0;
   }
 
@@ -777,7 +1123,15 @@ module.exports = {
   isNewsStoriesPost,
   isNewsVerifiedBadge,
   getSidePanelAiTargets,
+  getMetaAiSuggestionChipSignal,
+  hasMetaAiPromptSuggestionRow,
   findTopCardsForPagesContainer,
+  findMetaAiPromptSuggestionRows,
+  hideMetaAiPromptSuggestionRows,
+  inspectMetaAiPromptRows,
+  isNewsDirty,
+  isMetaAiPromptSuggestionRow,
   mopNewsFeed,
   postExceedsLikeCount,
+  scrubMetaAiPromptSuggestions,
 };

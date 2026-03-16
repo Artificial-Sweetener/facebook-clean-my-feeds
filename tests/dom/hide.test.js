@@ -1,5 +1,6 @@
 const {
   addCaptionForHiddenPost,
+  hideFeatureNoCaption,
   hidePost,
   sanitizeReason,
   toggleConsecutivesElements,
@@ -44,9 +45,27 @@ describe("dom/hide", () => {
     expect(post.hasAttribute("hide")).toBe(true);
   });
 
+  test("hideFeatureNoCaption hides a row and syncs debug visibility", () => {
+    const feature = document.createElement("div");
+    const context = {
+      options: { VERBOSITY_DEBUG: true },
+      state: {
+        hideWithNoCaptionAtt: "hideNoCaption",
+        showAtt: "show",
+      },
+    };
+
+    hideFeatureNoCaption(feature, '"Meta AI "prompts""', context);
+
+    expect(feature.getAttribute(postAtt)).toBe("Meta AI prompts");
+    expect(feature.hasAttribute("hideNoCaption")).toBe(true);
+    expect(feature.hasAttribute("show")).toBe(true);
+  });
+
   test("toggleHiddenElements toggles debug visibility", () => {
     const state = {
       hideAtt: "hide",
+      hideWithNoCaptionAtt: "hideNoCaption",
       cssHideEl: "hideBlock",
       cssHideNumberOfShares: "hideShares",
       showAtt: "show",
@@ -55,17 +74,21 @@ describe("dom/hide", () => {
     const el1 = document.createElement("div");
     const el2 = document.createElement("div");
     const el3 = document.createElement("div");
+    const el4 = document.createElement("div");
     el1.setAttribute(state.hideAtt, "");
-    el2.setAttribute(state.cssHideEl, "");
-    el3.setAttribute(state.cssHideNumberOfShares, "");
-    container.append(el1, el2, el3);
+    el2.setAttribute(state.hideWithNoCaptionAtt, "");
+    el3.setAttribute(state.cssHideEl, "");
+    el4.setAttribute(state.cssHideNumberOfShares, "");
+    container.append(el1, el2, el3, el4);
     document.body.appendChild(container);
 
     toggleHiddenElements(state, { VERBOSITY_DEBUG: true });
     expect(el1.hasAttribute(state.showAtt)).toBe(true);
+    expect(el2.hasAttribute(state.showAtt)).toBe(true);
 
     toggleHiddenElements(state, { VERBOSITY_DEBUG: false });
     expect(el1.hasAttribute(state.showAtt)).toBe(false);
+    expect(el2.hasAttribute(state.showAtt)).toBe(false);
 
     container.remove();
   });

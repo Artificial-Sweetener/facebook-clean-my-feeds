@@ -77,7 +77,7 @@ If you spot gaps or mistranslations, open an issue. I'd love to make the UI feel
 
 - **License:** GNU General Public License v3.0. You are free to share, tweak, and improve as long as you pass those freedoms on.
 - **Original Project:** [facebook-clean-my-feeds](https://github.com/zbluebugz/facebook-clean-my-feeds) by [zbluebugz](https://github.com/zbluebugz)
-- **Simplified UI & styling refresh:** [Simplified_UI branch](https://github.com/trinhquocviet/facebook-clean-my-feeds/tree/simplified_ui) by [trinhquocviet](https://github.com/trinhquocviet)
+- **Filter maintenance (2025):** [trinhquocviet](https://github.com/trinhquocviet)
 - **Current Maintainer:** [Artificial Sweetener](https://github.com/Artificial-Sweetener) - me!~
 
 ## <img src="src/res/about.png" alt="about" width="36"/> From the Maintainer

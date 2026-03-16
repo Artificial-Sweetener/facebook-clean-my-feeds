@@ -34,7 +34,7 @@ Thanks to **[trinhquocviet](https://github.com/trinhquocviet)** for helping main
 
 ### Language Support
 
-The dialog and detection dictionaries ship with many UI languages so localized feeds stay clean.
+The control panel ships with many UI languages so the settings, labels, and hidden-post reasons stay clear on localized Facebook installs.
 
 <details>
   <summary>Supported languages</summary>
@@ -65,13 +65,13 @@ The dialog and detection dictionaries ship with many UI languages so localized f
 
 </details>
 
-If you spot gaps or mistranslations, open an issue. I'd love to make this even friendlier for non-English feeds.
+If you spot gaps or mistranslations, open an issue. I'd love to make the UI feel smoother and clearer for non-English users too.
 
 ## <img src="src/res/bug.png" alt="bugs" width="36"/> Contributing & Support
 
 - **Issues & Features:** Open an issue if something breaks or Facebook changes the markup again. I read them.
 - **Pull Requests:** Yes please. Keep them focused and describe what you touched.
-- **Translations:** If you can help keep the language dictionary sharp, I'm all ears.
+- **Translations:** If you can help keep the UI text sharp across languages, I'm all ears.
 
 ## <img src="src/res/info.png" alt="license" width="36"/> License & Credits
 

@@ -32,9 +32,19 @@ Do not change user-visible behavior unless explicitly requested. Internal refact
 
 ## 4) Documentation
 
-- **No docs/ tree.** Keep documentation limited to `README.md`.
+- **No docs/ tree.** Keep documentation limited to `README.md` and approved localized README variants.
 - **Docstrings:** Use Google-style JSDoc only when complexity warrants it. Simple, self-explanatory functions do not need docstrings.
 - **Self-documenting code:** Prefer expressive function and variable names.
+
+### Localization
+
+Treat user-facing copy as an all-locales surface. This includes `src/ui/i18n/translations.js`, `README.md`, and any localized README variants.
+
+Any change to existing user-facing text must be updated across every supported locale in the same change. Do not make English-only wording edits unless the user explicitly requests an English-only change.
+
+Write translations as natural product copy in each language, not rigid word-for-word conversions from English. Preserve tone, clarity, and intent so the text feels native to that language.
+
+When localized README files exist, keep them in sync with the English README for substantive content, setup steps, feature descriptions, warnings, and credits. Localized README wording may adapt for natural flow, but it must not drift in meaning or omit important changes.
 
 ## 5) Naming & Casing (JS Norms)
 
@@ -49,7 +59,7 @@ Run the project’s lint, test, and build scripts when available. If no scripts 
 
 ### Localization Checks
 
-When adding new strings to `src/ui/i18n/translations.js`, ensure you add them to the English (`en`) block. To verify that other languages are up to date (or catch gaps), run:
+When adding new strings to `src/ui/i18n/translations.js`, ensure you add them to the English (`en`) block. After any UI localization change, run:
 
 ```bash
 node tools/check-locales.js

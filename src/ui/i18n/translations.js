@@ -1389,8 +1389,7 @@ module.exports = {
       DLG_TIPS_DESC: "קישורי הפרויקט ומידע על המתחזק.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "אם זה עוזר, כוכב ב-{github} שווה הרבה.",
-      DLG_TIPS_THREADS:
-        "אם גם אתם משתמשים ב-Threads במחשב, אני מתחזק גם מסנן בשביל זה: {threads}.",
+      DLG_TIPS_THREADS: "אם גם אתם משתמשים ב-Threads במחשב, אני מתחזק גם מסנן בשביל זה: {threads}.",
       DLG_TIPS_FACEBOOK: "בואו להגיד שלום ב-{facebook} - שם אני משתף אמנות ושירה.",
       DLG_TIPS_SITE: "אם רוצים לראות מה אני עושה ברחבי הרשת, {site} הוא המקום הכי טוב להתחיל.",
       DLG_TIPS_CREDITS:
@@ -1950,8 +1949,7 @@ module.exports = {
       DLG_TIPS_DESC: "Projekta saites un uzturētāja info.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Ja tas palīdz, {github} zvaigzne man nozīmē daudz.",
-      DLG_TIPS_THREADS:
-        "Ja lieto Threads arī datorā, es uzturu filtru arī tam: {threads}.",
+      DLG_TIPS_THREADS: "Ja lieto Threads arī datorā, es uzturu filtru arī tam: {threads}.",
       DLG_TIPS_FACEBOOK: "Ienāc uz {facebook} - tur dalos ar mākslu un dzeju.",
       DLG_TIPS_SITE: "Ja gribi redzēt, ar ko nodarbojos tīmeklī, {site} ir labākā vieta, kur sākt.",
       DLG_TIPS_CREDITS:
@@ -3201,7 +3199,8 @@ module.exports = {
       DLG_TIPS_DESC: "專案連結和維護者資訊。",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "如果有幫助，在 {github} 點個星對我意義很大。",
-      DLG_TIPS_THREADS: "如果你也在桌面版使用 Threads，我也有在維護一個適用於它的過濾器：{threads}。",
+      DLG_TIPS_THREADS:
+        "如果你也在桌面版使用 Threads，我也有在維護一個適用於它的過濾器：{threads}。",
       DLG_TIPS_FACEBOOK: "歡迎到{facebook}打個招呼 - 我在那裡分享藝術和詩。",
       DLG_TIPS_SITE: "想看看我在網路上都在做什麼，{site}是最好的起點。",
       DLG_TIPS_CREDITS:

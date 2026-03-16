@@ -1,6 +1,15 @@
 const { mainColumnAtt, postAtt, postPropDS } = require("../dom/attributes");
 const { swatTheMosquitos } = require("../dom/animated-gifs");
-const { hasSizeChanged } = require("../dom/dirty-check");
+const {
+  ensureDirtyObserver,
+  getDirtyToken,
+  hasPostChanged,
+  isElementDirty,
+  markElementCleanIfUnchanged,
+  markElementDirty,
+  resetPostState,
+  trackPostSignature,
+} = require("../dom/dirty-check");
 const { doLightDusting } = require("../dom/dusting");
 const { hideFeature, hideGroupPost } = require("../dom/hide");
 const { scrubInfoBoxes } = require("../dom/info-boxes");
@@ -16,22 +25,34 @@ function isGroupsColumnDirty(state) {
   const mainColumnQuery = 'div[role="navigation"] ~ div[role="main"]';
   const mainColumn = document.querySelector(mainColumnQuery);
   if (mainColumn) {
+    ensureDirtyObserver(mainColumn);
     if (!mainColumn.hasAttribute(mainColumnAtt)) {
+      mainColumn.setAttribute(mainColumnAtt, "1");
+      markElementDirty(mainColumn);
+    }
+    if (state && state.forceProcess) {
+      markElementDirty(mainColumn);
+    }
+    if (state && state.forceProcess) {
       arrReturn[0] = mainColumn;
-    } else if (
-      hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)
-    ) {
+    } else if (isElementDirty(mainColumn)) {
       arrReturn[0] = mainColumn;
     }
   } else {
     const mainColumnQueryGP = 'div[role="main"] div[role="feed"]';
     const mainColumnGP = document.querySelector(mainColumnQueryGP);
     if (mainColumnGP) {
+      ensureDirtyObserver(mainColumnGP);
       if (!mainColumnGP.hasAttribute(mainColumnAtt)) {
+        mainColumnGP.setAttribute(mainColumnAtt, "1");
+        markElementDirty(mainColumnGP);
+      }
+      if (state && state.forceProcess) {
+        markElementDirty(mainColumnGP);
+      }
+      if (state && state.forceProcess) {
         arrReturn[0] = mainColumnGP;
-      } else if (
-        hasSizeChanged(mainColumnGP.getAttribute(mainColumnAtt), mainColumnGP.innerHTML.length)
-      ) {
+      } else if (isElementDirty(mainColumnGP)) {
         arrReturn[0] = mainColumnGP;
       }
     }
@@ -39,9 +60,17 @@ function isGroupsColumnDirty(state) {
 
   const elDialog = document.querySelector('div[role="dialog"]');
   if (elDialog) {
+    ensureDirtyObserver(elDialog);
     if (!elDialog.hasAttribute(mainColumnAtt)) {
+      elDialog.setAttribute(mainColumnAtt, "1");
+      markElementDirty(elDialog);
+    }
+    if (state && state.forceProcess) {
+      markElementDirty(elDialog);
+    }
+    if (state && state.forceProcess) {
       arrReturn[1] = elDialog;
-    } else if (hasSizeChanged(elDialog.getAttribute(mainColumnAtt), elDialog.innerHTML.length)) {
+    } else if (isElementDirty(elDialog)) {
       arrReturn[1] = elDialog;
     }
   }
@@ -181,6 +210,9 @@ function mopGroupsFeed(context) {
     return null;
   }
 
+  const mainColumnToken = mainColumn ? getDirtyToken(mainColumn) : null;
+  const dialogToken = elDialog ? getDirtyToken(elDialog) : null;
+
   if (mainColumn) {
     if (
       state.gfType === "groups" ||
@@ -205,6 +237,11 @@ function mopGroupsFeed(context) {
           }
 
           let hideReason = "";
+
+          const postChanged = hasPostChanged(post);
+          if (postChanged) {
+            resetPostState(post, state);
+          }
 
           if (state.gfType === "groups" && post[postPropDS] === undefined) {
             setPostLinkToOpenInNewTab(post, state);
@@ -253,6 +290,10 @@ function mopGroupsFeed(context) {
               hideNumberOfShares(post, state, options);
             }
           }
+
+          if (!postChanged) {
+            trackPostSignature(post);
+          }
         }
       }
     } else {
@@ -265,6 +306,12 @@ function mopGroupsFeed(context) {
           }
 
           let hideReason = "";
+
+          const postChanged = hasPostChanged(post);
+          if (postChanged) {
+            resetPostState(post, state);
+          }
+
           if (post.hasAttribute(postAtt)) {
             hideReason = "hidden";
           } else {
@@ -301,11 +348,20 @@ function mopGroupsFeed(context) {
               hideNumberOfShares(post, state, options);
             }
           }
+
+          if (!postChanged) {
+            trackPostSignature(post);
+          }
         }
       }
     }
 
-    mainColumn.setAttribute(mainColumnAtt, mainColumn.innerHTML.length.toString());
+    if (!mainColumn.hasAttribute(mainColumnAtt)) {
+      mainColumn.setAttribute(mainColumnAtt, "1");
+    }
+    if (mainColumnToken !== null) {
+      markElementCleanIfUnchanged(mainColumn, mainColumnToken);
+    }
     state.noChangeCounter = 0;
   }
 
@@ -313,7 +369,12 @@ function mopGroupsFeed(context) {
     if (options.GF_ANIMATED_GIFS_PAUSE) {
       swatTheMosquitos(elDialog);
     }
-    elDialog.setAttribute(mainColumnAtt, elDialog.innerHTML.length.toString());
+    if (!elDialog.hasAttribute(mainColumnAtt)) {
+      elDialog.setAttribute(mainColumnAtt, "1");
+    }
+    if (dialogToken !== null) {
+      markElementCleanIfUnchanged(elDialog, dialogToken);
+    }
     state.noChangeCounter = 0;
   }
 

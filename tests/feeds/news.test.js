@@ -1,11 +1,160 @@
 const {
   findTopCardsForPagesContainer,
+  findMetaAiPromptSuggestionRows,
+  getMetaAiSuggestionChipSignal,
+  hasMetaAiPromptSuggestionRow,
+  hideMetaAiPromptSuggestionRows,
+  inspectMetaAiPromptRows,
   isNewsFollow,
+  isMetaAiPromptSuggestionRow,
   isNewsParticipate,
   isNewsVerifiedBadge,
   getSidePanelAiTargets,
+  mopNewsFeed,
+  scrubMetaAiPromptSuggestions,
 } = require("../../src/feeds/news");
+const { disconnectDirtyObserver } = require("../../src/dom/dirty-check");
+const { postAtt } = require("../../src/dom/attributes");
 const { newsSelectors } = require("../../src/selectors/news");
+
+function attachSuggestionFiber(button, { promptId, genAISessionID, suggestionKey }) {
+  const suggestionFiber = {
+    key: suggestionKey,
+    memoizedProps: {
+      promptId,
+      genAISessionID,
+    },
+    return: null,
+  };
+  button.__reactFiber$test = {
+    key: "button",
+    memoizedProps: {},
+    return: suggestionFiber,
+  };
+}
+
+function createMetaAiPromptRow({
+  includeSignals = true,
+  includeSecondSignal = true,
+  includePromptIcon = true,
+  includeFeedbackIcon = true,
+  feedbackAriaLabel = "Feedback",
+  feedbackIconRole = "img",
+} = {}) {
+  const outer = document.createElement("div");
+  const inner = document.createElement("div");
+  const strip = document.createElement("div");
+  const buttons = [];
+
+  outer.appendChild(inner);
+  inner.appendChild(strip);
+
+  for (let index = 0; index < 3; index += 1) {
+    const chip = document.createElement("div");
+    chip.setAttribute("data-type", "hscroll-child");
+    const button = document.createElement("div");
+    button.setAttribute("role", "button");
+    if (index === 0) {
+      if (includePromptIcon) {
+        const icon = document.createElement("i");
+        icon.setAttribute("role", "img");
+        button.appendChild(icon);
+      }
+      button.append("Prompt 1");
+    } else if (index === 1) {
+      button.textContent = "Prompt 2";
+    } else {
+      if (feedbackAriaLabel !== null) {
+        button.setAttribute("aria-label", feedbackAriaLabel);
+      }
+      if (includeFeedbackIcon) {
+        const icon = document.createElement("i");
+        if (feedbackIconRole) {
+          icon.setAttribute("role", feedbackIconRole);
+        }
+        button.appendChild(icon);
+      }
+    }
+    chip.appendChild(button);
+    strip.appendChild(chip);
+    buttons.push(button);
+
+    if (index < 2 && includeSignals && (includeSecondSignal || index === 0)) {
+      attachSuggestionFiber(button, {
+        promptId: `prompt-${index + 1}`,
+        genAISessionID: "session-1",
+        suggestionKey: `suggestion-${index}`,
+      });
+    }
+  }
+
+  return { outer, inner, buttons };
+}
+
+function createPostWithRow(row) {
+  const post = document.createElement("div");
+  post.setAttribute("aria-posinset", "1");
+  const pageLink = document.createElement("a");
+  pageLink.href = "/DemocraticSocialismNow";
+  pageLink.textContent = "Democratic Socialism Now";
+  post.append(pageLink, row);
+  return post;
+}
+
+function createNewsContext({ options = {}, keyWords = {} } = {}) {
+  const context = {
+    state: {
+      forceProcess: false,
+      noChangeCounter: 0,
+      lastNewsPostCount: 0,
+      newsPostQuery: "",
+      hideAtt: "hide",
+      hideWithNoCaptionAtt: "hideNoCaption",
+      showAtt: "show",
+      cssHideEl: "hideBlock",
+      cssHideNumberOfShares: "hideShares",
+      cssHideVerifiedBadge: "hideBadge",
+      hideAnInfoBox: false,
+      dictionaryReelsAndShortVideos: [],
+      dictionaryFollow: [],
+    },
+    options: {
+      VERBOSITY_DEBUG: false,
+      NF_META_AI_PROMPTS: false,
+      NF_TABLIST_STORIES_REELS_ROOMS: false,
+      NF_SURVEY: false,
+      NF_TOP_CARDS_PAGES: false,
+      NF_HIDE_VERIFIED_BADGE: false,
+      NF_AI_SIDE_PANELS: false,
+      NF_SPONSORED: false,
+      NF_SUGGESTIONS: false,
+      NF_REELS_SHORT_VIDEOS: false,
+      NF_SHORT_REEL_VIDEO: false,
+      NF_META_AI: false,
+      NF_PAID_PARTNERSHIP: false,
+      NF_PEOPLE_YOU_MAY_KNOW: false,
+      NF_FOLLOW: false,
+      NF_PARTICIPATE: false,
+      NF_SPONSORED_PAID: false,
+      NF_EVENTS_YOU_MAY_LIKE: false,
+      NF_FILTER_VERIFIED_BADGE: false,
+      NF_STORIES: false,
+      NF_ANIMATED_GIFS_POSTS: false,
+      NF_BLOCKED_ENABLED: false,
+      NF_LIKES_MAXIMUM: false,
+      NF_LIKES_MAXIMUM_COUNT: "",
+      NF_ANIMATED_GIFS_PAUSE: false,
+      NF_SHARES: false,
+      ...options,
+    },
+    filters: {},
+    keyWords,
+    pathInfo: {},
+  };
+
+  context.state.options = context.options;
+  return context;
+}
 
 describe("feeds/news", () => {
   test("findTopCardsForPagesContainer finds the top cards region", () => {
@@ -125,5 +274,217 @@ describe("feeds/news", () => {
 
     const targets = getSidePanelAiTargets();
     expect(targets.length).toBe(3);
+  });
+
+  test("getMetaAiSuggestionChipSignal extracts the stable React chip props", () => {
+    const { buttons } = createMetaAiPromptRow();
+
+    expect(getMetaAiSuggestionChipSignal(buttons[0])).toEqual({
+      promptId: "prompt-1",
+      genAISessionID: "session-1",
+      suggestionKey: "suggestion-0",
+    });
+  });
+
+  test("findMetaAiPromptSuggestionRows detects Meta AI prompt rows", () => {
+    const { outer } = createMetaAiPromptRow();
+    const post = createPostWithRow(outer);
+
+    const rows = findMetaAiPromptSuggestionRows(post);
+
+    expect(rows).toEqual([outer]);
+    expect(hasMetaAiPromptSuggestionRow(post)).toBe(true);
+  });
+
+  test("findMetaAiPromptSuggestionRows ignores similar chip rows without the prompt DOM signature", () => {
+    const { outer } = createMetaAiPromptRow({ includeSignals: false });
+    const firstButtonIcon = outer.querySelector('i[role="img"]');
+    firstButtonIcon.remove();
+    const post = createPostWithRow(outer);
+
+    expect(findMetaAiPromptSuggestionRows(post)).toEqual([]);
+    expect(hasMetaAiPromptSuggestionRow(post)).toBe(false);
+  });
+
+  test("inspectMetaAiPromptRows returns confirmed rows and unresolved candidate state", () => {
+    const { outer } = createMetaAiPromptRow();
+    const post = createPostWithRow(outer);
+
+    const inspection = inspectMetaAiPromptRows(post);
+
+    expect(inspection.confirmedRows).toEqual([outer]);
+    expect(inspection.hasUnresolvedCandidates).toBe(false);
+  });
+
+  test("hideMetaAiPromptSuggestionRows hides the outermost matching row", () => {
+    const { outer, inner } = createMetaAiPromptRow();
+    const context = createNewsContext({
+      keyWords: { NF_META_AI_PROMPTS: "Meta AI prompt suggestions" },
+    });
+
+    hideMetaAiPromptSuggestionRows([outer], context);
+
+    expect(outer.getAttribute(postAtt)).toBe("Meta AI prompt suggestions");
+    expect(outer.hasAttribute("hideNoCaption")).toBe(true);
+    expect(inner.hasAttribute(postAtt)).toBe(false);
+  });
+
+  test("isMetaAiPromptSuggestionRow returns false when React fiber data is unavailable and the DOM shape does not match", () => {
+    const { outer } = createMetaAiPromptRow({ includeSignals: false });
+    const firstButtonIcon = outer.querySelector('i[role="img"]');
+    firstButtonIcon.remove();
+
+    expect(isMetaAiPromptSuggestionRow(outer)).toBe(false);
+  });
+
+  test("isMetaAiPromptSuggestionRow falls back to the DOM signature when React fiber data is unavailable", () => {
+    const { outer } = createMetaAiPromptRow({ includeSignals: false });
+
+    expect(isMetaAiPromptSuggestionRow(outer)).toBe(true);
+  });
+
+  test("isMetaAiPromptSuggestionRow accepts feedback chips that use a plain icon element", () => {
+    const { outer } = createMetaAiPromptRow({
+      includeSignals: false,
+      feedbackIconRole: null,
+    });
+
+    expect(isMetaAiPromptSuggestionRow(outer)).toBe(true);
+  });
+
+  test("isMetaAiPromptSuggestionRow rejects rows without a feedback marker", () => {
+    const { outer } = createMetaAiPromptRow({
+      includeSignals: false,
+      includeFeedbackIcon: false,
+      feedbackAriaLabel: null,
+    });
+
+    expect(isMetaAiPromptSuggestionRow(outer)).toBe(false);
+  });
+
+  test("hideMetaAiPromptSuggestionRows adds the debug marker when highlighting is enabled", () => {
+    const { outer } = createMetaAiPromptRow();
+    const context = createNewsContext({
+      options: { VERBOSITY_DEBUG: true },
+      keyWords: { NF_META_AI_PROMPTS: "Meta AI prompt suggestions" },
+    });
+
+    hideMetaAiPromptSuggestionRows([outer], context);
+
+    expect(outer.hasAttribute(context.state.showAtt)).toBe(true);
+  });
+
+  test("scrubMetaAiPromptSuggestions hides rendered prompt rows from the feed root in one pass", () => {
+    document.body.innerHTML = `
+      <div role="navigation"></div>
+      <div role="main"></div>
+    `;
+
+    const mainColumn = document.querySelector(newsSelectors.mainColumn);
+    const { outer } = createMetaAiPromptRow();
+    const post = createPostWithRow(outer);
+    mainColumn.appendChild(post);
+
+    const context = createNewsContext({
+      options: { NF_META_AI_PROMPTS: true },
+      keyWords: { NF_META_AI_PROMPTS: "Meta AI prompt suggestions" },
+    });
+
+    expect(scrubMetaAiPromptSuggestions(context, mainColumn)).toBe(true);
+    expect(outer.getAttribute(postAtt)).toBe("Meta AI prompt suggestions");
+    expect(outer.hasAttribute(context.state.hideWithNoCaptionAtt)).toBe(true);
+  });
+
+  test("scrubMetaAiPromptSuggestions ignores similar chip rows that do not confirm", () => {
+    document.body.innerHTML = `
+      <div role="navigation"></div>
+      <div role="main"></div>
+    `;
+
+    const mainColumn = document.querySelector(newsSelectors.mainColumn);
+    const { outer } = createMetaAiPromptRow({
+      includeSignals: false,
+      includeFeedbackIcon: false,
+      feedbackAriaLabel: null,
+    });
+    const post = createPostWithRow(outer);
+    mainColumn.appendChild(post);
+
+    const context = createNewsContext({
+      options: { NF_META_AI_PROMPTS: true },
+      keyWords: { NF_META_AI_PROMPTS: "Meta AI prompt suggestions" },
+    });
+
+    expect(scrubMetaAiPromptSuggestions(context, mainColumn)).toBe(false);
+    expect(outer.hasAttribute(postAtt)).toBe(false);
+  });
+
+  test("mopNewsFeed scrubs prompt rows from the feed root without relying on post collection", () => {
+    document.body.innerHTML = `
+      <div role="navigation"></div>
+      <div role="main"></div>
+    `;
+
+    const mainColumn = document.querySelector(newsSelectors.mainColumn);
+    const { outer } = createMetaAiPromptRow();
+    mainColumn.appendChild(outer);
+
+    const context = createNewsContext({
+      options: { NF_META_AI_PROMPTS: true },
+      keyWords: { NF_META_AI_PROMPTS: "Meta AI prompt suggestions" },
+    });
+
+    mopNewsFeed(context);
+
+    expect(outer.getAttribute(postAtt)).toBe("Meta AI prompt suggestions");
+    expect(outer.hasAttribute(context.state.hideWithNoCaptionAtt)).toBe(true);
+    disconnectDirtyObserver(mainColumn);
+  });
+
+  test("mopNewsFeed scrubs prompt rows nested inside posts through the root scrubber", () => {
+    document.body.innerHTML = `
+      <div role="navigation"></div>
+      <div role="main"></div>
+    `;
+
+    const mainColumn = document.querySelector(newsSelectors.mainColumn);
+    const { outer } = createMetaAiPromptRow();
+    const post = createPostWithRow(outer);
+    mainColumn.appendChild(post);
+
+    const context = createNewsContext({
+      options: { NF_META_AI_PROMPTS: true },
+      keyWords: { NF_META_AI_PROMPTS: "Meta AI prompt suggestions" },
+    });
+
+    mopNewsFeed(context);
+
+    expect(outer.getAttribute(postAtt)).toBe("Meta AI prompt suggestions");
+    expect(outer.hasAttribute(context.state.hideWithNoCaptionAtt)).toBe(true);
+    disconnectDirtyObserver(mainColumn);
+  });
+
+  test("mopNewsFeed hides prompt rows via the DOM fallback when direct fiber access is blocked", () => {
+    document.body.innerHTML = `
+      <div role="navigation"></div>
+      <div role="main"></div>
+    `;
+
+    const mainColumn = document.querySelector(newsSelectors.mainColumn);
+    const { outer } = createMetaAiPromptRow({ includeSignals: false });
+    const post = createPostWithRow(outer);
+    mainColumn.appendChild(post);
+
+    const context = createNewsContext({
+      options: { NF_META_AI_PROMPTS: true, VERBOSITY_DEBUG: true },
+      keyWords: { NF_META_AI_PROMPTS: "Meta AI prompt suggestions" },
+    });
+
+    mopNewsFeed(context);
+
+    expect(outer.getAttribute(postAtt)).toBe("Meta AI prompt suggestions");
+    expect(outer.hasAttribute(context.state.hideWithNoCaptionAtt)).toBe(true);
+    expect(outer.hasAttribute(context.state.showAtt)).toBe(true);
+    disconnectDirtyObserver(mainColumn);
   });
 });

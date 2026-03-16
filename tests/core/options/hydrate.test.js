@@ -41,6 +41,7 @@ describe("core/options/hydrate", () => {
     expect(options.NF_SPONSORED).toBe(defaults.SPONSORED);
     expect(options.NF_BLOCKED_TEXT).toBe("");
     expect(options.NF_BLOCKED_ENABLED).toBe(defaults.NF_BLOCKED_ENABLED);
+    expect(options.NF_META_AI_PROMPTS).toBe(true);
     expect(options.VERBOSITY_LEVEL).toBe(defaults.DLG_VERBOSITY);
     expect(options.CMF_BORDER_COLOUR).toBe(defaults.CMF_BORDER_COLOUR);
   });

@@ -356,6 +356,7 @@ function buildDialogSections({ state, options, keyWords, translations }) {
     "NF_PAID_PARTNERSHIP",
     "NF_SPONSORED_PAID",
     "NF_META_AI",
+    "NF_META_AI_PROMPTS",
     "NF_AI_SIDE_PANELS",
     "NF_HIDE_VERIFIED_BADGE",
     "NF_FILTER_VERIFIED_BADGE",

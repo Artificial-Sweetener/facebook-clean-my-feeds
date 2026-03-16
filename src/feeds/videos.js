@@ -1,6 +1,15 @@
 const { mainColumnAtt, postAtt, postAttTab, postPropDS } = require("../dom/attributes");
 const { swatTheMosquitos } = require("../dom/animated-gifs");
-const { hasSizeChanged } = require("../dom/dirty-check");
+const {
+  ensureDirtyObserver,
+  getDirtyToken,
+  hasPostChanged,
+  isElementDirty,
+  markElementCleanIfUnchanged,
+  markElementDirty,
+  resetPostState,
+  trackPostSignature,
+} = require("../dom/dirty-check");
 const { doLightDusting } = require("../dom/dusting");
 const { hideVideoPost } = require("../dom/hide");
 const { scrubInfoBoxes } = require("../dom/info-boxes");
@@ -21,20 +30,34 @@ function isVideosDirty(state) {
   }
 
   if (mainColumn) {
+    ensureDirtyObserver(mainColumn);
     if (!mainColumn.hasAttribute(mainColumnAtt)) {
+      mainColumn.setAttribute(mainColumnAtt, "1");
+      markElementDirty(mainColumn);
+    }
+    if (state && state.forceProcess) {
+      markElementDirty(mainColumn);
+    }
+    if (state && state.forceProcess) {
       arrReturn[0] = mainColumn;
-    } else if (
-      hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)
-    ) {
+    } else if (isElementDirty(mainColumn)) {
       arrReturn[0] = mainColumn;
     }
   }
 
   const elDialog = document.querySelector('div[role="dialog"] div[role="main"]');
   if (elDialog) {
+    ensureDirtyObserver(elDialog);
     if (!elDialog.hasAttribute(mainColumnAtt)) {
+      elDialog.setAttribute(mainColumnAtt, "1");
+      markElementDirty(elDialog);
+    }
+    if (state && state.forceProcess) {
+      markElementDirty(elDialog);
+    }
+    if (state && state.forceProcess) {
       arrReturn[1] = elDialog;
-    } else if (hasSizeChanged(elDialog.getAttribute(mainColumnAtt), elDialog.innerHTML.length)) {
+    } else if (isElementDirty(elDialog)) {
       arrReturn[1] = elDialog;
     }
   }
@@ -214,6 +237,7 @@ function mopVideosFeed(context) {
   }
 
   const container = elDialog || mainColumn;
+  const containerToken = container ? getDirtyToken(container) : null;
   if (container) {
     let query;
     let queryBlocks;
@@ -239,6 +263,11 @@ function mopVideosFeed(context) {
         }
 
         let hideReason = "";
+
+        const postChanged = hasPostChanged(post);
+        if (postChanged) {
+          resetPostState(post, state);
+        }
 
         if (state.vfType === "videos" && post[postPropDS] === undefined) {
           setPostLinkToOpenInNewTab(post, state);
@@ -290,11 +319,20 @@ function mopVideosFeed(context) {
         }
 
         hideSponsoredBlock(post, queryBlocks, state);
+
+        if (!postChanged) {
+          trackPostSignature(post);
+        }
       }
     } else {
       const posts = document.querySelectorAll(query);
       for (const post of posts) {
         let hideReason = "";
+
+        const postChanged = hasPostChanged(post);
+        if (postChanged) {
+          resetPostState(post, state);
+        }
 
         if (post.hasAttribute(postAtt)) {
           hideReason = "hidden";
@@ -312,10 +350,19 @@ function mopVideosFeed(context) {
             });
           }
         }
+
+        if (!postChanged) {
+          trackPostSignature(post);
+        }
       }
     }
 
-    container.setAttribute(mainColumnAtt, container.innerHTML.length.toString());
+    if (!container.hasAttribute(mainColumnAtt)) {
+      container.setAttribute(mainColumnAtt, "1");
+    }
+    if (containerToken !== null) {
+      markElementCleanIfUnchanged(container, containerToken);
+    }
     state.noChangeCounter = 0;
   }
 

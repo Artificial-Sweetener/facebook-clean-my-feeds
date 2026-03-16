@@ -1205,6 +1205,7 @@ function initDialog(context, helpers) {
         for (const element of resetElements) {
           element.removeAttribute(postAtt);
           element.removeAttribute(state.hideAtt);
+          element.removeAttribute(state.hideWithNoCaptionAtt);
           element.removeAttribute(state.cssHideEl);
           element.removeAttribute(state.cssHideNumberOfShares);
           element.removeAttribute(state.showAtt);
@@ -1221,10 +1222,11 @@ function initDialog(context, helpers) {
         }
 
         resetElements = document.querySelectorAll(
-          `[${state.hideAtt}], [${state.cssHideEl}], [${state.cssHideNumberOfShares}]`
+          `[${state.hideAtt}], [${state.hideWithNoCaptionAtt}], [${state.cssHideEl}], [${state.cssHideNumberOfShares}]`
         );
         for (const element of resetElements) {
           element.removeAttribute(state.hideAtt);
+          element.removeAttribute(state.hideWithNoCaptionAtt);
           element.removeAttribute(state.cssHideEl);
           element.removeAttribute(state.cssHideNumberOfShares);
           element.removeAttribute(state.showAtt);

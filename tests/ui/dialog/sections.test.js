@@ -75,6 +75,44 @@ describe("ui/dialog/sections", () => {
     expect(input.value).toBe("12");
   });
 
+  test("news section renders Meta AI prompt suggestions next to the other Meta AI controls", () => {
+    const state = buildState();
+    const options = {
+      ...defaults,
+      NF_BLOCKED_TEXT: "",
+      GF_BLOCKED_TEXT: "",
+      VF_BLOCKED_TEXT: "",
+      MP_BLOCKED_TEXT: "",
+      MP_BLOCKED_TEXT_DESCRIPTION: "",
+      PP_BLOCKED_TEXT: "",
+      NF_LIKES_MAXIMUM_COUNT: "",
+      VERBOSITY_MESSAGE_COLOUR: "",
+      VERBOSITY_MESSAGE_BG_COLOUR: defaults.VERBOSITY_MESSAGE_BG_COLOUR,
+      VERBOSITY_DEBUG: false,
+      CMF_BORDER_COLOUR: defaults.CMF_BORDER_COLOUR,
+      CMF_DIALOG_LANGUAGE: "en",
+      CMF_BTN_OPTION: "0",
+      CMF_DIALOG_OPTION: "0",
+    };
+    const sections = buildDialogSections({
+      state,
+      options,
+      keyWords: translations.en,
+      translations,
+    });
+
+    const labels = Array.from(sections[0].querySelectorAll("label")).map((label) =>
+      label.textContent.trim()
+    );
+    const metaAiIndex = labels.indexOf(translations.en.NF_META_AI);
+    const metaAiPromptsIndex = labels.indexOf(translations.en.NF_META_AI_PROMPTS);
+    const sidePanelsIndex = labels.indexOf(translations.en.NF_AI_SIDE_PANELS);
+
+    expect(metaAiIndex).toBeGreaterThan(-1);
+    expect(metaAiPromptsIndex).toBe(metaAiIndex + 1);
+    expect(sidePanelsIndex).toBe(metaAiPromptsIndex + 1);
+  });
+
   test("language select includes current language", () => {
     const state = buildState();
     const options = {

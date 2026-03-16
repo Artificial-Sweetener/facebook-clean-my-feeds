@@ -59,6 +59,7 @@
             NF_REELS_SHORT_VIDEOS: "Reels and short videos",
             NF_SHORT_REEL_VIDEO: "Reel/short video",
             NF_META_AI: "Try Meta AI",
+            NF_META_AI_PROMPTS: "Meta AI prompt suggestions",
             NF_EVENTS_YOU_MAY_LIKE: "Events you may like",
             NF_ANIMATED_GIFS_POSTS: "Animated GIFs",
             NF_ANIMATED_GIFS_PAUSE: "Pause animated GIFs",
@@ -3083,6 +3084,7 @@
           NF_REELS_SHORT_VIDEOS: false,
           NF_SHORT_REEL_VIDEO: false,
           NF_META_AI: true,
+          NF_META_AI_PROMPTS: true,
           NF_EVENTS_YOU_MAY_LIKE: true,
           NF_ANIMATED_GIFS_POSTS: false,
           NF_ANIMATED_GIFS_PAUSE: false,
@@ -3173,6 +3175,9 @@
           prevURL: "",
           prevPathname: "",
           prevQuery: "",
+          forceProcess: false,
+          newsPostQuery: "",
+          lastNewsPostCount: 0,
           echoEl: null,
           echoElFirstNote: null,
           echoElCreatedCount: 0,
@@ -4327,6 +4332,10 @@
   // src/dom/dirty-check.js
   var require_dirty_check = __commonJS({
     "src/dom/dirty-check.js"(exports, module) {
+      var { postAtt, postAttTab } = require_attributes();
+      var dirtyTokens = /* @__PURE__ */ new WeakMap();
+      var postSignatures = /* @__PURE__ */ new WeakMap();
+      var observers = /* @__PURE__ */ new WeakMap();
       function hasSizeChanged(oldValue, newValue, tolerance = 16) {
         if (oldValue === null || oldValue === void 0) {
           return true;
@@ -4338,8 +4347,153 @@
         }
         return Math.abs(newNumber - oldNumber) > tolerance;
       }
+      function getDirtyEntry(target) {
+        if (!target) {
+          return null;
+        }
+        if (!dirtyTokens.has(target)) {
+          dirtyTokens.set(target, { dirtyToken: 0, lastProcessedToken: -1 });
+        }
+        return dirtyTokens.get(target);
+      }
+      function getDirtyToken(target) {
+        const entry = getDirtyEntry(target);
+        return entry ? entry.dirtyToken : 0;
+      }
+      function buildPostSignature(post) {
+        if (!post) {
+          return "";
+        }
+        const pos = post.getAttribute("aria-posinset") || "";
+        const textLen = post.textContent ? post.textContent.length : 0;
+        const firstLink = post.querySelector("a[href]");
+        const href = firstLink ? firstLink.getAttribute("href") || "" : "";
+        return `${pos}|${textLen}|${href}`;
+      }
+      function hasPostChanged(post) {
+        if (!post) {
+          return false;
+        }
+        const signature = buildPostSignature(post);
+        const previous = postSignatures.get(post);
+        postSignatures.set(post, signature);
+        if (previous === void 0) {
+          return false;
+        }
+        return previous !== signature;
+      }
+      function trackPostSignature(post) {
+        if (!post) {
+          return;
+        }
+        postSignatures.set(post, buildPostSignature(post));
+      }
+      function resetPostState(post, state) {
+        if (!post || !state) {
+          return;
+        }
+        const wrapper = post.closest(`details[${postAtt}]`);
+        if (wrapper && wrapper.parentNode) {
+          wrapper.parentNode.insertBefore(post, wrapper);
+          wrapper.remove();
+        }
+        const nestedWrappers = Array.from(post.querySelectorAll(`details[${postAtt}]`));
+        nestedWrappers.forEach((details) => {
+          const parent = details.parentNode;
+          if (!parent) {
+            return;
+          }
+          while (details.firstChild) {
+            parent.insertBefore(details.firstChild, details);
+          }
+          details.remove();
+        });
+        post.removeAttribute(postAtt);
+        post.removeAttribute(state.hideAtt);
+        post.removeAttribute(state.hideWithNoCaptionAtt);
+        post.removeAttribute(state.showAtt);
+        const nestedNoCaptionRows = Array.from(post.querySelectorAll(`[${state.hideWithNoCaptionAtt}]`));
+        nestedNoCaptionRows.forEach((element) => {
+          element.removeAttribute(postAtt);
+          element.removeAttribute(state.hideWithNoCaptionAtt);
+          element.removeAttribute(state.showAtt);
+        });
+        const miniCaption = post.querySelector(`[${postAttTab}]`);
+        if (miniCaption) {
+          miniCaption.remove();
+        }
+      }
+      function markElementDirty(target) {
+        const entry = getDirtyEntry(target);
+        if (!entry) {
+          return;
+        }
+        entry.dirtyToken += 1;
+      }
+      function markElementClean(target) {
+        const entry = getDirtyEntry(target);
+        if (!entry) {
+          return;
+        }
+        entry.lastProcessedToken = entry.dirtyToken;
+      }
+      function markElementCleanIfUnchanged(target, token) {
+        const entry = getDirtyEntry(target);
+        if (!entry) {
+          return;
+        }
+        if (entry.dirtyToken === token) {
+          entry.lastProcessedToken = entry.dirtyToken;
+        }
+      }
+      function isElementDirty(target) {
+        const entry = getDirtyEntry(target);
+        if (!entry) {
+          return false;
+        }
+        return entry.dirtyToken !== entry.lastProcessedToken;
+      }
+      function ensureDirtyObserver(target) {
+        if (!target || typeof MutationObserver === "undefined") {
+          return null;
+        }
+        const existing = observers.get(target);
+        if (existing) {
+          return existing;
+        }
+        const observer = new MutationObserver(() => {
+          markElementDirty(target);
+        });
+        observer.observe(target, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          characterData: true
+        });
+        observers.set(target, observer);
+        markElementDirty(target);
+        return observer;
+      }
+      function disconnectDirtyObserver(target) {
+        const observer = observers.get(target);
+        if (!observer) {
+          return;
+        }
+        observer.disconnect();
+        observers.delete(target);
+      }
       module.exports = {
-        hasSizeChanged
+        disconnectDirtyObserver,
+        ensureDirtyObserver,
+        getDirtyToken,
+        hasPostChanged,
+        hasSizeChanged,
+        isElementDirty,
+        markElementClean,
+        markElementCleanIfUnchanged,
+        markElementDirty,
+        resetPostState,
+        trackPostSignature
       };
     }
   });
@@ -4431,6 +4585,16 @@
           block.setAttribute(state.showAtt, "");
         }
       }
+      function syncDebugVisibility(element, state, options) {
+        if (!element || !state || !options) {
+          return;
+        }
+        if (options.VERBOSITY_DEBUG) {
+          element.setAttribute(state.showAtt, "");
+        } else {
+          element.removeAttribute(state.showAtt);
+        }
+      }
       function hidePost(post, reason, marker, context) {
         if (!post || !context) {
           return;
@@ -4475,14 +4639,27 @@
           }
         }
       }
+      function hideFeatureNoCaption(feature, reason, context) {
+        if (!feature || !context) {
+          return;
+        }
+        const { options, state } = context;
+        if (!options || !state) {
+          return;
+        }
+        feature.setAttribute(postAtt, sanitizeReason(reason));
+        feature.setAttribute(state.hideWithNoCaptionAtt, "");
+        syncDebugVisibility(feature, state, options);
+      }
       function toggleHiddenElements(state, options) {
         if (!state || !options) {
           return;
         }
         const containers = Array.from(document.querySelectorAll(`[${state.hideAtt}]`));
+        const noCaptionRows = Array.from(document.querySelectorAll(`[${state.hideWithNoCaptionAtt}]`));
         const blocks = Array.from(document.querySelectorAll(`[${state.cssHideEl}]`));
         const shares = Array.from(document.querySelectorAll(`[${state.cssHideNumberOfShares}]`));
-        const elements = [...containers, ...blocks, ...shares];
+        const elements = [...containers, ...noCaptionRows, ...blocks, ...shares];
         if (options.VERBOSITY_DEBUG) {
           for (const element of elements) {
             element.setAttribute(state.showAtt, "");
@@ -4579,6 +4756,7 @@
         addMiniCaption,
         hideBlock,
         hideFeature,
+        hideFeatureNoCaption,
         hideGroupPost,
         hideNewsPost,
         hidePost,
@@ -4701,13 +4879,24 @@
   var require_walker = __commonJS({
     "src/dom/walker.js"(exports, module) {
       var { cleanText } = require_text_normalize();
+      var { postAtt } = require_attributes();
       function countDescendants(element) {
         return element.querySelectorAll("div, span").length;
+      }
+      function isNestedMarkedNode(node, root) {
+        if (!node || !root || typeof node.closest !== "function") {
+          return false;
+        }
+        const markedAncestor = node.closest(`[${postAtt}]`);
+        return !!markedAncestor && markedAncestor !== root;
       }
       function scanTreeForText(node) {
         const arrayTextValues = [];
         const elements = node.querySelectorAll(":scope > div, :scope > blockquote, :scope > span");
         for (const element of elements) {
+          if (isNestedMarkedNode(element, node)) {
+            continue;
+          }
           if (element.hasAttribute("aria-hidden") && element.getAttribute("aria-hidden") === "false") {
             continue;
           }
@@ -4717,6 +4906,9 @@
             const elParent = currentNode.parentElement;
             const elParentTN = elParent.tagName.toLowerCase();
             const val = cleanText(currentNode.textContent).trim();
+            if (isNestedMarkedNode(elParent, node)) {
+              continue;
+            }
             if (val === "" || val.toLowerCase() === "facebook") {
               continue;
             }
@@ -4756,6 +4948,9 @@
         const arrayAltTextValues = [];
         const images = node.querySelectorAll("img[alt]");
         for (const img of images) {
+          if (isNestedMarkedNode(img, node)) {
+            continue;
+          }
           if (img.alt.length > 0 && img.naturalWidth > 32) {
             const altText = cleanText(img.alt);
             if (!arrayAltTextValues.includes(altText)) {
@@ -4770,6 +4965,9 @@
         const arrayTextValues = [];
         for (let b = 0; b < Math.min(maxBlocks, blocks.length); b++) {
           const block = blocks[b];
+          if (isNestedMarkedNode(block, post)) {
+            continue;
+          }
           if (countDescendants(block) > 0) {
             arrayTextValues.push(...scanTreeForText(block));
             arrayTextValues.push(...scanImagesForAltText(block));
@@ -4780,6 +4978,7 @@
       module.exports = {
         countDescendants,
         extractTextContent,
+        isNestedMarkedNode,
         mpScanTreeForText,
         scanImagesForAltText,
         scanTreeForText
@@ -5072,7 +5271,16 @@
     "src/feeds/groups.js"(exports, module) {
       var { mainColumnAtt, postAtt, postPropDS } = require_attributes();
       var { swatTheMosquitos } = require_animated_gifs();
-      var { hasSizeChanged } = require_dirty_check();
+      var {
+        ensureDirtyObserver,
+        getDirtyToken,
+        hasPostChanged,
+        isElementDirty,
+        markElementCleanIfUnchanged,
+        markElementDirty,
+        resetPostState,
+        trackPostSignature
+      } = require_dirty_check();
       var { doLightDusting } = require_dusting();
       var { hideFeature, hideGroupPost } = require_hide();
       var { scrubInfoBoxes } = require_info_boxes();
@@ -5086,27 +5294,51 @@
         const mainColumnQuery = 'div[role="navigation"] ~ div[role="main"]';
         const mainColumn = document.querySelector(mainColumnQuery);
         if (mainColumn) {
+          ensureDirtyObserver(mainColumn);
           if (!mainColumn.hasAttribute(mainColumnAtt)) {
+            mainColumn.setAttribute(mainColumnAtt, "1");
+            markElementDirty(mainColumn);
+          }
+          if (state && state.forceProcess) {
+            markElementDirty(mainColumn);
+          }
+          if (state && state.forceProcess) {
             arrReturn[0] = mainColumn;
-          } else if (hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)) {
+          } else if (isElementDirty(mainColumn)) {
             arrReturn[0] = mainColumn;
           }
         } else {
           const mainColumnQueryGP = 'div[role="main"] div[role="feed"]';
           const mainColumnGP = document.querySelector(mainColumnQueryGP);
           if (mainColumnGP) {
+            ensureDirtyObserver(mainColumnGP);
             if (!mainColumnGP.hasAttribute(mainColumnAtt)) {
+              mainColumnGP.setAttribute(mainColumnAtt, "1");
+              markElementDirty(mainColumnGP);
+            }
+            if (state && state.forceProcess) {
+              markElementDirty(mainColumnGP);
+            }
+            if (state && state.forceProcess) {
               arrReturn[0] = mainColumnGP;
-            } else if (hasSizeChanged(mainColumnGP.getAttribute(mainColumnAtt), mainColumnGP.innerHTML.length)) {
+            } else if (isElementDirty(mainColumnGP)) {
               arrReturn[0] = mainColumnGP;
             }
           }
         }
         const elDialog = document.querySelector('div[role="dialog"]');
         if (elDialog) {
+          ensureDirtyObserver(elDialog);
           if (!elDialog.hasAttribute(mainColumnAtt)) {
+            elDialog.setAttribute(mainColumnAtt, "1");
+            markElementDirty(elDialog);
+          }
+          if (state && state.forceProcess) {
+            markElementDirty(elDialog);
+          }
+          if (state && state.forceProcess) {
             arrReturn[1] = elDialog;
-          } else if (hasSizeChanged(elDialog.getAttribute(mainColumnAtt), elDialog.innerHTML.length)) {
+          } else if (isElementDirty(elDialog)) {
             arrReturn[1] = elDialog;
           }
         }
@@ -5223,6 +5455,8 @@
         if (!mainColumn && !elDialog) {
           return null;
         }
+        const mainColumnToken = mainColumn ? getDirtyToken(mainColumn) : null;
+        const dialogToken = elDialog ? getDirtyToken(elDialog) : null;
         if (mainColumn) {
           if (state.gfType === "groups" || state.gfType === "groups-recent" || state.gfType === "search") {
             if (options.GF_SUGGESTIONS) {
@@ -5239,6 +5473,10 @@
                   continue;
                 }
                 let hideReason = "";
+                const postChanged = hasPostChanged(post);
+                if (postChanged) {
+                  resetPostState(post, state);
+                }
                 if (state.gfType === "groups" && post[postPropDS] === void 0) {
                   setPostLinkToOpenInNewTab(post, state);
                 }
@@ -5283,6 +5521,9 @@
                     hideNumberOfShares(post, state, options);
                   }
                 }
+                if (!postChanged) {
+                  trackPostSignature(post);
+                }
               }
             }
           } else {
@@ -5294,6 +5535,10 @@
                   continue;
                 }
                 let hideReason = "";
+                const postChanged = hasPostChanged(post);
+                if (postChanged) {
+                  resetPostState(post, state);
+                }
                 if (post.hasAttribute(postAtt)) {
                   hideReason = "hidden";
                 } else {
@@ -5329,17 +5574,30 @@
                     hideNumberOfShares(post, state, options);
                   }
                 }
+                if (!postChanged) {
+                  trackPostSignature(post);
+                }
               }
             }
           }
-          mainColumn.setAttribute(mainColumnAtt, mainColumn.innerHTML.length.toString());
+          if (!mainColumn.hasAttribute(mainColumnAtt)) {
+            mainColumn.setAttribute(mainColumnAtt, "1");
+          }
+          if (mainColumnToken !== null) {
+            markElementCleanIfUnchanged(mainColumn, mainColumnToken);
+          }
           state.noChangeCounter = 0;
         }
         if (elDialog) {
           if (options.GF_ANIMATED_GIFS_PAUSE) {
             swatTheMosquitos(elDialog);
           }
-          elDialog.setAttribute(mainColumnAtt, elDialog.innerHTML.length.toString());
+          if (!elDialog.hasAttribute(mainColumnAtt)) {
+            elDialog.setAttribute(mainColumnAtt, "1");
+          }
+          if (dialogToken !== null) {
+            markElementCleanIfUnchanged(elDialog, dialogToken);
+          }
           state.noChangeCounter = 0;
         }
         return { mainColumn, elDialog };
@@ -5357,7 +5615,13 @@
     "src/feeds/marketplace.js"(exports, module) {
       var { findFirstMatch } = require_matching();
       var { mainColumnAtt, postAtt, postAttMPSkip } = require_attributes();
-      var { hasSizeChanged } = require_dirty_check();
+      var {
+        ensureDirtyObserver,
+        getDirtyToken,
+        isElementDirty,
+        markElementCleanIfUnchanged,
+        markElementDirty
+      } = require_dirty_check();
       var { mpScanTreeForText } = require_walker();
       var { sanitizeReason } = require_hide();
       var { climbUpTheTree } = require_dom();
@@ -5460,37 +5724,63 @@
             'div[hidden] ~ div[class*="__"] div[role="dialog"]'
           );
           if (mainColumnDM) {
-            if (mainColumnDM.hasAttribute(mainColumnAtt)) {
-              if (hasSizeChanged(mainColumnDM.getAttribute(mainColumnAtt), mainColumnDM.innerHTML.length)) {
-                return mainColumnDM;
-              }
-            } else {
+            ensureDirtyObserver(mainColumnDM);
+            if (!mainColumnDM.hasAttribute(mainColumnAtt)) {
+              mainColumnDM.setAttribute(mainColumnAtt, "1");
+              markElementDirty(mainColumnDM);
+            }
+            if (state && state.forceProcess) {
+              markElementDirty(mainColumnDM);
+            }
+            if (state && state.forceProcess) {
+              return mainColumnDM;
+            }
+            if (isElementDirty(mainColumnDM)) {
               return mainColumnDM;
             }
           }
           const mainColumnPM = document.querySelector('div[role="navigation"] ~ div[role="main"]');
           if (mainColumnPM) {
-            if (mainColumnPM.hasAttribute(mainColumnAtt)) {
-              if (hasSizeChanged(
-                mainColumnPM.getAttribute(mainColumnAtt),
-                mainColumnPM.innerHTML.length.toString()
-              )) {
-                return mainColumnPM;
-              }
-            } else {
+            ensureDirtyObserver(mainColumnPM);
+            if (!mainColumnPM.hasAttribute(mainColumnAtt)) {
+              mainColumnPM.setAttribute(mainColumnAtt, "1");
+              markElementDirty(mainColumnPM);
+            }
+            if (state && state.forceProcess) {
+              markElementDirty(mainColumnPM);
+            }
+            if (state && state.forceProcess) {
+              return mainColumnPM;
+            }
+            if (isElementDirty(mainColumnPM)) {
               return mainColumnPM;
             }
           }
         } else {
           const mainColumn = document.querySelector(`[${mainColumnAtt}]`);
           if (mainColumn) {
-            if (hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)) {
+            ensureDirtyObserver(mainColumn);
+            if (state && state.forceProcess) {
+              markElementDirty(mainColumn);
+            }
+            if (state && state.forceProcess) {
+              return mainColumn;
+            }
+            if (isElementDirty(mainColumn)) {
               return mainColumn;
             }
           } else {
             const query = 'div[role="navigation"] ~ div[role="main"]';
             const mainColumn2 = document.querySelector(query);
             if (mainColumn2) {
+              ensureDirtyObserver(mainColumn2);
+              if (!mainColumn2.hasAttribute(mainColumnAtt)) {
+                mainColumn2.setAttribute(mainColumnAtt, "1");
+                markElementDirty(mainColumn2);
+              }
+              if (state && state.forceProcess) {
+                markElementDirty(mainColumn2);
+              }
               return mainColumn2;
             }
           }
@@ -5512,6 +5802,7 @@
         if (!mainColumn) {
           return null;
         }
+        const mainColumnToken = getDirtyToken(mainColumn);
         mpStopTrackingDirtIntoMyHouse();
         if (state.mpType === "marketplace" || state.mpType === "item") {
           if (options.MP_SPONSORED) {
@@ -5567,7 +5858,10 @@
             mpDoBlockingByBlockedText(filters, keyWords, state, options);
           }
         }
-        mainColumn.setAttribute(mainColumnAtt, mainColumn.innerHTML.length.toString());
+        if (!mainColumn.hasAttribute(mainColumnAtt)) {
+          mainColumn.setAttribute(mainColumnAtt, "1");
+        }
+        markElementCleanIfUnchanged(mainColumn, mainColumnToken);
         state.noChangeCounter = 0;
         return mainColumn;
       }
@@ -5654,9 +5948,18 @@
       var { getFullNumber } = require_shares_likes();
       var { mainColumnAtt, postAtt, postAttChildFlag, postAttTab } = require_attributes();
       var { swatTheMosquitos } = require_animated_gifs();
-      var { hasSizeChanged } = require_dirty_check();
+      var {
+        ensureDirtyObserver,
+        getDirtyToken,
+        hasPostChanged,
+        isElementDirty,
+        markElementCleanIfUnchanged,
+        markElementDirty,
+        resetPostState,
+        trackPostSignature
+      } = require_dirty_check();
       var { doLightDusting } = require_dusting();
-      var { hideNewsPost, hideFeature } = require_hide();
+      var { hideNewsPost, hideFeature, hideFeatureNoCaption } = require_hide();
       var { scrubInfoBoxes } = require_info_boxes();
       var { extractTextContent, scanTreeForText } = require_walker();
       var { climbUpTheTree, querySelectorAllNoChildren } = require_dom();
@@ -5670,17 +5973,40 @@
         const arrReturn = [null, null];
         const mainColumn = document.querySelector(newsSelectors.mainColumn);
         if (mainColumn) {
+          ensureDirtyObserver(mainColumn);
           if (!mainColumn.hasAttribute(mainColumnAtt)) {
+            mainColumn.setAttribute(mainColumnAtt, "1");
+            markElementDirty(mainColumn);
+          }
+          if (state && state.forceProcess) {
+            markElementDirty(mainColumn);
+          }
+          if (state && state.forceProcess) {
             arrReturn[0] = mainColumn;
-          } else if (hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)) {
+          } else if (isElementDirty(mainColumn)) {
             arrReturn[0] = mainColumn;
+          } else if (state) {
+            const currentCount = getNewsPostCount(state);
+            if (currentCount !== state.lastNewsPostCount) {
+              state.lastNewsPostCount = currentCount;
+              markElementDirty(mainColumn);
+              arrReturn[0] = mainColumn;
+            }
           }
         }
         const elDialog = document.querySelector(newsSelectors.dialog);
         if (elDialog) {
+          ensureDirtyObserver(elDialog);
           if (!elDialog.hasAttribute(mainColumnAtt)) {
+            elDialog.setAttribute(mainColumnAtt, "1");
+            markElementDirty(elDialog);
+          }
+          if (state && state.forceProcess) {
+            markElementDirty(elDialog);
+          }
+          if (state && state.forceProcess) {
             arrReturn[1] = elDialog;
-          } else if (hasSizeChanged(elDialog.getAttribute(mainColumnAtt), elDialog.innerHTML.length)) {
+          } else if (isElementDirty(elDialog)) {
             arrReturn[1] = elDialog;
           }
         }
@@ -5689,16 +6015,36 @@
         }
         return arrReturn;
       }
-      function getCollectionOfNewsPosts() {
+      function getCollectionOfNewsPosts(state) {
+        if (state && typeof state.newsPostQuery === "string" && state.newsPostQuery !== "") {
+          const cachedNodeList = document.querySelectorAll(state.newsPostQuery);
+          if (cachedNodeList.length > 0) {
+            return Array.from(cachedNodeList);
+          }
+        }
         let posts = [];
         for (const query of newsSelectors.postQueries) {
           const nodeList = document.querySelectorAll(query);
           if (nodeList.length > 0) {
             posts = Array.from(nodeList);
+            if (state) {
+              state.newsPostQuery = query;
+            }
             break;
           }
         }
+        if (posts.length === 0 && state) {
+          state.newsPostQuery = "";
+        }
         return posts;
+      }
+      function getNewsPostCount(state) {
+        if (state && typeof state.newsPostQuery === "string" && state.newsPostQuery !== "") {
+          return document.querySelectorAll(state.newsPostQuery).length;
+        }
+        return document.querySelectorAll(
+          'div[role="main"] div[aria-posinset], div[role="main"] div[role="article"]'
+        ).length;
       }
       function isNewsSuggested(post, state, keyWords) {
         const queries = [
@@ -6120,9 +6466,7 @@
         });
         const rightPanel = document.querySelector('div[role="complementary"]');
         if (rightPanel) {
-          const metaThreads = rightPanel.querySelectorAll(
-            'a[href*="/messages/t/36327,2227039302/"]'
-          );
+          const metaThreads = rightPanel.querySelectorAll('a[href*="/messages/t/36327,2227039302/"]');
           metaThreads.forEach((link) => {
             const li = link.closest("li");
             targets.add(li || link);
@@ -6150,6 +6494,216 @@
           target.style.padding = "0";
         });
       }
+      function getReactFiberFromElement(element) {
+        let current = element;
+        let depth = 0;
+        while (current && depth < 4) {
+          const reactFiberKey = Object.getOwnPropertyNames(current).find(
+            (key) => key.startsWith("__reactFiber$") || key.startsWith("__reactInternalInstance$")
+          );
+          if (reactFiberKey && current[reactFiberKey]) {
+            return current[reactFiberKey];
+          }
+          current = current.parentElement;
+          depth += 1;
+        }
+        return null;
+      }
+      function findAncestorFiber(fiber, predicate) {
+        let current = fiber;
+        let safetyCounter = 0;
+        while (current && safetyCounter < 50) {
+          if (predicate(current)) {
+            return current;
+          }
+          current = current.return;
+          safetyCounter += 1;
+        }
+        return null;
+      }
+      function isMetaAiSuggestionFiber(fiber) {
+        if (!fiber || typeof fiber.key !== "string" || !fiber.key.startsWith("suggestion-")) {
+          return false;
+        }
+        const props = fiber.memoizedProps || fiber.pendingProps;
+        if (!props || typeof props !== "object") {
+          return false;
+        }
+        return Object.prototype.hasOwnProperty.call(props, "promptId") && Object.prototype.hasOwnProperty.call(props, "genAISessionID");
+      }
+      function getMetaAiSuggestionChipSignal(button) {
+        const fiber = getReactFiberFromElement(button);
+        if (!fiber) {
+          return null;
+        }
+        const suggestionFiber = findAncestorFiber(fiber, isMetaAiSuggestionFiber);
+        const props = suggestionFiber ? suggestionFiber.memoizedProps || suggestionFiber.pendingProps : null;
+        if (!suggestionFiber || !props) {
+          return null;
+        }
+        const { promptId, genAISessionID } = props;
+        if (!promptId || !genAISessionID) {
+          return null;
+        }
+        return {
+          promptId,
+          genAISessionID,
+          suggestionKey: suggestionFiber.key
+        };
+      }
+      function isButtonLike(element) {
+        if (!element || typeof element.getAttribute !== "function") {
+          return false;
+        }
+        return element.tagName === "BUTTON" || element.getAttribute("role") === "button";
+      }
+      function getMetaAiPromptChipButtons(row) {
+        if (!row || typeof row.querySelectorAll !== "function") {
+          return [];
+        }
+        return Array.from(
+          row.querySelectorAll(
+            '[data-type="hscroll-child"] button, [data-type="hscroll-child"] [role="button"]'
+          )
+        );
+      }
+      function getMetaAiPromptButtonText(button) {
+        if (!button || typeof button.textContent !== "string") {
+          return "";
+        }
+        return cleanText(button.textContent).trim();
+      }
+      function hasMetaAiPromptButtonIcon(button) {
+        if (!button || typeof button.querySelector !== "function") {
+          return false;
+        }
+        return button.querySelector("i, img, svg") !== null;
+      }
+      function hasMetaAiPromptButtonLabel(button) {
+        if (!button || typeof button.getAttribute !== "function") {
+          return false;
+        }
+        return ["aria-label", "title"].some((attributeName) => {
+          const attributeValue = button.getAttribute(attributeName);
+          return typeof attributeValue === "string" && attributeValue.trim() !== "";
+        });
+      }
+      function hasMetaAiPromptDomSignature(row) {
+        const chipButtons = getMetaAiPromptChipButtons(row);
+        if (chipButtons.length !== 3) {
+          return false;
+        }
+        const buttonTexts = chipButtons.map((button) => getMetaAiPromptButtonText(button));
+        if (buttonTexts[0] === "" || buttonTexts[1] === "" || buttonTexts[2] !== "") {
+          return false;
+        }
+        const firstButtonHasIcon = hasMetaAiPromptButtonIcon(chipButtons[0]);
+        const lastButtonHasIcon = hasMetaAiPromptButtonIcon(chipButtons[2]);
+        const lastButtonHasLabel = hasMetaAiPromptButtonLabel(chipButtons[2]);
+        return firstButtonHasIcon && (lastButtonHasIcon || lastButtonHasLabel);
+      }
+      function isMetaAiPromptCandidateRow(row, root) {
+        if (!row || !root || row === root || typeof row.querySelectorAll !== "function") {
+          return false;
+        }
+        const hscrollChildren = row.querySelectorAll('[data-type="hscroll-child"]');
+        if (hscrollChildren.length < 2) {
+          return false;
+        }
+        const chipButtons = getMetaAiPromptChipButtons(row);
+        if (chipButtons.length < 2) {
+          return false;
+        }
+        const contentLinks = Array.from(row.querySelectorAll("a[href]")).filter((link) => {
+          if (isButtonLike(link)) {
+            return false;
+          }
+          const buttonAncestor = link.closest('[role="button"], button');
+          return !buttonAncestor;
+        });
+        return contentLinks.length === 0;
+      }
+      function findMetaAiPromptCandidateRows(root) {
+        if (!root || typeof root.querySelectorAll !== "function") {
+          return [];
+        }
+        const candidateRows = /* @__PURE__ */ new Set();
+        const chips = root.querySelectorAll('[data-type="hscroll-child"]');
+        chips.forEach((chip) => {
+          let current = chip.parentElement;
+          while (current && current !== root) {
+            if (isMetaAiPromptCandidateRow(current, root)) {
+              candidateRows.add(current);
+            }
+            current = current.parentElement;
+          }
+        });
+        const rows = Array.from(candidateRows);
+        return rows.filter((row) => !rows.some((other) => other !== row && other.contains(row)));
+      }
+      function isMetaAiPromptSuggestionRow(row) {
+        const sessionMatches = /* @__PURE__ */ new Map();
+        const signals = getMetaAiPromptChipButtons(row).map((button) => getMetaAiSuggestionChipSignal(button)).filter(Boolean);
+        signals.forEach((signal) => {
+          if (!sessionMatches.has(signal.genAISessionID)) {
+            sessionMatches.set(signal.genAISessionID, /* @__PURE__ */ new Set());
+          }
+          sessionMatches.get(signal.genAISessionID).add(`${signal.suggestionKey}:${signal.promptId}`);
+        });
+        if (Array.from(sessionMatches.values()).some((signalSet) => signalSet.size >= 2)) {
+          return true;
+        }
+        return hasMetaAiPromptDomSignature(row);
+      }
+      function inspectMetaAiPromptRows(root) {
+        const candidateRows = findMetaAiPromptCandidateRows(root);
+        if (candidateRows.length === 0) {
+          return {
+            candidateRows: [],
+            confirmedRows: [],
+            hasUnresolvedCandidates: false
+          };
+        }
+        const confirmedRows = candidateRows.filter((row) => isMetaAiPromptSuggestionRow(row));
+        const confirmedSet = new Set(confirmedRows);
+        return {
+          candidateRows,
+          confirmedRows,
+          hasUnresolvedCandidates: candidateRows.some((row) => !confirmedSet.has(row))
+        };
+      }
+      function findMetaAiPromptSuggestionRows(root) {
+        return inspectMetaAiPromptRows(root).confirmedRows;
+      }
+      function hideMetaAiPromptSuggestionRows(rows, context) {
+        if (!Array.isArray(rows) || !context || rows.length === 0) {
+          return false;
+        }
+        const { keyWords } = context;
+        if (!keyWords) {
+          return false;
+        }
+        rows.forEach((row) => hideFeatureNoCaption(row, keyWords.NF_META_AI_PROMPTS, context));
+        return true;
+      }
+      function hasMetaAiPromptSuggestionRow(root) {
+        return findMetaAiPromptSuggestionRows(root).length > 0;
+      }
+      function scrubMetaAiPromptSuggestions(context, root = null) {
+        if (!context) {
+          return false;
+        }
+        const { options } = context;
+        if (!options || options.NF_META_AI_PROMPTS !== true) {
+          return false;
+        }
+        const scanRoot = root || document.querySelector(newsSelectors.mainColumn);
+        if (!scanRoot) {
+          return false;
+        }
+        const promptInspection = inspectMetaAiPromptRows(scanRoot);
+        return hideMetaAiPromptSuggestionRows(promptInspection.confirmedRows, context);
+      }
       function postExceedsLikeCount(post, options, keyWords) {
         const queryLikes = 'span[role="toolbar"] ~ div div[role="button"] > span[class][aria-hidden] > span:not([class]) > span[class]';
         const elLikes = post.querySelectorAll(queryLikes);
@@ -6172,6 +6726,8 @@
         if (!mainColumn && !elDialog) {
           return null;
         }
+        const mainColumnToken = mainColumn ? getDirtyToken(mainColumn) : null;
+        const dialogToken = elDialog ? getDirtyToken(elDialog) : null;
         if (mainColumn) {
           if (options.NF_TABLIST_STORIES_REELS_ROOMS) {
             scrubTabbies(context);
@@ -6188,19 +6744,29 @@
           if (options.NF_AI_SIDE_PANELS) {
             scrubSidePanelAi(context);
           }
+          if (options.NF_META_AI_PROMPTS) {
+            scrubMetaAiPromptSuggestions(context, mainColumn);
+          }
           if (options.NF_SPONSORED) {
             cleanConsoleTable("Sponsored", context);
           }
           if (options.NF_SUGGESTIONS) {
             cleanConsoleTable("Suggestions", context);
           }
-          const posts = getCollectionOfNewsPosts();
+          const posts = getCollectionOfNewsPosts(state);
+          if (state) {
+            state.lastNewsPostCount = posts.length;
+          }
           for (const post of posts) {
             if (post.innerHTML.length === 0) {
               continue;
             }
             let hideReason = "";
             let isSponsoredPost = false;
+            const postChanged = hasPostChanged(post);
+            if (postChanged) {
+              resetPostState(post, state);
+            }
             if (post.hasAttribute(postAtt)) {
               hideReason = "hidden";
             } else {
@@ -6278,15 +6844,28 @@
                 hideNumberOfShares(post, state, options);
               }
             }
+            if (!postChanged) {
+              trackPostSignature(post);
+            }
           }
-          mainColumn.setAttribute(mainColumnAtt, mainColumn.innerHTML.length.toString());
+          if (!mainColumn.hasAttribute(mainColumnAtt)) {
+            mainColumn.setAttribute(mainColumnAtt, "1");
+          }
+          if (mainColumnToken !== null) {
+            markElementCleanIfUnchanged(mainColumn, mainColumnToken);
+          }
           state.noChangeCounter = 0;
         }
         if (elDialog) {
           if (options.NF_ANIMATED_GIFS_PAUSE) {
             swatTheMosquitos(elDialog);
           }
-          elDialog.setAttribute(mainColumnAtt, elDialog.innerHTML.length.toString());
+          if (!elDialog.hasAttribute(mainColumnAtt)) {
+            elDialog.setAttribute(mainColumnAtt, "1");
+          }
+          if (dialogToken !== null) {
+            markElementCleanIfUnchanged(elDialog, dialogToken);
+          }
           state.noChangeCounter = 0;
         }
         return { mainColumn, elDialog };
@@ -6306,9 +6885,17 @@
         isNewsStoriesPost,
         isNewsVerifiedBadge,
         getSidePanelAiTargets,
+        getMetaAiSuggestionChipSignal,
+        hasMetaAiPromptSuggestionRow,
         findTopCardsForPagesContainer,
+        findMetaAiPromptSuggestionRows,
+        hideMetaAiPromptSuggestionRows,
+        inspectMetaAiPromptRows,
+        isNewsDirty,
+        isMetaAiPromptSuggestionRow,
         mopNewsFeed,
-        postExceedsLikeCount
+        postExceedsLikeCount,
+        scrubMetaAiPromptSuggestions
       };
     }
   });
@@ -6332,7 +6919,16 @@
     "src/feeds/profile.js"(exports, module) {
       var { mainColumnAtt, postAtt, postAttTab } = require_attributes();
       var { swatTheMosquitos } = require_animated_gifs();
-      var { hasSizeChanged } = require_dirty_check();
+      var {
+        ensureDirtyObserver,
+        getDirtyToken,
+        hasPostChanged,
+        isElementDirty,
+        markElementCleanIfUnchanged,
+        markElementDirty,
+        resetPostState,
+        trackPostSignature
+      } = require_dirty_check();
       var { hidePost } = require_hide();
       var { scrubInfoBoxes } = require_info_boxes();
       var { profileSelectors } = require_profile();
@@ -6342,17 +6938,33 @@
         const arrReturn = [null, null];
         const mainColumn = document.querySelector(profileSelectors.mainColumn);
         if (mainColumn) {
+          ensureDirtyObserver(mainColumn);
           if (!mainColumn.hasAttribute(mainColumnAtt)) {
+            mainColumn.setAttribute(mainColumnAtt, "1");
+            markElementDirty(mainColumn);
+          }
+          if (state && state.forceProcess) {
+            markElementDirty(mainColumn);
+          }
+          if (state && state.forceProcess) {
             arrReturn[0] = mainColumn;
-          } else if (hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)) {
+          } else if (isElementDirty(mainColumn)) {
             arrReturn[0] = mainColumn;
           }
         }
         const elDialog = document.querySelector(profileSelectors.dialog);
         if (elDialog) {
+          ensureDirtyObserver(elDialog);
           if (!elDialog.hasAttribute(mainColumnAtt)) {
+            elDialog.setAttribute(mainColumnAtt, "1");
+            markElementDirty(elDialog);
+          }
+          if (state && state.forceProcess) {
+            markElementDirty(elDialog);
+          }
+          if (state && state.forceProcess) {
             arrReturn[1] = elDialog;
-          } else if (hasSizeChanged(elDialog.getAttribute(mainColumnAtt), elDialog.innerHTML.length)) {
+          } else if (isElementDirty(elDialog)) {
             arrReturn[1] = elDialog;
           }
         }
@@ -6411,6 +7023,8 @@
         if (!mainColumn && !elDialog) {
           return null;
         }
+        const mainColumnToken = mainColumn ? getDirtyToken(mainColumn) : null;
+        const dialogToken = elDialog ? getDirtyToken(elDialog) : null;
         if (mainColumn) {
           const posts = getProfilePostsFromPermalinks(mainColumn);
           if (posts.length === 0) {
@@ -6422,6 +7036,10 @@
             }
             let hideReason = "";
             const isSponsoredPost = false;
+            const postChanged = hasPostChanged(post);
+            if (postChanged) {
+              resetPostState(post, state);
+            }
             if (post.hasAttribute(postAtt)) {
               hideReason = "hidden";
             } else {
@@ -6452,15 +7070,28 @@
                 scrubInfoBoxes(post, options, keyWords, pathInfo, state);
               }
             }
+            if (!postChanged) {
+              trackPostSignature(post);
+            }
           }
-          mainColumn.setAttribute(mainColumnAtt, mainColumn.innerHTML.length.toString());
+          if (!mainColumn.hasAttribute(mainColumnAtt)) {
+            mainColumn.setAttribute(mainColumnAtt, "1");
+          }
+          if (mainColumnToken !== null) {
+            markElementCleanIfUnchanged(mainColumn, mainColumnToken);
+          }
           state.noChangeCounter = 0;
         }
         if (elDialog) {
           if (options.PP_ANIMATED_GIFS_PAUSE) {
             swatTheMosquitos(elDialog);
           }
-          elDialog.setAttribute(mainColumnAtt, elDialog.innerHTML.length.toString());
+          if (!elDialog.hasAttribute(mainColumnAtt)) {
+            elDialog.setAttribute(mainColumnAtt, "1");
+          }
+          if (dialogToken !== null) {
+            markElementCleanIfUnchanged(elDialog, dialogToken);
+          }
           state.noChangeCounter = 0;
         }
         return { mainColumn, elDialog };
@@ -6552,7 +7183,16 @@
     "src/feeds/search.js"(exports, module) {
       var { mainColumnAtt, postAtt, postAttTab } = require_attributes();
       var { swatTheMosquitos } = require_animated_gifs();
-      var { hasSizeChanged } = require_dirty_check();
+      var {
+        ensureDirtyObserver,
+        getDirtyToken,
+        hasPostChanged,
+        isElementDirty,
+        markElementCleanIfUnchanged,
+        markElementDirty,
+        resetPostState,
+        trackPostSignature
+      } = require_dirty_check();
       var { hidePost } = require_hide();
       var { scrubInfoBoxes } = require_info_boxes();
       var { searchSelectors } = require_search();
@@ -6561,10 +7201,18 @@
       function isSearchColumnDirty(state) {
         const mainColumn = document.querySelector(searchSelectors.mainColumn);
         if (mainColumn) {
+          ensureDirtyObserver(mainColumn);
           if (!mainColumn.hasAttribute(mainColumnAtt)) {
+            mainColumn.setAttribute(mainColumnAtt, "1");
+            markElementDirty(mainColumn);
+          }
+          if (state && state.forceProcess) {
+            markElementDirty(mainColumn);
+          }
+          if (state && state.forceProcess) {
             return mainColumn;
           }
-          if (hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)) {
+          if (isElementDirty(mainColumn)) {
             return mainColumn;
           }
         }
@@ -6585,6 +7233,7 @@
         if (!mainColumn) {
           return null;
         }
+        const mainColumnToken = getDirtyToken(mainColumn);
         if (options.NF_BLOCKED_ENABLED) {
           const posts = Array.from(document.querySelectorAll(searchSelectors.postsQuery));
           for (const post of posts) {
@@ -6593,6 +7242,10 @@
             }
             let hideReason = "";
             let isSponsoredPost = false;
+            const postChanged = hasPostChanged(post);
+            if (postChanged) {
+              resetPostState(post, state);
+            }
             if (post.hasAttribute(postAtt)) {
               hideReason = "hidden";
             } else {
@@ -6626,9 +7279,15 @@
                 scrubInfoBoxes(post, options, keyWords, pathInfo, state);
               }
             }
+            if (!postChanged) {
+              trackPostSignature(post);
+            }
           }
         }
-        mainColumn.setAttribute(mainColumnAtt, mainColumn.innerHTML.length.toString());
+        if (!mainColumn.hasAttribute(mainColumnAtt)) {
+          mainColumn.setAttribute(mainColumnAtt, "1");
+        }
+        markElementCleanIfUnchanged(mainColumn, mainColumnToken);
         state.noChangeCounter = 0;
         return mainColumn;
       }
@@ -6643,7 +7302,16 @@
     "src/feeds/videos.js"(exports, module) {
       var { mainColumnAtt, postAtt, postAttTab, postPropDS } = require_attributes();
       var { swatTheMosquitos } = require_animated_gifs();
-      var { hasSizeChanged } = require_dirty_check();
+      var {
+        ensureDirtyObserver,
+        getDirtyToken,
+        hasPostChanged,
+        isElementDirty,
+        markElementCleanIfUnchanged,
+        markElementDirty,
+        resetPostState,
+        trackPostSignature
+      } = require_dirty_check();
       var { doLightDusting } = require_dusting();
       var { hideVideoPost } = require_hide();
       var { scrubInfoBoxes } = require_info_boxes();
@@ -6660,17 +7328,33 @@
           mainColumn = mainColumns[mainColumns.length - 1];
         }
         if (mainColumn) {
+          ensureDirtyObserver(mainColumn);
           if (!mainColumn.hasAttribute(mainColumnAtt)) {
+            mainColumn.setAttribute(mainColumnAtt, "1");
+            markElementDirty(mainColumn);
+          }
+          if (state && state.forceProcess) {
+            markElementDirty(mainColumn);
+          }
+          if (state && state.forceProcess) {
             arrReturn[0] = mainColumn;
-          } else if (hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)) {
+          } else if (isElementDirty(mainColumn)) {
             arrReturn[0] = mainColumn;
           }
         }
         const elDialog = document.querySelector('div[role="dialog"] div[role="main"]');
         if (elDialog) {
+          ensureDirtyObserver(elDialog);
           if (!elDialog.hasAttribute(mainColumnAtt)) {
+            elDialog.setAttribute(mainColumnAtt, "1");
+            markElementDirty(elDialog);
+          }
+          if (state && state.forceProcess) {
+            markElementDirty(elDialog);
+          }
+          if (state && state.forceProcess) {
             arrReturn[1] = elDialog;
-          } else if (hasSizeChanged(elDialog.getAttribute(mainColumnAtt), elDialog.innerHTML.length)) {
+          } else if (isElementDirty(elDialog)) {
             arrReturn[1] = elDialog;
           }
         }
@@ -6829,6 +7513,7 @@
           return null;
         }
         const container = elDialog || mainColumn;
+        const containerToken = container ? getDirtyToken(container) : null;
         if (container) {
           let query;
           let queryBlocks;
@@ -6851,6 +7536,10 @@
                 continue;
               }
               let hideReason = "";
+              const postChanged = hasPostChanged(post);
+              if (postChanged) {
+                resetPostState(post, state);
+              }
               if (state.vfType === "videos" && post[postPropDS] === void 0) {
                 setPostLinkToOpenInNewTab(post, state);
               }
@@ -6896,11 +7585,18 @@
                 scrubSponsoredBlock(post, state, options);
               }
               hideSponsoredBlock(post, queryBlocks, state);
+              if (!postChanged) {
+                trackPostSignature(post);
+              }
             }
           } else {
             const posts = document.querySelectorAll(query);
             for (const post of posts) {
               let hideReason = "";
+              const postChanged = hasPostChanged(post);
+              if (postChanged) {
+                resetPostState(post, state);
+              }
               if (post.hasAttribute(postAtt)) {
                 hideReason = "hidden";
               } else if (options.VF_BLOCKED_ENABLED) {
@@ -6916,9 +7612,17 @@
                   });
                 }
               }
+              if (!postChanged) {
+                trackPostSignature(post);
+              }
             }
           }
-          container.setAttribute(mainColumnAtt, container.innerHTML.length.toString());
+          if (!container.hasAttribute(mainColumnAtt)) {
+            container.setAttribute(mainColumnAtt, "1");
+          }
+          if (containerToken !== null) {
+            markElementCleanIfUnchanged(container, containerToken);
+          }
           state.noChangeCounter = 0;
         }
         if (elDialog) {
@@ -7634,6 +8338,7 @@
         isNewsEventsYouMayLike,
         isNewsFollow,
         isNewsMetaAICard,
+        hasMetaAiPromptSuggestionRow,
         isNewsPaidPartnership,
         isNewsParticipate,
         isNewsPeopleYouMayKnow,
@@ -7948,6 +8653,11 @@
         addMatch(matches, "NF_META_AI", options.NF_META_AI && isNewsMetaAICard(post, keyWords));
         addMatch(
           matches,
+          "NF_META_AI_PROMPTS",
+          options.NF_META_AI_PROMPTS && hasMetaAiPromptSuggestionRow(post)
+        );
+        addMatch(
+          matches,
           "NF_PAID_PARTNERSHIP",
           options.NF_PAID_PARTNERSHIP && isNewsPaidPartnership(post, keyWords)
         );
@@ -8215,6 +8925,7 @@
         }
         return {
           hiddenContainers: document.querySelectorAll(`[${state.hideAtt}]`).length,
+          hiddenNoCaptionRows: document.querySelectorAll(`[${state.hideWithNoCaptionAtt}]`).length,
           hiddenBlocks: document.querySelectorAll(`[${state.cssHideEl}]`).length,
           hiddenShares: document.querySelectorAll(`[${state.cssHideNumberOfShares}]`).length
         };
@@ -8667,6 +9378,7 @@
           "NF_PAID_PARTNERSHIP",
           "NF_SPONSORED_PAID",
           "NF_META_AI",
+          "NF_META_AI_PROMPTS",
           "NF_AI_SIDE_PANELS",
           "NF_HIDE_VERIFIED_BADGE",
           "NF_FILTER_VERIFIED_BADGE",
@@ -10022,6 +10734,7 @@
               for (const element of resetElements) {
                 element.removeAttribute(postAtt);
                 element.removeAttribute(state.hideAtt);
+                element.removeAttribute(state.hideWithNoCaptionAtt);
                 element.removeAttribute(state.cssHideEl);
                 element.removeAttribute(state.cssHideNumberOfShares);
                 element.removeAttribute(state.showAtt);
@@ -10036,10 +10749,11 @@
                 }
               }
               resetElements = document.querySelectorAll(
-                `[${state.hideAtt}], [${state.cssHideEl}], [${state.cssHideNumberOfShares}]`
+                `[${state.hideAtt}], [${state.hideWithNoCaptionAtt}], [${state.cssHideEl}], [${state.cssHideNumberOfShares}]`
               );
               for (const element of resetElements) {
                 element.removeAttribute(state.hideAtt);
+                element.removeAttribute(state.hideWithNoCaptionAtt);
                 element.removeAttribute(state.cssHideEl);
                 element.removeAttribute(state.cssHideNumberOfShares);
                 element.removeAttribute(state.showAtt);
@@ -10125,7 +10839,7 @@
   // src/res/about.png
   var require_about = __commonJS({
     "src/res/about.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAHlBMVEVMaXH////Nzs+tr7D39/fd3t7y8/Pr6+vt7u7k5OT4xq3QAAAACnRSTlMA/kcd9nLhrsqNVyXpXwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAoFJREFUeNrtVsu24jAMk+08mP//2SmO5VmU0pbeHsrdzAZv6AmJIsfyA/ja/zf5adESvApgPyy1JJpK/pKBFp9xhPEbgJqxfl6AeAGwct+hDX4EYJqvV/Y7LwOYyux9hW9W6z2uAJhqLBulfuCHPn5sPC9qBGBrfL3oewBZLzGHA6Wse7y9Bwj2hTAJVuz8nup7JeaoFQmrQQAqFMKqxbIr30uZQyDwBABJIG8BPs6xjyu5kJm5fImlN3/em6eZcfbAEmibYEb7IBvnKwt30T+lcMbgz4vTpxROGBhfLzyjcMJAD/o/o6CXiYV94ILO8bQq2RYuNL5l8MygHnNWufbxlLHYOwYV0ioTgBKoyRIxUJd4SOabinSbAJg5NVFltL/zYj7YOd8xKAEgo6dYMh+JUOLxGC69jgsAsNFGsUiba0SJJhmBrhHyQ1JuASxgTUuZClREo2QPIECrFoMAjSqzqeYRQInC8FLu4KgE2wTkzcHgskMeNMXK3Lt2DAgSNSmRlhYZAFSeouwMqEgCyGSwjRcdzGUwQwtQ4PNfyaVjyl+pXcYq8lwP7aTFoR1B6FoYq3gOa2MXhe4HIQ2gqpcWlgEL4CaUbIKklcHYxaDNXLZCUtV0K/c2ASZh5U6rHtAefujBS7exTWejJNsICIFskYHumTeNQ2sye9Yr2XS24rcJQA2kUQcAFMqxM1bbtEsDAG0Z0Tj7DaWSNTQ7JY8doQvvuU+mfgfMXBJA8TbMAYiZt3idMI4pJYBtWEpPr9OsKtkPG0AVPzokL1PNMPE1Nbaji0wSZ/XA1BaB2XGTqejPh3cDRpoKue3KBoWAIYjLMxKwf98rc97Xvva1rz3sH/oMVQSYrFHFAAAAAElFTkSuQmCC";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAHlBMVEX///9MaXHNzs+tr7D39/fd3t7y8/Pr6+vt7u7k5OTWemhzAAAACnRSTlP+AEcd9nLhrsqNB5RNfQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAopJREFUeNrtVtuWmzAMHF1s2P//2AVblz4QihOSLtmePnV5wmCPx9KMZCL83cP4Afg3AEzXcyPnqVzSszLyEsB5L9IGAFCK+A6Apu2vNS9APACwruOwWr4FwHxsf3vmlpcBmGk7fUUbjlRaXMkCi6b59p7ix4Swkhd0QNLXnf2UAFR/T2lKFwAOmtrR7wDQ6tcAEfMe+EhkhY+TFr2gRC8VAS2eAJiDHFr0hqOvZXlIOZyIcEt8AvHh2IXks13xQmLfKEGSNiaQ8k07k6MMorT6hht3Lfg9Yr7HYO7345cUXjDgsw9fUHjBgE9Rf0XhBYCcPzm/cQTK2JzIqHssXeNLBryPJgOAKTpPB3XirxgoqBa/qQA1Q82Niv0ximNFmhYAKj0pUMnqJwB8rBtzlf4U4OQzs7mjuBEGJahENJpouZIFbcW5hPPObSrszWuJ5VkixiPUFaoh+CzEnmzidUExTuHcqmSxfTohzkGkgIabaEd4CURdtrocuy8kSC0zU0iUkA8MtANAQWaASXoAgBydYm55V/nn9SEGW0DTWQFF337ljapOvJJW6jbWjydZAIdxhQdYjyZHPU3E+tmwd0IyoLJpdUmHOGhmp6xMGaI97E7L0zYcY0DMaazr1AAmU23JpQdo8vbI83fXPAAYwciyAsV2WU6N88nqsfXfAJjZrdi0AKiOlOAtJUHnelxlqLZCAKimeY2AOAAO9qguMQel4NHEM8XoCiKgroBKpwSgbTJpAFikV4+H/c+WIgIPLHnKXhYA0KD7ywZQqVM888J4qzGhNmT12FpppXhVD5jF7Mmq2ycmfr54TCOnMEXARmUzCOGEuHxHwtiFCYjv3BN/bus/AD8A/yvALxxhPAk52TxTAAAAAElFTkSuQmCC";
     }
   });
 
@@ -10167,14 +10881,14 @@
   // src/res/info.png
   var require_info = __commonJS({
     "src/res/info.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAG1BMVEVMaXH////9/f38/f39/f39/v78/Pz+/v78/PyV5uXfAAAACXRSTlMA/sCHP99pG6et6a3UAAAACXBIWXMAAAsTAAALEwEAmpwYAAABXUlEQVR42u2WwXKkMAxEn2WB9/+/dsxI1h5mkgVCFnsmpxR9weVCTbcsCcOFCxd+BOljoTEQlVPdEZT73AYIXNKy3ZF5THiZdKNA2+r75Sy6ArPcntYfj/kGoOKROfUy4cmFDQGUEDdHwTosBMvOQmqANq1QIjo4UtsoiACS3B3NFf7U7nTqaikVsjfgJvECQapA0gYgvqqxp+szAk0A2dUBk1DZlE6yUwUVKM0fyZmr9VmQXY3EaDOtFJR16hf+WbDWRWDTI1dZDNSxzyTm/xHkh5EAZHJUQmJv4zA+xRcLNoFBg5JeKiQahQolmr2URFTdJs/LCyNNfXwWtq+90FsDLY4tWOodqfZNDnoV2HftfEJw3E4DFuL0GIcbaU9wsmv9r+YjM02tl0DjfvQ3sJ6BMo63CbSbtuXuHJge7S7bU55vm/uBDNfAh56n2CkNxn+eydtXnAsXLvwa/AXWWXlMYMNAnAAAAABJRU5ErkJggg==";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAG1BMVEX///9MaXH9/f38/f39/f39/v78/Pz+/v78/PyAA8P4AAAACXRSTlP+AMCHP99pG6cZPLOkAAAACXBIWXMAAAsTAAALEwEAmpwYAAABVElEQVR42u2Wy27EIAxFDy+r//+1E4jtLjJth2lGgcymlcIKIXGwL9fgEHhvRC7ABbgAAPlrknxiVwr1axq2apQmNgHQGFoPCLlNBS7m+ghI9pCAHO2uQIlLp4EsACmqJ+xYNw0an0UUj9qgwFgyTp9CUKBYriDuA4zoXQQGEONaSanCx23eB1BihbgasEQ7AQgVCMUciPZsUjsElE0NzRXQaKUDaGqHEVRAbN2Okls7VUzVTxcTSO3c9pPCqkOAJps/kiuklfYNSGMAXCopOH7X3I4u4BnQBBRWkHDKSBhCBXFrp0QkZ21F0zJ1C/diWucfU/9dC6MeMHsh4ugLneyliIMRvCrngxRCO/JBnDj4rRReAh6y2Vts44C81zxaaaOA4nXvM1r/+vfee21Pg2SjgFb2Vmu/X5b+e5/2QNZOgzKrhWjfYLzd4lyN5gW4AP8f8Ak+JnxsPLzHBAAAAABJRU5ErkJggg==";
     }
   });
 
   // src/res/marketplace.png
   var require_marketplace3 = __commonJS({
     "src/res/marketplace.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAJFBMVEVMaXH8/Pzq6uo1NTWoqanIyMnf39+NjY7x8fGBgoPQ0ND///9ckvW8AAAAC3RSTlMA/OENaYbBS/YlqZU3bvwAAAAJcEhZcwAACxMAAAsTAQCanBgAAAMnSURBVHja7ZbLmtwqDIR/kIFB7/+som0MnIUvbbszOck232jjdmMVupQK4Md+7J8wd3uTv3Ftny6T9L8ACHF9RBDi30VfUoHpEn/D0OsXhtr2S7FPAB3cAOIAbe1SH+UANNXtAabY9sJ6BwDAv7bKtG3N9IjgeGz+psfK9BmZMFXSLE1M3fxomqipYoruoP7DPw+RnHscGcDdLewJGexV+Yygj+oEXyNAfq7OepRgj+ATYA7A2v26pnObW2v0VoVPgBhGd4FRtEF5U2OEvbOAmn5bg7yWSmtGeDWI4zQPBmpnVPachTzEtCSgb8hr/EX8R/imUJfPFHJbzlzWeK2B7nTai3jU8g6gIPnucqvetrVe/72mMMdHx/5vmupyAEjcM7/ZCPXb8fbB9FID/0pPbWEOrq2/UZjbLLhjbNG9VShhXfKfSlr65doq4SEQl67otQZTh8mNFWR08K6Bd21yI9ijzyIXStRlY6L0PDIt5JxHzCP7kXPufoThioa7Ds4cg6jvaUzOoHtMm7wyrKFk0zkTaig5fhbP9JQlPKQOWsQDCxFlMAG9NcIIBaOUUjDDzBTbXfU8CZI3wtQCNeAmIFSkhtC72FeTWavgJhcDIQQIBAhYgN62mQGoYDB8wwwZYHQPFhCGpFQXe2Zy1sA1pSSKUlIJotRGVUoqQynO41oPeYnznYmcRJrzMlJf00IqVN/HaNBdKsnPzsWZ6qZWx42ok2vyZmLJ64xbNglcGpJhGSAvmdY5m8LydSd6bYkrlSUWUkljo2acI2FuQi4jbZPvlnRtvo54aeNBXJ1FNqINEdEVQAwDxUsBVUVVFW3+dSXSlej6JuqV/jp/nfpiSu/ZgPEE+FSQdorvks7DxLR7FEqqV4C+TAsQ1tvslPPq0N7wJYwCX6lcI4jL2JXtKk3+KH6L8/tbmcU9j7YxdmaM27HOedr3XN35ksubEd+m/xTBkt8hXEg5AcK6/sJjtOaRY9eSF7Yk3ZBxkzRJr9/tfGBPE2MGQqzXa8wEsX+vnaZjPe8WW+SONZVbBLmtv4lA6vHDb1h59fNDleUP7pM/9mP/uv0HkViAM5aIJMsAAAAASUVORK5CYII=";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAJ1BMVEVMaXH8/Pzr6+s1NTWoqanIyMnf39+NjY7x8fGBgoPl5eXQ0ND///+TVIAfAAAADHRSTlMA/OMNaYbBS/Yl26nQarbRAAAACXBIWXMAAAsTAAALEwEAmpwYAAADSElEQVR42u2WyZakOgxErwdsQP//qQZsPLwFM1nVr3rbp7QBnOlwKCQFwG/8xj8R6vFk/mZr+dxiTf3Z3j4DncsvBp3/O/aTn8He+BcCcv9HQMJ2J4RPAGk8AFwDyeWmj3AABpHtAkEI2wMroF+oZl3Xda11Xde1cp4r52XbH85f7Cczg13x0RQTZFheRTMSRAiC7KD6Y//QjB3H6toALOoZbk8ocLD7ZFDbqix6dQDj+9doDwl2Bp8AsQPWqnP28IX4ewpBNpxPAOdaUY42SYbqzvXm9soCEuRbDYZcEzkHurlAbWdoCCDhZBXeszA0G6Q2oG7I2X/B/6AfBFL6TEHndOaS/V0D2dtpF/HQ8gkgYK8VyyH4od52tNxX7ylE9yyH/N80pXQAGLdn/ojm0rfjrV2QmwZ68W9vIXYq5z84jNxnQck5NXupkOhWPf7U0r52kmzcyyBuVZG7BtZBVi33i2m1X7Qq/aJVsaq58KqzsbeWSGnrROP0rClu1GPz4zzqNurR6eaaqvKsjIscgyjXNPYqQNUEyWYeIXfTGCSNuFTQ/lO8IKctYcEXi0ydAlLnEBoWcFlZlwo6yASMm0FeY3hVwaoAQ/KAxQKyKECXYoOkskjqCqYdBilc/bzNzAqQIEDTmRAwDQJVQ3AYmu37NYZ3JqcGKguTZxImP3dWSIUkTH5uwqQ0Klc3Rrc8O/EamDjE5mv2ET+z6tpagUX52etFKRdZh5bX9mhUq7K9OnEesjI5AQOkghkgNbCzsTmOQXBxeDZ6Kv3D1o2eVD/5trWmi44uFsM4tX4TTMX+Xnxp/lDxsrRVorWbGzRrrWQAEwggaDOBiCAigmQ93xvp3uhyNeq9/WUZ9tcSBKHWMQDtDfDpIOU039ifL5MgVSNQ7XoB9LFGG4EuP2anLj3AYk2+4KeuTT2qzTcGi09td7bdmvoI6KgigCouppOtiUbF/QvlWGyt22+O1/qiru8YoI5JnQ/DfHfeb9J/m+A00h0Pt6a0gCHnL3a0XDTmOHUeIluSqpn2sDTTz/1XZy49LOgD21paBDqfSnkwcOVr7xyBJu0AUHZjrsh+fjAYSv5D7mY9bvSGNWQdX65sfvA9+Ru/8a/Hf6OnlFLuL7WDAAAAAElFTkSuQmCC";
     }
   });
 
@@ -10188,21 +10902,21 @@
   // src/res/news.png
   var require_news3 = __commonJS({
     "src/res/news.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAGFBMVEVMaXH////g4ODw8PCrq6339/fo6Og9QEAgsGlPAAAACHRSTlMA/orYM/bAHX4j87kAAAAJcEhZcwAACxMAAAsTAQCanBgAAAEDSURBVHja7VbRDsIgDCyl+v/fK6X1SV2HtLBFYwx9WpfldhzXA4BVq/6ikm0x+Bx5/yab7loDgIwCzi+xRIQZXQZpYM2666ld5uNBhkRsAC63J7khBEf2fIyBYWM5JJ4FUIkpuQDstmPWO6cBbYyhfAAgSWwyB6BCoUCAPTBq6ESsIYOu/+jsLjB8ZxuxP9OiQwD9UKISjVzyU0AAIIWBQhIHqQsgzZsyKWIb3HMMeNxZ0z6gswA8hErVjDPq++l2dmHDCcVkO8rQOAfHQP34MG2diPxqkQ84UQESdQ7VPoBVqtDMDeUbImbXiUjzbrQBRhowqhLc0vyTCnhda1et+t26AyL9Rley/u65AAAAAElFTkSuQmCC";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAGFBMVEX///9MaXHg4ODw8PCrq6339/fo6Og9QEBDIN89AAAACHRSTlP+AIrYM/bAHaCDtEUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAD+SURBVHja7ZbBEsMgCEQRpP//vVKxtya2FUjspD3oKc6Y57KsjinB3EBYgAX4B0Dup16wsdoALg6AqFolJO9/EJz1wCkBAICGayMmAtzkSaqTbaRzCjo12vdYjgKa+pJMwMuOekWU+8G7ZDc5AUjqn5Jsha7w0I8NnF53tJNI6ioY5o9lsgsC17SRxpeSagSA4zOYS6gLzp3mdoHfICiHPNAcc3/swd1VbQMknqzDOeBZgIRK4J3iVIFaN410AbtQ7R38mLHpIH3/MO2TiLJNUU4ksQGkvH3HALUvqrBTwuUmknkBEbkSmlkCUHMUVQfgPQqqY+J6Ky/AAvwQ8ACGXEWLM0pbdgAAAABJRU5ErkJggg==";
     }
   });
 
   // src/res/pref.png
   var require_pref = __commonJS({
     "src/res/pref.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAHlBMVEVMaXH////BwsPy8vNkZWaio6Tp6ura29vh4uLO0NBg0qXhAAAACnRSTlMA/lb0EzDWmrh9+5zeCgAAAAlwSFlzAAALEwAACxMBAJqcGAAAAqVJREFUeNrtltuS4zoIRRcIpM7//+zYkmAe7O44idOeqXk5daqpysWy2EKwucCP/Mj/QuSvNbywxj+caFWk+OH53T6AcfIi5uNzOdfXIiLi8mKrlQBfLy2wDkA9NUCPsPr+AqdS7+hnVzAsAPeRG3yWAJyyH6oDlHgH4DqR9Dp77gYjTULJuiu1+eiBRx64dFDv8eTPDnh2wCNQ7W8AXPp3/MkObYW6POIf/n6nTzfw8RSCR3/3R3ckcryMju1jy1si5ccXyZrkOucotPvSgkU+heApCsIePHoEQORQ3dZ8Bq0/h+A5jLu+Huietq0GacSrAUcA29ii+ZAuIZsNPpknBhyjEJsXLQBMW1MDCNs32msIjhY4dW4bY+PknJgGIJJAyKkBnwBW5255XQHTXkWtFwmIOsHxeeKB+03kUxrAbftpcvt8qS4izZxvfHBYyI1VfYtAUVQVdJZ5DfCuwo396xIgAFaqgdU914pGCXSWeFt7SsSRTKpLC2zx/SaWAyzWE9vKJ12a7kS0gNCywvQcANqEqBp+P+ZUbocwYHq7bUTaOsGH+mVnstzwn2v5nk5qc1y0trbuCg8IDpr9DPklG3cvpEoeF6d3qJnOFcDuRZKaX3VckIF4vDa1FwAn72QQdzPiFuESLUaYZ1wBHH2UkWVKXbLqqtYhBnkBkPq1Q81CU+egxkjPCZpyCSCfCC0ZjTGTOnUqBK5xDnBso6Ea+DBGGflrq27asZ4g70aZh2SKbB8REbEG4CJkx2fdmkb78xmprTQZKWUB1ZmgKr0uasgzHU/rQYdcVMcCrghg91Jtdj3ipPrMGSpWZxCg6d1HZhYhSsm8HvNMgBxeFtCSXVGG7f332KAv5kQLoHS8dPBB0FhKjr8eNK0I/zZf/siP/MflN2o9O82izMxiAAAAAElFTkSuQmCC";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAHlBMVEX///9MaXHBwsPy8vNkZWaio6Tp6ura29vh4uLO0NBObmBCAAAACnRSTlP+AFb0EzDWmrh9qy16KAAAAAlwSFlzAAALEwAACxMBAJqcGAAAArRJREFUeNrtlsFy4zgMRB8IkPL//+zYFAHsgXJsOXKUzF52q+KDqkxSLaDRDUKEf/cr/AL8AvwXAOznbyg9H3/lp17Q0tEyTiNQAD/YiPGtFKQAmI+jALB+CrAdWQ4D0Ditgr6loAE23gKoGIDVLfsUBTC5I8r1JQD0uQpWhoBVv9fJU5qEEI25sgxo646tJwCTDlrXPfmqHWg5AAvf1XAPYNK/qH/LAe0GS38n5fLV+3Sb7O0Z2JVxl1oriTwnowPKutfAK4mXj+Qukqu7F5bHUkcjUeI9gEhuayMSIPFS5lrzZOmvJXgByNjUGrsDudlC8c8BPJOokw/NXZlG6kZW9BcRvgLEpMdyfri1qb+07aB9LsFzCpZtTBvE1KR72kxGEggZBwx8AGjzzejLOk27FK3dJCGrQ6OOAwYeEaz3LqUOLLelR/jSlwFEQpYOLT7nUA4XcqpqnRZSRUsBdfW/7crG2B6nAAHQaQra2BjSUD8O4A6gHz0oAUq7mohdJ+tjlRxgcjvqnhuJ0sJ96nB8WHs2AaRleM2o+XwhvOrAYxonqwMhXGrMvq56c2mr+PAvIgA054Hy8hnZLGJ+AkC7bUD50jFK9iPkd3bOXWWE0VZo5L2xvo9APmTWRvHHvqMWGYfvP0dgjxOeYtWMvIQ38UusYTVPAZ6tlp7qUq+5lJtaBx9vbuEHQDxI0mpZsvjKEiNbOmjKGcCD5ksyFlZPFi9DwWnF5XRCSdRpwxg64s9URunYGl8MIrrfWKqHZIwEWpZk0KIOSB2XQxYOkduNi4wUvYIWD9AifeliyKscDweMFbLX7Cu0RADzeMwOfhoBYu6gqK4hDir1TxuJVAlXxjemNBUg3fQKqjmEgut2/z5f0Cdjnsa8V01XqINg4Xa37U/mRFWBnt+twu+4/wvw/wP4B50IUBaay0+qAAAAAElFTkSuQmCC";
     }
   });
 
   // src/res/profile.png
   var require_profile3 = __commonJS({
     "src/res/profile.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAG1BMVEVMaXH////Q0dPm5+fz8/Ty8/Pr7e3x8vL3+PifvYELAAAACXRSTlMA/SNgzqmQdu5EKR+rAAAACXBIWXMAAAsTAAALEwEAmpwYAAABZklEQVR42u2WzZKkMAyDPzt/7/+4IbGzh252mpnugcBhq7bQhZMVRbId4MaNGwDy/OpsoW8Iis0fHSoAESDLGNPSJbWVQHXxeQUjuwEBSH7iBgwRf5o3rqSgV2OMr2SiA0SbnyJQSV18SLDcxkvQO9IfBJp8WG6GMioj1QIdAUToW5uEiDNi7XFtpNwAyuKEVEkLmush9W1j4nA0VWgBbyc8KAtIBQiGRSNuAzLbITB/nS81tL+dut9ixFJ/SEFg+Sy71A8EWHY5MBf1nYIBqAxIzcEhfV061QMmmnqR6gCpaeiMDfeBTgy+Gh0sVOizw9SzP9jiEneKy/tpbMFEs6qFtm/iX44ABF/3ZNAh+JFhNED9Z4wX9kGY2ktfwcYPLTWvwOxf78Sw731afiOIdii6zwT14hXCbKF9IxCZPbluCToXnjbhws+JAq2cqi99NW+MfKINy+MJlee7eOL/wLlx48Z/hT+4rocxsUkNawAAAABJRU5ErkJggg==";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAHlBMVEX///9MaXHm5+fz8/TW1tjy8/Pr7e3x8vK+v8H3+Phzjy7VAAAACnRSTlP9AGDOK6mQdhfuZYrtkQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAX9JREFUeNrtlstypDAMRY/8gPL/f6wDtqVZNIEm0xnAvchUCjbe4CPJVy8R3vscN+AG/ApAWM7x6sVpOUUAhtphet48iM4uh6Iu1E+A98XaZQ9KbAZ4gaCt4/UMp4sK9l/ICDDOXsE5mboA4ywi5tTVQVzYhP7mG2lPAO9VP9JkOtZhYhpzBId75EnZR6pEFJVMXDJJBgBSEHEJBpGQTnkfRUS2ELThY4bZWdOON0gGmgFCwXwj7gWq7QBQ13IQwDdc2f0oJ2TEYnm4gvxThZS/AeCdih1nQX7lgQLjHMB8A92V+JhPPGILbRCdAWL1oWBxK5tTmSjrQwffMpSrxVRifNiMRQ8uP+eZF/APy03MMZiIHBmvkCp4XXpinDcV4Hx3ifUvGVvr7wf+Ul/ahN08iG92pNZ+uif6w30vvKySFXA83V63mfCqwnpC8Fcvti8Ad3XlHfIeUHhjtPXu27ICUtf9pJ+DRVwPITlZB4tZR0KaPe1I96Z6A27ALwD8AbSmfeRMwUe+AAAAAElFTkSuQmCC";
     }
   });
 
@@ -10216,28 +10930,28 @@
   // src/res/reset.png
   var require_reset = __commonJS({
     "src/res/reset.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAHlBMVEVMaXGqrK3l5ubs7Oze39/Fx8fR0tPz9PS8vb7////eO3AlAAAACXRSTlMANMvlsm6R+lFFYOawAAAACXBIWXMAAAsTAAALEwEAmpwYAAABsElEQVR42u2VzXKkMAyEu/Vj5v2fdgZb0h4m2cqA2ZCa1J7oE2XkDyRbLeDSpUuXfkl6/IouIKkmCQCOZUyi7Gi7h8vnczKKYg+cB5BmyEEAZdKglQJOI+efF8GqvZ4hFstz+V4na9CMmSP+ZlAcmgSQ51JoijVrEyZIqXM18N3+pkCKYAaQ/VIiX/ebAhAkjGcAraFqQ/wIleXMKWhbYxu0BBMJifoe4IZYf3CVZU/MjncAiVFvAQrH+2+nTuFYjfoeYJwsIg8NYvY52S+0A8KtzQC7rJxgHLjXo9PrO8AoHfMEljUpnt/6gYlWzqpV4Sa5JewBmabMSZP3Zn0EN4SZIwmhuzJUiCMKuSFsAVRNwdY8SFCXoKiPpH+1ti3AGiK9q35Jlk3DG6OPLGOKZh63syz3AsgFyEEBkOkxzJ8uR7HRXtp9PheqRjZpH//4SPH+LEqp2OhnJlNHjaQBGFU3xvi0xzXL9X5itOEOcAVQQFg69FF8/snLTd0WUXUyPSqaCAVu0aES8Y8UCGky62RmuvSxK/uu88yPDWE7r6Y1GJx2AgBY/sgtL1269H/1B00RtgDyRwbRAAAAAElFTkSuQmCC";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAIVBMVEVMaXGlpqeqrK3l5ubs7Oze39/Fx8fR0tPz9PS8vb7///91sIfVAAAACnRSTlMABTTL5bJukfpRDzMgNgAAAAlwSFlzAAALEwAACxMBAJqcGAAAAg9JREFUeNrtVsuS2zAMA0hJ3v7/x2Zji0QPTmYSS26ynZ464cVjW4QJPkADH/vYx/5/I3m77hfwZ+7PWO+de3gskEUJwEybQLVoF2o4WU78WaPa/TYZaVauGP3nAJSxFGQnABVrcKWBkwCmFKhmhtU3CQBZYtlffOcI4TOApTCzd+34CrB7EkDwDQpUc6yZIAQBIIQCQ9qEAezMn9DtvLAUQ8KgSRIGADGR+US2OABDokyayYaktgY9+TPvR20ZKfhYFl/74Vl4KLKHNr0qI9UK4jor+J7N11Ugcpt+RdCskwYK5lv+ZOhsnCKdDt4ve6MPgBMEotFfl/F8xIX+DgWdCw+J1xQIQ5tiEF8N7+TAgDqPoON6sWoH9KGMIe+TNFK2rGlWE+KfAKhirhw50BS1WB4RfGzELM6jchDN16VsvfOA4BM9NcL7o5QToMIrQgrWfKToxyK4h8EMEEBy3y5G0Zegee3B+ihtR4DSEFE396z3pqY1j9YYa08VpnkGT7qO8uU7KeMCZKcByKzRS91Vzqz0Fqte7YVkz2btFuM1rW4hisxqpa8vF4uolerJAqBLX4xtF4Tqa2bzhx03jwCELiDXXUiiZINfRatbCIzTyaNq7eugO8YFQPZicaXjSbPL8HFbbDYHzKy2bbdldT77LPVcvtYcl+MxAnXqTBNL5rne/ctfo79487GPfQy/AYHu/dyW2FASAAAAAElFTkSuQmCC";
     }
   });
 
   // src/res/save.png
   var require_save = __commonJS({
     "src/res/save.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAG1BMVEVMaXG9vb7x8fFiYmTc3N3Dw8Pz8/Pm5+f+/v4fHaD+AAAACHRSTlMARfIVjG/avXuNz6UAAAAJcEhZcwAACxMAAAsTAQCanBgAAAEbSURBVHja7ZbJloQgDEUzSf3/54oZamF195FB4Zxe1IK3C+I1eUAQYGlpaekUlgNM0ZlqMQLAjTJAgnwdTpATqDYAXIQCmdAZNQh/5WQUTgxeA+QaEu1hn4x/mMgYAAYmAnUOdA0jUzXF0c8vq4o8ZXAvhTqHKQAoCB63JTwSwngWYLHH36ycfKQEE7br7ujtrg4govDbjzmAgV8eKE1mAAZHEc8BsDVINgpgaQLy1jKitYzYfB+S4SCAO+UmGQRMaQH+AdBrKFX71DR3FlSqA4oTAFcsdxPl11eYWB8zmrQ7jXlAUrWQcxVqbwqAvc6Lg6tl3PDjZdFXyppEwrFXVzjhHvfNi9FT7tmQwI947H58e8usX7Klpa/VGzFoXF8i3esxAAAAAElFTkSuQmCC";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAHlBMVEVMaXHx8fFiYmTBwcLc3N3Dw8Pz8/Pm5+epqqv+/v67FBq+AAAACXRSTlMA8hVKjG/avTcrlG0vAAAACXBIWXMAAAsTAAALEwEAmpwYAAABJUlEQVR42u2WwW7EIAxExwYS///X0sU2Pay2qyWQBKmVemBuWM7DHicBYGlpaekpagMc6iA15m60WYuHDAiaZEEWRO0AQrM/gZxqoKBMP6qs7MYRfllBCPW19yuZOZgDjq+YcKyBP5c1Pw4pxrYBALSkeOnBqRTHGqYAUCQqpy1cElx5FuB73d/GqNCdFoz1Pd8CcPIRvw9wTy1xElDo4wmvkxXAYTdt7QOkdIL9KnoATrR1wjn1sD1zuO+YqNwEhEG7YjcBU1qAXwCMfiiHiRWZAqi3pe3OEwAL2r7MrtuMB+WvTIx+E5BGW8k9D4IezkGPAKAUk50BqhQHgHgYY3hWwJnOj/eY3Gn0PbszP+wcwGySRxYKzOzqgnE+F19XsqWlf6tvBRdfhPY0CBQAAAAASUVORK5CYII=";
     }
   });
 
   // src/res/search.png
   var require_search3 = __commonJS({
     "src/res/search.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAJFBMVEVMaXH+/v74+fmqq63t7e7X2Nng4eLm6Ojx8vL09PXP0dL///9a6oKVAAAAC3RSTlMA+/AQn0Jcdr/ULGLQhs0AAAAJcEhZcwAACxMAAAsTAQCanBgAAAGeSURBVHja7VTbltwgDJNtCBPz/7/q7AYwfdjp6XZCeph0H6OnXEBRhCzgxo0bPwI6fSPMLVCv4NYuEEjgD31eb0zlXYKlrt9vTfqZijD8PMViurE4QB4ZSE4274uETJmT/L6Na6bMOk8QMuWHvDKuMrt/ed0PIGXKYdJEWRi+v3oWkiGUKRMDG8LB874p2oiAB5pUjitbhO06Q6A7bBQO2bCOsnCwlhIq+nFhSQnFJxQ4sAxTV8ep4/HSefD/jjPPzgfCWBoPHuwyHLCB4yOCvtkw9cwGn5HriYf/1aHuMwqaw2Q5TlgyeJsysbqivoZWK9TrG+PM8e/9nIniW4Xyp5AASZwpLxqnSzUkg7qLAZDUmA1aWsdgSodHC+emtvDHI4QQPhOZ1g5f4x58ttZj+O7uxl2iAbodNZw0pfdeS4kArLIvn513LSh61ED/aHcmQu/P049tPdEwXdZEdDzgd5DyF8NymSFkIvpxhrcaqTeFwtZ6WYOsTw2XnVT+YghXS9Vk0+kgncShKLA97PJJYGF+XA8TAIjgxo0bB/wCBbCD/cjGe68AAAAASUVORK5CYII=";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAM1BMVEVMaXH29/fx8vKFhorg4eLu7u/m6Ojv7/D+/v74+fnV1tf09PW5urvP0dLZ2tvp6uv///8XpKx9AAAAEHRSTlMA578JXKd2Avv1PdQYLEmSjzXjlgAAAAlwSFlzAAALEwAACxMBAJqcGAAAAkdJREFUeNrtVtGSokAM7MAMCSOu/P9fqqiJELmHdfc8GFc86x6uyjxQaE06yfR0D8A73vEfBD9cQT8n2/X5PADfpvEPEOW9fENNBZKHtaeTc/BnOmBYc44u1582xOPdJiifH3xz+4+yd2xLR2BDaDCErQ9l76c4lBiiy5F9KXNlbKWlqvmq8bFqpaV1nlPKNLAhlV3qvtdb2ZBKT9kpwjw/kMqOuu9tY8a2SiqHRZvIVkrEpBrD4kpR7TItFPNtjarjn90awFuRLkfllAXHyMFsUsr5VEUN9XnORDGlYM3QGllysydhNsKJYbnt2ptgXAKwAshnwxqjBHwJwBEos0cmISvs4lWDKTKFPKu8fV77M4ADMDazSmxlnZfuDKAy3Whm4Soq5DGAwQrBJbPwBOkPCzpg76EfwXiqsJWi90VaqHqBr/9AYFs7pK8WEhVaaSmBma9qZqypFfnIHo8ZM849R22GwnsHB4c7IlYqGoJmXG1OrfPBk6IuKJE5ygYswyCdHEKVQcicjRDOFxLl2JdOVHtdqhwqOm7CkEG4Y+uJ4i25VUeNAmJxZkr5q42tJBpYAChZ4D3SaZNHoPtXW3M5F7ikS/fZ08hZBLpPp92+soUAiM4Q6LF07TpVlRSiYv1wi0DLrcA2pAAmCOViAOeDpwEYZET/m82nHOmyEwiU443Y6Bk/s2aMn1PQ8WuKZzow7oqtAFDu/85Ujfe1ybdF52/nBwjHMApgz6VN7ILqIi34gPzhA6bBC/kAA/xK/svp73jHP4lfbHT2Wy9iy64AAAAASUVORK5CYII=";
     }
   });
 
   // src/res/videos.png
   var require_videos3 = __commonJS({
     "src/res/videos.png"(exports, module) {
-      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAG1BMVEX///9MaXHW1tbv7+/j4+SIiYmvsLHIyMjp6em6bGZ1AAAACXRSTlP+AITtuRg9bdAJmuH8AAAACXBIWXMAAAsTAAALEwEAmpwYAAABeElEQVR42u1WwZaDIAyckED7/1+rAskeWpUqKnQP+/Y9OSnIMDOJCUT43XC4AW6AGwAABAC89m1SicszEUDaT9wKCV/sh4YCIHwjnVYJohkA+3km5hYAdqkwEWAe56WQ+6MAYDEFVtK55iRVgbmutxkg8cdr7gZA7vdg43E7VhVAsqz68xcAxktQeGpjkImK3CwOTa0erB8O/7KgAHA+Nv/KB1HwjftjnYGOf+2B1OpaGNoB9MwCccdWtHgglNxhKKTFp6R7gY+pw0R3Es1iTS7YPHmr7EGLBOGcXAya2PwuX17/No9iZbH0WYfnOAO4iQBEPNK77Xnbl8gELiA01+RFUCAionodSuYcV/NAySkQaOA3dStqOZdstkfKPK9QHus1VKxIKRq2AEsTSNdpm3X1lhMQAQdsVR2NQKoFwSk4NoAJKkR22olNAVg2++h3CtbXDQWQ0/YXuaJuTmVpke945+0zF3ek6+G3J3hNXQD3VfcGuAEuxw8UJH6EUAYVPwAAAABJRU5ErkJggg==";
+      module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAIVBMVEX+/v5MaXHv7+/j4+TU1NSIiYmvsLHIyMjZ2drp6en///8Zp0rrAAAACnRSTlP7AO25fRg9bZLQVvLV2gAAAAlwSFlzAAALEwAACxMBAJqcGAAAAiVJREFUeNrtV93OrCAMHKCo6fs/ayPKz7kAFJTd/cy5lWTNgjKUmWlRpfB/TeMFeAFeAAAgALDh2SQb9+O/UsD8PIzomgiMlscAPG0ngAVYePCUoBkVFrCwsAAsJ3cEcguE17mOuEUaiLxeuUpGFQCOfEMieKW1TpqAQTjCOR6GyF0FAOkYSW04JSYI1+lcIrkCdE35vgthCMAszADyJr4BhNRrBs7bEkA4/74D8I0AQE6lGL8ApHHWIgADArCw3AIYA5h4DKs1r3xMlEt8QxcnHWsz8bQDhFmuOpalojqUU70tGVlBOS6dCMcW5t7DHaF1D6XLQxk/5pOcN6X0hiTyg1Qc+iCmvxYVWnlsZfNHAI9RMj3YgfHy00hDOU5dRgBi7CBYy436rbIDGVUaBFtJd1d+Jk/7BWD6KJiw03q/lYwriWMj5diN1uHGcth6DkrO9uWqdvY5P9DcY3WX0ZWa9yEWSY5rMgsAULJ7qACOfJj2yc16K4SFfr/CeqW4HRDw1i+wB4DZDHvsCNCBAKBzdika3tMWuZaDsAjfjRSgrOtYvtiYNr2MjBRMkgmTVmsI+pIaFGILoUdlXRiA02bMYTOftFbXk8nrIuNcz72PRZ5SsAeLlIUjwKx8HsZf0nJS23JagZxd1smBgN26FL/UtVxIseQz4lxjB7n8hgLQ16+GXc83aK5WVn/54LB+uR0d3j8AgI23s8vjCcD7qvsCvAA/2z+4ZeL1XyzIewAAAABJRU5ErkJggg==";
     }
   });
 
@@ -10380,6 +11094,7 @@
           state.prevURL = window.location.href;
           state.prevPathname = window.location.pathname;
           state.prevQuery = window.location.search;
+          state.forceProcess = true;
           state.isNF = false;
           state.isGF = false;
           state.isVF = false;
@@ -10390,6 +11105,8 @@
           state.gfType = "";
           state.vfType = "";
           state.mpType = "";
+          state.newsPostQuery = "";
+          state.lastNewsPostCount = 0;
           if (state.prevPathname === "/" || state.prevPathname === "/home.php") {
             if (state.prevQuery.indexOf("?filter=groups") < 0) {
               state.isNF = true;
@@ -10482,21 +11199,26 @@
         } else if (state.isPP) {
           mopProfileFeed(context);
         }
+        if (state.forceProcess) {
+          state.forceProcess = false;
+        }
       }
       function startLoop(state, options, filters, keyWords, context) {
         let prevScrollY = window.scrollY;
         let lastCleaningTime = 0;
         let sleepDuration = 50;
+        let mutationTimeoutId = null;
         const run = (eventType = "timing") => {
           const currentTime = (/* @__PURE__ */ new Date()).getTime();
           const elapsedTime = currentTime - lastCleaningTime;
+          const shouldForce = state.forceProcess === true;
           if (eventType === "url-changed") {
             setFeedSettings(state, options);
           } else if (eventType === "scrolling") {
-            if (sleepDuration < 151) {
+            if (sleepDuration < 151 && !shouldForce) {
               return;
             }
-          } else if (elapsedTime < sleepDuration) {
+          } else if (elapsedTime < sleepDuration && !shouldForce) {
             return;
           }
           processPage(state, options, filters, keyWords, context, eventType);
@@ -10521,6 +11243,7 @@
           const scrollingDistance = Math.abs(currentScrollY - prevScrollY);
           prevScrollY = currentScrollY;
           if (scrollingDistance > 20) {
+            state.forceProcess = true;
             run("scrolling");
           }
         });
@@ -10532,6 +11255,22 @@
             run("url-changed");
           }
         }, 500);
+        if (typeof MutationObserver !== "undefined") {
+          const observer = new MutationObserver(() => {
+            if (!state.isAF) {
+              return;
+            }
+            if (mutationTimeoutId !== null) {
+              return;
+            }
+            mutationTimeoutId = window.setTimeout(() => {
+              mutationTimeoutId = null;
+              state.forceProcess = true;
+              run("mutations");
+            }, 75);
+          });
+          observer.observe(document.body, { childList: true, subtree: true });
+        }
         run("url-changed");
       }
       async function startUserscript() {

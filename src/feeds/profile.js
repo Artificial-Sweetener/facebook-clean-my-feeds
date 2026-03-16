@@ -1,6 +1,15 @@
 const { mainColumnAtt, postAtt, postAttTab } = require("../dom/attributes");
 const { swatTheMosquitos } = require("../dom/animated-gifs");
-const { hasSizeChanged } = require("../dom/dirty-check");
+const {
+  ensureDirtyObserver,
+  getDirtyToken,
+  hasPostChanged,
+  isElementDirty,
+  markElementCleanIfUnchanged,
+  markElementDirty,
+  resetPostState,
+  trackPostSignature,
+} = require("../dom/dirty-check");
 const { hidePost } = require("../dom/hide");
 const { scrubInfoBoxes } = require("../dom/info-boxes");
 const { profileSelectors } = require("../selectors/profile");
@@ -12,20 +21,34 @@ function isProfileColumnDirty(state) {
   const arrReturn = [null, null];
   const mainColumn = document.querySelector(profileSelectors.mainColumn);
   if (mainColumn) {
+    ensureDirtyObserver(mainColumn);
     if (!mainColumn.hasAttribute(mainColumnAtt)) {
+      mainColumn.setAttribute(mainColumnAtt, "1");
+      markElementDirty(mainColumn);
+    }
+    if (state && state.forceProcess) {
+      markElementDirty(mainColumn);
+    }
+    if (state && state.forceProcess) {
       arrReturn[0] = mainColumn;
-    } else if (
-      hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)
-    ) {
+    } else if (isElementDirty(mainColumn)) {
       arrReturn[0] = mainColumn;
     }
   }
 
   const elDialog = document.querySelector(profileSelectors.dialog);
   if (elDialog) {
+    ensureDirtyObserver(elDialog);
     if (!elDialog.hasAttribute(mainColumnAtt)) {
+      elDialog.setAttribute(mainColumnAtt, "1");
+      markElementDirty(elDialog);
+    }
+    if (state && state.forceProcess) {
+      markElementDirty(elDialog);
+    }
+    if (state && state.forceProcess) {
       arrReturn[1] = elDialog;
-    } else if (hasSizeChanged(elDialog.getAttribute(mainColumnAtt), elDialog.innerHTML.length)) {
+    } else if (isElementDirty(elDialog)) {
       arrReturn[1] = elDialog;
     }
   }
@@ -100,6 +123,9 @@ function mopProfileFeed(context) {
     return null;
   }
 
+  const mainColumnToken = mainColumn ? getDirtyToken(mainColumn) : null;
+  const dialogToken = elDialog ? getDirtyToken(elDialog) : null;
+
   if (mainColumn) {
     const posts = getProfilePostsFromPermalinks(mainColumn);
     if (posts.length === 0) {
@@ -113,6 +139,11 @@ function mopProfileFeed(context) {
 
       let hideReason = "";
       const isSponsoredPost = false;
+
+      const postChanged = hasPostChanged(post);
+      if (postChanged) {
+        resetPostState(post, state);
+      }
 
       if (post.hasAttribute(postAtt)) {
         hideReason = "hidden";
@@ -145,9 +176,18 @@ function mopProfileFeed(context) {
           scrubInfoBoxes(post, options, keyWords, pathInfo, state);
         }
       }
+
+      if (!postChanged) {
+        trackPostSignature(post);
+      }
     }
 
-    mainColumn.setAttribute(mainColumnAtt, mainColumn.innerHTML.length.toString());
+    if (!mainColumn.hasAttribute(mainColumnAtt)) {
+      mainColumn.setAttribute(mainColumnAtt, "1");
+    }
+    if (mainColumnToken !== null) {
+      markElementCleanIfUnchanged(mainColumn, mainColumnToken);
+    }
     state.noChangeCounter = 0;
   }
 
@@ -155,7 +195,12 @@ function mopProfileFeed(context) {
     if (options.PP_ANIMATED_GIFS_PAUSE) {
       swatTheMosquitos(elDialog);
     }
-    elDialog.setAttribute(mainColumnAtt, elDialog.innerHTML.length.toString());
+    if (!elDialog.hasAttribute(mainColumnAtt)) {
+      elDialog.setAttribute(mainColumnAtt, "1");
+    }
+    if (dialogToken !== null) {
+      markElementCleanIfUnchanged(elDialog, dialogToken);
+    }
     state.noChangeCounter = 0;
   }
 

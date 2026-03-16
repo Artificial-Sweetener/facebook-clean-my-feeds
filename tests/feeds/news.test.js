@@ -105,9 +105,9 @@ function createNewsContext({ options = {}, keyWords = {} } = {}) {
   const context = {
     state: {
       forceProcess: false,
+      isNF: true,
       noChangeCounter: 0,
-      lastNewsPostCount: 0,
-      newsPostQuery: "",
+      lastNewsPostSweepAt: 0,
       hideAtt: "hide",
       hideWithNoCaptionAtt: "hideNoCaption",
       showAtt: "show",
@@ -115,10 +115,12 @@ function createNewsContext({ options = {}, keyWords = {} } = {}) {
       cssHideNumberOfShares: "hideShares",
       cssHideVerifiedBadge: "hideBadge",
       hideAnInfoBox: false,
+      dictionarySponsored: ["sponsored"],
       dictionaryReelsAndShortVideos: [],
       dictionaryFollow: [],
     },
     options: {
+      VERBOSITY_LEVEL: "0",
       VERBOSITY_DEBUG: false,
       NF_META_AI_PROMPTS: false,
       NF_TABLIST_STORIES_REELS_ROOMS: false,
@@ -154,6 +156,21 @@ function createNewsContext({ options = {}, keyWords = {} } = {}) {
 
   context.state.options = context.options;
   return context;
+}
+
+function createSponsoredPost({ labelId = "sponsored-label" } = {}) {
+  const post = document.createElement("div");
+  post.setAttribute("aria-posinset", "1");
+
+  const pageLink = document.createElement("a");
+  pageLink.href = "/DemocraticSocialismNow";
+  pageLink.textContent = "Democratic Socialism Now";
+
+  const labelProxy = document.createElement("span");
+  labelProxy.setAttribute("aria-labelledby", labelId);
+
+  post.append(pageLink, labelProxy);
+  return post;
 }
 
 describe("feeds/news", () => {
@@ -486,5 +503,69 @@ describe("feeds/news", () => {
     expect(outer.hasAttribute(context.state.hideWithNoCaptionAtt)).toBe(true);
     expect(outer.hasAttribute(context.state.showAtt)).toBe(true);
     disconnectDirtyObserver(mainColumn);
+  });
+
+  test("mopNewsFeed prefers real post selectors over fallback wrappers", () => {
+    document.body.innerHTML = `
+      <div role="navigation"></div>
+      <div role="main">
+        <h3 dir="auto">Feed</h3>
+        <div>
+          <div><div><div><div><div id="fallback-wrapper">Wrapper</div></div></div></div></div>
+        </div>
+      </div>
+    `;
+
+    const mainColumn = document.querySelector(newsSelectors.mainColumn);
+    const post = createSponsoredPost({ labelId: "sponsored-label-priority" });
+    mainColumn.appendChild(post);
+
+    const sponsoredLabel = document.createElement("span");
+    sponsoredLabel.id = "sponsored-label-priority";
+    sponsoredLabel.textContent = "Sponsored";
+    document.body.appendChild(sponsoredLabel);
+
+    const context = createNewsContext({
+      options: { NF_SPONSORED: true },
+      keyWords: { SPONSORED: "Sponsored" },
+    });
+
+    mopNewsFeed(context);
+
+    expect(post.getAttribute(postAtt)).toBe("Sponsored");
+    expect(document.getElementById("fallback-wrapper").hasAttribute(postAtt)).toBe(false);
+  });
+
+  test("mopNewsFeed rescans posts after external sponsored labels hydrate", () => {
+    document.body.innerHTML = `
+      <div role="navigation"></div>
+      <div role="main"></div>
+      <div id="outside-root"></div>
+    `;
+
+    const mainColumn = document.querySelector(newsSelectors.mainColumn);
+    const post = createSponsoredPost({ labelId: "sponsored-label-late" });
+    mainColumn.appendChild(post);
+
+    const context = createNewsContext({
+      options: { NF_SPONSORED: true },
+      keyWords: { SPONSORED: "Sponsored" },
+    });
+
+    mopNewsFeed(context);
+    expect(post.hasAttribute(postAtt)).toBe(false);
+
+    const outsideRoot = document.getElementById("outside-root");
+    const sponsoredLabel = document.createElement("span");
+    sponsoredLabel.id = "sponsored-label-late";
+    sponsoredLabel.textContent = "Sponsored";
+    outsideRoot.appendChild(sponsoredLabel);
+
+    context.state.lastNewsPostSweepAt = 0;
+
+    mopNewsFeed(context);
+
+    expect(post.getAttribute(postAtt)).toBe("Sponsored");
+    expect(post.hasAttribute(context.state.hideAtt)).toBe(true);
   });
 });

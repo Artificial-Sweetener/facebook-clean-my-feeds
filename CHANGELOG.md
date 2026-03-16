@@ -1,3 +1,10 @@
+# [6.2.0](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.1.2...v6.2.0) (2026-03-16)
+
+
+### Features
+
+* **news:** scrub Meta AI prompt suggestions ([536dbec](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/536dbec1b45f9843cdf6811c0134e0379ba5fbe7))
+
 # [6.1.2](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.1.1...v6.1.2) (2026-02-02)
 
 

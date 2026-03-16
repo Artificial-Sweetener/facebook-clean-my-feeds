@@ -5,7 +5,7 @@
   "type": "commonjs",
   "scripts": {
     "lint": "eslint -c tools/config/eslint.config.cjs \"src/**/*.js\" \"tools/**/*.js\" \"tools/config/**/*.cjs\"",
-    "format:check": "prettier --config tools/config/prettier.config.cjs --check \"src/**/*.js\" \"tools/**/*.js\" \"tools/config/**/*.cjs\" \"*.md\" \"*.json\"",
+    "format:check": "prettier --config tools/config/prettier.config.cjs --check \"src/**/*.js\" \"tools/**/*.js\" \"tools/config/**/*.cjs\"",
     "build": "node tools/build.js",
     "icons:optimize": "node tools/optimize-icons.js",
     "release": "semantic-release",

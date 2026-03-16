@@ -84,7 +84,7 @@ Nếu bạn thấy chỗ nào dịch chưa ổn hoặc còn thiếu, cứ mở i
 
 - **License:** GNU General Public License v3.0. Bạn được quyền chia sẻ, chỉnh sửa và cải tiến, miễn là vẫn giữ lại những quyền tự do đó cho người khác.
 - **Original Project:** [facebook-clean-my-feeds](https://github.com/zbluebugz/facebook-clean-my-feeds) bởi [zbluebugz](https://github.com/zbluebugz)
-- **Hỗ trợ duy trì bộ lọc trong một giai đoạn trước:** [trinhquocviet](https://github.com/trinhquocviet)
+- **Hỗ trợ duy trì bộ lọc (2025):** [trinhquocviet](https://github.com/trinhquocviet)
 - **Current Maintainer:** [Artificial Sweetener](https://github.com/Artificial-Sweetener) - chính là mình!~
 
 ## <img src="src/res/about.png" alt="about" width="36"/> Từ người duy trì

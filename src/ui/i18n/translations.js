@@ -270,7 +270,7 @@ module.exports = {
       DLG_TIPS_FACEBOOK: "قل مرحبًا على {facebook} - أشارك هناك أعمالي الفنية وشعري.",
       DLG_TIPS_SITE: "إذا أردت معرفة ما أفعله على الويب، فـ{site} هو أفضل مكان للبدء.",
       DLG_TIPS_CREDITS:
-        "شكر خاص لـ {zbluebugz} على المشروع الأصلي، ولـ {trinhquocviet} على المساعدة في صيانة الفلاتر خلال مرحلة سابقة من هذا الفرع.",
+        "شكر خاص لـ {zbluebugz} على المشروع الأصلي، ولـ {trinhquocviet} على المساعدة في صيانة الفلاتر في عام 2025.",
       DLG_TIPS_MAINTAINER_PREFIX: "من المُشرف:",
       DLG_TIPS_MAINTAINER:
         "آمل أن يساعدك هذا السكربت على استعادة تغذيتك. أعدك أن أكون حليفك في مواجهة الأشياء التي لا تريد رؤيتها على الإنترنت.",
@@ -411,7 +411,7 @@ module.exports = {
       DLG_TIPS_SITE:
         "Ако искаш да видиш какво правя из мрежата, {site} е най-доброто място да започнеш.",
       DLG_TIPS_CREDITS:
-        "Специални благодарности на {zbluebugz} за оригиналния проект и на {trinhquocviet} за помощта с поддръжката на филтрите в по-ранен етап от този форк.",
+        "Специални благодарности на {zbluebugz} за оригиналния проект и на {trinhquocviet} за помощта с поддръжката на филтрите през 2025 г.",
       DLG_TIPS_MAINTAINER_PREFIX: "От поддръжника:",
       DLG_TIPS_MAINTAINER:
         "Надявам се този скрипт да ти помогне да си върнеш емисията. Обещавам да бъда твой съюзник в битката срещу нещата, които не искаш да виждаш онлайн.",
@@ -551,7 +551,7 @@ module.exports = {
       DLG_TIPS_FACEBOOK: "Pozdrav na {facebook} - sdílím tam své umění a poezii.",
       DLG_TIPS_SITE: "Chceš-li vidět, co dělám na webu, {site} je nejlepší start.",
       DLG_TIPS_CREDITS:
-        "Speciální poděkování {zbluebugz} za původní projekt a {trinhquocviet} za pomoc s údržbou filtrů v dřívější fázi tohoto forku.",
+        "Speciální poděkování {zbluebugz} za původní projekt a {trinhquocviet} za pomoc s údržbou filtrů v roce 2025.",
       DLG_TIPS_MAINTAINER_PREFIX: "Od správce:",
       DLG_TIPS_MAINTAINER:
         "Doufám, že vám tento skript pomůže získat zpět váš feed. Slibuji, že budu vaším spojencem v boji proti věcem, které nechcete vidět online.",
@@ -693,7 +693,7 @@ module.exports = {
       DLG_TIPS_SITE:
         "Wenn du sehen willst, was ich im Netz mache, ist meine {site} der beste Start.",
       DLG_TIPS_CREDITS:
-        "Besonderer Dank an {zbluebugz} für das ursprüngliche Projekt und an {trinhquocviet} für die Hilfe bei der Filterpflege in einer früheren Phase dieses Forks.",
+        "Besonderer Dank an {zbluebugz} für das ursprüngliche Projekt und an {trinhquocviet} für die Hilfe bei der Filterpflege im Jahr 2025.",
       DLG_TIPS_MAINTAINER_PREFIX: "Vom Maintainer:",
       DLG_TIPS_MAINTAINER:
         "Ich hoffe, dieses Skript hilft dir, deinen Feed zurückzuholen. Ich verspreche, dein Verbündeter im Kampf gegen Dinge zu sein, die du online nicht sehen willst.",
@@ -834,7 +834,7 @@ module.exports = {
       DLG_TIPS_SITE:
         "Αν θέλεις να δεις τι κάνω γενικά στο διαδίκτυο, το {site} είναι το καλύτερο σημείο.",
       DLG_TIPS_CREDITS:
-        "Ιδιαίτερες ευχαριστίες στον {zbluebugz} για το αρχικό project και στον {trinhquocviet} για τη βοήθεια στη συντήρηση των φίλτρων σε ένα παλαιότερο στάδιο αυτού του fork.",
+        "Ιδιαίτερες ευχαριστίες στον {zbluebugz} για το αρχικό project και στον {trinhquocviet} για τη βοήθεια στη συντήρηση των φίλτρων το 2025.",
       DLG_TIPS_MAINTAINER_PREFIX: "Από τον συντηρητή:",
       DLG_TIPS_MAINTAINER:
         "Ελπίζω αυτό το σκριπτ να σε βοηθήσει να πάρεις πίσω το feed σου. Υπόσχομαι να είμαι σύμμαχός σου στη μάχη ενάντια σε όσα δεν θέλεις να βλέπεις online.",
@@ -974,7 +974,7 @@ module.exports = {
       DLG_TIPS_FACEBOOK: "Pásate por {facebook} - allí comparto mi arte y poesía.",
       DLG_TIPS_SITE: "Si quieres ver qué hago por la web, {site} es el mejor lugar para empezar.",
       DLG_TIPS_CREDITS:
-        "Un agradecimiento especial a {zbluebugz} por el proyecto original y a {trinhquocviet} por ayudar con el mantenimiento de filtros durante una etapa anterior de este fork.",
+        "Un agradecimiento especial a {zbluebugz} por el proyecto original y a {trinhquocviet} por ayudar con el mantenimiento de filtros en 2025.",
       DLG_TIPS_MAINTAINER_PREFIX: "Del mantenedor:",
       DLG_TIPS_MAINTAINER:
         "Espero que este script te ayude a recuperar tu feed. Prometo ser tu aliado en la lucha contra lo que no quieres ver en línea.",
@@ -1114,7 +1114,7 @@ module.exports = {
       DLG_TIPS_FACEBOOK: "Tule moikkaamaan {facebook} - jaan siellä taidetta ja runoutta.",
       DLG_TIPS_SITE: "Jos haluat nähdä mitä puuhailen verkossa, {site} on paras paikka aloittaa.",
       DLG_TIPS_CREDITS:
-        "Erityiskiitos {zbluebugz}:lle alkuperäisestä projektista ja {trinhquocviet}:lle avusta suodattimien ylläpidossa tämän forkin aiemmassa vaiheessa.",
+        "Erityiskiitos {zbluebugz}:lle alkuperäisestä projektista ja {trinhquocviet}:lle avusta suodattimien ylläpidossa vuonna 2025.",
       DLG_TIPS_MAINTAINER_PREFIX: "Ylläpitäjältä:",
       DLG_TIPS_MAINTAINER:
         "Toivon, että tämä skripti auttaa sinua saamaan feedisi takaisin. Lupaan olla liittolaisesi taistelussa sitä vastaan, mitä et halua nähdä verkossa.",
@@ -1255,7 +1255,7 @@ module.exports = {
       DLG_TIPS_SITE:
         "Si vous voulez voir ce que je fais sur le web, {site} est le meilleur point de départ.",
       DLG_TIPS_CREDITS:
-        "Remerciements particuliers à {zbluebugz} pour le projet original, et à {trinhquocviet} pour son aide dans la maintenance des filtres à une étape plus ancienne de ce fork.",
+        "Remerciements particuliers à {zbluebugz} pour le projet original, et à {trinhquocviet} pour son aide dans la maintenance des filtres en 2025.",
       DLG_TIPS_MAINTAINER_PREFIX: "De la part du mainteneur :",
       DLG_TIPS_MAINTAINER:
         "J’espère que ce script vous aidera à reprendre votre fil. Je promets d’être votre allié dans la lutte contre ce que vous ne voulez pas voir en ligne.",
@@ -1393,7 +1393,7 @@ module.exports = {
       DLG_TIPS_FACEBOOK: "בואו להגיד שלום ב-{facebook} - שם אני משתף אמנות ושירה.",
       DLG_TIPS_SITE: "אם רוצים לראות מה אני עושה ברחבי הרשת, {site} הוא המקום הכי טוב להתחיל.",
       DLG_TIPS_CREDITS:
-        "תודה מיוחדת ל-{zbluebugz} על הפרויקט המקורי, ול-{trinhquocviet} על העזרה בתחזוקת הפילטרים בשלב מוקדם יותר של הפורק הזה.",
+        "תודה מיוחדת ל-{zbluebugz} על הפרויקט המקורי, ול-{trinhquocviet} על העזרה בתחזוקת הפילטרים בשנת 2025.",
       DLG_TIPS_MAINTAINER_PREFIX: "מהמתחזק:",
       DLG_TIPS_MAINTAINER:
         "אני מקווה שהסקריפט הזה יעזור לך להחזיר לעצמך את הפיד. אני מבטיח להיות בן ברית במאבק נגד דברים שלא תרצה לראות ברשת.",
@@ -1533,7 +1533,7 @@ module.exports = {
       DLG_TIPS_SITE:
         "Jika ingin melihat apa yang saya lakukan di web, {site} adalah tempat terbaik untuk mulai.",
       DLG_TIPS_CREDITS:
-        "Terima kasih khusus kepada {zbluebugz} untuk proyek asli, dan kepada {trinhquocviet} karena membantu merawat filter pada fase awal fork ini.",
+        "Terima kasih khusus kepada {zbluebugz} untuk proyek asli, dan kepada {trinhquocviet} karena membantu merawat filter pada tahun 2025.",
       DLG_TIPS_MAINTAINER_PREFIX: "Dari pengelola:",
       DLG_TIPS_MAINTAINER:
         "Saya harap skrip ini membantu Anda merebut kembali feed Anda. Saya berjanji menjadi sekutu Anda melawan hal-hal yang tidak ingin Anda lihat online.",
@@ -1674,7 +1674,7 @@ module.exports = {
       DLG_TIPS_SITE:
         "Se vuoi vedere cosa faccio in giro per il web, {site} è il posto migliore da cui partire.",
       DLG_TIPS_CREDITS:
-        "Un grazie speciale a {zbluebugz} per il progetto originale e a {trinhquocviet} per l'aiuto con la manutenzione dei filtri in una fase precedente di questo fork.",
+        "Un grazie speciale a {zbluebugz} per il progetto originale e a {trinhquocviet} per l'aiuto con la manutenzione dei filtri nel 2025.",
       DLG_TIPS_MAINTAINER_PREFIX: "Dal maintainer:",
       DLG_TIPS_MAINTAINER:
         "Spero che questo script ti aiuti a riprenderti il tuo feed. Prometto di essere il tuo alleato nella lotta contro ciò che non vuoi vedere online.",
@@ -1814,7 +1814,7 @@ module.exports = {
       DLG_TIPS_FACEBOOK: "{facebook}で声をかけてください - そこでアートと詩を共有しています。",
       DLG_TIPS_SITE: "活動をまとめて見たいなら、{site}がいちばんの入口です。",
       DLG_TIPS_CREDITS:
-        "元のプロジェクトの {zbluebugz} と、この fork の初期にフィルター保守を手伝ってくれた {trinhquocviet} に特別な感謝を。",
+        "元のプロジェクトの {zbluebugz} と、2025年にフィルター保守を手伝ってくれた {trinhquocviet} に特別な感謝を。",
       DLG_TIPS_MAINTAINER_PREFIX: "メンテナより：",
       DLG_TIPS_MAINTAINER:
         "このスクリプトがあなたのフィードを取り戻す助けになれば嬉しいです。オンラインで見たくないものと戦うあなたの味方でいると約束します。",
@@ -1953,7 +1953,7 @@ module.exports = {
       DLG_TIPS_FACEBOOK: "Ienāc uz {facebook} - tur dalos ar mākslu un dzeju.",
       DLG_TIPS_SITE: "Ja gribi redzēt, ar ko nodarbojos tīmeklī, {site} ir labākā vieta, kur sākt.",
       DLG_TIPS_CREDITS:
-        "Īpašs paldies {zbluebugz} par oriģinālo projektu un {trinhquocviet} par palīdzību filtru uzturēšanā šī forka agrīnākā posmā.",
+        "Īpašs paldies {zbluebugz} par oriģinālo projektu un {trinhquocviet} par palīdzību filtru uzturēšanā 2025. gadā.",
       DLG_TIPS_MAINTAINER_PREFIX: "No uzturētāja:",
       DLG_TIPS_MAINTAINER:
         "Ceru, ka šis skripts palīdzēs atgūt savu plūsmu. Es apsolu būt tavs sabiedrotais cīņā pret to, ko nevēlies redzēt tiešsaistē.",
@@ -2093,7 +2093,7 @@ module.exports = {
       DLG_TIPS_FACEBOOK: "Zeg hallo op {facebook} - daar deel ik mijn kunst en poëzie.",
       DLG_TIPS_SITE: "Als je wilt zien wat ik online doe, is {site} de beste plek om te beginnen.",
       DLG_TIPS_CREDITS:
-        "Speciale dank aan {zbluebugz} voor het originele project, en aan {trinhquocviet} voor de hulp bij het onderhouden van filters in een eerdere fase van deze fork.",
+        "Speciale dank aan {zbluebugz} voor het originele project, en aan {trinhquocviet} voor de hulp bij het onderhouden van filters in 2025.",
       DLG_TIPS_MAINTAINER_PREFIX: "Van de maintainer:",
       DLG_TIPS_MAINTAINER:
         "Ik hoop dat dit script je helpt je feed terug te krijgen. Ik beloof je bondgenoot te zijn in de strijd tegen dingen die je online niet wilt zien.",
@@ -2233,7 +2233,7 @@ module.exports = {
       DLG_TIPS_FACEBOOK: "Wpadnij na {facebook} - dzielę się tam sztuką i poezją.",
       DLG_TIPS_SITE: "Jeśli chcesz zobaczyć, co robię w sieci, {site} to najlepszy start.",
       DLG_TIPS_CREDITS:
-        "Specjalne podziękowania dla {zbluebugz} za oryginalny projekt oraz dla {trinhquocviet} za pomoc w utrzymaniu filtrów na wcześniejszym etapie tego forka.",
+        "Specjalne podziękowania dla {zbluebugz} za oryginalny projekt oraz dla {trinhquocviet} za pomoc w utrzymaniu filtrów w 2025 roku.",
       DLG_TIPS_MAINTAINER_PREFIX: "Od opiekuna:",
       DLG_TIPS_MAINTAINER:
         "Mam nadzieję, że ten skrypt pomoże ci odzyskać feed. Obiecuję być twoim sojusznikiem w walce z tym, czego nie chcesz widzieć online.",
@@ -2375,7 +2375,7 @@ module.exports = {
       DLG_TIPS_SITE:
         "Se quiser ver o que ando fazendo pela web, {site} é o melhor lugar para começar.",
       DLG_TIPS_CREDITS:
-        "Agradecimento especial a {zbluebugz} pelo projeto original e a {trinhquocviet} pela ajuda na manutenção dos filtros em uma fase anterior deste fork.",
+        "Agradecimento especial a {zbluebugz} pelo projeto original e a {trinhquocviet} pela ajuda na manutenção dos filtros em 2025.",
       DLG_TIPS_MAINTAINER_PREFIX: "Do mantenedor:",
       DLG_TIPS_MAINTAINER:
         "Espero que este script ajude você a recuperar o seu feed. Prometo ser seu aliado na luta contra o que você não quer ver online.",
@@ -2515,7 +2515,7 @@ module.exports = {
       DLG_TIPS_FACEBOOK: "Загляните на {facebook} - там я делюсь искусством и поэзией.",
       DLG_TIPS_SITE: "Если хотите увидеть, чем я занимаюсь в сети, {site} — лучшее место начать.",
       DLG_TIPS_CREDITS:
-        "Особая благодарность {zbluebugz} за оригинальный проект и {trinhquocviet} за помощь с поддержкой фильтров на более раннем этапе этого форка.",
+        "Особая благодарность {zbluebugz} за оригинальный проект и {trinhquocviet} за помощь с поддержкой фильтров в 2025 году.",
       DLG_TIPS_MAINTAINER_PREFIX: "От сопровождающего:",
       DLG_TIPS_MAINTAINER:
         "Надеюсь, этот скрипт поможет вам вернуть свою ленту. Я обещаю быть вашим союзником в борьбе с тем, что вы не хотите видеть в сети.",
@@ -2655,7 +2655,7 @@ module.exports = {
       DLG_TIPS_FACEBOOK: "{facebook} uğrayıp selam verin - orada sanatımı ve şiirimi paylaşıyorum.",
       DLG_TIPS_SITE: "Webde neler yaptığımı görmek isterseniz, {site} en iyi başlangıç.",
       DLG_TIPS_CREDITS:
-        "Orijinal proje için {zbluebugz}'a ve bu fork'un daha erken bir döneminde filtre bakımına yardımcı olduğu için {trinhquocviet}'e özel teşekkürler.",
+        "Orijinal proje için {zbluebugz}'a ve 2025 yılında filtre bakımına yardımcı olduğu için {trinhquocviet}'e özel teşekkürler.",
       DLG_TIPS_MAINTAINER_PREFIX: "Geliştiriciden:",
       DLG_TIPS_MAINTAINER:
         "Bu betiğin feed’inizi geri almanıza yardımcı olmasını umuyorum. İnternette görmek istemediğiniz şeylere karşı müttefikiniz olacağıma söz veriyorum.",
@@ -2796,7 +2796,7 @@ module.exports = {
       DLG_TIPS_SITE:
         "Якщо хочете побачити, чим я займаюся в мережі, {site} — найкраще місце почати.",
       DLG_TIPS_CREDITS:
-        "Окрема подяка {zbluebugz} за оригінальний проєкт і {trinhquocviet} за допомогу з підтримкою фільтрів на раннішому етапі цього форка.",
+        "Окрема подяка {zbluebugz} за оригінальний проєкт і {trinhquocviet} за допомогу з підтримкою фільтрів у 2025 році.",
       DLG_TIPS_MAINTAINER_PREFIX: "Від супровідника:",
       DLG_TIPS_MAINTAINER:
         "Сподіваюся, цей скрипт допоможе вам повернути свою стрічку. Обіцяю бути вашим союзником у боротьбі з тим, що ви не хочете бачити онлайн.",
@@ -2936,7 +2936,7 @@ module.exports = {
       DLG_TIPS_FACEBOOK: "Ghé {facebook} - mình chia sẻ nghệ thuật và thơ ở đó.",
       DLG_TIPS_SITE: "Nếu muốn xem mình làm gì trên web, {site} là nơi bắt đầu tốt nhất.",
       DLG_TIPS_CREDITS:
-        "Xin cảm ơn đặc biệt tới {zbluebugz} cho dự án gốc và {trinhquocviet} vì đã giúp duy trì bộ lọc trong giai đoạn trước của bản fork này.",
+        "Xin cảm ơn đặc biệt tới {zbluebugz} cho dự án gốc và {trinhquocviet} vì đã giúp duy trì bộ lọc trong năm 2025.",
       DLG_TIPS_MAINTAINER_PREFIX: "Từ người bảo trì:",
       DLG_TIPS_MAINTAINER:
         "Mình hy vọng script này giúp bạn giành lại bảng tin. Mình hứa sẽ là đồng minh của bạn trong cuộc chiến với những thứ bạn không muốn thấy trên mạng.",
@@ -3070,7 +3070,7 @@ module.exports = {
       DLG_TIPS_FACEBOOK: "欢迎到{facebook}打个招呼 - 我在那里分享艺术和诗歌。",
       DLG_TIPS_SITE: "想看看我在网上都在做什么，{site}是最好的起点。",
       DLG_TIPS_CREDITS:
-        "特别感谢 {zbluebugz} 的原始项目，也感谢 {trinhquocviet} 在这个 fork 较早阶段帮助维护过滤器。",
+        "特别感谢 {zbluebugz} 的原始项目，也感谢 {trinhquocviet} 在 2025 年帮助维护过滤器。",
       DLG_TIPS_MAINTAINER:
         "希望这个脚本能帮你找回清爽的动态消息。我承诺将是你对抗不想看到的网络内容的盟友。",
       DLG_TIPS_LINK_REPO: "GitHub",
@@ -3204,7 +3204,7 @@ module.exports = {
       DLG_TIPS_FACEBOOK: "歡迎到{facebook}打個招呼 - 我在那裡分享藝術和詩。",
       DLG_TIPS_SITE: "想看看我在網路上都在做什麼，{site}是最好的起點。",
       DLG_TIPS_CREDITS:
-        "特別感謝 {zbluebugz} 的原始專案，也感謝 {trinhquocviet} 在這個 fork 較早階段協助維護過濾器。",
+        "特別感謝 {zbluebugz} 的原始專案，也感謝 {trinhquocviet} 在 2025 年協助維護過濾器。",
       DLG_TIPS_MAINTAINER:
         "希望這個腳本能幫你找回清爽的動態消息。我承諾將是你對抗不想看到的網路內容的盟友。",
       DLG_TIPS_LINK_REPO: "GitHub",

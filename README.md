@@ -19,6 +19,7 @@ Thanks to **[trinhquocviet](https://github.com/trinhquocviet)** for helping main
 "FB - Clean My Feeds" is designed to make your browsing experience calm, clean, and completely under your control.
 
 - **Nuke the Ads:** We automatically scrub "Sponsored" posts, "Paid Partnership" labels, and "Suggested for you" sections across News, Groups, Watch, Marketplace, Search, and Reels.
+- **Cut the AI Clutter:** Hide "Try Meta AI" cards, Meta AI prompt suggestions, and AI side-panel distractions before they take over your feed.
 - **Tame the Layout:** Hide Reels, "Short Videos," and those massive "Stories" shelves that eat up your screen. You can even toggle off entire sections like Marketplace if you never use them.
 - **Filter the Noise:** Create custom blocklists for specific words or phrases (with regex support!). You can also cap viral posts by "Like" count to keep your feed personal.
 - **Quiet Down:** We strip out "People You May Know," "Follow" suggestions, survey promos, and other engagement traps. Plus, you can pause autoplaying GIFs and videos so you're not ambushed by motion.

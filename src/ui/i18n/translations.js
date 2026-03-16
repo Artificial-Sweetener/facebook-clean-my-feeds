@@ -126,6 +126,8 @@ module.exports = {
       DLG_TIPS_DESC: "Project links and maintainer info.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "If it helps, a star on {github} would mean a lot.",
+      DLG_TIPS_THREADS:
+        "If you use Threads on desktop too, I maintain a filter for that as well: {threads}.",
       DLG_TIPS_FACEBOOK: "Come say hi on {facebook} page - I share my art and poetry there.",
       DLG_TIPS_SITE:
         "If you want to see what I'm up to around the web, {site} is the best place to start.",
@@ -136,6 +138,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "my Facebook",
       DLG_TIPS_LINK_SITE: "my website",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["Save", "Close", "Export", "Import", "Reset"],
       DLG_BUTTON_TOOLTIPS: [
@@ -154,6 +157,7 @@ module.exports = {
       NF_STORIES: "القصص",
       NF_TOP_CARDS_PAGES: "بطاقات في الأعلى (للصفحات)",
       NF_META_AI: "جرّب Meta AI",
+      NF_META_AI_PROMPTS: "اقتراحات مطالبات Meta AI",
       NF_HIDE_VERIFIED_BADGE: "إخفاء الشارات الموثقة",
       NF_FILTER_VERIFIED_BADGE: "تصفية الحسابات الموثقة",
       NF_AI_SIDE_PANELS: "الذكاء الاصطناعي في اللوحات الجانبية",
@@ -261,6 +265,8 @@ module.exports = {
       DLG_TIPS_DESC: "روابط المشروع ومعلومات المشرف.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "إذا كان هذا مفيدًا، فإن نجمة على {github} تعني الكثير.",
+      DLG_TIPS_THREADS:
+        "إذا كنت تستخدم Threads على سطح المكتب أيضًا، فأنا أُدير أداة تصفية له أيضًا: {threads}.",
       DLG_TIPS_FACEBOOK: "قل مرحبًا على {facebook} - أشارك هناك أعمالي الفنية وشعري.",
       DLG_TIPS_SITE: "إذا أردت معرفة ما أفعله على الويب، فـ{site} هو أفضل مكان للبدء.",
       DLG_TIPS_CREDITS:
@@ -271,6 +277,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "صفحتي على فيسبوك",
       DLG_TIPS_LINK_SITE: "موقعي",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["حفظ", "قريب", "يصدّر", "يستورد", "إعادة تعيين"],
       DLG_BUTTON_TOOLTIPS: [
@@ -289,6 +296,7 @@ module.exports = {
       NF_STORIES: "Истории",
       NF_TOP_CARDS_PAGES: "Горни карти (за страници)",
       NF_META_AI: "Опитай Meta AI",
+      NF_META_AI_PROMPTS: "Подсказки на Meta AI",
       NF_HIDE_VERIFIED_BADGE: "Скриване на потвърдени значки",
       NF_FILTER_VERIFIED_BADGE: "Филтриране на потвърдени акаунти",
       NF_AI_SIDE_PANELS: "AI в страничните панели",
@@ -397,6 +405,8 @@ module.exports = {
       DLG_TIPS_DESC: "Линкове към проекта и информация за поддръжника.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Ако това помага, една звезда в {github} значи много.",
+      DLG_TIPS_THREADS:
+        "Ако ползваш Threads и на настолен компютър, поддържам филтър и за него: {threads}.",
       DLG_TIPS_FACEBOOK: "Кажи здрасти на {facebook} - там споделям изкуство и поезия.",
       DLG_TIPS_SITE:
         "Ако искаш да видиш какво правя из мрежата, {site} е най-доброто място да започнеш.",
@@ -408,6 +418,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "моя Facebook страница",
       DLG_TIPS_LINK_SITE: "моят сайт",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["Запази", "Затвори", "Експорт", "Импорт", "Нулиране"],
       DLG_BUTTON_TOOLTIPS: [
@@ -426,6 +437,7 @@ module.exports = {
       NF_STORIES: "Stories",
       NF_TOP_CARDS_PAGES: "Horní karty (pro stránky)",
       NF_META_AI: "Vyzkoušejte Meta AI",
+      NF_META_AI_PROMPTS: "Návrhy promptů Meta AI",
       NF_HIDE_VERIFIED_BADGE: "Skrýt ověřené odznaky",
       NF_FILTER_VERIFIED_BADGE: "Filtrovat ověřené účty",
       NF_AI_SIDE_PANELS: "AI v postranních panelech",
@@ -534,6 +546,8 @@ module.exports = {
       DLG_TIPS_DESC: "Odkazy na projekt a informace o správci.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Pokud to pomáhá, hvězda na {github} pro mě hodně znamená.",
+      DLG_TIPS_THREADS:
+        "Pokud používáš Threads i na počítači, spravuji pro něj také filtr: {threads}.",
       DLG_TIPS_FACEBOOK: "Pozdrav na {facebook} - sdílím tam své umění a poezii.",
       DLG_TIPS_SITE: "Chceš-li vidět, co dělám na webu, {site} je nejlepší start.",
       DLG_TIPS_CREDITS:
@@ -544,6 +558,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "můj Facebook",
       DLG_TIPS_LINK_SITE: "můj web",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["Uložit", "Zavřít", "Export", "Import", "Resetovat"],
       DLG_BUTTON_TOOLTIPS: [
@@ -563,6 +578,7 @@ module.exports = {
       NF_STORIES: "Stories",
       NF_TOP_CARDS_PAGES: "Top-Karten (für Seiten)",
       NF_META_AI: "Meta AI ausprobieren",
+      NF_META_AI_PROMPTS: "Meta AI Prompt-Vorschläge",
       NF_HIDE_VERIFIED_BADGE: "Verifizierte Abzeichen ausblenden",
       NF_FILTER_VERIFIED_BADGE: "Verifizierte Konten filtern",
       NF_AI_SIDE_PANELS: "KI in Seitenleisten",
@@ -671,6 +687,8 @@ module.exports = {
       DLG_TIPS_DESC: "Projektlinks und Infos zum Maintainer.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Wenn das hilft, bedeutet mir ein Stern auf {github} viel.",
+      DLG_TIPS_THREADS:
+        "Wenn du Threads auch am Desktop nutzt, pflege ich dafür ebenfalls einen Filter: {threads}.",
       DLG_TIPS_FACEBOOK: "Sag gern Hallo auf {facebook} - dort teile ich Kunst und Poesie.",
       DLG_TIPS_SITE:
         "Wenn du sehen willst, was ich im Netz mache, ist meine {site} der beste Start.",
@@ -682,6 +700,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "meine Facebook-Seite",
       DLG_TIPS_LINK_SITE: "meine Website",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["Speichern", "Schließen", "Exportieren", "Importieren", "Zurücksetzen"],
       DLG_BUTTON_TOOLTIPS: [
@@ -700,6 +719,7 @@ module.exports = {
       NF_STORIES: "Ιστορίες",
       NF_TOP_CARDS_PAGES: "Κορυφαίες κάρτες (για Σελίδες)",
       NF_META_AI: "Δοκιμάστε το Meta AI",
+      NF_META_AI_PROMPTS: "Προτάσεις prompt του Meta AI",
       NF_HIDE_VERIFIED_BADGE: "Απόκρυψη επαληθευμένων σημάτων",
       NF_FILTER_VERIFIED_BADGE: "Φιλτράρισμα επαληθευμένων λογαριασμών",
       NF_AI_SIDE_PANELS: "AI στα πλευρικά πάνελ",
@@ -808,6 +828,8 @@ module.exports = {
       DLG_TIPS_DESC: "Σύνδεσμοι έργου και πληροφορίες συντηρητή.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Αν βοηθάει, ένα αστέρι στο {github} σημαίνει πολλά.",
+      DLG_TIPS_THREADS:
+        "Αν χρησιμοποιείς και το Threads σε υπολογιστή, διατηρώ και γι’ αυτό ένα φίλτρο: {threads}.",
       DLG_TIPS_FACEBOOK: "Πες γεια στη {facebook} - εκεί μοιράζομαι τέχνη και ποίηση.",
       DLG_TIPS_SITE:
         "Αν θέλεις να δεις τι κάνω γενικά στο διαδίκτυο, το {site} είναι το καλύτερο σημείο.",
@@ -819,6 +841,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "σελίδα μου στο Facebook",
       DLG_TIPS_LINK_SITE: "ιστότοπό μου",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["Αποθήκευση", "Κλείσιμο", "Εξαγωγή", "Εισαγωγή", "Επαναφορά"],
       DLG_BUTTON_TOOLTIPS: [
@@ -837,6 +860,7 @@ module.exports = {
       NF_STORIES: "Historias",
       NF_TOP_CARDS_PAGES: "Tarjetas principales (para páginas)",
       NF_META_AI: "Probar Meta AI",
+      NF_META_AI_PROMPTS: "Sugerencias de prompts de Meta AI",
       NF_HIDE_VERIFIED_BADGE: "Ocultar insignias verificadas",
       NF_FILTER_VERIFIED_BADGE: "Filtrar cuentas verificadas",
       NF_AI_SIDE_PANELS: "IA en paneles laterales",
@@ -945,6 +969,8 @@ module.exports = {
       DLG_TIPS_DESC: "Enlaces del proyecto e info del mantenedor.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Si te ayuda, una estrella en {github} significa mucho.",
+      DLG_TIPS_THREADS:
+        "Si también usas Threads en el escritorio, mantengo un filtro para eso: {threads}.",
       DLG_TIPS_FACEBOOK: "Pásate por {facebook} - allí comparto mi arte y poesía.",
       DLG_TIPS_SITE: "Si quieres ver qué hago por la web, {site} es el mejor lugar para empezar.",
       DLG_TIPS_CREDITS:
@@ -955,6 +981,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "mi Facebook",
       DLG_TIPS_LINK_SITE: "mi sitio web",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["Guardar", "Cerrar", "Exportar", "Importar", "Reajustar"],
       DLG_BUTTON_TOOLTIPS: [
@@ -973,6 +1000,7 @@ module.exports = {
       NF_STORIES: "Tarinat",
       NF_TOP_CARDS_PAGES: "Yläkortit (sivuja varten)",
       NF_META_AI: "Kokeile Meta AI:ta",
+      NF_META_AI_PROMPTS: "Meta AI -kehote-ehdotukset",
       NF_HIDE_VERIFIED_BADGE: "Piilota varmennusmerkit",
       NF_FILTER_VERIFIED_BADGE: "Suodata varmennetut tilit",
       NF_AI_SIDE_PANELS: "Tekoäly sivupaneeleissa",
@@ -1081,6 +1109,8 @@ module.exports = {
       DLG_TIPS_DESC: "Projektin linkit ja ylläpitäjän tiedot.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Jos tästä on apua, {github}-tähti merkitsee paljon.",
+      DLG_TIPS_THREADS:
+        "Jos käytät myös Threadsia työpöydällä, ylläpidän siihenkin suodatinta: {threads}.",
       DLG_TIPS_FACEBOOK: "Tule moikkaamaan {facebook} - jaan siellä taidetta ja runoutta.",
       DLG_TIPS_SITE: "Jos haluat nähdä mitä puuhailen verkossa, {site} on paras paikka aloittaa.",
       DLG_TIPS_CREDITS:
@@ -1091,6 +1121,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "Facebook-sivuni",
       DLG_TIPS_LINK_SITE: "sivuni",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["Tallentaa", "Sulkea", "Vienti", "Tuonti", "Nollaa"],
       DLG_BUTTON_TOOLTIPS: [
@@ -1109,6 +1140,7 @@ module.exports = {
       NF_STORIES: "Stories",
       NF_TOP_CARDS_PAGES: "Cartes principales (pour les Pages)",
       NF_META_AI: "Essayer Meta AI",
+      NF_META_AI_PROMPTS: "Suggestions de prompts Meta AI",
       NF_HIDE_VERIFIED_BADGE: "Masquer les badges vérifiés",
       NF_FILTER_VERIFIED_BADGE: "Filtrer les comptes vérifiés",
       NF_AI_SIDE_PANELS: "IA dans les panneaux latéraux",
@@ -1217,6 +1249,8 @@ module.exports = {
       DLG_TIPS_DESC: "Liens du projet et infos du mainteneur.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Si cela vous aide, une étoile sur {github} compte beaucoup.",
+      DLG_TIPS_THREADS:
+        "Si vous utilisez aussi Threads sur ordinateur, j’entretiens aussi un filtre pour ça : {threads}.",
       DLG_TIPS_FACEBOOK: "Passez dire bonjour sur {facebook} - j'y partage mon art et ma poésie.",
       DLG_TIPS_SITE:
         "Si vous voulez voir ce que je fais sur le web, {site} est le meilleur point de départ.",
@@ -1228,6 +1262,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "ma page Facebook",
       DLG_TIPS_LINK_SITE: "mon site",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["Sauvegarder", "Fermer", "Exporter", "Importer", "Réinitialiser"],
       DLG_BUTTON_TOOLTIPS: [
@@ -1246,6 +1281,7 @@ module.exports = {
       NF_STORIES: "סטוריז ",
       NF_TOP_CARDS_PAGES: "כרטיסים מובילים (לדפים)",
       NF_META_AI: "נסה את Meta AI",
+      NF_META_AI_PROMPTS: "הצעות פרומפטים של Meta AI",
       NF_HIDE_VERIFIED_BADGE: "הסתר תגי אימות",
       NF_FILTER_VERIFIED_BADGE: "סנן חשבונות מאומתים",
       NF_AI_SIDE_PANELS: "בינה מלאכותית בלוחות הצד",
@@ -1353,6 +1389,8 @@ module.exports = {
       DLG_TIPS_DESC: "קישורי הפרויקט ומידע על המתחזק.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "אם זה עוזר, כוכב ב-{github} שווה הרבה.",
+      DLG_TIPS_THREADS:
+        "אם גם אתם משתמשים ב-Threads במחשב, אני מתחזק גם מסנן בשביל זה: {threads}.",
       DLG_TIPS_FACEBOOK: "בואו להגיד שלום ב-{facebook} - שם אני משתף אמנות ושירה.",
       DLG_TIPS_SITE: "אם רוצים לראות מה אני עושה ברחבי הרשת, {site} הוא המקום הכי טוב להתחיל.",
       DLG_TIPS_CREDITS:
@@ -1363,6 +1401,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "עמוד הפייסבוק שלי",
       DLG_TIPS_LINK_SITE: "האתר שלי",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["שמור", "סגור", "ייצא", "ייבא", "איפוס"],
       DLG_BUTTON_TOOLTIPS: [
@@ -1381,6 +1420,7 @@ module.exports = {
       NF_STORIES: "Cerita",
       NF_TOP_CARDS_PAGES: "Kartu teratas (untuk Halaman)",
       NF_META_AI: "Coba Meta AI",
+      NF_META_AI_PROMPTS: "Saran prompt Meta AI",
       NF_HIDE_VERIFIED_BADGE: "Sembunyikan lencana terverifikasi",
       NF_FILTER_VERIFIED_BADGE: "Filter akun terverifikasi",
       NF_AI_SIDE_PANELS: "AI di panel samping",
@@ -1488,6 +1528,8 @@ module.exports = {
       DLG_TIPS_DESC: "Tautan proyek dan info pengelola.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Jika ini membantu, bintang di {github} sangat berarti.",
+      DLG_TIPS_THREADS:
+        "Kalau Anda juga memakai Threads di desktop, saya juga mengelola filter untuk itu: {threads}.",
       DLG_TIPS_FACEBOOK: "Sapa di {facebook} - saya berbagi karya seni dan puisi di sana.",
       DLG_TIPS_SITE:
         "Jika ingin melihat apa yang saya lakukan di web, {site} adalah tempat terbaik untuk mulai.",
@@ -1499,6 +1541,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "Facebook saya",
       DLG_TIPS_LINK_SITE: "situs saya",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["Simpan", "Tutup", "Ekspor", "Impor", "Reset"],
       DLG_BUTTON_TOOLTIPS: [
@@ -1517,6 +1560,7 @@ module.exports = {
       NF_STORIES: "Storie",
       NF_TOP_CARDS_PAGES: "Schede principali (per Pagine)",
       NF_META_AI: "Prova Meta AI",
+      NF_META_AI_PROMPTS: "Suggerimenti di prompt di Meta AI",
       NF_HIDE_VERIFIED_BADGE: "Nascondi badge verificati",
       NF_FILTER_VERIFIED_BADGE: "Filtra account verificati",
       NF_AI_SIDE_PANELS: "IA nei pannelli laterali",
@@ -1625,6 +1669,8 @@ module.exports = {
       DLG_TIPS_DESC: "Link al progetto e info del maintainer.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Se ti è utile, una stella su {github} significa molto.",
+      DLG_TIPS_THREADS:
+        "Se usi Threads anche da desktop, mantengo anche un filtro per quello: {threads}.",
       DLG_TIPS_FACEBOOK: "Passa a salutarmi su {facebook} - lì condivido la mia arte e poesia.",
       DLG_TIPS_SITE:
         "Se vuoi vedere cosa faccio in giro per il web, {site} è il posto migliore da cui partire.",
@@ -1636,6 +1682,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "la mia pagina Facebook",
       DLG_TIPS_LINK_SITE: "il mio sito",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["Salva", "Chiudi", "Esportare", "Importare", "Ripristina"],
       DLG_BUTTON_TOOLTIPS: [
@@ -1654,6 +1701,7 @@ module.exports = {
       NF_STORIES: "Stories",
       NF_TOP_CARDS_PAGES: "トップカード（ページ向け）",
       NF_META_AI: "Meta AI を試す",
+      NF_META_AI_PROMPTS: "Meta AI のプロンプト候補",
       NF_HIDE_VERIFIED_BADGE: "認証バッジを非表示",
       NF_FILTER_VERIFIED_BADGE: "認証済みアカウントをフィルター",
       NF_AI_SIDE_PANELS: "サイドパネルのAI",
@@ -1762,6 +1810,8 @@ module.exports = {
       DLG_TIPS_DESC: "プロジェクトリンクとメンテナ情報。",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "役に立ったら {github} のスターが励みになります。",
+      DLG_TIPS_THREADS:
+        "Threads をデスクトップでも使っているなら、そちら向けのフィルターもメンテナンスしています: {threads}。",
       DLG_TIPS_FACEBOOK: "{facebook}で声をかけてください - そこでアートと詩を共有しています。",
       DLG_TIPS_SITE: "活動をまとめて見たいなら、{site}がいちばんの入口です。",
       DLG_TIPS_CREDITS:
@@ -1772,6 +1822,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "私のFacebook",
       DLG_TIPS_LINK_SITE: "私のサイト",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["セーブ", "クローズ", "輸出する", "輸入", "リセット"],
       DLG_BUTTON_TOOLTIPS: [
@@ -1790,6 +1841,7 @@ module.exports = {
       NF_STORIES: "Stāsti",
       NF_TOP_CARDS_PAGES: "Augšējās kartītes (lapām)",
       NF_META_AI: "Izmēģiniet Meta AI",
+      NF_META_AI_PROMPTS: "Meta AI uzvedņu ieteikumi",
       NF_HIDE_VERIFIED_BADGE: "Slēpt verificētās nozīmītes",
       NF_FILTER_VERIFIED_BADGE: "Filtrēt verificētos kontus",
       NF_AI_SIDE_PANELS: "AI sānu paneļos",
@@ -1898,6 +1950,8 @@ module.exports = {
       DLG_TIPS_DESC: "Projekta saites un uzturētāja info.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Ja tas palīdz, {github} zvaigzne man nozīmē daudz.",
+      DLG_TIPS_THREADS:
+        "Ja lieto Threads arī datorā, es uzturu filtru arī tam: {threads}.",
       DLG_TIPS_FACEBOOK: "Ienāc uz {facebook} - tur dalos ar mākslu un dzeju.",
       DLG_TIPS_SITE: "Ja gribi redzēt, ar ko nodarbojos tīmeklī, {site} ir labākā vieta, kur sākt.",
       DLG_TIPS_CREDITS:
@@ -1908,6 +1962,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "mana Facebook lapa",
       DLG_TIPS_LINK_SITE: "mana vietne",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["Saglabājiet", "Aizveriet", "Eksportēt", "Importēt", "Atiestatīt"],
       DLG_BUTTON_TOOLTIPS: [
@@ -1926,6 +1981,7 @@ module.exports = {
       NF_STORIES: "Verhalen",
       NF_TOP_CARDS_PAGES: "Topkaarten (voor Pagina's)",
       NF_META_AI: "Probeer Meta AI",
+      NF_META_AI_PROMPTS: "Meta AI-promptsuggesties",
       NF_HIDE_VERIFIED_BADGE: "Geverifieerde badges verbergen",
       NF_FILTER_VERIFIED_BADGE: "Geverifieerde accounts filteren",
       NF_AI_SIDE_PANELS: "AI in zijpanelen",
@@ -2034,6 +2090,8 @@ module.exports = {
       DLG_TIPS_DESC: "Projectlinks en info over de beheerder.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Als dit helpt, betekent een ster op {github} veel.",
+      DLG_TIPS_THREADS:
+        "Als je Threads ook op desktop gebruikt, onderhoud ik daar ook een filter voor: {threads}.",
       DLG_TIPS_FACEBOOK: "Zeg hallo op {facebook} - daar deel ik mijn kunst en poëzie.",
       DLG_TIPS_SITE: "Als je wilt zien wat ik online doe, is {site} de beste plek om te beginnen.",
       DLG_TIPS_CREDITS:
@@ -2044,6 +2102,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "mijn Facebook-pagina",
       DLG_TIPS_LINK_SITE: "mijn website",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["Opslaan", "Sluiten", "Exporteren", "Importeren", "Reset"],
       DLG_BUTTON_TOOLTIPS: [
@@ -2062,6 +2121,7 @@ module.exports = {
       NF_STORIES: "Relacje",
       NF_TOP_CARDS_PAGES: "Górne karty (dla stron)",
       NF_META_AI: "Wypróbuj Meta AI",
+      NF_META_AI_PROMPTS: "Sugestie promptów Meta AI",
       NF_HIDE_VERIFIED_BADGE: "Ukryj zweryfikowane odznaki",
       NF_FILTER_VERIFIED_BADGE: "Filtruj zweryfikowane konta",
       NF_AI_SIDE_PANELS: "AI w panelach bocznych",
@@ -2170,6 +2230,8 @@ module.exports = {
       DLG_TIPS_DESC: "Linki do projektu i informacje o opiekunie.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Jeśli to pomaga, gwiazdka na {github} wiele dla mnie znaczy.",
+      DLG_TIPS_THREADS:
+        "Jeśli korzystasz z Threads także na komputerze, utrzymuję też filtr do tego: {threads}.",
       DLG_TIPS_FACEBOOK: "Wpadnij na {facebook} - dzielę się tam sztuką i poezją.",
       DLG_TIPS_SITE: "Jeśli chcesz zobaczyć, co robię w sieci, {site} to najlepszy start.",
       DLG_TIPS_CREDITS:
@@ -2180,6 +2242,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "moja strona na Facebooku",
       DLG_TIPS_LINK_SITE: "moja strona",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["Zapisz", "Zamknij", "Eksport", "Import", "Przeskładać"],
       DLG_BUTTON_TOOLTIPS: [
@@ -2199,6 +2262,7 @@ module.exports = {
       NF_STORIES: "Stories",
       NF_TOP_CARDS_PAGES: "Cartões principais (para Páginas)",
       NF_META_AI: "Experimente o Meta AI",
+      NF_META_AI_PROMPTS: "Sugestões de prompts do Meta AI",
       NF_HIDE_VERIFIED_BADGE: "Ocultar selos verificados",
       NF_FILTER_VERIFIED_BADGE: "Filtrar contas verificadas",
       NF_AI_SIDE_PANELS: "IA nos painéis laterais",
@@ -2307,6 +2371,8 @@ module.exports = {
       DLG_TIPS_DESC: "Links do projeto e info do mantenedor.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Se isso ajudar, uma estrela no {github} significa muito.",
+      DLG_TIPS_THREADS:
+        "Se você também usa o Threads no desktop, eu também mantenho um filtro para isso: {threads}.",
       DLG_TIPS_FACEBOOK: "Diga oi na {facebook} - lá compartilho minha arte e poesia.",
       DLG_TIPS_SITE:
         "Se quiser ver o que ando fazendo pela web, {site} é o melhor lugar para começar.",
@@ -2318,6 +2384,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "minha página do Facebook",
       DLG_TIPS_LINK_SITE: "meu site",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["Salvar", "Fechar", "Exportar", "Importar", "Redefinir"],
       DLG_BUTTON_TOOLTIPS: [
@@ -2336,6 +2403,7 @@ module.exports = {
       NF_STORIES: "Истории",
       NF_TOP_CARDS_PAGES: "Верхние карточки (для Страниц)",
       NF_META_AI: "Попробуйте Meta AI",
+      NF_META_AI_PROMPTS: "Подсказки запросов Meta AI",
       NF_HIDE_VERIFIED_BADGE: "Скрыть значки подтверждения",
       NF_FILTER_VERIFIED_BADGE: "Фильтровать подтвержденные аккаунты",
       NF_AI_SIDE_PANELS: "ИИ в боковых панелях",
@@ -2444,6 +2512,8 @@ module.exports = {
       DLG_TIPS_DESC: "Ссылки проекта и информация о сопровождающем.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Если это помогает, звезда на {github} очень многое для меня значит.",
+      DLG_TIPS_THREADS:
+        "Если вы тоже пользуетесь Threads на компьютере, я поддерживаю и для него фильтр: {threads}.",
       DLG_TIPS_FACEBOOK: "Загляните на {facebook} - там я делюсь искусством и поэзией.",
       DLG_TIPS_SITE: "Если хотите увидеть, чем я занимаюсь в сети, {site} — лучшее место начать.",
       DLG_TIPS_CREDITS:
@@ -2454,6 +2524,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "мою страницу на Facebook",
       DLG_TIPS_LINK_SITE: "мой сайт",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["Сохранить", "Закрыть", "Экспорт", "Импорт", "Сброс"],
       DLG_BUTTON_TOOLTIPS: [
@@ -2472,6 +2543,7 @@ module.exports = {
       NF_STORIES: "Hikayeler",
       NF_TOP_CARDS_PAGES: "Üst kartlar (Sayfalar için)",
       NF_META_AI: "Meta AI'yi dene",
+      NF_META_AI_PROMPTS: "Meta AI istem önerileri",
       NF_HIDE_VERIFIED_BADGE: "Doğrulanmış rozetleri gizle",
       NF_FILTER_VERIFIED_BADGE: "Doğrulanmış hesapları filtrele",
       NF_AI_SIDE_PANELS: "Yan panellerde Yapay Zeka",
@@ -2580,6 +2652,8 @@ module.exports = {
       DLG_TIPS_DESC: "Proje bağlantıları ve bakım sorumlusu bilgisi.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Bu işe yararsa, {github} üzerinde bir yıldız çok şey ifade eder.",
+      DLG_TIPS_THREADS:
+        "Threads'i masaüstünde de kullanıyorsanız, onun için de bakımını yaptığım bir filtre var: {threads}.",
       DLG_TIPS_FACEBOOK: "{facebook} uğrayıp selam verin - orada sanatımı ve şiirimi paylaşıyorum.",
       DLG_TIPS_SITE: "Webde neler yaptığımı görmek isterseniz, {site} en iyi başlangıç.",
       DLG_TIPS_CREDITS:
@@ -2590,6 +2664,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "Facebook sayfam",
       DLG_TIPS_LINK_SITE: "web sitem",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["Kaydetmek", "Kapat", "İhracat", "İçe aktarmak", "Sıfırla"],
       DLG_BUTTON_TOOLTIPS: [
@@ -2608,6 +2683,7 @@ module.exports = {
       NF_STORIES: "Історії",
       NF_TOP_CARDS_PAGES: "Верхні картки (для Сторінок)",
       NF_META_AI: "Спробувати Meta AI",
+      NF_META_AI_PROMPTS: "Підказки запитів Meta AI",
       NF_HIDE_VERIFIED_BADGE: "Приховати значки підтвердження",
       NF_FILTER_VERIFIED_BADGE: "Фільтрувати підтверджені облікові записи",
       NF_AI_SIDE_PANELS: "ШІ в бічних панелях",
@@ -2716,6 +2792,8 @@ module.exports = {
       DLG_TIPS_DESC: "Посилання проєкту та інформація про супровідника.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Якщо це допомагає, зірка на {github} дуже багато для мене означає.",
+      DLG_TIPS_THREADS:
+        "Якщо ви теж користуєтеся Threads на комп’ютері, я підтримую фільтр і для нього: {threads}.",
       DLG_TIPS_FACEBOOK: "Завітайте на {facebook} - там я ділюся мистецтвом і поезією.",
       DLG_TIPS_SITE:
         "Якщо хочете побачити, чим я займаюся в мережі, {site} — найкраще місце почати.",
@@ -2727,6 +2805,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "мою сторінку у Facebook",
       DLG_TIPS_LINK_SITE: "мій сайт",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["Зберегти", "Закрити", "Експорт", "Імпорт", "Скинути"],
       DLG_BUTTON_TOOLTIPS: [
@@ -2745,6 +2824,7 @@ module.exports = {
       NF_STORIES: "Tin",
       NF_TOP_CARDS_PAGES: "Thẻ trên cùng (cho Trang)",
       NF_META_AI: "Thử Meta AI",
+      NF_META_AI_PROMPTS: "Gợi ý prompt của Meta AI",
       NF_HIDE_VERIFIED_BADGE: "Ẩn huy hiệu đã xác minh",
       NF_FILTER_VERIFIED_BADGE: "Lọc tài khoản đã xác minh",
       NF_AI_SIDE_PANELS: "AI ở bảng bên",
@@ -2853,6 +2933,8 @@ module.exports = {
       DLG_TIPS_DESC: "Liên kết dự án và thông tin người bảo trì.",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "Nếu thấy hữu ích, một ngôi sao trên {github} có ý nghĩa rất lớn.",
+      DLG_TIPS_THREADS:
+        "Nếu bạn cũng dùng Threads trên máy tính, mình cũng duy trì một bộ lọc cho nó: {threads}.",
       DLG_TIPS_FACEBOOK: "Ghé {facebook} - mình chia sẻ nghệ thuật và thơ ở đó.",
       DLG_TIPS_SITE: "Nếu muốn xem mình làm gì trên web, {site} là nơi bắt đầu tốt nhất.",
       DLG_TIPS_CREDITS:
@@ -2863,6 +2945,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "trang Facebook của mình",
       DLG_TIPS_LINK_SITE: "trang web của mình",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["Lưu", "Đóng", "Xuất", "Nhập", "Đặt lại"],
       DLG_BUTTON_TOOLTIPS: [
@@ -2881,6 +2964,7 @@ module.exports = {
       NF_STORIES: "故事",
       NF_TOP_CARDS_PAGES: "顶部卡片（用于页面）",
       NF_META_AI: "试用 Meta AI",
+      NF_META_AI_PROMPTS: "Meta AI 提示建议",
       NF_HIDE_VERIFIED_BADGE: "隐藏已验证徽章",
       NF_FILTER_VERIFIED_BADGE: "过滤已验证帐户",
       NF_AI_SIDE_PANELS: "侧边栏中的 AI",
@@ -2984,6 +3068,7 @@ module.exports = {
       DLG_TIPS_DESC: "项目链接和维护者信息。",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "如果有帮助，在 {github} 点个星对我意义很大。",
+      DLG_TIPS_THREADS: "如果你也在桌面端使用 Threads，我也在维护一个适用于它的过滤器：{threads}。",
       DLG_TIPS_FACEBOOK: "欢迎到{facebook}打个招呼 - 我在那里分享艺术和诗歌。",
       DLG_TIPS_SITE: "想看看我在网上都在做什么，{site}是最好的起点。",
       DLG_TIPS_CREDITS:
@@ -2993,6 +3078,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "我的 Facebook",
       DLG_TIPS_LINK_SITE: "我的网站",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["节省", "关", "出口", "进口", "重置"],
       DLG_BUTTON_TOOLTIPS: [
@@ -3014,6 +3100,7 @@ module.exports = {
       NF_FILTER_VERIFIED_BADGE: "過濾已驗證帳戶",
       NF_AI_SIDE_PANELS: "側邊欄中的 AI",
       NF_META_AI: "試用 Meta AI",
+      NF_META_AI_PROMPTS: "Meta AI 提示建議",
       NF_SURVEY: "調查",
       NF_PEOPLE_YOU_MAY_KNOW: "你可能認識的人",
       NF_PAID_PARTNERSHIP: "付費合作",
@@ -3114,6 +3201,7 @@ module.exports = {
       DLG_TIPS_DESC: "專案連結和維護者資訊。",
       DLG_TIPS_CONTENT: "",
       DLG_TIPS_STAR: "如果有幫助，在 {github} 點個星對我意義很大。",
+      DLG_TIPS_THREADS: "如果你也在桌面版使用 Threads，我也有在維護一個適用於它的過濾器：{threads}。",
       DLG_TIPS_FACEBOOK: "歡迎到{facebook}打個招呼 - 我在那裡分享藝術和詩。",
       DLG_TIPS_SITE: "想看看我在網路上都在做什麼，{site}是最好的起點。",
       DLG_TIPS_CREDITS:
@@ -3123,6 +3211,7 @@ module.exports = {
       DLG_TIPS_LINK_REPO: "GitHub",
       DLG_TIPS_LINK_FACEBOOK: "我的 Facebook",
       DLG_TIPS_LINK_SITE: "我的網站",
+      DLG_TIPS_LINK_THREADS: "Bobbin Threads Filter",
       DLG_TIPS_THANKS: "",
       DLG_BUTTONS: ["儲存", "關閉", "匯出", "匯入", "重設"],
       DLG_BUTTON_TOOLTIPS: [

@@ -1,5 +1,7 @@
 # <img src="src/res/mop.png" alt="mop" width="36"/> FB - Clean My Feeds
 
+**English** | [Tiếng Việt](README.vi.md)
+
 You should be in control of what you see online, but Facebook throws all kinds of garbage at you making it practically impossible to see updates from your friends and pages you care about. "FB - Clean My Feeds" is the mop bucket you roll in when you want control back.
 
 Originally built by **[zbluebugz](https://github.com/zbluebugz)** and battle-tested since 2021.
@@ -19,6 +21,7 @@ Thanks to **[trinhquocviet](https://github.com/trinhquocviet)** for helping main
 "FB - Clean My Feeds" is designed to make your browsing experience calm, clean, and completely under your control.
 
 - **Nuke the Ads:** We automatically scrub "Sponsored" posts, "Paid Partnership" labels, and "Suggested for you" sections across News, Groups, Watch, Marketplace, Search, and Reels.
+- **Built for Any Locale:** The core filters are designed to work across Facebook languages without depending on translation dictionaries, so they keep doing their job even when your Facebook isn't in English.
 - **Cut the AI Clutter:** Hide "Try Meta AI" cards, Meta AI prompt suggestions, and AI side-panel distractions before they take over your feed.
 - **Tame the Layout:** Hide Reels, "Short Videos," and those massive "Stories" shelves that eat up your screen. You can even toggle off entire sections like Marketplace if you never use them.
 - **Filter the Noise:** Create custom blocklists for specific words or phrases (with regex support!). You can also cap viral posts by "Like" count to keep your feed personal.

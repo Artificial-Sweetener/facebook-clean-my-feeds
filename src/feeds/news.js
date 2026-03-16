@@ -2,16 +2,7 @@ const { cleanText } = require("../core/filters/text-normalize");
 const { getFullNumber } = require("../core/filters/classifiers/shares-likes");
 const { mainColumnAtt, postAtt, postAttChildFlag, postAttTab } = require("../dom/attributes");
 const { swatTheMosquitos } = require("../dom/animated-gifs");
-const {
-  ensureDirtyObserver,
-  getDirtyToken,
-  hasPostChanged,
-  isElementDirty,
-  markElementCleanIfUnchanged,
-  markElementDirty,
-  resetPostState,
-  trackPostSignature,
-} = require("../dom/dirty-check");
+const { hasSizeChanged } = require("../dom/dirty-check");
 const { doLightDusting } = require("../dom/dusting");
 const { hideNewsPost, hideFeature, hideFeatureNoCaption } = require("../dom/hide");
 const { scrubInfoBoxes } = require("../dom/info-boxes");
@@ -25,45 +16,37 @@ const { getNewsBlocksQuery } = require("./shared/blocks");
 const { isSponsored } = require("./shared/sponsored");
 const { hideNumberOfShares } = require("./shared/shares");
 
+const newsPostSweepIntervalMs = 750;
+const prioritizedNewsPostQueries = Array.from(
+  new Set([
+    'div[role="main"] div[aria-posinset]',
+    'div[role="main"] div[role="article"]',
+    ...newsSelectors.postQueries,
+  ])
+);
+
 function isNewsDirty(state) {
   const arrReturn = [null, null];
   const mainColumn = document.querySelector(newsSelectors.mainColumn);
   if (mainColumn) {
-    ensureDirtyObserver(mainColumn);
-    if (!mainColumn.hasAttribute(mainColumnAtt)) {
-      mainColumn.setAttribute(mainColumnAtt, "1");
-      markElementDirty(mainColumn);
-    }
-    if (state && state.forceProcess) {
-      markElementDirty(mainColumn);
-    }
     if (state && state.forceProcess) {
       arrReturn[0] = mainColumn;
-    } else if (isElementDirty(mainColumn)) {
+    } else if (!mainColumn.hasAttribute(mainColumnAtt)) {
       arrReturn[0] = mainColumn;
-    } else if (state) {
-      const currentCount = getNewsPostCount(state);
-      if (currentCount !== state.lastNewsPostCount) {
-        state.lastNewsPostCount = currentCount;
-        markElementDirty(mainColumn);
-        arrReturn[0] = mainColumn;
-      }
+    } else if (
+      hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)
+    ) {
+      arrReturn[0] = mainColumn;
     }
   }
 
   const elDialog = document.querySelector(newsSelectors.dialog);
   if (elDialog) {
-    ensureDirtyObserver(elDialog);
-    if (!elDialog.hasAttribute(mainColumnAtt)) {
-      elDialog.setAttribute(mainColumnAtt, "1");
-      markElementDirty(elDialog);
-    }
-    if (state && state.forceProcess) {
-      markElementDirty(elDialog);
-    }
     if (state && state.forceProcess) {
       arrReturn[1] = elDialog;
-    } else if (isElementDirty(elDialog)) {
+    } else if (!elDialog.hasAttribute(mainColumnAtt)) {
+      arrReturn[1] = elDialog;
+    } else if (hasSizeChanged(elDialog.getAttribute(mainColumnAtt), elDialog.innerHTML.length)) {
       arrReturn[1] = elDialog;
     }
   }
@@ -75,39 +58,31 @@ function isNewsDirty(state) {
   return arrReturn;
 }
 
-function getCollectionOfNewsPosts(state) {
-  if (state && typeof state.newsPostQuery === "string" && state.newsPostQuery !== "") {
-    const cachedNodeList = document.querySelectorAll(state.newsPostQuery);
-    if (cachedNodeList.length > 0) {
-      return Array.from(cachedNodeList);
-    }
-  }
-
-  let posts = [];
-  for (const query of newsSelectors.postQueries) {
+function getCollectionOfNewsPosts() {
+  for (const query of prioritizedNewsPostQueries) {
     const nodeList = document.querySelectorAll(query);
     if (nodeList.length > 0) {
-      posts = Array.from(nodeList);
-      if (state) {
-        state.newsPostQuery = query;
-      }
-      break;
+      return Array.from(nodeList);
     }
   }
-  if (posts.length === 0 && state) {
-    state.newsPostQuery = "";
-  }
-  return posts;
+
+  return [];
 }
 
-function getNewsPostCount(state) {
-  if (state && typeof state.newsPostQuery === "string" && state.newsPostQuery !== "") {
-    return document.querySelectorAll(state.newsPostQuery).length;
+function shouldSweepNewsPosts(state, mainColumn, isMainColumnDirty) {
+  if (!mainColumn) {
+    return false;
   }
 
-  return document.querySelectorAll(
-    'div[role="main"] div[aria-posinset], div[role="main"] div[role="article"]'
-  ).length;
+  if (isMainColumnDirty) {
+    return true;
+  }
+
+  if (!state || typeof state.lastNewsPostSweepAt !== "number") {
+    return true;
+  }
+
+  return Date.now() - state.lastNewsPostSweepAt >= newsPostSweepIntervalMs;
 }
 
 function isNewsSuggested(post, state, keyWords) {
@@ -711,7 +686,9 @@ function getMetaAiSuggestionChipSignal(button) {
   }
 
   const suggestionFiber = findAncestorFiber(fiber, isMetaAiSuggestionFiber);
-  const props = suggestionFiber ? suggestionFiber.memoizedProps || suggestionFiber.pendingProps : null;
+  const props = suggestionFiber
+    ? suggestionFiber.memoizedProps || suggestionFiber.pendingProps
+    : null;
   if (!suggestionFiber || !props) {
     return null;
   }
@@ -947,14 +924,16 @@ function mopNewsFeed(context) {
     return null;
   }
 
-  const [mainColumn, elDialog] = isNewsDirty(state);
-  if (!mainColumn && !elDialog) {
+  const [dirtyMainColumn, dirtyDialog] = isNewsDirty(state);
+  const mainColumn = dirtyMainColumn || document.querySelector(newsSelectors.mainColumn);
+  const elDialog = dirtyDialog || document.querySelector(newsSelectors.dialog);
+  const shouldSweepPosts = shouldSweepNewsPosts(state, mainColumn, !!dirtyMainColumn);
+
+  if (!dirtyMainColumn && !dirtyDialog && !shouldSweepPosts) {
     return null;
   }
-  const mainColumnToken = mainColumn ? getDirtyToken(mainColumn) : null;
-  const dialogToken = elDialog ? getDirtyToken(elDialog) : null;
 
-  if (mainColumn) {
+  if (dirtyMainColumn) {
     if (options.NF_TABLIST_STORIES_REELS_ROOMS) {
       scrubTabbies(context);
     }
@@ -970,9 +949,6 @@ function mopNewsFeed(context) {
     if (options.NF_AI_SIDE_PANELS) {
       scrubSidePanelAi(context);
     }
-    if (options.NF_META_AI_PROMPTS) {
-      scrubMetaAiPromptSuggestions(context, mainColumn);
-    }
 
     if (options.NF_SPONSORED) {
       cleanConsoleTable("Sponsored", context);
@@ -980,11 +956,14 @@ function mopNewsFeed(context) {
     if (options.NF_SUGGESTIONS) {
       cleanConsoleTable("Suggestions", context);
     }
+  }
 
-    const posts = getCollectionOfNewsPosts(state);
-    if (state) {
-      state.lastNewsPostCount = posts.length;
-    }
+  if (mainColumn && options.NF_META_AI_PROMPTS && shouldSweepPosts) {
+    scrubMetaAiPromptSuggestions(context, mainColumn);
+  }
+
+  if (mainColumn && shouldSweepPosts) {
+    const posts = getCollectionOfNewsPosts();
     for (const post of posts) {
       if (post.innerHTML.length === 0) {
         continue;
@@ -992,11 +971,6 @@ function mopNewsFeed(context) {
 
       let hideReason = "";
       let isSponsoredPost = false;
-
-      const postChanged = hasPostChanged(post);
-      if (postChanged) {
-        resetPostState(post, state);
-      }
 
       if (post.hasAttribute(postAtt)) {
         hideReason = "hidden";
@@ -1077,31 +1051,21 @@ function mopNewsFeed(context) {
           hideNumberOfShares(post, state, options);
         }
       }
-
-      if (!postChanged) {
-        trackPostSignature(post);
-      }
     }
 
-    if (!mainColumn.hasAttribute(mainColumnAtt)) {
-      mainColumn.setAttribute(mainColumnAtt, "1");
-    }
-    if (mainColumnToken !== null) {
-      markElementCleanIfUnchanged(mainColumn, mainColumnToken);
-    }
+    state.lastNewsPostSweepAt = Date.now();
+  }
+
+  if (dirtyMainColumn) {
+    mainColumn.setAttribute(mainColumnAtt, mainColumn.innerHTML.length.toString());
     state.noChangeCounter = 0;
   }
 
-  if (elDialog) {
+  if (dirtyDialog) {
     if (options.NF_ANIMATED_GIFS_PAUSE) {
       swatTheMosquitos(elDialog);
     }
-    if (!elDialog.hasAttribute(mainColumnAtt)) {
-      elDialog.setAttribute(mainColumnAtt, "1");
-    }
-    if (dialogToken !== null) {
-      markElementCleanIfUnchanged(elDialog, dialogToken);
-    }
+    elDialog.setAttribute(mainColumnAtt, elDialog.innerHTML.length.toString());
     state.noChangeCounter = 0;
   }
 

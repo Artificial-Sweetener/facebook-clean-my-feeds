@@ -110,14 +110,13 @@ function setFeedSettings(state, options, forceUpdate = false) {
     state.isMF = false;
     state.isSF = false;
     state.isRF = false;
-     state.isPP = false;
-     state.gfType = "";
-     state.vfType = "";
-     state.mpType = "";
-     state.newsPostQuery = "";
-     state.lastNewsPostCount = 0;
+    state.isPP = false;
+    state.gfType = "";
+    state.vfType = "";
+    state.mpType = "";
+    state.lastNewsPostSweepAt = 0;
 
-     if (state.prevPathname === "/" || state.prevPathname === "/home.php") {
+    if (state.prevPathname === "/" || state.prevPathname === "/home.php") {
       if (state.prevQuery.indexOf("?filter=groups") < 0) {
         state.isNF = true;
       } else {

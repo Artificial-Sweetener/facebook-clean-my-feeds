@@ -115,9 +115,6 @@ function createNewsContext({ options = {}, keyWords = {} } = {}) {
       cssHideNumberOfShares: "hideShares",
       cssHideVerifiedBadge: "hideBadge",
       hideAnInfoBox: false,
-      dictionarySponsored: ["sponsored"],
-      dictionaryReelsAndShortVideos: [],
-      dictionaryFollow: [],
     },
     options: {
       VERBOSITY_LEVEL: "0",
@@ -173,6 +170,17 @@ function createSponsoredPost({ labelId = "sponsored-label" } = {}) {
   return post;
 }
 
+function appendSponsoredLinkSignature(post, hrefLength = 320) {
+  const wrapper = document.createElement("div");
+  wrapper.setAttribute("aria-posinset", "1");
+  const span = document.createElement("span");
+  const link = document.createElement("a");
+  link.href = `/foo?__cft__[0]=${"a".repeat(hrefLength)}`;
+  span.appendChild(link);
+  wrapper.appendChild(span);
+  post.appendChild(wrapper);
+}
+
 describe("feeds/news", () => {
   test("findTopCardsForPagesContainer finds the top cards region", () => {
     document.body.innerHTML = `
@@ -224,10 +232,9 @@ describe("feeds/news", () => {
     header.appendChild(followButton);
     post.appendChild(header);
 
-    const state = { dictionaryFollow: [] };
     const keyWords = { NF_FOLLOW: "Follow" };
 
-    expect(isNewsFollow(post, state, keyWords)).toBe("Follow");
+    expect(isNewsFollow(post, keyWords)).toBe("Follow");
   });
 
   test("isNewsParticipate detects header join posts with group links", () => {
@@ -246,6 +253,30 @@ describe("feeds/news", () => {
     const keyWords = { NF_PARTICIPATE: "Participate / Join" };
 
     expect(isNewsParticipate(post, keyWords)).toBe("Participate / Join");
+  });
+
+  test("isNewsFollow ignores follow text without structural follow signals", () => {
+    const post = document.createElement("div");
+    const button = document.createElement("div");
+    button.setAttribute("role", "button");
+    button.textContent = "Seguir";
+    post.appendChild(button);
+
+    const keyWords = { NF_FOLLOW: "Follow" };
+
+    expect(isNewsFollow(post, keyWords)).toBe("");
+  });
+
+  test("isNewsParticipate ignores join text without structural participate signals", () => {
+    const post = document.createElement("div");
+    const button = document.createElement("div");
+    button.setAttribute("role", "button");
+    button.textContent = "Join";
+    post.appendChild(button);
+
+    const keyWords = { NF_PARTICIPATE: "Participate / Join" };
+
+    expect(isNewsParticipate(post, keyWords)).toBe("");
   });
 
   test("isNewsVerifiedBadge detects verified badge in header", () => {
@@ -518,12 +549,8 @@ describe("feeds/news", () => {
 
     const mainColumn = document.querySelector(newsSelectors.mainColumn);
     const post = createSponsoredPost({ labelId: "sponsored-label-priority" });
+    appendSponsoredLinkSignature(post);
     mainColumn.appendChild(post);
-
-    const sponsoredLabel = document.createElement("span");
-    sponsoredLabel.id = "sponsored-label-priority";
-    sponsoredLabel.textContent = "Sponsored";
-    document.body.appendChild(sponsoredLabel);
 
     const context = createNewsContext({
       options: { NF_SPONSORED: true },
@@ -536,7 +563,7 @@ describe("feeds/news", () => {
     expect(document.getElementById("fallback-wrapper").hasAttribute(postAtt)).toBe(false);
   });
 
-  test("mopNewsFeed rescans posts after external sponsored labels hydrate", () => {
+  test("mopNewsFeed ignores sponsored labels that appear later without an agnostic signal", () => {
     document.body.innerHTML = `
       <div role="navigation"></div>
       <div role="main"></div>
@@ -565,7 +592,6 @@ describe("feeds/news", () => {
 
     mopNewsFeed(context);
 
-    expect(post.getAttribute(postAtt)).toBe("Sponsored");
-    expect(post.hasAttribute(context.state.hideAtt)).toBe(true);
+    expect(post.hasAttribute(postAtt)).toBe(false);
   });
 });

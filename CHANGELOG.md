@@ -1,3 +1,10 @@
+## [6.2.1](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.2.0...v6.2.1) (2026-03-16)
+
+
+### Bug Fixes
+
+* **news:** restore feed filtering ([277b281](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/277b28117b50a1b4aa8b55333fb789cd06cdd37e))
+
 # [6.2.0](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.1.2...v6.2.0) (2026-03-16)
 
 

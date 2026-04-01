@@ -1,3 +1,10 @@
+## [6.2.2](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.2.1...v6.2.2) (2026-04-01)
+
+
+### Bug Fixes
+
+* **ui:** stabilize preferences dialog and toggle placement ([77898a9](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/77898a90cee903f0984ef81cfa2bdaf748194443))
+
 ## [6.2.1](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.2.0...v6.2.1) (2026-03-16)
 
 

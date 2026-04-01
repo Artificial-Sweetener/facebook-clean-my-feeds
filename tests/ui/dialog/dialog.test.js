@@ -19,6 +19,9 @@ jest.mock("../../../src/ui/reporting/bug-report", () => ({
 
 jest.mock("../../../src/ui/controls/toggle-button", () => ({
   createToggleButton: jest.fn((state, _keyWords, onToggle) => {
+    if (state.btnToggleEl && state.btnToggleEl.parentNode) {
+      state.btnToggleEl.parentNode.removeChild(state.btnToggleEl);
+    }
     const btn = globalThis.document.createElement("button");
     btn.id = "fbcmfToggle";
     btn.addEventListener("click", onToggle);
@@ -32,6 +35,24 @@ const { initDialog } = require("../../../src/ui/dialog/dialog");
 const { defaults, translations } = require("../../../src/ui/i18n/translations");
 const { createState, SEPARATOR } = require("../../../src/core/state/vars");
 const { setOptions, deleteOptions } = require("../../../src/storage/idb");
+const { createToggleButton } = require("../../../src/ui/controls/toggle-button");
+
+function mockRect(element, { left, top, width, height }) {
+  Object.defineProperty(element, "getBoundingClientRect", {
+    configurable: true,
+    value: () => ({
+      x: left,
+      y: top,
+      left,
+      top,
+      width,
+      height,
+      right: left + width,
+      bottom: top + height,
+      toJSON: () => null,
+    }),
+  });
+}
 
 function buildState() {
   const state = createState();
@@ -222,9 +243,11 @@ describe("ui/dialog/dialog", () => {
   test("topbar menu click closes the dialog", () => {
     const banner = document.createElement("div");
     banner.setAttribute("role", "banner");
+    mockRect(banner, { left: 0, top: 0, width: 900, height: 56 });
     const menuBtn = document.createElement("button");
-    menuBtn.setAttribute("aria-label", "Menu");
+    menuBtn.setAttribute("aria-label", "Localized entry");
     menuBtn.setAttribute("aria-expanded", "false");
+    mockRect(menuBtn, { left: 700, top: 8, width: 40, height: 40 });
     banner.appendChild(menuBtn);
     document.body.appendChild(banner);
 
@@ -244,6 +267,50 @@ describe("ui/dialog/dialog", () => {
     menuBtn.click();
 
     expect(dialog.hasAttribute(state.showAtt)).toBe(false);
+  });
+
+  test("saveUserOptions rebuilds the toggle when the placement changes", async () => {
+    const state = buildState();
+    const context = {
+      state,
+      options: state.options,
+      filters: state.filters,
+      keyWords: translations.en,
+      pathInfo: {},
+    };
+    const handlers = initDialog(context, { setFeedSettings: jest.fn(), rerunFeeds: jest.fn() });
+
+    const dialog = document.getElementById("fbcmf");
+    const topRightOption = dialog.querySelector('input[name="CMF_BTN_OPTION"][value="1"]');
+    topRightOption.checked = true;
+
+    await handlers.saveUserOptions();
+
+    expect(state.options.CMF_BTN_OPTION).toBe("1");
+    expect(createToggleButton).toHaveBeenCalledTimes(2);
+    expect(document.querySelectorAll("#fbcmfToggle")).toHaveLength(1);
+  });
+
+  test("saveUserOptions persists normalized menu preference values", async () => {
+    const state = buildState();
+    state.options.CMF_BTN_OPTION = 1;
+    state.options.CMF_DIALOG_OPTION = "";
+    const context = {
+      state,
+      options: state.options,
+      filters: state.filters,
+      keyWords: translations.en,
+      pathInfo: {},
+    };
+    const handlers = initDialog(context, { setFeedSettings: jest.fn(), rerunFeeds: jest.fn() });
+
+    await handlers.saveUserOptions();
+
+    const savedOptions = JSON.parse(setOptions.mock.calls.at(-1)[0]);
+    expect(savedOptions.CMF_BTN_OPTION).toBe("1");
+    expect(savedOptions.CMF_DIALOG_OPTION).toBe(defaults.CMF_DIALOG_OPTION);
+    expect(state.options.CMF_BTN_OPTION).toBe("1");
+    expect(state.options.CMF_DIALOG_OPTION).toBe(defaults.CMF_DIALOG_OPTION);
   });
 
   test("report bug actions generate, copy, and open", async () => {
@@ -309,9 +376,11 @@ describe("ui/dialog/dialog", () => {
   test("topbar mutation observer closes dialog on expand", () => {
     const banner = document.createElement("div");
     banner.setAttribute("role", "banner");
+    mockRect(banner, { left: 0, top: 0, width: 900, height: 56 });
     const menuBtn = document.createElement("button");
-    menuBtn.setAttribute("aria-label", "Menu");
+    menuBtn.setAttribute("aria-label", "Localized entry");
     menuBtn.setAttribute("aria-expanded", "false");
+    mockRect(menuBtn, { left: 700, top: 8, width: 40, height: 40 });
     banner.appendChild(menuBtn);
     document.body.appendChild(banner);
 

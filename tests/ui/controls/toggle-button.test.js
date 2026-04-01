@@ -2,7 +2,10 @@ jest.mock("../../../src/dom/tooltip", () => ({
   attachTooltip: jest.fn(() => () => {}),
 }));
 
-const { createToggleButton } = require("../../../src/ui/controls/toggle-button");
+const {
+  createToggleButton,
+  destroyToggleButton,
+} = require("../../../src/ui/controls/toggle-button");
 const { attachTooltip } = require("../../../src/dom/tooltip");
 
 function buildState(btnOption) {
@@ -14,9 +17,30 @@ function buildState(btnOption) {
   };
 }
 
+function mockRect(element, { left, top, width, height }) {
+  Object.defineProperty(element, "getBoundingClientRect", {
+    configurable: true,
+    value: () => ({
+      x: left,
+      y: top,
+      left,
+      top,
+      width,
+      height,
+      right: left + width,
+      bottom: top + height,
+      toJSON: () => null,
+    }),
+  });
+}
+
 describe("ui/controls/toggle-button", () => {
   beforeEach(() => {
     document.body.innerHTML = "";
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
   });
 
   test("creates a floating button by default", () => {
@@ -28,6 +52,7 @@ describe("ui/controls/toggle-button", () => {
     btn.click();
     expect(onToggle).toHaveBeenCalled();
     expect(attachTooltip).toHaveBeenCalledWith(btn, "Toggle", { placement: "right" });
+    destroyToggleButton(state);
   });
 
   test("creates a topbar button with keyboard support", () => {
@@ -43,19 +68,22 @@ describe("ui/controls/toggle-button", () => {
     btn.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
     expect(onToggle).toHaveBeenCalled();
 
+    destroyToggleButton(state);
     jest.runOnlyPendingTimers();
-    jest.useRealTimers();
   });
 
-  test("clears inline color when dialog is open to allow active styling", async () => {
+  test("matches the leftmost button in the rightmost header cluster without relying on labels", () => {
+    jest.useFakeTimers();
     const onToggle = jest.fn();
     const state = buildState("1");
     const originalRaf = window.requestAnimationFrame;
     window.requestAnimationFrame = (cb) => cb();
     const banner = document.createElement("div");
     banner.setAttribute("role", "banner");
+
+    mockRect(banner, { left: 0, top: 0, width: 900, height: 56 });
     const menuButton = document.createElement("button");
-    menuButton.setAttribute("aria-label", "Menu");
+    menuButton.setAttribute("aria-label", "Localized entry");
     menuButton.style.color = "rgb(255, 255, 255)";
     menuButton.style.backgroundColor = "rgb(0, 0, 0)";
     menuButton.style.borderRadius = "999px";
@@ -67,7 +95,57 @@ describe("ui/controls/toggle-button", () => {
     menuButton.style.setProperty("--press-overlay", "rgba(255, 255, 255, 0.2)");
     const menuIcon = document.createElement("svg");
     menuButton.appendChild(menuIcon);
+    mockRect(menuButton, { left: 700, top: 8, width: 40, height: 40 });
+
+    const profileButton = document.createElement("button");
+    profileButton.setAttribute("aria-label", "Localized profile");
+    mockRect(profileButton, { left: 748, top: 8, width: 40, height: 40 });
+
     banner.appendChild(menuButton);
+    banner.appendChild(profileButton);
+    document.body.appendChild(banner);
+
+    const btn = createToggleButton(state, { DLG_TITLE: "Toggle" }, onToggle);
+    expect(btn.style.left).toBe("652px");
+    expect(btn.style.top).toBe("8px");
+    expect(btn.style.width).toBe("40px");
+    expect(btn.style.height).toBe("40px");
+
+    destroyToggleButton(state);
+    jest.runOnlyPendingTimers();
+    window.requestAnimationFrame = originalRaf;
+  });
+
+  test("clears inline color when dialog is open to allow active styling", async () => {
+    const onToggle = jest.fn();
+    const state = buildState("1");
+    const originalRaf = window.requestAnimationFrame;
+    window.requestAnimationFrame = (cb) => cb();
+    const banner = document.createElement("div");
+    banner.setAttribute("role", "banner");
+    mockRect(banner, { left: 0, top: 0, width: 900, height: 56 });
+
+    const menuButton = document.createElement("button");
+    menuButton.setAttribute("aria-label", "Localized entry");
+    menuButton.style.color = "rgb(255, 255, 255)";
+    menuButton.style.backgroundColor = "rgb(0, 0, 0)";
+    menuButton.style.borderRadius = "999px";
+    menuButton.style.setProperty("--secondary-icon", "rgb(255, 255, 255)");
+    menuButton.style.setProperty("--secondary-button-background", "rgb(0, 0, 0)");
+    menuButton.style.setProperty("--primary-button-background", "rgb(24, 119, 242)");
+    menuButton.style.setProperty("--accent", "rgb(24, 119, 242)");
+    menuButton.style.setProperty("--hover-overlay", "rgba(255, 255, 255, 0.1)");
+    menuButton.style.setProperty("--press-overlay", "rgba(255, 255, 255, 0.2)");
+    const menuIcon = document.createElement("svg");
+    menuButton.appendChild(menuIcon);
+    mockRect(menuButton, { left: 700, top: 8, width: 40, height: 40 });
+
+    const profileButton = document.createElement("button");
+    profileButton.setAttribute("aria-label", "Localized profile");
+    mockRect(profileButton, { left: 748, top: 8, width: 40, height: 40 });
+
+    banner.appendChild(menuButton);
+    banner.appendChild(profileButton);
     document.body.appendChild(banner);
 
     const btn = createToggleButton(state, { DLG_TITLE: "Toggle" }, onToggle);
@@ -78,6 +156,7 @@ describe("ui/controls/toggle-button", () => {
     await new Promise((resolve) => setTimeout(resolve, 0));
 
     expect(btn.style.color).toBe("");
+    destroyToggleButton(state);
     window.requestAnimationFrame = originalRaf;
   });
 });

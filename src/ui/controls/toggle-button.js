@@ -1,4 +1,24 @@
+const { getTopbarMenuButton } = require("../../dom/topbar-controls");
 const { attachTooltip } = require("../../dom/tooltip");
+
+function destroyToggleButton(state) {
+  if (!state) {
+    return;
+  }
+
+  if (typeof state.destroyToggleButton === "function") {
+    const teardown = state.destroyToggleButton;
+    state.destroyToggleButton = null;
+    teardown();
+    return;
+  }
+
+  if (state.btnToggleEl && state.btnToggleEl.parentNode) {
+    state.btnToggleEl.parentNode.removeChild(state.btnToggleEl);
+  }
+  state.btnToggleEl = null;
+  state.syncToggleButtonTheme = null;
+}
 
 function createToggleButton(state, keyWords, onToggle) {
   if (!state || !keyWords || typeof onToggle !== "function") {
@@ -9,10 +29,18 @@ function createToggleButton(state, keyWords, onToggle) {
     return null;
   }
 
+  destroyToggleButton(state);
+
   const btnLocation =
     state.options && state.options.CMF_BTN_OPTION ? state.options.CMF_BTN_OPTION.toString() : "0";
   const useTopRight = btnLocation === "1";
   const btn = document.createElement(useTopRight ? "div" : "button");
+  const cleanupFns = [];
+  const addCleanup = (cleanup) => {
+    if (typeof cleanup === "function") {
+      cleanupFns.push(cleanup);
+    }
+  };
   btn.innerHTML = state.iconToggleHTML;
   btn.id = "fbcmfToggle";
   btn.removeAttribute("title");
@@ -28,16 +56,19 @@ function createToggleButton(state, keyWords, onToggle) {
     btn.setAttribute("role", "button");
     btn.setAttribute("tabindex", "0");
     btn.setAttribute("aria-label", keyWords.DLG_TITLE);
-    btn.addEventListener("keydown", (event) => {
+    const onKeyDown = (event) => {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
         toggleHandler();
       }
-    });
+    };
+    btn.addEventListener("keydown", onKeyDown);
+    addCleanup(() => btn.removeEventListener("keydown", onKeyDown));
   }
   btn.addEventListener("click", toggleHandler, false);
+  addCleanup(() => btn.removeEventListener("click", toggleHandler, false));
   const tooltipPlacement = btnLocation === "0" ? "right" : "auto";
-  attachTooltip(btn, keyWords.DLG_TITLE, { placement: tooltipPlacement });
+  addCleanup(attachTooltip(btn, keyWords.DLG_TITLE, { placement: tooltipPlacement }));
   let cachedIconColor = "";
   let cachedBtnBg = "";
   let cachedHover = "";
@@ -82,7 +113,7 @@ function createToggleButton(state, keyWords, onToggle) {
     return true;
   };
   const updateTopRightPosition = () => {
-    const menuButton = document.querySelector('[role="banner"] [aria-label="Menu"]');
+    const menuButton = getTopbarMenuButton();
     if (!menuButton) {
       btn.style.position = "fixed";
       btn.style.top = "0.5rem";
@@ -201,7 +232,7 @@ function createToggleButton(state, keyWords, onToggle) {
       setTimeout(runUpdate, 0);
     }
   };
-  const getMenuButton = () => document.querySelector('[role="banner"] [aria-label="Menu"]');
+  const getMenuButton = () => getTopbarMenuButton();
   const observeMenuButton = () => {
     const menuButton = getMenuButton();
     if (menuButton === observedMenuButton) {
@@ -244,6 +275,7 @@ function createToggleButton(state, keyWords, onToggle) {
       resizeObserver = new ResizeObserver(() => {
         scheduleUpdate();
       });
+      addCleanup(() => resizeObserver.disconnect());
     }
     observeMenuButton();
     const banner = document.querySelector('[role="banner"]');
@@ -253,14 +285,17 @@ function createToggleButton(state, keyWords, onToggle) {
         scheduleUpdate();
       });
       observer.observe(banner, { childList: true, subtree: true });
+      addCleanup(() => observer.disconnect());
     }
     if (typeof window !== "undefined") {
       window.addEventListener("resize", scheduleUpdate);
-      setInterval(() => {
+      addCleanup(() => window.removeEventListener("resize", scheduleUpdate));
+      const intervalId = setInterval(() => {
         if (needsMenuSync()) {
           scheduleUpdate();
         }
       }, 2000);
+      addCleanup(() => clearInterval(intervalId));
     }
     if (typeof MutationObserver !== "undefined") {
       const stateObserver = new MutationObserver(() => {
@@ -270,6 +305,7 @@ function createToggleButton(state, keyWords, onToggle) {
         scheduleUpdate();
       });
       stateObserver.observe(btn, { attributes: true, attributeFilter: ["data-cmf-open"] });
+      addCleanup(() => stateObserver.disconnect());
     }
   } else {
     document.body.appendChild(btn);
@@ -284,7 +320,7 @@ function createToggleButton(state, keyWords, onToggle) {
       btn.setAttribute("data-cmf-open", "true");
     }
   }
-  state.syncToggleButtonTheme = () => {
+  const syncToggleButtonTheme = () => {
     cachedIconColor = "";
     cachedBtnBg = "";
     cachedHover = "";
@@ -293,9 +329,23 @@ function createToggleButton(state, keyWords, onToggle) {
     scheduleUpdate();
     setTimeout(scheduleUpdate, 250);
   };
+  state.destroyToggleButton = () => {
+    cleanupFns.splice(0).forEach((cleanup) => cleanup());
+    if (btn.parentNode) {
+      btn.parentNode.removeChild(btn);
+    }
+    if (state.btnToggleEl === btn) {
+      state.btnToggleEl = null;
+    }
+    if (state.syncToggleButtonTheme === syncToggleButtonTheme) {
+      state.syncToggleButtonTheme = null;
+    }
+  };
+  state.syncToggleButtonTheme = syncToggleButtonTheme;
   return btn;
 }
 
 module.exports = {
   createToggleButton,
+  destroyToggleButton,
 };

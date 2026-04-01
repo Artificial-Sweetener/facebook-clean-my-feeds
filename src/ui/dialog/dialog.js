@@ -8,6 +8,7 @@ const {
 } = require("../../dom/attributes");
 const { toggleHiddenElements } = require("../../dom/hide");
 const { addCSS, addExtraCSS } = require("../../dom/styles");
+const { getTopbarControlButtons, isTopbarControlButton } = require("../../dom/topbar-controls");
 const { deleteOptions, setOptions } = require("../../storage/idb");
 const { createToggleButton } = require("../controls/toggle-button");
 const { defaults, translations } = require("../i18n/translations");
@@ -257,56 +258,24 @@ function updateHeaderCloseVisibility(dialog, state) {
 }
 
 function getTopbarMenuButtons() {
-  const banner = document.querySelector('[role="banner"]');
-  if (!banner) {
-    return [];
-  }
-  const candidates = Array.from(banner.querySelectorAll("[aria-label]"));
-  return candidates.filter((button) => {
-    const label = button.getAttribute("aria-label");
-    if (!label) {
-      return false;
-    }
-    const normalized = label.trim().toLowerCase();
-    const isTopbarMenu =
-      normalized === "menu" ||
-      normalized === "messenger" ||
-      normalized === "messages" ||
-      normalized.startsWith("notifications") ||
-      normalized === "your profile" ||
-      normalized === "account";
-    if (!isTopbarMenu) {
-      return false;
-    }
-    const role = button.getAttribute("role");
-    const hasExpanded = button.getAttribute("aria-expanded") !== null;
-    return hasExpanded || role === "button" || button.tagName === "BUTTON";
-  });
+  return getTopbarControlButtons();
 }
 
 function isTopbarMenuButton(element) {
-  if (!element || typeof element.getAttribute !== "function") {
+  if (!element || typeof element.closest !== "function") {
     return false;
   }
-  const label = element.getAttribute("aria-label");
-  if (!label) {
-    return false;
+  const control = element.closest('button, [role="button"]');
+  return control ? isTopbarControlButton(control) : false;
+}
+
+function mountToggleButton(state, keyWords) {
+  if (!state || !keyWords) {
+    return null;
   }
-  const normalized = label.trim().toLowerCase();
-  const isTopbarMenu =
-    normalized === "menu" ||
-    normalized === "messenger" ||
-    normalized === "messages" ||
-    normalized.startsWith("notifications") ||
-    normalized === "your profile" ||
-    normalized === "account";
-  if (!isTopbarMenu) {
-    return false;
-  }
-  const role = element.getAttribute("role");
-  const hasExpanded = element.getAttribute("aria-expanded") !== null;
-  const hasTabIndex = element.getAttribute("tabindex") !== null;
-  return hasExpanded || hasTabIndex || role === "button" || element.tagName === "BUTTON";
+  const button = createToggleButton(state, keyWords, () => toggleDialog(state));
+  syncToggleButtonOpenState(state);
+  return button;
 }
 
 function closeFacebookMenus(exceptButton) {
@@ -455,7 +424,7 @@ function setupTopbarMenuSync(state) {
     if (!target) {
       return null;
     }
-    const closest = target.closest("[aria-label]");
+    const closest = target.closest('button, [role="button"]');
     return closest && isTopbarMenuButton(closest) ? closest : null;
   };
 
@@ -494,6 +463,9 @@ function toggleDialog(state) {
     elDialog.setAttribute(state.showAtt, "");
     if (state.btnToggleEl) {
       state.btnToggleEl.setAttribute("data-cmf-open", "true");
+    }
+    if (typeof state.syncDialogSearch === "function") {
+      state.syncDialogSearch();
     }
   }
 }
@@ -655,14 +627,11 @@ function addSearchEvents(state) {
   searchInput.addEventListener("input", () => {
     applySearchFilter(dialog, searchInput.value || "");
   });
-  const toggleButton = state && state.btnToggleEl ? state.btnToggleEl : null;
-  if (toggleButton) {
-    toggleButton.addEventListener("click", () => {
-      if (searchInput.value) {
-        applySearchFilter(dialog, searchInput.value);
-      }
-    });
-  }
+  state.syncDialogSearch = () => {
+    if (searchInput.value) {
+      applySearchFilter(dialog, searchInput.value);
+    }
+  };
 }
 
 function initReportBug(context) {
@@ -1095,6 +1064,10 @@ function initDialog(context, helpers) {
     saveUserOptions: async (event, source = "dialog") => {
       let languageChanged = false;
       let hadUnsavedChanges = false;
+      const previousBtnLocation =
+        state.options && state.options.CMF_BTN_OPTION
+          ? state.options.CMF_BTN_OPTION.toString()
+          : defaults.CMF_BTN_OPTION;
       if (source === "dialog") {
         const md = document.getElementById("fbcmf");
         if (!md) {
@@ -1140,8 +1113,6 @@ function initDialog(context, helpers) {
         });
       }
 
-      await setOptions(JSON.stringify(state.options));
-
       const siteLanguage = document.documentElement ? document.documentElement.lang : "en";
       const hydrated = hydrateOptions(state.options, siteLanguage);
       replaceObjectContents(state.options, hydrated.options);
@@ -1151,6 +1122,12 @@ function initDialog(context, helpers) {
       replaceObjectContents(context.options, hydrated.options);
       replaceObjectContents(context.filters, hydrated.filters);
       replaceObjectContents(context.keyWords, hydrated.keyWords);
+      const nextBtnLocation =
+        hydrated.options && hydrated.options.CMF_BTN_OPTION
+          ? hydrated.options.CMF_BTN_OPTION.toString()
+          : defaults.CMF_BTN_OPTION;
+
+      await setOptions(JSON.stringify(state.options));
 
       if (languageChanged) {
         buildDialog(context, handlers, true);
@@ -1160,6 +1137,9 @@ function initDialog(context, helpers) {
       setFeedSettings(true);
       addCSS(state, context.options, defaults);
       addExtraCSS(state, context.options, defaults);
+      if (previousBtnLocation !== nextBtnLocation) {
+        mountToggleButton(state, context.keyWords);
+      }
       updateHeaderCloseVisibility(document.getElementById("fbcmf"), state);
 
       const elements = document.querySelectorAll(`[${mainColumnAtt}]`);
@@ -1281,7 +1261,7 @@ function initDialog(context, helpers) {
 
   const runInit = () => {
     if (document.body) {
-      createToggleButton(state, context.keyWords, () => toggleDialog(state));
+      mountToggleButton(state, context.keyWords);
       buildDialog(context, handlers, false);
       initReportBug(context);
       addLegendEvents();

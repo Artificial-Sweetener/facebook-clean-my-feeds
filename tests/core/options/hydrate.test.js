@@ -46,6 +46,21 @@ describe("core/options/hydrate", () => {
     expect(options.CMF_BORDER_COLOUR).toBe(defaults.CMF_BORDER_COLOUR);
   });
 
+  test("applyOptionDefaults normalizes radio-backed preference values", () => {
+    const options = {
+      VERBOSITY_LEVEL: 2,
+      CMF_BTN_OPTION: 1,
+      CMF_DIALOG_OPTION: "",
+    };
+    const keyWords = cloneKeywords("en");
+
+    applyOptionDefaults(options, keyWords);
+
+    expect(options.VERBOSITY_LEVEL).toBe("2");
+    expect(options.CMF_BTN_OPTION).toBe("1");
+    expect(options.CMF_DIALOG_OPTION).toBe(defaults.CMF_DIALOG_OPTION);
+  });
+
   test("buildFilters merges blocked text across feeds when enabled", () => {
     const options = {
       NF_BLOCKED_ENABLED: true,

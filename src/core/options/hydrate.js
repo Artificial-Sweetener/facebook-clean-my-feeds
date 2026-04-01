@@ -153,12 +153,9 @@ function applyOptionDefaults(options, keyWords) {
     options.VERBOSITY_DEBUG = defaults.VERBOSITY_DEBUG;
   }
 
-  if (!Object.prototype.hasOwnProperty.call(options, "CMF_BTN_OPTION")) {
-    options.CMF_BTN_OPTION = defaults.CMF_BTN_OPTION;
-  }
-  if (!Object.prototype.hasOwnProperty.call(options, "CMF_DIALOG_OPTION")) {
-    options.CMF_DIALOG_OPTION = defaults.CMF_DIALOG_OPTION;
-  }
+  normalizeEnumOption(options, "VERBOSITY_LEVEL", ["0", "1", "2"], defaults.DLG_VERBOSITY);
+  normalizeEnumOption(options, "CMF_BTN_OPTION", ["0", "1", "2"], defaults.CMF_BTN_OPTION);
+  normalizeEnumOption(options, "CMF_DIALOG_OPTION", ["0", "1"], defaults.CMF_DIALOG_OPTION);
   if (
     !Object.prototype.hasOwnProperty.call(options, "CMF_BORDER_COLOUR") ||
     options.CMF_BORDER_COLOUR.toString() === undefined ||
@@ -171,6 +168,22 @@ function applyOptionDefaults(options, keyWords) {
   }
 
   return hideAnInfoBox;
+}
+
+function normalizeEnumOption(options, key, validValues, defaultValue) {
+  if (!Object.prototype.hasOwnProperty.call(options, key)) {
+    options[key] = defaultValue;
+    return;
+  }
+
+  const value = options[key];
+  if (value === undefined || value === null) {
+    options[key] = defaultValue;
+    return;
+  }
+
+  const normalized = value.toString();
+  options[key] = validValues.includes(normalized) ? normalized : defaultValue;
 }
 
 function buildFilters(options, separator = SEPARATOR) {

@@ -1,3 +1,12 @@
+## [6.2.3](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.2.2...v6.2.3) (2026-04-11)
+
+
+### Bug Fixes
+
+* **news:** hide right-rail sponsored ads ([b61f93f](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/b61f93fcd9656688700bcc36f7f0ae52230cc75e))
+* **ui:** avoid page-mode topbar overlap ([dce697c](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/dce697cc9df33651448cb260267e2a6d9ff2132a))
+* **ui:** dim mop toggle behind facebook modals ([7988d6d](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/7988d6d74f2f2f29a53461c50194cfe0f5598d79))
+
 ## [6.2.2](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.2.1...v6.2.2) (2026-04-01)
 
 

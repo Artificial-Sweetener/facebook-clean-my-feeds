@@ -5,6 +5,8 @@ jest.mock("../../../src/dom/tooltip", () => ({
 const {
   createToggleButton,
   destroyToggleButton,
+  isFacebookPageDimmed,
+  pageDimmedAtt,
 } = require("../../../src/ui/controls/toggle-button");
 const { attachTooltip } = require("../../../src/dom/tooltip");
 
@@ -32,6 +34,29 @@ function mockRect(element, { left, top, width, height }) {
       toJSON: () => null,
     }),
   });
+}
+
+function createModalDimmerFixture({ backgroundColor, transparent = false } = {}) {
+  const dialog = document.createElement("div");
+  dialog.setAttribute("role", "dialog");
+  dialog.textContent = "Modal";
+  mockRect(dialog, { left: 300, top: 200, width: 400, height: 300 });
+
+  const dimmer = document.createElement("div");
+  dimmer.style.position = "fixed";
+  dimmer.style.backgroundColor =
+    backgroundColor || (transparent ? "rgba(0, 0, 0, 0)" : "rgba(11, 11, 11, 0.8)");
+  mockRect(dimmer, {
+    left: 0,
+    top: 0,
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
+  document.body.appendChild(dimmer);
+  document.body.appendChild(dialog);
+
+  return { dialog, dimmer };
 }
 
 describe("ui/controls/toggle-button", () => {
@@ -158,5 +183,101 @@ describe("ui/controls/toggle-button", () => {
     expect(btn.style.color).toBe("");
     destroyToggleButton(state);
     window.requestAnimationFrame = originalRaf;
+  });
+
+  test("marks the floating toggle dimmed when a full-page modal scrim is present", () => {
+    const originalRaf = window.requestAnimationFrame;
+    window.requestAnimationFrame = (cb) => cb();
+    createModalDimmerFixture();
+
+    const onToggle = jest.fn();
+    const state = buildState("0");
+    const btn = createToggleButton(state, { DLG_TITLE: "Toggle" }, onToggle);
+
+    expect(isFacebookPageDimmed()).toBe(true);
+    expect(btn.getAttribute(pageDimmedAtt)).toBe("true");
+
+    destroyToggleButton(state);
+    window.requestAnimationFrame = originalRaf;
+  });
+
+  test("marks the topbar toggle dimmed when a full-page modal scrim is present", () => {
+    const originalRaf = window.requestAnimationFrame;
+    window.requestAnimationFrame = (cb) => cb();
+    createModalDimmerFixture();
+
+    const onToggle = jest.fn();
+    const state = buildState("1");
+    const btn = createToggleButton(state, { DLG_TITLE: "Toggle" }, onToggle);
+
+    expect(btn.getAttribute(pageDimmedAtt)).toBe("true");
+
+    destroyToggleButton(state);
+    window.requestAnimationFrame = originalRaf;
+  });
+
+  test("marks the topbar toggle dimmed when a light-mode modal scrim is present", () => {
+    const originalRaf = window.requestAnimationFrame;
+    window.requestAnimationFrame = (cb) => cb();
+    createModalDimmerFixture({ backgroundColor: "rgba(244, 244, 244, 0.8)" });
+
+    const onToggle = jest.fn();
+    const state = buildState("1");
+    const btn = createToggleButton(state, { DLG_TITLE: "Toggle" }, onToggle);
+
+    expect(isFacebookPageDimmed()).toBe(true);
+    expect(btn.getAttribute(pageDimmedAtt)).toBe("true");
+
+    destroyToggleButton(state);
+    window.requestAnimationFrame = originalRaf;
+  });
+
+  test("removes dimmed state when the modal scrim is removed", async () => {
+    const originalRaf = window.requestAnimationFrame;
+    window.requestAnimationFrame = (cb) => cb();
+    const { dialog, dimmer } = createModalDimmerFixture();
+
+    const onToggle = jest.fn();
+    const state = buildState("0");
+    const btn = createToggleButton(state, { DLG_TITLE: "Toggle" }, onToggle);
+
+    expect(btn.getAttribute(pageDimmedAtt)).toBe("true");
+
+    dialog.remove();
+    dimmer.remove();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(btn.hasAttribute(pageDimmedAtt)).toBe(false);
+
+    destroyToggleButton(state);
+    window.requestAnimationFrame = originalRaf;
+  });
+
+  test("does not dim for unrelated transparent fixed overlays", () => {
+    const originalRaf = window.requestAnimationFrame;
+    window.requestAnimationFrame = (cb) => cb();
+    createModalDimmerFixture({ transparent: true });
+
+    const onToggle = jest.fn();
+    const state = buildState("0");
+    const btn = createToggleButton(state, { DLG_TITLE: "Toggle" }, onToggle);
+
+    expect(isFacebookPageDimmed()).toBe(false);
+    expect(btn.hasAttribute(pageDimmedAtt)).toBe(false);
+
+    destroyToggleButton(state);
+    window.requestAnimationFrame = originalRaf;
+  });
+
+  test("ignores activation while the toggle is dimmed", () => {
+    const onToggle = jest.fn();
+    const state = buildState("0");
+    const btn = createToggleButton(state, { DLG_TITLE: "Toggle" }, onToggle);
+    btn.setAttribute(pageDimmedAtt, "true");
+
+    btn.click();
+
+    expect(onToggle).not.toHaveBeenCalled();
+    destroyToggleButton(state);
   });
 });

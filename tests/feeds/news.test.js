@@ -14,7 +14,7 @@ const {
   scrubMetaAiPromptSuggestions,
 } = require("../../src/feeds/news");
 const { disconnectDirtyObserver } = require("../../src/dom/dirty-check");
-const { postAtt } = require("../../src/dom/attributes");
+const { mainColumnAtt, postAtt } = require("../../src/dom/attributes");
 const { newsSelectors } = require("../../src/selectors/news");
 
 function attachSuggestionFiber(button, { promptId, genAISessionID, suggestionKey }) {
@@ -179,6 +179,55 @@ function appendSponsoredLinkSignature(post, hrefLength = 320) {
   span.appendChild(link);
   wrapper.appendChild(span);
   post.appendChild(wrapper);
+}
+
+function createRightRailSponsoredFixture() {
+  document.body.innerHTML = `
+    <div role="navigation"></div>
+    <div role="main"></div>
+    <div role="complementary">
+      <div>
+        <div>
+          <div>
+            <div>
+              <div>
+                <div id="right-rail-sections">
+                  <div id="right-rail-sponsored">
+                    <div>
+                      <h3>Sponsored</h3>
+                    </div>
+                    <div>
+                      <a href="https://l.facebook.com/l.php?u=https%3A%2F%2Fexample.com%2F%3Futm_campaign%3Dspring%26ad_id%3D123">
+                        Example Ad example.com
+                      </a>
+                      <a href="https://l.facebook.com/l.php?u=https%3A%2F%2Fexample.org%2F%3Ffbclid%3Dabc">
+                        Second Ad example.org
+                      </a>
+                    </div>
+                    <div></div>
+                  </div>
+                  <div id="right-rail-birthdays">
+                    <div>
+                      <h3>Birthdays</h3>
+                    </div>
+                    <a href="/events/birthdays/">Amr Farid has a birthday today.</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  return {
+    mainColumn: document.querySelector(newsSelectors.mainColumn),
+    sponsoredSection: document.getElementById("right-rail-sponsored"),
+    birthdaysSection: document.getElementById("right-rail-birthdays"),
+    oldSponsoredSelector:
+      'div[role="complementary"] > div > div > div > div > div:not([data-visualcompletion]) > span',
+  };
 }
 
 describe("feeds/news", () => {
@@ -533,6 +582,71 @@ describe("feeds/news", () => {
     expect(outer.getAttribute(postAtt)).toBe("Meta AI prompt suggestions");
     expect(outer.hasAttribute(context.state.hideWithNoCaptionAtt)).toBe(true);
     expect(outer.hasAttribute(context.state.showAtt)).toBe(true);
+    disconnectDirtyObserver(mainColumn);
+  });
+
+  test("mopNewsFeed hides the current right-rail sponsored section", () => {
+    const { mainColumn, sponsoredSection, oldSponsoredSelector } =
+      createRightRailSponsoredFixture();
+
+    expect(document.querySelector(oldSponsoredSelector)).toBeNull();
+
+    const context = createNewsContext({
+      options: { NF_SPONSORED: true },
+      keyWords: { SPONSORED: "Sponsored" },
+    });
+
+    mopNewsFeed(context);
+
+    expect(sponsoredSection.getAttribute(postAtt)).toBe("Sponsored");
+    expect(sponsoredSection.hasAttribute(context.state.hideAtt)).toBe(true);
+    disconnectDirtyObserver(mainColumn);
+  });
+
+  test("mopNewsFeed leaves right-rail birthdays visible when hiding sponsored ads", () => {
+    const { mainColumn, sponsoredSection, birthdaysSection } = createRightRailSponsoredFixture();
+
+    const context = createNewsContext({
+      options: { NF_SPONSORED: true },
+      keyWords: { SPONSORED: "Sponsored" },
+    });
+
+    mopNewsFeed(context);
+
+    expect(sponsoredSection.getAttribute(postAtt)).toBe("Sponsored");
+    expect(birthdaysSection.hasAttribute(postAtt)).toBe(false);
+    expect(birthdaysSection.hasAttribute(context.state.hideAtt)).toBe(false);
+    disconnectDirtyObserver(mainColumn);
+  });
+
+  test("mopNewsFeed leaves right-rail sponsored ads visible when NF_SPONSORED is disabled", () => {
+    const { mainColumn, sponsoredSection, birthdaysSection } = createRightRailSponsoredFixture();
+
+    const context = createNewsContext({
+      options: { NF_SPONSORED: false },
+      keyWords: { SPONSORED: "Sponsored" },
+    });
+
+    mopNewsFeed(context);
+
+    expect(sponsoredSection.hasAttribute(postAtt)).toBe(false);
+    expect(sponsoredSection.hasAttribute(context.state.hideAtt)).toBe(false);
+    expect(birthdaysSection.hasAttribute(postAtt)).toBe(false);
+    disconnectDirtyObserver(mainColumn);
+  });
+
+  test("mopNewsFeed checks right-rail sponsored ads during periodic sweeps", () => {
+    const { mainColumn, sponsoredSection } = createRightRailSponsoredFixture();
+    mainColumn.setAttribute(mainColumnAtt, mainColumn.innerHTML.length.toString());
+
+    const context = createNewsContext({
+      options: { NF_SPONSORED: true },
+      keyWords: { SPONSORED: "Sponsored" },
+    });
+
+    mopNewsFeed(context);
+
+    expect(sponsoredSection.getAttribute(postAtt)).toBe("Sponsored");
     disconnectDirtyObserver(mainColumn);
   });
 

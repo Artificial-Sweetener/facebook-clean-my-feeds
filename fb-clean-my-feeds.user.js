@@ -6187,7 +6187,89 @@
         }
         return null;
       }
-      function cleanConsoleTable(findItem, context) {
+      function getNormalizedElementText(element) {
+        if (!element) {
+          return "";
+        }
+        return cleanText(element.textContent || "").replace(/\s+/g, " ").trim();
+      }
+      function isRightRailHeadingText(element, text) {
+        const normalizedText = getNormalizedElementText(element);
+        const normalizedTarget = cleanText(text || "").replace(/\s+/g, " ").trim();
+        return normalizedText.length > 0 && normalizedTarget.length > 0 && normalizedText.toLocaleLowerCase() === normalizedTarget.toLocaleLowerCase();
+      }
+      function isAfterElement(source, target) {
+        if (!source || !target || typeof source.compareDocumentPosition !== "function") {
+          return false;
+        }
+        return !!(source.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING);
+      }
+      function isPlausibleRightRailAdLink(link) {
+        if (!link) {
+          return false;
+        }
+        const href = link.href || link.getAttribute("href") || "";
+        if (href.startsWith("https://l.facebook.com/l.php")) {
+          return true;
+        }
+        return /(?:utm_|fbclid|ad_id|adset_id|campaign_id)(?:=|%3D)/i.test(href);
+      }
+      function hasPlausibleRightRailAdLink(section, heading) {
+        if (!section || !heading) {
+          return false;
+        }
+        return Array.from(section.querySelectorAll("a")).some(
+          (link) => isAfterElement(heading, link) && isPlausibleRightRailAdLink(link)
+        );
+      }
+      function hasOtherRightRailHeading(section, sponsoredHeading, sponsoredLabel) {
+        if (!section || !sponsoredHeading) {
+          return false;
+        }
+        const headingQuery = 'h1, h2, h3, h4, [role="heading"]';
+        return Array.from(section.querySelectorAll(headingQuery)).some(
+          (heading) => heading !== sponsoredHeading && getNormalizedElementText(heading).length > 0 && !isRightRailHeadingText(heading, sponsoredLabel)
+        );
+      }
+      function findRightRailSponsoredSection(rightRail, sponsoredHeading, sponsoredLabel) {
+        if (!rightRail || !sponsoredHeading || !sponsoredLabel) {
+          return null;
+        }
+        let current = sponsoredHeading.parentElement;
+        while (current && current !== rightRail) {
+          if (current.hasAttribute(postAtt)) {
+            return null;
+          }
+          if (hasPlausibleRightRailAdLink(current, sponsoredHeading) && !hasOtherRightRailHeading(current, sponsoredHeading, sponsoredLabel)) {
+            return current;
+          }
+          current = current.parentElement;
+        }
+        return null;
+      }
+      function scrubRightRailSponsored(context) {
+        const { keyWords, state, options } = context;
+        if (!keyWords || !state || !options || !keyWords.SPONSORED) {
+          return false;
+        }
+        const rightRail = document.querySelector('div[role="complementary"]');
+        if (!rightRail) {
+          return false;
+        }
+        const headings = Array.from(
+          rightRail.querySelectorAll('h1, h2, h3, h4, [role="heading"]')
+        ).filter((heading) => isRightRailHeadingText(heading, keyWords.SPONSORED));
+        let hidden = false;
+        for (const heading of headings) {
+          const section = findRightRailSponsoredSection(rightRail, heading, keyWords.SPONSORED);
+          if (section) {
+            hideFeature(section, keyWords.SPONSORED, false, context);
+            hidden = true;
+          }
+        }
+        return hidden;
+      }
+      function scrubRightRailSuggestions(context) {
         const { keyWords, state, options } = context;
         if (!keyWords || !state || !options) {
           return;
@@ -6201,21 +6283,13 @@
         if (asideContainer.childElementCount === 0) {
           return;
         }
-        let elItem = null;
+        const elItem = asideContainer.querySelector(`:scope > div:not([${postAtt}])`);
         let reason = "";
-        if (findItem === "Sponsored") {
-          elItem = asideContainer.querySelector(`:scope > span:not([${postAtt}])`);
-          if (elItem && elItem.innerHTML.length > 0) {
-            reason = keyWords.SPONSORED;
-          }
-        } else if (findItem === "Suggestions") {
-          elItem = asideContainer.querySelector(`:scope > div:not([${postAtt}])`);
-          if (elItem && elItem.innerHTML.length > 0) {
-            const birthdays = elItem.querySelectorAll('a[href="/events/birthdays/"]').length > 0;
-            const pagesAndProfiles = elItem.querySelectorAll('div > i[data-visualcompletion="css-img"]').length > 1;
-            if (!birthdays && !pagesAndProfiles) {
-              reason = keyWords.NF_SUGGESTIONS;
-            }
+        if (elItem && elItem.innerHTML.length > 0) {
+          const birthdays = elItem.querySelectorAll('a[href="/events/birthdays/"]').length > 0;
+          const pagesAndProfiles = elItem.querySelectorAll('div > i[data-visualcompletion="css-img"]').length > 1;
+          if (!birthdays && !pagesAndProfiles) {
+            reason = keyWords.NF_SUGGESTIONS;
           }
         }
         if (reason.length > 0) {
@@ -6639,12 +6713,12 @@
           if (options.NF_AI_SIDE_PANELS) {
             scrubSidePanelAi(context);
           }
-          if (options.NF_SPONSORED) {
-            cleanConsoleTable("Sponsored", context);
-          }
           if (options.NF_SUGGESTIONS) {
-            cleanConsoleTable("Suggestions", context);
+            scrubRightRailSuggestions(context);
           }
+        }
+        if (options.NF_SPONSORED && shouldSweepPosts) {
+          scrubRightRailSponsored(context);
         }
         if (mainColumn && options.NF_META_AI_PROMPTS && shouldSweepPosts) {
           scrubMetaAiPromptSuggestions(context, mainColumn);

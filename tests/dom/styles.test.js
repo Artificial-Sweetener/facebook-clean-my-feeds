@@ -82,8 +82,24 @@ describe("dom/styles", () => {
 
     addCSS(state, options, defaults);
     const style = addExtraCSS(state, options, defaults);
+    const css = style.textContent;
+    const topbarOverlayRule = ".fb-cmf-toggle.fb-cmf-toggle-topbar::after";
+    const dimmedTopbarOverlayRule =
+      '.fb-cmf-toggle.fb-cmf-toggle-topbar[data-cmf-page-dimmed="true"]::after';
+    const lightModeDimmedTopbarOverlayRule =
+      '.__fb-light-mode .fb-cmf-toggle.fb-cmf-toggle-topbar[data-cmf-page-dimmed="true"]::after';
 
     expect(style).not.toBeNull();
-    expect(style.textContent).toContain(".fb-cmf-toggle");
+    expect(css).toContain(".fb-cmf-toggle");
+    expect(css).toContain('.fb-cmf-toggle[data-cmf-page-dimmed="true"]');
+    expect(css).toContain("pointer-events:none");
+    expect(css).toContain("background-color:rgba(11,11,11,0.66)");
+    expect(css).toContain("background-color:rgba(244,244,244,0.8)");
+    expect(css).toContain("opacity:1");
+    expect(css).not.toContain('.fb-cmf-toggle[data-cmf-page-dimmed="true"]{display:none');
+    expect(css.indexOf(dimmedTopbarOverlayRule)).toBeGreaterThan(css.indexOf(topbarOverlayRule));
+    expect(css.indexOf(lightModeDimmedTopbarOverlayRule)).toBeGreaterThan(
+      css.indexOf(dimmedTopbarOverlayRule)
+    );
   });
 });

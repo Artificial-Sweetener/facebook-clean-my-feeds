@@ -1,6 +1,110 @@
 const { getTopbarMenuButton } = require("../../dom/topbar-controls");
 const { attachTooltip } = require("../../dom/tooltip");
 
+const pageDimmedAtt = "data-cmf-page-dimmed";
+
+function getVisibleRect(element) {
+  if (!element || typeof element.getBoundingClientRect !== "function") {
+    return null;
+  }
+
+  const rect = element.getBoundingClientRect();
+  if (!rect || rect.width <= 0 || rect.height <= 0) {
+    return null;
+  }
+
+  return rect;
+}
+
+function parseRgbColor(color) {
+  if (typeof color !== "string") {
+    return null;
+  }
+
+  const match = color
+    .trim()
+    .match(
+      /^rgba?\(\s*([0-9.]+)(?:,|\s)\s*([0-9.]+)(?:,|\s)\s*([0-9.]+)(?:\s*[,/]\s*([0-9.]+%?))?\s*\)$/i
+    );
+  if (!match) {
+    return null;
+  }
+
+  const alphaValue = match[4] || "1";
+  const alpha = alphaValue.endsWith("%")
+    ? parseFloat(alphaValue.slice(0, -1)) / 100
+    : parseFloat(alphaValue);
+
+  return {
+    r: parseFloat(match[1]),
+    g: parseFloat(match[2]),
+    b: parseFloat(match[3]),
+    a: Number.isNaN(alpha) ? 1 : alpha,
+  };
+}
+
+function isModalScrimColor(color) {
+  const parsed = parseRgbColor(color);
+  if (!parsed) {
+    return false;
+  }
+
+  const maxChannel = Math.max(parsed.r, parsed.g, parsed.b);
+  const minChannel = Math.min(parsed.r, parsed.g, parsed.b);
+  return parsed.a >= 0.2 && (maxChannel <= 120 || minChannel >= 180);
+}
+
+function isVisibleElement(element) {
+  const rect = getVisibleRect(element);
+  if (!rect) {
+    return false;
+  }
+
+  const style = window.getComputedStyle(element);
+  return style.display !== "none" && style.visibility !== "hidden" && style.opacity !== "0";
+}
+
+function hasVisibleDialog() {
+  return Array.from(document.querySelectorAll('[role="dialog"], [aria-modal="true"]')).some(
+    isVisibleElement
+  );
+}
+
+function isFullViewportDimmer(element) {
+  if (!element || element.id === "fbcmf" || element.id === "fbcmfToggle") {
+    return false;
+  }
+  if (element.closest && element.closest("#fbcmf, .fb-cmf-toggle")) {
+    return false;
+  }
+
+  const rect = getVisibleRect(element);
+  if (!rect || rect.bottom <= 0 || rect.right <= 0) {
+    return false;
+  }
+
+  const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 0;
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+  if (viewportWidth === 0 || viewportHeight === 0) {
+    return false;
+  }
+
+  if (rect.width < viewportWidth * 0.8 || rect.height < viewportHeight * 0.8) {
+    return false;
+  }
+
+  const style = window.getComputedStyle(element);
+  return style.position === "fixed" && isModalScrimColor(style.backgroundColor);
+}
+
+function isFacebookPageDimmed() {
+  if (!document.body || !hasVisibleDialog()) {
+    return false;
+  }
+
+  return Array.from(document.body.querySelectorAll("*")).some(isFullViewportDimmer);
+}
+
 function destroyToggleButton(state) {
   if (!state) {
     return;
@@ -48,11 +152,19 @@ function createToggleButton(state, keyWords, onToggle) {
   if (useTopRight) {
     btn.classList.add("fb-cmf-toggle-topbar");
   }
-  let toggleHandler = onToggle;
+  const toggleHandler = (event) => {
+    if (btn.getAttribute(pageDimmedAtt) === "true") {
+      if (event && typeof event.preventDefault === "function") {
+        event.preventDefault();
+      }
+      if (event && typeof event.stopPropagation === "function") {
+        event.stopPropagation();
+      }
+      return;
+    }
+    onToggle();
+  };
   if (useTopRight) {
-    toggleHandler = () => {
-      onToggle();
-    };
     btn.setAttribute("role", "button");
     btn.setAttribute("tabindex", "0");
     btn.setAttribute("aria-label", keyWords.DLG_TITLE);
@@ -76,6 +188,7 @@ function createToggleButton(state, keyWords, onToggle) {
   let lastMenuRect = null;
   let observedMenuButton = null;
   let updateScheduled = false;
+  let pageDimmedUpdateScheduled = false;
   let themeDirty = false;
   let resizeObserver = null;
   const hexToRgba = (value, alpha) => {
@@ -267,6 +380,30 @@ function createToggleButton(state, keyWords, onToggle) {
       Math.abs(rect.height - lastMenuRect.height) > 1
     );
   };
+  const syncPageDimmedState = () => {
+    if (isFacebookPageDimmed()) {
+      btn.setAttribute(pageDimmedAtt, "true");
+    } else {
+      btn.removeAttribute(pageDimmedAtt);
+    }
+  };
+  const schedulePageDimmedStateSync = () => {
+    if (pageDimmedUpdateScheduled) {
+      return;
+    }
+    pageDimmedUpdateScheduled = true;
+    const runUpdate = () => {
+      pageDimmedUpdateScheduled = false;
+      if (btn.isConnected) {
+        syncPageDimmedState();
+      }
+    };
+    if (typeof window !== "undefined" && typeof window.requestAnimationFrame === "function") {
+      window.requestAnimationFrame(runUpdate);
+    } else {
+      setTimeout(runUpdate, 0);
+    }
+  };
   if (useTopRight) {
     if (!btn.isConnected) {
       document.body.appendChild(btn);
@@ -310,6 +447,19 @@ function createToggleButton(state, keyWords, onToggle) {
   } else {
     document.body.appendChild(btn);
   }
+  if (typeof MutationObserver !== "undefined") {
+    const pageDimmedObserver = new MutationObserver(() => {
+      schedulePageDimmedStateSync();
+    });
+    pageDimmedObserver.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["aria-hidden", "aria-modal", "class", "hidden", "role", "style"],
+      childList: true,
+      subtree: true,
+    });
+    addCleanup(() => pageDimmedObserver.disconnect());
+  }
+  syncPageDimmedState();
   state.btnToggleEl = btn;
   if (state.isAF) {
     btn.setAttribute(state.showAtt, "");
@@ -348,4 +498,6 @@ function createToggleButton(state, keyWords, onToggle) {
 module.exports = {
   createToggleButton,
   destroyToggleButton,
+  isFacebookPageDimmed,
+  pageDimmedAtt,
 };

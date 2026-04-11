@@ -608,6 +608,17 @@ function addExtraCSS(state, options, defaults) {
       '.fb-cmf-toggle.fb-cmf-toggle-topbar[data-cmf-open="true"]',
       "color: var(--cmf-active-icon, var(--accent)); background-color: var(--cmf-active-bg, var(--primary-button-background));"
     );
+    addToSS(state, '.fb-cmf-toggle[data-cmf-page-dimmed="true"]', "pointer-events:none;");
+    addToSS(
+      state,
+      '.fb-cmf-toggle[data-cmf-page-dimmed="true"]::after, .fb-cmf-toggle[data-cmf-page-dimmed="true"]:hover::after, .fb-cmf-toggle.fb-cmf-toggle-topbar[data-cmf-page-dimmed="true"]::after, .fb-cmf-toggle.fb-cmf-toggle-topbar[data-cmf-page-dimmed="true"]:hover::after',
+      "background-color:rgba(11,11,11,0.66); opacity:1;"
+    );
+    addToSS(
+      state,
+      '.__fb-light-mode .fb-cmf-toggle[data-cmf-page-dimmed="true"]::after, .__fb-light-mode .fb-cmf-toggle[data-cmf-page-dimmed="true"]:hover::after, .__fb-light-mode .fb-cmf-toggle.fb-cmf-toggle-topbar[data-cmf-page-dimmed="true"]::after, .__fb-light-mode .fb-cmf-toggle.fb-cmf-toggle-topbar[data-cmf-page-dimmed="true"]:hover::after',
+      "background-color:rgba(244,244,244,0.8); opacity:1;"
+    );
   }
 
   if (cmfDlgLocation === "1") {

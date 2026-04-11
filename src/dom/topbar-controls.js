@@ -4,6 +4,8 @@ const MIN_ASPECT_RATIO = 0.75;
 const MAX_ASPECT_RATIO = 1.35;
 const MAX_CLUSTER_GAP = 24;
 const MAX_ROW_OFFSET = 12;
+const RECT_MATCH_TOLERANCE = 1;
+const topbarControlSelector = 'button, [role="button"], a[aria-label]';
 
 function getRect(element) {
   if (!element || typeof element.getBoundingClientRect !== "function") {
@@ -30,8 +32,29 @@ function isInteractiveControl(element) {
   if (element.getAttribute("aria-expanded") !== null) {
     return true;
   }
+  if (tagName === "A" && element.getAttribute("aria-label")) {
+    return true;
+  }
   const tabIndex = element.getAttribute("tabindex");
   return tabIndex !== null && tabIndex !== "-1";
+}
+
+function isSameRect(first, second) {
+  return (
+    Math.abs(first.left - second.left) <= RECT_MATCH_TOLERANCE &&
+    Math.abs(first.top - second.top) <= RECT_MATCH_TOLERANCE &&
+    Math.abs(first.width - second.width) <= RECT_MATCH_TOLERANCE &&
+    Math.abs(first.height - second.height) <= RECT_MATCH_TOLERANCE
+  );
+}
+
+function dedupeOverlappingControls(controls) {
+  return controls.filter(
+    (control, index) =>
+      !controls
+        .slice(0, index)
+        .some((existingControl) => isSameRect(existingControl.rect, control.rect))
+  );
 }
 
 function isTopbarControlCandidate(element, bannerRect) {
@@ -100,14 +123,16 @@ function getTopbarControlButtons(root = document) {
   }
 
   const bannerRect = getRect(banner);
-  const controls = Array.from(new Set(Array.from(banner.querySelectorAll('button, [role="button"]'))))
-    .filter((control) => isTopbarControlCandidate(control, bannerRect))
-    .map((control) => ({
-      element: control,
-      rect: getRect(control),
-    }))
-    .filter((control) => control.rect !== null)
-    .sort((a, b) => a.rect.left - b.rect.left);
+  const controls = dedupeOverlappingControls(
+    Array.from(new Set(Array.from(banner.querySelectorAll(topbarControlSelector))))
+      .filter((control) => isTopbarControlCandidate(control, bannerRect))
+      .map((control) => ({
+        element: control,
+        rect: getRect(control),
+      }))
+      .filter((control) => control.rect !== null)
+      .sort((a, b) => a.rect.left - b.rect.left)
+  );
 
   if (controls.length === 0) {
     return [];

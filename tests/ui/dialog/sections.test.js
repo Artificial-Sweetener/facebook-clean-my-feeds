@@ -106,11 +106,13 @@ describe("ui/dialog/sections", () => {
     );
     const metaAiIndex = labels.indexOf(translations.en.NF_META_AI);
     const metaAiPromptsIndex = labels.indexOf(translations.en.NF_META_AI_PROMPTS);
+    const aiInfoPostsIndex = labels.indexOf(translations.en.NF_AI_INFO_POSTS);
     const sidePanelsIndex = labels.indexOf(translations.en.NF_AI_SIDE_PANELS);
 
     expect(metaAiIndex).toBeGreaterThan(-1);
     expect(metaAiPromptsIndex).toBe(metaAiIndex + 1);
-    expect(sidePanelsIndex).toBe(metaAiPromptsIndex + 1);
+    expect(aiInfoPostsIndex).toBe(metaAiPromptsIndex + 1);
+    expect(sidePanelsIndex).toBe(aiInfoPostsIndex + 1);
   });
 
   test("language select includes current language", () => {

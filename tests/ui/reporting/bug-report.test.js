@@ -132,6 +132,7 @@ describe("ui/reporting/bug-report", () => {
       NF_SHORT_REEL_VIDEO: false,
       NF_META_AI: false,
       NF_META_AI_PROMPTS: true,
+      NF_AI_INFO_POSTS: false,
       NF_PAID_PARTNERSHIP: false,
       NF_PEOPLE_YOU_MAY_KNOW: false,
       NF_FOLLOW: false,
@@ -153,5 +154,63 @@ describe("ui/reporting/bug-report", () => {
     });
 
     expect(report.data.samples.summary.NF_META_AI_PROMPTS).toBe(1);
+  });
+
+  test("buildBugReport includes NF_AI_INFO_POSTS sample matches", () => {
+    document.body.innerHTML = `
+      <div role="navigation"></div>
+      <div role="main">
+        <div aria-posinset="1">
+          <a href="/example">Example Page</a>
+          <div role="button">AI info</div>
+        </div>
+      </div>
+    `;
+
+    const state = {
+      isNF: true,
+      isGF: false,
+      isVF: false,
+      isMF: false,
+      isSF: false,
+      isRF: false,
+      isPP: false,
+      hideAtt: "hide",
+      hideWithNoCaptionAtt: "hideNoCaption",
+      cssHideEl: "hideBlock",
+      cssHideNumberOfShares: "hideShares",
+      vfType: "",
+      gfType: "",
+      mpType: "",
+    };
+    const options = {
+      NF_SPONSORED: false,
+      NF_SUGGESTIONS: false,
+      NF_REELS_SHORT_VIDEOS: false,
+      NF_SHORT_REEL_VIDEO: false,
+      NF_META_AI: false,
+      NF_META_AI_PROMPTS: false,
+      NF_AI_INFO_POSTS: true,
+      NF_PAID_PARTNERSHIP: false,
+      NF_PEOPLE_YOU_MAY_KNOW: false,
+      NF_FOLLOW: false,
+      NF_PARTICIPATE: false,
+      NF_SPONSORED_PAID: false,
+      NF_EVENTS_YOU_MAY_LIKE: false,
+      NF_STORIES: false,
+      NF_ANIMATED_GIFS_POSTS: false,
+      NF_BLOCKED_ENABLED: false,
+      NF_LIKES_MAXIMUM: false,
+      NF_SHARES: false,
+    };
+    const report = buildBugReport({
+      state,
+      options,
+      filters: {},
+      keyWords: { NF_AI_INFO_POSTS: 'Posts labeled "AI info"' },
+      pathInfo: {},
+    });
+
+    expect(report.data.samples.summary.NF_AI_INFO_POSTS).toBe(1);
   });
 });

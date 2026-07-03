@@ -1,3 +1,10 @@
+# [6.3.0](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.2.3...v6.3.0) (2026-07-03)
+
+
+### Features
+
+* **news:** filter posts labeled AI info ([7854587](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/7854587fc01a86caa5fbea38f5c385941f5aa051))
+
 ## [6.2.3](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.2.2...v6.2.3) (2026-04-11)
 
 

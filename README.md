@@ -24,7 +24,7 @@ Thanks to **[trinhquocviet](https://github.com/trinhquocviet)** for helping main
 
 - **Nuke the Ads:** We automatically scrub "Sponsored" posts, "Paid Partnership" labels, and "Suggested for you" sections across News, Groups, Watch, Marketplace, Search, and Reels.
 - **Built for Any Locale:** The core filters are designed to work across Facebook languages without depending on translation dictionaries, so they keep doing their job even when your Facebook isn't in English.
-- **Cut the AI Clutter:** Hide "Try Meta AI" cards, Meta AI prompt suggestions, and AI side-panel distractions before they take over your feed.
+- **Cut the AI Clutter:** Hide "Try Meta AI" cards, Meta AI prompt suggestions, posts labeled with Facebook's "AI info" marker, and AI side-panel distractions before they take over your feed. The "AI info" filter relies on Facebook's label and does not detect every AI-generated post.
 - **Tame the Layout:** Hide Reels, "Short Videos," and those massive "Stories" shelves that eat up your screen. You can even toggle off entire sections like Marketplace if you never use them.
 - **Filter the Noise:** Create custom blocklists for specific words or phrases (with regex support!). You can also cap viral posts by "Like" count to keep your feed personal.
 - **Quiet Down:** We strip out "People You May Know," "Follow" suggestions, survey promos, and other engagement traps. Plus, you can pause autoplaying GIFs and videos so you're not ambushed by motion.

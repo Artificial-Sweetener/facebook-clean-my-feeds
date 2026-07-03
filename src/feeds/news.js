@@ -231,6 +231,26 @@ function isNewsMetaAICard(post, keyWords) {
   return "";
 }
 
+function isNewsAiInfoPost(post, keyWords) {
+  if (!post || !keyWords || typeof post.querySelectorAll !== "function") {
+    return "";
+  }
+
+  const controls = Array.from(post.querySelectorAll('button, [role="button"]'));
+  const hasAiInfoLabel = controls.some((control) => {
+    const text = cleanText(control.textContent || "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .toLocaleLowerCase();
+
+    return text === "ai info";
+  });
+
+  return hasAiInfoLabel && typeof keyWords.NF_AI_INFO_POSTS === "string"
+    ? keyWords.NF_AI_INFO_POSTS
+    : "";
+}
+
 function isNewsStoriesPost(post, keyWords) {
   const queryForStory = '[href^="/stories/"][href*="source=from_feed"]';
   const elStory = post.querySelector(queryForStory);
@@ -1011,6 +1031,9 @@ function mopNewsFeed(context) {
         if (hideReason === "" && options.NF_META_AI) {
           hideReason = isNewsMetaAICard(post, keyWords);
         }
+        if (hideReason === "" && options.NF_AI_INFO_POSTS) {
+          hideReason = isNewsAiInfoPost(post, keyWords);
+        }
         if (hideReason === "" && options.NF_PAID_PARTNERSHIP) {
           hideReason = isNewsPaidPartnership(post, keyWords);
         }
@@ -1118,6 +1141,7 @@ module.exports = {
   findMetaAiPromptSuggestionRows,
   hideMetaAiPromptSuggestionRows,
   inspectMetaAiPromptRows,
+  isNewsAiInfoPost,
   isNewsDirty,
   isMetaAiPromptSuggestionRow,
   mopNewsFeed,

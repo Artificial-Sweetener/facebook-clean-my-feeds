@@ -5,6 +5,7 @@ const {
   hasMetaAiPromptSuggestionRow,
   hideMetaAiPromptSuggestionRows,
   inspectMetaAiPromptRows,
+  isNewsAiInfoPost,
   isNewsFollow,
   isMetaAiPromptSuggestionRow,
   isNewsParticipate,
@@ -130,6 +131,7 @@ function createNewsContext({ options = {}, keyWords = {} } = {}) {
       NF_REELS_SHORT_VIDEOS: false,
       NF_SHORT_REEL_VIDEO: false,
       NF_META_AI: false,
+      NF_AI_INFO_POSTS: false,
       NF_PAID_PARTNERSHIP: false,
       NF_PEOPLE_YOU_MAY_KNOW: false,
       NF_FOLLOW: false,
@@ -350,6 +352,47 @@ describe("feeds/news", () => {
     const keyWords = { NF_FILTER_VERIFIED_BADGE: "Filter verified accounts" };
 
     expect(isNewsVerifiedBadge(post, keyWords)).toBe("Filter verified accounts");
+  });
+
+  test("isNewsAiInfoPost detects exact AI info button labels", () => {
+    const post = document.createElement("div");
+    post.setAttribute("aria-posinset", "1");
+    const pageLink = document.createElement("a");
+    pageLink.href = "/example";
+    pageLink.textContent = "Example Page";
+    const aiInfo = document.createElement("div");
+    aiInfo.setAttribute("role", "button");
+    aiInfo.textContent = "AI info";
+    post.append(pageLink, aiInfo);
+
+    const keyWords = { NF_AI_INFO_POSTS: 'Posts labeled "AI info"' };
+
+    expect(isNewsAiInfoPost(post, keyWords)).toBe('Posts labeled "AI info"');
+  });
+
+  test("isNewsAiInfoPost ignores AI info text outside button-like controls", () => {
+    const post = document.createElement("div");
+    post.setAttribute("aria-posinset", "1");
+    const body = document.createElement("p");
+    body.textContent = "This post discusses AI info labels.";
+    post.appendChild(body);
+
+    const keyWords = { NF_AI_INFO_POSTS: 'Posts labeled "AI info"' };
+
+    expect(isNewsAiInfoPost(post, keyWords)).toBe("");
+  });
+
+  test("isNewsAiInfoPost ignores unrelated button labels", () => {
+    const post = document.createElement("div");
+    post.setAttribute("aria-posinset", "1");
+    const button = document.createElement("div");
+    button.setAttribute("role", "button");
+    button.textContent = "More";
+    post.appendChild(button);
+
+    const keyWords = { NF_AI_INFO_POSTS: 'Posts labeled "AI info"' };
+
+    expect(isNewsAiInfoPost(post, keyWords)).toBe("");
   });
 
   test("getSidePanelAiTargets finds Meta AI and Manus AI items", () => {
@@ -582,6 +625,60 @@ describe("feeds/news", () => {
     expect(outer.getAttribute(postAtt)).toBe("Meta AI prompt suggestions");
     expect(outer.hasAttribute(context.state.hideWithNoCaptionAtt)).toBe(true);
     expect(outer.hasAttribute(context.state.showAtt)).toBe(true);
+    disconnectDirtyObserver(mainColumn);
+  });
+
+  test("mopNewsFeed hides posts labeled AI info when the option is enabled", () => {
+    document.body.innerHTML = `
+      <div role="navigation"></div>
+      <div role="main"></div>
+    `;
+
+    const mainColumn = document.querySelector(newsSelectors.mainColumn);
+    const post = document.createElement("div");
+    post.setAttribute("aria-posinset", "1");
+    const aiInfo = document.createElement("div");
+    aiInfo.setAttribute("role", "button");
+    aiInfo.textContent = "AI info";
+    post.appendChild(aiInfo);
+    mainColumn.appendChild(post);
+
+    const context = createNewsContext({
+      options: { NF_AI_INFO_POSTS: true },
+      keyWords: { NF_AI_INFO_POSTS: 'Posts labeled "AI info"' },
+    });
+
+    mopNewsFeed(context);
+
+    expect(post.getAttribute(postAtt)).toBe("Posts labeled AI info");
+    expect(post.hasAttribute(context.state.hideAtt)).toBe(true);
+    disconnectDirtyObserver(mainColumn);
+  });
+
+  test("mopNewsFeed leaves posts labeled AI info visible when the option is disabled", () => {
+    document.body.innerHTML = `
+      <div role="navigation"></div>
+      <div role="main"></div>
+    `;
+
+    const mainColumn = document.querySelector(newsSelectors.mainColumn);
+    const post = document.createElement("div");
+    post.setAttribute("aria-posinset", "1");
+    const aiInfo = document.createElement("div");
+    aiInfo.setAttribute("role", "button");
+    aiInfo.textContent = "AI info";
+    post.appendChild(aiInfo);
+    mainColumn.appendChild(post);
+
+    const context = createNewsContext({
+      options: { NF_AI_INFO_POSTS: false },
+      keyWords: { NF_AI_INFO_POSTS: 'Posts labeled "AI info"' },
+    });
+
+    mopNewsFeed(context);
+
+    expect(post.hasAttribute(postAtt)).toBe(false);
+    expect(post.hasAttribute(context.state.hideAtt)).toBe(false);
     disconnectDirtyObserver(mainColumn);
   });
 

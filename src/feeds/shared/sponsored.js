@@ -37,7 +37,9 @@ function hasSponsoredLinkSignature(post, state) {
       post.querySelectorAll(`div > div > div > div > span > span > div > a[href*="${paramFind}"]`)
     );
   } else if (state.isSF) {
-    elLinks = Array.from(post.querySelectorAll(`div[role="article"] span > a[href*="${paramFind}"]`));
+    elLinks = Array.from(
+      post.querySelectorAll(`div[role="article"] span > a[href*="${paramFind}"]`)
+    );
   }
 
   if (elLinks.length === 0 || elLinks.length >= 10) {

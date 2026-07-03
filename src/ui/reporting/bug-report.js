@@ -19,6 +19,7 @@ const {
 const { findNumberOfShares } = require("../../feeds/shared/shares");
 const {
   isNewsEventsYouMayLike,
+  isNewsAiInfoPost,
   isNewsFollow,
   isNewsMetaAICard,
   hasMetaAiPromptSuggestionRow,
@@ -373,6 +374,11 @@ function buildNewsMatches(post, context) {
     options.NF_SHORT_REEL_VIDEO && isNewsShortReelVideo(post, keyWords)
   );
   addMatch(matches, "NF_META_AI", options.NF_META_AI && isNewsMetaAICard(post, keyWords));
+  addMatch(
+    matches,
+    "NF_AI_INFO_POSTS",
+    options.NF_AI_INFO_POSTS && isNewsAiInfoPost(post, keyWords)
+  );
   addMatch(
     matches,
     "NF_META_AI_PROMPTS",

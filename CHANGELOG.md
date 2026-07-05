@@ -1,3 +1,10 @@
+## [6.3.1](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.3.0...v6.3.1) (2026-07-05)
+
+
+### Bug Fixes
+
+* **news:** detect zero-width sponsored rail labels ([45b0e83](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/45b0e83256110e9cf9e7da6372aac4363d0cf273))
+
 # [6.3.0](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.2.3...v6.3.0) (2026-07-03)
 
 

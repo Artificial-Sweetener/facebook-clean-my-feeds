@@ -196,7 +196,7 @@ function createRightRailSponsoredFixture() {
                 <div id="right-rail-sections">
                   <div id="right-rail-sponsored">
                     <div>
-                      <h3>Sponsored</h3>
+                      <h3>Sponsored\u200b</h3>
                     </div>
                     <div>
                       <a href="https://l.facebook.com/l.php?u=https%3A%2F%2Fexample.com%2F%3Futm_campaign%3Dspring%26ad_id%3D123">

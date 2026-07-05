@@ -331,6 +331,7 @@ function getNormalizedElementText(element) {
   }
 
   return cleanText(element.textContent || "")
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
     .replace(/\s+/g, " ")
     .trim();
 }

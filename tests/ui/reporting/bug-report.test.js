@@ -156,6 +156,72 @@ describe("ui/reporting/bug-report", () => {
     expect(report.data.samples.summary.NF_META_AI_PROMPTS).toBe(1);
   });
 
+  test("buildBugReport includes privacy-safe sponsored diagnostics for article roots", () => {
+    document.body.innerHTML = `
+      <div role="navigation"></div>
+      <div role="main">
+        <h3 dir="auto">Feed</h3>
+        <div>
+          <div role="article">
+            <span><a href="/private-advertiser?__cft__[0]=${"a".repeat(320)}">Ad</a></span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const state = {
+      isNF: true,
+      isGF: false,
+      isVF: false,
+      isMF: false,
+      isSF: false,
+      isRF: false,
+      isPP: false,
+      hideAtt: "hide",
+      hideWithNoCaptionAtt: "hideNoCaption",
+      cssHideEl: "hideBlock",
+      cssHideNumberOfShares: "hideShares",
+      vfType: "",
+      gfType: "",
+      mpType: "",
+    };
+    const options = {
+      NF_SPONSORED: true,
+      NF_SUGGESTIONS: false,
+      NF_REELS_SHORT_VIDEOS: false,
+      NF_SHORT_REEL_VIDEO: false,
+      NF_META_AI: false,
+      NF_META_AI_PROMPTS: false,
+      NF_AI_INFO_POSTS: false,
+      NF_PAID_PARTNERSHIP: false,
+      NF_PEOPLE_YOU_MAY_KNOW: false,
+      NF_FOLLOW: false,
+      NF_PARTICIPATE: false,
+      NF_SPONSORED_PAID: false,
+      NF_EVENTS_YOU_MAY_LIKE: false,
+      NF_STORIES: false,
+      NF_ANIMATED_GIFS_POSTS: false,
+      NF_BLOCKED_ENABLED: false,
+      NF_LIKES_MAXIMUM: false,
+      NF_SHARES: false,
+    };
+
+    const report = buildBugReport({
+      state,
+      options,
+      filters: {},
+      keyWords: { SPONSORED: "Sponsored" },
+      pathInfo: {},
+    });
+
+    expect(report.data.samples.summary.NF_SPONSORED).toBeGreaterThan(0);
+    expect(report.data.samples.samples[0].sponsoredDiagnostics).toEqual(
+      expect.objectContaining({ matchedBy: "cft-link-signature", rootRoleArticle: true })
+    );
+    expect(report.text).not.toContain("private-advertiser");
+    expect(report.text).not.toContain("__cft__");
+  });
+
   test("buildBugReport includes NF_AI_INFO_POSTS sample matches", () => {
     document.body.innerHTML = `
       <div role="navigation"></div>

@@ -774,6 +774,29 @@ describe("feeds/news", () => {
     expect(document.getElementById("fallback-wrapper").hasAttribute(postAtt)).toBe(false);
   });
 
+  test("mopNewsFeed hides sponsored signatures directly beneath article roots", () => {
+    document.body.innerHTML = `
+      <div role="navigation"></div>
+      <div role="main">
+        <h3 dir="auto">Feed</h3>
+        <div>
+          <div role="article" id="sponsored-article">
+            <span><a href="/foo?__cft__[0]=${"a".repeat(320)}">Ad</a></span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const context = createNewsContext({
+      options: { NF_SPONSORED: true },
+      keyWords: { SPONSORED: "Sponsored" },
+    });
+
+    mopNewsFeed(context);
+
+    expect(document.getElementById("sponsored-article").getAttribute(postAtt)).toBe("Sponsored");
+  });
+
   test("mopNewsFeed ignores sponsored labels that appear later without an agnostic signal", () => {
     document.body.innerHTML = `
       <div role="navigation"></div>

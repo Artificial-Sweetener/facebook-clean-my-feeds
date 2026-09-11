@@ -5,7 +5,7 @@ const { videosSelectors } = require("../../selectors/videos");
 const { marketplaceSelectors } = require("../../selectors/marketplace");
 const { profileSelectors } = require("../../selectors/profile");
 const { searchSelectors } = require("../../selectors/search");
-const { isSponsored } = require("../../feeds/shared/sponsored");
+const { getSponsoredDiagnostics, isSponsored } = require("../../feeds/shared/sponsored");
 const {
   findGroupsBlockedText,
   findNewsBlockedText,
@@ -568,6 +568,7 @@ function buildSamples(context, maxSamples = 20) {
     const samples = samplePosts(posts, maxSamples).map((post) => ({
       signature: buildDomSignature(post),
       matches: buildNewsMatches(post, context),
+      sponsoredDiagnostics: getSponsoredDiagnostics(post, state),
     }));
     return { feed: "news", query, queries, samples };
   }
@@ -576,6 +577,7 @@ function buildSamples(context, maxSamples = 20) {
     const samples = samplePosts(posts, maxSamples).map((post) => ({
       signature: buildDomSignature(post),
       matches: buildGroupsMatches(post, context),
+      sponsoredDiagnostics: getSponsoredDiagnostics(post, state),
     }));
     return { feed: "groups", query, samples };
   }
@@ -584,6 +586,7 @@ function buildSamples(context, maxSamples = 20) {
     const samples = samplePosts(posts, maxSamples).map((post) => ({
       signature: buildDomSignature(post),
       matches: buildVideosMatches(post, queryBlocks, context),
+      sponsoredDiagnostics: getSponsoredDiagnostics(post, state),
     }));
     return { feed: "videos", query, samples };
   }
@@ -603,6 +606,7 @@ function buildSamples(context, maxSamples = 20) {
     const samples = samplePosts(posts, maxSamples).map((post) => ({
       signature: buildDomSignature(post),
       matches: buildNewsMatches(post, context),
+      sponsoredDiagnostics: getSponsoredDiagnostics(post, state),
     }));
     return { feed: "search", query, samples };
   }

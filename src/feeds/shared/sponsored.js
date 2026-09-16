@@ -23,8 +23,6 @@ function inspectSponsored(post, state) {
   }
 
   const candidates = collectCftLinkCandidates(post, state);
-  diagnostics.cftLinks.nestedWrapperCount = candidates.nestedWrapperCount;
-  diagnostics.cftLinks.rootContainerCount = candidates.rootContainerCount;
   diagnostics.cftLinks.selectedSource = candidates.selectedSource;
   diagnostics.cftLinks.selectedCount = candidates.links.length;
   diagnostics.cftLinks.rejectedForVolume = candidates.links.length >= maximumCandidateLinks;
@@ -53,17 +51,21 @@ function inspectSponsored(post, state) {
 }
 
 function collectCftLinkCandidates(post, state) {
-  const linkSelector = `span > a[href*="${cftParam}"]:not([href^="/groups/"]):not([href*="section_header_type"])`;
-  const rootContainer = post.matches(
-    'div[role="article"], div[aria-posinset], div[aria-describedby]'
-  );
   let links = [];
   let selectedSource = "none";
 
   if (state.isNF || state.isGF) {
-    links = Array.from(post.querySelectorAll(`div[aria-posinset] ${linkSelector}`));
+    links = Array.from(
+      post.querySelectorAll(
+        `div[aria-posinset] span > a[href*="${cftParam}"]:not([href^="/groups/"]):not([href*="section_header_type"])`
+      )
+    );
     if (links.length === 0) {
-      links = Array.from(post.querySelectorAll(`div[aria-describedby] ${linkSelector}`));
+      links = Array.from(
+        post.querySelectorAll(
+          `div[aria-describedby] span > a[href*="${cftParam}"]:not([href^="/groups/"]):not([href*="section_header_type"])`
+        )
+      );
     }
     if (links.length > 0) {
       selectedSource = "nested-wrapper";
@@ -76,23 +78,13 @@ function collectCftLinkCandidates(post, state) {
       selectedSource = "video-wrapper";
     }
   } else if (state.isSF) {
-    links = Array.from(post.querySelectorAll(`div[role="article"] ${linkSelector}`));
+    links = Array.from(post.querySelectorAll(`div[role="article"] span > a[href*="${cftParam}"]`));
     if (links.length > 0) {
       selectedSource = "nested-article";
     }
   }
 
-  const nestedWrapperCount = links.length;
-  let rootContainerCount = 0;
-  if (links.length === 0 && rootContainer && (state.isNF || state.isGF || state.isSF)) {
-    links = Array.from(post.querySelectorAll(linkSelector));
-    rootContainerCount = links.length;
-    if (links.length > 0) {
-      selectedSource = "post-root";
-    }
-  }
-
-  return { links, nestedWrapperCount, rootContainerCount, selectedSource };
+  return { links, selectedSource };
 }
 
 function createSponsoredDiagnostics(post, state) {
@@ -108,8 +100,6 @@ function createSponsoredDiagnostics(post, state) {
     rootAriaDescribedby: canMatchRoot && post.matches("div[aria-describedby]"),
     cftLinks: {
       minimumSignatureLength: state ? (state.isSF ? 250 : state.isVF ? 299 : 311) : 0,
-      nestedWrapperCount: 0,
-      rootContainerCount: 0,
       selectedSource: "none",
       selectedCount: 0,
       inspectedCount: 0,

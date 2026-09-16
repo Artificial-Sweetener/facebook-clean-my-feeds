@@ -39,6 +39,15 @@ describe("ui/reporting/bug-report", () => {
   });
 
   test("buildBugReport redacts blocked options and filters", () => {
+    global.GM = {
+      info: {
+        script: {
+          downloadURL:
+            "https://raw.githubusercontent.com/Artificial-Sweetener/facebook-clean-my-feeds/refs/heads/fix/news-sponsored-role-article/fb-clean-my-feeds.user.js?cache=private",
+        },
+        scriptHandler: "Violentmonkey",
+      },
+    };
     const state = {
       isNF: false,
       isGF: false,
@@ -78,6 +87,10 @@ describe("ui/reporting/bug-report", () => {
     expect(report.data.blockedFilters.NF_BLOCKED_TEXT_LC.count).toBe(1);
     expect(report.data.hidden.reasonCounts.Hidden).toBe(1);
     expect(report.data.hidden.hiddenElements.hiddenNoCaptionRows).toBe(1);
+    expect(report.data.script.buildSource).toBe(
+      "github:refs/heads/fix/news-sponsored-role-article"
+    );
+    expect(report.text).not.toContain("cache=private");
     expect(report.text).toContain('"generatedAt"');
   });
 
@@ -156,14 +169,20 @@ describe("ui/reporting/bug-report", () => {
     expect(report.data.samples.summary.NF_META_AI_PROMPTS).toBe(1);
   });
 
-  test("buildBugReport includes privacy-safe sponsored diagnostics for article roots", () => {
+  test("buildBugReport includes privacy-safe orphan virtualized diagnostics", () => {
     document.body.innerHTML = `
       <div role="navigation"></div>
       <div role="main">
         <h3 dir="auto">Feed</h3>
         <div>
-          <div role="article">
-            <span><a href="/private-advertiser?__cft__[0]=${"a".repeat(320)}">Ad</a></span>
+          <div role="article">Ordinary post</div>
+          <div data-virtualized="false">
+            <a href="/ads/about/?entry_product=ad_preferences">Private Advertiser</a>
+            <div data-ad-rendering-role="profile_name"></div>
+            <div data-ad-rendering-role="creative_body"></div>
+          </div>
+          <div data-virtualized="false">
+            <div data-ad-rendering-role="profile_name">Ordinary content</div>
           </div>
         </div>
       </div>
@@ -214,12 +233,37 @@ describe("ui/reporting/bug-report", () => {
       pathInfo: {},
     });
 
-    expect(report.data.samples.summary.NF_SPONSORED).toBeGreaterThan(0);
-    expect(report.data.samples.samples[0].sponsoredDiagnostics).toEqual(
-      expect.objectContaining({ matchedBy: "cft-link-signature", rootRoleArticle: true })
+    expect(report.data.discovery.news.runtime).toEqual({
+      selectedQuery: 'div[role="main"] div[role="article"]',
+      selectedCount: 1,
+    });
+    expect(report.data.discovery.news.virtualized).toEqual(
+      expect.objectContaining({
+        containerCount: 2,
+        containersWithAdsAboutLink: 1,
+        containersWithAdRenderingRole: 2,
+        containersWithAdRenderingRoleOnly: 1,
+        adsAboutLinkCount: 1,
+        orphanAdsAboutLinkCount: 1,
+        orphanWithoutVirtualizedContainerCount: 0,
+        orphanContainerCount: 1,
+      })
     );
-    expect(report.text).not.toContain("private-advertiser");
-    expect(report.text).not.toContain("__cft__");
+    expect(report.data.discovery.news.virtualized.orphanSamples[0]).toEqual(
+      expect.objectContaining({
+        dataVirtualized: "false",
+        adsAboutLinkCount: 1,
+        adRenderingRoleCount: 2,
+        roleArticleDescendantCount: 0,
+        ariaPosinsetDescendantCount: 0,
+        hasPostMarker: false,
+        hasHideMarker: false,
+      })
+    );
+    expect(report.data.signals).toEqual(
+      expect.objectContaining({ page: expect.any(Object), newsMain: expect.any(Object) })
+    );
+    expect(report.text).not.toContain("Private Advertiser");
   });
 
   test("buildBugReport includes NF_AI_INFO_POSTS sample matches", () => {

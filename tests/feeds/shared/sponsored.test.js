@@ -11,12 +11,12 @@ describe("feeds/shared/sponsored", () => {
     expect(isSponsored(post, state)).toBe(true);
   });
 
-  test("isSponsored detects cft link signatures when the post is the article root", () => {
+  test("isSponsored does not broaden cft detection to article roots", () => {
     const post = document.createElement("div");
     post.setAttribute("role", "article");
     post.innerHTML = `<span><a href="/foo?__cft__[0]=${"a".repeat(320)}"></a></span>`;
 
-    expect(isSponsored(post, { isNF: true })).toBe(true);
+    expect(isSponsored(post, { isNF: true })).toBe(false);
   });
 
   test("isSponsored does not broaden cft detection for an unrecognized wrapper", () => {
@@ -36,23 +36,20 @@ describe("feeds/shared/sponsored", () => {
 
   test("getSponsoredDiagnostics exposes only structural cft details", () => {
     const post = document.createElement("div");
-    post.setAttribute("role", "article");
-    post.innerHTML = `<span><a href="/private-advertiser?__cft__[0]=${"secret".repeat(60)}"></a></span>`;
+    post.innerHTML = `<div aria-posinset="1"><span><a href="/private-advertiser?__cft__[0]=${"secret".repeat(60)}"></a></span></div>`;
 
     const diagnostics = getSponsoredDiagnostics(post, { isNF: true });
 
     expect(diagnostics).toEqual({
       matchedBy: "cft-link-signature",
       adsAboutLinkCount: 0,
-      rootContainer: true,
-      rootRoleArticle: true,
+      rootContainer: false,
+      rootRoleArticle: false,
       rootAriaPosinset: false,
       rootAriaDescribedby: false,
       cftLinks: {
         minimumSignatureLength: 311,
-        nestedWrapperCount: 0,
-        rootContainerCount: 1,
-        selectedSource: "post-root",
+        selectedSource: "nested-wrapper",
         selectedCount: 1,
         inspectedCount: 1,
         belowMinimumCount: 0,

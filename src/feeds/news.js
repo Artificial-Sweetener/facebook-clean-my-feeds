@@ -58,15 +58,69 @@ function isNewsDirty(state) {
   return arrReturn;
 }
 
-function getCollectionOfNewsPosts() {
+function getNewsPostDiscovery() {
   for (const query of prioritizedNewsPostQueries) {
     const nodeList = document.querySelectorAll(query);
     if (nodeList.length > 0) {
-      return Array.from(nodeList);
+      return { query, posts: Array.from(nodeList) };
     }
   }
 
-  return [];
+  return { query: "", posts: [] };
+}
+
+function getCollectionOfNewsPosts() {
+  return getNewsPostDiscovery().posts;
+}
+
+function getOrphanSponsoredNewsPosts(mainColumn) {
+  if (!mainColumn || typeof mainColumn.querySelectorAll !== "function") {
+    return [];
+  }
+
+  const posts = new Set();
+  const sponsoredLinks = mainColumn.querySelectorAll(newsSelectors.sponsoredLink);
+  sponsoredLinks.forEach((link) => {
+    if (link.closest(newsSelectors.standardPost)) {
+      return;
+    }
+
+    const virtualizedPost = link.closest(newsSelectors.virtualizedContainer);
+    if (virtualizedPost && virtualizedPost !== mainColumn && mainColumn.contains(virtualizedPost)) {
+      posts.add(virtualizedPost);
+    }
+  });
+
+  return Array.from(posts);
+}
+
+function scrubOrphanSponsoredNewsPosts(context, mainColumn) {
+  if (!context) {
+    return;
+  }
+
+  const { state, options, keyWords } = context;
+  if (!state || !options || !keyWords) {
+    return;
+  }
+
+  const posts = getOrphanSponsoredNewsPosts(mainColumn);
+
+  posts.forEach((post) => {
+    if (post.hasAttribute(postAtt)) {
+      return;
+    }
+
+    hideNewsPost(post, keyWords.SPONSORED, true, {
+      options,
+      keyWords,
+      attributes: {
+        postAtt,
+        postAttTab,
+      },
+      state,
+    });
+  });
 }
 
 function shouldSweepNewsPosts(state, mainColumn, isMainColumnDirty) {
@@ -1002,6 +1056,7 @@ function mopNewsFeed(context) {
 
   if (options.NF_SPONSORED && shouldSweepPosts) {
     scrubRightRailSponsored(context);
+    scrubOrphanSponsoredNewsPosts(context, mainColumn);
   }
 
   if (mainColumn && options.NF_META_AI_PROMPTS && shouldSweepPosts) {
@@ -1136,6 +1191,8 @@ module.exports = {
   isNewsStoriesPost,
   isNewsVerifiedBadge,
   getSidePanelAiTargets,
+  getNewsPostDiscovery,
+  getOrphanSponsoredNewsPosts,
   getMetaAiSuggestionChipSignal,
   hasMetaAiPromptSuggestionRow,
   findTopCardsForPagesContainer,

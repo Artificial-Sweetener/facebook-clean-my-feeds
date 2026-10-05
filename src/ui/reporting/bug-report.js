@@ -5,7 +5,7 @@ const { videosSelectors } = require("../../selectors/videos");
 const { marketplaceSelectors } = require("../../selectors/marketplace");
 const { profileSelectors } = require("../../selectors/profile");
 const { searchSelectors } = require("../../selectors/search");
-const { isSponsored } = require("../../feeds/shared/sponsored");
+const { getSponsoredDiagnostics, isSponsored } = require("../../feeds/shared/sponsored");
 const {
   findGroupsBlockedText,
   findNewsBlockedText,
@@ -18,6 +18,8 @@ const {
 } = require("../../feeds/shared/animated-gifs");
 const { findNumberOfShares } = require("../../feeds/shared/shares");
 const {
+  getNewsPostDiscovery,
+  getOrphanSponsoredNewsPosts,
   isNewsEventsYouMayLike,
   isNewsAiInfoPost,
   isNewsFollow,
@@ -84,9 +86,40 @@ function getScriptInfo() {
   return {
     name: script && script.name ? script.name : "FB - Clean my feeds",
     version: script && script.version ? script.version : "unknown",
+    buildSource: getBuildSource(script),
     supportURL: script && script.supportURL ? script.supportURL : getSupportUrl(),
     handler: gm && gm.info && gm.info.scriptHandler ? gm.info.scriptHandler : "unknown",
   };
+}
+
+function getBuildSource(script) {
+  if (!script) {
+    return "unknown";
+  }
+
+  const sourceUrl = script.downloadURL || script.updateURL || "";
+  if (!sourceUrl) {
+    return "unknown";
+  }
+
+  try {
+    const url = new URL(sourceUrl);
+    const repositoryPath = "/Artificial-Sweetener/facebook-clean-my-feeds/";
+    if (url.hostname === "raw.githubusercontent.com" && url.pathname.startsWith(repositoryPath)) {
+      const sourcePath = url.pathname.slice(repositoryPath.length);
+      const fileSuffix = "/fb-clean-my-feeds.user.js";
+      const refPath = sourcePath.endsWith(fileSuffix)
+        ? sourcePath.slice(0, -fileSuffix.length)
+        : sourcePath;
+      return `github:${decodeURIComponent(refPath)}`;
+    }
+    if (url.hostname === "greasyfork.org" || url.hostname.endsWith(".greasyfork.org")) {
+      return "greasyfork";
+    }
+    return "custom";
+  } catch (error) {
+    return "custom";
+  }
 }
 
 function summarizeList(list, limit = 20) {
@@ -166,7 +199,7 @@ function collectSafeReasons(keyWords) {
   return safe;
 }
 
-function collectSignalCounts() {
+function collectSignalCounts(root = document) {
   const signals = [
     "Sponsored",
     "Suggested",
@@ -182,7 +215,10 @@ function collectSignalCounts() {
   for (const signal of signals) {
     counts[signal] = 0;
   }
-  const spans = Array.from(document.querySelectorAll("span[dir], span, div")).filter(
+  if (!root || typeof root.querySelectorAll !== "function") {
+    return counts;
+  }
+  const spans = Array.from(root.querySelectorAll("span[dir], span, div")).filter(
     (el) => typeof el.textContent === "string" && el.textContent.trim() !== ""
   );
   for (const el of spans) {
@@ -256,6 +292,86 @@ function getNewsPostCollection() {
     query: results.length > 0 ? "combined" : "",
     queries: results.map((entry) => entry.query),
     posts: combined,
+  };
+}
+
+function normalizeVirtualizedValue(container) {
+  const value = container.getAttribute("data-virtualized");
+  if (value === "true" || value === "false" || value === "") {
+    return value;
+  }
+  return value === null ? "missing" : "other";
+}
+
+function buildNewsDiscoveryDiagnostics(state, maxSamples = 5) {
+  const mainColumn = document.querySelector(newsSelectors.mainColumn);
+  const runtimeDiscovery = getNewsPostDiscovery();
+  const runtime = {
+    selectedQuery: runtimeDiscovery.query,
+    selectedCount: runtimeDiscovery.posts.length,
+  };
+  const emptyVirtualized = {
+    containerCount: 0,
+    containersWithAdsAboutLink: 0,
+    containersWithAdRenderingRole: 0,
+    containersWithAdRenderingRoleOnly: 0,
+    adsAboutLinkCount: 0,
+    orphanAdsAboutLinkCount: 0,
+    orphanWithoutVirtualizedContainerCount: 0,
+    orphanContainerCount: 0,
+    orphanSamples: [],
+  };
+
+  if (!mainColumn) {
+    return { runtime, virtualized: emptyVirtualized };
+  }
+
+  const virtualizedContainers = Array.from(
+    mainColumn.querySelectorAll(newsSelectors.virtualizedContainer)
+  );
+  const adsAboutLinks = Array.from(mainColumn.querySelectorAll(newsSelectors.sponsoredLink));
+  const orphanAdsAboutLinks = adsAboutLinks.filter(
+    (link) => !link.closest(newsSelectors.standardPost)
+  );
+  const orphanContainers = getOrphanSponsoredNewsPosts(mainColumn);
+  const containersWithAdsAboutLink = virtualizedContainers.filter((container) =>
+    container.querySelector(newsSelectors.sponsoredLink)
+  );
+  const containersWithAdRenderingRole = virtualizedContainers.filter((container) =>
+    container.querySelector("[data-ad-rendering-role]")
+  );
+  const containersWithAdRenderingRoleOnly = containersWithAdRenderingRole.filter(
+    (container) => !container.querySelector(newsSelectors.sponsoredLink)
+  );
+  const orphanWithoutVirtualizedContainerCount = orphanAdsAboutLinks.filter((link) => {
+    const container = link.closest(newsSelectors.virtualizedContainer);
+    return !container || !mainColumn.contains(container);
+  }).length;
+  const orphanSamples = samplePosts(orphanContainers, maxSamples).map((container) => ({
+    signature: buildDomSignature(container),
+    dataVirtualized: normalizeVirtualizedValue(container),
+    adsAboutLinkCount: container.querySelectorAll(newsSelectors.sponsoredLink).length,
+    adRenderingRoleCount: container.querySelectorAll("[data-ad-rendering-role]").length,
+    roleArticleDescendantCount: container.querySelectorAll('div[role="article"]').length,
+    ariaPosinsetDescendantCount: container.querySelectorAll("div[aria-posinset]").length,
+    inViewport: isInViewport(container),
+    hasPostMarker: container.hasAttribute(postAtt),
+    hasHideMarker: !!(state && state.hideAtt && container.hasAttribute(state.hideAtt)),
+  }));
+
+  return {
+    runtime,
+    virtualized: {
+      containerCount: virtualizedContainers.length,
+      containersWithAdsAboutLink: containersWithAdsAboutLink.length,
+      containersWithAdRenderingRole: containersWithAdRenderingRole.length,
+      containersWithAdRenderingRoleOnly: containersWithAdRenderingRoleOnly.length,
+      adsAboutLinkCount: adsAboutLinks.length,
+      orphanAdsAboutLinkCount: orphanAdsAboutLinks.length,
+      orphanWithoutVirtualizedContainerCount,
+      orphanContainerCount: orphanContainers.length,
+      orphanSamples,
+    },
   };
 }
 
@@ -568,6 +684,7 @@ function buildSamples(context, maxSamples = 20) {
     const samples = samplePosts(posts, maxSamples).map((post) => ({
       signature: buildDomSignature(post),
       matches: buildNewsMatches(post, context),
+      sponsoredDiagnostics: getSponsoredDiagnostics(post, state),
     }));
     return { feed: "news", query, queries, samples };
   }
@@ -576,6 +693,7 @@ function buildSamples(context, maxSamples = 20) {
     const samples = samplePosts(posts, maxSamples).map((post) => ({
       signature: buildDomSignature(post),
       matches: buildGroupsMatches(post, context),
+      sponsoredDiagnostics: getSponsoredDiagnostics(post, state),
     }));
     return { feed: "groups", query, samples };
   }
@@ -584,6 +702,7 @@ function buildSamples(context, maxSamples = 20) {
     const samples = samplePosts(posts, maxSamples).map((post) => ({
       signature: buildDomSignature(post),
       matches: buildVideosMatches(post, queryBlocks, context),
+      sponsoredDiagnostics: getSponsoredDiagnostics(post, state),
     }));
     return { feed: "videos", query, samples };
   }
@@ -603,6 +722,7 @@ function buildSamples(context, maxSamples = 20) {
     const samples = samplePosts(posts, maxSamples).map((post) => ({
       signature: buildDomSignature(post),
       matches: buildNewsMatches(post, context),
+      sponsoredDiagnostics: getSponsoredDiagnostics(post, state),
     }));
     return { feed: "search", query, samples };
   }
@@ -773,6 +893,7 @@ function buildBugReport(context) {
   const now = new Date();
   const scriptInfo = getScriptInfo();
   const safeLocation = buildSafeLocation();
+  const newsMainColumn = document.querySelector(newsSelectors.mainColumn);
   const data = {
     generatedAt: now.toISOString(),
     script: scriptInfo,
@@ -790,12 +911,18 @@ function buildBugReport(context) {
     blockedFilters: summarizeBlockedFilters(filters || {}),
     pathInfo: pathInfo || {},
     selectors: buildSelectorDiagnostics(state),
+    discovery: {
+      news: buildNewsDiscoveryDiagnostics(state),
+    },
     hidden: {
       reasonCounts: collectReasonCounts(keyWords),
       hiddenElements: buildHiddenCounts(state),
       sample: collectHiddenSample(keyWords),
     },
-    signals: collectSignalCounts(),
+    signals: {
+      page: collectSignalCounts(document),
+      newsMain: collectSignalCounts(newsMainColumn),
+    },
     samples: buildSamples(context),
     notes: {
       redaction: "Post text, names, and IDs are not included. Blocked keywords are hashed.",

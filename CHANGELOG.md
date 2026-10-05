@@ -1,3 +1,11 @@
+## [6.3.2](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.3.1...v6.3.2) (2026-10-05)
+
+
+### Bug Fixes
+
+* **news:** detect sponsored article-root signatures ([5a70c91](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/5a70c910f92ab41dbc2af0bc13013ddabf935f79))
+* **news:** handle orphan virtualized sponsored posts ([b71a390](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/b71a390621a4b8dc6f6f577fad8b5c146754bb7a))
+
 ## [6.3.1](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.3.0...v6.3.1) (2026-07-05)
 
 

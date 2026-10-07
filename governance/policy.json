@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "warningLines": 350,
+  "maximumLines": 500,
+  "maximumExceptionDays": 90,
+  "license": "GPL-3.0-only",
+  "generatedJavaScript": "fb-clean-my-feeds.user.js",
+  "layers": [
+    {
+      "name": "platform",
+      "patterns": ["^src/runtime/userscript-api\\.ts$"],
+      "allows": ["platform"]
+    },
+    {
+      "name": "core",
+      "patterns": ["^src/core/"],
+      "allows": ["core", "i18n", "pure-utils"]
+    },
+    {
+      "name": "i18n",
+      "patterns": ["^src/i18n/"],
+      "allows": ["i18n"]
+    },
+    {
+      "name": "assets",
+      "patterns": ["^src/assets(?:/|\\.ts$)", "^src/res/", "^src/types/"],
+      "allows": ["assets"]
+    },
+    {
+      "name": "selectors",
+      "patterns": ["^src/selectors/"],
+      "allows": ["selectors"]
+    },
+    {
+      "name": "dom",
+      "patterns": ["^src/dom/", "^src/utils/dom\\.ts$"],
+      "allows": ["dom", "core", "i18n", "assets", "selectors", "pure-utils"]
+    },
+    {
+      "name": "pure-utils",
+      "patterns": ["^src/utils/"],
+      "allows": ["pure-utils", "core"]
+    },
+    {
+      "name": "feeds",
+      "patterns": ["^src/feeds/"],
+      "allows": ["feeds", "dom", "core", "i18n", "assets", "selectors", "pure-utils"]
+    },
+    {
+      "name": "storage",
+      "patterns": ["^src/storage/", "^src/vendor/"],
+      "allows": ["storage", "core", "pure-utils"]
+    },
+    {
+      "name": "application",
+      "patterns": ["^src/application/"],
+      "allows": ["application", "storage", "core", "i18n", "pure-utils"]
+    },
+    {
+      "name": "diagnostics",
+      "patterns": ["^src/diagnostics/"],
+      "allows": [
+        "diagnostics",
+        "feeds",
+        "dom",
+        "core",
+        "i18n",
+        "selectors",
+        "pure-utils",
+        "platform"
+      ]
+    },
+    {
+      "name": "ui",
+      "patterns": ["^src/ui/"],
+      "allows": [
+        "ui",
+        "application",
+        "diagnostics",
+        "dom",
+        "core",
+        "i18n",
+        "assets",
+        "selectors",
+        "pure-utils",
+        "platform"
+      ]
+    },
+    {
+      "name": "runtime",
+      "patterns": ["^src/runtime/", "^src/entry/"],
+      "allows": [
+        "runtime",
+        "ui",
+        "application",
+        "diagnostics",
+        "feeds",
+        "storage",
+        "dom",
+        "core",
+        "i18n",
+        "assets",
+        "selectors",
+        "pure-utils",
+        "platform"
+      ]
+    }
+  ]
+}

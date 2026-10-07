@@ -25,7 +25,7 @@ Xin cảm ơn **[trinhquocviet](https://github.com/trinhquocviet)** vì đã h�
 "FB - Clean My Feeds" được tạo ra để giúp trải nghiệm lướt Facebook của bạn gọn hơn, yên hơn, và hoàn toàn nằm trong tay bạn.
 
 - **Quét sạch quảng cáo:** Tự động chặn quảng cáo Facebook, dọn các bài "Sponsored", nhãn "Paid Partnership" và các mục "Suggested for you" trên News, Groups, Watch, Marketplace, Search và Reels.
-- **Hoạt động tốt bất kể Facebook dùng ngôn ngữ nào:** Các bộ lọc cốt lõi được thiết kế để chạy ổn trên nhiều ngôn ngữ của Facebook mà không phụ thuộc vào từ điển dịch, nên chúng vẫn làm tốt phần việc của mình ngay cả khi Facebook của bạn không dùng tiếng Anh.
+- **Nhận diện nhãn đa ngôn ngữ:** Bộ lọc kết hợp bố cục Facebook được hỗ trợ với nhãn chính xác từ 23 bản dịch khi cần phân biệt đúng nút hoặc thành phần. Đổi ngôn ngữ của bảng cài đặt không làm thay đổi các nhãn được nhận diện. Nhãn mới hoặc cấu trúc trang chưa được hỗ trợ có thể bị bỏ sót.
 - **Dẹp bớt AI cho đỡ mệt:** Ẩn thẻ "Try Meta AI", các gợi ý prompt của Meta AI, bài viết có nhãn "AI info" của Facebook, và mấy thứ gây xao nhãng ở panel bên cạnh trước khi chúng chiếm luôn feed của bạn. Bộ lọc "AI info" dựa vào nhãn của Facebook và không phát hiện mọi bài viết được tạo bằng AI.
 - **Thu gọn bố cục:** Ẩn Reels, "Short Videos", và cả những dãy "Stories" to đùng chiếm hết màn hình. Bạn còn có thể tắt nguyên những khu như Marketplace nếu chẳng bao giờ dùng tới.
 - **Lọc bớt ồn ào:** Tạo danh sách chặn theo từ hoặc cụm từ cụ thể (có hỗ trợ regex!). Bạn cũng có thể đặt ngưỡng số "Like" để bớt thấy những bài quá viral và giữ feed mang tính cá nhân hơn.
@@ -38,6 +38,7 @@ Xin cảm ơn **[trinhquocviet](https://github.com/trinhquocviet)** vì đã h�
 - Các tùy chọn được nhóm theo từng feed (News, Groups, Watch, Marketplace, Profiles, Search, Reels). Bật những gì bạn muốn, lưu lại, và script sẽ quét lại trang ngay lập tức.
 - Bật **Debug** nếu muốn hiện các bài bị ẩn bằng viền chấm để bạn dễ kiểm tra thứ gì đang bị lọc.
 - Dùng **Export / Import** để sao lưu cài đặt. Script lưu tùy chọn cục bộ; khi duyệt web ẩn danh/private, các thiết lập đó sẽ mất khi phiên kết thúc.
+- Khi bật regex cho News, Groups, Watch hoặc Profiles, biểu thức không hợp lệ sẽ ngăn việc lưu hoặc nhập cài đặt. Thông báo lỗi chỉ rõ ô nhập gốc, dòng và feed bị ảnh hưởng; bản đang chỉnh sửa và cài đặt trước đó vẫn được giữ nguyên. Nếu cài đặt đã lưu từ trước chứa biểu thức không hợp lệ, script chỉ bỏ qua từng biểu thức đó để các quy tắc hợp lệ và bộ lọc khác tiếp tục hoạt động; hãy mở cài đặt để sửa. Marketplace vẫn khớp văn bản thông thường, không dùng regex.
 
 ### Hỗ trợ ngôn ngữ
 
@@ -80,9 +81,39 @@ Nếu bạn thấy chỗ nào dịch chưa ổn hoặc còn thiếu, cứ mở i
 - **Pull Requests:** Rất hoan nghênh. Giữ phạm vi gọn và mô tả rõ bạn đã sửa gì.
 - **Translations:** Nếu bạn muốn giúp phần chữ trên giao diện sắc sảo hơn ở nhiều ngôn ngữ, mình rất sẵn lòng.
 
+## Phát triển
+
+Dùng Node **>=22.14.0 <23**; `.nvmrc` và CI cố định phiên bản **22.14.0**. Mã nguồn, kiểm thử và công cụ được viết bằng TypeScript với kiểm tra kiểu nghiêm ngặt. Userscript cài trên trình duyệt vẫn là một gói ES2018 độc lập, không cần tải thêm mã bên ngoài.
+
+```sh
+nvm use
+npm ci
+npm run verify
+```
+
+Nếu không dùng nvm, hãy cài phiên bản Node được hỗ trợ trước. Lệnh kiểm tra duy nhất này chạy kiểm tra định dạng, lint, kiểm tra kiểu riêng cho trình duyệt/lõi/công cụ/kiểm thử, các bài kiểm thử Jest, kiểm tra bản dịch và quy tắc dự án, rồi build và xác minh userscript. Lệnh cũng kiểm tra metadata, bảo đảm không có phụ thuộc mã chạy bên ngoài, tài nguyên gốc không bị sửa và kết quả build có thể tái tạo giống hệt nhau. Commit cả `fb-clean-my-feeds.user.js` đã build lại cùng thay đổi mã nguồn; đừng sửa trực tiếp tệp này.
+
+PNG được tối ưu trong bộ nhớ nên ảnh gốc không bị thay đổi. Mô-đun vượt 350 dòng mã không tính chú thích sẽ được cảnh báo; vượt 500 dòng cần ngoại lệ đã được xem xét. Hàm có tên, phương thức, lớp và hợp đồng dữ liệu được xuất ra cần JSDoc có nội dung hữu ích. Xem [CONTRIBUTING.md](CONTRIBUTING.md) để biết kiến trúc, ngoại lệ tạm thời và điều kiện phát hành. Giữ nội dung thiết yếu của README này đồng bộ với bản tiếng Anh.
+
+## Kiểm thử và giới hạn hiện tại
+
+`tests/validation/` gồm các trường hợp nhận diện đúng, tắt tùy chọn, giữ nội dung thông thường, dữ liệu dễ gây nhầm lẫn, quét lặp lại và khôi phục hiển thị. Dữ liệu kiểm thử mô phỏng các cấu trúc được hỗ trợ; không chứng minh rằng mọi thử nghiệm giao diện hay ngôn ngữ của Facebook đều đã được kiểm tra.
+
+| Phạm vi                                                                                                                          | Bộ kiểm thử chính                   |
+| -------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| Bộ lọc News, các dãy thẻ, gợi ý, nút cạnh tên tác giả, huy hiệu và tính năng AI                                                  | `news-*.test.ts`                    |
+| Groups, Watch, Marketplace, Search, Profiles và Reels                                                                            | `routes-*.test.ts`                  |
+| Quảng cáo, từ khóa chặn, số lượt tương tác, GIF, lượt chia sẻ và trích xuất DOM                                                  | `shared-*.test.ts`                  |
+| Toàn bộ 76 khóa tùy chọn, 4.096 tổ hợp chia sẻ bộ lọc giữa các feed, 23 ngôn ngữ giao diện, nhập/xuất, lưu đồng thời và vòng đời | `settings-*.test.ts`                |
+| Quyền riêng tư của báo cáo và thông tin chẩn đoán quy tắc không hợp lệ                                                           | `diagnostic-script-privacy.test.ts` |
+
+Biểu tượng hay nút thông thường trong phần đầu bài viết và liên kết trong nội dung/bình luận không được coi là huy hiệu xác minh, nút Follow/Join hay thẻ gợi ý. Liên kết theo dõi quảng cáo phải đi kèm dấu hiệu quảng cáo thuộc đúng thành phần được hỗ trợ; riêng độ dài tham số theo dõi là chưa đủ. Vì vậy, nhãn hoặc cách che giấu chưa được hỗ trợ có thể khiến nội dung không mong muốn vẫn hiển thị. Kiểm thử hữu hạn không thể bảo đảm tuyệt đối không lọc nhầm; hãy dùng Debug để xem trường hợp đáng ngờ và báo lại bố cục liên quan.
+
+Đợt kiểm tra cũng ghi rõ các nhánh vốn chưa hoạt động: Marketplace vẫn khớp văn bản thông thường dù có tùy chọn regex; bộ lọc video trùng lặp trên Watch hiện chưa ẩn video trùng; ba tùy chọn hộp thông tin không khớp với mô tả đường dẫn đang dùng lúc chạy. Khóa paid-partnership của Groups được giữ lại để tương thích với cài đặt đã lưu. Đây là những giới hạn riêng, không phải các bộ lọc đang hoạt động đã được kiểm chứng.
+
 ## <img src="src/res/info.png" alt="license" width="36"/> Giấy phép & Ghi công
 
-- **License:** GNU General Public License v3.0. Bạn được quyền chia sẻ, chỉnh sửa và cải tiến, miễn là vẫn giữ lại những quyền tự do đó cho người khác.
+- **License:** GNU General Public License v3.0, chỉ phiên bản 3 (GPL-3.0-only). Bạn được quyền chia sẻ, chỉnh sửa và cải tiến, miễn là vẫn giữ lại những quyền tự do đó cho người khác.
 - **Original Project:** [facebook-clean-my-feeds](https://github.com/zbluebugz/facebook-clean-my-feeds) bởi [zbluebugz](https://github.com/zbluebugz)
 - **Hỗ trợ duy trì bộ lọc (2025):** [trinhquocviet](https://github.com/trinhquocviet)
 - **Current Maintainer:** [Artificial Sweetener](https://github.com/Artificial-Sweetener) - chính là mình!~

@@ -15,6 +15,11 @@ export class UiLifecycle {
     else cleanup();
   }
 
+  /** Forget a resource already released by its owner without invoking its teardown again. */
+  remove(cleanup: () => void): void {
+    this.cleanups.delete(cleanup);
+  }
+
   /** Remove an event listener at teardown and ignore already-queued stale dispatches. */
   listen(
     target: EventTarget,

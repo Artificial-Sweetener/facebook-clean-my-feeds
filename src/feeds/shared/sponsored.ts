@@ -154,7 +154,10 @@ function hasSponsoredCorroboration(
     !!header &&
     post.contains(header) &&
     Array.from(header.querySelectorAll('a, button, [role="button"], [role="link"]')).some(
-      (control) => isOwnedControl(control, post, bodies) && hasSponsoredName(control, post, bodies)
+      (control) =>
+        control !== link &&
+        isOwnedControl(control, post, bodies) &&
+        hasSponsoredName(control, post, bodies)
     )
   );
 }

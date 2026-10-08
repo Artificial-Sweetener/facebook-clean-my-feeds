@@ -1,58 +1,69 @@
-name: release
+name: verify-and-release
 
 on:
+  pull_request:
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
     inputs:
       dry_run:
-        description: "Run semantic-release in dry-run mode without publishing"
+        description: Run semantic-release without publishing
         required: false
         default: "true"
         type: choice
-        options:
-          - "true"
-          - "false"
+        options: ["true", "false"]
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  release:
+  verify:
+    name: Verify TypeScript and userscript
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 22.14.0
           cache: npm
+      - run: npm ci
+      - run: npm run verify
+      - name: Require committed generated output
+        run: git diff --exit-code -- fb-clean-my-feeds.user.js
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Check for existing version tags
+  release:
+    name: Release verified main
+    needs: verify
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.14.0
+          cache: npm
+      - run: npm ci
+      - name: Check existing version tags
         id: tags
         run: |
           if git tag --list "v*" | grep -q .; then
             echo "has_tags=true" >> "$GITHUB_OUTPUT"
           else
             echo "has_tags=false" >> "$GITHUB_OUTPUT"
-            echo "No version tags found. Create v6.0.0 to enable releases."
+            echo "No version tags found. A maintainer must establish the release baseline."
           fi
-
       - name: Release
         if: steps.tags.outputs.has_tags == 'true' || github.event.inputs.dry_run == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
         run: |
-          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
-            npx semantic-release --dry-run --no-ci
+          if [ "$DRY_RUN" = "true" ]; then
+            npm run release -- --dry-run --no-ci
           else
-            npx semantic-release
+            npm run release
           fi

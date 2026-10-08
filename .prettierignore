@@ -1,2 +1,5 @@
-*.md
-package*.json
+node_modules/
+coverage/
+fb-clean-my-feeds.user.js
+CHANGELOG.md
+LICENSE

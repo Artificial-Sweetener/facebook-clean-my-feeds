@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "components": [
+    {
+      "name": "idb-keyval",
+      "source": "src/vendor/idb-keyval.ts",
+      "upstream": "https://github.com/jakearchibald/idb-keyval",
+      "upstreamNotice": "https://github.com/jakearchibald/idb-keyval/blob/main/LICENCE",
+      "originalCopyright": "Copyright 2016, Jake Archibald",
+      "originalLicense": "Apache-2.0",
+      "licenseFile": "governance/licenses/Apache-2.0.txt",
+      "licenseSha256": "527adf9d4c760f7367c2aeffed6a89afba8ba40ea1b0efbc8f56496ad30ea9cf",
+      "baselineSourceCommit": "4527453048b95815d59c9d48e86359d4e93f4161",
+      "baselineSourceSha256": "c39b8635642fc4cfa293de5f78591282a313b84ad7eaefb0e68d5a39712e1762",
+      "upstreamVersion": "Exact upstream release was not recorded in the legacy bundled source",
+      "modifications": "CMF-owned strict TypeScript port preserving eager database opening, Safari readiness polling, and transaction semantics; unknown-value storage boundary and documented maintenance ownership"
+    }
+  ]
+}

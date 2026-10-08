@@ -7,7 +7,7 @@ import { loadBanner } from "../../tools/banner";
 import { fingerprint } from "../../tools/governance/files";
 import { iconDirectory, listIcons, optimizeIcon, projectRoot } from "../../tools/optimize-icons";
 import { assertMetadata, assertThirdPartyNotices } from "../../tools/verify-artifact";
-import { loadSvgIcons } from "../../tools/svg-assets";
+import { inlineSvg, loadSvgIcons } from "../../tools/svg-assets";
 import { verifyAssets } from "../../tools/verify-assets";
 
 describe("immutable historical image contract", () => {
@@ -17,7 +17,7 @@ describe("immutable historical image contract", () => {
     for (const file of files) before.set(file, fingerprint(await fs.readFile(file)));
     const images = await loadSvgIcons();
     const embedded = [...images.values()]
-      .map((image, index) => `const icon${index} = ${JSON.stringify(image)};`)
+      .map((image, index) => `const icon${index} = ${JSON.stringify(inlineSvg(image))};`)
       .join("\n");
     await expect(verifyAssets(embedded)).resolves.toBeUndefined();
     for (const file of files) expect(fingerprint(await fs.readFile(file))).toBe(before.get(file));

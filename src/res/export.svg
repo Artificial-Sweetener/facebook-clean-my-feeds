@@ -1,4 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#6b7280">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">
+  <style>:root{color:#1f2328}@media(prefers-color-scheme:dark){:root{color:#f0f6fc}}</style>
   <path fill="currentColor" d="m35.5 18.3 12.2-2-1.5 11.2-3.1-4L28.8 35.4c-.6.5-1 .5-1.6-.1l-.4-.4c-.5-.5-.4-1 .2-1.6l13.1-13-4.6-1.6c-.5-.1-.5-.3 0-.4Z"/>
   <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
     <path d="M21.7 33.5h-2.1L14 40.8v5.7c0 1.4.7 2 2 2h30.9c1.4 0 2.1-.6 2.1-2v-5.7l-4.9-7.3h-2.3"/>

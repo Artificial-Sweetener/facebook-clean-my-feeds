@@ -8,7 +8,7 @@ import * as esbuild from "esbuild";
 import { loadBanner } from "./banner";
 import { iconDirectory, projectRoot } from "./optimize-icons";
 
-import { loadSvgIcons } from "./svg-assets";
+import { inlineSvg, loadSvgIcons } from "./svg-assets";
 
 export const artifactPath = path.join(projectRoot, "fb-clean-my-feeds.user.js");
 
@@ -54,7 +54,7 @@ export async function buildUserscript(): Promise<UserscriptBuild> {
             const contents = icons.get(args.path);
             if (!contents)
               throw new Error(`SVG is outside the reviewed asset directory: ${args.path}`);
-            return { contents, loader: "text" };
+            return { contents: inlineSvg(contents), loader: "text" };
           });
         },
       },

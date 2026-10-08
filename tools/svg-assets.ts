@@ -7,6 +7,10 @@ import { JSDOM } from "jsdom";
 
 import { iconDirectory } from "./optimize-icons";
 
+/** The only admitted stylesheet colors a standalone image and is removed before inline embedding. */
+export const standaloneThemeCss =
+  ":root{color:#1f2328}@media(prefers-color-scheme:dark){:root{color:#f0f6fc}}";
+
 const shapeNames = new Set([
   "svg",
   "g",
@@ -58,8 +62,9 @@ const paintPattern = /^(?:none|currentColor|#[\da-fA-F]{3,8})$/;
 /**
  * Accept only inert, self-contained SVG geometry before trusted artwork reaches an HTML sink.
  * This is a build-time contract, not a sanitizer for arbitrary downloaded or user-provided SVG.
- * The grammar deliberately excludes links, stylesheets, filters, scripts, foreign content,
- * IDs and references, so multiple instances cannot collide or access the surrounding page.
+ * The grammar deliberately excludes links, arbitrary stylesheets, filters, scripts, foreign content,
+ * IDs and references. One exact root-color media rule is allowed for standalone images; the
+ * inline build removes that rule so multiple instances cannot affect the surrounding page.
  *
  * @param markup Hand-authored UTF-8 source, never generated from raster pixels.
  * @param filename Source name used only in actionable build diagnostics.
@@ -80,7 +85,22 @@ export function validateSvg(markup: string, filename: string): string {
     ) {
       throw new Error(`SVG must use the reviewed 64px canvas: ${filename}`);
     }
+    if (root.querySelectorAll("style").length > 1) {
+      throw new Error(`Duplicate standalone SVG theme: ${filename}`);
+    }
     for (const element of [root, ...root.querySelectorAll("*")]) {
+      if (element.localName === "style") {
+        if (
+          element.namespaceURI !== root.namespaceURI ||
+          element.parentElement !== root ||
+          element.attributes.length !== 0 ||
+          element.children.length !== 0 ||
+          element.textContent !== standaloneThemeCss
+        ) {
+          throw new Error(`Unsupported SVG stylesheet in ${filename}`);
+        }
+        continue;
+      }
       if (
         !shapeNames.has(element.localName) ||
         element.namespaceURI !== root.namespaceURI ||
@@ -107,6 +127,20 @@ export function validateSvg(markup: string, filename: string): string {
   } finally {
     window.close();
   }
+}
+
+/**
+ * Remove the one allowlisted standalone theme before artwork is placed inside a host document.
+ * @param markup Repository SVG source; validation is repeated at this HTML-boundary operation.
+ * @returns Decorative markup with geometry retained verbatim and no host-root stylesheet.
+ * @throws If SVG is outside the static contract or any stylesheet survives removal.
+ */
+export function inlineSvg(markup: string): string {
+  const source = validateSvg(markup, "inline SVG");
+  const inline = source.replace(/<style\s*>[\s\S]*?<\/style\s*>/g, "");
+  if (/<style\b|:root/.test(inline))
+    throw new Error("Standalone SVG theme survived inline stripping");
+  return inline;
 }
 
 /**

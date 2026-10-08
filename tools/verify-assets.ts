@@ -8,7 +8,7 @@ import ts from "typescript";
 
 import assetContract from "../governance/asset-contract.json";
 import { fingerprint } from "./governance/files";
-import { loadSvgIcons } from "./svg-assets";
+import { inlineSvg, loadSvgIcons } from "./svg-assets";
 import { optimizedIcons } from "./optimize-icons";
 
 /**
@@ -66,7 +66,7 @@ export async function verifyAssets(code: string): Promise<void> {
   }
   visit(parsed);
   for (const [filename, svg] of svgs) {
-    if (!literals.has(svg))
+    if (!literals.has(inlineSvg(svg)))
       throw new Error(`Reviewed SVG is missing from the userscript: ${path.basename(filename)}`);
   }
   if (/data:image\/png/.test(code))

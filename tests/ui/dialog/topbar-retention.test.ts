@@ -94,6 +94,35 @@ describe("topbar replacement resource bounds", () => {
     expect(CountingObserver.active.size).toBe(0);
   });
 
+  test("rebinds live banner replacements behind a cached hidden banner", async () => {
+    const cached = createBanner();
+    cached.hidden = true;
+    const banner = createBanner();
+    document.body.append(cached, banner);
+    const state = createState();
+    state.showAtt = "cmf-show";
+    const lifecycle = new UiLifecycle();
+    state.dialogLifecycle = lifecycle;
+    setupTopbarMenuSync(state);
+    const dialog = document.createElement("div");
+    dialog.id = "fbcmf";
+    document.body.append(dialog);
+    try {
+      for (let index = 0; index < 40; index += 1) {
+        replaceButtons(banner);
+        await Promise.resolve();
+        dialog.setAttribute(state.showAtt, "");
+        banner.firstElementChild?.setAttribute("aria-expanded", "true");
+        await Promise.resolve();
+        expect(dialog.hasAttribute(state.showAtt)).toBe(false);
+        expect(CountingObserver.active.size).toBe(4);
+      }
+    } finally {
+      lifecycle.dispose();
+    }
+    expect(CountingObserver.active.size).toBe(0);
+  });
+
   test.each(["buttons", "banner"])(
     "forty %s replacements retain only current controls",
     async (replacement) => {

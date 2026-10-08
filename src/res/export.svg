@@ -1,8 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">
   <style>:root{color:#1f2328}@media(prefers-color-scheme:dark){:root{color:#f0f6fc}}</style>
-  <path fill="currentColor" d="m35.5 18.3 12.2-2-1.5 11.2-3.1-4L28.8 35.4c-.6.5-1 .5-1.6-.1l-.4-.4c-.5-.5-.4-1 .2-1.6l13.1-13-4.6-1.6c-.5-.1-.5-.3 0-.4Z"/>
-  <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M21.7 33.5h-2.1L14 40.8v5.7c0 1.4.7 2 2 2h30.9c1.4 0 2.1-.6 2.1-2v-5.7l-4.9-7.3h-2.3"/>
-    <path d="M14 41.9h10.5l1.9 2.3h10.5l2-2.3H49"/>
+  <g transform="translate(-11.43003 -12.45392) scale(1.36519)">
+    <g transform="scale(0.095096582)" fill="currentColor">
+        <path d="M389 182 488 169c13-2 21 7 19 20l-16 89c-1 9-8 13-16 11-5-1-7-4-9-10l-8-28-149 126c-9 8-19 5-25-2-7-7-6-17 1-24l137-134-35-11c-9-3-13-7-12-13 1-6 6-10 14-11Z"/>
+        <g fill="none" stroke="currentColor" stroke-width="19" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M229 352h-17c-6 0-11 3-14 8l-42 65c-3 4-4 8-4 14v39c0 17 11 29 28 29h309c18 0 28-12 28-29v-39c0-6-1-10-4-15l-42-65c-3-5-8-7-14-7h-17"/>
+          <path d="M153 440h100c5 0 10 3 13 8l5 7c4 6 9 9 16 9h95c7 0 12-3 16-9l5-7c3-5 8-8 14-8h99"/>
+        </g>
+      </g>
   </g>
 </svg>

@@ -4,6 +4,7 @@ import { releaseDirtyObservers } from "../dom/dirty-check";
 import { releaseReelsProcessing } from "../feeds/reels";
 import { restoreNewsPresentation } from "../feeds/news-presentation";
 import { classifyRoute } from "../core/routing/routes";
+import { closeDialogIfOpen } from "../ui/dialog/topbar";
 import type { RuntimeState } from "./state";
 
 /**
@@ -27,11 +28,15 @@ export function setFeedSettings(
   if (state.prevURL === location.href && !forceUpdate) return false;
   const { href, pathname, search } = location;
   const route = classifyRoute(pathname, search, options);
+  // Hide unsupported-route UI before fallible restoration, while retaining retryable feed identity.
+  if (!route.isAF) {
+    state.btnToggleEl?.removeAttribute(state.showAtt);
+    closeDialogIfOpen(state);
+  }
   if (state.prevURL !== href) releaseDirtyObservers();
   if (state.isNF && !route.isNF) restoreNewsPresentation();
   if (state.isRF && !route.isRF) releaseReelsProcessing(state);
   if (route.isAF) state.btnToggleEl?.setAttribute(state.showAtt, "");
-  else state.btnToggleEl?.removeAttribute(state.showAtt);
   // Publish route identity only after fallible page restoration has completed successfully.
   Object.assign(state, route);
   state.prevURL = href;

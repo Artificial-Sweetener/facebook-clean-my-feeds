@@ -61,6 +61,8 @@ export function createToggleButton(
   const useTopRight = btnLocation === "1";
   const btn = document.createElement(useTopRight ? "div" : "button");
   const lifecycle = new UiLifecycle();
+  /** A host window may close after queuing observer delivery but before its callbacks run. */
+  const hasLiveDocument = () => typeof document !== "undefined" && !!document.body;
   /**
    * Collect teardown operations so replacing the control cannot leave active observers or listeners.
    * @param cleanup Lifecycle teardown operation to run exactly once on removal.
@@ -122,7 +124,7 @@ export function createToggleButton(
    * Coalesce geometry/theme work into one animation frame, with a timer fallback for limited hosts.
    */
   const scheduleUpdate = () => {
-    if (!lifecycle.active || updateScheduled) {
+    if (!lifecycle.active || !hasLiveDocument() || updateScheduled) {
       return;
     }
     updateScheduled = true;
@@ -131,7 +133,7 @@ export function createToggleButton(
      */
     const runUpdate = () => {
       updateScheduled = false;
-      positioning.updatePosition();
+      if (hasLiveDocument()) positioning.updatePosition();
     };
     lifecycle.frame(runUpdate);
   };
@@ -172,7 +174,7 @@ export function createToggleButton(
    * Coalesce broad body mutations and avoid touching a detached toggle after teardown.
    */
   const schedulePageDimmedStateSync = () => {
-    if (!lifecycle.active || pageDimmedUpdateScheduled) {
+    if (!lifecycle.active || !hasLiveDocument() || pageDimmedUpdateScheduled) {
       return;
     }
     pageDimmedUpdateScheduled = true;
@@ -181,11 +183,27 @@ export function createToggleButton(
      */
     const runUpdate = () => {
       pageDimmedUpdateScheduled = false;
-      if (btn.isConnected) {
+      if (hasLiveDocument() && btn.isConnected) {
         syncPageDimmedState();
       }
     };
     lifecycle.frame(runUpdate);
+  };
+  /** Recover only this live generation after host DOM replacement, never a disabled or superseded toggle. */
+  const restoreOwnedToggle = () => {
+    if (
+      lifecycle.active &&
+      hasLiveDocument() &&
+      btnLocation !== "2" &&
+      state.btnToggleEl === btn &&
+      state.isAF &&
+      !btn.isConnected &&
+      document.body &&
+      !document.getElementById(btn.id)
+    ) {
+      document.body.appendChild(btn);
+      if (useTopRight) scheduleUpdate();
+    }
   };
   if (useTopRight) {
     if (!btn.isConnected) {
@@ -198,17 +216,25 @@ export function createToggleButton(
       addCleanup(() => resizeObserver?.disconnect());
     }
     observeMenuButton();
-    const banner = document.querySelector('[role="banner"]');
-    if (banner && typeof MutationObserver !== "undefined") {
-      lifecycle.observe(banner, { childList: true, subtree: true }, () => {
-        observeMenuButton();
-        scheduleUpdate();
-      });
+    // The header can arrive late or be replaced outside its original subtree.
+    scheduleUpdate();
+    if (typeof MutationObserver !== "undefined") {
+      lifecycle.observe(
+        document.documentElement,
+        { attributes: true, attributeFilter: ["class", "style"] },
+        () => {
+          positioning.invalidateTheme(true);
+          scheduleUpdate();
+        }
+      );
     }
     if (typeof window !== "undefined") {
       window.addEventListener("resize", scheduleUpdate);
       addCleanup(() => window.removeEventListener("resize", scheduleUpdate));
       const intervalId = setInterval(() => {
+        if (!hasLiveDocument()) return;
+        restoreOwnedToggle();
+        observeMenuButton();
         if (positioning.needsMenuSync()) {
           scheduleUpdate();
         }
@@ -235,7 +261,32 @@ export function createToggleButton(
         childList: true,
         subtree: true,
       },
-      () => schedulePageDimmedStateSync()
+      (records) => {
+        if (!hasLiveDocument()) return;
+        schedulePageDimmedStateSync();
+        restoreOwnedToggle();
+        if (!useTopRight) return;
+        const hostChanged = records.some(({ target, type, addedNodes, removedNodes }) => {
+          if (!(target instanceof Element) || target === btn || btn.contains(target)) return false;
+          if (target.closest('[role="banner"]')) return true;
+          if (
+            type === "attributes" &&
+            (!observedMenuButton || target.contains(observedMenuButton))
+          ) {
+            positioning.invalidateTheme(true);
+            return true;
+          }
+          return [...addedNodes, ...removedNodes].some(
+            (node) =>
+              node instanceof Element &&
+              (node.matches('[role="banner"]') || !!node.querySelector('[role="banner"]'))
+          );
+        });
+        if (hostChanged) {
+          observeMenuButton();
+          scheduleUpdate();
+        }
+      }
     );
   }
   syncPageDimmedState();

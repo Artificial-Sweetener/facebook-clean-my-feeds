@@ -74,6 +74,20 @@ describe("dom/topbar-controls", () => {
     expect(isTopbarControlButton(backButton)).toBe(false);
   });
 
+  test("ignores a cached hidden banner before a live replacement", () => {
+    const cached = document.createElement("div");
+    cached.setAttribute("role", "banner");
+    cached.hidden = true;
+    const current = document.createElement("div");
+    current.setAttribute("role", "banner");
+    const menu = document.createElement("button");
+    mockRect(current, { left: 0, top: 0, width: 900, height: 56 });
+    mockRect(menu, { left: 700, top: 8, width: 40, height: 40 });
+    current.append(menu);
+    document.body.append(cached, current);
+    expect(getTopbarMenuButton()).toBe(menu);
+  });
+
   test("includes square page-mode topbar links and dedupes nested controls", () => {
     const banner = document.createElement("div");
     banner.setAttribute("role", "banner");

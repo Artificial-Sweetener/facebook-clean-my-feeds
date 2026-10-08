@@ -137,16 +137,6 @@ export function appendDialogStyles(state: StyleContext): void {
   addToSS(state, ".fb-cmf fieldset legend .cmf-legend-icon .cmf-icon", "width:26px; height:26px;");
   addToSS(
     state,
-    ".fb-cmf fieldset legend .cmf-legend-icon .cmf-icon--legend-report-bug",
-    "width:32px; height:32px;"
-  );
-  addToSS(
-    state,
-    ".fb-cmf fieldset legend .cmf-legend-icon .cmf-icon--legend-reels",
-    "width:32px; height:32px;"
-  );
-  addToSS(
-    state,
     ".fb-cmf fieldset legend .cmf-legend-text",
     "display:flex; flex-direction:column; align-items:flex-start; gap:0; min-width:0;"
   );

@@ -208,7 +208,7 @@ export function setupTopbarMenuSync(state: DialogState) {
     });
   };
 
-  const banner = document.querySelector('[role="banner"]');
+  const banner = getTopbarMenuButtons()[0]?.closest('[role="banner"]');
   if (!banner) {
     state.cmfTopbarSyncPending = true;
     lifecycle.defer(() => {
@@ -236,7 +236,7 @@ export function setupTopbarMenuSync(state: DialogState) {
    * @returns Whether banner ownership changed, so unrelated document churn can skip geometry discovery.
    */
   const syncBanner = () => {
-    const current = document.querySelector('[role="banner"]');
+    const current = getTopbarMenuButtons()[0]?.closest('[role="banner"]') ?? null;
     if (current === observedBanner) return false;
     bannerOwner?.dispose();
     bannerOwner = null;
@@ -276,7 +276,16 @@ export function setupTopbarMenuSync(state: DialogState) {
     lifecycle.observe(document, { childList: true, subtree: true }, (mutations) => {
       // A closed host window can deliver a queued record after its document global has gone away.
       if (typeof document === "undefined") return;
-      if (syncBanner()) bindButtons();
+      const bannerChanged =
+        !observedBanner?.isConnected ||
+        mutations.some((mutation) =>
+          [...mutation.addedNodes, ...mutation.removedNodes].some(
+            (node) =>
+              node instanceof Element &&
+              (node.matches('[role="banner"]') || !!node.querySelector('[role="banner"]'))
+          )
+        );
+      if (bannerChanged && syncBanner()) bindButtons();
       mutations.forEach((mutation) => {
         if (mutation.type !== "childList") {
           return;

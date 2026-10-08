@@ -1,11 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">
   <style>:root{color:#1f2328}@media(prefers-color-scheme:dark){:root{color:#f0f6fc}}</style>
-  <g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M40 21.6a13.4 13.4 0 1 0 4.4 9.9M16.2 41v5.8c0 1.2.6 1.7 1.8 1.7h25.6"/>
-  </g>
-  <path fill="currentColor" d="m35.8 25.8 8.5.6-.9-8.6c-.1-.7-.5-.8-.9-.2l-7 7.3c-.5.5-.5.8.3.9Z"/>
-  <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-    <path d="m37.8 43.7 8.1-7.2c.6-.5 1.1-.5 1.6 0l3.6 3.4c.7.6.7 1.2.1 1.9l-6.7 6.3c-.3.3-.6.4-1 .4h-3.8l-1.8-1.7c-.8-.8-.9-2-.1-3.1Z"/>
-    <path d="m44.4 38 4.9 5.7m-11.8 1.6 6.7 2"/>
+  <g transform="translate(-13.28381 -12.6995) scale(1.33556)">
+    <g transform="scale(0.095096582)" fill="currentColor">
+        <path d="M421 210c-25-20-57-30-94-30-86 0-157 67-157 151 0 80 67 144 151 144 17 0 33-2 48-6 6-18 18-26 33-39 2-2 2-3-1-2-23 13-45 20-78 20-71 0-127-51-127-117 0-68 57-125 130-125 28 0 56 8 78 25l-28 24c-10 9-9 18 4 20l73 7c18 1 26-3 23-16l-18-72c-3-14-16-17-25-4Z"/>
+        <path d="M457 335c-3 29-12 47-32 74-3 4-2 5 3 2 18-11 37-27 44-44 5-11 7-20 8-31 1-16-20-17-23-1Z"/>
+        <path d="M174 422c-9 0-14 8-14 20v43c0 24 18 39 44 39h237c21 0 34-12 40-30l-29 7c-5 2-10 2-17 2H207c-17 0-27-7-27-23v-39c0-4 2-6 5-9 5-6 0-10-11-10Z"/>
+        <path fill-rule="evenodd" d="m490 381-94 75c-7 6-10 13-10 23 0 11 4 15 14 16l61 7c7 0 13-3 20-9l63-48c11-10 10-22 1-32l-30-30c-9-10-15-10-25-2Zm9 11-22 17 40 37 15-12c3-3 3-6 0-9Zm-34 28-60 47c-2 2-3 6-2 11l61 7 39-29Z"/>
+        <ellipse cx="527" cy="493" rx="12" ry="8"/>
+        <circle cx="546" cy="475" r="7"/>
+      </g>
   </g>
 </svg>

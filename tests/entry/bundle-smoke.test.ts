@@ -123,6 +123,15 @@ afterEach(() => {
 });
 
 describe("compiled userscript smoke", () => {
+  test("queued toggle recovery does not touch a closed host document", async () => {
+    const fixture = await startBundle(new IDBFactory(), false);
+    requiredElement(fixture.window.document, "#fbcmfToggle").remove();
+    fixture.window.document.documentElement.classList.add("closing-theme");
+    fixture.window.close();
+    await new Promise<void>((resolve) => setTimeout(resolve, 0));
+    expect(fixture.errors).toEqual([]);
+  });
+
   test.each([false, true])(
     "mounts, saves, reloads, and redacts reports with optional GM present: %s",
     async (withManager) => {

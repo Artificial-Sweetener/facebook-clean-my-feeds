@@ -97,6 +97,11 @@ describe("dom/styles", () => {
 
     expect(style).not.toBeNull();
     expect(css).toContain(".cmf-icon > svg");
+    expect(css).toMatch(
+      /\.fb-cmf fieldset legend \.cmf-legend-icon \.cmf-icon \{\s*width:26px;\s*height:26px;/
+    );
+    expect(css).not.toContain(".cmf-icon--legend-report-bug");
+    expect(css).not.toContain(".cmf-icon--legend-reels");
     expect(css).not.toContain("mask-image");
     expect(css).toContain(".fb-cmf-toggle:focus-visible");
     expect(css).toContain("--primary-deemphasized-button-background");

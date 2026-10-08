@@ -35,6 +35,7 @@ Xin cảm ơn **[trinhquocviet](https://github.com/trinhquocviet)** vì đã h�
 ## <img src="src/res/pref.svg" alt="options" width="36"/> Cách dùng Bảng Điều Khiển
 
 - Bấm biểu tượng cây lau nhà **Clean My Feeds** (hoặc mở từ menu của trình quản lý userscript) để mở hộp thoại cài đặt.
+- Nút trên thanh công cụ đi theo các bảng tin và trang cá nhân được hỗ trợ; hộp thoại đóng khi bạn chuyển sang trang không được hỗ trợ. Nút không xuất hiện trên các trang cài đặt, quyền riêng tư, đăng nhập hoặc trợ giúp. Trên Reels, nút chỉ xuất hiện khi bật điều khiển phát hoặc tắt phát lặp.
 - Các tùy chọn được nhóm theo từng feed (News, Groups, Watch, Marketplace, Profiles, Search, Reels). Bật những gì bạn muốn, lưu lại, và script sẽ quét lại trang ngay lập tức.
 - Bật **Debug** nếu muốn hiện các bài bị ẩn bằng viền chấm để bạn dễ kiểm tra thứ gì đang bị lọc.
 - Dùng **Export / Import** để sao lưu cài đặt. Script lưu tùy chọn cục bộ; khi duyệt web ẩn danh/private, các thiết lập đó sẽ mất khi phiên kết thúc.

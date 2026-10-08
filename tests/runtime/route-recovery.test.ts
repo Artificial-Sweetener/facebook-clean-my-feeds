@@ -92,6 +92,32 @@ describe("route transition recovery without stale feed dispatch", () => {
     loop.stop();
   });
 
+  test("unsupported routes hide controls even while presentation restoration is retrying", () => {
+    const state = createState();
+    state.showAtt = "cmf-visible";
+    state.btnToggleEl = document.createElement("button");
+    const dialog = document.createElement("div");
+    dialog.id = "fbcmf";
+    const badge = document.createElement("span");
+    document.body.append(dialog, badge, state.btnToggleEl);
+    setFeedSettings(state, {}, false, new URL("https://www.facebook.com/"));
+    dialog.setAttribute(state.showAtt, "");
+    state.btnToggleEl.setAttribute("data-cmf-open", "true");
+    reconcileNewsPresentation("badge", new Map([[badge, ["display"]]]), "cmf-badge");
+    jest.spyOn(badge, "removeAttribute").mockImplementationOnce(() => {
+      throw new Error("Transient badge restoration failure");
+    });
+    const next = new URL("https://www.facebook.com/settings/privacy/");
+    expect(() => setFeedSettings(state, {}, false, next)).toThrow();
+    expect(state.prevPathname).toBe("/");
+    expect(state.isNF).toBe(true);
+    expect(state.btnToggleEl.hasAttribute(state.showAtt)).toBe(false);
+    expect(state.btnToggleEl.hasAttribute("data-cmf-open")).toBe(false);
+    expect(dialog.hasAttribute(state.showAtt)).toBe(false);
+    expect(setFeedSettings(state, {}, false, next)).toBe(true);
+    expect(state.isAF).toBe(false);
+  });
+
   test("Reels cleanup failure preserves old route flags while retiring the old timer", () => {
     const state = createState();
     const options = createNewsContext({ options: { REELS_CONTROLS: true } });

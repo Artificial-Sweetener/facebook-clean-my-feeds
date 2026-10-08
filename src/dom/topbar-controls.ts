@@ -157,11 +157,18 @@ export function getTopbarControlButtons(root: ParentNode | null = document): Ele
   if (!root || typeof root.querySelector !== "function") {
     return [];
   }
-  const banner = root.querySelector('[role="banner"]');
-  if (!banner) {
-    return [];
+  for (const banner of root.querySelectorAll('[role="banner"]')) {
+    if (banner.closest('[hidden], [aria-hidden="true"]')) continue;
+    const style = window.getComputedStyle(banner);
+    if (style.display === "none" || style.visibility === "hidden") continue;
+    const controls = getBannerControls(banner);
+    if (controls.length) return controls;
   }
+  return [];
+}
 
+/** Rank control clusters within one eligible banner, allowing cached empty banners to be skipped. */
+function getBannerControls(banner: Element): Element[] {
   const bannerRect = getRect(banner);
   const controls = dedupeOverlappingControls(
     Array.from(new Set(Array.from(banner.querySelectorAll(topbarControlSelector))))

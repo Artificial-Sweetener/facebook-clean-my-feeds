@@ -1,0 +1,239 @@
+// SPDX-License-Identifier: GPL-3.0-only
+
+import { findElement, requireValue } from "../helpers";
+import { buildDialogSections } from "../../../src/ui/dialog/sections";
+import { defaults } from "../../../src/core/options/defaults";
+import { translations } from "../../../src/i18n";
+import { createState } from "../../../src/runtime/state";
+import { SEPARATOR } from "../../../src/core/options/constants";
+
+/** Supply section presentation state without starting dialog event listeners. */
+function buildState() {
+  const state = createState();
+  state.SEP = SEPARATOR;
+  state.language = "en";
+  state.iconLegendHTML = "<svg></svg>";
+  state.dialogSectionIcons = {};
+  return state;
+}
+
+describe("ui/dialog/sections", () => {
+  test("blocked text textareas split by separator", () => {
+    const state = buildState();
+    const options = {
+      ...defaults,
+      NF_BLOCKED_TEXT: "alphaIIbeta",
+      GF_BLOCKED_TEXT: "",
+      VF_BLOCKED_TEXT: "",
+      MP_BLOCKED_TEXT: "",
+      MP_BLOCKED_TEXT_DESCRIPTION: "",
+      PP_BLOCKED_TEXT: "",
+      NF_LIKES_MAXIMUM_COUNT: "",
+      VERBOSITY_MESSAGE_COLOUR: "",
+      VERBOSITY_MESSAGE_BG_COLOUR: defaults.VERBOSITY_MESSAGE_BG_COLOUR,
+      VERBOSITY_DEBUG: false,
+      CMF_BORDER_COLOUR: defaults.CMF_BORDER_COLOUR,
+      CMF_DIALOG_LANGUAGE: "en",
+      CMF_BTN_OPTION: "0",
+      CMF_DIALOG_OPTION: "0",
+    };
+    const sections = buildDialogSections({
+      state,
+      options,
+      keyWords: translations.en,
+      translations,
+    });
+
+    const nfSection = requireValue(sections[0]);
+    const textarea = findElement<HTMLTextAreaElement>(
+      nfSection,
+      'textarea[name="NF_BLOCKED_TEXT"]'
+    );
+    expect(textarea.textContent.replace(/\r?\n/g, state.SEP)).toBe(options.NF_BLOCKED_TEXT);
+  });
+
+  test("likes maximum count input strips non-numeric values", () => {
+    const state = buildState();
+    const options = {
+      ...defaults,
+      NF_BLOCKED_TEXT: "",
+      GF_BLOCKED_TEXT: "",
+      VF_BLOCKED_TEXT: "",
+      MP_BLOCKED_TEXT: "",
+      MP_BLOCKED_TEXT_DESCRIPTION: "",
+      PP_BLOCKED_TEXT: "",
+      NF_LIKES_MAXIMUM_COUNT: "",
+      VERBOSITY_MESSAGE_COLOUR: "",
+      VERBOSITY_MESSAGE_BG_COLOUR: defaults.VERBOSITY_MESSAGE_BG_COLOUR,
+      VERBOSITY_DEBUG: false,
+      CMF_BORDER_COLOUR: defaults.CMF_BORDER_COLOUR,
+      CMF_DIALOG_LANGUAGE: "en",
+      CMF_BTN_OPTION: "0",
+      CMF_DIALOG_OPTION: "0",
+    };
+    const sections = buildDialogSections({
+      state,
+      options,
+      keyWords: translations.en,
+      translations,
+    });
+
+    const input = findElement<HTMLInputElement>(
+      requireValue(sections[0]),
+      'input[name="NF_LIKES_MAXIMUM_COUNT"]'
+    );
+    input.value = "12ab";
+    input.dispatchEvent(new Event("input"));
+    expect(input.value).toBe("12");
+  });
+
+  test("news section renders Meta AI prompt suggestions next to the other Meta AI controls", () => {
+    const state = buildState();
+    const options = {
+      ...defaults,
+      NF_BLOCKED_TEXT: "",
+      GF_BLOCKED_TEXT: "",
+      VF_BLOCKED_TEXT: "",
+      MP_BLOCKED_TEXT: "",
+      MP_BLOCKED_TEXT_DESCRIPTION: "",
+      PP_BLOCKED_TEXT: "",
+      NF_LIKES_MAXIMUM_COUNT: "",
+      VERBOSITY_MESSAGE_COLOUR: "",
+      VERBOSITY_MESSAGE_BG_COLOUR: defaults.VERBOSITY_MESSAGE_BG_COLOUR,
+      VERBOSITY_DEBUG: false,
+      CMF_BORDER_COLOUR: defaults.CMF_BORDER_COLOUR,
+      CMF_DIALOG_LANGUAGE: "en",
+      CMF_BTN_OPTION: "0",
+      CMF_DIALOG_OPTION: "0",
+    };
+    const sections = buildDialogSections({
+      state,
+      options,
+      keyWords: translations.en,
+      translations,
+    });
+
+    const labels = Array.from(requireValue(sections[0]).querySelectorAll("label")).map((label) =>
+      label.textContent.trim()
+    );
+    const metaAiIndex = labels.indexOf(translations.en.NF_META_AI);
+    const metaAiPromptsIndex = labels.indexOf(translations.en.NF_META_AI_PROMPTS);
+    const aiInfoPostsIndex = labels.indexOf(translations.en.NF_AI_INFO_POSTS);
+    const sidePanelsIndex = labels.indexOf(translations.en.NF_AI_SIDE_PANELS);
+
+    expect(metaAiIndex).toBeGreaterThan(-1);
+    expect(metaAiPromptsIndex).toBe(metaAiIndex + 1);
+    expect(aiInfoPostsIndex).toBe(metaAiPromptsIndex + 1);
+    expect(sidePanelsIndex).toBe(aiInfoPostsIndex + 1);
+  });
+
+  test("language select includes current language", () => {
+    const state = buildState();
+    const options = {
+      ...defaults,
+      NF_BLOCKED_TEXT: "",
+      GF_BLOCKED_TEXT: "",
+      VF_BLOCKED_TEXT: "",
+      MP_BLOCKED_TEXT: "",
+      MP_BLOCKED_TEXT_DESCRIPTION: "",
+      PP_BLOCKED_TEXT: "",
+      NF_LIKES_MAXIMUM_COUNT: "",
+      VERBOSITY_MESSAGE_COLOUR: "",
+      VERBOSITY_MESSAGE_BG_COLOUR: defaults.VERBOSITY_MESSAGE_BG_COLOUR,
+      VERBOSITY_DEBUG: false,
+      CMF_BORDER_COLOUR: defaults.CMF_BORDER_COLOUR,
+      CMF_DIALOG_LANGUAGE: "en",
+      CMF_BTN_OPTION: "0",
+      CMF_DIALOG_OPTION: "0",
+    };
+    const sections = buildDialogSections({
+      state,
+      options,
+      keyWords: translations.en,
+      translations,
+    });
+
+    const select = findElement<HTMLSelectElement>(
+      requireValue(sections[7]),
+      'select[name="CMF_DIALOG_LANGUAGE"]'
+    );
+    expect(select.value).toBe("en");
+  });
+
+  test("tips content injects links for tokens", () => {
+    const state = buildState();
+    const options = {
+      ...defaults,
+      NF_BLOCKED_TEXT: "",
+      GF_BLOCKED_TEXT: "",
+      VF_BLOCKED_TEXT: "",
+      MP_BLOCKED_TEXT: "",
+      MP_BLOCKED_TEXT_DESCRIPTION: "",
+      PP_BLOCKED_TEXT: "",
+      NF_LIKES_MAXIMUM_COUNT: "",
+      VERBOSITY_MESSAGE_COLOUR: "",
+      VERBOSITY_MESSAGE_BG_COLOUR: defaults.VERBOSITY_MESSAGE_BG_COLOUR,
+      VERBOSITY_DEBUG: false,
+      CMF_BORDER_COLOUR: defaults.CMF_BORDER_COLOUR,
+      CMF_DIALOG_LANGUAGE: "en",
+      CMF_BTN_OPTION: "0",
+      CMF_DIALOG_OPTION: "0",
+    };
+    const sections = buildDialogSections({
+      state,
+      options,
+      keyWords: translations.en,
+      translations,
+    });
+
+    const tipsSection = requireValue(sections[9]);
+    const anchors = tipsSection.querySelectorAll("a");
+    expect(anchors.length).toBeGreaterThan(0);
+  });
+
+  test("tips content renders the Threads filter link between GitHub and Facebook paragraphs", () => {
+    const state = buildState();
+    const options = {
+      ...defaults,
+      NF_BLOCKED_TEXT: "",
+      GF_BLOCKED_TEXT: "",
+      VF_BLOCKED_TEXT: "",
+      MP_BLOCKED_TEXT: "",
+      MP_BLOCKED_TEXT_DESCRIPTION: "",
+      PP_BLOCKED_TEXT: "",
+      NF_LIKES_MAXIMUM_COUNT: "",
+      VERBOSITY_MESSAGE_COLOUR: "",
+      VERBOSITY_MESSAGE_BG_COLOUR: defaults.VERBOSITY_MESSAGE_BG_COLOUR,
+      VERBOSITY_DEBUG: false,
+      CMF_BORDER_COLOUR: defaults.CMF_BORDER_COLOUR,
+      CMF_DIALOG_LANGUAGE: "en",
+      CMF_BTN_OPTION: "0",
+      CMF_DIALOG_OPTION: "0",
+    };
+    const sections = buildDialogSections({
+      state,
+      options,
+      keyWords: translations.en,
+      translations,
+    });
+
+    const tipsSection = requireValue(sections[9]);
+    const paragraphs = Array.from(tipsSection.querySelectorAll("p")).map((p) =>
+      p.textContent.trim()
+    );
+    const starIndex = paragraphs.findIndex((text) => text.includes("GitHub"));
+    const threadsIndex = paragraphs.findIndex((text) => text.includes("Bobbin Threads Filter"));
+    const facebookIndex = paragraphs.findIndex((text) => text.includes("my Facebook"));
+    const threadsAnchor = Array.from(tipsSection.querySelectorAll("a")).find(
+      (anchor) => anchor.textContent.trim() === translations.en.DLG_TIPS_LINK_THREADS
+    );
+
+    expect(threadsAnchor).toBeTruthy();
+    expect(requireValue(threadsAnchor).href).toBe(
+      "https://github.com/Artificial-Sweetener/bobbin-threads-filter"
+    );
+    expect(starIndex).toBeGreaterThan(-1);
+    expect(threadsIndex).toBeGreaterThan(starIndex);
+    expect(facebookIndex).toBeGreaterThan(threadsIndex);
+  });
+});

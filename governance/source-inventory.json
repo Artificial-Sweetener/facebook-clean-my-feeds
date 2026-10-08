@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "license": "GPL-3.0-only",
+  "categories": [
+    {
+      "name": "browser-source",
+      "patterns": ["^src/.*\\.ts$"],
+      "review": "Strict browser types, AST boundaries, cycles, size and documentation"
+    },
+    {
+      "name": "tool-source",
+      "patterns": ["^tools/.*\\.ts$"],
+      "review": "Strict Node types, size and documentation"
+    },
+    {
+      "name": "test-source",
+      "patterns": ["^tests/.*\\.ts$"],
+      "review": "Strict Jest types, size and documentation; includes files outside the runtime graph"
+    },
+    {
+      "name": "configuration",
+      "patterns": [
+        "^(?:package(?:-lock)?|tsconfig(?:\\.[^/]+)?)\\.json$",
+        "^tools/config/.*\\.json$",
+        "^governance/.*\\.json$",
+        "^\\.releaserc\\.json$",
+        "^\\.github/workflows/[^/]+\\.yml$",
+        "^\\.(?:gitignore|prettierignore|nvmrc)$"
+      ],
+      "review": "Declarative build, release, inventory and review policy"
+    },
+    {
+      "name": "bootstrap",
+      "patterns": ["^tools/setup\\.(?:sh|ps1)$"],
+      "review": "Minimal platform wrappers; invoke the shared verified npm workflow"
+    },
+    {
+      "name": "documentation",
+      "patterns": ["^(?:README(?:\\.[^/]+)?|AGENTS|CONTRIBUTING|CHANGELOG)\\.md$", "^LICENSE$"],
+      "review": "Project license, contribution policy and synchronized setup guidance"
+    },
+    {
+      "name": "metadata",
+      "patterns": ["^src/entry/metadata\\.txt$"],
+      "review": "Userscript contract template; never executable JavaScript"
+    },
+    {
+      "name": "artwork",
+      "patterns": ["^src/res/[^/]+\\.png$"],
+      "review": "Original PNGs; build optimization is in memory and must preserve source bytes"
+    },
+    {
+      "name": "generated-userscript",
+      "patterns": ["^fb-clean-my-feeds\\.user\\.js$"],
+      "review": "The sole checked-in JavaScript; reproducible, self-contained ES2018 browser IIFE"
+    },
+    {
+      "name": "third-party-license",
+      "patterns": ["^governance/licenses/[^/]+\\.txt$"],
+      "review": "Original third-party license text, preserved in the standalone userscript as well as source archives"
+    }
+  ]
+}

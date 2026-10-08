@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "baseline": "en",
+  "allowedExtraKeys": {
+    "ar": ["DLG_TIPS_MAINTAINER_PREFIX"],
+    "bg": ["DLG_TIPS_MAINTAINER_PREFIX"],
+    "cs": ["DLG_TIPS_MAINTAINER_PREFIX"],
+    "de": ["DLG_TIPS_MAINTAINER_PREFIX", "SPONSORED_EXTRA"],
+    "el": ["DLG_TIPS_MAINTAINER_PREFIX"],
+    "es": ["DLG_TIPS_MAINTAINER_PREFIX"],
+    "fi": ["DLG_TIPS_MAINTAINER_PREFIX"],
+    "fr": ["DLG_TIPS_MAINTAINER_PREFIX"],
+    "he": ["DLG_TIPS_MAINTAINER_PREFIX"],
+    "id": ["DLG_TIPS_MAINTAINER_PREFIX"],
+    "it": ["DLG_TIPS_MAINTAINER_PREFIX"],
+    "ja": ["DLG_TIPS_MAINTAINER_PREFIX"],
+    "lv": ["DLG_TIPS_MAINTAINER_PREFIX"],
+    "nl": ["DLG_TIPS_MAINTAINER_PREFIX"],
+    "pl": ["DLG_TIPS_MAINTAINER_PREFIX"],
+    "pt": ["DLG_TIPS_MAINTAINER_PREFIX"],
+    "ru": ["DLG_TIPS_MAINTAINER_PREFIX"],
+    "tr": ["DLG_TIPS_MAINTAINER_PREFIX"],
+    "uk": ["DLG_TIPS_MAINTAINER_PREFIX"],
+    "vi": ["DLG_TIPS_MAINTAINER_PREFIX"]
+  },
+  "note": "Preserved pre-port locale-only copy; empty strings and array-valued labels are intentional runtime data."
+}

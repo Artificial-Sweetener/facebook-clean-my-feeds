@@ -3,6 +3,11 @@
 import type { FeedContext } from "./types";
 import { mainColumnAtt, postAtt, postAttTab } from "../dom/attributes";
 import { swatTheMosquitos } from "../dom/animated-gifs";
+import {
+  ensureDirtyObserver,
+  getDirtyToken,
+  markElementCleanIfUnchanged,
+} from "../dom/dirty-check";
 import { doLightDusting } from "../dom/dusting";
 import { hideNewsPost } from "../dom/hide";
 import { scrubInfoBoxes } from "../dom/info-boxes";
@@ -54,7 +59,7 @@ export * from "./news-meta-ai";
  * Separate page-layout cleanup from periodic post discovery so late-rendered ads and AI prompt rows can be found without an HTML-length change.
  * Dirty main roots trigger top-card and suggestion cleanup; either dirty root triggers badge cleanup. Eligible sweeps process AI sidebars, right-rail/orphan ads, and posts using the first enabled matching reason.
  * Unchanged already-marked posts are retained; recycled content is reclassified; visible posts may have GIFs paused, info boxes scrubbed, and share counts hidden. Dialog handling also pauses GIFs when enabled.
- * The pass records the sweep timestamp and stores HTML lengths only for roots that were dirty when the pass began.
+ * The pass records the sweep timestamp and acknowledges only roots that were dirty when the pass began.
  * @param context News options, localized reasons, and blocked-text filters supply classification; shared state receives presentation markers, sweep timing, and idle-counter updates. Null skips all discovery.
  * @returns The current main/dialog roots, or null when neither root is dirty and no periodic sweep is due.
  */
@@ -80,6 +85,8 @@ export function mopNewsFeed(context: FeedContext | null) {
     return null;
   }
 
+  const mainToken = getDirtyToken(dirtyMainColumn);
+  const dialogToken = getDirtyToken(dirtyDialog);
   if (shouldSweepPosts) resetChangedNewsPosts(mainColumn, state);
 
   if (dirtyMainColumn) {
@@ -116,7 +123,7 @@ export function mopNewsFeed(context: FeedContext | null) {
   if (mainColumn && shouldSweepPosts) {
     const posts = getCollectionOfNewsPosts();
     for (const post of posts) {
-      if (post.innerHTML.length === 0) {
+      if (!post.hasChildNodes()) {
         continue;
       }
 
@@ -209,7 +216,7 @@ export function mopNewsFeed(context: FeedContext | null) {
   }
 
   if (dirtyMainColumn && mainColumn) {
-    mainColumn.setAttribute(mainColumnAtt, mainColumn.innerHTML.length.toString());
+    acknowledgeNewsRoot(mainColumn, mainToken);
     state.noChangeCounter = 0;
   }
 
@@ -217,9 +224,22 @@ export function mopNewsFeed(context: FeedContext | null) {
     if (options.NF_ANIMATED_GIFS_PAUSE) {
       swatTheMosquitos(elDialog);
     }
-    elDialog.setAttribute(mainColumnAtt, elDialog.innerHTML.length.toString());
+    acknowledgeNewsRoot(elDialog, dialogToken);
     state.noChangeCounter = 0;
   }
 
   return { mainColumn, elDialog };
+}
+
+/**
+ * Mark observer-owned roots without serializing their descendants; retain size fallback otherwise.
+ * Mutations produced by this scan remain queued and can request one reconciliation pass.
+ */
+function acknowledgeNewsRoot(root: Element, token: number): void {
+  if (ensureDirtyObserver(root)) {
+    if (!root.hasAttribute(mainColumnAtt)) root.setAttribute(mainColumnAtt, "1");
+    markElementCleanIfUnchanged(root, token);
+  } else {
+    root.setAttribute(mainColumnAtt, root.innerHTML.length.toString());
+  }
 }

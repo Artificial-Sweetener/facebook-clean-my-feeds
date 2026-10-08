@@ -17,6 +17,11 @@ beforeEach(() => {
   readOptions.mockReset();
 });
 
+/** Restore real clocks after timeout scenarios so other startup cases do not retain scheduled work. */
+afterEach(() => {
+  jest.useRealTimers();
+});
+
 describe("runtime/load-options", () => {
   test("loads a legacy serialized record and installs the returned state objects in place", async () => {
     readOptions.mockResolvedValue(
@@ -128,6 +133,54 @@ describe("runtime/load-options", () => {
     await pending;
     expect(state.optionsReady).toBe(true);
     expect(state.options.NF_STORIES).toBe(true);
+  });
+
+  test("releases a permanently stalled read after three seconds and removes the deadline", async () => {
+    jest.useFakeTimers();
+    readOptions.mockImplementation(() => new Promise(() => {}));
+    const state = createOptionsState();
+    const pending = loadOptions(state);
+    await jest.advanceTimersByTimeAsync(2999);
+    expect(state.optionsReady).toBe(false);
+    await jest.advanceTimersByTimeAsync(1);
+    await pending;
+    expect(state.optionsReady).toBe(true);
+    expect(state.options.NF_SPONSORED).toBe(true);
+    expect(jest.getTimerCount()).toBe(0);
+  });
+
+  test.each([false, true])("clears the read deadline when storage rejects=%s", async (rejects) => {
+    jest.useFakeTimers();
+    if (rejects) readOptions.mockRejectedValue(new Error("storage unavailable"));
+    else readOptions.mockResolvedValue({ NF_STORIES: true });
+    const state = createOptionsState();
+    await loadOptions(state);
+    expect(state.optionsReady).toBe(true);
+    expect(state.options.NF_STORIES).toBe(!rejects);
+    expect(jest.getTimerCount()).toBe(0);
+  });
+
+  test("late stored settings cannot replace live state after timeout recovery", async () => {
+    jest.useFakeTimers();
+    let completeRead: ((value: unknown) => void) | undefined;
+    readOptions.mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          completeRead = resolve;
+        })
+    );
+    const state = createOptionsState();
+    const pending = loadOptions(state);
+    await jest.advanceTimersByTimeAsync(3000);
+    const result = await pending;
+    state.options.NF_STORIES = true;
+    if (!completeRead) throw new Error("Expected loader to start the storage read");
+    completeRead({ NF_STORIES: false, CMF_DIALOG_LANGUAGE: "de" });
+    await jest.advanceTimersByTimeAsync(60_000);
+    expect(state.options).toBe(result.options);
+    expect(state.options.NF_STORIES).toBe(true);
+    expect(state.language).toBe("en");
+    expect(jest.getTimerCount()).toBe(0);
   });
 
   test("preserves the unknown-site-language fallback without requiring a matching catalog", async () => {

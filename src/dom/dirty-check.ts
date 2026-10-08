@@ -212,6 +212,14 @@ export function isElementDirty(target: Node | null): boolean {
 }
 
 /**
+ * Deliver queued records synchronously before a scan decision, including same-turn React reuse.
+ * Taking records empties the observer queue, so the later callback cannot count them twice.
+ */
+export function flushDirtyRecords(target: Node | null): void {
+  if (target && observers.get(target)?.takeRecords().length) markElementDirty(target);
+}
+
+/**
  * Reuse one observer per root; every relevant subtree mutation advances its content version.
  * @param target Root whose children, attributes and text participate in filtering.
  * @returns Existing or newly connected observer, or null when observation is unavailable.
@@ -255,11 +263,16 @@ export function disconnectDirtyObserver(target: Node): void {
   activeObservers.delete(target);
 }
 
-/** Release all feed observers and version caches before a new page-processing lifecycle starts. */
-export function clearDirtyTracking(): void {
+/** Release root subscriptions on SPA navigation without losing weak recycled-post identities. */
+export function releaseDirtyObservers(): void {
   for (const observer of activeObservers.values()) observer.disconnect();
   activeObservers.clear();
   observers = new WeakMap();
+}
+
+/** Release all feed observers and version caches before a new page-processing lifecycle starts. */
+export function clearDirtyTracking(): void {
+  releaseDirtyObservers();
   dirtyTokens = new WeakMap();
   postSignatures = new WeakMap();
 }

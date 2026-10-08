@@ -4,6 +4,7 @@ import type { DialogState } from "./types";
 import type { Keywords } from "../../i18n";
 import { getTopbarControlButtons, isTopbarControlButton } from "../../dom/topbar-controls";
 import { createToggleButton } from "../controls/toggle-button";
+import { UiLifecycle } from "../lifecycle";
 
 /**
  * Remove dialog visibility and its active toggle marker without destroying mounted settings controls.
@@ -165,6 +166,7 @@ export function setupOutsideClickClose(state: DialogState) {
 
 /**
  * Watch host controls and delegated activation so opening Facebook menus consistently dismisses settings.
+ * Per-button and per-banner owners are retired on replacement; the session retains only live controls.
  * @param state Shared presentation state retained by mounted listeners.
  */
 export function setupTopbarMenuSync(state: DialogState) {
@@ -175,22 +177,31 @@ export function setupTopbarMenuSync(state: DialogState) {
   const lifecycle = state.dialogLifecycle;
   if (!lifecycle?.active) return;
 
-  /**
-   * Attach direct activation/expanded-state listeners once to each currently discovered host control.
-   */
+  const buttonOwners = new Map<HTMLElement, UiLifecycle>();
+  let bannerOwner: UiLifecycle | null = null;
+  let observedBanner: Element | null = null;
+
+  /** Reconcile per-control resources so replaced buttons are released before new controls are bound. */
   const bindButtons = () => {
-    const buttons = getTopbarMenuButtons();
+    const buttons = new Set(getTopbarMenuButtons());
+    for (const [button, owner] of buttonOwners) {
+      if (button.isConnected && buttons.has(button)) continue;
+      owner.dispose();
+      buttonOwners.delete(button);
+    }
     buttons.forEach((button) => {
-      if (button.dataset.cmfMenuSync === "1") {
+      if (buttonOwners.has(button) || button.dataset.cmfMenuSync === "1") {
         return;
       }
+      const owner = new UiLifecycle();
+      buttonOwners.set(button, owner);
       button.dataset.cmfMenuSync = "1";
-      lifecycle.add(() => {
+      owner.add(() => {
         delete button.dataset.cmfMenuSync;
       });
-      lifecycle.listen(button, "click", () => closeDialogIfOpen(state));
+      owner.listen(button, "click", () => closeDialogIfOpen(state));
       if (typeof MutationObserver !== "undefined") {
-        lifecycle.observe(button, { attributes: true, attributeFilter: ["aria-expanded"] }, () => {
+        owner.observe(button, { attributes: true, attributeFilter: ["aria-expanded"] }, () => {
           if (button.getAttribute("aria-expanded") === "true") closeDialogIfOpen(state);
         });
       }
@@ -212,10 +223,28 @@ export function setupTopbarMenuSync(state: DialogState) {
     delete state.cmfTopbarSyncInit;
     delete state.cmfTopbarSyncPending;
   });
-  bindButtons();
-  if (typeof MutationObserver !== "undefined") {
-    lifecycle.observe(
-      banner,
+  lifecycle.add(() => {
+    for (const owner of buttonOwners.values()) owner.dispose();
+    buttonOwners.clear();
+    bannerOwner?.dispose();
+    bannerOwner = null;
+    observedBanner = null;
+  });
+
+  /**
+   * Transfer banner observation when SPA rendering replaces its root rather than only its buttons.
+   * @returns Whether banner ownership changed, so unrelated document churn can skip geometry discovery.
+   */
+  const syncBanner = () => {
+    const current = document.querySelector('[role="banner"]');
+    if (current === observedBanner) return false;
+    bannerOwner?.dispose();
+    bannerOwner = null;
+    observedBanner = current;
+    if (!current) return true;
+    bannerOwner = new UiLifecycle();
+    bannerOwner.observe(
+      current,
       {
         childList: true,
         subtree: true,
@@ -238,10 +267,16 @@ export function setupTopbarMenuSync(state: DialogState) {
         });
       }
     );
-  }
+    return true;
+  };
+  syncBanner();
+  bindButtons();
 
-  if (typeof MutationObserver !== "undefined" && document.body) {
-    lifecycle.observe(document.body, { childList: true, subtree: true }, (mutations) => {
+  if (typeof MutationObserver !== "undefined") {
+    lifecycle.observe(document, { childList: true, subtree: true }, (mutations) => {
+      // A closed host window can deliver a queued record after its document global has gone away.
+      if (typeof document === "undefined") return;
+      if (syncBanner()) bindButtons();
       mutations.forEach((mutation) => {
         if (mutation.type !== "childList") {
           return;

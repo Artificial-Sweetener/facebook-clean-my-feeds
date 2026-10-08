@@ -106,14 +106,15 @@ describe("news audit correctness regressions", () => {
     expect(post.textContent).toBe("AliceReplacement ordinary post");
   });
 
-  test("detects equal-length recycled content on the next periodic sweep", () => {
+  test("detects equal-length recycled content despite an unchanged root marker", () => {
     const { post, main } = mountNewsPost("<button>AI info</button>");
     const context = createNewsContext({ options: { NF_AI_INFO_POSTS: true } });
     mopNewsFeed(context);
     const beforeLength = main.innerHTML.length;
+    const beforeMarker = main.getAttribute(mainColumnAtt);
     post.innerHTML = "<button>My info</button>";
     expect(main.innerHTML.length).toBe(beforeLength);
-    expect(Number(main.getAttribute(mainColumnAtt))).toBe(beforeLength);
+    expect(main.getAttribute(mainColumnAtt)).toBe(beforeMarker);
     context.state.lastNewsPostSweepAt = 0;
     mopNewsFeed(context);
     expect(post.hasAttribute(postAtt)).toBe(false);

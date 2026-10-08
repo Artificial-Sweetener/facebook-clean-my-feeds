@@ -18,23 +18,32 @@ export interface OptionsState {
 /**
  * Read either historical JSON-string settings or an object while treating external data as unknown.
  * Invalid JSON, malformed known settings, and unavailable storage all use the existing empty-input
- * defaults; startup remains useful when private-mode IndexedDB is blocked or unavailable.
+ * defaults. A three-second deadline also releases startup when IndexedDB never settles.
+ * Timing out does not write defaults or cancel the native read: late data is ignored for this
+ * session, while a later explicit save can still use the shared database if it eventually opens.
  */
 async function readStoredOptions(): Promise<StoredOptions> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
   try {
-    const rawOptions = await getOptions();
+    const deadline = new Promise<undefined>((resolve) => {
+      timer = setTimeout(() => resolve(undefined), 3000);
+    });
+    const rawOptions = await Promise.race([getOptions(), deadline]);
     const candidate: unknown = typeof rawOptions === "string" ? JSON.parse(rawOptions) : rawOptions;
     return decodeStoredOptions(candidate) ?? {};
   } catch {
     return {};
+  } finally {
+    if (timer !== undefined) clearTimeout(timer);
   }
 }
 
 /**
- * Hydrate startup options and install all derived state together after persistence has settled.
+ * Hydrate startup options and install all derived state together after persistence or its deadline.
  * @param state The existing shared state object, whose identity must remain stable for listeners.
  * @returns The same options/filter objects installed on state, plus localized keywords for contexts.
- * Storage and malformed-payload failures recover to defaults; readiness is set only after hydration.
+ * Storage failure, a stalled read, and malformed payloads recover to defaults without overwriting
+ * persistence; readiness is set only after hydration and is never revisited by late read results.
  */
 export async function loadOptions(state: OptionsState): Promise<HydratedSettings> {
   const storedOptions = await readStoredOptions();

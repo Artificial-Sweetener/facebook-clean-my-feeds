@@ -3,34 +3,6 @@
 import { getTopbarMenuButton } from "../../dom/topbar-controls";
 
 /**
- * Convert computed three- or six-digit hex colors into the translucent active-button background.
- * @param value Input value to validate or convert before presentation.
- * @param alpha Opacity fraction used for the active background.
- * @returns A CSS rgba() value, or an empty string when the input is not a supported hex color.
- */
-const hexToRgba = (value: string, alpha: number) => {
-  if (!value) {
-    return "";
-  }
-  const hex = value.trim();
-  if (!hex.startsWith("#")) {
-    return "";
-  }
-  const normalized =
-    hex.length === 4 ? `#${hex[1]}${hex[1]}${hex[2]}${hex[2]}${hex[3]}${hex[3]}` : hex;
-  if (normalized.length !== 7) {
-    return "";
-  }
-  const r = parseInt(normalized.slice(1, 3), 16);
-  const g = parseInt(normalized.slice(3, 5), 16);
-  const b = parseInt(normalized.slice(5, 7), 16);
-  if (Number.isNaN(r) || Number.isNaN(g) || Number.isNaN(b)) {
-    return "";
-  }
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-};
-
-/**
  * Ignore unresolved transparent colors when choosing a readable host-derived icon color.
  * @param value Input value to validate or convert before presentation.
  * @returns Whether the computed color is nonempty and not transparent.
@@ -88,8 +60,8 @@ export function createTopbarPositioning(btn: HTMLElement) {
     const hoverOverlay = menuStyle.getPropertyValue("--hover-overlay");
     const pressOverlay = menuStyle.getPropertyValue("--press-overlay");
     const secondaryBg = menuStyle.getPropertyValue("--secondary-button-background");
-    const accent = menuStyle.getPropertyValue("--accent");
-    const primaryButtonBg = menuStyle.getPropertyValue("--primary-button-background");
+    const activeBackground = menuStyle.getPropertyValue("--primary-deemphasized-button-background");
+    const activeIcon = menuStyle.getPropertyValue("--primary-deemphasized-button-text");
     const isMenuExpanded = menuButton.getAttribute("aria-expanded") === "true";
     const gap = 8;
     const left = Math.max(0, rect.left - rect.width - gap);
@@ -121,14 +93,18 @@ export function createTopbarPositioning(btn: HTMLElement) {
     } else {
       btn.style.color = finalIconColor;
     }
-    const activeBg = hexToRgba(primaryButtonBg, 0.2);
-    if (activeBg) {
-      btn.style.setProperty("--cmf-active-bg", activeBg);
-    }
-    if (accent) {
-      btn.style.setProperty("--cmf-active-icon", accent);
-    }
-    const icon = btn.querySelector<HTMLElement | SVGElement>("svg, .cmf-icon");
+    // Facebook selected controls use independent theme tokens, not an alpha of the CTA color.
+    btn.style.setProperty(
+      "--cmf-active-bg",
+      activeBackground.trim() ||
+        "var(--primary-deemphasized-button-background, rgba(8, 102, 255, 0.1))"
+    );
+    btn.style.setProperty(
+      "--cmf-active-icon",
+      activeIcon.trim() || "var(--primary-deemphasized-button-text, var(--accent, #0866ff))"
+    );
+    const icon =
+      btn.querySelector<HTMLElement>(".cmf-icon") ?? btn.querySelector<SVGElement>("svg");
     if (icon) {
       if (icon.tagName && icon.tagName.toLowerCase() === "svg") {
         icon.style.fill = "currentColor";

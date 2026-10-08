@@ -6,7 +6,9 @@ import path from "node:path";
 import * as esbuild from "esbuild";
 
 import { loadBanner } from "./banner";
-import { iconDirectory, optimizedIcons, projectRoot } from "./optimize-icons";
+import { iconDirectory, projectRoot } from "./optimize-icons";
+
+import { loadSvgIcons } from "./svg-assets";
 
 export const artifactPath = path.join(projectRoot, "fb-clean-my-feeds.user.js");
 
@@ -18,14 +20,14 @@ export interface UserscriptBuild {
 
 /**
  * Build one self-contained browser IIFE without changing any repository file.
- * Each invocation regenerates PNG buffers, making cold and repeated builds equivalent.
+ * Each invocation validates hand-authored SVG, making cold and repeated builds equivalent.
  *
  * @returns UTF-8 userscript text and esbuild's dependency manifest.
- * @throws If metadata, image decoding, entry resolution, or bundling fails.
+ * @throws If metadata, artwork validation, entry resolution, or bundling fails.
  */
 export async function buildUserscript(): Promise<UserscriptBuild> {
-  const icons = await optimizedIcons();
-  const mop = icons.get(path.join(iconDirectory, "mop.png"));
+  const icons = await loadSvgIcons();
+  const mop = icons.get(path.join(iconDirectory, "mop.svg"));
   if (!mop) throw new Error("The metadata mop icon is missing");
   const result = await esbuild.build({
     absWorkingDir: projectRoot,
@@ -45,14 +47,14 @@ export async function buildUserscript(): Promise<UserscriptBuild> {
     },
     plugins: [
       {
-        name: "immutable-png-assets",
-        /** Intercept asset loads so optimized bundle bytes never overwrite original artwork. */
+        name: "reviewed-static-svg",
+        /** Embed only validated owned shapes; no browser parsing of untrusted artwork is allowed. */
         setup(build) {
-          build.onLoad({ filter: /\.png$/ }, (args) => {
+          build.onLoad({ filter: /\.svg$/ }, (args) => {
             const contents = icons.get(args.path);
             if (!contents)
-              throw new Error(`PNG is outside the reviewed asset directory: ${args.path}`);
-            return { contents, loader: "dataurl" };
+              throw new Error(`SVG is outside the reviewed asset directory: ${args.path}`);
+            return { contents, loader: "text" };
           });
         },
       },

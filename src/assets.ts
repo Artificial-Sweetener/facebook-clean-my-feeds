@@ -1,24 +1,24 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-import aboutIcon from "./res/about.png";
-import bugIcon from "./res/bug.png";
-import checkIcon from "./res/check.png";
-import exportIcon from "./res/export.png";
-import groupsIcon from "./res/groups.png";
-import importIcon from "./res/import.png";
-import infoIcon from "./res/info.png";
-import marketplaceIcon from "./res/marketplace.png";
-import mopIcon from "./res/mop.png";
-import newsIcon from "./res/news.png";
-import prefIcon from "./res/pref.png";
-import profileIcon from "./res/profile.png";
-import reelsIcon from "./res/reels.png";
-import resetIcon from "./res/reset.png";
-import saveIcon from "./res/save.png";
-import searchIcon from "./res/search.png";
-import videosIcon from "./res/videos.png";
+import aboutIcon from "./res/about.svg";
+import bugIcon from "./res/bug.svg";
+import checkIcon from "./res/check.svg";
+import exportIcon from "./res/export.svg";
+import groupsIcon from "./res/groups.svg";
+import importIcon from "./res/import.svg";
+import infoIcon from "./res/info.svg";
+import marketplaceIcon from "./res/marketplace.svg";
+import mopIcon from "./res/mop.svg";
+import newsIcon from "./res/news.svg";
+import prefIcon from "./res/pref.svg";
+import profileIcon from "./res/profile.svg";
+import reelsIcon from "./res/reels.svg";
+import resetIcon from "./res/reset.svg";
+import saveIcon from "./res/save.svg";
+import searchIcon from "./res/search.svg";
+import videosIcon from "./res/videos.svg";
 
-/** Bundled image data URLs consumed by the settings UI composition root. */
+/** Build-validated static SVG markup; only repository-owned artwork reaches UI HTML sinks. */
 export {
   aboutIcon,
   bugIcon,

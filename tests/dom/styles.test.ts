@@ -96,6 +96,15 @@ describe("dom/styles", () => {
       '.__fb-light-mode .fb-cmf-toggle.fb-cmf-toggle-topbar[data-cmf-page-dimmed="true"]::after';
 
     expect(style).not.toBeNull();
+    expect(css).toContain(".cmf-icon > svg");
+    expect(css).not.toContain("mask-image");
+    expect(css).toContain(".fb-cmf-toggle:focus-visible");
+    expect(css).toContain("--primary-deemphasized-button-background");
+    expect(css).toContain("--primary-deemphasized-button-text");
+    expect(css).toContain("@media (prefers-reduced-motion: reduce)");
+    expect(css).toContain(
+      ".fb-cmf-toggle.fb-cmf-toggle-topbar, #fbcmf footer > button, #fbcmf footer > button::after { transition:none; }"
+    );
     expect(css).toContain(".fb-cmf-toggle");
     expect(css).toContain('.fb-cmf-toggle[data-cmf-page-dimmed="true"]');
     expect(css).toContain("pointer-events:none");

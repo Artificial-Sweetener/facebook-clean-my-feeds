@@ -84,4 +84,4 @@ When asked to draft a commit, use Conventional Commits: `type(scope): subject`.
 - Keep the mandatory substantive docstring rules above. The executable checker cannot replace human review of semantics or justify tautological filler.
 - Exceptions must be exact-fingerprint, owned, expiring within 90 days, and have concrete extraction plans. Size caps must decrease from the previous review. Do not create blanket legacy exemptions.
 - Keep `governance/source-inventory.json` complete and the GPL-3.0-only license consistent. Root `CONTRIBUTING.md` and `AGENTS.md` are the approved contributor guidance alongside synchronized READMEs; do not create a `docs/` tree.
-- Builds must keep original PNG bytes unchanged. Optimize only in memory, preserve the browser ES2018 IIFE contract, and verify cold-build reproducibility plus no external runtime dependencies.
+- Builds must keep original PNG reference bytes unchanged. Runtime icons are manually authored, build-validated static SVG; never trace or automatically convert the original artwork. Preserve the browser ES2018 IIFE contract, and verify cold-build reproducibility plus no external runtime dependencies.

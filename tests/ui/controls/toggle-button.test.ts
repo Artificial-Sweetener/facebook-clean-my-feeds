@@ -68,6 +68,7 @@ describe("ui/controls/toggle-button", () => {
     const btn = requireValue(createToggleButton(state, { DLG_TITLE: "Toggle" }, onToggle));
 
     expect(btn.tagName).toBe("BUTTON");
+    expect(btn.getAttribute("aria-label")).toBe("Toggle");
     btn.click();
     expect(onToggle).toHaveBeenCalled();
     expect(attachTooltip).toHaveBeenCalledWith(btn, "Toggle", { placement: "right" });
@@ -81,6 +82,7 @@ describe("ui/controls/toggle-button", () => {
     const btn = requireValue(createToggleButton(state, { DLG_TITLE: "Toggle" }, onToggle));
 
     expect(btn.tagName).toBe("DIV");
+    expect(btn.getAttribute("aria-label")).toBe("Toggle");
     expect(btn.getAttribute("role")).toBe("button");
     expect(btn.getAttribute("tabindex")).toBe("0");
 

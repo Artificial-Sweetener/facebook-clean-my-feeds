@@ -44,8 +44,8 @@ export async function listIcons(): Promise<string[]> {
 }
 
 /**
- * Compute all bundle-ready images in memory; neither a warm cache nor writable source files is needed.
- * @returns A map keyed by absolute source filename, suitable for esbuild's PNG loader.
+ * Recreate historical PNG reference pixels in memory for the immutable pre-SVG comparison contract.
+ * @returns A map keyed by absolute source filename; these pixels are not embedded in the SVG userscript.
  */
 export async function optimizedIcons(targetSize = defaultTargetSize): Promise<Map<string, Buffer>> {
   const images = new Map<string, Buffer>();
@@ -56,7 +56,7 @@ export async function optimizedIcons(targetSize = defaultTargetSize): Promise<Ma
 }
 
 /**
- * Print potential bundle savings without changing original artwork.
+ * Inspect historical PNG reference sizes without changing original artwork or the SVG bundle.
  * @throws If an unknown option or malformed size would silently change the optimization contract.
  */
 async function main(): Promise<void> {
@@ -82,7 +82,9 @@ async function main(): Promise<void> {
     after += buffer.length;
     console.log(`${path.basename(filename)}: ${originalSize} -> ${buffer.length} bytes`);
   }
-  console.log(`Bundle PNGs: ${before} -> ${after} bytes. Source PNGs are unchanged.`);
+  console.log(
+    `Historical PNG references: ${before} -> ${after} bytes. Source PNGs and SVGs are unchanged.`
+  );
 }
 
 if (require.main === module) {

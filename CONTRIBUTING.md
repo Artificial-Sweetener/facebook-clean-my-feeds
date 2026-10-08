@@ -50,7 +50,7 @@ The exception registry starts empty. Any necessary exception in `governance/exce
 
 ## Build assets and public contracts
 
-The build optimizes PNG bytes in memory with the existing 64px canvas and palette settings. It does not overwrite original PNGs or depend on a warm cache. `npm run icons:optimize` reports potential bundle sizes without changing source artwork. Metadata and runtime icons use the same prepared bytes. Verification builds twice independently, checks unchanged source hashes, and rejects stale output or external runtime dependencies.
+All 17 runtime icons are manually authored static SVGs on the original 64px canvas. Do not trace, vectorize or embed raster copies. The build validates a narrow, inert shape/attribute grammar before inlining owned markup; scripts, external resources, style rules and document-scoped IDs are forbidden. Inline icons inherit their control color, while a neutral standalone color keeps README and userscript-manager icons visible on light and dark surfaces. Metadata and runtime use the same geometry. Original PNG bytes and their historical decoded-pixel contract remain immutable references; `npm run icons:optimize` inspects those historical reference sizes without changing artwork or the SVG bundle. Verification builds twice independently, requires all 17 SVG counterparts, checks unchanged source hashes, and rejects stale output or external runtime dependencies.
 
 Preserve userscript behavior, filter outcomes, metadata grants and matches, settings options, and installation guidance unless the requested change intentionally affects them. Mention any such impact in the PR. Keep failures at boundaries so a malformed setting or missing element cannot break the page.
 

@@ -46,8 +46,8 @@
     },
     {
       "name": "artwork",
-      "patterns": ["^src/res/[^/]+\\.png$"],
-      "review": "Original PNGs; build optimization is in memory and must preserve source bytes"
+      "patterns": ["^src/res/[^/]+\\.(?:png|svg)$"],
+      "review": "Immutable original PNG references and manually authored static SVG; validated inert markup and reviewed geometry"
     },
     {
       "name": "generated-userscript",

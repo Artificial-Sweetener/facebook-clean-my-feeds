@@ -5,14 +5,9 @@ import path from "node:path";
 
 import { loadBanner } from "../../tools/banner";
 import { fingerprint } from "../../tools/governance/files";
-import {
-  iconDirectory,
-  listIcons,
-  optimizeIcon,
-  optimizedIcons,
-  projectRoot,
-} from "../../tools/optimize-icons";
+import { iconDirectory, listIcons, optimizeIcon, projectRoot } from "../../tools/optimize-icons";
 import { assertMetadata, assertThirdPartyNotices } from "../../tools/verify-artifact";
+import { loadSvgIcons } from "../../tools/svg-assets";
 import { verifyAssets } from "../../tools/verify-assets";
 
 describe("immutable historical image contract", () => {
@@ -20,9 +15,9 @@ describe("immutable historical image contract", () => {
     const files = await listIcons();
     const before = new Map<string, string>();
     for (const file of files) before.set(file, fingerprint(await fs.readFile(file)));
-    const images = await optimizedIcons();
+    const images = await loadSvgIcons();
     const embedded = [...images.values()]
-      .map((image) => `data:image/png;base64,${image.toString("base64")}`)
+      .map((image, index) => `const icon${index} = ${JSON.stringify(image)};`)
       .join("\n");
     await expect(verifyAssets(embedded)).resolves.toBeUndefined();
     for (const file of files) expect(fingerprint(await fs.readFile(file))).toBe(before.get(file));
@@ -36,7 +31,7 @@ describe("immutable historical image contract", () => {
     );
   });
   test("detects a reviewed image omitted from the output", async () => {
-    await expect(verifyAssets("// no embedded images")).rejects.toThrow("Optimized PNG is missing");
+    await expect(verifyAssets("// no embedded images")).rejects.toThrow("Reviewed SVG is missing");
   });
 });
 
@@ -45,9 +40,7 @@ describe("userscript metadata contract", () => {
   let banner: string;
   beforeAll(async () => {
     template = await fs.readFile(path.join(projectRoot, "src/entry/metadata.txt"), "utf8");
-    banner = await loadBanner(
-      await optimizeIcon(await fs.readFile(path.join(iconDirectory, "mop.png")))
-    );
+    banner = await loadBanner(await fs.readFile(path.join(iconDirectory, "mop.svg"), "utf8"));
   });
   test("fills the release version and embeds metadata icons", () => {
     expect(() => assertMetadata(banner, template)).not.toThrow();
@@ -77,7 +70,7 @@ describe("userscript metadata contract", () => {
         banner.replace(/\/\/ @icon\s+.*/, "// @icon         https://example.test/icon.png"),
         template
       )
-    ).toThrow("embedded PNG");
+    ).toThrow("embedded static SVG");
     expect(() =>
       assertMetadata(banner.replace(/\/\/ @version\s+.*/, "// @version      VERSION"), template)
     ).toThrow("placeholders");

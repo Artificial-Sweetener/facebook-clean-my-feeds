@@ -3,16 +3,20 @@ import type { StyleState } from "../types";
 import { addToSS } from "./builder";
 
 /**
- * Append shared mask-icon and tooltip rules independently of dialog layout ownership.
+ * Append shared inline-SVG icon and tooltip rules independently of dialog layout ownership.
  * @param state Current stylesheet buffer; no mounted DOM references are required.
  */
 export function appendAccessoryStyles(state: Pick<StyleState, "tempStyleSheetCode">): void {
   addToSS(
     state,
     ".cmf-icon",
-    "display:inline-block; width:20px; height:20px; background-color: currentColor;" +
-      "mask-image: var(--cmf-icon-url); mask-repeat:no-repeat; mask-position:center; mask-size:contain;" +
-      "-webkit-mask-image: var(--cmf-icon-url); -webkit-mask-repeat:no-repeat; -webkit-mask-position:center; -webkit-mask-size:contain;"
+    "display:inline-flex; width:20px; height:20px; flex-shrink:0; align-items:center; justify-content:center;" +
+      "color:inherit;"
+  );
+  addToSS(
+    state,
+    ".cmf-icon > svg",
+    "display:block; width:100%; height:100%; color:inherit; overflow:visible; pointer-events:none;"
   );
   addToSS(
     state,

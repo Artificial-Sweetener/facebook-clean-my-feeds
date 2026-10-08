@@ -57,7 +57,7 @@ export function addExtraCSS(
   }
   if (styles.length > 0) {
     addToSS(state, ".fb-cmf-toggle", styles);
-    addToSS(state, ".fb-cmf-toggle svg", "height: 95%; aspect-ratio : 1 / 1;");
+    addToSS(state, ".fb-cmf-toggle > svg", "height: 95%; aspect-ratio : 1 / 1;");
     addToSS(state, ".fb-cmf-toggle .cmf-icon", "height: 95%; aspect-ratio : 1 / 1;");
     addToSS(state, ".fb-cmf-toggle:hover", "cursor:pointer;");
     addToSS(state, ".fb-cmf-toggle", "overflow: hidden;");
@@ -101,11 +101,15 @@ export function addExtraCSS(
       ".fb-cmf-toggle.fb-cmf-toggle-topbar:active::after",
       "background-color: var(--cmf-btn-press, var(--press-overlay)); opacity: 1;"
     );
-    addToSS(state, ".fb-cmf-toggle.fb-cmf-toggle-topbar:active", "color: var(--accent);");
+    addToSS(
+      state,
+      ".fb-cmf-toggle:focus-visible",
+      "outline:2px solid var(--focus-ring-blue, #0866ff); outline-offset:2px;"
+    );
     addToSS(
       state,
       '.fb-cmf-toggle.fb-cmf-toggle-topbar[data-cmf-open="true"]',
-      "color: var(--cmf-active-icon, var(--accent)); background-color: var(--cmf-active-bg, var(--primary-button-background));"
+      "color: var(--cmf-active-icon, var(--primary-deemphasized-button-text, var(--accent))); background-color: var(--cmf-active-bg, var(--primary-deemphasized-button-background, rgba(8, 102, 255, 0.1)));"
     );
     addToSS(state, '.fb-cmf-toggle[data-cmf-page-dimmed="true"]', "pointer-events:none;");
     addToSS(
@@ -182,7 +186,7 @@ export function addExtraCSS(
   );
   addToSS(
     state,
-    ".fb-cmf footer .cmf-action-icon svg",
+    ".fb-cmf footer .cmf-action-icon > svg",
     "width:20px; height:20px; fill: currentColor;"
   );
   addToSS(state, ".fb-cmf footer .cmf-action-icon .cmf-icon", "width:32px; height:32px;");
@@ -198,6 +202,10 @@ export function addExtraCSS(
       "0% { color: #2e7d32; }" +
       "50% { color: #66bb6a; }" +
       "100% { color: #2e7d32; }" +
+      "}\n" +
+      "@media (prefers-reduced-motion: reduce) {" +
+      ".fb-cmf-toggle.fb-cmf-toggle-topbar, #fbcmf footer > button, #fbcmf footer > button::after { transition:none; }" +
+      "#fbcmf footer > button.cmf-action--confirm-blue, #fbcmf footer > button.cmf-action--confirm-green { animation:none; }" +
       "}\n";
     styleTag.appendChild(document.createTextNode(state.tempStyleSheetCode));
     state.tempStyleSheetCode = "";

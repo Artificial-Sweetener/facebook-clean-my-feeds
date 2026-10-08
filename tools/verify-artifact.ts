@@ -6,6 +6,7 @@ import path from "node:path";
 import ts from "typescript";
 
 import { verifyAssets } from "./verify-assets";
+import { validateSvg } from "./svg-assets";
 import { artifactPath, buildUserscript } from "./build";
 import { fingerprint, repositoryFiles } from "./governance/files";
 import { moduleReferences } from "./governance/graph";
@@ -36,9 +37,11 @@ export function assertMetadata(code: string, template: string): void {
   if (/^\/\/ @(?:require|resource)\s/m.test(header))
     throw new Error("External userscript dependencies are forbidden");
   for (const name of ["icon", "icon64"]) {
-    if (!new RegExp(`^// @${name}\\s+data:image/png;base64,[A-Za-z0-9+/=]+$`, "m").test(header)) {
-      throw new Error(`@${name} must be an embedded PNG`);
-    }
+    const encoded = header.match(
+      new RegExp(`^// @${name}\\s+data:image/svg\\+xml;base64,([A-Za-z0-9+/=]+)$`, "m")
+    )?.[1];
+    if (!encoded) throw new Error(`@${name} must be an embedded static SVG`);
+    validateSvg(Buffer.from(encoded, "base64").toString("utf8"), `metadata @${name}`);
   }
 }
 
@@ -77,7 +80,7 @@ export async function verifyArtifact(): Promise<void> {
     if (output.imports.length) throw new Error("Bundle still has external imports");
   }
   for (const input of Object.keys(first.metafile.inputs)) {
-    if (!input.startsWith("src/") || !/\.(?:ts|png)$/.test(input))
+    if (!input.startsWith("src/") || !/\.(?:ts|svg)$/.test(input))
       throw new Error(`Unexpected runtime dependency: ${input}`);
   }
   for (const [file, hash] of before) {
@@ -88,7 +91,7 @@ export async function verifyArtifact(): Promise<void> {
   if (!icons.includes(path.join(iconDirectory, "mop.png")))
     throw new Error("Source icon inventory is incomplete");
   console.log(
-    `Artifact verified: SHA-256 ${fingerprint(first.code)}, ${icons.length} unchanged PNGs, no external dependencies, reproducible cold builds.`
+    `Artifact verified: SHA-256 ${fingerprint(first.code)}, ${icons.length} unchanged PNG references and manually authored SVGs, no external dependencies, reproducible cold builds.`
   );
 }
 

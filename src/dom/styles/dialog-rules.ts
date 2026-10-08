@@ -131,7 +131,7 @@ export function appendDialogStyles(state: StyleContext): void {
   );
   addToSS(
     state,
-    ".fb-cmf fieldset legend .cmf-legend-icon svg",
+    ".fb-cmf fieldset legend .cmf-legend-icon > svg",
     "width:20px; height:20px; fill: currentColor;"
   );
   addToSS(state, ".fb-cmf fieldset legend .cmf-legend-icon .cmf-icon", "width:26px; height:26px;");
@@ -290,7 +290,11 @@ export function appendDialogStyles(state: StyleContext): void {
     ".fb-cmf .fb-cmf-search-icon",
     "display:flex; align-items:center; justify-content:center; width:20px; height:20px; color: var(--secondary-icon); flex-shrink:0;"
   );
-  addToSS(state, ".fb-cmf .fb-cmf-search-icon svg", "width:16px; height:16px; fill: currentColor;");
+  addToSS(
+    state,
+    ".fb-cmf .fb-cmf-search-icon > svg",
+    "width:16px; height:16px; fill: currentColor;"
+  );
   addToSS(state, ".fb-cmf .fb-cmf-search-icon .cmf-icon", "width:22px; height:22px;");
   addToSS(
     state,

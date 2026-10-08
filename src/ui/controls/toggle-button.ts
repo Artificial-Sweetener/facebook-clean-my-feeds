@@ -72,6 +72,7 @@ export function createToggleButton(
   btn.id = "fbcmfToggle";
   btn.removeAttribute("title");
   btn.className = "fb-cmf-toggle fb-cmf-icon";
+  btn.setAttribute("aria-label", keyWords.DLG_TITLE);
   if (useTopRight) {
     btn.classList.add("fb-cmf-toggle-topbar");
   }
@@ -94,7 +95,6 @@ export function createToggleButton(
   if (useTopRight) {
     btn.setAttribute("role", "button");
     btn.setAttribute("tabindex", "0");
-    btn.setAttribute("aria-label", keyWords.DLG_TITLE);
     /**
      * Support Enter and Space for the topbar div’s button semantics without scrolling the page.
      * @param event Native activation/input event, when provided by the caller.

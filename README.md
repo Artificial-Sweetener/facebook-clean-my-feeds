@@ -91,7 +91,7 @@ npm run verify
 
 If you do not use nvm, install the supported Node version first. The one verification command runs formatting, lint, strict browser/core/tool/test typechecks, Jest tests, locale and governance checks, then builds and validates the userscript. It checks metadata, no external runtime dependencies, unchanged source assets, and reproducible output. Commit the rebuilt `fb-clean-my-feeds.user.js` with source changes; never edit it by hand.
 
-All 17 icons are manually authored SVGs with theme-native inline colors and a readable neutral fallback for standalone documentation and userscript-manager icons. Builds validate inert SVG geometry and leave the original PNG references unchanged. Modules warn above 350 non-comment lines and require a reviewed exception above 500. Named functions, methods, classes, and exported contracts need useful JSDoc. See [CONTRIBUTING.md](CONTRIBUTING.md) for architecture, temporary exceptions, and the release gate. Keep this README and its Vietnamese version synchronized.
+All 17 icons are manually authored SVGs with theme-native inline colors and explicit light/dark colors for standalone documentation and userscript-manager icons. Builds validate inert SVG geometry and leave the original PNG references unchanged. Modules warn above 350 non-comment lines and require a reviewed exception above 500. Named functions, methods, classes, and exported contracts need useful JSDoc. See [CONTRIBUTING.md](CONTRIBUTING.md) for architecture, temporary exceptions, and the release gate. Keep this README and its Vietnamese version synchronized.
 
 ## <img src="src/res/info.svg" alt="license" width="36"/> License & Credits
 

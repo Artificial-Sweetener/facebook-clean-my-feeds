@@ -1,4 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#6b7280">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">
+  <style>:root{color:#1f2328}@media(prefers-color-scheme:dark){:root{color:#f0f6fc}}</style>
   <g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
     <path d="M40 21.6a13.4 13.4 0 1 0 4.4 9.9M16.2 41v5.8c0 1.2.6 1.7 1.8 1.7h25.6"/>
   </g>

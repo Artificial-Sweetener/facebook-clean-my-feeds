@@ -178,6 +178,8 @@ describe("settings import and reset side effects", () => {
     control<HTMLTextAreaElement>('[name="NF_BLOCKED_TEXT"]').value = "Unsaved draft";
     let exported: Blob | undefined;
     const original = Object.getOwnPropertyDescriptor(URL, "createObjectURL");
+    const originalRevoke = Object.getOwnPropertyDescriptor(URL, "revokeObjectURL");
+    Object.defineProperty(URL, "revokeObjectURL", { configurable: true, value: jest.fn() });
     Object.defineProperty(URL, "createObjectURL", {
       configurable: true,
       /** Retain the exact Blob passed to the browser download boundary. */
@@ -210,8 +212,11 @@ describe("settings import and reset side effects", () => {
       expect(clicked[0]?.download).toBe("fb - clean my feeds - settings.json");
       expect(setOptions).not.toHaveBeenCalled();
     } finally {
+      handlers.destroyDialog();
       if (original) Object.defineProperty(URL, "createObjectURL", original);
       else Reflect.deleteProperty(URL, "createObjectURL");
+      if (originalRevoke) Object.defineProperty(URL, "revokeObjectURL", originalRevoke);
+      else Reflect.deleteProperty(URL, "revokeObjectURL");
     }
   });
 });

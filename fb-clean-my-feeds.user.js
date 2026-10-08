@@ -5690,7 +5690,7 @@
     if (hasSponsoredName(link, post, bodies)) return true;
     const header = link.closest("h4, h5");
     return !!header && post.contains(header) && Array.from(header.querySelectorAll('a, button, [role="button"], [role="link"]')).some(
-      (control) => isOwnedControl(control, post, bodies) && hasSponsoredName(control, post, bodies)
+      (control) => control !== link && isOwnedControl(control, post, bodies) && hasSponsoredName(control, post, bodies)
     );
   }
   function isSponsored(post, state) {
@@ -11143,6 +11143,10 @@
           if (this.active) this.cleanups.add(cleanup);
           else cleanup();
         }
+        /** Forget a resource already released by its owner without invoking its teardown again. */
+        remove(cleanup) {
+          this.cleanups.delete(cleanup);
+        }
         /** Remove an event listener at teardown and ignore already-queued stale dispatches. */
         listen(target, type, listener, options) {
           const guarded = (event) => {
@@ -13386,30 +13390,57 @@
 
   // src/ui/dialog/import-export.ts
   function exportUserOptions(state) {
+    const lifecycle = state.dialogLifecycle;
+    if (lifecycle && !lifecycle.active) return;
     const link = document.createElement("a");
-    link.href = window.URL.createObjectURL(
+    const url = window.URL.createObjectURL(
       new Blob([JSON.stringify(state.options)], { type: "text/plain" })
     );
-    link.download = "fb - clean my feeds - settings.json";
-    link.click();
-    link.remove();
+    let released = false;
+    let timeout;
+    const release = () => {
+      if (released) return;
+      released = true;
+      if (timeout !== void 0) clearTimeout(timeout);
+      lifecycle == null ? void 0 : lifecycle.remove(release);
+      window.URL.revokeObjectURL(url);
+    };
+    lifecycle == null ? void 0 : lifecycle.add(release);
+    try {
+      link.href = url;
+      link.download = "fb - clean my feeds - settings.json";
+      link.click();
+    } finally {
+      link.remove();
+      if (!released) timeout = setTimeout(release, 0);
+    }
     triggerActionFeedback(state, "BTNExport", "cmf-action--confirm-green");
   }
   function importUserOptions(event, save, state, lifecycle) {
     var _a;
     const target = event.target;
     const file = target instanceof HTMLInputElement ? (_a = target.files) == null ? void 0 : _a[0] : void 0;
-    if (!file) return;
+    if (!file || lifecycle && !lifecycle.active) return;
     const reader = new FileReader();
-    lifecycle == null ? void 0 : lifecycle.add(() => {
+    let settled = false;
+    const release = () => {
+      if (settled) return;
+      settled = true;
       reader.onload = null;
+      reader.onerror = null;
+      reader.onabort = null;
+      lifecycle == null ? void 0 : lifecycle.remove(release);
       if (reader.readyState === FileReader.LOADING) reader.abort();
-    });
+    };
+    lifecycle == null ? void 0 : lifecycle.add(release);
     reader.onload = () => {
+      if (settled) return;
+      const result = reader.result;
+      release();
       if (lifecycle && !lifecycle.active) return;
       try {
-        if (typeof reader.result !== "string") return;
-        const parsed = JSON.parse(reader.result);
+        if (typeof result !== "string") return;
+        const parsed = JSON.parse(result);
         if (!isPlainObject(parsed)) return;
         const required = ["NF_SPONSORED", "GF_SPONSORED", "VF_SPONSORED", "MP_SPONSORED"];
         if (!required.every((key) => Object.prototype.hasOwnProperty.call(parsed, key))) return;
@@ -13422,7 +13453,13 @@
       } catch (e) {
       }
     };
-    reader.readAsText(file);
+    reader.onerror = release;
+    reader.onabort = release;
+    try {
+      reader.readAsText(file);
+    } catch (e) {
+      release();
+    }
   }
   var init_import_export = __esm({
     "src/ui/dialog/import-export.ts"() {

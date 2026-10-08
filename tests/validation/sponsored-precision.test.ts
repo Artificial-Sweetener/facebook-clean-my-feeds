@@ -234,3 +234,91 @@ describe("sponsorship evidence precision", () => {
     expect(getSponsoredDiagnostics(post, {}).matchedBy).toBe("ads-about");
   });
 });
+
+/** Build one bare-text tracking control so each visible-label inspection has one style read. */
+function trackedAuthorPost(label = "Publisher", siblings = "") {
+  const post = ownedPost(`<span><a href="${trackingUrl}">${label}</a></span>${siblings}`);
+  const author = post.querySelector("a");
+  const header = post.querySelector("h4");
+  if (!author || !header) throw new Error("Missing tracked-author fixture");
+  return { post, author, header };
+}
+
+describe("same-scan sponsorship label work", () => {
+  afterEach(() => jest.restoreAllMocks());
+
+  test("does not repeat a failed author-label style read within one classification", () => {
+    const { post, author } = trackedAuthorPost();
+    const styleReads = jest.spyOn(window, "getComputedStyle");
+    for (let scan = 0; scan < 3; scan += 1) {
+      styleReads.mockClear();
+      expect(isSponsored(post, { isNF: true })).toBe(false);
+      expect(styleReads.mock.calls.filter(([element]) => element === author)).toHaveLength(1);
+    }
+  });
+
+  test("accepts the tracking control's own sponsored label without inspecting siblings", () => {
+    const { post, author, header } = trackedAuthorPost("Sponsored", "<button>Other</button>");
+    const sibling = header.querySelector("button");
+    const styleReads = jest.spyOn(window, "getComputedStyle");
+    expect(isSponsored(post, { isNF: true })).toBe(true);
+    expect(styleReads.mock.calls.filter(([element]) => element === author)).toHaveLength(1);
+    expect(styleReads.mock.calls.filter(([element]) => element === sibling)).toHaveLength(0);
+  });
+
+  test("retains a different sponsored control in the same header with one author read", () => {
+    const { post, author, header } = trackedAuthorPost("Publisher", "<button>Sponsored</button>");
+    const sibling = header.querySelector("button");
+    const styleReads = jest.spyOn(window, "getComputedStyle");
+    expect(isSponsored(post, { isNF: true })).toBe(true);
+    expect(styleReads.mock.calls.filter(([element]) => element === author)).toHaveLength(1);
+    expect(styleReads.mock.calls.filter(([element]) => element === sibling)).toHaveLength(1);
+  });
+
+  test.each([
+    "<span>Sponsored</span>",
+    "<p><button>Sponsored</button></p>",
+    '<div role="article"><button>Sponsored</button></div>',
+    '<button aria-label="Person">Sponsored</button>',
+    "<button hidden>Sponsored</button>",
+  ])("rejects unowned, non-control, conflicting or hidden sibling evidence: %s", (siblings) => {
+    const { post, author } = trackedAuthorPost("Publisher", siblings);
+    const styleReads = jest.spyOn(window, "getComputedStyle");
+    expect(isSponsored(post, { isNF: true })).toBe(false);
+    expect(styleReads.mock.calls.filter(([element]) => element === author)).toHaveLength(1);
+  });
+
+  test("does not borrow corroboration from a different author heading", () => {
+    const { post, author } = trackedAuthorPost();
+    post.append(sharedPost("<h4><button>Sponsored</button></h4>"));
+    const styleReads = jest.spyOn(window, "getComputedStyle");
+    expect(isSponsored(post, { isNF: true })).toBe(false);
+    expect(styleReads.mock.calls.filter(([element]) => element === author)).toHaveLength(1);
+  });
+
+  test("rechecks changed sibling and author labels, removed controls, and changed hrefs", () => {
+    const { post, author, header } = trackedAuthorPost("Publisher", "<button>Other</button>");
+    const sibling = header.querySelector("button");
+    if (!sibling) throw new Error("Missing corroborating fixture control");
+    const styleReads = jest.spyOn(window, "getComputedStyle");
+    for (const label of ["Other", "Sponsored", "Other"]) {
+      sibling.textContent = label;
+      styleReads.mockClear();
+      expect(isSponsored(post, { isNF: true })).toBe(label === "Sponsored");
+      expect(styleReads.mock.calls.filter(([element]) => element === author)).toHaveLength(1);
+      expect(styleReads.mock.calls.filter(([element]) => element === sibling)).toHaveLength(1);
+    }
+    sibling.remove();
+    for (const label of ["Sponsored", "Publisher"]) {
+      author.textContent = label;
+      styleReads.mockClear();
+      expect(isSponsored(post, { isNF: true })).toBe(label === "Sponsored");
+      expect(styleReads.mock.calls.filter(([element]) => element === author)).toHaveLength(1);
+    }
+    author.textContent = "Sponsored";
+    author.setAttribute("href", "/ordinary");
+    styleReads.mockClear();
+    expect(isSponsored(post, { isNF: true })).toBe(false);
+    expect(styleReads.mock.calls.filter(([element]) => element === author)).toHaveLength(0);
+  });
+});

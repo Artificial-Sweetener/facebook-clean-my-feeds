@@ -37,6 +37,7 @@ Thanks to **[trinhquocviet](https://github.com/trinhquocviet)** for helping main
 - Toggle **Debug** to reveal hidden posts with dotted outlines so you can verify what's being filtered.
 - Use **Export / Import** to back up your settings. The script stores preferences locally; incognito/private browsing wipes them when the session ends.
 - When regex matching is enabled for News, Groups, Watch, or Profiles, invalid expressions block saving or importing and show the original field, line, and affected feed. Your draft and previous settings stay intact. Invalid expressions in older saved settings are skipped individually while valid rules and other filters keep working; open settings to repair them. Marketplace text matching remains literal.
+- Syntax validation does not guarantee safe execution time. An expensive valid regex can still freeze the tab because this build retains native JavaScript matching, which cannot be interrupted here. A worker-based prototype was excluded because Facebook's security policy blocked its worker source.
 
 ### Language Support
 

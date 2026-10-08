@@ -39,6 +39,7 @@ Xin cảm ơn **[trinhquocviet](https://github.com/trinhquocviet)** vì đã h�
 - Bật **Debug** nếu muốn hiện các bài bị ẩn bằng viền chấm để bạn dễ kiểm tra thứ gì đang bị lọc.
 - Dùng **Export / Import** để sao lưu cài đặt. Script lưu tùy chọn cục bộ; khi duyệt web ẩn danh/private, các thiết lập đó sẽ mất khi phiên kết thúc.
 - Khi bật regex cho News, Groups, Watch hoặc Profiles, biểu thức không hợp lệ sẽ ngăn việc lưu hoặc nhập cài đặt. Thông báo lỗi chỉ rõ ô nhập gốc, dòng và feed bị ảnh hưởng; bản đang chỉnh sửa và cài đặt trước đó vẫn được giữ nguyên. Nếu cài đặt đã lưu từ trước chứa biểu thức không hợp lệ, script chỉ bỏ qua từng biểu thức đó để các quy tắc hợp lệ và bộ lọc khác tiếp tục hoạt động; hãy mở cài đặt để sửa. Marketplace vẫn khớp văn bản thông thường, không dùng regex.
+- Kiểm tra cú pháp không đảm bảo thời gian chạy an toàn. Một regex hợp lệ nhưng tốn nhiều xử lý vẫn có thể làm treo tab, vì bản này dùng cơ chế khớp gốc của JavaScript và không thể ngắt giữa chừng. Bản thử nghiệm chạy regex trong Worker chưa được đưa vào vì chính sách bảo mật của Facebook chặn nguồn Worker đó.
 
 ### Hỗ trợ ngôn ngữ
 

@@ -15,8 +15,8 @@
 // @grant        GM.info
 // @grant        unsafeWindow
 // @license      GPL-3.0-only; https://www.gnu.org/licenses/gpl-3.0.html
-// @icon         data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgY29sb3I9IiMxZjIzMjgiPgogIDxzdHlsZT46cm9vdHtjb2xvcjojMWYyMzI4fUBtZWRpYShwcmVmZXJzLWNvbG9yLXNjaGVtZTpkYXJrKXs6cm9vdHtjb2xvcjojZjBmNmZjfX08L3N0eWxlPgogIDxnIGZpbGw9ImN1cnJlbnRDb2xvciI+CiAgICA8cGF0aCBkPSJNNDYuMyAxLjFhMS42IDEuNiAwIDAgMSAyLjkgMS4zbC05LjYgMTktMi44LTEuM1oiLz4KICAgIDxwYXRoIGQ9Im0zNS43IDIxIDQuMyAxLjktMS4xIDMuMS00LjctMS45WiIvPgogICAgPHBhdGggZD0iTTMzLjEgMjUuNmMtMi42IDEuMi00LjMgNC02LjggNi4zLTIuMiAyLjEtNC4zIDMuMS02LjIgMy40IDQuOC42IDguNy01LjEgMTIuNi04LjEtMyA0LjUtNS43IDgtMTAuMyA5LjIgMi4yLjQgMy41LjYgNS4yLjIgMy0xLjkgNS4xLTUuNyA2LjctOS40LTEgNC4yLTMuMSA3LjctNS4yIDEwLjEgMS43LjMgMy43LjQgNS4xLS4xIDEuMS0yLjkgMS44LTYuMiAyLjEtOS4yLjUgMy42LS4yIDYuNy0uNyA5LjdsMi4yLS4yYy41LTIuOC0uMS02LS4zLTguNyAxIDMuMSAxLjEgNi4zIDEgOC44bDIuMS0uMmMtLjctMy41LTEuNy02LjYtMi4xLTkuOVoiLz4KICAgIDxwYXRoIGQ9Ik0xNy43IDUzLjRjMS44LjUgMy44LjcgNS43LjIgNy4zLTEuNCAxMy44LTUuNSAxOC44LTEwLjJsLTEuNyAxNS4yYy0uMyAzLjEtNC42IDQuNC0xMS4xIDQuNC02LjMgMC0xMC42LTEuNS0xMS00LjFaIi8+CiAgICA8cGF0aCBkPSJNMTUuNyA0MC4zYzcuNSAyLjkgMTYuNyAzLjIgMjMuNi43LTMuNiA0LjQtOCA3LjEtMTMuMyA4LjUtMS44LS45LTMuMy0yLjItNS4zLTIuNmwtMy42LS43WiIvPgogICAgPHBhdGggZD0iTTE2LjQgNDcuOGMxLjktLjIgNC41LjMgNi4xIDEuNmwxLjEgMS40Yy0yLjkuOC01LjQuNi03LjItLjVaIi8+CiAgPC9nPgogIDxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPgogICAgPHBhdGggc3Ryb2tlLXdpZHRoPSIxLjI1IiBkPSJNMjMuOCAzMC40Yy02LjUgMS4yLTkuNSAzLjItOC44IDUuMy44IDIuNSA3LjYgNC40IDE0LjcgNC41IDcuNyAwIDEzLjYtMi4zIDEzLjYtNC44IDAtMS4yLTEuMS0yLjMtMi43LTMuMiIvPgogICAgPHBhdGggc3Ryb2tlLXdpZHRoPSIxLjMiIGQ9Ik0xMi41IDM1LjFjLTEuMyAzLjQgNi42IDYuNyAxNi4yIDYuOSA4LjYuMSAxNS45LTIuMyAxNS45LTYgMC0xLjEtLjctMi4xLTItMi45Ii8+CiAgICA8cGF0aCBzdHJva2Utd2lkdGg9IjEuMzUiIGQ9Ik0xMy4yIDM4LjFjLS45IDMuNC0uNiA3IDEgOS4zTTE1LjkgNTAuOWM2LjMgMy4zIDE1LjYtLjEgMjQtNy45IDEuNy0xLjYgMy4xLTMuMSAzLjctNC42Ii8+CiAgICA8cGF0aCBzdHJva2Utd2lkdGg9IjEuMSIgZD0iTTE1LjEgMzkuMmMtLjQgMy4xLS4xIDUuNyAxIDcuM00yNC42IDUwLjhjNy40LTIuMyAxMi45LTYuNSAxNS43LTExLjUiLz4KICA8L2c+Cjwvc3ZnPg==
-// @icon64       data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgY29sb3I9IiMxZjIzMjgiPgogIDxzdHlsZT46cm9vdHtjb2xvcjojMWYyMzI4fUBtZWRpYShwcmVmZXJzLWNvbG9yLXNjaGVtZTpkYXJrKXs6cm9vdHtjb2xvcjojZjBmNmZjfX08L3N0eWxlPgogIDxnIGZpbGw9ImN1cnJlbnRDb2xvciI+CiAgICA8cGF0aCBkPSJNNDYuMyAxLjFhMS42IDEuNiAwIDAgMSAyLjkgMS4zbC05LjYgMTktMi44LTEuM1oiLz4KICAgIDxwYXRoIGQ9Im0zNS43IDIxIDQuMyAxLjktMS4xIDMuMS00LjctMS45WiIvPgogICAgPHBhdGggZD0iTTMzLjEgMjUuNmMtMi42IDEuMi00LjMgNC02LjggNi4zLTIuMiAyLjEtNC4zIDMuMS02LjIgMy40IDQuOC42IDguNy01LjEgMTIuNi04LjEtMyA0LjUtNS43IDgtMTAuMyA5LjIgMi4yLjQgMy41LjYgNS4yLjIgMy0xLjkgNS4xLTUuNyA2LjctOS40LTEgNC4yLTMuMSA3LjctNS4yIDEwLjEgMS43LjMgMy43LjQgNS4xLS4xIDEuMS0yLjkgMS44LTYuMiAyLjEtOS4yLjUgMy42LS4yIDYuNy0uNyA5LjdsMi4yLS4yYy41LTIuOC0uMS02LS4zLTguNyAxIDMuMSAxLjEgNi4zIDEgOC44bDIuMS0uMmMtLjctMy41LTEuNy02LjYtMi4xLTkuOVoiLz4KICAgIDxwYXRoIGQ9Ik0xNy43IDUzLjRjMS44LjUgMy44LjcgNS43LjIgNy4zLTEuNCAxMy44LTUuNSAxOC44LTEwLjJsLTEuNyAxNS4yYy0uMyAzLjEtNC42IDQuNC0xMS4xIDQuNC02LjMgMC0xMC42LTEuNS0xMS00LjFaIi8+CiAgICA8cGF0aCBkPSJNMTUuNyA0MC4zYzcuNSAyLjkgMTYuNyAzLjIgMjMuNi43LTMuNiA0LjQtOCA3LjEtMTMuMyA4LjUtMS44LS45LTMuMy0yLjItNS4zLTIuNmwtMy42LS43WiIvPgogICAgPHBhdGggZD0iTTE2LjQgNDcuOGMxLjktLjIgNC41LjMgNi4xIDEuNmwxLjEgMS40Yy0yLjkuOC01LjQuNi03LjItLjVaIi8+CiAgPC9nPgogIDxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPgogICAgPHBhdGggc3Ryb2tlLXdpZHRoPSIxLjI1IiBkPSJNMjMuOCAzMC40Yy02LjUgMS4yLTkuNSAzLjItOC44IDUuMy44IDIuNSA3LjYgNC40IDE0LjcgNC41IDcuNyAwIDEzLjYtMi4zIDEzLjYtNC44IDAtMS4yLTEuMS0yLjMtMi43LTMuMiIvPgogICAgPHBhdGggc3Ryb2tlLXdpZHRoPSIxLjMiIGQ9Ik0xMi41IDM1LjFjLTEuMyAzLjQgNi42IDYuNyAxNi4yIDYuOSA4LjYuMSAxNS45LTIuMyAxNS45LTYgMC0xLjEtLjctMi4xLTItMi45Ii8+CiAgICA8cGF0aCBzdHJva2Utd2lkdGg9IjEuMzUiIGQ9Ik0xMy4yIDM4LjFjLS45IDMuNC0uNiA3IDEgOS4zTTE1LjkgNTAuOWM2LjMgMy4zIDE1LjYtLjEgMjQtNy45IDEuNy0xLjYgMy4xLTMuMSAzLjctNC42Ii8+CiAgICA8cGF0aCBzdHJva2Utd2lkdGg9IjEuMSIgZD0iTTE1LjEgMzkuMmMtLjQgMy4xLS4xIDUuNyAxIDcuM00yNC42IDUwLjhjNy40LTIuMyAxMi45LTYuNSAxNS43LTExLjUiLz4KICA8L2c+Cjwvc3ZnPg==
+// @icon         data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgY29sb3I9IiMxZjIzMjgiPgogIDxzdHlsZT46cm9vdHtjb2xvcjojMWYyMzI4fUBtZWRpYShwcmVmZXJzLWNvbG9yLXNjaGVtZTpkYXJrKXs6cm9vdHtjb2xvcjojZjBmNmZjfX08L3N0eWxlPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQuOTk5MDEgMy43MjI1KSBzY2FsZSgwLjg4ODAxKSI+CiAgICA8ZyBmaWxsPSJjdXJyZW50Q29sb3IiIHRyYW5zZm9ybT0ic2NhbGUoLjA5NTA5NjU4MjQ2NjU2NzYpIj4KICAgICAgICA8cGF0aCBkPSJNNDc4IDE2QzQ5MS05IDUyMiAxMCA1MjAgMjNMNDI4IDIyMyAzOTEgMjA3WiIvPgogICAgICAgIDxwYXRoIGQ9Ik0zNjggMjI2UTM3NiAyMTEgMzkwIDIyMEw0MTkgMjMyUTQzMyAyMzcgNDI3IDI1MUw0MTMgMjgzIDM1MyAyNTdaIi8+CiAgICAgICAgPHBhdGggZD0iTTM1MiAyNjVDMzI4IDI2MiAzMDcgMjgwIDI4NCAzMDUgMjYzIDMyOSAyNDMgMzUwIDIyMSAzNjQgMjM1IDM3MSAyNDQgMzc3IDI1NCAzNjkgMjc0IDM1NiAyOTEgMzM3IDMwNSAzMjEgMjg5IDM1MSAyNzYgMzY4IDI1NyAzODIgMjcwIDM4NyAyODUgMzkwIDI5NiAzOTAgMzEwIDM5MCAzMzIgMzYxIDM0NCAzNDUgMzM2IDM2OCAzMjkgMzg2IDMyNCAzOTIgMzMzIDM5NCAzMzggMzk1IDM0MyAzODcgMzU1IDM2OSAzNjMgMzUxIDM3MCAzMzFMMzUyIDM5MSAzNzkgMzkwQzM4NiAzNTkgMzk1IDMyNCAzOTUgMjk5IDM5NCAyODEgMzgxIDI3OCAzNzYgMjg5TDM0NyAzMzNDMzU1IDMxMiAzNjcgMjg5IDM2NiAyODIgMzY1IDI3MiAzNTMgMjcyIDM0MyAyODJMMzA5IDMxNkMzMjEgMjk1IDMzNyAyNzggMzUyIDI2NVoiLz4KICAgICAgICA8cGF0aCBkPSJNNDAzIDI5MkM0MjUgMjk0IDQxMyAzMzYgNDE4IDM2MVE0MjAgMzc3IDQyNyAzODBMMzk5IDM4NkMzOTIgMzgyIDM5NyAzNDYgNDAyIDMxOFE0MDQgMzAzIDQwMyAyOTJaIi8+CiAgICAgICAgPHBhdGggZD0iTTI2NiAzMDlDMjAzIDMxOSAxNDUgMzM0IDE0NiAzNzQgMTQ3IDQxNCAyMjQgNDM4IDMxNiA0MzYgMzUwIDQzNiAzODAgNDMzIDM5OCA0MjYgNDAzIDQwOCA0MjMgNDAyIDQzOSA0MTAgNDYyIDQwNCA0ODAgMzg4IDQ3OCAzNjkgNDc2IDM1MCA0NTcgMzM2IDQ0NCAzMzEgNDI5IDMyMyA0MjYgMzQwIDQzNSAzNTAgNDUxIDM1OCA0NjMgMzcwIDQ0OCAzODQgNDIyIDQwNSAzMzQgNDE2IDI0NCA0MDcgMTk5IDQwMiAxNjkgMzkwIDE2OSAzNzUgMTY5IDM2NyAxNzIgMzU5IDE3OSAzNTUgMTk4IDM2OCAyMTUgMzYxIDIyNSAzNDkgMjQ1IDMzOSAyNTggMzI0IDI2NiAzMDlaIi8+CiAgICAgICAgPHBhdGggZD0iTTEzMCAzNjRRMTM2IDM2MyAxMzkgMzY3QzEzNyAzNzggMTQwIDM4OSAxNDQgMzk3IDEyNCA0MDQgMTE5IDM5NSAxMTkgMzgyIDExOSAzNzIgMTIxIDM2NiAxMzAgMzY0WiIvPgogICAgICAgIDxwYXRoIGQ9Ik0xNDAgNDA5IDE1NSA0MTBDMTQ3IDQ1MSAxNTcgNDg3IDE4MCA1MDFMMTc0IDUxNkMxNDIgNTAwIDEyNiA0NTkgMTQwIDQwOVoiLz4KICAgICAgICA8cGF0aCBkPSJNMTcwIDQyMUMyMjcgNDQ2IDMyNCA0NTMgMzkxIDQzOSAzNjYgNDc1IDMyMiA1MDMgMjY5IDUxMiAyNjMgNTA3IDI1NSA1MDUgMjQ3IDUwM0wxOTEgNDg5QzE3NSA0ODUgMTczIDQ3NyAxNzIgNDYxWiIvPgogICAgICAgIDxwYXRoIGQ9Ik0xOTQgNTAzQzE5OSA1MDAgMjEwIDUwNCAyMjIgNTA3TDI0NiA1MTRDMjU4IDUxNyAyNjIgNTI1IDI1NSA1MzYgMjUyIDU0MSAyNDcgNTQzIDIzOSA1NDFMMTk5IDUzMUMxODUgNTI3IDE4MCA1MjIgMTg2IDUxMVExODkgNTA1IDE5NCA1MDNaIi8+CiAgICAgICAgPHBhdGggZD0iTTI2OSA1MjVDMzI3IDUxOSAzNzQgNDg1IDQwNyA0NDkgNDAwIDQ0NCA0MDAgNDMyIDQwNyA0MjIgNDE2IDQxMCA0MzAgNDExIDQzOCA0MjIgNDQ3IDQzNyA0MzYgNDUyIDQyMyA0NTNMNDE1IDQ1MkMzNzggNDk5IDMyNyA1MzQgMjY3IDU0MloiLz4KICAgICAgICA8cGF0aCBkPSJNMTgzIDUzOEMyMDIgNTQ2IDI0MSA1NTkgMjUzIDU1M0wyNTkgNTUwQzM0MyA1NTAgMzk4IDUwNSA0MjYgNDY3IDQ0NCA0NjUgNDU0IDQ0OSA0NTIgNDMxTDQ1MSA0MjEgNDY0IDQxOEM0NjQgNDU2IDQ1MiA1NDIgNDQ0IDYwOSA0NDIgNjQ0IDQwNCA2NjYgMzMyIDY2NiAyNjcgNjY2IDIxMyA2NTQgMTk3IDYyNSAxOTIgNjE0IDE5MCA1ODcgMTgzIDUzOFoiLz4KICAgICAgPC9nPgogIDwvZz4KPC9zdmc+
+// @icon64       data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgY29sb3I9IiMxZjIzMjgiPgogIDxzdHlsZT46cm9vdHtjb2xvcjojMWYyMzI4fUBtZWRpYShwcmVmZXJzLWNvbG9yLXNjaGVtZTpkYXJrKXs6cm9vdHtjb2xvcjojZjBmNmZjfX08L3N0eWxlPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQuOTk5MDEgMy43MjI1KSBzY2FsZSgwLjg4ODAxKSI+CiAgICA8ZyBmaWxsPSJjdXJyZW50Q29sb3IiIHRyYW5zZm9ybT0ic2NhbGUoLjA5NTA5NjU4MjQ2NjU2NzYpIj4KICAgICAgICA8cGF0aCBkPSJNNDc4IDE2QzQ5MS05IDUyMiAxMCA1MjAgMjNMNDI4IDIyMyAzOTEgMjA3WiIvPgogICAgICAgIDxwYXRoIGQ9Ik0zNjggMjI2UTM3NiAyMTEgMzkwIDIyMEw0MTkgMjMyUTQzMyAyMzcgNDI3IDI1MUw0MTMgMjgzIDM1MyAyNTdaIi8+CiAgICAgICAgPHBhdGggZD0iTTM1MiAyNjVDMzI4IDI2MiAzMDcgMjgwIDI4NCAzMDUgMjYzIDMyOSAyNDMgMzUwIDIyMSAzNjQgMjM1IDM3MSAyNDQgMzc3IDI1NCAzNjkgMjc0IDM1NiAyOTEgMzM3IDMwNSAzMjEgMjg5IDM1MSAyNzYgMzY4IDI1NyAzODIgMjcwIDM4NyAyODUgMzkwIDI5NiAzOTAgMzEwIDM5MCAzMzIgMzYxIDM0NCAzNDUgMzM2IDM2OCAzMjkgMzg2IDMyNCAzOTIgMzMzIDM5NCAzMzggMzk1IDM0MyAzODcgMzU1IDM2OSAzNjMgMzUxIDM3MCAzMzFMMzUyIDM5MSAzNzkgMzkwQzM4NiAzNTkgMzk1IDMyNCAzOTUgMjk5IDM5NCAyODEgMzgxIDI3OCAzNzYgMjg5TDM0NyAzMzNDMzU1IDMxMiAzNjcgMjg5IDM2NiAyODIgMzY1IDI3MiAzNTMgMjcyIDM0MyAyODJMMzA5IDMxNkMzMjEgMjk1IDMzNyAyNzggMzUyIDI2NVoiLz4KICAgICAgICA8cGF0aCBkPSJNNDAzIDI5MkM0MjUgMjk0IDQxMyAzMzYgNDE4IDM2MVE0MjAgMzc3IDQyNyAzODBMMzk5IDM4NkMzOTIgMzgyIDM5NyAzNDYgNDAyIDMxOFE0MDQgMzAzIDQwMyAyOTJaIi8+CiAgICAgICAgPHBhdGggZD0iTTI2NiAzMDlDMjAzIDMxOSAxNDUgMzM0IDE0NiAzNzQgMTQ3IDQxNCAyMjQgNDM4IDMxNiA0MzYgMzUwIDQzNiAzODAgNDMzIDM5OCA0MjYgNDAzIDQwOCA0MjMgNDAyIDQzOSA0MTAgNDYyIDQwNCA0ODAgMzg4IDQ3OCAzNjkgNDc2IDM1MCA0NTcgMzM2IDQ0NCAzMzEgNDI5IDMyMyA0MjYgMzQwIDQzNSAzNTAgNDUxIDM1OCA0NjMgMzcwIDQ0OCAzODQgNDIyIDQwNSAzMzQgNDE2IDI0NCA0MDcgMTk5IDQwMiAxNjkgMzkwIDE2OSAzNzUgMTY5IDM2NyAxNzIgMzU5IDE3OSAzNTUgMTk4IDM2OCAyMTUgMzYxIDIyNSAzNDkgMjQ1IDMzOSAyNTggMzI0IDI2NiAzMDlaIi8+CiAgICAgICAgPHBhdGggZD0iTTEzMCAzNjRRMTM2IDM2MyAxMzkgMzY3QzEzNyAzNzggMTQwIDM4OSAxNDQgMzk3IDEyNCA0MDQgMTE5IDM5NSAxMTkgMzgyIDExOSAzNzIgMTIxIDM2NiAxMzAgMzY0WiIvPgogICAgICAgIDxwYXRoIGQ9Ik0xNDAgNDA5IDE1NSA0MTBDMTQ3IDQ1MSAxNTcgNDg3IDE4MCA1MDFMMTc0IDUxNkMxNDIgNTAwIDEyNiA0NTkgMTQwIDQwOVoiLz4KICAgICAgICA8cGF0aCBkPSJNMTcwIDQyMUMyMjcgNDQ2IDMyNCA0NTMgMzkxIDQzOSAzNjYgNDc1IDMyMiA1MDMgMjY5IDUxMiAyNjMgNTA3IDI1NSA1MDUgMjQ3IDUwM0wxOTEgNDg5QzE3NSA0ODUgMTczIDQ3NyAxNzIgNDYxWiIvPgogICAgICAgIDxwYXRoIGQ9Ik0xOTQgNTAzQzE5OSA1MDAgMjEwIDUwNCAyMjIgNTA3TDI0NiA1MTRDMjU4IDUxNyAyNjIgNTI1IDI1NSA1MzYgMjUyIDU0MSAyNDcgNTQzIDIzOSA1NDFMMTk5IDUzMUMxODUgNTI3IDE4MCA1MjIgMTg2IDUxMVExODkgNTA1IDE5NCA1MDNaIi8+CiAgICAgICAgPHBhdGggZD0iTTI2OSA1MjVDMzI3IDUxOSAzNzQgNDg1IDQwNyA0NDkgNDAwIDQ0NCA0MDAgNDMyIDQwNyA0MjIgNDE2IDQxMCA0MzAgNDExIDQzOCA0MjIgNDQ3IDQzNyA0MzYgNDUyIDQyMyA0NTNMNDE1IDQ1MkMzNzggNDk5IDMyNyA1MzQgMjY3IDU0MloiLz4KICAgICAgICA8cGF0aCBkPSJNMTgzIDUzOEMyMDIgNTQ2IDI0MSA1NTkgMjUzIDU1M0wyNTkgNTUwQzM0MyA1NTAgMzk4IDUwNSA0MjYgNDY3IDQ0NCA0NjUgNDU0IDQ0OSA0NTIgNDMxTDQ1MSA0MjEgNDY0IDQxOEM0NjQgNDU2IDQ1MiA1NDIgNDQ0IDYwOSA0NDIgNjQ0IDQwNCA2NjYgMzMyIDY2NiAyNjcgNjY2IDIxMyA2NTQgMTk3IDYyNSAxOTIgNjE0IDE5MCA1ODcgMTgzIDUzOFoiLz4KICAgICAgPC9nPgogIDwvZz4KPC9zdmc+
 // @run-at       document-start
 // ==/UserScript==
 
@@ -9334,16 +9334,6 @@
     addToSS(state, ".fb-cmf fieldset legend .cmf-legend-icon .cmf-icon", "width:26px; height:26px;");
     addToSS(
       state,
-      ".fb-cmf fieldset legend .cmf-legend-icon .cmf-icon--legend-report-bug",
-      "width:32px; height:32px;"
-    );
-    addToSS(
-      state,
-      ".fb-cmf fieldset legend .cmf-legend-icon .cmf-icon--legend-reels",
-      "width:32px; height:32px;"
-    );
-    addToSS(
-      state,
       ".fb-cmf fieldset legend .cmf-legend-text",
       "display:flex; flex-direction:column; align-items:flex-start; gap:0; min-width:0;"
     );
@@ -9763,7 +9753,7 @@
     let bootstrap = null;
     let stopped = false;
     function syncMode() {
-      if (stopped) return;
+      if (stopped || typeof document === "undefined" || !document.documentElement) return;
       const mode = detectDarkMode();
       if (state && state.isDarkMode !== mode) {
         state.isDarkMode = mode;
@@ -9771,7 +9761,7 @@
       }
     }
     function startObserving() {
-      if (stopped || !document.documentElement || active) return;
+      if (stopped || typeof document === "undefined" || !document.documentElement || active) return;
       bootstrap == null ? void 0 : bootstrap.disconnect();
       bootstrap = null;
       active = new MutationObserver((mutations) => {
@@ -10639,6 +10629,8 @@
       vfType: "",
       mpType: ""
     };
+    const profilePath = pathname.replace(/\/$/, "");
+    if (/^\/(settings|privacy|login(?:\.php)?|help)(?:\/|$)/.test(pathname)) return route;
     if (pathname === "/" || pathname === "/home.php") {
       if (search.indexOf("?filter=groups") < 0) {
         route.isNF = true;
@@ -10691,11 +10683,11 @@
       pathname
     )) {
       route.isSF = true;
-    } else if (pathname.includes("/reel/")) {
+    } else if (pathname.includes("/reel/") || profilePath === "/reels") {
       route.isRF = options.REELS_CONTROLS === true || options.REELS_DISABLE_LOOPING === true;
     } else if (pathname.includes("/profile.php")) {
       route.isPP = true;
-    } else if (pathname.substring(1).length > 1 && pathname.substring(1).indexOf("/") < 0) {
+    } else if (profilePath.substring(1).length > 1 && profilePath.substring(1).indexOf("/") < 0) {
       route.isPP = true;
     }
     route.isAF = route.isNF || route.isGF || route.isVF || route.isMF || route.isSF || route.isRF || route.isPP;
@@ -10707,17 +10699,1120 @@
     }
   });
 
+  // src/dom/topbar-controls.ts
+  function getRect(element) {
+    if (!element || typeof element.getBoundingClientRect !== "function") {
+      return null;
+    }
+    const rect = element.getBoundingClientRect();
+    if (!rect || rect.width <= 0 || rect.height <= 0) {
+      return null;
+    }
+    return rect;
+  }
+  function isInteractiveControl(element) {
+    if (!element || !element.tagName) {
+      return false;
+    }
+    const tagName = element.tagName.toUpperCase();
+    if (tagName === "BUTTON") {
+      return true;
+    }
+    if (element.getAttribute("role") === "button") {
+      return true;
+    }
+    if (element.getAttribute("aria-expanded") !== null) {
+      return true;
+    }
+    if (tagName === "A" && element.getAttribute("aria-label")) {
+      return true;
+    }
+    const tabIndex = element.getAttribute("tabindex");
+    return tabIndex !== null && tabIndex !== "-1";
+  }
+  function isSameRect(first, second) {
+    return Math.abs(first.left - second.left) <= RECT_MATCH_TOLERANCE && Math.abs(first.top - second.top) <= RECT_MATCH_TOLERANCE && Math.abs(first.width - second.width) <= RECT_MATCH_TOLERANCE && Math.abs(first.height - second.height) <= RECT_MATCH_TOLERANCE;
+  }
+  function dedupeOverlappingControls(controls) {
+    return controls.filter(
+      (control, index) => !controls.slice(0, index).some((existingControl) => isSameRect(existingControl.rect, control.rect))
+    );
+  }
+  function isTopbarControlCandidate(element, bannerRect) {
+    if (!isInteractiveControl(element)) {
+      return false;
+    }
+    const rect = getRect(element);
+    if (!rect) {
+      return false;
+    }
+    if (rect.width < MIN_CONTROL_SIZE || rect.height < MIN_CONTROL_SIZE || rect.width > MAX_CONTROL_SIZE || rect.height > MAX_CONTROL_SIZE) {
+      return false;
+    }
+    const aspectRatio = rect.width / rect.height;
+    if (aspectRatio < MIN_ASPECT_RATIO || aspectRatio > MAX_ASPECT_RATIO) {
+      return false;
+    }
+    if (!bannerRect) {
+      return true;
+    }
+    return rect.bottom > bannerRect.top && rect.top < bannerRect.bottom;
+  }
+  function buildControlClusters(controls) {
+    const clusters = [];
+    controls.forEach((control) => {
+      const currentCluster = clusters[clusters.length - 1];
+      if (!currentCluster) {
+        clusters.push({
+          controls: [control],
+          rightEdge: control.rect.right
+        });
+        return;
+      }
+      const previous = currentCluster.controls[currentCluster.controls.length - 1];
+      if (!previous) return;
+      const gap = control.rect.left - previous.rect.right;
+      const sameRow = Math.abs(control.rect.top - previous.rect.top) <= MAX_ROW_OFFSET;
+      const similarHeight = Math.abs(control.rect.height - previous.rect.height) <= MAX_ROW_OFFSET;
+      if (sameRow && similarHeight && gap >= -1 && gap <= MAX_CLUSTER_GAP) {
+        currentCluster.controls.push(control);
+        currentCluster.rightEdge = control.rect.right;
+        return;
+      }
+      clusters.push({
+        controls: [control],
+        rightEdge: control.rect.right
+      });
+    });
+    return clusters;
+  }
+  function getTopbarControlButtons(root = document) {
+    if (!root || typeof root.querySelector !== "function") {
+      return [];
+    }
+    for (const banner of root.querySelectorAll('[role="banner"]')) {
+      if (banner.closest('[hidden], [aria-hidden="true"]')) continue;
+      const style = window.getComputedStyle(banner);
+      if (style.display === "none" || style.visibility === "hidden") continue;
+      const controls = getBannerControls(banner);
+      if (controls.length) return controls;
+    }
+    return [];
+  }
+  function getBannerControls(banner) {
+    var _a, _b;
+    const bannerRect = getRect(banner);
+    const controls = dedupeOverlappingControls(
+      Array.from(new Set(Array.from(banner.querySelectorAll(topbarControlSelector)))).filter((control) => isTopbarControlCandidate(control, bannerRect)).map((control) => ({
+        element: control,
+        rect: getRect(control)
+      })).filter((control) => control.rect !== null).sort((a, b) => a.rect.left - b.rect.left)
+    );
+    if (controls.length === 0) {
+      return [];
+    }
+    const clusters = buildControlClusters(controls);
+    const candidateClusters = clusters.some((cluster) => cluster.controls.length > 1) ? clusters.filter((cluster) => cluster.controls.length > 1) : clusters;
+    candidateClusters.sort(
+      (a, b) => b.rightEdge - a.rightEdge || b.controls.length - a.controls.length
+    );
+    return (_b = (_a = candidateClusters[0]) == null ? void 0 : _a.controls.map((control) => control.element)) != null ? _b : [];
+  }
+  function getTopbarMenuButton(root = document) {
+    var _a;
+    const controls = getTopbarControlButtons(root);
+    return (_a = controls[0]) != null ? _a : null;
+  }
+  function isTopbarControlButton(element, root = document) {
+    return getTopbarControlButtons(root).some((control) => control === element);
+  }
+  var MIN_CONTROL_SIZE, MAX_CONTROL_SIZE, MIN_ASPECT_RATIO, MAX_ASPECT_RATIO, MAX_CLUSTER_GAP, MAX_ROW_OFFSET, RECT_MATCH_TOLERANCE, topbarControlSelector;
+  var init_topbar_controls = __esm({
+    "src/dom/topbar-controls.ts"() {
+      "use strict";
+      MIN_CONTROL_SIZE = 28;
+      MAX_CONTROL_SIZE = 72;
+      MIN_ASPECT_RATIO = 0.75;
+      MAX_ASPECT_RATIO = 1.35;
+      MAX_CLUSTER_GAP = 24;
+      MAX_ROW_OFFSET = 12;
+      RECT_MATCH_TOLERANCE = 1;
+      topbarControlSelector = 'button, [role="button"], a[aria-label]';
+    }
+  });
+
+  // src/ui/lifecycle.ts
+  var UiLifecycle;
+  var init_lifecycle = __esm({
+    "src/ui/lifecycle.ts"() {
+      "use strict";
+      UiLifecycle = class {
+        constructor() {
+          this.active = true;
+          this.cleanups = /* @__PURE__ */ new Set();
+        }
+        /** Register a teardown, or run it immediately when its generation already ended. */
+        add(cleanup) {
+          if (!cleanup) return;
+          if (this.active) this.cleanups.add(cleanup);
+          else cleanup();
+        }
+        /** Forget a resource already released by its owner without invoking its teardown again. */
+        remove(cleanup) {
+          this.cleanups.delete(cleanup);
+        }
+        /** Remove an event listener at teardown and ignore already-queued stale dispatches. */
+        listen(target, type, listener, options) {
+          const guarded = (event) => {
+            if (this.active) listener(event);
+          };
+          target.addEventListener(type, guarded, options);
+          this.add(() => target.removeEventListener(type, guarded, options));
+        }
+        /** Observe a node only while mounted; pending mutation records cannot reach a later generation. */
+        observe(target, options, callback) {
+          if (!this.active || typeof MutationObserver === "undefined") return;
+          const observer = new MutationObserver((records, instance) => {
+            if (this.active) callback(records, instance);
+          });
+          observer.observe(target, options);
+          this.add(() => observer.disconnect());
+        }
+        /** Schedule an owned timeout in milliseconds and release its cleanup record once it fires. */
+        defer(callback, delay) {
+          if (!this.active) return;
+          const id = setTimeout(() => {
+            this.cleanups.delete(cancel);
+            if (this.active) callback();
+          }, delay);
+          const cancel = () => clearTimeout(id);
+          this.add(cancel);
+        }
+        /** Coalesce caller-owned work into a cancellable frame, with a timeout fallback for limited hosts. */
+        frame(callback) {
+          if (!this.active) return;
+          if (typeof window.requestAnimationFrame !== "function") {
+            this.defer(callback, 0);
+            return;
+          }
+          let id = null;
+          const cancel = () => {
+            if (id !== null) window.cancelAnimationFrame(id);
+          };
+          this.add(cancel);
+          id = window.requestAnimationFrame(() => {
+            this.cleanups.delete(cancel);
+            if (this.active) callback();
+          });
+        }
+        /** Tear down all owned resources once; one faulty host cleanup cannot retain the others. */
+        dispose() {
+          if (!this.active) return;
+          this.active = false;
+          for (const cleanup of this.cleanups) {
+            try {
+              cleanup();
+            } catch (e) {
+            }
+          }
+          this.cleanups.clear();
+        }
+      };
+    }
+  });
+
+  // src/dom/tooltip.ts
+  function positionTooltip(target, tooltip, placement = "auto") {
+    if (!target || !tooltip || typeof target.getBoundingClientRect !== "function") {
+      return;
+    }
+    if (typeof window === "undefined") {
+      return;
+    }
+    const rect = target.getBoundingClientRect();
+    const tooltipRect = tooltip.getBoundingClientRect();
+    const gap = 8;
+    const edgePadding = 8;
+    let top = rect.bottom + gap;
+    let left = rect.left + rect.width / 2 - tooltipRect.width / 2;
+    if (placement === "right") {
+      top = rect.top + rect.height / 2 - tooltipRect.height / 2;
+      left = rect.right + gap;
+      if (left + tooltipRect.width + edgePadding > window.innerWidth) {
+        left = rect.left - tooltipRect.width - gap;
+      }
+      top = Math.max(
+        edgePadding,
+        Math.min(top, window.innerHeight - tooltipRect.height - edgePadding)
+      );
+    } else {
+      if (top + tooltipRect.height + edgePadding > window.innerHeight) {
+        top = rect.top - tooltipRect.height - gap;
+      }
+    }
+    left = Math.max(edgePadding, Math.min(left, window.innerWidth - tooltipRect.width - edgePadding));
+    tooltip.style.top = `${Math.round(top)}px`;
+    tooltip.style.left = `${Math.round(left)}px`;
+  }
+  function attachTooltip(target, text, options = {}) {
+    if (!target || !text) {
+      return () => {
+      };
+    }
+    let tooltip = null;
+    let showTimer = null;
+    const placement = options && options.placement ? options.placement : "auto";
+    const tooltipId = target.dataset.cmfTooltipId || `fbcmf-tooltip-${generateRandomString(8)}`;
+    target.dataset.cmfTooltipId = tooltipId;
+    target.setAttribute("aria-describedby", tooltipId);
+    const updatePosition = () => {
+      if (!tooltip) {
+        return;
+      }
+      positionTooltip(target, tooltip, placement);
+    };
+    const show = () => {
+      if (tooltip || !document.body || !target.isConnected) {
+        return;
+      }
+      tooltip = document.createElement("div");
+      tooltip.id = tooltipId;
+      tooltip.className = "fb-cmf-tooltip";
+      tooltip.setAttribute("role", "tooltip");
+      tooltip.textContent = text;
+      tooltip.style.visibility = "hidden";
+      document.body.appendChild(tooltip);
+      updatePosition();
+      tooltip.style.visibility = "visible";
+    };
+    const hide = () => {
+      if (showTimer) {
+        clearTimeout(showTimer);
+        showTimer = null;
+      }
+      if (tooltip) {
+        tooltip.remove();
+        tooltip = null;
+      }
+    };
+    const onEnter = () => {
+      if (showTimer) {
+        clearTimeout(showTimer);
+      }
+      showTimer = setTimeout(show, 400);
+    };
+    const onLeave = () => {
+      hide();
+    };
+    target.addEventListener("pointerenter", onEnter);
+    target.addEventListener("pointerleave", onLeave);
+    if (typeof window !== "undefined") {
+      window.addEventListener("scroll", updatePosition, true);
+      window.addEventListener("resize", updatePosition);
+    }
+    return () => {
+      hide();
+      target.removeEventListener("pointerenter", onEnter);
+      target.removeEventListener("pointerleave", onLeave);
+      if (typeof window !== "undefined") {
+        window.removeEventListener("scroll", updatePosition, true);
+        window.removeEventListener("resize", updatePosition);
+      }
+    };
+  }
+  var init_tooltip = __esm({
+    "src/dom/tooltip.ts"() {
+      "use strict";
+      init_random();
+    }
+  });
+
+  // src/ui/controls/toggle-position.ts
+  function createTopbarPositioning(btn) {
+    let cachedIconColor = "";
+    let cachedBtnBg = "";
+    let cachedHover = "";
+    let cachedPress = "";
+    let lastMenuRect = null;
+    let themeDirty = false;
+    const updateTopRightPosition = () => {
+      var _a, _b, _c;
+      const menuButton = getTopbarMenuButton();
+      if (!menuButton) {
+        btn.style.position = "fixed";
+        btn.style.top = "0.5rem";
+        btn.style.right = "0.5rem";
+        btn.style.left = "auto";
+        btn.style.zIndex = "999";
+        lastMenuRect = null;
+        return false;
+      }
+      const rect = menuButton.getBoundingClientRect();
+      lastMenuRect = {
+        left: rect.left,
+        top: rect.top,
+        width: rect.width,
+        height: rect.height
+      };
+      const menuStyle = window.getComputedStyle(menuButton);
+      const hoverOverlay = menuStyle.getPropertyValue("--hover-overlay");
+      const pressOverlay = menuStyle.getPropertyValue("--press-overlay");
+      const secondaryBg = menuStyle.getPropertyValue("--secondary-button-background");
+      const activeBackground = menuStyle.getPropertyValue("--primary-deemphasized-button-background");
+      const activeIcon = menuStyle.getPropertyValue("--primary-deemphasized-button-text");
+      const isMenuExpanded = menuButton.getAttribute("aria-expanded") === "true";
+      const gap = 8;
+      const left = Math.max(0, rect.left - rect.width - gap);
+      btn.style.position = "fixed";
+      btn.style.top = `${rect.top}px`;
+      btn.style.left = `${left}px`;
+      btn.style.right = "auto";
+      btn.style.width = `${rect.width}px`;
+      btn.style.height = `${rect.height}px`;
+      btn.style.borderRadius = menuStyle.borderRadius;
+      btn.style.boxShadow = menuStyle.boxShadow;
+      const iconElement = menuButton.querySelector("svg, i, span");
+      const iconStyle = iconElement ? window.getComputedStyle(iconElement) : null;
+      const iconColor = iconStyle ? iconStyle.color : "";
+      const iconFill = iconStyle ? iconStyle.getPropertyValue("fill") : "";
+      const menuColor = menuStyle.color;
+      const secondaryIcon = menuStyle.getPropertyValue("--secondary-icon");
+      const resolvedIconColor = (isMenuExpanded ? [secondaryIcon, iconColor, iconFill, menuColor] : [iconColor, iconFill, menuColor, secondaryIcon]).find(isUsableColor) || "var(--secondary-icon)";
+      if (themeDirty || !isMenuExpanded || !cachedIconColor || isUsableColor(secondaryIcon)) {
+        cachedIconColor = resolvedIconColor;
+      }
+      const finalIconColor = cachedIconColor || resolvedIconColor;
+      btn.style.setProperty("--cmf-icon-color", finalIconColor);
+      if (btn.getAttribute("data-cmf-open") === "true") {
+        btn.style.color = "";
+      } else {
+        btn.style.color = finalIconColor;
+      }
+      btn.style.setProperty(
+        "--cmf-active-bg",
+        activeBackground.trim() || "var(--primary-deemphasized-button-background, rgba(8, 102, 255, 0.1))"
+      );
+      btn.style.setProperty(
+        "--cmf-active-icon",
+        activeIcon.trim() || "var(--primary-deemphasized-button-text, var(--accent, #0866ff))"
+      );
+      const icon = (_a = btn.querySelector(".cmf-icon")) != null ? _a : btn.querySelector("svg");
+      if (icon) {
+        if (icon.tagName && icon.tagName.toLowerCase() === "svg") {
+          icon.style.fill = "currentColor";
+        }
+        const width = Number.parseFloat((_b = iconStyle == null ? void 0 : iconStyle.width) != null ? _b : "");
+        const height = Number.parseFloat((_c = iconStyle == null ? void 0 : iconStyle.height) != null ? _c : "");
+        const fitsControl = (iconStyle == null ? void 0 : iconStyle.width.endsWith("px")) && iconStyle.height.endsWith("px") && width > 0 && width <= rect.width && height > 0 && height <= rect.height;
+        icon.style.width = fitsControl && iconStyle ? iconStyle.width : "";
+        icon.style.height = fitsControl && iconStyle ? iconStyle.height : "";
+      }
+      const zIndexValue = menuStyle.zIndex;
+      if (zIndexValue && zIndexValue !== "auto" && zIndexValue !== "0") {
+        btn.style.zIndex = zIndexValue;
+      } else {
+        btn.style.zIndex = "9999";
+      }
+      btn.style.padding = "0";
+      btn.style.margin = "0";
+      if (themeDirty || !isMenuExpanded || !cachedBtnBg || secondaryBg.trim()) {
+        if (secondaryBg) {
+          cachedBtnBg = secondaryBg;
+        } else if (menuStyle.backgroundColor) {
+          cachedBtnBg = menuStyle.backgroundColor;
+        }
+      }
+      if (cachedBtnBg) {
+        btn.style.setProperty("--cmf-btn-bg", cachedBtnBg);
+      }
+      btn.style.backgroundColor = "";
+      if (themeDirty || !isMenuExpanded || !cachedHover || hoverOverlay.trim()) {
+        cachedHover = hoverOverlay || "var(--hover-overlay)";
+      }
+      if (themeDirty || !isMenuExpanded || !cachedPress || pressOverlay.trim()) {
+        cachedPress = pressOverlay || "var(--press-overlay)";
+      }
+      btn.style.setProperty("--cmf-btn-hover", cachedHover || hoverOverlay || "var(--hover-overlay)");
+      btn.style.setProperty("--cmf-btn-press", cachedPress || pressOverlay || "var(--press-overlay)");
+      themeDirty = false;
+      return true;
+    };
+    const needsMenuSync = () => {
+      const menuButton = getTopbarMenuButton();
+      if (!menuButton) {
+        return lastMenuRect !== null;
+      }
+      const rect = menuButton.getBoundingClientRect();
+      if (!lastMenuRect) {
+        return true;
+      }
+      return Math.abs(rect.left - lastMenuRect.left) > 1 || Math.abs(rect.top - lastMenuRect.top) > 1 || Math.abs(rect.width - lastMenuRect.width) > 1 || Math.abs(rect.height - lastMenuRect.height) > 1;
+    };
+    const invalidateTheme = (themeChanged = false) => {
+      cachedIconColor = "";
+      cachedBtnBg = "";
+      cachedHover = "";
+      cachedPress = "";
+      if (themeChanged) themeDirty = true;
+    };
+    return { updatePosition: updateTopRightPosition, needsMenuSync, invalidateTheme };
+  }
+  var isUsableColor;
+  var init_toggle_position = __esm({
+    "src/ui/controls/toggle-position.ts"() {
+      "use strict";
+      init_topbar_controls();
+      isUsableColor = (value) => {
+        if (!value) {
+          return false;
+        }
+        const normalized = value.trim().toLowerCase();
+        if (!normalized || normalized === "transparent" || normalized === "none") {
+          return false;
+        }
+        if (normalized.startsWith("rgba(") && normalized.endsWith(", 0)")) {
+          return false;
+        }
+        return true;
+      };
+    }
+  });
+
+  // src/ui/controls/modal-scrim.ts
+  function getVisibleRect(element) {
+    if (!element || typeof element.getBoundingClientRect !== "function") {
+      return null;
+    }
+    const rect = element.getBoundingClientRect();
+    if (!rect || rect.width <= 0 || rect.height <= 0) {
+      return null;
+    }
+    return rect;
+  }
+  function parseRgbColor(color) {
+    if (typeof color !== "string") {
+      return null;
+    }
+    const match = color.trim().match(
+      /^rgba?\(\s*([0-9.]+)(?:,|\s)\s*([0-9.]+)(?:,|\s)\s*([0-9.]+)(?:\s*[,/]\s*([0-9.]+%?))?\s*\)$/i
+    );
+    if (!match) {
+      return null;
+    }
+    const alphaValue = match[4] || "1";
+    const alpha = alphaValue.endsWith("%") ? parseFloat(alphaValue.slice(0, -1)) / 100 : parseFloat(alphaValue);
+    return {
+      r: parseFloat(match[1] || "0"),
+      g: parseFloat(match[2] || "0"),
+      b: parseFloat(match[3] || "0"),
+      a: Number.isNaN(alpha) ? 1 : alpha
+    };
+  }
+  function isModalScrimColor(color) {
+    const parsed = parseRgbColor(color);
+    if (!parsed) {
+      return false;
+    }
+    const maxChannel = Math.max(parsed.r, parsed.g, parsed.b);
+    const minChannel = Math.min(parsed.r, parsed.g, parsed.b);
+    return parsed.a >= 0.2 && (maxChannel <= 120 || minChannel >= 180);
+  }
+  function isVisibleElement(element) {
+    const rect = getVisibleRect(element);
+    if (!rect) {
+      return false;
+    }
+    const style = window.getComputedStyle(element);
+    return style.display !== "none" && style.visibility !== "hidden" && style.opacity !== "0";
+  }
+  function hasVisibleDialog() {
+    return Array.from(document.querySelectorAll('[role="dialog"], [aria-modal="true"]')).some(
+      isVisibleElement
+    );
+  }
+  function isFullViewportDimmer(element) {
+    if (!element || element.id === "fbcmf" || element.id === "fbcmfToggle") {
+      return false;
+    }
+    if (element.closest && element.closest("#fbcmf, .fb-cmf-toggle")) {
+      return false;
+    }
+    const rect = getVisibleRect(element);
+    if (!rect || rect.bottom <= 0 || rect.right <= 0) {
+      return false;
+    }
+    const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 0;
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+    if (viewportWidth === 0 || viewportHeight === 0) {
+      return false;
+    }
+    if (rect.width < viewportWidth * 0.8 || rect.height < viewportHeight * 0.8) {
+      return false;
+    }
+    const style = window.getComputedStyle(element);
+    return style.position === "fixed" && isModalScrimColor(style.backgroundColor);
+  }
+  function isFacebookPageDimmed() {
+    if (!document.body || !hasVisibleDialog()) {
+      return false;
+    }
+    return Array.from(document.body.querySelectorAll("*")).some(isFullViewportDimmer);
+  }
+  var init_modal_scrim = __esm({
+    "src/ui/controls/modal-scrim.ts"() {
+      "use strict";
+    }
+  });
+
+  // src/ui/controls/toggle-button.ts
+  function destroyToggleButton(state) {
+    if (!state) {
+      return;
+    }
+    if (typeof state.destroyToggleButton === "function") {
+      const teardown = state.destroyToggleButton;
+      state.destroyToggleButton = null;
+      teardown();
+      return;
+    }
+    if (state.btnToggleEl && state.btnToggleEl.parentNode) {
+      state.btnToggleEl.parentNode.removeChild(state.btnToggleEl);
+    }
+    state.btnToggleEl = null;
+    state.syncToggleButtonTheme = null;
+  }
+  function createToggleButton(state, keyWords, onToggle) {
+    if (!state || !keyWords || typeof onToggle !== "function") {
+      return null;
+    }
+    if (!document.body) {
+      return null;
+    }
+    destroyToggleButton(state);
+    const btnLocation = state.options && state.options.CMF_BTN_OPTION ? state.options.CMF_BTN_OPTION.toString() : "0";
+    const useTopRight = btnLocation === "1";
+    const btn = document.createElement(useTopRight ? "div" : "button");
+    const lifecycle = new UiLifecycle();
+    const hasLiveDocument = () => typeof document !== "undefined" && !!document.body;
+    const addCleanup = (cleanup) => {
+      lifecycle.add(cleanup);
+    };
+    btn.innerHTML = state.iconToggleHTML;
+    btn.id = "fbcmfToggle";
+    btn.removeAttribute("title");
+    btn.className = "fb-cmf-toggle fb-cmf-icon";
+    btn.setAttribute("aria-label", keyWords.DLG_TITLE);
+    if (useTopRight) {
+      btn.classList.add("fb-cmf-toggle-topbar");
+    }
+    const toggleHandler = (event) => {
+      if (btn.getAttribute(pageDimmedAtt) === "true") {
+        if (event && typeof event.preventDefault === "function") {
+          event.preventDefault();
+        }
+        if (event && typeof event.stopPropagation === "function") {
+          event.stopPropagation();
+        }
+        return;
+      }
+      onToggle();
+    };
+    if (useTopRight) {
+      btn.setAttribute("role", "button");
+      btn.setAttribute("tabindex", "0");
+      const onKeyDown = (event) => {
+        if (!(event instanceof KeyboardEvent)) return;
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          toggleHandler();
+        }
+      };
+      btn.addEventListener("keydown", onKeyDown);
+      addCleanup(() => btn.removeEventListener("keydown", onKeyDown));
+    }
+    btn.addEventListener("click", toggleHandler, false);
+    addCleanup(() => btn.removeEventListener("click", toggleHandler, false));
+    const tooltipPlacement = btnLocation === "0" ? "right" : "auto";
+    addCleanup(attachTooltip(btn, keyWords.DLG_TITLE, { placement: tooltipPlacement }));
+    const positioning = createTopbarPositioning(btn);
+    let observedMenuButton = null;
+    let updateScheduled = false;
+    let pageDimmedUpdateScheduled = false;
+    let resizeObserver = null;
+    const scheduleUpdate = () => {
+      if (!lifecycle.active || !hasLiveDocument() || updateScheduled) {
+        return;
+      }
+      updateScheduled = true;
+      const runUpdate = () => {
+        updateScheduled = false;
+        if (hasLiveDocument()) positioning.updatePosition();
+      };
+      lifecycle.frame(runUpdate);
+    };
+    const getMenuButton = () => getTopbarMenuButton();
+    const observeMenuButton = () => {
+      const menuButton = getMenuButton();
+      if (menuButton === observedMenuButton) {
+        return;
+      }
+      if (resizeObserver && observedMenuButton) {
+        resizeObserver.unobserve(observedMenuButton);
+      }
+      observedMenuButton = menuButton;
+      if (resizeObserver && observedMenuButton) {
+        resizeObserver.observe(observedMenuButton);
+      }
+      positioning.invalidateTheme();
+      scheduleUpdate();
+    };
+    const syncPageDimmedState = () => {
+      if (isFacebookPageDimmed()) {
+        btn.setAttribute(pageDimmedAtt, "true");
+      } else {
+        btn.removeAttribute(pageDimmedAtt);
+      }
+    };
+    const schedulePageDimmedStateSync = () => {
+      if (!lifecycle.active || !hasLiveDocument() || pageDimmedUpdateScheduled) {
+        return;
+      }
+      pageDimmedUpdateScheduled = true;
+      const runUpdate = () => {
+        pageDimmedUpdateScheduled = false;
+        if (hasLiveDocument() && btn.isConnected) {
+          syncPageDimmedState();
+        }
+      };
+      lifecycle.frame(runUpdate);
+    };
+    const restoreOwnedToggle = () => {
+      if (lifecycle.active && hasLiveDocument() && btnLocation !== "2" && state.btnToggleEl === btn && state.isAF && !btn.isConnected && document.body && !document.getElementById(btn.id)) {
+        document.body.appendChild(btn);
+        if (useTopRight) scheduleUpdate();
+      }
+    };
+    if (useTopRight) {
+      if (!btn.isConnected) {
+        document.body.appendChild(btn);
+      }
+      if (typeof ResizeObserver !== "undefined") {
+        resizeObserver = new ResizeObserver(() => {
+          scheduleUpdate();
+        });
+        addCleanup(() => resizeObserver == null ? void 0 : resizeObserver.disconnect());
+      }
+      observeMenuButton();
+      scheduleUpdate();
+      if (typeof MutationObserver !== "undefined") {
+        lifecycle.observe(
+          document.documentElement,
+          { attributes: true, attributeFilter: ["class", "style"] },
+          () => {
+            positioning.invalidateTheme(true);
+            scheduleUpdate();
+          }
+        );
+      }
+      if (typeof window !== "undefined") {
+        window.addEventListener("resize", scheduleUpdate);
+        addCleanup(() => window.removeEventListener("resize", scheduleUpdate));
+        const intervalId = setInterval(() => {
+          if (!hasLiveDocument()) return;
+          restoreOwnedToggle();
+          observeMenuButton();
+          if (positioning.needsMenuSync()) {
+            scheduleUpdate();
+          }
+        }, 2e3);
+        addCleanup(() => clearInterval(intervalId));
+      }
+      if (typeof MutationObserver !== "undefined") {
+        lifecycle.observe(btn, { attributes: true, attributeFilter: ["data-cmf-open"] }, () => {
+          if (btn.getAttribute("data-cmf-open") === "true") {
+            btn.style.color = "";
+          }
+          scheduleUpdate();
+        });
+      }
+    } else {
+      document.body.appendChild(btn);
+    }
+    if (typeof MutationObserver !== "undefined") {
+      lifecycle.observe(
+        document.body,
+        {
+          attributes: true,
+          attributeFilter: ["aria-hidden", "aria-modal", "class", "hidden", "role", "style"],
+          childList: true,
+          subtree: true
+        },
+        (records) => {
+          if (!hasLiveDocument()) return;
+          schedulePageDimmedStateSync();
+          restoreOwnedToggle();
+          if (!useTopRight) return;
+          const hostChanged = records.some(({ target, type, addedNodes, removedNodes }) => {
+            if (!(target instanceof Element) || target === btn || btn.contains(target)) return false;
+            if (target.closest('[role="banner"]')) return true;
+            if (type === "attributes" && (!observedMenuButton || target.contains(observedMenuButton))) {
+              positioning.invalidateTheme(true);
+              return true;
+            }
+            return [...addedNodes, ...removedNodes].some(
+              (node) => node instanceof Element && (node.matches('[role="banner"]') || !!node.querySelector('[role="banner"]'))
+            );
+          });
+          if (hostChanged) {
+            observeMenuButton();
+            scheduleUpdate();
+          }
+        }
+      );
+    }
+    syncPageDimmedState();
+    state.btnToggleEl = btn;
+    if (state.isAF) {
+      btn.setAttribute(state.showAtt, "");
+    }
+    if (useTopRight) {
+      const dialog = document.getElementById("fbcmf");
+      if (dialog && dialog.hasAttribute(state.showAtt)) {
+        btn.setAttribute("data-cmf-open", "true");
+      }
+    }
+    const syncToggleButtonTheme = () => {
+      if (!lifecycle.active) return;
+      positioning.invalidateTheme(true);
+      scheduleUpdate();
+      lifecycle.defer(scheduleUpdate, 250);
+    };
+    state.destroyToggleButton = () => {
+      lifecycle.dispose();
+      if (btn.parentNode) {
+        btn.parentNode.removeChild(btn);
+      }
+      if (state.btnToggleEl === btn) {
+        state.btnToggleEl = null;
+      }
+      if (state.syncToggleButtonTheme === syncToggleButtonTheme) {
+        state.syncToggleButtonTheme = null;
+      }
+    };
+    state.syncToggleButtonTheme = syncToggleButtonTheme;
+    return btn;
+  }
+  var pageDimmedAtt;
+  var init_toggle_button = __esm({
+    "src/ui/controls/toggle-button.ts"() {
+      "use strict";
+      init_lifecycle();
+      init_topbar_controls();
+      init_tooltip();
+      init_toggle_position();
+      init_modal_scrim();
+      init_modal_scrim();
+      pageDimmedAtt = "data-cmf-page-dimmed";
+    }
+  });
+
+  // src/ui/dialog/topbar.ts
+  function closeDialogIfOpen(state) {
+    const elDialog = document.getElementById("fbcmf");
+    if (!elDialog || !state) {
+      return;
+    }
+    if (elDialog.hasAttribute(state.showAtt)) {
+      elDialog.removeAttribute(state.showAtt);
+      if (state.btnToggleEl) {
+        state.btnToggleEl.removeAttribute("data-cmf-open");
+      }
+    }
+  }
+  function shouldShowHeaderClose(state) {
+    const btnLocation = state && state.options && state.options.CMF_BTN_OPTION ? state.options.CMF_BTN_OPTION.toString() : "0";
+    return btnLocation !== "1";
+  }
+  function updateHeaderCloseVisibility(dialog, state) {
+    if (!dialog || !state) {
+      return;
+    }
+    const closeWrap = dialog.querySelector(".fb-cmf-close");
+    if (!closeWrap) {
+      return;
+    }
+    if (shouldShowHeaderClose(state)) {
+      closeWrap.removeAttribute("hidden");
+    } else {
+      closeWrap.setAttribute("hidden", "");
+    }
+  }
+  function getTopbarMenuButtons() {
+    return getTopbarControlButtons().filter(
+      (button) => button instanceof HTMLElement
+    );
+  }
+  function isTopbarMenuButton(element) {
+    if (!element || typeof element.closest !== "function") {
+      return false;
+    }
+    const control = element.closest('button, [role="button"]');
+    return control ? isTopbarControlButton(control) : false;
+  }
+  function mountToggleButton(state, keyWords) {
+    if (!state || !keyWords) {
+      return null;
+    }
+    const button = createToggleButton(state, keyWords, () => toggleDialog(state));
+    syncToggleButtonOpenState(state);
+    return button;
+  }
+  function closeFacebookMenus(exceptButton) {
+    const buttons = getTopbarMenuButtons();
+    buttons.forEach((button) => {
+      if (button === exceptButton) {
+        return;
+      }
+      if (button.getAttribute("aria-expanded") === "true") {
+        button.click();
+      }
+    });
+  }
+  function setupOutsideClickClose(state) {
+    if (!state || state.cmfOutsideClickInit) {
+      return;
+    }
+    const lifecycle = state.dialogLifecycle;
+    if (!(lifecycle == null ? void 0 : lifecycle.active)) return;
+    state.cmfOutsideClickInit = true;
+    lifecycle.add(() => {
+      delete state.cmfOutsideClickInit;
+    });
+    const isEventInside = (event, element) => {
+      if (!element) {
+        return false;
+      }
+      const path = typeof event.composedPath === "function" ? event.composedPath() : [];
+      if (path.includes(element)) {
+        return true;
+      }
+      const target = event.target instanceof Element ? event.target : null;
+      return target ? element.contains(target) : false;
+    };
+    const onOutsideActivate = (event) => {
+      const dialog = document.getElementById("fbcmf");
+      if (!dialog || !dialog.hasAttribute(state.showAtt)) {
+        return;
+      }
+      if (isEventInside(event, dialog)) {
+        return;
+      }
+      if (isEventInside(event, state.btnToggleEl)) {
+        return;
+      }
+      closeDialogIfOpen(state);
+    };
+    lifecycle.listen(document, "pointerdown", onOutsideActivate, true);
+  }
+  function setupTopbarMenuSync(state) {
+    var _a;
+    if (!state || state.cmfTopbarSyncInit || state.cmfTopbarSyncPending) {
+      return;
+    }
+    const lifecycle = state.dialogLifecycle;
+    if (!(lifecycle == null ? void 0 : lifecycle.active)) return;
+    const buttonOwners = /* @__PURE__ */ new Map();
+    let bannerOwner = null;
+    let observedBanner = null;
+    const bindButtons = () => {
+      const buttons = new Set(getTopbarMenuButtons());
+      for (const [button, owner] of buttonOwners) {
+        if (button.isConnected && buttons.has(button)) continue;
+        owner.dispose();
+        buttonOwners.delete(button);
+      }
+      buttons.forEach((button) => {
+        if (buttonOwners.has(button) || button.dataset.cmfMenuSync === "1") {
+          return;
+        }
+        const owner = new UiLifecycle();
+        buttonOwners.set(button, owner);
+        button.dataset.cmfMenuSync = "1";
+        owner.add(() => {
+          delete button.dataset.cmfMenuSync;
+        });
+        owner.listen(button, "click", () => closeDialogIfOpen(state));
+        if (typeof MutationObserver !== "undefined") {
+          owner.observe(button, { attributes: true, attributeFilter: ["aria-expanded"] }, () => {
+            if (button.getAttribute("aria-expanded") === "true") closeDialogIfOpen(state);
+          });
+        }
+      });
+    };
+    const banner = (_a = getTopbarMenuButtons()[0]) == null ? void 0 : _a.closest('[role="banner"]');
+    if (!banner) {
+      state.cmfTopbarSyncPending = true;
+      lifecycle.defer(() => {
+        delete state.cmfTopbarSyncPending;
+        setupTopbarMenuSync(state);
+      }, 200);
+      return;
+    }
+    state.cmfTopbarSyncInit = true;
+    lifecycle.add(() => {
+      delete state.cmfTopbarSyncInit;
+      delete state.cmfTopbarSyncPending;
+    });
+    lifecycle.add(() => {
+      for (const owner of buttonOwners.values()) owner.dispose();
+      buttonOwners.clear();
+      bannerOwner == null ? void 0 : bannerOwner.dispose();
+      bannerOwner = null;
+      observedBanner = null;
+    });
+    const syncBanner = () => {
+      var _a2, _b;
+      const current = (_b = (_a2 = getTopbarMenuButtons()[0]) == null ? void 0 : _a2.closest('[role="banner"]')) != null ? _b : null;
+      if (current === observedBanner) return false;
+      bannerOwner == null ? void 0 : bannerOwner.dispose();
+      bannerOwner = null;
+      observedBanner = current;
+      if (!current) return true;
+      bannerOwner = new UiLifecycle();
+      bannerOwner.observe(
+        current,
+        {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: ["aria-expanded", "aria-label", "role", "tabindex"]
+        },
+        (mutations) => {
+          bindButtons();
+          mutations.forEach((mutation) => {
+            const target = mutation.target instanceof Element ? mutation.target : null;
+            if (target && mutation.type === "attributes" && mutation.attributeName === "aria-expanded" && isTopbarMenuButton(target) && target.getAttribute("aria-expanded") === "true") {
+              closeDialogIfOpen(state);
+            }
+          });
+        }
+      );
+      return true;
+    };
+    syncBanner();
+    bindButtons();
+    if (typeof MutationObserver !== "undefined") {
+      lifecycle.observe(document, { childList: true, subtree: true }, (mutations) => {
+        if (typeof document === "undefined") return;
+        const bannerChanged = !(observedBanner == null ? void 0 : observedBanner.isConnected) || mutations.some(
+          (mutation) => [...mutation.addedNodes, ...mutation.removedNodes].some(
+            (node) => node instanceof Element && (node.matches('[role="banner"]') || !!node.querySelector('[role="banner"]'))
+          )
+        );
+        if (bannerChanged && syncBanner()) bindButtons();
+        mutations.forEach((mutation) => {
+          if (mutation.type !== "childList") {
+            return;
+          }
+          mutation.addedNodes.forEach((node) => {
+            if (!(node instanceof Element)) {
+              return;
+            }
+            const dialog = node.matches('[role="dialog"][aria-label]') ? node : node.querySelector ? node.querySelector('[role="dialog"][aria-label]') : null;
+            if (dialog && isTopbarMenuButton(dialog)) {
+              closeDialogIfOpen(state);
+            }
+          });
+        });
+      });
+    }
+    const getMenuButtonFromEvent = (event) => {
+      const path = typeof event.composedPath === "function" ? event.composedPath() : [];
+      for (const entry of path) {
+        if (entry instanceof Element && isTopbarMenuButton(entry)) {
+          return entry;
+        }
+      }
+      const target = event.target instanceof Element ? event.target : null;
+      if (!target) {
+        return null;
+      }
+      const closest = target.closest('button, [role="button"]');
+      return closest && isTopbarMenuButton(closest) ? closest : null;
+    };
+    const onTopbarActivate = (event) => {
+      const topbarButton = getMenuButtonFromEvent(event);
+      if (!topbarButton) {
+        return;
+      }
+      closeDialogIfOpen(state);
+    };
+    lifecycle.listen(document, "pointerdown", onTopbarActivate, true);
+    lifecycle.listen(document, "click", onTopbarActivate, true);
+    lifecycle.listen(document, "keydown", (event) => {
+      if (!(event instanceof KeyboardEvent) || event.key !== "Enter" && event.key !== " ") {
+        return;
+      }
+      onTopbarActivate(event);
+    });
+  }
+  function toggleDialog(state) {
+    const elDialog = document.getElementById("fbcmf");
+    if (!elDialog || !state) {
+      return;
+    }
+    if (elDialog.hasAttribute(state.showAtt)) {
+      elDialog.removeAttribute(state.showAtt);
+      if (state.btnToggleEl) {
+        state.btnToggleEl.removeAttribute("data-cmf-open");
+      }
+    } else {
+      setupTopbarMenuSync(state);
+      closeFacebookMenus();
+      elDialog.setAttribute(state.showAtt, "");
+      if (state.btnToggleEl) {
+        state.btnToggleEl.setAttribute("data-cmf-open", "true");
+      }
+      if (typeof state.syncDialogSearch === "function") {
+        state.syncDialogSearch();
+      }
+    }
+  }
+  function syncToggleButtonOpenState(state) {
+    const elDialog = document.getElementById("fbcmf");
+    const toggleButton = state && state.btnToggleEl ? state.btnToggleEl : null;
+    if (!elDialog || !toggleButton || !state) {
+      return;
+    }
+    if (elDialog.hasAttribute(state.showAtt)) {
+      toggleButton.setAttribute("data-cmf-open", "true");
+    } else {
+      toggleButton.removeAttribute("data-cmf-open");
+    }
+  }
+  var init_topbar = __esm({
+    "src/ui/dialog/topbar.ts"() {
+      "use strict";
+      init_topbar_controls();
+      init_toggle_button();
+      init_lifecycle();
+    }
+  });
+
   // src/runtime/routes.ts
   function setFeedSettings(state, options, forceUpdate = false, location = window.location) {
     var _a, _b;
     if (state.prevURL === location.href && !forceUpdate) return false;
     const { href, pathname, search } = location;
     const route = classifyRoute(pathname, search, options);
+    if (!route.isAF) {
+      (_a = state.btnToggleEl) == null ? void 0 : _a.removeAttribute(state.showAtt);
+      closeDialogIfOpen(state);
+    }
     if (state.prevURL !== href) releaseDirtyObservers();
     if (state.isNF && !route.isNF) restoreNewsPresentation();
     if (state.isRF && !route.isRF) releaseReelsProcessing(state);
-    if (route.isAF) (_a = state.btnToggleEl) == null ? void 0 : _a.setAttribute(state.showAtt, "");
-    else (_b = state.btnToggleEl) == null ? void 0 : _b.removeAttribute(state.showAtt);
+    if (route.isAF) (_b = state.btnToggleEl) == null ? void 0 : _b.setAttribute(state.showAtt, "");
     Object.assign(state, route);
     state.prevURL = href;
     state.prevPathname = pathname;
@@ -10737,6 +11832,7 @@
       init_reels();
       init_news_presentation();
       init_routes();
+      init_topbar();
     }
   });
 
@@ -11127,782 +12223,6 @@
     }
   });
 
-  // src/ui/lifecycle.ts
-  var UiLifecycle;
-  var init_lifecycle = __esm({
-    "src/ui/lifecycle.ts"() {
-      "use strict";
-      UiLifecycle = class {
-        constructor() {
-          this.active = true;
-          this.cleanups = /* @__PURE__ */ new Set();
-        }
-        /** Register a teardown, or run it immediately when its generation already ended. */
-        add(cleanup) {
-          if (!cleanup) return;
-          if (this.active) this.cleanups.add(cleanup);
-          else cleanup();
-        }
-        /** Forget a resource already released by its owner without invoking its teardown again. */
-        remove(cleanup) {
-          this.cleanups.delete(cleanup);
-        }
-        /** Remove an event listener at teardown and ignore already-queued stale dispatches. */
-        listen(target, type, listener, options) {
-          const guarded = (event) => {
-            if (this.active) listener(event);
-          };
-          target.addEventListener(type, guarded, options);
-          this.add(() => target.removeEventListener(type, guarded, options));
-        }
-        /** Observe a node only while mounted; pending mutation records cannot reach a later generation. */
-        observe(target, options, callback) {
-          if (!this.active || typeof MutationObserver === "undefined") return;
-          const observer = new MutationObserver((records, instance) => {
-            if (this.active) callback(records, instance);
-          });
-          observer.observe(target, options);
-          this.add(() => observer.disconnect());
-        }
-        /** Schedule an owned timeout in milliseconds and release its cleanup record once it fires. */
-        defer(callback, delay) {
-          if (!this.active) return;
-          const id = setTimeout(() => {
-            this.cleanups.delete(cancel);
-            if (this.active) callback();
-          }, delay);
-          const cancel = () => clearTimeout(id);
-          this.add(cancel);
-        }
-        /** Coalesce caller-owned work into a cancellable frame, with a timeout fallback for limited hosts. */
-        frame(callback) {
-          if (!this.active) return;
-          if (typeof window.requestAnimationFrame !== "function") {
-            this.defer(callback, 0);
-            return;
-          }
-          let id = null;
-          const cancel = () => {
-            if (id !== null) window.cancelAnimationFrame(id);
-          };
-          this.add(cancel);
-          id = window.requestAnimationFrame(() => {
-            this.cleanups.delete(cancel);
-            if (this.active) callback();
-          });
-        }
-        /** Tear down all owned resources once; one faulty host cleanup cannot retain the others. */
-        dispose() {
-          if (!this.active) return;
-          this.active = false;
-          for (const cleanup of this.cleanups) {
-            try {
-              cleanup();
-            } catch (e) {
-            }
-          }
-          this.cleanups.clear();
-        }
-      };
-    }
-  });
-
-  // src/dom/topbar-controls.ts
-  function getRect(element) {
-    if (!element || typeof element.getBoundingClientRect !== "function") {
-      return null;
-    }
-    const rect = element.getBoundingClientRect();
-    if (!rect || rect.width <= 0 || rect.height <= 0) {
-      return null;
-    }
-    return rect;
-  }
-  function isInteractiveControl(element) {
-    if (!element || !element.tagName) {
-      return false;
-    }
-    const tagName = element.tagName.toUpperCase();
-    if (tagName === "BUTTON") {
-      return true;
-    }
-    if (element.getAttribute("role") === "button") {
-      return true;
-    }
-    if (element.getAttribute("aria-expanded") !== null) {
-      return true;
-    }
-    if (tagName === "A" && element.getAttribute("aria-label")) {
-      return true;
-    }
-    const tabIndex = element.getAttribute("tabindex");
-    return tabIndex !== null && tabIndex !== "-1";
-  }
-  function isSameRect(first, second) {
-    return Math.abs(first.left - second.left) <= RECT_MATCH_TOLERANCE && Math.abs(first.top - second.top) <= RECT_MATCH_TOLERANCE && Math.abs(first.width - second.width) <= RECT_MATCH_TOLERANCE && Math.abs(first.height - second.height) <= RECT_MATCH_TOLERANCE;
-  }
-  function dedupeOverlappingControls(controls) {
-    return controls.filter(
-      (control, index) => !controls.slice(0, index).some((existingControl) => isSameRect(existingControl.rect, control.rect))
-    );
-  }
-  function isTopbarControlCandidate(element, bannerRect) {
-    if (!isInteractiveControl(element)) {
-      return false;
-    }
-    const rect = getRect(element);
-    if (!rect) {
-      return false;
-    }
-    if (rect.width < MIN_CONTROL_SIZE || rect.height < MIN_CONTROL_SIZE || rect.width > MAX_CONTROL_SIZE || rect.height > MAX_CONTROL_SIZE) {
-      return false;
-    }
-    const aspectRatio = rect.width / rect.height;
-    if (aspectRatio < MIN_ASPECT_RATIO || aspectRatio > MAX_ASPECT_RATIO) {
-      return false;
-    }
-    if (!bannerRect) {
-      return true;
-    }
-    return rect.bottom > bannerRect.top && rect.top < bannerRect.bottom;
-  }
-  function buildControlClusters(controls) {
-    const clusters = [];
-    controls.forEach((control) => {
-      const currentCluster = clusters[clusters.length - 1];
-      if (!currentCluster) {
-        clusters.push({
-          controls: [control],
-          rightEdge: control.rect.right
-        });
-        return;
-      }
-      const previous = currentCluster.controls[currentCluster.controls.length - 1];
-      if (!previous) return;
-      const gap = control.rect.left - previous.rect.right;
-      const sameRow = Math.abs(control.rect.top - previous.rect.top) <= MAX_ROW_OFFSET;
-      const similarHeight = Math.abs(control.rect.height - previous.rect.height) <= MAX_ROW_OFFSET;
-      if (sameRow && similarHeight && gap >= -1 && gap <= MAX_CLUSTER_GAP) {
-        currentCluster.controls.push(control);
-        currentCluster.rightEdge = control.rect.right;
-        return;
-      }
-      clusters.push({
-        controls: [control],
-        rightEdge: control.rect.right
-      });
-    });
-    return clusters;
-  }
-  function getTopbarControlButtons(root = document) {
-    var _a, _b;
-    if (!root || typeof root.querySelector !== "function") {
-      return [];
-    }
-    const banner = root.querySelector('[role="banner"]');
-    if (!banner) {
-      return [];
-    }
-    const bannerRect = getRect(banner);
-    const controls = dedupeOverlappingControls(
-      Array.from(new Set(Array.from(banner.querySelectorAll(topbarControlSelector)))).filter((control) => isTopbarControlCandidate(control, bannerRect)).map((control) => ({
-        element: control,
-        rect: getRect(control)
-      })).filter((control) => control.rect !== null).sort((a, b) => a.rect.left - b.rect.left)
-    );
-    if (controls.length === 0) {
-      return [];
-    }
-    const clusters = buildControlClusters(controls);
-    const candidateClusters = clusters.some((cluster) => cluster.controls.length > 1) ? clusters.filter((cluster) => cluster.controls.length > 1) : clusters;
-    candidateClusters.sort(
-      (a, b) => b.rightEdge - a.rightEdge || b.controls.length - a.controls.length
-    );
-    return (_b = (_a = candidateClusters[0]) == null ? void 0 : _a.controls.map((control) => control.element)) != null ? _b : [];
-  }
-  function getTopbarMenuButton(root = document) {
-    var _a;
-    const controls = getTopbarControlButtons(root);
-    return (_a = controls[0]) != null ? _a : null;
-  }
-  function isTopbarControlButton(element, root = document) {
-    return getTopbarControlButtons(root).some((control) => control === element);
-  }
-  var MIN_CONTROL_SIZE, MAX_CONTROL_SIZE, MIN_ASPECT_RATIO, MAX_ASPECT_RATIO, MAX_CLUSTER_GAP, MAX_ROW_OFFSET, RECT_MATCH_TOLERANCE, topbarControlSelector;
-  var init_topbar_controls = __esm({
-    "src/dom/topbar-controls.ts"() {
-      "use strict";
-      MIN_CONTROL_SIZE = 28;
-      MAX_CONTROL_SIZE = 72;
-      MIN_ASPECT_RATIO = 0.75;
-      MAX_ASPECT_RATIO = 1.35;
-      MAX_CLUSTER_GAP = 24;
-      MAX_ROW_OFFSET = 12;
-      RECT_MATCH_TOLERANCE = 1;
-      topbarControlSelector = 'button, [role="button"], a[aria-label]';
-    }
-  });
-
-  // src/dom/tooltip.ts
-  function positionTooltip(target, tooltip, placement = "auto") {
-    if (!target || !tooltip || typeof target.getBoundingClientRect !== "function") {
-      return;
-    }
-    if (typeof window === "undefined") {
-      return;
-    }
-    const rect = target.getBoundingClientRect();
-    const tooltipRect = tooltip.getBoundingClientRect();
-    const gap = 8;
-    const edgePadding = 8;
-    let top = rect.bottom + gap;
-    let left = rect.left + rect.width / 2 - tooltipRect.width / 2;
-    if (placement === "right") {
-      top = rect.top + rect.height / 2 - tooltipRect.height / 2;
-      left = rect.right + gap;
-      if (left + tooltipRect.width + edgePadding > window.innerWidth) {
-        left = rect.left - tooltipRect.width - gap;
-      }
-      top = Math.max(
-        edgePadding,
-        Math.min(top, window.innerHeight - tooltipRect.height - edgePadding)
-      );
-    } else {
-      if (top + tooltipRect.height + edgePadding > window.innerHeight) {
-        top = rect.top - tooltipRect.height - gap;
-      }
-    }
-    left = Math.max(edgePadding, Math.min(left, window.innerWidth - tooltipRect.width - edgePadding));
-    tooltip.style.top = `${Math.round(top)}px`;
-    tooltip.style.left = `${Math.round(left)}px`;
-  }
-  function attachTooltip(target, text, options = {}) {
-    if (!target || !text) {
-      return () => {
-      };
-    }
-    let tooltip = null;
-    let showTimer = null;
-    const placement = options && options.placement ? options.placement : "auto";
-    const tooltipId = target.dataset.cmfTooltipId || `fbcmf-tooltip-${generateRandomString(8)}`;
-    target.dataset.cmfTooltipId = tooltipId;
-    target.setAttribute("aria-describedby", tooltipId);
-    const updatePosition = () => {
-      if (!tooltip) {
-        return;
-      }
-      positionTooltip(target, tooltip, placement);
-    };
-    const show = () => {
-      if (tooltip || !document.body || !target.isConnected) {
-        return;
-      }
-      tooltip = document.createElement("div");
-      tooltip.id = tooltipId;
-      tooltip.className = "fb-cmf-tooltip";
-      tooltip.setAttribute("role", "tooltip");
-      tooltip.textContent = text;
-      tooltip.style.visibility = "hidden";
-      document.body.appendChild(tooltip);
-      updatePosition();
-      tooltip.style.visibility = "visible";
-    };
-    const hide = () => {
-      if (showTimer) {
-        clearTimeout(showTimer);
-        showTimer = null;
-      }
-      if (tooltip) {
-        tooltip.remove();
-        tooltip = null;
-      }
-    };
-    const onEnter = () => {
-      if (showTimer) {
-        clearTimeout(showTimer);
-      }
-      showTimer = setTimeout(show, 400);
-    };
-    const onLeave = () => {
-      hide();
-    };
-    target.addEventListener("pointerenter", onEnter);
-    target.addEventListener("pointerleave", onLeave);
-    if (typeof window !== "undefined") {
-      window.addEventListener("scroll", updatePosition, true);
-      window.addEventListener("resize", updatePosition);
-    }
-    return () => {
-      hide();
-      target.removeEventListener("pointerenter", onEnter);
-      target.removeEventListener("pointerleave", onLeave);
-      if (typeof window !== "undefined") {
-        window.removeEventListener("scroll", updatePosition, true);
-        window.removeEventListener("resize", updatePosition);
-      }
-    };
-  }
-  var init_tooltip = __esm({
-    "src/dom/tooltip.ts"() {
-      "use strict";
-      init_random();
-    }
-  });
-
-  // src/ui/controls/toggle-position.ts
-  function createTopbarPositioning(btn) {
-    let cachedIconColor = "";
-    let cachedBtnBg = "";
-    let cachedHover = "";
-    let cachedPress = "";
-    let lastMenuRect = null;
-    let themeDirty = false;
-    const updateTopRightPosition = () => {
-      var _a;
-      const menuButton = getTopbarMenuButton();
-      if (!menuButton) {
-        btn.style.position = "fixed";
-        btn.style.top = "0.5rem";
-        btn.style.right = "0.5rem";
-        btn.style.left = "auto";
-        btn.style.zIndex = "999";
-        lastMenuRect = null;
-        return false;
-      }
-      const rect = menuButton.getBoundingClientRect();
-      lastMenuRect = {
-        left: rect.left,
-        top: rect.top,
-        width: rect.width,
-        height: rect.height
-      };
-      const menuStyle = window.getComputedStyle(menuButton);
-      const hoverOverlay = menuStyle.getPropertyValue("--hover-overlay");
-      const pressOverlay = menuStyle.getPropertyValue("--press-overlay");
-      const secondaryBg = menuStyle.getPropertyValue("--secondary-button-background");
-      const activeBackground = menuStyle.getPropertyValue("--primary-deemphasized-button-background");
-      const activeIcon = menuStyle.getPropertyValue("--primary-deemphasized-button-text");
-      const isMenuExpanded = menuButton.getAttribute("aria-expanded") === "true";
-      const gap = 8;
-      const left = Math.max(0, rect.left - rect.width - gap);
-      btn.style.position = "fixed";
-      btn.style.top = `${rect.top}px`;
-      btn.style.left = `${left}px`;
-      btn.style.right = "auto";
-      btn.style.width = `${rect.width}px`;
-      btn.style.height = `${rect.height}px`;
-      btn.style.borderRadius = menuStyle.borderRadius;
-      btn.style.boxShadow = menuStyle.boxShadow;
-      const iconElement = menuButton.querySelector("svg, i, span");
-      const iconStyle = iconElement ? window.getComputedStyle(iconElement) : null;
-      const iconColor = iconStyle ? iconStyle.color : "";
-      const iconFill = iconStyle ? iconStyle.getPropertyValue("fill") : "";
-      const menuColor = menuStyle.color;
-      const secondaryIcon = menuStyle.getPropertyValue("--secondary-icon");
-      const resolvedIconColor = [iconColor, iconFill, menuColor, secondaryIcon].find(isUsableColor) || "var(--secondary-icon)";
-      if (themeDirty || !isMenuExpanded || !cachedIconColor) {
-        cachedIconColor = resolvedIconColor;
-      }
-      const finalIconColor = cachedIconColor || resolvedIconColor;
-      btn.style.setProperty("--cmf-icon-color", finalIconColor);
-      if (btn.getAttribute("data-cmf-open") === "true") {
-        btn.style.color = "";
-      } else {
-        btn.style.color = finalIconColor;
-      }
-      btn.style.setProperty(
-        "--cmf-active-bg",
-        activeBackground.trim() || "var(--primary-deemphasized-button-background, rgba(8, 102, 255, 0.1))"
-      );
-      btn.style.setProperty(
-        "--cmf-active-icon",
-        activeIcon.trim() || "var(--primary-deemphasized-button-text, var(--accent, #0866ff))"
-      );
-      const icon = (_a = btn.querySelector(".cmf-icon")) != null ? _a : btn.querySelector("svg");
-      if (icon) {
-        if (icon.tagName && icon.tagName.toLowerCase() === "svg") {
-          icon.style.fill = "currentColor";
-        }
-        if (iconStyle && iconStyle.width && iconStyle.height) {
-          icon.style.width = iconStyle.width;
-          icon.style.height = iconStyle.height;
-        }
-      }
-      const zIndexValue = menuStyle.zIndex;
-      if (zIndexValue && zIndexValue !== "auto" && zIndexValue !== "0") {
-        btn.style.zIndex = zIndexValue;
-      } else {
-        btn.style.zIndex = "9999";
-      }
-      btn.style.padding = "0";
-      btn.style.margin = "0";
-      if (themeDirty || !isMenuExpanded || !cachedBtnBg) {
-        if (secondaryBg) {
-          cachedBtnBg = secondaryBg;
-        } else if (menuStyle.backgroundColor) {
-          cachedBtnBg = menuStyle.backgroundColor;
-        }
-      }
-      if (cachedBtnBg) {
-        btn.style.setProperty("--cmf-btn-bg", cachedBtnBg);
-      }
-      btn.style.backgroundColor = "";
-      if (themeDirty || !isMenuExpanded || !cachedHover) {
-        cachedHover = hoverOverlay || "var(--hover-overlay)";
-      }
-      if (themeDirty || !isMenuExpanded || !cachedPress) {
-        cachedPress = pressOverlay || "var(--press-overlay)";
-      }
-      btn.style.setProperty("--cmf-btn-hover", cachedHover || hoverOverlay || "var(--hover-overlay)");
-      btn.style.setProperty("--cmf-btn-press", cachedPress || pressOverlay || "var(--press-overlay)");
-      themeDirty = false;
-      return true;
-    };
-    const needsMenuSync = () => {
-      const menuButton = getTopbarMenuButton();
-      if (!menuButton) {
-        return lastMenuRect !== null;
-      }
-      const rect = menuButton.getBoundingClientRect();
-      if (!lastMenuRect) {
-        return true;
-      }
-      return Math.abs(rect.left - lastMenuRect.left) > 1 || Math.abs(rect.top - lastMenuRect.top) > 1 || Math.abs(rect.width - lastMenuRect.width) > 1 || Math.abs(rect.height - lastMenuRect.height) > 1;
-    };
-    const invalidateTheme = (themeChanged = false) => {
-      cachedIconColor = "";
-      cachedBtnBg = "";
-      cachedHover = "";
-      cachedPress = "";
-      if (themeChanged) themeDirty = true;
-    };
-    return { updatePosition: updateTopRightPosition, needsMenuSync, invalidateTheme };
-  }
-  var isUsableColor;
-  var init_toggle_position = __esm({
-    "src/ui/controls/toggle-position.ts"() {
-      "use strict";
-      init_topbar_controls();
-      isUsableColor = (value) => {
-        if (!value) {
-          return false;
-        }
-        const normalized = value.trim().toLowerCase();
-        if (!normalized || normalized === "transparent" || normalized === "none") {
-          return false;
-        }
-        if (normalized.startsWith("rgba(") && normalized.endsWith(", 0)")) {
-          return false;
-        }
-        return true;
-      };
-    }
-  });
-
-  // src/ui/controls/modal-scrim.ts
-  function getVisibleRect(element) {
-    if (!element || typeof element.getBoundingClientRect !== "function") {
-      return null;
-    }
-    const rect = element.getBoundingClientRect();
-    if (!rect || rect.width <= 0 || rect.height <= 0) {
-      return null;
-    }
-    return rect;
-  }
-  function parseRgbColor(color) {
-    if (typeof color !== "string") {
-      return null;
-    }
-    const match = color.trim().match(
-      /^rgba?\(\s*([0-9.]+)(?:,|\s)\s*([0-9.]+)(?:,|\s)\s*([0-9.]+)(?:\s*[,/]\s*([0-9.]+%?))?\s*\)$/i
-    );
-    if (!match) {
-      return null;
-    }
-    const alphaValue = match[4] || "1";
-    const alpha = alphaValue.endsWith("%") ? parseFloat(alphaValue.slice(0, -1)) / 100 : parseFloat(alphaValue);
-    return {
-      r: parseFloat(match[1] || "0"),
-      g: parseFloat(match[2] || "0"),
-      b: parseFloat(match[3] || "0"),
-      a: Number.isNaN(alpha) ? 1 : alpha
-    };
-  }
-  function isModalScrimColor(color) {
-    const parsed = parseRgbColor(color);
-    if (!parsed) {
-      return false;
-    }
-    const maxChannel = Math.max(parsed.r, parsed.g, parsed.b);
-    const minChannel = Math.min(parsed.r, parsed.g, parsed.b);
-    return parsed.a >= 0.2 && (maxChannel <= 120 || minChannel >= 180);
-  }
-  function isVisibleElement(element) {
-    const rect = getVisibleRect(element);
-    if (!rect) {
-      return false;
-    }
-    const style = window.getComputedStyle(element);
-    return style.display !== "none" && style.visibility !== "hidden" && style.opacity !== "0";
-  }
-  function hasVisibleDialog() {
-    return Array.from(document.querySelectorAll('[role="dialog"], [aria-modal="true"]')).some(
-      isVisibleElement
-    );
-  }
-  function isFullViewportDimmer(element) {
-    if (!element || element.id === "fbcmf" || element.id === "fbcmfToggle") {
-      return false;
-    }
-    if (element.closest && element.closest("#fbcmf, .fb-cmf-toggle")) {
-      return false;
-    }
-    const rect = getVisibleRect(element);
-    if (!rect || rect.bottom <= 0 || rect.right <= 0) {
-      return false;
-    }
-    const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 0;
-    const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
-    if (viewportWidth === 0 || viewportHeight === 0) {
-      return false;
-    }
-    if (rect.width < viewportWidth * 0.8 || rect.height < viewportHeight * 0.8) {
-      return false;
-    }
-    const style = window.getComputedStyle(element);
-    return style.position === "fixed" && isModalScrimColor(style.backgroundColor);
-  }
-  function isFacebookPageDimmed() {
-    if (!document.body || !hasVisibleDialog()) {
-      return false;
-    }
-    return Array.from(document.body.querySelectorAll("*")).some(isFullViewportDimmer);
-  }
-  var init_modal_scrim = __esm({
-    "src/ui/controls/modal-scrim.ts"() {
-      "use strict";
-    }
-  });
-
-  // src/ui/controls/toggle-button.ts
-  function destroyToggleButton(state) {
-    if (!state) {
-      return;
-    }
-    if (typeof state.destroyToggleButton === "function") {
-      const teardown = state.destroyToggleButton;
-      state.destroyToggleButton = null;
-      teardown();
-      return;
-    }
-    if (state.btnToggleEl && state.btnToggleEl.parentNode) {
-      state.btnToggleEl.parentNode.removeChild(state.btnToggleEl);
-    }
-    state.btnToggleEl = null;
-    state.syncToggleButtonTheme = null;
-  }
-  function createToggleButton(state, keyWords, onToggle) {
-    if (!state || !keyWords || typeof onToggle !== "function") {
-      return null;
-    }
-    if (!document.body) {
-      return null;
-    }
-    destroyToggleButton(state);
-    const btnLocation = state.options && state.options.CMF_BTN_OPTION ? state.options.CMF_BTN_OPTION.toString() : "0";
-    const useTopRight = btnLocation === "1";
-    const btn = document.createElement(useTopRight ? "div" : "button");
-    const lifecycle = new UiLifecycle();
-    const addCleanup = (cleanup) => {
-      lifecycle.add(cleanup);
-    };
-    btn.innerHTML = state.iconToggleHTML;
-    btn.id = "fbcmfToggle";
-    btn.removeAttribute("title");
-    btn.className = "fb-cmf-toggle fb-cmf-icon";
-    btn.setAttribute("aria-label", keyWords.DLG_TITLE);
-    if (useTopRight) {
-      btn.classList.add("fb-cmf-toggle-topbar");
-    }
-    const toggleHandler = (event) => {
-      if (btn.getAttribute(pageDimmedAtt) === "true") {
-        if (event && typeof event.preventDefault === "function") {
-          event.preventDefault();
-        }
-        if (event && typeof event.stopPropagation === "function") {
-          event.stopPropagation();
-        }
-        return;
-      }
-      onToggle();
-    };
-    if (useTopRight) {
-      btn.setAttribute("role", "button");
-      btn.setAttribute("tabindex", "0");
-      const onKeyDown = (event) => {
-        if (!(event instanceof KeyboardEvent)) return;
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          toggleHandler();
-        }
-      };
-      btn.addEventListener("keydown", onKeyDown);
-      addCleanup(() => btn.removeEventListener("keydown", onKeyDown));
-    }
-    btn.addEventListener("click", toggleHandler, false);
-    addCleanup(() => btn.removeEventListener("click", toggleHandler, false));
-    const tooltipPlacement = btnLocation === "0" ? "right" : "auto";
-    addCleanup(attachTooltip(btn, keyWords.DLG_TITLE, { placement: tooltipPlacement }));
-    const positioning = createTopbarPositioning(btn);
-    let observedMenuButton = null;
-    let updateScheduled = false;
-    let pageDimmedUpdateScheduled = false;
-    let resizeObserver = null;
-    const scheduleUpdate = () => {
-      if (!lifecycle.active || updateScheduled) {
-        return;
-      }
-      updateScheduled = true;
-      const runUpdate = () => {
-        updateScheduled = false;
-        positioning.updatePosition();
-      };
-      lifecycle.frame(runUpdate);
-    };
-    const getMenuButton = () => getTopbarMenuButton();
-    const observeMenuButton = () => {
-      const menuButton = getMenuButton();
-      if (menuButton === observedMenuButton) {
-        return;
-      }
-      if (resizeObserver && observedMenuButton) {
-        resizeObserver.unobserve(observedMenuButton);
-      }
-      observedMenuButton = menuButton;
-      if (resizeObserver && observedMenuButton) {
-        resizeObserver.observe(observedMenuButton);
-      }
-      positioning.invalidateTheme();
-      scheduleUpdate();
-    };
-    const syncPageDimmedState = () => {
-      if (isFacebookPageDimmed()) {
-        btn.setAttribute(pageDimmedAtt, "true");
-      } else {
-        btn.removeAttribute(pageDimmedAtt);
-      }
-    };
-    const schedulePageDimmedStateSync = () => {
-      if (!lifecycle.active || pageDimmedUpdateScheduled) {
-        return;
-      }
-      pageDimmedUpdateScheduled = true;
-      const runUpdate = () => {
-        pageDimmedUpdateScheduled = false;
-        if (btn.isConnected) {
-          syncPageDimmedState();
-        }
-      };
-      lifecycle.frame(runUpdate);
-    };
-    if (useTopRight) {
-      if (!btn.isConnected) {
-        document.body.appendChild(btn);
-      }
-      if (typeof ResizeObserver !== "undefined") {
-        resizeObserver = new ResizeObserver(() => {
-          scheduleUpdate();
-        });
-        addCleanup(() => resizeObserver == null ? void 0 : resizeObserver.disconnect());
-      }
-      observeMenuButton();
-      const banner = document.querySelector('[role="banner"]');
-      if (banner && typeof MutationObserver !== "undefined") {
-        lifecycle.observe(banner, { childList: true, subtree: true }, () => {
-          observeMenuButton();
-          scheduleUpdate();
-        });
-      }
-      if (typeof window !== "undefined") {
-        window.addEventListener("resize", scheduleUpdate);
-        addCleanup(() => window.removeEventListener("resize", scheduleUpdate));
-        const intervalId = setInterval(() => {
-          if (positioning.needsMenuSync()) {
-            scheduleUpdate();
-          }
-        }, 2e3);
-        addCleanup(() => clearInterval(intervalId));
-      }
-      if (typeof MutationObserver !== "undefined") {
-        lifecycle.observe(btn, { attributes: true, attributeFilter: ["data-cmf-open"] }, () => {
-          if (btn.getAttribute("data-cmf-open") === "true") {
-            btn.style.color = "";
-          }
-          scheduleUpdate();
-        });
-      }
-    } else {
-      document.body.appendChild(btn);
-    }
-    if (typeof MutationObserver !== "undefined") {
-      lifecycle.observe(
-        document.body,
-        {
-          attributes: true,
-          attributeFilter: ["aria-hidden", "aria-modal", "class", "hidden", "role", "style"],
-          childList: true,
-          subtree: true
-        },
-        () => schedulePageDimmedStateSync()
-      );
-    }
-    syncPageDimmedState();
-    state.btnToggleEl = btn;
-    if (state.isAF) {
-      btn.setAttribute(state.showAtt, "");
-    }
-    if (useTopRight) {
-      const dialog = document.getElementById("fbcmf");
-      if (dialog && dialog.hasAttribute(state.showAtt)) {
-        btn.setAttribute("data-cmf-open", "true");
-      }
-    }
-    const syncToggleButtonTheme = () => {
-      if (!lifecycle.active) return;
-      positioning.invalidateTheme(true);
-      scheduleUpdate();
-      lifecycle.defer(scheduleUpdate, 250);
-    };
-    state.destroyToggleButton = () => {
-      lifecycle.dispose();
-      if (btn.parentNode) {
-        btn.parentNode.removeChild(btn);
-      }
-      if (state.btnToggleEl === btn) {
-        state.btnToggleEl = null;
-      }
-      if (state.syncToggleButtonTheme === syncToggleButtonTheme) {
-        state.syncToggleButtonTheme = null;
-      }
-    };
-    state.syncToggleButtonTheme = syncToggleButtonTheme;
-    return btn;
-  }
-  var pageDimmedAtt;
-  var init_toggle_button = __esm({
-    "src/ui/controls/toggle-button.ts"() {
-      "use strict";
-      init_lifecycle();
-      init_topbar_controls();
-      init_tooltip();
-      init_toggle_position();
-      init_modal_scrim();
-      init_modal_scrim();
-      pageDimmedAtt = "data-cmf-page-dimmed";
-    }
-  });
-
   // src/ui/dialog/value-helpers.ts
   function hasOwnKey(object, key) {
     return Object.prototype.hasOwnProperty.call(object, key);
@@ -12065,282 +12385,6 @@
     "src/ui/dialog/action-feedback.ts"() {
       "use strict";
       init_form_state();
-    }
-  });
-
-  // src/ui/dialog/topbar.ts
-  function closeDialogIfOpen(state) {
-    const elDialog = document.getElementById("fbcmf");
-    if (!elDialog || !state) {
-      return;
-    }
-    if (elDialog.hasAttribute(state.showAtt)) {
-      elDialog.removeAttribute(state.showAtt);
-      if (state.btnToggleEl) {
-        state.btnToggleEl.removeAttribute("data-cmf-open");
-      }
-    }
-  }
-  function shouldShowHeaderClose(state) {
-    const btnLocation = state && state.options && state.options.CMF_BTN_OPTION ? state.options.CMF_BTN_OPTION.toString() : "0";
-    return btnLocation !== "1";
-  }
-  function updateHeaderCloseVisibility(dialog, state) {
-    if (!dialog || !state) {
-      return;
-    }
-    const closeWrap = dialog.querySelector(".fb-cmf-close");
-    if (!closeWrap) {
-      return;
-    }
-    if (shouldShowHeaderClose(state)) {
-      closeWrap.removeAttribute("hidden");
-    } else {
-      closeWrap.setAttribute("hidden", "");
-    }
-  }
-  function getTopbarMenuButtons() {
-    return getTopbarControlButtons().filter(
-      (button) => button instanceof HTMLElement
-    );
-  }
-  function isTopbarMenuButton(element) {
-    if (!element || typeof element.closest !== "function") {
-      return false;
-    }
-    const control = element.closest('button, [role="button"]');
-    return control ? isTopbarControlButton(control) : false;
-  }
-  function mountToggleButton(state, keyWords) {
-    if (!state || !keyWords) {
-      return null;
-    }
-    const button = createToggleButton(state, keyWords, () => toggleDialog(state));
-    syncToggleButtonOpenState(state);
-    return button;
-  }
-  function closeFacebookMenus(exceptButton) {
-    const buttons = getTopbarMenuButtons();
-    buttons.forEach((button) => {
-      if (button === exceptButton) {
-        return;
-      }
-      if (button.getAttribute("aria-expanded") === "true") {
-        button.click();
-      }
-    });
-  }
-  function setupOutsideClickClose(state) {
-    if (!state || state.cmfOutsideClickInit) {
-      return;
-    }
-    const lifecycle = state.dialogLifecycle;
-    if (!(lifecycle == null ? void 0 : lifecycle.active)) return;
-    state.cmfOutsideClickInit = true;
-    lifecycle.add(() => {
-      delete state.cmfOutsideClickInit;
-    });
-    const isEventInside = (event, element) => {
-      if (!element) {
-        return false;
-      }
-      const path = typeof event.composedPath === "function" ? event.composedPath() : [];
-      if (path.includes(element)) {
-        return true;
-      }
-      const target = event.target instanceof Element ? event.target : null;
-      return target ? element.contains(target) : false;
-    };
-    const onOutsideActivate = (event) => {
-      const dialog = document.getElementById("fbcmf");
-      if (!dialog || !dialog.hasAttribute(state.showAtt)) {
-        return;
-      }
-      if (isEventInside(event, dialog)) {
-        return;
-      }
-      if (isEventInside(event, state.btnToggleEl)) {
-        return;
-      }
-      closeDialogIfOpen(state);
-    };
-    lifecycle.listen(document, "pointerdown", onOutsideActivate, true);
-  }
-  function setupTopbarMenuSync(state) {
-    if (!state || state.cmfTopbarSyncInit || state.cmfTopbarSyncPending) {
-      return;
-    }
-    const lifecycle = state.dialogLifecycle;
-    if (!(lifecycle == null ? void 0 : lifecycle.active)) return;
-    const buttonOwners = /* @__PURE__ */ new Map();
-    let bannerOwner = null;
-    let observedBanner = null;
-    const bindButtons = () => {
-      const buttons = new Set(getTopbarMenuButtons());
-      for (const [button, owner] of buttonOwners) {
-        if (button.isConnected && buttons.has(button)) continue;
-        owner.dispose();
-        buttonOwners.delete(button);
-      }
-      buttons.forEach((button) => {
-        if (buttonOwners.has(button) || button.dataset.cmfMenuSync === "1") {
-          return;
-        }
-        const owner = new UiLifecycle();
-        buttonOwners.set(button, owner);
-        button.dataset.cmfMenuSync = "1";
-        owner.add(() => {
-          delete button.dataset.cmfMenuSync;
-        });
-        owner.listen(button, "click", () => closeDialogIfOpen(state));
-        if (typeof MutationObserver !== "undefined") {
-          owner.observe(button, { attributes: true, attributeFilter: ["aria-expanded"] }, () => {
-            if (button.getAttribute("aria-expanded") === "true") closeDialogIfOpen(state);
-          });
-        }
-      });
-    };
-    const banner = document.querySelector('[role="banner"]');
-    if (!banner) {
-      state.cmfTopbarSyncPending = true;
-      lifecycle.defer(() => {
-        delete state.cmfTopbarSyncPending;
-        setupTopbarMenuSync(state);
-      }, 200);
-      return;
-    }
-    state.cmfTopbarSyncInit = true;
-    lifecycle.add(() => {
-      delete state.cmfTopbarSyncInit;
-      delete state.cmfTopbarSyncPending;
-    });
-    lifecycle.add(() => {
-      for (const owner of buttonOwners.values()) owner.dispose();
-      buttonOwners.clear();
-      bannerOwner == null ? void 0 : bannerOwner.dispose();
-      bannerOwner = null;
-      observedBanner = null;
-    });
-    const syncBanner = () => {
-      const current = document.querySelector('[role="banner"]');
-      if (current === observedBanner) return false;
-      bannerOwner == null ? void 0 : bannerOwner.dispose();
-      bannerOwner = null;
-      observedBanner = current;
-      if (!current) return true;
-      bannerOwner = new UiLifecycle();
-      bannerOwner.observe(
-        current,
-        {
-          childList: true,
-          subtree: true,
-          attributes: true,
-          attributeFilter: ["aria-expanded", "aria-label", "role", "tabindex"]
-        },
-        (mutations) => {
-          bindButtons();
-          mutations.forEach((mutation) => {
-            const target = mutation.target instanceof Element ? mutation.target : null;
-            if (target && mutation.type === "attributes" && mutation.attributeName === "aria-expanded" && isTopbarMenuButton(target) && target.getAttribute("aria-expanded") === "true") {
-              closeDialogIfOpen(state);
-            }
-          });
-        }
-      );
-      return true;
-    };
-    syncBanner();
-    bindButtons();
-    if (typeof MutationObserver !== "undefined") {
-      lifecycle.observe(document, { childList: true, subtree: true }, (mutations) => {
-        if (typeof document === "undefined") return;
-        if (syncBanner()) bindButtons();
-        mutations.forEach((mutation) => {
-          if (mutation.type !== "childList") {
-            return;
-          }
-          mutation.addedNodes.forEach((node) => {
-            if (!(node instanceof Element)) {
-              return;
-            }
-            const dialog = node.matches('[role="dialog"][aria-label]') ? node : node.querySelector ? node.querySelector('[role="dialog"][aria-label]') : null;
-            if (dialog && isTopbarMenuButton(dialog)) {
-              closeDialogIfOpen(state);
-            }
-          });
-        });
-      });
-    }
-    const getMenuButtonFromEvent = (event) => {
-      const path = typeof event.composedPath === "function" ? event.composedPath() : [];
-      for (const entry of path) {
-        if (entry instanceof Element && isTopbarMenuButton(entry)) {
-          return entry;
-        }
-      }
-      const target = event.target instanceof Element ? event.target : null;
-      if (!target) {
-        return null;
-      }
-      const closest = target.closest('button, [role="button"]');
-      return closest && isTopbarMenuButton(closest) ? closest : null;
-    };
-    const onTopbarActivate = (event) => {
-      const topbarButton = getMenuButtonFromEvent(event);
-      if (!topbarButton) {
-        return;
-      }
-      closeDialogIfOpen(state);
-    };
-    lifecycle.listen(document, "pointerdown", onTopbarActivate, true);
-    lifecycle.listen(document, "click", onTopbarActivate, true);
-    lifecycle.listen(document, "keydown", (event) => {
-      if (!(event instanceof KeyboardEvent) || event.key !== "Enter" && event.key !== " ") {
-        return;
-      }
-      onTopbarActivate(event);
-    });
-  }
-  function toggleDialog(state) {
-    const elDialog = document.getElementById("fbcmf");
-    if (!elDialog || !state) {
-      return;
-    }
-    if (elDialog.hasAttribute(state.showAtt)) {
-      elDialog.removeAttribute(state.showAtt);
-      if (state.btnToggleEl) {
-        state.btnToggleEl.removeAttribute("data-cmf-open");
-      }
-    } else {
-      setupTopbarMenuSync(state);
-      closeFacebookMenus();
-      elDialog.setAttribute(state.showAtt, "");
-      if (state.btnToggleEl) {
-        state.btnToggleEl.setAttribute("data-cmf-open", "true");
-      }
-      if (typeof state.syncDialogSearch === "function") {
-        state.syncDialogSearch();
-      }
-    }
-  }
-  function syncToggleButtonOpenState(state) {
-    const elDialog = document.getElementById("fbcmf");
-    const toggleButton = state && state.btnToggleEl ? state.btnToggleEl : null;
-    if (!elDialog || !toggleButton || !state) {
-      return;
-    }
-    if (elDialog.hasAttribute(state.showAtt)) {
-      toggleButton.setAttribute("data-cmf-open", "true");
-    } else {
-      toggleButton.removeAttribute("data-cmf-open");
-    }
-  }
-  var init_topbar = __esm({
-    "src/ui/dialog/topbar.ts"() {
-      "use strict";
-      init_topbar_controls();
-      init_toggle_button();
-      init_lifecycle();
     }
   });
 
@@ -13647,7 +13691,7 @@
   var about_default;
   var init_about = __esm({
     "src/res/about.svg"() {
-      about_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g fill="currentColor">\n    <path d="M7.8 14.5c4.7-2.1 8.5-5.3 12.8-8 .6-.5 1.1-.5 1.8-.1l9.2 5.2c2.3 1.3 3.5 2.9 4.8 5.2l6.5 12.9c-2.8 1.4-5.6 2.5-9.1 3.2l-.1-4.9c-.1-1.6-1.2-2.4-2.8-2-2.1.4-4.6 2.5-6.8 3.6l-3.9.9 2.2-7.8 2.2-2.6 3.4-2.7-2.1.7-1.7 1.3-.2-4-1 .1-.4 3-1.1-1.3-1.1-4.4-.7-.5c-.8 1.1-.9 2.7-2 4-1.2 1.6-3.2 2.2-5.1 1.8-2.2-.3-4.7-1.1-5.4-2.3-.3-.5-.2-.9.6-1.3Z"/>\n    <path d="M34 34.3c3.6-.7 6.5-1.9 9.8-3.4l1.6 3.5c-3.4 1.5-7.1 2.7-11.5 3.9Z"/>\n    <path d="M10.8 40.1C6.7 41.3 1.8 43.2 2.3 44.6c3.7 3.8 19.3 4.5 34.3 1.2 11.8-2.6 22.9-8.6 22.8-11.2-.3-1.5-4.8-1.8-12.5-1.5l.5 1.6c-5.7 2.3-13.1 4.4-16 4.6l-1.7 1.8-2.4 1.6-1.7 1.5-2.1-1.4-2.4-2.9-1.6 2.5-2.7 2.8-2.3-.1-1.2-1.4-3.4-.7-1.6-.1Z"/>\n    <path d="M11.9 28.4c1.5-.3 5.4 1.2 7.2 2.4l-.7 2-1 .2-3-.1.5 1.1 2.9.6.2 2.1c-2.1 1.4-4.4 2.3-6.2 2.3-.4-2.3-.5-7.5.1-10.6Z"/>\n    <path d="m24.1 31.4 5.7-3.7c1.7-1 2.9-.4 2.9 1.2v8.8c-1.5-.1-4-1.3-6.6-2.8l1.2-1.7 1.9-1.1-.5-.7-2.8 1.2Z"/>\n    <path d="M18.9 38.1c.1 1.3-.7 2.9-2.9 5.8l-1.4-1.4-2.2-.4 2.5-3.2 3.7-1.6Zm5.3-1.4c1.5.5 3.3 1.5 4.6 3.2l-2.1.8-1.2 1.8c-2-1.1-2.6-3.4-2.6-4.8Z"/>\n  </g>\n  <path fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" d="M21.2 33.2c-1-1.7-2.4-1.4-2.5 0-.2 1.7 1.4 3.3 2.5 4 1.3-.7 2.8-2.4 2.6-4-.2-1.5-1.6-1.7-2.6 0Z"/>\n</svg>';
+      about_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g transform="translate(1.17853 5.47207) scale(0.98138)">\n    <g fill="currentColor" transform="scale(.0950965824665676)">\n        <path d="M82 145C139 128 171 100 205 79 218 71 227 67 241 73 283 91 328 116 361 139 384 154 393 176 406 201L452 291Q458 301 451 306C430 317 390 328 354 335 356 303 351 284 339 278 323 268 294 284 271 300L256 312Q238 313 230 320L220 317Q217 316 220 309L244 242C248 229 270 215 287 202L315 182C289 187 269 202 250 216L255 153C246 166 242 183 238 198 224 178 214 153 212 128 201 141 196 160 181 173 161 193 139 195 117 188 94 182 78 171 72 161Q67 152 82 145Z"/>\n        <path d="M355 347C397 339 436 329 462 315Q464 314 466 318L478 345Q481 352 476 357C458 374 399 389 352 398 355 378 348 360 352 350Z"/>\n        <path d="M111 420C64 432 28 443 31 459 35 480 115 494 201 498 331 502 459 474 563 424 606 403 631 376 630 365 629 348 565 342 497 346L519 362C447 386 389 406 335 421 346 442 317 440 300 445 286 468 269 470 255 444L244 426 210 432C196 456 178 474 165 472 153 470 151 454 144 450 122 452 102 453 81 447 97 443 112 436 122 429Z"/>\n        <path d="M131 295C151 293 181 305 200 320 188 326 185 337 183 346 172 343 160 344 152 348 162 352 177 353 185 361 188 369 191 377 194 383L153 404C128 418 121 410 121 396 118 377 124 364 122 349 119 332 112 298 131 295Z"/>\n        <path d="M269 318C289 302 316 287 329 287 346 285 343 323 340 341 335 361 341 377 339 395 338 406 334 410 327 410 327 396 310 396 298 392L267 385C281 364 294 354 312 341 304 336 295 338 284 344 282 334 278 325 269 318Z"/>\n        <path fill-rule="evenodd" d="M231 333C244 319 264 321 271 339 281 364 250 393 233 400 214 390 193 371 193 350 192 330 208 316 231 333ZM230 347C220 334 208 341 207 350 205 364 220 380 232 385 244 377 254 365 256 353 258 341 245 334 230 347Z"/>\n        <path d="M200 393Q211 387 207 403C201 428 185 453 172 462 165 467 162 466 161 458 159 445 149 442 141 437 134 433 134 430 140 424 153 413 181 400 200 393Z"/>\n        <path d="M260 396C282 397 309 414 321 428Q325 433 316 433C300 434 292 435 284 445 278 453 274 456 268 448 258 435 250 413 252 402Q253 394 260 396Z"/>\n      </g>\n  </g>\n</svg>';
     }
   });
 
@@ -13655,7 +13699,7 @@
   var bug_default;
   var init_bug = __esm({
     "src/res/bug.svg"() {
-      bug_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round">\n    <path d="M28.8 17.1 28 14.8 24.3 11.8M34 17.1l1.2-2.6 3.3-2.7M24.4 25v-3.1c0-2.8 3.3-5.2 7.1-5.2s7.1 2.4 7.1 5.2V25"/>\n    <path d="m22.5 25.8-3 1.6-2.8-2-1.3-2.2m3.7 10.5h-4.3l-2.2 1.9m7.4 3.6-1.8.6-2.7 6.1m25.1-20.1 3 1.6 2.8-2 1.3-2.2m-3.7 10.5h4.3l2.2 1.9m-7.4 3.6 1.8.6 2.7 6.1"/>\n    <path d="M27.7 47.1c-5.3-2.9-8.5-7.1-8.5-12.8 0-6.3 5.6-11.5 12.4-11.5S44 28 44 34.3c0 5.7-3.2 9.9-8.5 12.8"/>\n  </g>\n  <path fill="currentColor" d="M30.7 25.1c-5.4.7-9.1 4.6-9.1 10 0 5.8 3.8 10.2 9.1 11.2Zm2 0v21.2c5.3-1 9.1-5.4 9.1-11.2 0-5.4-3.7-9.3-9.1-10Z"/>\n</svg>';
+      bug_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g transform="translate(-7.83516 -5.59812) scale(1.25589)">\n    <g transform="scale(0.095096582)" fill="currentColor">\n        <g fill="none" stroke="currentColor" stroke-width="19" stroke-linecap="round" stroke-linejoin="round">\n          <path d="M302 177c-7-23-24-40-44-44m108 44c7-23 24-40 43-44M260 253c-6-43 28-76 74-76s80 33 73 76"/>\n          <path d="M226 290c-36-5-47-17-63-44m38 107h-32c-11 0-22 15-35 20m75 45c-9 3-19 9-22 18l-15 44M443 290c36-5 47-17 61-44m-33 107h30c11 0 21 15 32 20m-75 45c9 3 17 9 21 18l19 44"/>\n        </g>\n        <path d="M297 506c-56-3-101-75-101-145 0-76 62-131 138-131s139 55 139 131c0 70-46 132-98 145-9 2-17-3-11-8 59-21 91-77 91-137 0-64-54-111-121-111s-119 47-119 111c0 60 32 116 85 135 10 4 8 11-3 10Z"/>\n        <path d="M322 263c-55 4-95 49-95 99 0 58 39 112 94 125 4 1 6-1 6-5V267c0-3-1-4-5-4Zm24 0c55 4 97 49 97 99 0 58-39 112-95 125-5 1-7-1-7-5V267c0-3 1-4 5-4Z"/>\n      </g>\n  </g>\n</svg>';
     }
   });
 
@@ -13663,7 +13707,7 @@
   var check_default;
   var init_check = __esm({
     "src/res/check.svg"() {
-      check_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <path fill="currentColor" d="M17.9 36.9c1.2-1.7 2.1-2.1 3.4-.8l6.1 6.1 20.3-21c1.2-1.2 2.7-1.3 4-.1l.7.7c1.1 1.1 1 2.6-.1 3.7L28.9 48.2c-1.3 1.1-2.5 1.1-3.7-.1l-7.1-7.2c-1.1-1.1-1.2-2.6-.2-4Z"/>\n</svg>';
+      check_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g transform="translate(-14.87695 -14.21144) scale(1.33102)">\n    <path fill="currentColor" d="M18.1 36.7c1.1-1.2 2.7-1.3 3.9-.1l5.5 5.6 20.1-21c1.2-1.2 2.8-1.3 4-.1l.7.7c1.2 1.1 1.2 2.7 0 3.9L29.2 48.2c-1.2 1.3-2.8 1.3-4.1 0l-7-7.1c-1.2-1.2-1.2-2.7 0-3.9Z"/>\n  </g>\n</svg>';
     }
   });
 
@@ -13671,7 +13715,7 @@
   var export_default;
   var init_export = __esm({
     "src/res/export.svg"() {
-      export_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <path fill="currentColor" d="m35.5 18.3 12.2-2-1.5 11.2-3.1-4L28.8 35.4c-.6.5-1 .5-1.6-.1l-.4-.4c-.5-.5-.4-1 .2-1.6l13.1-13-4.6-1.6c-.5-.1-.5-.3 0-.4Z"/>\n  <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">\n    <path d="M21.7 33.5h-2.1L14 40.8v5.7c0 1.4.7 2 2 2h30.9c1.4 0 2.1-.6 2.1-2v-5.7l-4.9-7.3h-2.3"/>\n    <path d="M14 41.9h10.5l1.9 2.3h10.5l2-2.3H49"/>\n  </g>\n</svg>';
+      export_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g transform="translate(-11.43003 -12.45392) scale(1.36519)">\n    <g transform="scale(0.095096582)" fill="currentColor">\n        <path d="M389 182 488 169c13-2 21 7 19 20l-16 89c-1 9-8 13-16 11-5-1-7-4-9-10l-8-28-149 126c-9 8-19 5-25-2-7-7-6-17 1-24l137-134-35-11c-9-3-13-7-12-13 1-6 6-10 14-11Z"/>\n        <g fill="none" stroke="currentColor" stroke-width="19" stroke-linecap="round" stroke-linejoin="round">\n          <path d="M229 352h-17c-6 0-11 3-14 8l-42 65c-3 4-4 8-4 14v39c0 17 11 29 28 29h309c18 0 28-12 28-29v-39c0-6-1-10-4-15l-42-65c-3-5-8-7-14-7h-17"/>\n          <path d="M153 440h100c5 0 10 3 13 8l5 7c4 6 9 9 16 9h95c7 0 12-3 16-9l5-7c3-5 8-8 14-8h99"/>\n        </g>\n      </g>\n  </g>\n</svg>';
     }
   });
 
@@ -13679,7 +13723,7 @@
   var groups_default;
   var init_groups3 = __esm({
     "src/res/groups.svg"() {
-      groups_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <path fill="currentColor" fill-rule="evenodd" d="M11.2 9.6h42.7a3.2 3.2 0 0 1 3.2 3.2v25.6a3.2 3.2 0 0 1-3.2 3.2h-9.1a5 5 0 0 0 1.6-4.1 4.5 4.5 0 0 0-8.7-1.5 6 6 0 0 0-11.7 0 4.5 4.5 0 0 0-8.7 1.5 5 5 0 0 0 1.6 4.1h-7.7A3.2 3.2 0 0 1 8 38.4V12.8a3.2 3.2 0 0 1 3.2-3.2Zm2 4.1v7.4h8.8v-7.4Zm12 1.7v1.4h14.6v-1.4Zm0 3.7v1.3h9.9v-1.3Zm-12 5.3v1.3h37.5v-1.3Zm0 4.3v1.3H39v-1.3Z"/>\n  <path fill="currentColor" d="M18.7 16a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm-3.6 1.1a.8.8 0 1 1 0-1.6.8.8 0 0 1 0 1.6Zm5.2 0a.8.8 0 1 1 0-1.6.8.8 0 0 1 0 1.6Zm-4.3 2.4v-1.1c0-.7.6-1 1.1-1h1.2c.6 0 1.1.3 1.1 1v1.1Zm-2-1.1c0-.6.4-.9 1.1-.9h.5v1.8H14Zm5.8-.9h.5c.7 0 1.1.3 1.1.9v.9h-1.6Z"/>\n  <ellipse cx="21.4" cy="37.9" rx="3.5" ry="3.9" fill="currentColor"/>\n  <ellipse cx="42.3" cy="37.9" rx="3.5" ry="3.9" fill="currentColor"/>\n  <ellipse cx="31.8" cy="37.3" rx="4.9" ry="5.2" fill="currentColor"/>\n  <path fill="currentColor" d="M17.9 43.1h7.2v1.4c-3.1 1.1-4.8 3.1-5.2 5.2-2.6.1-4.8-.2-6.2-.8v-2.3a3.5 3.5 0 0 1 4.2-3.5Zm20.6 0h7.2a3.5 3.5 0 0 1 4.2 3.5v2.3c-1.4.6-3.6.9-6.2.8-.4-2.1-2.1-4.1-5.2-5.2Zm-9.8.8H35c4.3 0 7.1 2.8 7.1 7.1v1.5c-5.1 2.3-15.4 2.3-20.5 0V51c0-4.3 2.8-7.1 7.1-7.1Z"/>\n</svg>';
+      groups_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g transform="translate(-2.43423 -2.16858) scale(1.06258)">\n    <g fill="currentColor" transform="scale(0.0950965824665676)">\n        <path fill-rule="evenodd" d="M125 104h433c23 0 40 17 40 40v253c0 24-17 41-40 41h-93c15-9 24-24 24-42 0-25-20-46-46-46s-46 21-46 46c0 18 9 33 24 42h-48c13-11 20-28 20-47 0-35-27-62-62-62s-62 27-62 62c0 19 7 36 20 47h-47c15-9 23-24 23-42 0-25-20-46-45.5-46s-46 21-46 46c0 18 9 33 23.5 42H125c-24 0-41-17-41-41V144c0-23 17-40 41-40ZM152 141c-10 0-17 7-17 17v50c0 10 7 17 17 17h68c10 0 17-7 17-17v-50c0-10-7-17-17-17ZM273 158a6.5 6.5 0 0 0 0 13h149a6.5 6.5 0 0 0 0-13ZM273 199a6.5 6.5 0 0 0 0 13h97a6.5 6.5 0 0 0 0-13ZM144 257a6.5 6.5 0 0 0 0 13h395a6.5 6.5 0 0 0 0-13ZM144 301a7 7 0 0 0 0 14h272a7 7 0 0 0 0-14Z"/>\n        <circle cx="189" cy="168.5" r="12.5"/>\n        <circle cx="162" cy="175.5" r="9.5"/>\n        <circle cx="215.5" cy="175.5" r="9.5"/>\n        <path d="M169 209c0-13 8-21 20-21s20 8 20 21c0 2-1 3-3 3h-34c-2 0-3-1-3-3ZM144 210c1-14 11-22 23-20-3 5-5 12-5 20ZM216 210c0-8-2-15-6-20 13-2 23 7 23 20Z"/>\n        <ellipse cx="219.5" cy="396.5" rx="35.5" ry="36.5"/>\n        <ellipse cx="331" cy="390.5" rx="50.5" ry="50.5"/>\n        <ellipse cx="443" cy="396.5" rx="35.5" ry="36.5"/>\n        <path d="M207 444c-42 0-63 22-63 56v9c0 12 17 14 70 17 1-37 20-60 57-76-17-5-40-6-64-6ZM458 444c-24 0-47 1-64 6 37 16 56 39 58 76 53-3 71-5 71-17v-9c0-34-23-56-65-56ZM333 450c-62 0-108 33-108 78v17c0 36 217 36 217 0v-17c0-45-46-78-109-78Z"/>\n      </g>\n  </g>\n</svg>';
     }
   });
 
@@ -13687,7 +13731,7 @@
   var import_default;
   var init_import = __esm({
     "src/res/import.svg"() {
-      import_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <path fill="currentColor" d="M29.4 22.6c.1-.8.4-.8.8-.2l3.2 4 10.9-9.5c1.1-1 2.1-1 3.1.1l.1.1c1 1.1.8 2.1-.2 3.1L36.8 30.1l4.4 2.3c.6.3.6.6-.2.8l-12.5 1.7Z"/>\n  <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">\n    <path d="M20.1 33.5h-2.2l-5.2 7.3v5.6c0 1.5.7 2.2 2.2 2.2h33.9c1.5 0 2.2-.7 2.2-2.2v-5.6l-5.2-7.3h-2.2"/>\n    <path d="M12.7 41.9h10.8l2.1 2.5h12.5l2.1-2.5H51"/>\n  </g>\n</svg>';
+      import_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g transform="translate(-7.47368 -8.55728) scale(1.23839)">\n    <g transform="scale(0.095096582)" fill="currentColor">\n        <path d="M310 245c2-10 7-15 15-15 7 0 12 4 14 12l9 32 112-98c13-11 28-7 37 3 11 11 11 25-1 36L383 319l45 17c8 3 11 8 10 14-1 6-6 10-14 11l-104 14c-18 2-28-9-26-26Z"/>\n        <g fill="none" stroke="currentColor" stroke-width="19" stroke-linecap="round" stroke-linejoin="round">\n          <path d="M210 352h-17c-6 0-10 3-13 8l-43 65c-3 5-4 9-4 15v39c0 18 12 31 31 31h343c19 0 31-13 31-31v-39c0-6-1-10-4-15l-43-65c-3-5-8-8-14-8h-17"/>\n          <path d="M134 440h103c7 0 12 3 16 9l4 6c4 6 9 9 17 9h119c8 0 13-3 17-9l4-6c4-6 9-9 16-9h107"/>\n        </g>\n      </g>\n  </g>\n</svg>';
     }
   });
 
@@ -13695,7 +13739,7 @@
   var info_default;
   var init_info = __esm({
     "src/res/info.svg"() {
-      info_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <path fill="none" stroke="currentColor" stroke-width="1" d="M5.8 19v-2.8a2.8 2.8 0 0 1 2.8-2.8h44.8a2.8 2.8 0 0 1 2.8 2.8V19"/>\n  <path fill="currentColor" fill-rule="evenodd" d="M5.6 18.4h50.8V46a2.5 2.5 0 0 1-2.5 2.5H8.1A2.5 2.5 0 0 1 5.6 46Zm10.8.3a6.7 6.7 0 1 0 0 13.4 6.7 6.7 0 0 0 0-13.4Zm9.4 4v1.2h13.8v-1.2Zm0 3.8v1.1h9.3v-1.1Zm-14.7 6.7v1.2h40v-1.2Zm0 3v1.2h30.7v-1.2Zm10 3.8a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h20a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1Zm.2 1.1h19.6v2.8H21.3Z"/>\n  <path fill="currentColor" d="M15 24.4h2.3v4.2c0 .7.3.9 1.1 1v.6h-4.5v-.6c.9-.1 1.1-.3 1.1-1v-2.3c0-.7-.2-.9-.9-.9v-.6Z"/>\n  <circle cx="16.1" cy="22.2" r="1" fill="currentColor"/>\n</svg>';
+      info_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g transform="translate(0.21516 0.46944) scale(1.01711)">\n    <g fill="currentColor" transform="scale(0.0950965824665676)">\n        <path fill-rule="evenodd" d="M103 142h449c25 0 45 19 45 43v286c0 23-19 39-42 39H100c-23 0-40-16-40-39V185c0-24 19-43 43-43ZM69 209c37-19 89-30 139-30h316c23 0 43 2 64 7-1-20-17-35-38-35H104c-20 0-35 15-35 34ZM175 198c-40 0-71 29-71 66 0 15 5 29 16 41l-3 18c-2 6 1 9 7 7l25-6c8 3 17 4 26 4 40 0 71-27 71-64s-31-66-71-66ZM276.5 240a5.5 5.5 0 0 0 0 11h140a5.5 5.5 0 0 0 0-11ZM276.5 275a5.5 5.5 0 0 0 0 11h92a5.5 5.5 0 0 0 0-11ZM120 349a5 5 0 0 0 0 10h415a5 5 0 0 0 0-10ZM120 381a5 5 0 0 0 0 10h319a5 5 0 0 0 0-10ZM223 420h207c7 0 13 6 13 13v30c0 7-5 13-12 13H222c-7 0-12-6-12-13v-30c0-6 6-13 13-13ZM223 427c-3 0-5 2-5 5v32c0 3 2 5 5 5h207c3 0 5-2 5-5v-32c0-3-2-5-5-5Z"/>\n        <circle cx="175" cy="230" r="12.5"/>\n        <path d="M160 251h23c3 0 4 1 4 4v37h7c3 0 4 1 4 4v3c0 3-1 4-4 4h-35c-3 0-4-1-4-4v-3c0-3 1-4 4-4h6v-30h-5c-3 0-4-2-4-5v-1c0-3 1-5 4-5Z"/>\n      </g>\n  </g>\n</svg>';
     }
   });
 
@@ -13703,7 +13747,7 @@
   var marketplace_default;
   var init_marketplace3 = __esm({
     "src/res/marketplace.svg"() {
-      marketplace_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <path fill="currentColor" fill-rule="evenodd" d="M14.1 12.1h43.4a2.7 2.7 0 0 1 2.7 2.7v26.5a2.7 2.7 0 0 1-2.7 2.7h-2.6l1-6.8H41.6l-.6-1.2c-.3-.7-.8-1-1.6-1h-2.5c-.9 0-1.5.7-1.5 1.5s.6 1.5 1.5 1.5h1.4l1.2 6h-9.1v-5.1c2.4.2 3.9-1.1 3.7-2.7l-3.6-5.9h-1.7v-3.2H11.4V14.8a2.7 2.7 0 0 1 2.7-2.7Zm1.2 3.2v8.5h12.1v-8.5Zm15.3 2v1.4h16.1v-1.4Zm0 3.8v1.3h10.7v-1.3Zm-.9 6.5v1.3H55v-1.3Zm1.5 3.8v1.3h15.2v-1.3Z"/>\n  <path fill="currentColor" d="M23.1 18a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0Zm-4.5 1.3a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm6.7 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2ZM20 22v-1.1c0-.9.6-1.3 1.3-1.3h1.3c.8 0 1.4.4 1.4 1.3V22Zm-2.9-1.3c0-.7.5-1.1 1.4-1.1h.7v2.2h-2.1Zm7.7-1.1h.7c.9 0 1.4.4 1.4 1.1v1.1h-2.1Z"/>\n  <path fill="currentColor" d="M5.4 28.1h21.3v1.7H5.4Zm-.5 3h3.5l-1.9 5.4c-.5 1.6-4.3 1.7-4.1-.1Zm4.8 0H14l-.8 5.3c-.2 1.9-5.1 1.8-4.8-.1Zm5.6 0h4.3l.6 5.3c.2 1.9-5.4 1.9-5.3 0Zm5.7 0h4.1l2.3 5.2c.8 1.9-4.9 2.1-5.2.3Zm5.6 0h2.6l3.7 5.3c.7 1.3-3.5 1.9-4.2.4Z"/>\n  <path fill="currentColor" fill-rule="evenodd" d="M4 39.1h3v6.6h12.4v-6.6H26v10H4Zm5.1 0h8.2v4.7H9.1Z"/>\n  <path fill="currentColor" d="M27.8 39.1h1.5v10h-1.5Zm-25 11.4h30v1.4h-30Z"/>\n  <g fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">\n    <path d="M36.7 36.5h2.9L42.5 48h9.8"/>\n    <path d="M40.2 37.9h14.4l-1.7 7.6H42.1"/>\n  </g>\n  <circle cx="43.3" cy="50.4" r="1" fill="currentColor"/>\n  <circle cx="50.5" cy="50.4" r="1" fill="currentColor"/>\n</svg>';
+      marketplace_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g transform="translate(2.98507 2.52452) scale(0.92111)">\n    <g fill="currentColor" transform="scale(0.0950965824665676)">\n        <path fill-rule="evenodd" d="M152 127h450c21 0 37 16 37 37v272c0 20-16 36-37 36h-36l21-61c5-13-2-21-14-21H436c-3 0-4-2-5-6l-3-7c-2-7-6-10-14-10h-26c-22 0-23 36-1 36h13l22 69h-98v-57c26-3 37-28 19-47l-46-48v-12c0-15-10-24-25-24H115V164c0-21 16-37 37-37ZM178 161c-9 0-15 6-15 15v62c0 9 6 15 15 15h100c9 0 15-6 15-15v-62c0-9-6-15-15-15ZM329 182a6.5 6.5 0 0 0 0 13h161a6.5 6.5 0 0 0 0-13ZM329 222a6 6 0 0 0 0 12h102a6 6 0 0 0 0-12ZM316 288a6 6 0 0 0 0 12h263a6 6 0 0 0 0-12ZM342 330a6 6 0 0 0 0 12h148a6 6 0 0 0 0-12Z"/>\n        <circle cx="231.5" cy="193.5" r="15"/>\n        <circle cx="199" cy="201.5" r="12"/>\n        <circle cx="264" cy="201.5" r="12"/>\n        <path d="M207 242c0-18 10-28 25-28s26 10 26 28ZM176 240c2-16 13-24 28-22-3 6-5 13-5 22ZM264 240c-1-9-3-16-7-22 15-2 27 6 28 22Z"/>\n        <path d="M55 317v-8c0-10 5-15 15-15h201c10 0 15 5 15 15v8ZM53 327h43l-16 49c-3 18-15 28-30 28-22 0-33-15-23-33ZM109 327h44l-10 50c-2 19-15 28-31 27-19-1-28-14-21-34ZM165 327h37l11 49c5 19-6 28-25 28-21 0-35-11-32-30ZM214 327h40l22 47c9 21-5 31-21 30-16 0-25-8-29-24ZM265 327h24l42 43c22 20-1 43-23 31-10-5-15-14-18-24ZM52 415c12 0 22-3 30-9v78h128v-63h62v87H52ZM98 421h73v47H98ZM288 407c8 6 17 9 27 9v92h-27ZM31 546v-18c0-8 4-11 12-11h287c8 0 12 3 12 11v18Z"/>\n        <path d="M388 377h25c4 0 5 1 6 5l4 13c1 4 4 6 9 6h141c5 0 6 3 4 8l-25 71H453c-10 0-10 12 0 12h99c11 0 11 16 0 16H447c-14 0-22-10-16-23l3-8-28-84h-19c-8 0-8-16 1-16Z"/>\n        <circle cx="451.5" cy="527" r="14"/>\n        <circle cx="532.5" cy="527" r="14"/>\n      </g>\n  </g>\n</svg>';
     }
   });
 
@@ -13711,7 +13755,7 @@
   var mop_default;
   var init_mop = __esm({
     "src/res/mop.svg"() {
-      mop_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g fill="currentColor">\n    <path d="M46.3 1.1a1.6 1.6 0 0 1 2.9 1.3l-9.6 19-2.8-1.3Z"/>\n    <path d="m35.7 21 4.3 1.9-1.1 3.1-4.7-1.9Z"/>\n    <path d="M33.1 25.6c-2.6 1.2-4.3 4-6.8 6.3-2.2 2.1-4.3 3.1-6.2 3.4 4.8.6 8.7-5.1 12.6-8.1-3 4.5-5.7 8-10.3 9.2 2.2.4 3.5.6 5.2.2 3-1.9 5.1-5.7 6.7-9.4-1 4.2-3.1 7.7-5.2 10.1 1.7.3 3.7.4 5.1-.1 1.1-2.9 1.8-6.2 2.1-9.2.5 3.6-.2 6.7-.7 9.7l2.2-.2c.5-2.8-.1-6-.3-8.7 1 3.1 1.1 6.3 1 8.8l2.1-.2c-.7-3.5-1.7-6.6-2.1-9.9Z"/>\n    <path d="M17.7 53.4c1.8.5 3.8.7 5.7.2 7.3-1.4 13.8-5.5 18.8-10.2l-1.7 15.2c-.3 3.1-4.6 4.4-11.1 4.4-6.3 0-10.6-1.5-11-4.1Z"/>\n    <path d="M15.7 40.3c7.5 2.9 16.7 3.2 23.6.7-3.6 4.4-8 7.1-13.3 8.5-1.8-.9-3.3-2.2-5.3-2.6l-3.6-.7Z"/>\n    <path d="M16.4 47.8c1.9-.2 4.5.3 6.1 1.6l1.1 1.4c-2.9.8-5.4.6-7.2-.5Z"/>\n  </g>\n  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">\n    <path stroke-width="1.25" d="M23.8 30.4c-6.5 1.2-9.5 3.2-8.8 5.3.8 2.5 7.6 4.4 14.7 4.5 7.7 0 13.6-2.3 13.6-4.8 0-1.2-1.1-2.3-2.7-3.2"/>\n    <path stroke-width="1.3" d="M12.5 35.1c-1.3 3.4 6.6 6.7 16.2 6.9 8.6.1 15.9-2.3 15.9-6 0-1.1-.7-2.1-2-2.9"/>\n    <path stroke-width="1.35" d="M13.2 38.1c-.9 3.4-.6 7 1 9.3M15.9 50.9c6.3 3.3 15.6-.1 24-7.9 1.7-1.6 3.1-3.1 3.7-4.6"/>\n    <path stroke-width="1.1" d="M15.1 39.2c-.4 3.1-.1 5.7 1 7.3M24.6 50.8c7.4-2.3 12.9-6.5 15.7-11.5"/>\n  </g>\n</svg>';
+      mop_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g transform="translate(4.99901 3.7225) scale(0.88801)">\n    <g fill="currentColor" transform="scale(.0950965824665676)">\n        <path d="M478 16C491-9 522 10 520 23L428 223 391 207Z"/>\n        <path d="M368 226Q376 211 390 220L419 232Q433 237 427 251L413 283 353 257Z"/>\n        <path d="M352 265C328 262 307 280 284 305 263 329 243 350 221 364 235 371 244 377 254 369 274 356 291 337 305 321 289 351 276 368 257 382 270 387 285 390 296 390 310 390 332 361 344 345 336 368 329 386 324 392 333 394 338 395 343 387 355 369 363 351 370 331L352 391 379 390C386 359 395 324 395 299 394 281 381 278 376 289L347 333C355 312 367 289 366 282 365 272 353 272 343 282L309 316C321 295 337 278 352 265Z"/>\n        <path d="M403 292C425 294 413 336 418 361Q420 377 427 380L399 386C392 382 397 346 402 318Q404 303 403 292Z"/>\n        <path d="M266 309C203 319 145 334 146 374 147 414 224 438 316 436 350 436 380 433 398 426 403 408 423 402 439 410 462 404 480 388 478 369 476 350 457 336 444 331 429 323 426 340 435 350 451 358 463 370 448 384 422 405 334 416 244 407 199 402 169 390 169 375 169 367 172 359 179 355 198 368 215 361 225 349 245 339 258 324 266 309Z"/>\n        <path d="M130 364Q136 363 139 367C137 378 140 389 144 397 124 404 119 395 119 382 119 372 121 366 130 364Z"/>\n        <path d="M140 409 155 410C147 451 157 487 180 501L174 516C142 500 126 459 140 409Z"/>\n        <path d="M170 421C227 446 324 453 391 439 366 475 322 503 269 512 263 507 255 505 247 503L191 489C175 485 173 477 172 461Z"/>\n        <path d="M194 503C199 500 210 504 222 507L246 514C258 517 262 525 255 536 252 541 247 543 239 541L199 531C185 527 180 522 186 511Q189 505 194 503Z"/>\n        <path d="M269 525C327 519 374 485 407 449 400 444 400 432 407 422 416 410 430 411 438 422 447 437 436 452 423 453L415 452C378 499 327 534 267 542Z"/>\n        <path d="M183 538C202 546 241 559 253 553L259 550C343 550 398 505 426 467 444 465 454 449 452 431L451 421 464 418C464 456 452 542 444 609 442 644 404 666 332 666 267 666 213 654 197 625 192 614 190 587 183 538Z"/>\n      </g>\n  </g>\n</svg>';
     }
   });
 
@@ -13719,7 +13763,7 @@
   var news_default;
   var init_news3 = __esm({
     "src/res/news.svg"() {
-      news_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <path fill="currentColor" fill-rule="evenodd" d="M15 11.5h30a2.5 2.5 0 0 1 2.5 2.5v33a2.5 2.5 0 0 1-2.5 2.5H15a2.5 2.5 0 0 1-2.5-2.5V14a2.5 2.5 0 0 1 2.5-2.5Zm2 4v9.5h9v-9.5Zm11.5 2.7v1.3H43v-1.3Zm0 4.5V24H40v-1.3ZM17 29v1.4h26.5V29Zm0 4v1.3h17.4V33Zm0 5.2v1.3h11.2v-1.3Zm14 0v1.3h12.4v-1.3ZM17 42.5v1.3h11.2v-1.3Zm14 0v1.3h9v-1.3Z"/>\n</svg>';
+      news_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g transform="translate(-6.44776 -6.64677) scale(1.27363)">\n    <g fill="currentColor" transform="scale(0.0950965824665676)">\n        <path fill-rule="evenodd" d="M165 121h305c20 0 33 13 33 33v329c0 20-13 34-33 34H165c-20 0-33-14-33-34V154c0-20 13-33 33-33ZM183 166c-5 0-8 3-8 8v84c0 5 3 8 8 8h85c5 0 8-3 8-8v-84c0-5-3-8-8-8ZM307 191a7 7 0 0 0 0 14h140a7 7 0 0 0 0-14ZM307 239a6.5 6.5 0 0 0 0 13h109a6.5 6.5 0 0 0 0-13ZM182 307a7 7 0 0 0 0 14h271a7 7 0 0 0 0-14ZM182 346a7 7 0 0 0 0 14h174a7 7 0 0 0 0-14ZM182 405a7 7 0 0 0 0 14h111a7 7 0 0 0 0-14ZM339 405a7 7 0 0 0 0 14h111a7 7 0 0 0 0-14ZM182 450a6.5 6.5 0 0 0 0 13h111a6.5 6.5 0 0 0 0-13ZM339 450a6.5 6.5 0 0 0 0 13h80a6.5 6.5 0 0 0 0-13Z"/>\n      </g>\n  </g>\n</svg>';
     }
   });
 
@@ -13727,7 +13771,7 @@
   var pref_default;
   var init_pref = __esm({
     "src/res/pref.svg"() {
-      pref_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <path fill="currentColor" fill-rule="evenodd" d="M22.2 14.1h6.7l.8 3.7c1.4.3 2.7.8 3.8 1.5l3.1-2 4.9 4.9-2 3c.6.8 1.1 1.6 1.4 2.4l-3.8 7.6-3.3.4.6 2.1c-2.6 3-5.6 5.2-9.4 6.1-2.6.7-4.4 1.8-5.4 2.8l-1.1-.5-3.1 2-4.8-4.9 2-3c-.7-1.1-1.2-2.4-1.5-3.7l-3.9-.8v-6.8l3.9-.8c.3-1.3.8-2.5 1.5-3.7l-2.1-3.1 4.9-4.9 3 2c1.1-.7 2.4-1.2 3.7-1.5L22.2 14.1ZM25.7 23.1a9.2 9.2 0 1 0 0 18.4 9.2 9.2 0 0 0 0-18.4Z"/>\n  <circle cx="25.8" cy="32.3" r="4.3" fill="none" stroke="currentColor" stroke-width="1.1"/>\n  <path fill="currentColor" d="M49.6 11.8a1.6 1.6 0 0 1 2.9 1.4L41.5 36l-2.9-1.4Zm-14 23.9 8.1 3.2-.8 2.3-8.2-3.2Z"/>\n  <path fill="currentColor" d="M33.8 39.1c-2.2 3-5.9 4.8-9.7 6-2.7.8-4.1 2-3.6 3.5 1.1 2.8 6.6 1.7 10.5-1.1 2.5-1.8 4.3-4.5 5.6-7.2-1.2 3.9-4.3 7.8-9.1 9.9 2.3.7 5 .6 7.6-.3 2.2-2.8 3.1-6 3.5-8.6.1 4.2-.9 7.4-2.1 10 1.6.1 2.4-.1 3.7-.4 1.3-2.3 1.2-5.4 1.2-8.7 1.1 3 .9 5.7.7 8.2l1.2.1c.1-2.9-.1-5.4-.7-7.9l-.3-.3Z"/>\n  <path fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" d="M33.6 41.2c-2.8 3.5-6.2 5.2-10.4 6.4M39.2 52.2h3.9M46.2 50.4h5.9M46.4 48.5h1.4"/>\n</svg>';
+      pref_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g transform="translate(-1.64912 -3.85965) scale(1.12281)">\n    <g fill="currentColor" transform="scale(.0950965824665676)">\n        <path fill-rule="evenodd" d="M250 149H293Q308 149 309 163L311 181Q311 185 318 187C333 190 347 196 358 203Q362 205 367 200L383 190Q394 182 405 191L429 214Q440 225 433 237L420 256Q417 260 420 265L429 278Q431 282 429 288L399 358 376 355C386 311 354 258 310 243 263 226 222 245 194 277 163 312 163 355 191 395 214 430 252 441 291 434Q300 432 293 440C273 454 252 458 229 463Q212 468 207 481Q205 488 198 483L188 477Q183 473 177 479L165 487Q153 495 142 486L116 461Q105 450 115 436L127 421C119 407 113 393 111 380Q110 377 103 376L85 373Q72 370 72 357V322Q72 310 85 307L103 303Q109 303 112 296C115 284 120 272 126 263Q129 258 125 254L114 239Q105 226 115 215L140 192Q152 181 163 190L179 202Q183 205 188 202C201 194 216 190 230 185Q233 184 233 178L234 163Q235 149 250 149Z"/>\n        <path fill-rule="evenodd" d="M273 289A48 48 0 1 0 273 385 48 48 0 0 0 273 289ZM273 306A30 30 0 1 0 273 366 30 30 0 0 0 273 306Z"/>\n        <path d="M518 132C531 105 568 121 556 147L439 378 410 367Z"/>\n        <path d="M479 328Q485 315 486 328L487 355Q488 367 479 370L454 376Z"/>\n        <path d="M375 378Q380 368 391 373L445 393Q458 398 453 410L445 427 365 398Z"/>\n        <path d="M360 409C334 436 305 459 260 468 232 473 212 478 215 504 218 529 254 527 282 527 334 527 369 493 385 435Q389 425 388 436C385 483 361 513 326 530Q318 535 327 537C348 543 376 538 388 534 408 526 415 492 420 465Q422 455 422 467C425 495 424 516 414 525Q409 530 418 529L439 524Q449 522 447 513L445 452Q445 442 435 438L367 411Q363 409 360 409ZM242 502C291 495 336 467 362 424 348 478 294 514 251 513Q246 513 242 502Z" fill-rule="evenodd"/>\n        <path d="M467 504C471 497 495 496 502 501 516 513 480 516 470 511Q465 509 467 504ZM477 525C492 515 531 513 546 520 573 537 526 542 499 540 478 540 468 534 477 525ZM412 540C423 535 449 535 459 541 475 553 422 557 411 550Q405 546 412 540Z"/>\n      </g>\n  </g>\n</svg>';
     }
   });
 
@@ -13735,7 +13779,7 @@
   var profile_default;
   var init_profile3 = __esm({
     "src/res/profile.svg"() {
-      profile_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <path fill="none" stroke="currentColor" stroke-width="1" d="M3.8 22.5v-6.4a3.1 3.1 0 0 1 3.1-3.1h48.4a3.1 3.1 0 0 1 3.1 3.1v6.4"/>\n  <path fill="currentColor" fill-rule="evenodd" d="M3.4 21.9h6.3a7.6 7.6 0 0 1 11.4 0h37.8v23.2a3.2 3.2 0 0 1-3.2 3.2H6.6a3.2 3.2 0 0 1-3.2-3.2Zm12.1-1.8a6.6 6.6 0 1 0 0 13.2 6.6 6.6 0 0 0 0-13.2Zm10 4.4v1.3h14.6v-1.3Zm0 4v1.2h10.2v-1.2ZM8.7 35.3v1.3h45.2v-1.3Zm0 4v1.2h34.5v-1.2Zm-1 3.5v.9h47.8v-.9Z"/>\n  <path fill="currentColor" d="M18.3 24.7a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM11.1 31.4c0-1.7 1.2-2.5 2.6-2.5H17c1.4 0 2.6.8 2.6 2.5a5.8 5.8 0 0 1-8.5 0Z"/>\n</svg>';
+      profile_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g transform="translate(2.75724 3.59688) scale(0.9265)">\n    <g fill="currentColor" transform="scale(0.0950965824665676)">\n        <path fill-rule="evenodd" d="M82 137H581c26 0 46 20 46 45v287c0 23-17 39-40 39H76c-23 0-39-17-39-39V182c0-25 20-45 45-45ZM48 233c21-8 42-12 65-15 31-23 69-22 102 0 142 9 285 20 400 0v-36c0-19-15-34-34-34H82c-19 0-34 15-34 34ZM164 211c-41 0-74 31-74 70s33 70 74 70 74-31 74-70-33-70-74-70ZM270 258a6 6 0 0 0 0 12h149a6 6 0 0 0 0-12ZM270 299a5.5 5.5 0 0 0 0 11h104a5.5 5.5 0 0 0 0-11ZM97 372a6 6 0 0 0 0 12h467a6 6 0 0 0 0-12ZM98 411a6 6 0 0 0 0 12h356a6 6 0 0 0 0-12ZM77 451a3 3 0 0 0 0 6h511a3 3 0 0 0 0-6Z"/>\n        <ellipse cx="164" cy="260.5" rx="30.5" ry="31.5"/>\n        <path d="M114 318c24-26 76-26 100 0-24 32-76 32-100 0Z"/>\n      </g>\n  </g>\n</svg>';
     }
   });
 
@@ -13743,7 +13787,7 @@
   var reels_default;
   var init_reels2 = __esm({
     "src/res/reels.svg"() {
-      reels_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g fill="currentColor" transform="rotate(-6 31 32)">\n    <path fill-rule="evenodd" d="M18.6 16.4h25.2a3.3 3.3 0 0 1 3.3 3.3v5H14.4v-4.1a4.2 4.2 0 0 1 4.2-4.2Zm.1 1.1a3.1 3.1 0 0 0-3.1 3.1v2.8h3.1l2.8-5.9Zm5.1 0L21 23.4h3.6l2.8-5.9Zm9.1 0-2.8 5.9H34l2.8-5.9Zm9.4 0-2.8 5.9h6.4v-3.6a2.3 2.3 0 0 0-2.3-2.3Z"/>\n    <path fill-rule="evenodd" d="M14.4 26.2h32.7v15.5a4 4 0 0 1-4 4H18.4a4 4 0 0 1-4-4Zm13.3 4.1v7.6c0 .7.5 1 1.1.7l7.3-3.8c.7-.4.7-.9 0-1.3l-7.3-3.8c-.6-.3-1.1 0-1.1.6Zm-9.5 12.4v1.2h2.4v-1.2Zm5.2 0v1.2h2.4v-1.2Zm5.2 0v1.2H31v-1.2Zm5.2 0v1.2h2.4v-1.2Zm5.2 0v1.2h2.4v-1.2Z"/>\n  </g>\n</svg>';
+      reels_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g transform="translate(-13.14388 -11.43525) scale(1.43885)">\n    <g transform="scale(0.095096582)" fill="currentColor">\n        <path fill-rule="evenodd" d="m194 178 246-25c28-3 50 17 53 46l4 45-345 29-4-47c-3-25 17-44 46-48Zm-1 15c-22 3-36 16-33 38l2 19 23-2 24-57Zm43-5-27 58 43-4 26-59Zm89-9-27 58 43-4 27-59Zm96-10-29 59 90-9-2-21c-2-20-16-34-38-32Z"/>\n        <path fill-rule="evenodd" d="m153 286 344-30 15 151c3 29-16 51-45 55l-236 20c-32 3-59-16-63-49Zm145 23c-8-1-12 5-11 14l8 63c1 9 7 15 16 10l70-36c8-5 8-14-1-18l-76-31c-2-1-4-2-6-2Zm-74 140c-5 1-7 3-7 7s3 6 8 6l18-2c4 0 6-3 6-7-1-4-3-6-7-6Zm54-5c-5 0-7 3-7 7s3 6 8 6l17-1c4-1 7-3 6-8 0-4-3-6-7-5Zm54-5c-5 0-7 3-7 7 1 4 3 7 8 6l18-1c5-1 7-4 7-8-1-4-3-6-8-5Zm55-5c-5 1-7 3-7 7 0 5 3 7 8 6l17-1c5-1 7-4 7-8-1-4-3-6-8-5Zm55-5c-5 0-7 3-7 7 0 5 3 7 8 6l17-2c5 0 7-3 7-7 0-5-3-7-8-6Z"/>\n      </g>\n  </g>\n</svg>';
     }
   });
 
@@ -13751,7 +13795,7 @@
   var reset_default;
   var init_reset2 = __esm({
     "src/res/reset.svg"() {
-      reset_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">\n    <path d="M40 21.6a13.4 13.4 0 1 0 4.4 9.9M16.2 41v5.8c0 1.2.6 1.7 1.8 1.7h25.6"/>\n  </g>\n  <path fill="currentColor" d="m35.8 25.8 8.5.6-.9-8.6c-.1-.7-.5-.8-.9-.2l-7 7.3c-.5.5-.5.8.3.9Z"/>\n  <g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">\n    <path d="m37.8 43.7 8.1-7.2c.6-.5 1.1-.5 1.6 0l3.6 3.4c.7.6.7 1.2.1 1.9l-6.7 6.3c-.3.3-.6.4-1 .4h-3.8l-1.8-1.7c-.8-.8-.9-2-.1-3.1Z"/>\n    <path d="m44.4 38 4.9 5.7m-11.8 1.6 6.7 2"/>\n  </g>\n</svg>';
+      reset_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g transform="translate(-13.28381 -12.6995) scale(1.33556)">\n    <g transform="scale(0.095096582)" fill="currentColor">\n        <path d="M421 210c-25-20-57-30-94-30-86 0-157 67-157 151 0 80 67 144 151 144 17 0 33-2 48-6 6-18 18-26 33-39 2-2 2-3-1-2-23 13-45 20-78 20-71 0-127-51-127-117 0-68 57-125 130-125 28 0 56 8 78 25l-28 24c-10 9-9 18 4 20l73 7c18 1 26-3 23-16l-18-72c-3-14-16-17-25-4Z"/>\n        <path d="M457 335c-3 29-12 47-32 74-3 4-2 5 3 2 18-11 37-27 44-44 5-11 7-20 8-31 1-16-20-17-23-1Z"/>\n        <path d="M174 422c-9 0-14 8-14 20v43c0 24 18 39 44 39h237c21 0 34-12 40-30l-29 7c-5 2-10 2-17 2H207c-17 0-27-7-27-23v-39c0-4 2-6 5-9 5-6 0-10-11-10Z"/>\n        <path fill-rule="evenodd" d="m490 381-94 75c-7 6-10 13-10 23 0 11 4 15 14 16l61 7c7 0 13-3 20-9l63-48c11-10 10-22 1-32l-30-30c-9-10-15-10-25-2Zm9 11-22 17 40 37 15-12c3-3 3-6 0-9Zm-34 28-60 47c-2 2-3 6-2 11l61 7 39-29Z"/>\n        <ellipse cx="527" cy="493" rx="12" ry="8"/>\n        <circle cx="546" cy="475" r="7"/>\n      </g>\n  </g>\n</svg>';
     }
   });
 
@@ -13759,7 +13803,7 @@
   var save_default;
   var init_save = __esm({
     "src/res/save.svg"() {
-      save_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g fill="none" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round">\n    <path d="M18.2 17h22.6a3 3 0 0 1 2.1.9l5.1 5.2a3 3 0 0 1 .9 2.1v21.2a2.2 2.2 0 0 1-2.2 2.2H17.5a2.8 2.8 0 0 1-2.8-2.8V20.5a3.5 3.5 0 0 1 3.5-3.5Z"/>\n    <path d="M22 17v9a1 1 0 0 0 1 1h15a1 1 0 0 0 1-1v-9"/>\n    <path d="M46.7 44v1.2" stroke-linecap="round"/>\n  </g>\n  <path fill="currentColor" d="M34.5 19.2h2v5h-2Z"/>\n  <path fill="currentColor" fill-rule="evenodd" d="M22.1 29.5h18.8a3.1 3.1 0 0 1 3.1 3.1V49H19V32.6a3.1 3.1 0 0 1 3.1-3.1Zm.7 10.5a1.3 1.3 0 0 0-1.3 1.3v3.4a1.3 1.3 0 0 0 1.3 1.3h16.6a1.3 1.3 0 0 0 1.3-1.3v-3.4a1.3 1.3 0 0 0-1.3-1.3Zm.2 1.2h16.2v3.6H23Z"/>\n</svg>';
+      save_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g transform="translate(-11.99282 -13.24237) scale(1.37882)">\n    <g transform="scale(0.095096582)" fill="currentColor">\n        <path fill-rule="evenodd" d="M194 174h234c14 0 23 5 33 15l44 45c9 9 13 19 13 32v207c0 25-18 43-43 43H196c-25 0-43-18-43-43V215c0-23 18-41 41-41Zm0 14c-16 0-27 11-27 27v258c0 17 12 28 29 28h7V344c0-17 14-30 31-30h201c17 0 31 13 31 30v157h9c16 0 27-12 28-28h-10c-4 0-5-2-5-7v-7c0-4 2-6 6-6h9V265c0-9-3-15-9-21l-45-46c-7-7-12-10-21-10h-10v72c0 16-12 27-28 27H253c-17 0-28-11-28-27v-72Zm48 0v71c0 8 4 12 12 12h135c7 0 11-4 11-12v-71Zm4 232c-9 0-15 6-15 15v35c0 9 6 15 15 15h178c9 0 15-6 15-15v-35c0-9-6-15-15-15Zm4 9h171c5 0 7 3 7 7v35c0 4-2 6-7 6H249c-5 0-7-2-7-6v-35c0-4 3-7 8-7Z"/>\n        <path d="M365 203h18c4 0 7 2 7 7v37c0 5-3 7-7 7h-18c-4 0-7-2-7-7v-37c0-5 3-7 7-7Z"/>\n      </g>\n  </g>\n</svg>';
     }
   });
 
@@ -13767,7 +13811,7 @@
   var search_default;
   var init_search4 = __esm({
     "src/res/search.svg"() {
-      search_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <ellipse cx="30.5" cy="26.7" rx="12.7" ry="12.2" fill="none" stroke="currentColor" stroke-width="2.8"/>\n  <path fill="currentColor" d="m42.1 36.8 11.3 10.3c1.2 1.1 1.3 2.4.1 3.5s-2.6 1.1-3.7-.1l-9.2-10.2c-.7-.8-1-1.5-.3-2.2l.8-.9c.4-.5.6-.7 1-.4Z"/>\n</svg>';
+      search_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g transform="translate(-3.23077 -8.15385) scale(1.23077)">\n    <g transform="translate(64 0) scale(-1 1)"><ellipse cx="30.4" cy="26.7" rx="12.65" ry="12.1" fill="none" stroke="currentColor" stroke-width="2.9"/>\n      <path fill="currentColor" d="m41.7 36.4 11.7 10.8c1.4 1.3 1.4 2.8.2 4-1.1 1.2-2.8 1.3-4.1-.1L38.9 39.5c1.1-.9 2-1.9 2.8-3.1Z"/></g>\n  </g>\n</svg>';
     }
   });
 
@@ -13775,7 +13819,7 @@
   var videos_default;
   var init_videos3 = __esm({
     "src/res/videos.svg"() {
-      videos_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <path fill="currentColor" fill-rule="evenodd" d="M5.6 13.7h46a3.6 3.6 0 0 1 3.6 3.6v17.9H38.4a3 3 0 0 0-3 3V40H15.3v3.8h20.1v4H5.6A3.6 3.6 0 0 1 2 44.2V17.3a3.6 3.6 0 0 1 3.6-3.6Zm1.6 4.2v8h10.1v-8Zm13.6 1.6v1.3h14.4v-1.3Zm0 4.6v1.2h11.5v-1.2ZM7.2 30.1v1.4h42.1v-1.4Zm0 4.4v1.2h20.7v-1.2Zm-.1 6v2.9h1.2v-2.9Zm3-1.1v4.8c0 .4.3.6.7.4l3.3-2.2c.4-.2.4-.6 0-.8l-3.3-2.5c-.4-.2-.7-.1-.7.3Z"/>\n  <path fill="currentColor" d="M17.2 41.2h6.1v1.5h-6.1Z"/>\n  <path fill="currentColor" fill-rule="evenodd" d="M39 36.7h15.3a1.6 1.6 0 0 1 1.6 1.6v10.1a1.6 1.6 0 0 1-1.6 1.6H39a1.6 1.6 0 0 1-1.6-1.6V38.3a1.6 1.6 0 0 1 1.6-1.6Zm3.1 3.3v6.7c0 .5.3.7.8.4l6.2-3.3c.5-.2.5-.6 0-.9l-6.2-3.3c-.5-.3-.8-.1-.8.4Z"/>\n  <path fill="currentColor" d="m57.3 40.5 3.2-1.3c.5-.2 1 .1 1 .7v6.6c0 .6-.5.9-1 .7l-3.2-1.3Z"/>\n</svg>';
+      videos_default = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">\n  \n  <g transform="translate(3.13598 3.13598) scale(0.90377)">\n    <g fill="currentColor" transform="scale(0.0950965824665676)">\n        <path fill-rule="evenodd" d="M68 141h474c26 0 46 20 46 45v184H404c-20 0-34 14-34 34v20H165c8 12 7 24-2 34h207v48H68c-27 0-46-19-46-45V186c0-25 20-45 46-45ZM83 187c-6 0-10 4-10 10v71c0 7 4 11 10 11h94c7 0 11-4 11-11v-71c0-6-4-10-11-10ZM222 208a6.5 6.5 0 0 0 0 13h144a6.5 6.5 0 0 0 0-13ZM222 253a6.5 6.5 0 0 0 0 13h110a6.5 6.5 0 0 0 0-13ZM80 320a6.5 6.5 0 0 0 0 13h440a6.5 6.5 0 0 0 0-13ZM80 364a5.5 5.5 0 0 0 0 11h214a5.5 5.5 0 0 0 0-11ZM72 424c-5 0-7 3-7 7v20c0 5 2 7 7 7h19v-34ZM106 424v34c0 9 5 12 13 7l33-17c8-4 8-11 0-15l-33-17c-8-4-13-1-13 8Z"/>\n        <rect x="176" y="437" width="75" height="13" rx="6.5"/>\n        <path fill-rule="evenodd" d="M407 382h161c16 0 26 10 26 26v97c0 16-10 26-26 26H407c-16 0-25-10-25-26v-97c0-16 9-26 25-26ZM440 427v55c0 10 5 12 14 8l58-27c10-5 10-12 0-17l-58-27c-9-4-14-2-14 8Z"/>\n        <path d="M603 435c0-6 2-8 7-10l24-11c8-4 16 0 16 9v60c0 9-7 14-15 10l-25-11c-5-2-7-5-7-10Z"/>\n      </g>\n  </g>\n</svg>';
     }
   });
 

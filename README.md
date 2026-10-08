@@ -33,6 +33,7 @@ Thanks to **[trinhquocviet](https://github.com/trinhquocviet)** for helping main
 ## <img src="src/res/pref.svg" alt="options" width="36"/> Using the Control Panel
 
 - Click the **Clean My Feeds** mop icon (or open it from your userscript manager menu) to bring up the settings dialog.
+- The toolbar follows supported feeds and profiles and closes its dialog when navigation leaves those routes. Settings, privacy, sign-in and help pages are excluded. On Reels, it appears only when playback controls or loop disabling are enabled.
 - Options are grouped by feed (News, Groups, Watch, Marketplace, Profiles, Search, Reels). Flip the switches you want, save, and the script immediately re-sweeps the page.
 - Toggle **Debug** to reveal hidden posts with dotted outlines so you can verify what's being filtered.
 - Use **Export / Import** to back up your settings. The script stores preferences locally; incognito/private browsing wipes them when the session ends.

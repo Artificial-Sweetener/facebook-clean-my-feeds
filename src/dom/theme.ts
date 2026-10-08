@@ -54,7 +54,7 @@ export function watchDarkMode(
 
   /** Suppress duplicate rebuilds when unrelated root classes change. */
   function syncMode(): void {
-    if (stopped) return;
+    if (stopped || typeof document === "undefined" || !document.documentElement) return;
     const mode = detectDarkMode();
     if (state && state.isDarkMode !== mode) {
       state.isDarkMode = mode;
@@ -64,7 +64,7 @@ export function watchDarkMode(
 
   /** Transfer ownership from the bootstrap observer once a root can express its theme. */
   function startObserving(): void {
-    if (stopped || !document.documentElement || active) return;
+    if (stopped || typeof document === "undefined" || !document.documentElement || active) return;
     bootstrap?.disconnect();
     bootstrap = null;
     active = new MutationObserver((mutations) => {

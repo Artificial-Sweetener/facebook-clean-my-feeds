@@ -19,7 +19,7 @@ export interface FeedRoute {
 /**
  * Classify Facebook routes without reading location or touching the page.
  *
- * @param pathname - URL pathname only; historical path checks remain intentionally unchanged.
+ * @param pathname - URL pathname only; trailing slashes on username profiles and Reels roots are equivalent.
  * @param search - Query including its leading question mark.
  * @param options - Reels routes activate only when a supported video modification is enabled.
  * @returns Fresh flags; callers replace every prior flag to avoid carrying a previous feed across navigation.
@@ -38,6 +38,9 @@ export function classifyRoute(pathname: string, search: string, options: Options
     vfType: "",
     mpType: "",
   };
+  const profilePath = pathname.replace(/\/$/, "");
+  // Reserved application roots must not fall through to the username profile heuristic.
+  if (/^\/(settings|privacy|login(?:\.php)?|help)(?:\/|$)/.test(pathname)) return route;
   if (pathname === "/" || pathname === "/home.php") {
     if (search.indexOf("?filter=groups") < 0) {
       route.isNF = true;
@@ -92,11 +95,11 @@ export function classifyRoute(pathname: string, search: string, options: Options
     )
   ) {
     route.isSF = true;
-  } else if (pathname.includes("/reel/")) {
+  } else if (pathname.includes("/reel/") || profilePath === "/reels") {
     route.isRF = options.REELS_CONTROLS === true || options.REELS_DISABLE_LOOPING === true;
   } else if (pathname.includes("/profile.php")) {
     route.isPP = true;
-  } else if (pathname.substring(1).length > 1 && pathname.substring(1).indexOf("/") < 0) {
+  } else if (profilePath.substring(1).length > 1 && profilePath.substring(1).indexOf("/") < 0) {
     route.isPP = true;
   }
 

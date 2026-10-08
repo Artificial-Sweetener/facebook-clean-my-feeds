@@ -1,4 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" color="#1f2328">
   <style>:root{color:#1f2328}@media(prefers-color-scheme:dark){:root{color:#f0f6fc}}</style>
-  <path fill="currentColor" fill-rule="evenodd" d="M15 11.5h30a2.5 2.5 0 0 1 2.5 2.5v33a2.5 2.5 0 0 1-2.5 2.5H15a2.5 2.5 0 0 1-2.5-2.5V14a2.5 2.5 0 0 1 2.5-2.5Zm2 4v9.5h9v-9.5Zm11.5 2.7v1.3H43v-1.3Zm0 4.5V24H40v-1.3ZM17 29v1.4h26.5V29Zm0 4v1.3h17.4V33Zm0 5.2v1.3h11.2v-1.3Zm14 0v1.3h12.4v-1.3ZM17 42.5v1.3h11.2v-1.3Zm14 0v1.3h9v-1.3Z"/>
+  <g transform="translate(-6.44776 -6.64677) scale(1.27363)">
+    <g fill="currentColor" transform="scale(0.0950965824665676)">
+        <path fill-rule="evenodd" d="M165 121h305c20 0 33 13 33 33v329c0 20-13 34-33 34H165c-20 0-33-14-33-34V154c0-20 13-33 33-33ZM183 166c-5 0-8 3-8 8v84c0 5 3 8 8 8h85c5 0 8-3 8-8v-84c0-5-3-8-8-8ZM307 191a7 7 0 0 0 0 14h140a7 7 0 0 0 0-14ZM307 239a6.5 6.5 0 0 0 0 13h109a6.5 6.5 0 0 0 0-13ZM182 307a7 7 0 0 0 0 14h271a7 7 0 0 0 0-14ZM182 346a7 7 0 0 0 0 14h174a7 7 0 0 0 0-14ZM182 405a7 7 0 0 0 0 14h111a7 7 0 0 0 0-14ZM339 405a7 7 0 0 0 0 14h111a7 7 0 0 0 0-14ZM182 450a6.5 6.5 0 0 0 0 13h111a6.5 6.5 0 0 0 0-13ZM339 450a6.5 6.5 0 0 0 0 13h80a6.5 6.5 0 0 0 0-13Z"/>
+      </g>
+  </g>
 </svg>

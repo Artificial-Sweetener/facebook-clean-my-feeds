@@ -81,9 +81,12 @@ export function createTopbarPositioning(btn: HTMLElement) {
     const menuColor = menuStyle.color;
     const secondaryIcon = menuStyle.getPropertyValue("--secondary-icon");
     const resolvedIconColor =
-      [iconColor, iconFill, menuColor, secondaryIcon].find(isUsableColor) ||
-      "var(--secondary-icon)";
-    if (themeDirty || !isMenuExpanded || !cachedIconColor) {
+      (isMenuExpanded
+        ? [secondaryIcon, iconColor, iconFill, menuColor]
+        : [iconColor, iconFill, menuColor, secondaryIcon]
+      ).find(isUsableColor) || "var(--secondary-icon)";
+    // Semantic neutral tokens stay valid while expanded; only selected computed colors need freezing.
+    if (themeDirty || !isMenuExpanded || !cachedIconColor || isUsableColor(secondaryIcon)) {
       cachedIconColor = resolvedIconColor;
     }
     const finalIconColor = cachedIconColor || resolvedIconColor;
@@ -109,10 +112,18 @@ export function createTopbarPositioning(btn: HTMLElement) {
       if (icon.tagName && icon.tagName.toLowerCase() === "svg") {
         icon.style.fill = "currentColor";
       }
-      if (iconStyle && iconStyle.width && iconStyle.height) {
-        icon.style.width = iconStyle.width;
-        icon.style.height = iconStyle.height;
-      }
+      // Unresolved SVG sizes can become 300×150 intrinsic dimensions and cover the toolbar.
+      const width = Number.parseFloat(iconStyle?.width ?? "");
+      const height = Number.parseFloat(iconStyle?.height ?? "");
+      const fitsControl =
+        iconStyle?.width.endsWith("px") &&
+        iconStyle.height.endsWith("px") &&
+        width > 0 &&
+        width <= rect.width &&
+        height > 0 &&
+        height <= rect.height;
+      icon.style.width = fitsControl && iconStyle ? iconStyle.width : "";
+      icon.style.height = fitsControl && iconStyle ? iconStyle.height : "";
     }
 
     const zIndexValue = menuStyle.zIndex;
@@ -123,7 +134,7 @@ export function createTopbarPositioning(btn: HTMLElement) {
     }
     btn.style.padding = "0";
     btn.style.margin = "0";
-    if (themeDirty || !isMenuExpanded || !cachedBtnBg) {
+    if (themeDirty || !isMenuExpanded || !cachedBtnBg || secondaryBg.trim()) {
       if (secondaryBg) {
         cachedBtnBg = secondaryBg;
       } else if (menuStyle.backgroundColor) {
@@ -135,10 +146,10 @@ export function createTopbarPositioning(btn: HTMLElement) {
     }
     btn.style.backgroundColor = "";
 
-    if (themeDirty || !isMenuExpanded || !cachedHover) {
+    if (themeDirty || !isMenuExpanded || !cachedHover || hoverOverlay.trim()) {
       cachedHover = hoverOverlay || "var(--hover-overlay)";
     }
-    if (themeDirty || !isMenuExpanded || !cachedPress) {
+    if (themeDirty || !isMenuExpanded || !cachedPress || pressOverlay.trim()) {
       cachedPress = pressOverlay || "var(--press-overlay)";
     }
     btn.style.setProperty("--cmf-btn-hover", cachedHover || hoverOverlay || "var(--hover-overlay)");

@@ -26,6 +26,48 @@ describe("pure Facebook routing", () => {
     expect(classifyRoute("/settings/privacy", "", {}).isAF).toBe(false);
   });
 
+  test.each(["/settings", "/settings/", "/settings/privacy", "/privacy", "/privacy/"])(
+    "keeps reserved application route %s out of username profiles",
+    (path) => {
+      expect(classifyRoute(path, "?ref=home", {}).isAF).toBe(false);
+    }
+  );
+
+  test.each(["/login", "/login/", "/login.php", "/login.php/", "/help", "/help/"])(
+    "keeps official account/help endpoint %s unsupported across query and hash transitions",
+    (path) => {
+      const state = createState();
+      state.showAtt = "cmf-visible";
+      state.btnToggleEl = document.createElement("button");
+      for (const suffix of ["", "?next=%2Fhelp%2F", "?next=%2Fhelp%2F#account"]) {
+        setFeedSettings(state, {}, false, new URL("https://www.facebook.com/"));
+        setFeedSettings(state, {}, false, new URL(`https://www.facebook.com${path}${suffix}`));
+        expect(state.isAF).toBe(false);
+        expect(state.btnToggleEl.hasAttribute(state.showAtt)).toBe(false);
+      }
+    }
+  );
+
+  test.each(["/reels", "/reels/", "/reel/123/"])(
+    "activates %s only when a Reels modification is enabled",
+    (path) => {
+      expect(classifyRoute(path, "", {}).isAF).toBe(false);
+      expect(classifyRoute(path, "", { REELS_CONTROLS: true }).isRF).toBe(true);
+      expect(classifyRoute(path, "", { REELS_DISABLE_LOOPING: true }).isRF).toBe(true);
+    }
+  );
+
+  test.each([
+    "/person.name",
+    "/person.name/",
+    "/login-fan",
+    "/login-fan/",
+    "/helpful",
+    "/helpful/",
+  ])("retains username profile %s", (path) => {
+    expect(classifyRoute(path, "?ref=home", {}).isPP).toBe(true);
+  });
+
   test("retains historical group, video and marketplace subtype contracts", () => {
     expect(classifyRoute("/groups/feed", "", {}).gfType).toBe("groups");
     expect(classifyRoute("/watch", "?v=123", {}).vfType).toBe("item");
@@ -61,6 +103,27 @@ describe("route transitions", () => {
     expect(state.noChangeCounter).toBe(0);
     expect(state.lastNewsPostSweepAt).toBe(0);
     expect(state.btnToggleEl.hasAttribute(state.showAtt)).toBe(false);
+  });
+
+  test("rapid query/hash and supported/unsupported transitions publish current visibility", () => {
+    const state = createState();
+    state.showAtt = "cmf-visible";
+    state.btnToggleEl = document.createElement("button");
+    for (let cycle = 0; cycle < 10; cycle += 1) {
+      for (const [suffix, visible] of [
+        ["/?q=one#first", true],
+        ["/?q=two#second", true],
+        ["/settings?ref=home#privacy", false],
+        ["/person.name/?ref=home#posts", true],
+        ["/settings/privacy/#other", false],
+      ] as const) {
+        const location = new URL(`https://www.facebook.com${suffix}`);
+        setFeedSettings(state, {}, false, location);
+        expect(state.isAF).toBe(visible);
+        expect(state.btnToggleEl.hasAttribute(state.showAtt)).toBe(visible);
+        expect(state.prevURL).toBe(location.href);
+      }
+    }
   });
 
   test("unchanged URLs are skipped unless options require a forced refresh", () => {

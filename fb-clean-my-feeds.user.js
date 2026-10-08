@@ -4074,18 +4074,31 @@
   function waitForSafariIndexedDB() {
     const safari = typeof indexedDB !== "undefined" && !("userAgentData" in navigator && navigator.userAgentData) && /Safari\//.test(navigator.userAgent) && !/Chrom(e|ium)\//.test(navigator.userAgent) && typeof indexedDB.databases === "function";
     if (!safari) return Promise.resolve();
-    let interval;
+    let timer;
     return new Promise((resolve) => {
-      const probe = () => {
-        void indexedDB.databases().then(
-          () => resolve(),
-          () => resolve()
-        );
+      let attempts = 0;
+      let finished = false;
+      const finish = () => {
+        if (finished) return;
+        finished = true;
+        if (timer !== void 0) clearTimeout(timer);
+        resolve();
       };
-      interval = setInterval(probe, 100);
+      const probe = () => {
+        if (finished) return;
+        if (attempts >= 10) {
+          finish();
+          return;
+        }
+        attempts += 1;
+        timer = setTimeout(probe, 100);
+        try {
+          void indexedDB.databases().then(finish, finish);
+        } catch (e) {
+          finish();
+        }
+      };
       probe();
-    }).finally(() => {
-      if (interval !== void 0) clearInterval(interval);
     });
   }
   function createStore(databaseName, storeName) {
@@ -4821,6 +4834,180 @@
     }
   });
 
+  // src/dom/dirty-check.ts
+  function hasSizeChanged(oldValue, newValue, tolerance = 16) {
+    if (oldValue === null || oldValue === void 0) {
+      return true;
+    }
+    const oldNumber = parseInt(String(oldValue), 10);
+    const newNumber = parseInt(String(newValue), 10);
+    if (Number.isNaN(oldNumber) || Number.isNaN(newNumber)) {
+      return true;
+    }
+    return Math.abs(newNumber - oldNumber) > tolerance;
+  }
+  function getDirtyEntry(target) {
+    var _a;
+    if (!target) {
+      return null;
+    }
+    if (!dirtyTokens.has(target)) {
+      dirtyTokens.set(target, { dirtyToken: 0, lastProcessedToken: -1 });
+    }
+    return (_a = dirtyTokens.get(target)) != null ? _a : null;
+  }
+  function getDirtyToken(target) {
+    const entry = getDirtyEntry(target);
+    return entry ? entry.dirtyToken : 0;
+  }
+  function buildPostSignature(post) {
+    return post ? `${post.getAttribute("aria-posinset") || ""}|${post.innerHTML}` : "";
+  }
+  function hasPostChanged(post) {
+    if (!post) {
+      return false;
+    }
+    const signature = buildPostSignature(post);
+    const previous = postSignatures.get(post);
+    postSignatures.set(post, signature);
+    if (previous === void 0) {
+      return false;
+    }
+    return previous !== signature;
+  }
+  function trackPostSignature(post) {
+    if (!post) {
+      return;
+    }
+    postSignatures.set(post, buildPostSignature(post));
+  }
+  function revalidateTrackedPosts(root, state) {
+    if (!root) return;
+    for (const post of root.querySelectorAll(`[${postAtt}]`)) {
+      const previous = postSignatures.get(post);
+      if (previous === void 0 || previous === buildPostSignature(post)) continue;
+      resetPostState(post, state);
+      postSignatures.delete(post);
+    }
+  }
+  function resetPostState(post, state) {
+    if (!post || !state) {
+      return;
+    }
+    const wrapper = post.closest(`details[${postAtt}]`);
+    if (wrapper && wrapper.parentNode) {
+      wrapper.parentNode.insertBefore(post, wrapper);
+      wrapper.remove();
+    }
+    const nestedWrappers = Array.from(post.querySelectorAll(`details[${postAtt}]`));
+    nestedWrappers.forEach((details) => {
+      var _a;
+      const parent = details.parentNode;
+      if (!parent) {
+        return;
+      }
+      (_a = details.querySelector(":scope > summary")) == null ? void 0 : _a.remove();
+      while (details.firstChild) {
+        parent.insertBefore(details.firstChild, details);
+      }
+      details.remove();
+    });
+    post.removeAttribute(postAtt);
+    post.removeAttribute(state.hideAtt);
+    post.removeAttribute(state.hideWithNoCaptionAtt);
+    post.removeAttribute(state.showAtt);
+    const nestedNoCaptionRows = Array.from(post.querySelectorAll(`[${state.hideWithNoCaptionAtt}]`));
+    nestedNoCaptionRows.forEach((element) => {
+      element.removeAttribute(postAtt);
+      element.removeAttribute(state.hideWithNoCaptionAtt);
+      element.removeAttribute(state.showAtt);
+    });
+    for (const caption of post.querySelectorAll(`h6[${postAttTab}]`)) caption.remove();
+    for (const child of post.querySelectorAll(`[${postAttCPID}], [${state.hideAtt}]`)) {
+      child.removeAttribute(postAttCPID);
+      child.removeAttribute(state.hideAtt);
+      child.removeAttribute(state.showAtt);
+    }
+  }
+  function markElementDirty(target) {
+    const entry = getDirtyEntry(target);
+    if (!entry) {
+      return;
+    }
+    entry.dirtyToken += 1;
+  }
+  function markElementCleanIfUnchanged(target, token) {
+    const entry = getDirtyEntry(target);
+    if (!entry) {
+      return;
+    }
+    if (entry.dirtyToken === token) {
+      entry.lastProcessedToken = entry.dirtyToken;
+    }
+  }
+  function isElementDirty(target) {
+    const entry = getDirtyEntry(target);
+    if (!entry) {
+      return false;
+    }
+    return entry.dirtyToken !== entry.lastProcessedToken;
+  }
+  function flushDirtyRecords(target) {
+    var _a;
+    if (target && ((_a = observers.get(target)) == null ? void 0 : _a.takeRecords().length)) markElementDirty(target);
+  }
+  function ensureDirtyObserver(target) {
+    if (!target || typeof MutationObserver === "undefined") {
+      return null;
+    }
+    const existing = observers.get(target);
+    if (existing) {
+      return existing;
+    }
+    const observer = new MutationObserver(() => {
+      markElementDirty(target);
+    });
+    observer.observe(target, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      characterData: true
+    });
+    observers.set(target, observer);
+    activeObservers.set(target, observer);
+    markElementDirty(target);
+    return observer;
+  }
+  function releaseDirtyObservers() {
+    for (const observer of activeObservers.values()) observer.disconnect();
+    activeObservers.clear();
+    observers = /* @__PURE__ */ new WeakMap();
+  }
+  function clearDirtyTracking() {
+    releaseDirtyObservers();
+    dirtyTokens = /* @__PURE__ */ new WeakMap();
+    postSignatures = /* @__PURE__ */ new WeakMap();
+  }
+  function pruneDirtyObservers() {
+    for (const [target, observer] of activeObservers) {
+      if (target.isConnected) continue;
+      observer.disconnect();
+      observers.delete(target);
+      activeObservers.delete(target);
+    }
+  }
+  var dirtyTokens, postSignatures, observers, activeObservers;
+  var init_dirty_check = __esm({
+    "src/dom/dirty-check.ts"() {
+      "use strict";
+      init_attributes();
+      dirtyTokens = /* @__PURE__ */ new WeakMap();
+      postSignatures = /* @__PURE__ */ new WeakMap();
+      observers = /* @__PURE__ */ new WeakMap();
+      activeObservers = /* @__PURE__ */ new Map();
+    }
+  });
+
   // src/dom/dusting.ts
   function doLightDusting(post, state) {
     if (!post || !state) {
@@ -4917,8 +5104,8 @@
       return;
     }
     if (options.VERBOSITY_DEBUG) {
-      element.setAttribute(state.showAtt, "");
-    } else {
+      if (!element.hasAttribute(state.showAtt)) element.setAttribute(state.showAtt, "");
+    } else if (element.hasAttribute(state.showAtt)) {
       element.removeAttribute(state.showAtt);
     }
   }
@@ -4974,8 +5161,10 @@
     if (!options || !state) {
       return;
     }
-    feature.setAttribute(postAtt, sanitizeReason(reason));
-    feature.setAttribute(state.hideWithNoCaptionAtt, "");
+    const sanitized = sanitizeReason(reason);
+    if (feature.getAttribute(postAtt) !== sanitized) feature.setAttribute(postAtt, sanitized);
+    if (!feature.hasAttribute(state.hideWithNoCaptionAtt))
+      feature.setAttribute(state.hideWithNoCaptionAtt, "");
     syncDebugVisibility(feature, state, options);
   }
   function toggleHiddenElements(state, options) {
@@ -5642,173 +5831,6 @@
     }
   });
 
-  // src/dom/dirty-check.ts
-  function hasSizeChanged(oldValue, newValue, tolerance = 16) {
-    if (oldValue === null || oldValue === void 0) {
-      return true;
-    }
-    const oldNumber = parseInt(String(oldValue), 10);
-    const newNumber = parseInt(String(newValue), 10);
-    if (Number.isNaN(oldNumber) || Number.isNaN(newNumber)) {
-      return true;
-    }
-    return Math.abs(newNumber - oldNumber) > tolerance;
-  }
-  function getDirtyEntry(target) {
-    var _a;
-    if (!target) {
-      return null;
-    }
-    if (!dirtyTokens.has(target)) {
-      dirtyTokens.set(target, { dirtyToken: 0, lastProcessedToken: -1 });
-    }
-    return (_a = dirtyTokens.get(target)) != null ? _a : null;
-  }
-  function getDirtyToken(target) {
-    const entry = getDirtyEntry(target);
-    return entry ? entry.dirtyToken : 0;
-  }
-  function buildPostSignature(post) {
-    return post ? `${post.getAttribute("aria-posinset") || ""}|${post.innerHTML}` : "";
-  }
-  function hasPostChanged(post) {
-    if (!post) {
-      return false;
-    }
-    const signature = buildPostSignature(post);
-    const previous = postSignatures.get(post);
-    postSignatures.set(post, signature);
-    if (previous === void 0) {
-      return false;
-    }
-    return previous !== signature;
-  }
-  function trackPostSignature(post) {
-    if (!post) {
-      return;
-    }
-    postSignatures.set(post, buildPostSignature(post));
-  }
-  function revalidateTrackedPosts(root, state) {
-    if (!root) return;
-    for (const post of root.querySelectorAll(`[${postAtt}]`)) {
-      const previous = postSignatures.get(post);
-      if (previous === void 0 || previous === buildPostSignature(post)) continue;
-      resetPostState(post, state);
-      postSignatures.delete(post);
-    }
-  }
-  function resetPostState(post, state) {
-    if (!post || !state) {
-      return;
-    }
-    const wrapper = post.closest(`details[${postAtt}]`);
-    if (wrapper && wrapper.parentNode) {
-      wrapper.parentNode.insertBefore(post, wrapper);
-      wrapper.remove();
-    }
-    const nestedWrappers = Array.from(post.querySelectorAll(`details[${postAtt}]`));
-    nestedWrappers.forEach((details) => {
-      var _a;
-      const parent = details.parentNode;
-      if (!parent) {
-        return;
-      }
-      (_a = details.querySelector(":scope > summary")) == null ? void 0 : _a.remove();
-      while (details.firstChild) {
-        parent.insertBefore(details.firstChild, details);
-      }
-      details.remove();
-    });
-    post.removeAttribute(postAtt);
-    post.removeAttribute(state.hideAtt);
-    post.removeAttribute(state.hideWithNoCaptionAtt);
-    post.removeAttribute(state.showAtt);
-    const nestedNoCaptionRows = Array.from(post.querySelectorAll(`[${state.hideWithNoCaptionAtt}]`));
-    nestedNoCaptionRows.forEach((element) => {
-      element.removeAttribute(postAtt);
-      element.removeAttribute(state.hideWithNoCaptionAtt);
-      element.removeAttribute(state.showAtt);
-    });
-    for (const caption of post.querySelectorAll(`h6[${postAttTab}]`)) caption.remove();
-    for (const child of post.querySelectorAll(`[${postAttCPID}], [${state.hideAtt}]`)) {
-      child.removeAttribute(postAttCPID);
-      child.removeAttribute(state.hideAtt);
-      child.removeAttribute(state.showAtt);
-    }
-  }
-  function markElementDirty(target) {
-    const entry = getDirtyEntry(target);
-    if (!entry) {
-      return;
-    }
-    entry.dirtyToken += 1;
-  }
-  function markElementCleanIfUnchanged(target, token) {
-    const entry = getDirtyEntry(target);
-    if (!entry) {
-      return;
-    }
-    if (entry.dirtyToken === token) {
-      entry.lastProcessedToken = entry.dirtyToken;
-    }
-  }
-  function isElementDirty(target) {
-    const entry = getDirtyEntry(target);
-    if (!entry) {
-      return false;
-    }
-    return entry.dirtyToken !== entry.lastProcessedToken;
-  }
-  function ensureDirtyObserver(target) {
-    if (!target || typeof MutationObserver === "undefined") {
-      return null;
-    }
-    const existing = observers.get(target);
-    if (existing) {
-      return existing;
-    }
-    const observer = new MutationObserver(() => {
-      markElementDirty(target);
-    });
-    observer.observe(target, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      characterData: true
-    });
-    observers.set(target, observer);
-    activeObservers.set(target, observer);
-    markElementDirty(target);
-    return observer;
-  }
-  function clearDirtyTracking() {
-    for (const observer of activeObservers.values()) observer.disconnect();
-    activeObservers.clear();
-    observers = /* @__PURE__ */ new WeakMap();
-    dirtyTokens = /* @__PURE__ */ new WeakMap();
-    postSignatures = /* @__PURE__ */ new WeakMap();
-  }
-  function pruneDirtyObservers() {
-    for (const [target, observer] of activeObservers) {
-      if (target.isConnected) continue;
-      observer.disconnect();
-      observers.delete(target);
-      activeObservers.delete(target);
-    }
-  }
-  var dirtyTokens, postSignatures, observers, activeObservers;
-  var init_dirty_check = __esm({
-    "src/dom/dirty-check.ts"() {
-      "use strict";
-      init_attributes();
-      dirtyTokens = /* @__PURE__ */ new WeakMap();
-      postSignatures = /* @__PURE__ */ new WeakMap();
-      observers = /* @__PURE__ */ new WeakMap();
-      activeObservers = /* @__PURE__ */ new Map();
-    }
-  });
-
   // src/feeds/news-revalidation.ts
   function rememberHiddenNewsContent(post) {
     if (post.hasAttribute(postAtt)) hiddenNewsContent.set(post, post.innerHTML);
@@ -5838,32 +5860,22 @@
   });
 
   // src/feeds/news-discovery.ts
+  function isNewsRootDirty(root, force) {
+    if (!root) return false;
+    const observer = ensureDirtyObserver(root);
+    flushDirtyRecords(root);
+    if (force || !root.hasAttribute(mainColumnAtt)) return true;
+    return observer ? isElementDirty(root) : hasSizeChanged(root.getAttribute(mainColumnAtt), root.innerHTML.length);
+  }
   function isNewsDirty(state) {
-    const arrReturn = [null, null];
     const mainColumn = document.querySelector(newsSelectors.mainColumn);
-    if (mainColumn) {
-      if (state && state.forceProcess) {
-        arrReturn[0] = mainColumn;
-      } else if (!mainColumn.hasAttribute(mainColumnAtt)) {
-        arrReturn[0] = mainColumn;
-      } else if (hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)) {
-        arrReturn[0] = mainColumn;
-      }
-    }
     const elDialog = document.querySelector(newsSelectors.dialog);
-    if (elDialog) {
-      if (state && state.forceProcess) {
-        arrReturn[1] = elDialog;
-      } else if (!elDialog.hasAttribute(mainColumnAtt)) {
-        arrReturn[1] = elDialog;
-      } else if (hasSizeChanged(elDialog.getAttribute(mainColumnAtt), elDialog.innerHTML.length)) {
-        arrReturn[1] = elDialog;
-      }
-    }
-    if (state) {
-      state.noChangeCounter += 1;
-    }
-    return arrReturn;
+    const force = (state == null ? void 0 : state.forceProcess) === true;
+    if (state) state.noChangeCounter += 1;
+    return [
+      isNewsRootDirty(mainColumn, force) ? mainColumn : null,
+      isNewsRootDirty(elDialog, force) ? elDialog : null
+    ];
   }
   function getNewsPostDiscovery() {
     const concreteQuery = 'div[role="main"] div[aria-posinset], div[role="main"] div[role="article"]';
@@ -7244,6 +7256,8 @@
     if (!dirtyMainColumn && !dirtyDialog && !shouldSweepPosts) {
       return null;
     }
+    const mainToken = getDirtyToken(dirtyMainColumn);
+    const dialogToken = getDirtyToken(dirtyDialog);
     if (shouldSweepPosts) resetChangedNewsPosts(mainColumn, state);
     if (dirtyMainColumn) {
       if (options.NF_TABLIST_STORIES_REELS_ROOMS) {
@@ -7275,7 +7289,7 @@
     if (mainColumn && shouldSweepPosts) {
       const posts = getCollectionOfNewsPosts();
       for (const post of posts) {
-        if (post.innerHTML.length === 0) {
+        if (!post.hasChildNodes()) {
           continue;
         }
         let hideReason = "";
@@ -7362,23 +7376,32 @@
       state.lastNewsPostSweepAt = Date.now();
     }
     if (dirtyMainColumn && mainColumn) {
-      mainColumn.setAttribute(mainColumnAtt, mainColumn.innerHTML.length.toString());
+      acknowledgeNewsRoot(mainColumn, mainToken);
       state.noChangeCounter = 0;
     }
     if (dirtyDialog && elDialog) {
       if (options.NF_ANIMATED_GIFS_PAUSE) {
         swatTheMosquitos(elDialog);
       }
-      elDialog.setAttribute(mainColumnAtt, elDialog.innerHTML.length.toString());
+      acknowledgeNewsRoot(elDialog, dialogToken);
       state.noChangeCounter = 0;
     }
     return { mainColumn, elDialog };
+  }
+  function acknowledgeNewsRoot(root, token) {
+    if (ensureDirtyObserver(root)) {
+      if (!root.hasAttribute(mainColumnAtt)) root.setAttribute(mainColumnAtt, "1");
+      markElementCleanIfUnchanged(root, token);
+    } else {
+      root.setAttribute(mainColumnAtt, root.innerHTML.length.toString());
+    }
   }
   var init_news2 = __esm({
     "src/feeds/news.ts"() {
       "use strict";
       init_attributes();
       init_animated_gifs();
+      init_dirty_check();
       init_dusting();
       init_hide();
       init_info_boxes();
@@ -9969,6 +9992,9 @@
     return true;
   }
   function restoreFeedPresentation(state) {
+    state.echoEl = null;
+    state.echoCount = 0;
+    state.echoCPID = "";
     restoreNewsPresentation();
     restoreReelsPresentation();
     clearMarketplaceListingTracking();
@@ -10027,12 +10053,18 @@
   // src/runtime/load-options.ts
   async function readStoredOptions() {
     var _a;
+    let timer;
     try {
-      const rawOptions = await getOptions();
+      const deadline = new Promise((resolve) => {
+        timer = setTimeout(() => resolve(void 0), 3e3);
+      });
+      const rawOptions = await Promise.race([getOptions(), deadline]);
       const candidate = typeof rawOptions === "string" ? JSON.parse(rawOptions) : rawOptions;
       return (_a = decodeStoredOptions(candidate)) != null ? _a : {};
     } catch (e) {
       return {};
+    } finally {
+      if (timer !== void 0) clearTimeout(timer);
     }
   }
   async function loadOptions(state) {
@@ -10068,19 +10100,23 @@
   function startLoop(state, hooks, environment = {
     window,
     document,
-    /** Use monotonic wall-clock milliseconds for adaptive throttling within this lifecycle. */
-    now: () => Date.now(),
+    /** Use monotonic elapsed milliseconds so system-clock corrections cannot stall processing. */
+    now: () => performance.now(),
     createObserver: typeof MutationObserver === "undefined" ? void 0 : (callback) => new MutationObserver(callback)
   }) {
-    var _a;
     const { window: browser, document: page, now, createObserver } = environment;
     let previousScroll = browser.scrollY;
+    let lastAttemptedURL = state.prevURL;
+    let routeUpdatePending = true;
     let lastCleaningTime = 0;
     let sleepDuration = 50;
     let timer;
     let mutationTimer;
     let stopped = false;
+    let retryAt = 0;
+    let consecutiveFailures = 0;
     function schedule() {
+      if (stopped) return;
       if (timer !== void 0) browser.clearTimeout(timer);
       timer = browser.setTimeout(() => run("timing"), sleepDuration);
     }
@@ -10088,14 +10124,37 @@
       if (stopped) return;
       const currentTime = now();
       const force = state.forceProcess;
-      if (reason === "url-changed") hooks.updateRoute();
-      else if (reason === "scrolling") {
+      const changedRoute = lastAttemptedURL !== browser.location.href;
+      if (reason === "url-changed" || changedRoute) routeUpdatePending = true;
+      if (currentTime < retryAt && !changedRoute) {
+        if (reason === "timing") schedule();
+        return;
+      }
+      if (reason === "scrolling") {
         if (sleepDuration < 151 && !force) return;
-      } else if (currentTime - lastCleaningTime < sleepDuration && !force) return;
-      hooks.process(reason);
-      if (state.isAF) sleepDuration = cleaningDelay(state.noChangeCounter);
-      lastCleaningTime = currentTime;
-      schedule();
+      } else if (reason !== "url-changed" && currentTime - lastCleaningTime < sleepDuration && !force) {
+        if (reason === "timing") schedule();
+        return;
+      }
+      try {
+        if (routeUpdatePending) {
+          lastAttemptedURL = browser.location.href;
+          hooks.updateRoute();
+          routeUpdatePending = false;
+        }
+        if (!stopped) hooks.process(reason);
+        consecutiveFailures = 0;
+        retryAt = 0;
+        sleepDuration = state.isAF ? cleaningDelay(state.noChangeCounter) : 1e3;
+      } catch (e) {
+        consecutiveFailures = Math.min(consecutiveFailures + 1, 6);
+        sleepDuration = Math.min(1e3 * 2 ** (consecutiveFailures - 1), 3e4);
+        retryAt = currentTime + sleepDuration;
+        state.forceProcess = true;
+      } finally {
+        lastCleaningTime = currentTime;
+        schedule();
+      }
     }
     function onScroll() {
       const distance = Math.abs(browser.scrollY - previousScroll);
@@ -10121,7 +10180,7 @@
         run("mutations");
       }, 75);
     });
-    observer == null ? void 0 : observer.observe((_a = page.body) != null ? _a : page, { childList: true, subtree: true });
+    observer == null ? void 0 : observer.observe(page, { childList: true, subtree: true });
     run("url-changed");
     return () => {
       if (stopped) return;
@@ -10349,48 +10408,78 @@
   });
 
   // src/feeds/reels.ts
+  function scheduleReels(context, loop) {
+    const { state } = context;
+    if (!state.isRF || loops.get(state) !== loop) return;
+    const delay = loop.failures === 0 ? 1e3 : Math.min(1e3 * 2 ** (loop.failures - 1), 3e4);
+    const timer = setTimeout(() => {
+      if (loops.get(state) !== loop || state.reelsTimer !== timer) return;
+      state.reelsTimer = null;
+      state.isRF_InTimeoutMode = false;
+      try {
+        mopReelsFeed(context, "self");
+      } catch (e) {
+      }
+    }, delay);
+    state.reelsTimer = timer;
+    state.isRF_InTimeoutMode = true;
+  }
   function mopReelsFeed(context, caller = "self") {
-    if (!context) {
-      return null;
-    }
+    if (!context) return null;
     const { state, options } = context;
-    if (!state || !options) {
-      return null;
-    }
+    if (!state || !options) return null;
     if (!state.isRF) {
       stopReelsProcessing(state);
       return null;
     }
-    if (caller !== "self" && state.isRF_InTimeoutMode === true) {
+    let loop = loops.get(state);
+    if (!loop) {
+      loop = { failures: 0, processing: false };
+      loops.set(state, loop);
+    }
+    if (loop.processing || state.reelsTimer !== null && (caller !== "self" || loop.failures > 0))
       return null;
-    }
-    const videos = document.querySelectorAll("[data-video-id] video");
-    const active = /* @__PURE__ */ new Set();
-    for (const video of videos) {
-      if (!(video instanceof HTMLVideoElement)) continue;
-      active.add(video);
-      reconcileReelPresentation(video, options, state.isChromium);
-    }
-    pruneReelPresentations(active);
-    state.isRF_InTimeoutMode = true;
     if (state.reelsTimer !== null) clearTimeout(state.reelsTimer);
-    state.reelsTimer = setTimeout(() => {
-      state.reelsTimer = null;
-      mopReelsFeed(context, "self");
-    }, 1e3);
-    return videos;
+    state.reelsTimer = null;
+    state.isRF_InTimeoutMode = false;
+    loop.processing = true;
+    try {
+      const videos = document.querySelectorAll("[data-video-id] video");
+      if (!state.isRF || loops.get(state) !== loop) return null;
+      const active = /* @__PURE__ */ new Set();
+      for (const video of videos) {
+        if (!(video instanceof HTMLVideoElement)) continue;
+        active.add(video);
+        reconcileReelPresentation(video, options, state.isChromium);
+      }
+      pruneReelPresentations(active);
+      loop.failures = 0;
+      return videos;
+    } catch (e) {
+      loop.failures = Math.min(loop.failures + 1, 6);
+      return null;
+    } finally {
+      loop.processing = false;
+      scheduleReels(context, loop);
+    }
+  }
+  function releaseReelsProcessing(state) {
+    loops.delete(state);
+    if (state.reelsTimer !== null) clearTimeout(state.reelsTimer);
+    state.reelsTimer = null;
+    state.isRF_InTimeoutMode = false;
+    restoreReelsPresentation();
   }
   function stopReelsProcessing(state) {
-    if (state.reelsTimer !== null) clearTimeout(state.reelsTimer);
-    restoreReelsPresentation();
-    state.reelsTimer = null;
     state.isRF = false;
-    state.isRF_InTimeoutMode = false;
+    releaseReelsProcessing(state);
   }
+  var loops;
   var init_reels = __esm({
     "src/feeds/reels.ts"() {
       "use strict";
       init_reels_presentation();
+      loops = /* @__PURE__ */ new WeakMap();
     }
   });
 
@@ -10506,6 +10595,11 @@
   function processPage(context, eventType = "timing") {
     pruneDirtyObservers();
     const { state } = context;
+    if (state.echoEl && !state.echoEl.isConnected) {
+      state.echoEl = null;
+      state.echoCount = 0;
+      state.echoCPID = "";
+    }
     if (!state.isAF) return;
     if (state.isNF) mopNewsFeed(context);
     else if (state.isGF) mopGroupsFeed(context);
@@ -10617,23 +10711,30 @@
   function setFeedSettings(state, options, forceUpdate = false, location = window.location) {
     var _a, _b;
     if (state.prevURL === location.href && !forceUpdate) return false;
-    state.prevURL = location.href;
-    state.prevPathname = location.pathname;
-    state.prevQuery = location.search;
-    const route = classifyRoute(location.pathname, location.search, options);
+    const { href, pathname, search } = location;
+    const route = classifyRoute(pathname, search, options);
+    if (state.prevURL !== href) releaseDirtyObservers();
     if (state.isNF && !route.isNF) restoreNewsPresentation();
+    if (state.isRF && !route.isRF) releaseReelsProcessing(state);
+    if (route.isAF) (_a = state.btnToggleEl) == null ? void 0 : _a.setAttribute(state.showAtt, "");
+    else (_b = state.btnToggleEl) == null ? void 0 : _b.removeAttribute(state.showAtt);
     Object.assign(state, route);
+    state.prevURL = href;
+    state.prevPathname = pathname;
+    state.prevQuery = search;
     state.forceProcess = true;
     state.lastNewsPostSweepAt = 0;
     state.echoCount = 0;
+    state.echoEl = null;
+    state.echoCPID = "";
     state.noChangeCounter = 0;
-    if (state.isAF) (_a = state.btnToggleEl) == null ? void 0 : _a.setAttribute(state.showAtt, "");
-    else (_b = state.btnToggleEl) == null ? void 0 : _b.removeAttribute(state.showAtt);
     return true;
   }
   var init_routes2 = __esm({
     "src/runtime/routes.ts"() {
       "use strict";
+      init_dirty_check();
+      init_reels();
       init_news_presentation();
       init_routes();
     }
@@ -12067,19 +12168,29 @@
     }
     const lifecycle = state.dialogLifecycle;
     if (!(lifecycle == null ? void 0 : lifecycle.active)) return;
+    const buttonOwners = /* @__PURE__ */ new Map();
+    let bannerOwner = null;
+    let observedBanner = null;
     const bindButtons = () => {
-      const buttons = getTopbarMenuButtons();
+      const buttons = new Set(getTopbarMenuButtons());
+      for (const [button, owner] of buttonOwners) {
+        if (button.isConnected && buttons.has(button)) continue;
+        owner.dispose();
+        buttonOwners.delete(button);
+      }
       buttons.forEach((button) => {
-        if (button.dataset.cmfMenuSync === "1") {
+        if (buttonOwners.has(button) || button.dataset.cmfMenuSync === "1") {
           return;
         }
+        const owner = new UiLifecycle();
+        buttonOwners.set(button, owner);
         button.dataset.cmfMenuSync = "1";
-        lifecycle.add(() => {
+        owner.add(() => {
           delete button.dataset.cmfMenuSync;
         });
-        lifecycle.listen(button, "click", () => closeDialogIfOpen(state));
+        owner.listen(button, "click", () => closeDialogIfOpen(state));
         if (typeof MutationObserver !== "undefined") {
-          lifecycle.observe(button, { attributes: true, attributeFilter: ["aria-expanded"] }, () => {
+          owner.observe(button, { attributes: true, attributeFilter: ["aria-expanded"] }, () => {
             if (button.getAttribute("aria-expanded") === "true") closeDialogIfOpen(state);
           });
         }
@@ -12099,10 +12210,23 @@
       delete state.cmfTopbarSyncInit;
       delete state.cmfTopbarSyncPending;
     });
-    bindButtons();
-    if (typeof MutationObserver !== "undefined") {
-      lifecycle.observe(
-        banner,
+    lifecycle.add(() => {
+      for (const owner of buttonOwners.values()) owner.dispose();
+      buttonOwners.clear();
+      bannerOwner == null ? void 0 : bannerOwner.dispose();
+      bannerOwner = null;
+      observedBanner = null;
+    });
+    const syncBanner = () => {
+      const current = document.querySelector('[role="banner"]');
+      if (current === observedBanner) return false;
+      bannerOwner == null ? void 0 : bannerOwner.dispose();
+      bannerOwner = null;
+      observedBanner = current;
+      if (!current) return true;
+      bannerOwner = new UiLifecycle();
+      bannerOwner.observe(
+        current,
         {
           childList: true,
           subtree: true,
@@ -12119,9 +12243,14 @@
           });
         }
       );
-    }
-    if (typeof MutationObserver !== "undefined" && document.body) {
-      lifecycle.observe(document.body, { childList: true, subtree: true }, (mutations) => {
+      return true;
+    };
+    syncBanner();
+    bindButtons();
+    if (typeof MutationObserver !== "undefined") {
+      lifecycle.observe(document, { childList: true, subtree: true }, (mutations) => {
+        if (typeof document === "undefined") return;
+        if (syncBanner()) bindButtons();
         mutations.forEach((mutation) => {
           if (mutation.type !== "childList") {
             return;
@@ -12207,6 +12336,7 @@
       "use strict";
       init_topbar_controls();
       init_toggle_button();
+      init_lifecycle();
     }
   });
 

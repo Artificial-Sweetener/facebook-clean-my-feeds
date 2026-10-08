@@ -21,6 +21,9 @@ export type FeedResetState = Pick<
   | "scanCountStart"
   | "scanCountMaxLoop"
   | "options"
+  | "echoEl"
+  | "echoCount"
+  | "echoCPID"
   | "hideAtt"
   | "hideWithNoCaptionAtt"
   | "cssHideEl"
@@ -59,6 +62,9 @@ export function resetFeedProcessing(state: FeedResetState): boolean {
  * @param state Marker names retained from the lifecycle being disposed; unrelated DOM stays intact.
  */
 export function restoreFeedPresentation(state: FeedResetState): void {
+  state.echoEl = null;
+  state.echoCount = 0;
+  state.echoCPID = "";
   restoreNewsPresentation();
   restoreReelsPresentation();
   clearMarketplaceListingTracking();

@@ -139,6 +139,51 @@ describe("owned IndexedDB adapter", () => {
     expect(probe).toHaveBeenCalledTimes(2);
   });
 
+  test("Safari stops after ten stalled probes and opens normally at one second", async () => {
+    jest.useFakeTimers({ doNotFake: ["setImmediate"] });
+    jest.spyOn(navigator, "userAgent", "get").mockReturnValue("Version/15.0 Safari/605.1.15");
+    let completeProbe: (() => void) | undefined;
+    const stalledProbe = new Promise<IDBDatabaseInfo[]>((resolve) => {
+      completeProbe = () => resolve([]);
+    });
+    const probe = jest.spyOn(indexedDB, "databases").mockReturnValue(stalledProbe);
+    const open = jest.spyOn(indexedDB, "open");
+    const store = freshStore();
+    const pending = get("missing", store);
+    await jest.advanceTimersByTimeAsync(999);
+    expect(probe).toHaveBeenCalledTimes(10);
+    expect(open).not.toHaveBeenCalled();
+    await jest.advanceTimersByTimeAsync(1);
+    await expect(pending).resolves.toBeUndefined();
+    expect(open).toHaveBeenCalledTimes(1);
+    expect(jest.getTimerCount()).toBe(0);
+    if (!completeProbe) throw new Error("Expected a pending Safari probe");
+    completeProbe();
+    await jest.advanceTimersByTimeAsync(59_000);
+    expect(probe).toHaveBeenCalledTimes(10);
+    expect(open).toHaveBeenCalledTimes(1);
+    expect(jest.getTimerCount()).toBe(0);
+    await set("after-timeout", true, store);
+    await expect(get("after-timeout", store)).resolves.toBe(true);
+  });
+
+  test("a synchronous failure on a later Safari probe releases startup and clears polling", async () => {
+    jest.useFakeTimers({ doNotFake: ["setImmediate"] });
+    jest.spyOn(navigator, "userAgent", "get").mockReturnValue("Version/15.0 Safari/605.1.15");
+    const probe = jest
+      .spyOn(indexedDB, "databases")
+      .mockImplementationOnce(() => new Promise(() => {}))
+      .mockImplementation(() => {
+        throw new DOMException("Probe unavailable", "SecurityError");
+      });
+    const store = freshStore();
+    await jest.advanceTimersByTimeAsync(100);
+    await expect(get("missing", store)).resolves.toBeUndefined();
+    await jest.advanceTimersByTimeAsync(60_000);
+    expect(probe).toHaveBeenCalledTimes(2);
+    expect(jest.getTimerCount()).toBe(0);
+  });
+
   test("Chrome user agents skip Safari's database-probing workaround", async () => {
     jest.spyOn(navigator, "userAgent", "get").mockReturnValue("Chrome/120.0 Safari/537.36");
     const probe = jest.spyOn(indexedDB, "databases");

@@ -54,6 +54,30 @@ All 17 runtime icons are manually authored static SVGs on the original 64px canv
 
 Preserve userscript behavior, filter outcomes, metadata grants and matches, settings options, and installation guidance unless the requested change intentionally affects them. Mention any such impact in the PR. Keep failures at boundaries so a malformed setting or missing element cannot break the page.
 
+## Offline performance and failure checks
+
+Run `node --import tsx tools/performance/feed-profile.ts` with Node 22.14.0 to profile the real News processor in jsdom. The deterministic fixture contains 80 mixed organic/sponsored posts, nested media/comment markup, and 20 hidden posts. After two settling passes, it measures 24 idle ticks, 24 periodic sweeps, 24 hidden-post content replacements, 24 coalesced mutation batches of 100 changes at 75 ms intervals, and 24 SPA root replacements. It reports HTML serialization work, median/p95 scan milliseconds, and scans exceeding 50 ms. No Facebook account, network request, or live-page stress is involved.
+
+For native-browser measurements, run `node --import tsx tools/performance/build-browser-profile.ts` and open the printed temporary HTML file in a separate browser tab. The page contains its own bundle and replaces the fixture with JSON when finished. `browserLongTasks` is `null` when the browser lacks Long Tasks support; this does not mean zero long tasks. jsdom elapsed times are synthetic CPU measurements, not browser responsiveness or rendering telemetry. Neither fixture proves that a live Facebook crash or splash screen is caused or prevented by CMF.
+
+The same Node 22 fixture, compared with the pre-profile source, reduced serialized characters in the following scenarios. Counts are per 24 scans, and all scenarios preserved the expected 20 hidden posts:
+
+| Scenario                 |    Before |     After |
+| ------------------------ | --------: | --------: |
+| Settled idle ticks       | 3,685,920 |         0 |
+| Periodic sweeps          | 9,092,832 | 1,823,952 |
+| Hidden-post replacements | 9,092,696 | 1,823,884 |
+| Mutation churn           | 9,096,256 | 1,824,656 |
+| SPA root replacements    | 8,180,856 |   911,976 |
+
+Two paired offline Firefox 157 runs, one in each before/after order, reproduced those work counts. Idle medians changed from 1 ms to below the observed timer resolution, and periodic-sweep medians from 18–23 ms to 16–17 ms. Mutation-heavy p95 measurements increased from 43–48 ms to 61–114 ms, while SPA-replacement p95 changed from 37–39 ms to 45–46 ms. These samples establish no uniform latency improvement. Firefox did not support the Long Tasks API, so its reported null is not a count of zero. Extra instrumentation found identical selector/computed-style totals for mutation and SPA scenarios, but News observation added 5,760 records across 24 mutation batches and 1,944 records across 24 SPA replacements. This direct-processor fixture excludes the runtime-wide observer shared by both versions. Reduced serialization has a real mutation-observation tradeoff; the counters do not attribute all tail variation to that overhead.
+
+News now uses content-version observation to avoid whole-feed serialization on idle ticks, while its periodic sweep and exact hidden-post signatures remain intact. Same-turn records are consumed before dirty decisions, including equal-length and attribute-only replacements. CMF's own no-caption markers are idempotent, so reconciliation settles instead of triggering an attribute feedback loop. Without MutationObserver, News retains its serialized-size fallback. Exact post snapshots remain weakly keyed; this change does not claim a measured heap-size reduction.
+
+Lifecycle regressions cover 100 settled idle scans with zero serialization; 40 navigation changes whose still-connected cached roots retain only the latest observer; detached consecutive-caption references; body replacement; and zero scheduled timers after teardown. Host-processing exceptions retry with exponential backoff from one to thirty seconds, even under mutation/scroll churn, and a changed URL may retry immediately. Failed route cleanup remains pending before any feed dispatch; URL identity and route flags publish only after successful restoration. Reels owns the same bounded failure backoff independently, and stopping an in-flight pass prevents it from rescheduling. Replaced topbar controls and banners have individual owners: 40 two-button replacements retain a constant six session cleanup records and four active observers, with no geometry reads from unrelated feed churn. These tests assert resource ownership and liveness, not garbage-collector timing or a universal crash-free guarantee.
+
+Startup permits at most ten Safari readiness probes over one second and bounds the initial settings read to three seconds. Timeout recovery uses in-memory session defaults without writing them, matching the existing storage-failure behavior. Late reads cannot replace live options or subsequent user edits. A stalled read therefore does not mean saved settings loaded successfully. Explicit saves retain native IndexedDB commit/error semantics and can still remain pending if the browser never settles the underlying transaction.
+
 ## Localization
 
 User-facing copy is an all-locales surface. Update the English baseline in `src/i18n/locales/en.ts` and every supported catalog when adding or changing copy. Preserve intentional empty labels, array-valued labels, and reviewed locale-only keys in `governance/locale-contract.json`. `npm run check:locales` checks required keys and unreviewed extras without rewriting translations. Keep `README.md` and `README.vi.md` substantively synchronized, including setup, features, warnings, and credits.

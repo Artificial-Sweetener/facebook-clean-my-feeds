@@ -46,9 +46,11 @@ export function promisifyRequest<T>(
 
 /**
  * Wait for Safari's IndexedDB startup to become responsive before opening the database.
- * Polling every 100 ms is intentional: older Safari can leave the first databases() call pending.
- * Either fulfillment or rejection releases startup, matching the original finally-based gate.
+ * Probe at most ten times, 100 ms apart, because older Safari can leave databases() pending.
+ * Either settlement or a one-second deadline releases normal opening; native pending probes
+ * cannot be cancelled, but the finite budget prevents an ever-growing queue and live poller.
  * Missing IndexedDB skips probing so eager opening rejects asynchronously at the recovery boundary.
+ * @returns Readiness to attempt opening, without promising that the database will respond.
  */
 function waitForSafariIndexedDB(): Promise<void> {
   const safari =
@@ -58,19 +60,33 @@ function waitForSafariIndexedDB(): Promise<void> {
     !/Chrom(e|ium)\//.test(navigator.userAgent) &&
     typeof indexedDB.databases === "function";
   if (!safari) return Promise.resolve();
-  let interval: ReturnType<typeof setInterval> | undefined;
+  let timer: ReturnType<typeof setTimeout> | undefined;
   return new Promise<void>((resolve) => {
-    /** Release Safari startup when any probe settles; older pending probes may remain unresolved. */
-    const probe = (): void => {
-      void indexedDB.databases().then(
-        () => resolve(),
-        () => resolve()
-      );
+    let attempts = 0;
+    let finished = false;
+    /** Clear the only scheduled retry before releasing startup, including synchronous probe failures. */
+    const finish = (): void => {
+      if (finished) return;
+      finished = true;
+      if (timer !== undefined) clearTimeout(timer);
+      resolve();
     };
-    interval = setInterval(probe, 100);
+    /** Bound concurrent native probes when none settle, then let normal database opening try. */
+    const probe = (): void => {
+      if (finished) return;
+      if (attempts >= 10) {
+        finish();
+        return;
+      }
+      attempts += 1;
+      timer = setTimeout(probe, 100);
+      try {
+        void indexedDB.databases().then(finish, finish);
+      } catch {
+        finish();
+      }
+    };
     probe();
-  }).finally(() => {
-    if (interval !== undefined) clearInterval(interval);
   });
 }
 

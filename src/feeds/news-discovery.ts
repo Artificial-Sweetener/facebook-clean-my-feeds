@@ -2,7 +2,12 @@
 
 import type { FeedContext, FeedProcessingState, DirtyFeedRoots } from "./types";
 import { mainColumnAtt, postAtt, postAttTab } from "../dom/attributes";
-import { hasSizeChanged } from "../dom/dirty-check";
+import {
+  ensureDirtyObserver,
+  flushDirtyRecords,
+  hasSizeChanged,
+  isElementDirty,
+} from "../dom/dirty-check";
 import { hideNewsPost } from "../dom/hide";
 import { newsSelectors } from "../selectors/news";
 import { isSponsored } from "./shared/sponsored";
@@ -18,44 +23,40 @@ const prioritizedNewsPostQueries = Array.from(
 );
 
 /**
- * Compare main-column and dialog HTML lengths with their stored markers; unlike observer-based feeds, equal-length changes are not detected here.
- * The independent periodic sweep covers later post discovery. This helper reads DOM markers but does not update them.
- * @param state forceProcess includes all existing roots; when state exists, noChangeCounter increments once regardless of the result.
- * @returns Changed main and dialog roots in fixed positions, with null for absent roots or unchanged lengths.
+ * Use observed content versions instead of serializing the complete feed on every idle tick.
+ * Pending records are consumed before isElementDirty so same-turn and equal-length changes cannot
+ * be missed. Hosts without observers retain the historical serialized-length fallback.
+ * @param root Current feed/dialog boundary; missing roots never require processing.
+ * @param force Explicit option/navigation invalidation bypasses normal idle suppression.
+ * @returns Whether this root needs a scan; this helper never acknowledges pending work.
+ */
+function isNewsRootDirty(root: Element | null, force: boolean): boolean {
+  if (!root) return false;
+  const observer = ensureDirtyObserver(root);
+  flushDirtyRecords(root);
+  if (force || !root.hasAttribute(mainColumnAtt)) return true;
+  return observer
+    ? isElementDirty(root)
+    : hasSizeChanged(root.getAttribute(mainColumnAtt), root.innerHTML.length);
+}
+
+/**
+ * Discover dirty main/dialog roots independently without serializing unchanged descendants.
+ * The independent 750 ms sweep still finds late external labels and virtualized post replacements.
+ * @param state Explicit invalidation includes existing roots; the idle counter advances once per call.
+ * @returns Dirty main and dialog roots in fixed positions; absent or unchanged roots are null.
  */
 export function isNewsDirty(
   state: Pick<FeedProcessingState, "forceProcess" | "noChangeCounter"> | null
 ): DirtyFeedRoots {
-  const arrReturn: DirtyFeedRoots = [null, null];
   const mainColumn = document.querySelector(newsSelectors.mainColumn);
-  if (mainColumn) {
-    if (state && state.forceProcess) {
-      arrReturn[0] = mainColumn;
-    } else if (!mainColumn.hasAttribute(mainColumnAtt)) {
-      arrReturn[0] = mainColumn;
-    } else if (
-      hasSizeChanged(mainColumn.getAttribute(mainColumnAtt), mainColumn.innerHTML.length)
-    ) {
-      arrReturn[0] = mainColumn;
-    }
-  }
-
   const elDialog = document.querySelector(newsSelectors.dialog);
-  if (elDialog) {
-    if (state && state.forceProcess) {
-      arrReturn[1] = elDialog;
-    } else if (!elDialog.hasAttribute(mainColumnAtt)) {
-      arrReturn[1] = elDialog;
-    } else if (hasSizeChanged(elDialog.getAttribute(mainColumnAtt), elDialog.innerHTML.length)) {
-      arrReturn[1] = elDialog;
-    }
-  }
-
-  if (state) {
-    state.noChangeCounter += 1;
-  }
-
-  return arrReturn;
+  const force = state?.forceProcess === true;
+  if (state) state.noChangeCounter += 1;
+  return [
+    isNewsRootDirty(mainColumn, force) ? mainColumn : null,
+    isNewsRootDirty(elDialog, force) ? elDialog : null,
+  ];
 }
 
 /**

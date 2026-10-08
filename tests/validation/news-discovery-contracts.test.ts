@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { mainColumnAtt, postAtt } from "../../src/dom/attributes";
+import { clearDirtyTracking, flushDirtyRecords, markElementClean } from "../../src/dom/dirty-check";
 import {
   getCollectionOfNewsPosts,
   getOrphanSponsoredNewsPosts,
@@ -32,7 +33,10 @@ function mountSponsoredRail(heading: string, href: string) {
 }
 
 describe("news discovery and sweep contract", () => {
-  afterEach(() => jest.restoreAllMocks());
+  afterEach(() => {
+    jest.restoreAllMocks();
+    clearDirtyTracking();
+  });
 
   test.each([0, 749, 750, 751])(
     "uses the documented 750 ms sweep boundary at elapsed %s",
@@ -60,8 +64,12 @@ describe("news discovery and sweep contract", () => {
     const dialog = requireElement(document.querySelector('[role="dialog"]'));
     const { state } = createNewsContext();
     expect(isNewsDirty(state)).toEqual([main, dialog]);
-    main.setAttribute(mainColumnAtt, String(main.innerHTML.length));
-    dialog.setAttribute(mainColumnAtt, String(dialog.innerHTML.length));
+    // Mark ownership and acknowledge observed versions as the processor does after a settled pass.
+    for (const root of [main, dialog]) {
+      root.setAttribute(mainColumnAtt, "1");
+      flushDirtyRecords(root);
+      markElementClean(root);
+    }
     expect(isNewsDirty(state)).toEqual([null, null]);
     dialog.append("This is a sufficiently long late dialog change");
     expect(isNewsDirty(state)).toEqual([null, dialog]);

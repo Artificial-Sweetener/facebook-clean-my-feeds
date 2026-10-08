@@ -45,8 +45,8 @@ export function syncDebugVisibility(
   }
 
   if (options.VERBOSITY_DEBUG) {
-    element.setAttribute(state.showAtt, "");
-  } else {
+    if (!element.hasAttribute(state.showAtt)) element.setAttribute(state.showAtt, "");
+  } else if (element.hasAttribute(state.showAtt)) {
     element.removeAttribute(state.showAtt);
   }
 }
@@ -129,6 +129,7 @@ export function hideFeature(
 
 /**
  * Suppress a feature row without creating a caption, while preserving debug visibility.
+ * Identical markers are not rewritten, preventing observer feedback on periodic prompt sweeps.
  */
 export function hideFeatureNoCaption(
   feature: Element | null,
@@ -147,8 +148,10 @@ export function hideFeatureNoCaption(
     return;
   }
 
-  feature.setAttribute(postAtt, sanitizeReason(reason));
-  feature.setAttribute(state.hideWithNoCaptionAtt, "");
+  const sanitized = sanitizeReason(reason);
+  if (feature.getAttribute(postAtt) !== sanitized) feature.setAttribute(postAtt, sanitized);
+  if (!feature.hasAttribute(state.hideWithNoCaptionAtt))
+    feature.setAttribute(state.hideWithNoCaptionAtt, "");
   syncDebugVisibility(feature, state, options);
 }
 

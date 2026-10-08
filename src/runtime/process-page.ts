@@ -9,10 +9,18 @@ import { mopSearchFeed } from "../feeds/search";
 import type { FeedContext } from "../feeds/types";
 import { mopVideosFeed } from "../feeds/videos";
 
-/** Dispatch one active feed; an inactive page must not consume its pending forced scan. */
+/**
+ * Release detached consecutive-caption roots before dispatching one active feed.
+ * Inactive pages retain their pending forced scan; no old caption may retain a removed feed tree.
+ */
 export function processPage(context: FeedContext, eventType = "timing"): void {
   pruneDirtyObservers();
   const { state } = context;
+  if (state.echoEl && !state.echoEl.isConnected) {
+    state.echoEl = null;
+    state.echoCount = 0;
+    state.echoCPID = "";
+  }
   if (!state.isAF) return;
   if (state.isNF) mopNewsFeed(context);
   else if (state.isGF) mopGroupsFeed(context);

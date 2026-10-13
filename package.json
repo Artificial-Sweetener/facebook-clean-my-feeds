@@ -46,7 +46,7 @@
     "jsdom": "26.1.0",
     "prettier": "3.7.4",
     "semantic-release": "25.0.2",
-    "sharp": "0.34.5",
+    "sharp": "0.35.5",
     "ts-jest": "29.4.5",
     "tsx": "4.23.15",
     "typescript": "5.9.3",

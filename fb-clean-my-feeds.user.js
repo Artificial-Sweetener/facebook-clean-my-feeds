@@ -5722,7 +5722,7 @@
     diagnostics.cftLinks.selectedCount = candidates.links.length;
     diagnostics.cftLinks.rejectedForVolume = candidates.links.length >= maximumCandidateLinks;
     if (diagnostics.cftLinks.rejectedForVolume) return { isSponsored: false, diagnostics };
-    const inspectedLinks = candidates.links.slice(0, maximumInspectedLinks);
+    const inspectedLinks = candidates.links;
     diagnostics.cftLinks.inspectedCount = inspectedLinks.length;
     inspectedLinks.forEach((link) => {
       var _a;
@@ -5781,7 +5781,7 @@
       }
     };
   }
-  var cftParam, maximumCandidateLinks, maximumInspectedLinks, postOwnerSelector, authoredRegionSelector, sponsoredLabels;
+  var cftParam, maximumCandidateLinks, postOwnerSelector, authoredRegionSelector, sponsoredLabels;
   var init_sponsored = __esm({
     "src/feeds/shared/sponsored.ts"() {
       "use strict";
@@ -5791,7 +5791,6 @@
       init_blocks();
       cftParam = "__cft__[0]=";
       maximumCandidateLinks = 10;
-      maximumInspectedLinks = 2;
       postOwnerSelector = 'div[role="article"], div[aria-posinset]';
       authoredRegionSelector = 'p, blockquote, [data-ad-preview="message"], [data-ad-comet-preview="message"], [data-ad-rendering-role="story_message"], [data-ad-rendering-role="creative_body"], [contenteditable="true"], [data-commentid], [data-testid^="UFI2Comment/"], [role="comment"]';
       sponsoredLabels = new Set(
@@ -7468,7 +7467,8 @@
       orphanAdsAboutLinkCount: 0,
       orphanWithoutVirtualizedContainerCount: 0,
       orphanContainerCount: 0,
-      orphanSamples: []
+      orphanSamples: [],
+      adRenderingRoleOnlySamples: []
     };
     if (!mainColumn) {
       return { runtime, virtualized: emptyVirtualized };
@@ -7494,17 +7494,22 @@
       const container = link.closest(newsSelectors.virtualizedContainer);
       return !container || !mainColumn.contains(container);
     }).length;
-    const orphanSamples = samplePosts(orphanContainers, maxSamples).map((container) => ({
-      signature: buildDomSignature(container),
-      dataVirtualized: normalizeVirtualizedValue(container),
-      adsAboutLinkCount: container.querySelectorAll(newsSelectors.sponsoredLink).length,
-      adRenderingRoleCount: container.querySelectorAll("[data-ad-rendering-role]").length,
-      roleArticleDescendantCount: container.querySelectorAll('div[role="article"]').length,
-      ariaPosinsetDescendantCount: container.querySelectorAll("div[aria-posinset]").length,
-      inViewport: isInViewport(container),
-      hasPostMarker: container.hasAttribute(postAtt),
-      hasHideMarker: !!(state && state.hideAtt && container.hasAttribute(state.hideAtt))
-    }));
+    const orphanSamples = samplePosts(orphanContainers, maxSamples).map(
+      (container) => buildVirtualizedContainerSample(container, state)
+    );
+    const adRenderingRoleOnlySamples = samplePosts(containersWithAdRenderingRoleOnly, maxSamples).map(
+      (container) => ({
+        ...buildVirtualizedContainerSample(container, state),
+        isRuntimeSelectedRoot: runtimeDiscovery.posts.includes(container),
+        runtimeRootDescendantCount: runtimeDiscovery.posts.filter(
+          (post) => post !== container && container.contains(post)
+        ).length,
+        runtimeRootAncestorCount: runtimeDiscovery.posts.filter(
+          (post) => post !== container && post.contains(container)
+        ).length,
+        sponsoredDiagnostics: getSponsoredDiagnostics(container, state)
+      })
+    );
     return {
       runtime,
       virtualized: {
@@ -7516,8 +7521,24 @@
         orphanAdsAboutLinkCount: orphanAdsAboutLinks.length,
         orphanWithoutVirtualizedContainerCount,
         orphanContainerCount: orphanContainers.length,
-        orphanSamples
+        orphanSamples,
+        adRenderingRoleOnlySamples
       }
+    };
+  }
+  function buildVirtualizedContainerSample(container, state) {
+    const signature = buildDomSignature(container);
+    if (signature && signature.role && signature.role !== "article") signature.role = "other";
+    return {
+      signature,
+      dataVirtualized: normalizeVirtualizedValue(container),
+      adsAboutLinkCount: container.querySelectorAll(newsSelectors.sponsoredLink).length,
+      adRenderingRoleCount: container.querySelectorAll("[data-ad-rendering-role]").length,
+      roleArticleDescendantCount: container.querySelectorAll('div[role="article"]').length,
+      ariaPosinsetDescendantCount: container.querySelectorAll("div[aria-posinset]").length,
+      inViewport: isInViewport(container),
+      hasPostMarker: container.hasAttribute(postAtt),
+      hasHideMarker: !!(state && state.hideAtt && container.hasAttribute(state.hideAtt))
     };
   }
   function getGroupsPostCollection(state) {
@@ -7638,6 +7659,7 @@
       init_profile();
       init_search();
       init_news2();
+      init_sponsored();
       init_redaction();
     }
   });

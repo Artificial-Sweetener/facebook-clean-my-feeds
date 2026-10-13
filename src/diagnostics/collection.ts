@@ -6,6 +6,7 @@ import { videosSelectors } from "../selectors/videos";
 import { profileSelectors } from "../selectors/profile";
 import { searchSelectors } from "../selectors/search";
 import { getNewsPostDiscovery, getOrphanSponsoredNewsPosts } from "../feeds/news";
+import { getSponsoredDiagnostics } from "../feeds/shared/sponsored";
 import { hashText } from "./redaction";
 import type { DiagnosticsState } from "./types";
 
@@ -47,10 +48,14 @@ export function normalizeVirtualizedValue(container: Element) {
 }
 
 /**
- * Compare runtime discovery with orphan sponsored containers using counts and structural samples.
+ * Compare runtime discovery with virtualized containers using read-only structural evidence.
+ * Role-only samples are candidates for investigation, not advertisements or additional runtime roots.
+ * Ancestor/descendant runtime counts exclude the sampled root itself. Sponsored diagnostics inspect
+ * that container, not its selected descendants; a child post can match while its wrapper does not.
+ * Sampling and detector evidence are rebuilt from the current DOM so recycled containers cannot retain stale relationships.
  * @param state Active feed flags, subtypes, and hide-marker names.
  * @param maxSamples Maximum structural examples to include in DOM order, preferring visible posts.
- * @returns Runtime selector evidence, orphan counts, and bounded structural examples.
+ * @returns Runtime selector evidence, orphan counts, and independently bounded orphan and role-only examples.
  */
 export function buildNewsDiscoveryDiagnostics(state: DiagnosticsState, maxSamples = 5) {
   const mainColumn = document.querySelector(newsSelectors.mainColumn);
@@ -69,6 +74,7 @@ export function buildNewsDiscoveryDiagnostics(state: DiagnosticsState, maxSample
     orphanWithoutVirtualizedContainerCount: 0,
     orphanContainerCount: 0,
     orphanSamples: [],
+    adRenderingRoleOnlySamples: [],
   };
 
   if (!mainColumn) {
@@ -96,17 +102,22 @@ export function buildNewsDiscoveryDiagnostics(state: DiagnosticsState, maxSample
     const container = link.closest(newsSelectors.virtualizedContainer);
     return !container || !mainColumn.contains(container);
   }).length;
-  const orphanSamples = samplePosts(orphanContainers, maxSamples).map((container) => ({
-    signature: buildDomSignature(container),
-    dataVirtualized: normalizeVirtualizedValue(container),
-    adsAboutLinkCount: container.querySelectorAll(newsSelectors.sponsoredLink).length,
-    adRenderingRoleCount: container.querySelectorAll("[data-ad-rendering-role]").length,
-    roleArticleDescendantCount: container.querySelectorAll('div[role="article"]').length,
-    ariaPosinsetDescendantCount: container.querySelectorAll("div[aria-posinset]").length,
-    inViewport: isInViewport(container),
-    hasPostMarker: container.hasAttribute(postAtt),
-    hasHideMarker: !!(state && state.hideAtt && container.hasAttribute(state.hideAtt)),
-  }));
+  const orphanSamples = samplePosts(orphanContainers, maxSamples).map((container) =>
+    buildVirtualizedContainerSample(container, state)
+  );
+  const adRenderingRoleOnlySamples = samplePosts(containersWithAdRenderingRoleOnly, maxSamples).map(
+    (container) => ({
+      ...buildVirtualizedContainerSample(container, state),
+      isRuntimeSelectedRoot: runtimeDiscovery.posts.includes(container),
+      runtimeRootDescendantCount: runtimeDiscovery.posts.filter(
+        (post) => post !== container && container.contains(post)
+      ).length,
+      runtimeRootAncestorCount: runtimeDiscovery.posts.filter(
+        (post) => post !== container && post.contains(container)
+      ).length,
+      sponsoredDiagnostics: getSponsoredDiagnostics(container, state),
+    })
+  );
 
   return {
     runtime,
@@ -120,7 +131,32 @@ export function buildNewsDiscoveryDiagnostics(state: DiagnosticsState, maxSample
       orphanWithoutVirtualizedContainerCount,
       orphanContainerCount: orphanContainers.length,
       orphanSamples,
+      adRenderingRoleOnlySamples,
     },
+  };
+}
+
+/**
+ * Describe a virtualized container without copying text, identifiers, URLs, or arbitrary attribute values.
+ * Only the fixed article role is retained; other nonempty roles collapse to a sentinel. Marker values
+ * and advertising-role values are never serialized. All reads describe the container itself or its descendants.
+ * @param container Current virtualized root; counts exclude the root and marker flags apply only to it.
+ * @param state Active hide-marker name used only to test presence, never included in the result.
+ * @returns A fresh structural sample without modifying the DOM, runtime state, or filtering decisions.
+ */
+function buildVirtualizedContainerSample(container: Element, state: DiagnosticsState) {
+  const signature = buildDomSignature(container);
+  if (signature && signature.role && signature.role !== "article") signature.role = "other";
+  return {
+    signature,
+    dataVirtualized: normalizeVirtualizedValue(container),
+    adsAboutLinkCount: container.querySelectorAll(newsSelectors.sponsoredLink).length,
+    adRenderingRoleCount: container.querySelectorAll("[data-ad-rendering-role]").length,
+    roleArticleDescendantCount: container.querySelectorAll('div[role="article"]').length,
+    ariaPosinsetDescendantCount: container.querySelectorAll("div[aria-posinset]").length,
+    inViewport: isInViewport(container),
+    hasPostMarker: container.hasAttribute(postAtt),
+    hasHideMarker: !!(state && state.hideAtt && container.hasAttribute(state.hideAtt)),
   };
 }
 

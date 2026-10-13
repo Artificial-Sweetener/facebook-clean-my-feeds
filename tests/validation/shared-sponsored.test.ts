@@ -77,16 +77,29 @@ describe("validation: shared corroborated sponsorship", () => {
       expect(isSponsored(post, state)).toBe(count > 0 && count < 10);
       expect(getSponsoredDiagnostics(post, state).cftLinks).toMatchObject({
         selectedCount: count,
-        inspectedCount: count >= 10 ? 0 : Math.min(count, 2),
+        inspectedCount: count >= 10 ? 0 : count,
         rejectedForVolume: count >= 10,
       });
     }
   });
 
   test.each(routes)(
-    "$name inspects only the first two eligible links",
+    "$name checks every eligible link below the existing volume ceiling",
     ({ state, source, minimum }) => {
-      expect(isSponsored(sponsorFixture(source, [1, 1, minimum]), state)).toBe(false);
+      for (const count of [3, 4, 8, 9]) {
+        const lengths = Array.from({ length: count }, () => minimum - 1);
+        lengths[count - 1] = minimum;
+        const post = sponsorFixture(source, lengths);
+        expect(isSponsored(post, state)).toBe(true);
+        expect(getSponsoredDiagnostics(post, state).cftLinks).toMatchObject({
+          selectedCount: count,
+          inspectedCount: count,
+          belowMinimumCount: count - 1,
+          meetsMinimumCount: 1,
+          rejectedForVolume: false,
+        });
+      }
+      expect(isSponsored(sponsorFixture(source, [1, 1, minimum - 1]), state)).toBe(false);
       expect(isSponsored(sponsorFixture(source, [1, minimum, 1]), state)).toBe(true);
       expect(isSponsored(sponsorFixture(source, [minimum, 1, 1]), state)).toBe(true);
     }

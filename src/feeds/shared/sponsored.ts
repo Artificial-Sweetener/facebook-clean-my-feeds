@@ -8,7 +8,6 @@ import { getNewsBlocksQuery } from "./blocks";
 
 const cftParam = "__cft__[0]=";
 const maximumCandidateLinks = 10;
-const maximumInspectedLinks = 2;
 const postOwnerSelector = 'div[role="article"], div[aria-posinset]';
 const authoredRegionSelector =
   'p, blockquote, [data-ad-preview="message"], [data-ad-comet-preview="message"], [data-ad-rendering-role="story_message"], [data-ad-rendering-role="creative_body"], [contenteditable="true"], [data-commentid], [data-testid^="UFI2Comment/"], [role="comment"]';
@@ -195,6 +194,8 @@ function getSponsoredDiagnostics(post: Element | null, state: SponsoredState | n
  * Require an owned Facebook disclosure control or a corroborated tracking control in a known feed layout.
  * CFT length alone never identifies an advertisement. Signature limits retain their prior feed-specific
  * thresholds but count only the parameter, not trailing query parameters or fragments.
+ * Inspect every eligible control below the existing ten-candidate rejection ceiling, so short author
+ * controls cannot mask a later qualifying signature. This performs at most nine signature checks.
  * @param post Read-only post scope; null returns initialized unmatched diagnostics.
  * @param state Feed flags select wrapper/body boundaries; null disables all matching.
  * @returns A decision with privacy-safe source, route, and eligible-candidate counts.
@@ -222,7 +223,7 @@ function inspectSponsored(post: Element | null, state: SponsoredState | null) {
   diagnostics.cftLinks.rejectedForVolume = candidates.links.length >= maximumCandidateLinks;
   if (diagnostics.cftLinks.rejectedForVolume) return { isSponsored: false, diagnostics };
 
-  const inspectedLinks = candidates.links.slice(0, maximumInspectedLinks);
+  const inspectedLinks = candidates.links;
   diagnostics.cftLinks.inspectedCount = inspectedLinks.length;
   inspectedLinks.forEach((link) => {
     const value = facebookUrl(link)?.searchParams.get("__cft__[0]");

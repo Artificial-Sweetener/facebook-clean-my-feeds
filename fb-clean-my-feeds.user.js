@@ -5501,7 +5501,7 @@
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:97bd59df32cf4531bc3d739c34f675bac1fe19f2eac774de5b80467f95d8db5e" : "unbundled";
+      buildIdentity = true ? "source-sha256:b699d1d7e54d522938df95a5972dce170321113a9500f72a11cbfce7157479fc" : "unbundled";
     }
   });
 
@@ -8037,9 +8037,14 @@
     return matches ? keyWords.NF_PEOPLE_YOU_MAY_KNOW : "";
   }
   function isNewsPaidPartnership(post, keyWords) {
-    const queryPP = 'span[dir] > span[id] a[href^="/business/help/"]';
-    const elPaidPartnership = getPostEvidence(post).select(queryPP)[0];
-    return elPaidPartnership === void 0 ? "" : keyWords.NF_PAID_PARTNERSHIP;
+    const evidence = getPostEvidence(post);
+    const matched = evidence.select("span[dir] > span[id] a[href]").some(
+      (link) => {
+        var _a;
+        return ((_a = facebookUrl(link)) == null ? void 0 : _a.pathname.startsWith("/business/help/")) && isOwnedNewsMetadata(link, post) && evidence.isRendered(link);
+      }
+    );
+    return matched ? keyWords.NF_PAID_PARTNERSHIP : "";
   }
   function isNewsSponsoredPaidBy(post, keyWords) {
     const querySPB = "div:nth-child(2) > div > div:nth-child(2) > span[class] > span[id] > div:nth-child(2)";
@@ -8118,7 +8123,9 @@
     const branding = evidence.select("a[aria-label], a[aria-labelledby]").some(
       (link) => isOwnedNewsMetadata(link, post) && evidence.isRendered(link) && evidence.explicitNames(link).some((name) => matchesDisclosureLabel(name, "metaAiBrand"))
     );
-    if (branding || evidence.select("a[href]").some((link) => isOwnedNewsElement(link, post) && isMetaAiLink(link)))
+    if (branding || evidence.select("a[href]").some(
+      (link) => isOwnedNewsMetadata(link, post) && evidence.isRendered(link) && isMetaAiLink(link)
+    ))
       return keyWords.NF_META_AI;
     const postTexts = extractTextContent(post, getNewsBlocksQuery(post), 3).join(" ");
     if (containsMetaAiCopy(postTexts)) return keyWords.NF_META_AI;
@@ -8139,9 +8146,12 @@
     return hasAiInfoLabel && typeof keyWords.NF_AI_INFO_POSTS === "string" ? keyWords.NF_AI_INFO_POSTS : "";
   }
   function isNewsStoriesPost(post, keyWords) {
-    const queryForStory = '[href^="/stories/"][href*="source=from_feed"]';
-    const elStory = getPostEvidence(post).select(queryForStory)[0];
-    return elStory ? keyWords.NF_STORIES : "";
+    const evidence = getPostEvidence(post);
+    const matched = evidence.select("a[href]").some((link) => {
+      const url = facebookUrl(link);
+      return url !== null && url.pathname.startsWith("/stories/") && url.searchParams.get("source") === "from_feed" && isOwnedNewsMetadata(link, post) && evidence.isRendered(link);
+    });
+    return matched ? keyWords.NF_STORIES : "";
   }
   function isNewsVerifiedBadge(post, keyWords) {
     return ownVerifiedBadges(post).some(

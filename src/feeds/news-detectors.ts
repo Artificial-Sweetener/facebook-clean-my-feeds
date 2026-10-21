@@ -88,14 +88,21 @@ export function isNewsPeopleYouMayKnow(
   return matches ? keyWords.NF_PEOPLE_YOU_MAY_KNOW : "";
 }
 
-/** Detect the business-help disclosure link rather than translated partnership wording. */
+/** Require a rendered business-help disclosure in this post's metadata, excluding authored and nested content. */
 export function isNewsPaidPartnership(
   post: Element,
   keyWords: Pick<Keywords, "NF_PAID_PARTNERSHIP">
 ) {
-  const queryPP = 'span[dir] > span[id] a[href^="/business/help/"]';
-  const elPaidPartnership = getPostEvidence(post).select(queryPP)[0];
-  return elPaidPartnership === undefined ? "" : keyWords.NF_PAID_PARTNERSHIP;
+  const evidence = getPostEvidence(post);
+  const matched = evidence
+    .select("span[dir] > span[id] a[href]")
+    .some(
+      (link) =>
+        facebookUrl(link)?.pathname.startsWith("/business/help/") &&
+        isOwnedNewsMetadata(link, post) &&
+        evidence.isRendered(link)
+    );
+  return matched ? keyWords.NF_PAID_PARTNERSHIP : "";
 }
 
 /** Require the owned disclosure layout and a localized paid-by statement with a nonempty payer. */
@@ -238,7 +245,11 @@ export function isNewsMetaAICard(post: Element, keyWords: Pick<Keywords, "NF_MET
     );
   if (
     branding ||
-    evidence.select("a[href]").some((link) => isOwnedNewsElement(link, post) && isMetaAiLink(link))
+    evidence
+      .select("a[href]")
+      .some(
+        (link) => isOwnedNewsMetadata(link, post) && evidence.isRendered(link) && isMetaAiLink(link)
+      )
   )
     return keyWords.NF_META_AI;
   const postTexts = extractTextContent(post, getNewsBlocksQuery(post), 3).join(" ");
@@ -267,11 +278,20 @@ export function isNewsAiInfoPost(post: Element, keyWords: Pick<Keywords, "NF_AI_
     : "";
 }
 
-/** Return the localized story reason only for feed-origin story links. */
+/** Require an owned, rendered Facebook story destination with an exact feed-origin parameter. */
 export function isNewsStoriesPost(post: Element, keyWords: Pick<Keywords, "NF_STORIES">) {
-  const queryForStory = '[href^="/stories/"][href*="source=from_feed"]';
-  const elStory = getPostEvidence(post).select(queryForStory)[0];
-  return elStory ? keyWords.NF_STORIES : "";
+  const evidence = getPostEvidence(post);
+  const matched = evidence.select("a[href]").some((link) => {
+    const url = facebookUrl(link);
+    return (
+      url !== null &&
+      url.pathname.startsWith("/stories/") &&
+      url.searchParams.get("source") === "from_feed" &&
+      isOwnedNewsMetadata(link, post) &&
+      evidence.isRendered(link)
+    );
+  });
+  return matched ? keyWords.NF_STORIES : "";
 }
 
 /** Identify a verified author by an exact semantic badge name in this post's own header, never by SVG presence alone. */

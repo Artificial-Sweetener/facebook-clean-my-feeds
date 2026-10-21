@@ -50,6 +50,10 @@ jobs:
         if: steps.tags.outputs.has_tags == 'true' || github.event.inputs.dry_run == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_AUTHOR_NAME: Daisy-Bluemel
+          GIT_AUTHOR_EMAIL: daisy@artificialsweetener.ai
+          GIT_COMMITTER_NAME: Daisy-Bluemel
+          GIT_COMMITTER_EMAIL: daisy@artificialsweetener.ai
         run: |
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
             npx semantic-release --dry-run --no-ci

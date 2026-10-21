@@ -21,6 +21,8 @@ export const catalog: Keywords = {
   NF_FILTER_VERIFIED_BADGE: "Фільтрувати підтверджені облікові записи",
   NF_AI_SIDE_PANELS: "ШІ в бічних панелях",
   NF_SURVEY: "Опитування",
+  NF_FRIEND_REQUESTS: "Запити на дружбу (права панель)",
+  DLG_FRIEND_REQUESTS_DESC: "Приховувати блок запитів на дружбу на правій панелі стрічки новин.",
   NF_PEOPLE_YOU_MAY_KNOW: "Люди, яких Ви можете знати",
   NF_PAID_PARTNERSHIP: "Оплачуване партнерство",
   NF_SPONSORED_PAID: "Спонсоровано · Оплачено ______",

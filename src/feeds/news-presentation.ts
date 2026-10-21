@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-/** The two news features that own reversible inline layout changes independently. */
-type NewsFeature = "badge" | "sidebar";
+/** News features retain independent ownership of reversible inline layout changes. */
+type NewsFeature = "badge" | "sidebar" | "friendRequests";
 
 /** Retain native CSS values per declaration so later page edits to other properties survive restoration. */
 interface NativeStyle {
@@ -23,7 +23,16 @@ interface NewsPresentation {
 const presentations: Record<NewsFeature, Map<HTMLElement | SVGElement, NewsPresentation>> = {
   badge: new Map(),
   sidebar: new Map(),
+  friendRequests: new Map(),
 };
+
+/** Preserve badge identity while CMF's reversible presentation intentionally conceals its icon. */
+export function isNewsBadgeCollapsed(element: Element): boolean {
+  return (
+    (element instanceof HTMLElement || element instanceof SVGElement) &&
+    presentations.badge.has(element)
+  );
+}
 
 /** Read longhand priority even when CSSOM stores the declaration as a margin/padding shorthand. */
 function inlinePriority(style: CSSStyleDeclaration, name: string): string {
@@ -81,7 +90,9 @@ function restoreElement(element: HTMLElement | SVGElement, change: NewsPresentat
 
 /** Release a feature's inline changes on option reset or lifecycle exit, including detached nodes. */
 export function restoreNewsPresentation(feature?: NewsFeature): void {
-  const features: readonly NewsFeature[] = feature ? [feature] : ["badge", "sidebar"];
+  const features: readonly NewsFeature[] = feature
+    ? [feature]
+    : ["badge", "sidebar", "friendRequests"];
   for (const name of features) {
     for (const [element, change] of presentations[name]) restoreElement(element, change);
     presentations[name].clear();

@@ -21,6 +21,9 @@ export const catalog: Keywords = {
   NF_FILTER_VERIFIED_BADGE: "Filter akun terverifikasi",
   NF_AI_SIDE_PANELS: "AI di panel samping",
   NF_SURVEY: "Survei",
+  NF_FRIEND_REQUESTS: "Permintaan pertemanan (bilah sisi kanan)",
+  DLG_FRIEND_REQUESTS_DESC:
+    "Sembunyikan panel permintaan pertemanan di bilah sisi kanan Kabar Beranda.",
   NF_PEOPLE_YOU_MAY_KNOW: "Orang yang Mungkin Anda Kenal",
   NF_PAID_PARTNERSHIP: "Kemitraan berbayar",
   NF_SPONSORED_PAID: "Disponsori · Dibayar oleh ______",

@@ -1,4 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-only
+import {
+  clearContentVersions,
+  contentStamp,
+  ignoreContentAttributes,
+  pruneContentVersions,
+} from "./content-version";
 import type { VisibilityState } from "./types";
 import { postAtt, postAttTab, postAttCPID } from "./attributes";
 
@@ -8,7 +14,7 @@ interface DirtyEntry {
   lastProcessedToken: number;
 }
 let dirtyTokens = new WeakMap<Node, DirtyEntry>();
-let postSignatures = new WeakMap<Element, string>();
+let postSignatures = new WeakMap<Element, number | string>();
 let observers = new WeakMap<Node, MutationObserver>();
 const activeObservers = new Map<Node, MutationObserver>();
 
@@ -74,7 +80,7 @@ export function hasPostChanged(post: Element | null): boolean {
     return false;
   }
 
-  const signature = buildPostSignature(post);
+  const signature = contentStamp(post);
   const previous = postSignatures.get(post);
   postSignatures.set(post, signature);
   if (previous === undefined) {
@@ -91,7 +97,7 @@ export function trackPostSignature(post: Element | null): void {
   if (!post) {
     return;
   }
-  postSignatures.set(post, buildPostSignature(post));
+  postSignatures.set(post, contentStamp(post));
 }
 
 /**
@@ -104,10 +110,11 @@ export function revalidateTrackedPosts(
   root: Element | null,
   state: Pick<VisibilityState, "hideAtt" | "hideWithNoCaptionAtt" | "showAtt">
 ): void {
+  ignoreContentAttributes([state.hideAtt, state.showAtt, state.hideWithNoCaptionAtt]);
   if (!root) return;
   for (const post of root.querySelectorAll(`[${postAtt}]`)) {
     const previous = postSignatures.get(post);
-    if (previous === undefined || previous === buildPostSignature(post)) continue;
+    if (previous === undefined || previous === contentStamp(post)) continue;
     resetPostState(post, state);
     postSignatures.delete(post);
   }
@@ -267,6 +274,7 @@ export function disconnectDirtyObserver(target: Node): void {
 export function releaseDirtyObservers(): void {
   for (const observer of activeObservers.values()) observer.disconnect();
   activeObservers.clear();
+  clearContentVersions();
   observers = new WeakMap();
 }
 
@@ -279,6 +287,7 @@ export function clearDirtyTracking(): void {
 
 /** Release replaced or detached Facebook roots during ordinary SPA scans, not only final teardown. */
 export function pruneDirtyObservers(): void {
+  pruneContentVersions();
   for (const [target, observer] of activeObservers) {
     if (target.isConnected) continue;
     observer.disconnect();

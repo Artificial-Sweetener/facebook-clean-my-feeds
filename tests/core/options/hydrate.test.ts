@@ -12,6 +12,16 @@ import {
 import { translations } from "../../../src/i18n";
 
 describe("core/options/hydrate", () => {
+  test("friend request filtering defaults off and preserves explicit saved selections", () => {
+    expect(hydrateOptions({}, "en").options.NF_FRIEND_REQUESTS).toBe(false);
+    for (const enabled of [true, false]) {
+      const stored = { NF_FRIEND_REQUESTS: enabled, NF_SPONSORED: false };
+      const result = hydrateOptions(stored, "ja");
+      expect(result.options.NF_FRIEND_REQUESTS).toBe(enabled);
+      expect(result.options.NF_SPONSORED).toBe(false);
+    }
+  });
+
   test("resolveLanguage prefers site language when unset", () => {
     expect(resolveLanguage({}, "en")).toBe("en");
   });

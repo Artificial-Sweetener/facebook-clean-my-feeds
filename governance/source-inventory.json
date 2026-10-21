@@ -20,10 +20,9 @@
     {
       "name": "configuration",
       "patterns": [
-        "^(?:package(?:-lock)?|tsconfig(?:\\.[^/]+)?)\\.json$",
+        "^(?:package(?:-lock)?|tsconfig)\\.json$",
         "^tools/config/.*\\.json$",
         "^governance/.*\\.json$",
-        "^\\.releaserc\\.json$",
         "^\\.github/workflows/[^/]+\\.yml$",
         "^\\.(?:gitignore|prettierignore|nvmrc)$"
       ],

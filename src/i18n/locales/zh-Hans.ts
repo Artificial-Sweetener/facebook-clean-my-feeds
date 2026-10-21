@@ -20,6 +20,8 @@ export const catalog: Keywords = {
   NF_FILTER_VERIFIED_BADGE: "过滤已验证帐户",
   NF_AI_SIDE_PANELS: "侧边栏中的 AI",
   NF_SURVEY: "调查",
+  NF_FRIEND_REQUESTS: "好友请求（右侧边栏）",
+  DLG_FRIEND_REQUESTS_DESC: "隐藏动态消息右侧边栏中的好友请求面板。",
   NF_PEOPLE_YOU_MAY_KNOW: "你可能认识的人",
   NF_PAID_PARTNERSHIP: "付费合伙",
   NF_SPONSORED_PAID: "赞助 · 由 ______ 付费",

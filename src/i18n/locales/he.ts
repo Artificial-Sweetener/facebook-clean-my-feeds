@@ -20,6 +20,8 @@ export const catalog: Keywords = {
   NF_FILTER_VERIFIED_BADGE: "סנן חשבונות מאומתים",
   NF_AI_SIDE_PANELS: "בינה מלאכותית בלוחות הצד",
   NF_SURVEY: "סקר",
+  NF_FRIEND_REQUESTS: "בקשות חברות (סרגל צד ימני)",
+  DLG_FRIEND_REQUESTS_DESC: "הסתרת חלונית בקשות החברות בסרגל הצד הימני של הפיד.",
   NF_PEOPLE_YOU_MAY_KNOW: "אנשים שאולי אתה מכיר",
   NF_PAID_PARTNERSHIP: "שותפות בתשלום",
   NF_SPONSORED_PAID: "ממומן · שולם על ידי ______",

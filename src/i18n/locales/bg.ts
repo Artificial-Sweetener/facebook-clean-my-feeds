@@ -21,6 +21,9 @@ export const catalog: Keywords = {
   NF_FILTER_VERIFIED_BADGE: "Филтриране на потвърдени акаунти",
   NF_AI_SIDE_PANELS: "AI в страничните панели",
   NF_SURVEY: "Анкета",
+  NF_FRIEND_REQUESTS: "Покани за приятелство (дясна лента)",
+  DLG_FRIEND_REQUESTS_DESC:
+    "Скриване на панела с покани за приятелство в дясната лента на новинарския поток.",
   NF_PEOPLE_YOU_MAY_KNOW: "Хора, които може би познавате",
   NF_PAID_PARTNERSHIP: "Платено партньорство",
   NF_SPONSORED_PAID: "Спонсорирано · Платено от ______",

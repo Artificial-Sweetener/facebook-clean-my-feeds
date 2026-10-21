@@ -12,6 +12,8 @@ export interface Keywords {
   NF_AI_SIDE_PANELS: string;
   NF_SURVEY: string;
   NF_PEOPLE_YOU_MAY_KNOW: string;
+  NF_FRIEND_REQUESTS: string;
+  DLG_FRIEND_REQUESTS_DESC: string;
   NF_PAID_PARTNERSHIP: string;
   NF_SPONSORED_PAID: string;
   NF_SUGGESTIONS: string;

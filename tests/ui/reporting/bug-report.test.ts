@@ -100,22 +100,22 @@ describe("ui/reporting/bug-report", () => {
     globalThis.GM = undefined;
   });
 
-  test("getSupportUrl falls back without GM", () => {
+  test("getSupportUrl falls back without GM", async () => {
     expect(getSupportUrl()).toContain("github.com");
   });
 
-  test("getSupportUrl reads GM support url when available", () => {
+  test("getSupportUrl reads GM support url when available", async () => {
     globalThis.GM = { info: { script: { supportURL: "https://example.com/support" } } };
     expect(getSupportUrl()).toBe("https://example.com/support");
   });
 
-  test("buildBugReport returns error without context", () => {
-    const report = buildBugReport(null);
+  test("buildBugReport returns error without context", async () => {
+    const report = await buildBugReport(null);
     expect(report.data.error).toBe("No context available.");
     expect(report.text).toBe("");
   });
 
-  test("buildBugReport redacts blocked options and filters", () => {
+  test("buildBugReport redacts blocked options and filters", async () => {
     globalThis.GM = {
       info: {
         script: {
@@ -150,7 +150,7 @@ describe("ui/reporting/bug-report", () => {
     hiddenRow.setAttribute(state.hideWithNoCaptionAtt, "");
     document.body.append(hidden, hiddenContainer, hiddenRow);
 
-    const report = buildBugReport(
+    const report = await buildBugReport(
       createReportContext({ state, options, filters, keyWords, pathInfo })
     );
 
@@ -166,7 +166,7 @@ describe("ui/reporting/bug-report", () => {
     expect(report.text).toContain('"generatedAt"');
   });
 
-  test("buildBugReport includes NF_META_AI_PROMPTS sample matches", () => {
+  test("buildBugReport includes NF_META_AI_PROMPTS sample matches", async () => {
     document.body.innerHTML = `
       <div role="navigation"></div>
       <div role="main">
@@ -196,7 +196,7 @@ describe("ui/reporting/bug-report", () => {
 
     const state = { isNF: true };
     const options = { NF_META_AI_PROMPTS: true };
-    const report = buildBugReport(
+    const report = await buildBugReport(
       createReportContext({
         state,
         options,
@@ -209,7 +209,7 @@ describe("ui/reporting/bug-report", () => {
     expect(report.data.samples.summary.NF_META_AI_PROMPTS).toBe(1);
   });
 
-  test("buildBugReport includes privacy-safe orphan virtualized diagnostics", () => {
+  test("buildBugReport includes privacy-safe orphan virtualized diagnostics", async () => {
     document.body.innerHTML = `
       <div role="navigation"></div>
       <div role="main">
@@ -217,8 +217,8 @@ describe("ui/reporting/bug-report", () => {
         <div>
           <div role="article">Ordinary post</div>
           <div data-virtualized="false">
-            <a href="/ads/about/?entry_product=ad_preferences">Private Advertiser</a>
-            <div data-ad-rendering-role="profile_name"></div>
+            <a href="/ads/about/?entry_product=ad_preferences">Sponsored</a>
+            <div data-ad-rendering-role="profile_name">Private Advertiser</div>
             <div data-ad-rendering-role="creative_body"></div>
           </div>
           <div data-virtualized="false">
@@ -231,7 +231,7 @@ describe("ui/reporting/bug-report", () => {
     const state = { isNF: true };
     const options = { NF_SPONSORED: true };
 
-    const report = buildBugReport(
+    const report = await buildBugReport(
       createReportContext({
         state,
         options,
@@ -268,13 +268,12 @@ describe("ui/reporting/bug-report", () => {
         hasHideMarker: false,
       })
     );
-    expect(report.data.signals).toEqual(
-      expect.objectContaining({ page: expect.any(Object), newsMain: expect.any(Object) })
-    );
+    expect(report.data.snapshot.version).toBe(1);
+    expect(report.data.snapshot.regions.length).toBeGreaterThan(0);
     expect(report.text).not.toContain("Private Advertiser");
   });
 
-  test("buildBugReport includes NF_AI_INFO_POSTS sample matches", () => {
+  test("buildBugReport includes NF_AI_INFO_POSTS sample matches", async () => {
     document.body.innerHTML = `
       <div role="navigation"></div>
       <div role="main">
@@ -287,7 +286,7 @@ describe("ui/reporting/bug-report", () => {
 
     const state = { isNF: true };
     const options = { NF_AI_INFO_POSTS: true };
-    const report = buildBugReport(
+    const report = await buildBugReport(
       createReportContext({
         state,
         options,
@@ -300,14 +299,14 @@ describe("ui/reporting/bug-report", () => {
     expect(report.data.samples.summary.NF_AI_INFO_POSTS).toBe(1);
   });
 
-  test("buildBugReport uses translated keywords when diagnosing reels collections", () => {
+  test("buildBugReport uses translated keywords when diagnosing reels collections", async () => {
     document.body.innerHTML = `
       <div role="navigation"></div>
       <div role="main">
         <div aria-posinset="1"><h3>Reels</h3><a href="/reel/?s=ifu_see_more">Reels</a></div>
       </div>
     `;
-    const report = buildBugReport(
+    const report = await buildBugReport(
       createReportContext({
         state: {
           isNF: true,
@@ -326,7 +325,7 @@ describe("ui/reporting/bug-report", () => {
     expect(report.data.samples.summary.NF_REELS_SHORT_VIDEOS).toBe(1);
   });
 
-  test("buildBugReport uses translated keywords when diagnosing follow headers", () => {
+  test("buildBugReport uses translated keywords when diagnosing follow headers", async () => {
     document.body.innerHTML = `
       <div role="navigation"></div>
       <div role="main">
@@ -335,7 +334,7 @@ describe("ui/reporting/bug-report", () => {
         </div>
       </div>
     `;
-    const report = buildBugReport(
+    const report = await buildBugReport(
       createReportContext({
         state: { isNF: true },
         options: { NF_FOLLOW: true },
@@ -346,7 +345,7 @@ describe("ui/reporting/bug-report", () => {
     expect(report.data.samples.summary.NF_FOLLOW).toBe(1);
   });
 
-  test("buildBugReport redacts raw and case-folded keywords from hydrated filters", () => {
+  test("buildBugReport redacts raw and case-folded keywords from hydrated filters", async () => {
     const privateKeywords = {
       NF_BLOCKED_TEXT: "Private News Phrase",
       GF_BLOCKED_TEXT: "Private Group Phrase",
@@ -363,7 +362,7 @@ describe("ui/reporting/bug-report", () => {
       MP_BLOCKED_ENABLED: true,
       PP_BLOCKED_ENABLED: true,
     });
-    const report = buildBugReport(
+    const report = await buildBugReport(
       createReportContext({
         options: settings.options,
         filters: settings.filters,
@@ -380,8 +379,7 @@ describe("ui/reporting/bug-report", () => {
     }
     for (const summary of Object.values(report.data.blockedFilters)) {
       expect(summary.count).toBe(1);
-      expect(summary.hashes).toEqual([expect.stringMatching(/^fnv1a:[a-f0-9]+$/)]);
-      expect(summary.truncated).toBe(false);
+      expect(summary).toEqual({ count: 1 });
     }
     expect(settings.filters).toEqual(buildFilters(settings.options));
   });

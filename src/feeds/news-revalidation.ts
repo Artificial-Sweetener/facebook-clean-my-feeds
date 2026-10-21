@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { contentStamp, ignoreContentAttributes } from "../dom/content-version";
 import { postAtt, postAttTab } from "../dom/attributes";
 import type { FeedProcessingState } from "./types";
 
-const hiddenNewsContent = new WeakMap<Element, string>();
+const hiddenNewsContent = new WeakMap<Element, number | string>();
 
 /** Record the rendered content after CMF's own mutation so a later replacement can be distinguished from its hide markers. */
 export function rememberHiddenNewsContent(post: Element): void {
-  if (post.hasAttribute(postAtt)) hiddenNewsContent.set(post, post.innerHTML);
+  if (post.hasAttribute(postAtt)) hiddenNewsContent.set(post, contentStamp(post));
   else hiddenNewsContent.delete(post);
 }
 
@@ -19,10 +20,11 @@ export function rememberHiddenNewsContent(post: Element): void {
  * @param state Current randomized visibility markers; no unrelated attributes or child content are removed.
  */
 export function resetChangedNewsPosts(root: Element | null, state: FeedProcessingState): void {
+  ignoreContentAttributes([state.hideAtt, state.showAtt, state.hideWithNoCaptionAtt]);
   if (!root) return;
   for (const post of root.querySelectorAll(`[${postAtt}]`)) {
     const previous = hiddenNewsContent.get(post);
-    if (previous === undefined || previous === post.innerHTML) continue;
+    if (previous === undefined || previous === contentStamp(post)) continue;
     hiddenNewsContent.delete(post);
     for (const caption of post.querySelectorAll(`:scope > h6[${postAttTab}]`)) caption.remove();
     post.removeAttribute(postAtt);

@@ -61,7 +61,7 @@ describe("complete source ownership", () => {
   test("includes unreachable tests and tools rather than checking only entry dependencies", () => {
     expect(
       inventoryProblems(
-        ["tests/unused.test.ts", "tools/unused.ts", "tsconfig.browser.json"],
+        ["tests/unused.test.ts", "tools/unused.ts", "tools/config/tsconfig.browser.json"],
         inventory
       )
     ).toEqual([]);
@@ -269,7 +269,7 @@ describe("strict inherited compiler policy", () => {
     "useUnknownInCatchVariables",
   ] as const)("rejects %s:false beneath strict:true", (flag) => {
     const parsed = ts.parseJsonConfigFileContent(
-      { extends: "./tsconfig.browser.json", compilerOptions: { [flag]: false } },
+      { extends: "./tools/config/tsconfig.browser.json", compilerOptions: { [flag]: false } },
       ts.sys,
       process.cwd()
     );
@@ -284,7 +284,7 @@ describe("strict inherited compiler policy", () => {
     "rejects %s source/declaration bypass",
     (flag) => {
       const parsed = ts.parseJsonConfigFileContent(
-        { extends: "./tsconfig.browser.json", compilerOptions: { [flag]: true } },
+        { extends: "./tools/config/tsconfig.browser.json", compilerOptions: { [flag]: true } },
         ts.sys,
         process.cwd()
       );
@@ -297,7 +297,7 @@ describe("strict inherited compiler policy", () => {
   );
   test("accepts the complete inherited browser strict policy", () => {
     const parsed = ts.parseJsonConfigFileContent(
-      { extends: "./tsconfig.browser.json" },
+      { extends: "./tools/config/tsconfig.browser.json" },
       ts.sys,
       process.cwd()
     );

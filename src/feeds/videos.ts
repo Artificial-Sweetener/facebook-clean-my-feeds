@@ -150,7 +150,7 @@ function isInstagram(post: Element, keyWords: Pick<Keywords, "VF_INSTAGRAM">) {
   return Array.from(post.querySelectorAll(instagramRule)).some(
     (icon) =>
       isOwnedVideoSignal(icon, post) &&
-      explicitNewsNames(icon).some((name) => normalizeVideoLabel(name) === "instagram")
+      explicitNewsNames(icon, post).some((name) => normalizeVideoLabel(name) === "instagram")
   )
     ? keyWords.VF_INSTAGRAM
     : "";

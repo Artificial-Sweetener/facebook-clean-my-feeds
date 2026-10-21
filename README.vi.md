@@ -30,6 +30,7 @@ Xin cảm ơn **[trinhquocviet](https://github.com/trinhquocviet)** vì đã h�
 - **Thu gọn bố cục:** Ẩn Reels, "Short Videos", và cả những dãy "Stories" to đùng chiếm hết màn hình. Bạn còn có thể tắt nguyên những khu như Marketplace nếu chẳng bao giờ dùng tới.
 - **Lọc bớt ồn ào:** Tạo danh sách chặn theo từ hoặc cụm từ cụ thể (có hỗ trợ regex!). Bạn cũng có thể đặt ngưỡng số "Like" để bớt thấy những bài quá viral và giữ feed mang tính cá nhân hơn.
 - **Dọn bảng tin Facebook cho đỡ phiền đầu:** Script sẽ loại bớt "People You May Know", gợi ý "Follow", khảo sát quảng bá, và các chiêu câu tương tác khác. Ngoài ra bạn còn có thể tạm dừng GIF và video tự phát để khỏi bị motion đập thẳng vào mắt.
+- **Lời mời kết bạn:** Tùy chọn ẩn khung lời mời kết bạn ở thanh bên phải trong cài đặt **Bảng tin**. Bộ lọc này mặc định tắt và nhận diện bằng cấu trúc khung cùng đích đến của liên kết, không phụ thuộc vào ngôn ngữ hiển thị của Facebook.
 - **Điều khiển dễ dàng:** Một menu cài đặt gọn gàng, đẹp mắt và hỗ trợ nhiều ngôn ngữ. Chỉ cần bấm biểu tượng cây lau nhà, bật những gì bạn muốn, và thấy kết quả ngay.
 
 ## <img src="src/res/pref.svg" alt="options" width="36"/> Cách dùng Bảng Điều Khiển
@@ -87,6 +88,8 @@ Nếu bạn thấy chỗ nào dịch chưa ổn hoặc còn thiếu, cứ mở i
 
 Dùng Node **>=22.14.0 <23**; `.nvmrc` và CI cố định phiên bản **22.14.0**. Mã nguồn, kiểm thử và công cụ được viết bằng TypeScript với kiểm tra kiểu nghiêm ngặt. Userscript cài trên trình duyệt vẫn là một gói ES2018 độc lập, không cần tải thêm mã bên ngoài.
 
+Các thiết lập TypeScript dùng chung nằm trong `tsconfig.json`; cấu hình kiểm tra kiểu cho từng phạm vi và các công cụ nằm trong `tools/config`. Cấu hình phát hành nằm ở trường `release` của `package.json`, còn quy trình CI nằm trong `.github/workflows`.
+
 ```sh
 nvm use
 npm ci
@@ -94,6 +97,8 @@ npm run verify
 ```
 
 Nếu không dùng nvm, hãy cài phiên bản Node được hỗ trợ trước. Lệnh kiểm tra duy nhất này chạy kiểm tra định dạng, lint, kiểm tra kiểu riêng cho trình duyệt/lõi/công cụ/kiểm thử, các bài kiểm thử Jest, kiểm tra bản dịch và quy tắc dự án, rồi build và xác minh userscript. Lệnh cũng kiểm tra metadata, bảo đảm không có phụ thuộc mã chạy bên ngoài, tài nguyên gốc không bị sửa và kết quả build có thể tái tạo giống hệt nhau. Commit cả `fb-clean-my-feeds.user.js` đã build lại cùng thay đổi mã nguồn; đừng sửa trực tiếp tệp này.
+
+Người duy trì có thể dựng lại các mẫu DOM đã ẩn dữ liệu riêng tư và kiểm tra bộ chọn từ nội dung báo cáo bằng `npm run report:inspect -- report.json output-directory "CSS selector"`. Lệnh giải mã báo cáo ngay trên máy và lưu các vùng đã chụp cùng thông tin chẩn đoán để điều tra lỗi.
 
 Cả 17 biểu tượng đều được vẽ SVG thủ công, dùng màu theo giao diện khi hiển thị trong trang và màu sáng/tối phù hợp khi xuất hiện riêng trong tài liệu hoặc trình quản lý userscript. Quá trình dựng kiểm tra SVG chỉ chứa hình học tĩnh an toàn và giữ nguyên các PNG gốc để đối chiếu. Mô-đun vượt 350 dòng mã không tính chú thích sẽ được cảnh báo; vượt 500 dòng cần ngoại lệ đã được xem xét. Hàm có tên, phương thức, lớp và hợp đồng dữ liệu được xuất ra cần JSDoc có nội dung hữu ích. Xem [CONTRIBUTING.md](CONTRIBUTING.md) để biết kiến trúc, ngoại lệ tạm thời và điều kiện phát hành. Giữ nội dung thiết yếu của README này đồng bộ với bản tiếng Anh.
 

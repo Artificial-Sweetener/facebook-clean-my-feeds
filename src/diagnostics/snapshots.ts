@@ -13,45 +13,7 @@ import type { DiagnosticsState } from "./types";
 import type { DiagnosticCounts } from "./types";
 
 /**
- * Count fixed product labels across descendants without retaining any surrounding page text.
- * @param root Root to inspect; a missing root returns zero counts without throwing.
- * @returns Counts for each fixed product signal, including zeroes for absent signals.
- */
-export function collectSignalCounts(root: ParentNode | null = document) {
-  const signals = [
-    "Sponsored",
-    "Suggested",
-    "Follow",
-    "Reels",
-    "Stories",
-    "People you may know",
-    "Paid partnership",
-    "Try Meta AI",
-    "Events you may like",
-  ];
-  const counts: DiagnosticCounts = {};
-  for (const signal of signals) {
-    counts[signal] = 0;
-  }
-  if (!root || typeof root.querySelectorAll !== "function") {
-    return counts;
-  }
-  const spans = Array.from(root.querySelectorAll("span[dir], span, div")).filter(
-    (el) => typeof el.textContent === "string" && el.textContent.trim() !== ""
-  );
-  for (const el of spans) {
-    const text = el.textContent ?? "";
-    for (const signal of signals) {
-      if (text.includes(signal)) {
-        counts[signal] = (counts[signal] ?? 0) + 1;
-      }
-    }
-  }
-  return counts;
-}
-
-/**
- * Aggregate processed-post markers using only recognized labels or hashed private reasons.
+ * Aggregate processed-post markers using only recognized labels or a private-reason sentinel.
  * @param keyWords Current product labels used to identify safe readable reason strings.
  * @returns Occurrence counts keyed by privacy-safe hidden-post reasons.
  */
@@ -170,7 +132,11 @@ export function buildFeedDomSnapshot() {
   const feedNodes = Array.from(document.querySelectorAll('[role="feed"]'));
   const pageletSample = Array.from(document.querySelectorAll('[role="feed"] [data-pagelet]'))
     .slice(0, 5)
-    .map((el) => el.getAttribute("data-pagelet"));
+    .map((el) =>
+      /^FeedUnit_\d+$/.test(el.getAttribute("data-pagelet") || "")
+        ? "FeedUnit_:index"
+        : "other-pagelet"
+    );
   const mainNode = document.querySelector('div[role="main"]');
   const feedRoot = feedNodes[0] || null;
   const feedRootParent = feedRoot && feedRoot.parentElement ? feedRoot.parentElement : null;

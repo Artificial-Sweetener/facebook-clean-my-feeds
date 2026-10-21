@@ -21,6 +21,9 @@ export const catalog: Keywords = {
   NF_FILTER_VERIFIED_BADGE: "認証済みアカウントをフィルター",
   NF_AI_SIDE_PANELS: "サイドパネルのAI",
   NF_SURVEY: "アンケート",
+  NF_FRIEND_REQUESTS: "友達リクエスト（右サイドバー）",
+  DLG_FRIEND_REQUESTS_DESC:
+    "ニュースフィードの右サイドバーにある友達リクエストのパネルを非表示にします。",
   NF_PEOPLE_YOU_MAY_KNOW: "あなたが知っているかもしれない人々",
   NF_PAID_PARTNERSHIP: "有償パートナーシップ",
   NF_SPONSORED_PAID: "後援 · ______ による支払い",

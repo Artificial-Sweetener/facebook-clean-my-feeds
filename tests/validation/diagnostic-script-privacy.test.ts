@@ -29,28 +29,28 @@ describe("diagnostic script-source privacy", () => {
     expect(JSON.stringify(samples)).not.toContain("private");
   });
 
-  test("keeps useful network paths while removing credentials, queries and fragments", () => {
+  test("redacts private network hosts and paths along with credentials and queries", () => {
     scriptSource(
       "https://private-user:private-pass@static.example.test/assets/main.js?private_token=secret#private-fragment"
     );
-    expect(getScriptsSample()).toEqual(["https://static.example.test/assets/main.js"]);
+    expect(getScriptsSample()).toEqual(["external-script"]);
   });
 
   test("retains inline-script sentinels and bounds source samples", () => {
     scriptSource();
     scriptSource("https://static.example.test/one.js");
     scriptSource("https://static.example.test/two.js");
-    expect(getScriptsSample(2)).toEqual(["inline-script", "https://static.example.test/one.js"]);
+    expect(getScriptsSample(2)).toEqual(["inline-script", "external-script"]);
   });
 });
 
-test("report identifies quarantined regex coordinates without leaking private patterns", () => {
+test("report identifies quarantined regex coordinates without leaking private patterns", async () => {
   const context = routeContext("/", {
     NF_BLOCKED_ENABLED: true,
     NF_BLOCKED_RE: true,
     NF_BLOCKED_TEXT: "[private-pattern-sentinelİİvalid",
   });
-  const report = buildBugReport(context);
+  const report = await buildBugReport(context);
   expect(report.data.regexValidationIssues).toEqual([
     { field: "NF_BLOCKED_TEXT", line: 1, destination: "NF" },
   ]);

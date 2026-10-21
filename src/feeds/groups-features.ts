@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { matchesNewsLabel } from "../core/filters/labels";
 import type { FeedContext, FeedProcessingState } from "./types";
 import { postAtt } from "../dom/attributes";
 import { hideFeature } from "../dom/hide";
 import { climbUpTheTree } from "../utils/dom";
-import { isOwnedNewsElement, matchesNewsLabel } from "./news-identity";
+import { isOwnedNewsElement } from "./news-identity";
 import {
   hasPostChanged,
   resetPostState,

@@ -31,15 +31,14 @@ import { isInstagram, isVideoLive } from "../feeds/videos";
 import { mpGetBlockedPrices, mpGetBlockedTextDescription } from "../feeds/marketplace";
 
 import { isSponsored } from "../feeds/shared/sponsored";
-import { hashText } from "./redaction";
 import type { BugReportContext, MatchEvidence, DiagnosticCounts } from "./types";
 import type { Filters } from "../core/filters/types";
 
 /**
  * Record positive enabled-filter evidence and omit negative results to keep reports compact.
  * @param matches Mutable output map of positive, privacy-safe diagnostic evidence.
- * @param key Option or hashed-match name to add when evidence is positive.
- * @param value Text to hash; non-string or empty inputs intentionally yield no identifier.
+ * @param key Option name to add when evidence is positive.
+ * @param value Detector result whose truthiness indicates a match.
  * @returns Nothing; positive evidence is stored in the supplied output map.
  */
 export function addMatch(matches: MatchEvidence, key: string, value: unknown) {
@@ -49,10 +48,10 @@ export function addMatch(matches: MatchEvidence, key: string, value: unknown) {
 }
 
 /**
- * Run read-only news detectors and hash configured text matches without changing post state.
+ * Run read-only news detectors and annotate configured text matches without changing post state.
  * @param post Existing post root inspected read-only; no post content is serialized.
  * @param context Initialized options, translated labels, filters, and narrow feed state.
- * @returns Enabled news-filter flags and hashes of blocked-text matches.
+ * @returns Enabled news-filter flags and private blocked-text match flags.
  */
 export function buildNewsMatches(post: HTMLElement, context: BugReportContext) {
   const { options, filters, keyWords, state } = context;
@@ -116,7 +115,7 @@ export function buildNewsMatches(post: HTMLElement, context: BugReportContext) {
   if (options.NF_BLOCKED_ENABLED) {
     const blockedText = findNewsBlockedText(post, options, filters);
     if (blockedText) {
-      matches.NF_BLOCKED_TEXT_HASH = hashText(blockedText);
+      matches.NF_BLOCKED_TEXT = true;
     }
   }
 
@@ -141,7 +140,7 @@ export function buildNewsMatches(post: HTMLElement, context: BugReportContext) {
  * Run enabled group detectors while keeping blocked text out of the report.
  * @param post Existing post root inspected read-only; no post content is serialized.
  * @param context Initialized options, translated labels, filters, and narrow feed state.
- * @returns Enabled group-filter flags and hashes of blocked-text matches.
+ * @returns Enabled group-filter flags and private blocked-text match flags.
  */
 export function buildGroupsMatches(post: HTMLElement, context: BugReportContext) {
   const { options, filters, keyWords, state } = context;
@@ -162,7 +161,7 @@ export function buildGroupsMatches(post: HTMLElement, context: BugReportContext)
   if (options.GF_BLOCKED_ENABLED) {
     const blockedText = findGroupsBlockedText(post, options, filters);
     if (blockedText) {
-      matches.GF_BLOCKED_TEXT_HASH = hashText(blockedText);
+      matches.GF_BLOCKED_TEXT = true;
     }
   }
 
@@ -181,7 +180,7 @@ export function buildGroupsMatches(post: HTMLElement, context: BugReportContext)
  * @param post Existing post root inspected read-only; no post content is serialized.
  * @param queryBlocks Layout-specific selector used to find video content blocks.
  * @param context Initialized options, translated labels, filters, and narrow feed state.
- * @returns Enabled video-filter flags and hashes of blocked-text matches.
+ * @returns Enabled video-filter flags and private blocked-text match flags.
  */
 export function buildVideosMatches(
   post: HTMLElement,
@@ -197,7 +196,7 @@ export function buildVideosMatches(
   if (options.VF_BLOCKED_ENABLED && queryBlocks) {
     const blockedText = findVideosBlockedText(post, options, filters, queryBlocks);
     if (blockedText) {
-      matches.VF_BLOCKED_TEXT_HASH = hashText(blockedText);
+      matches.VF_BLOCKED_TEXT = true;
     }
   }
 
@@ -208,7 +207,7 @@ export function buildVideosMatches(
  * Collect profile GIF and blocked-text evidence without exposing matching keywords.
  * @param post Existing post root inspected read-only; no post content is serialized.
  * @param context Initialized options, translated labels, filters, and narrow feed state.
- * @returns Enabled profile-filter flags and hashes of blocked-text matches.
+ * @returns Enabled profile-filter flags and private blocked-text match flags.
  */
 export function buildProfileMatches(post: HTMLElement, context: BugReportContext) {
   const { options, filters, keyWords } = context;
@@ -221,17 +220,17 @@ export function buildProfileMatches(post: HTMLElement, context: BugReportContext
   if (options.PP_BLOCKED_ENABLED) {
     const blockedText = findProfileBlockedText(post, options, filters);
     if (blockedText) {
-      matches.PP_BLOCKED_TEXT_HASH = hashText(blockedText);
+      matches.PP_BLOCKED_TEXT = true;
     }
   }
   return matches;
 }
 
 /**
- * Hash price and description matches from the marketplace item text blocks.
+ * Annotate price and description matches from the marketplace item text blocks.
  * @param item Marketplace item whose price and description blocks are inspected.
  * @param filters Materialized keyword lists used by the active filtering pass.
- * @returns Hashes of matched price and description filters, with no item content.
+ * @returns Flags for matched price and description filters, with no item content.
  */
 export function buildMarketplaceMatches(item: HTMLElement, filters: Filters) {
   const matches: MatchEvidence = {};
@@ -241,11 +240,11 @@ export function buildMarketplaceMatches(item: HTMLElement, filters: Filters) {
   if (priceBlock) {
     const blockedPrices = mpGetBlockedPrices(priceBlock, filters);
     if (blockedPrices) {
-      matches.MP_BLOCKED_TEXT_HASH = hashText(blockedPrices);
+      matches.MP_BLOCKED_TEXT = true;
     }
     const blockedDesc = mpGetBlockedTextDescription(blocksOfText, filters, true);
     if (blockedDesc) {
-      matches.MP_BLOCKED_TEXT_DESCRIPTION_HASH = hashText(blockedDesc);
+      matches.MP_BLOCKED_TEXT_DESCRIPTION = true;
     }
   }
   return matches;
@@ -254,7 +253,7 @@ export function buildMarketplaceMatches(item: HTMLElement, filters: Filters) {
 /**
  * Count positive sample evidence so reports expose which enabled filters would match.
  * @param samples Previously collected per-post match maps to aggregate.
- * @returns Counts keyed by each positive flag or hashed-match category.
+ * @returns Counts keyed by each positive filter flag.
  */
 export function buildMatchSummary(samples: readonly { matches: MatchEvidence }[]) {
   const summary: DiagnosticCounts = {};
@@ -262,7 +261,7 @@ export function buildMatchSummary(samples: readonly { matches: MatchEvidence }[]
     const matches = sample.matches || {};
     Object.keys(matches).forEach((key) => {
       const value = matches[key];
-      if (value === true || (typeof value === "string" && value.trim() !== "")) {
+      if (value === true) {
         summary[key] = (summary[key] || 0) + 1;
       }
     });

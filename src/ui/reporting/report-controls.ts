@@ -45,37 +45,54 @@ export function initReportBug(
     statusEl.textContent = typeof value === "string" ? value : "";
   };
 
+  let pending: Promise<string> | null = null;
+
   /**
-   * Reuse the last generated report until explicitly refreshed, then reveal and resize its output section.
-   * @returns Cached or freshly generated privacy-safe serialized report text.
+   * Share one asynchronous capture across actions and reveal its result only in the owning dialog.
+   * @returns Cached or newly captured automatically redacted report text.
    */
-  const ensureReport = () => {
+  const ensureReport = async (): Promise<string> => {
     if (state && typeof state.cmfReportText === "string" && state.cmfReportText.length > 0) {
       return state.cmfReportText;
     }
-    const { text } = capabilities.buildReport();
-    if (state) {
-      state.cmfReportText = text;
-    }
-    outputEl.value = text;
-    outputEl.classList.add("cmf-report-output--visible");
-    setStatus("DLG_REPORT_BUG_STATUS_READY");
-    const fieldset = outputEl.closest("fieldset");
-    if (fieldset && fieldset.classList.contains("cmf-visible")) {
-      updateFieldsetState(fieldset, true, { animateHeight: false });
-    }
-    return text;
+    if (pending) return pending;
+    pending = Promise.resolve()
+      .then(() => capabilities.buildReport())
+      .then(({ text }) => {
+        if (!outputEl.isConnected || (lifecycle && !lifecycle.active)) return "";
+        if (state) {
+          state.cmfReportText = text;
+        }
+        outputEl.value = text;
+        outputEl.classList.add("cmf-report-output--visible");
+        setStatus("DLG_REPORT_BUG_STATUS_READY");
+        const fieldset = outputEl.closest("fieldset");
+        if (fieldset && fieldset.classList.contains("cmf-visible")) {
+          updateFieldsetState(fieldset, true, { animateHeight: false });
+        }
+        return text;
+      })
+      .catch(() => {
+        setStatus("DLG_REPORT_BUG_STATUS_FAILED");
+        return "";
+      })
+      .finally(() => {
+        pending = null;
+        btnGenerate.disabled = false;
+      });
+    btnGenerate.disabled = true;
+    return pending;
   };
 
   lifecycle?.listen(btnGenerate, "click", () => {
     if (state) {
       state.cmfReportText = "";
     }
-    ensureReport();
+    void ensureReport();
   });
 
   lifecycle?.listen(btnCopy, "click", async () => {
-    const reportText = ensureReport();
+    const reportText = await ensureReport();
     if (!reportText) {
       setStatus("DLG_REPORT_BUG_STATUS_FAILED");
       return;

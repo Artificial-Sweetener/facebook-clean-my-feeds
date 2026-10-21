@@ -21,6 +21,9 @@ export const catalog: Keywords = {
   NF_FILTER_VERIFIED_BADGE: "Doğrulanmış hesapları filtrele",
   NF_AI_SIDE_PANELS: "Yan panellerde Yapay Zeka",
   NF_SURVEY: "Anket",
+  NF_FRIEND_REQUESTS: "Arkadaşlık istekleri (sağ kenar çubuğu)",
+  DLG_FRIEND_REQUESTS_DESC:
+    "Haber Kaynağı’nın sağ kenar çubuğundaki arkadaşlık istekleri panelini gizle.",
   NF_PEOPLE_YOU_MAY_KNOW: "Tanıyor olabileceğin kişiler",
   NF_PAID_PARTNERSHIP: "ücretli ortaklık",
   NF_SPONSORED_PAID: "Sponsorlu · ______ tarafından ödendi",

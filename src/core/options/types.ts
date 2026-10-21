@@ -7,6 +7,7 @@ export interface Options {
   NF_STORIES?: boolean;
   NF_SURVEY?: boolean;
   NF_PEOPLE_YOU_MAY_KNOW?: boolean;
+  NF_FRIEND_REQUESTS?: boolean;
   NF_PAID_PARTNERSHIP?: boolean;
   NF_SPONSORED_PAID?: boolean;
   NF_SUGGESTIONS?: boolean;
@@ -109,6 +110,7 @@ export type HydratedOptionKey =
   | "NF_STORIES"
   | "NF_SURVEY"
   | "NF_PEOPLE_YOU_MAY_KNOW"
+  | "NF_FRIEND_REQUESTS"
   | "NF_PAID_PARTNERSHIP"
   | "NF_SPONSORED_PAID"
   | "NF_SUGGESTIONS"

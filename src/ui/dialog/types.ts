@@ -49,7 +49,7 @@ export type { SaveSource, SaveResult } from "../../core/options/commands";
 export interface DialogCapabilities {
   saveOptions: (pending: Record<string, unknown> | null, source: SaveSource) => Promise<SaveResult>;
   resetOptions: () => Promise<void>;
-  buildReport: () => { text: string };
+  buildReport: () => { text: string } | Promise<{ text: string }>;
   getSupportUrl: () => string;
 }
 

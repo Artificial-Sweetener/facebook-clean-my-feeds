@@ -28,6 +28,7 @@ Thanks to **[trinhquocviet](https://github.com/trinhquocviet)** for helping main
 - **Tame the Layout:** Hide Reels, "Short Videos," and those massive "Stories" shelves that eat up your screen. You can even toggle off entire sections like Marketplace if you never use them.
 - **Filter the Noise:** Create custom blocklists for specific words or phrases (with regex support!). You can also cap viral posts by "Like" count to keep your feed personal.
 - **Quiet Down:** We strip out "People You May Know," "Follow" suggestions, survey promos, and other engagement traps. Plus, you can pause autoplaying GIFs and videos so you're not ambushed by motion.
+- **Friend Requests:** Optionally hide the Friend requests panel in the right sidebar from **News Feed** settings. This filter is off by default and uses panel structure and link destinations independently of Facebook’s display language.
 - **Easy Controls:** Enjoy a refined, dark-mode friendly settings menu with translated labels. Just click the mop icon, flip a switch, and see the results instantly.
 
 ## <img src="src/res/pref.svg" alt="options" width="36"/> Using the Control Panel
@@ -85,6 +86,8 @@ If you spot gaps or mistranslations, open an issue. I'd love to make the UI feel
 
 Use Node **>=22.14.0 <23**; `.nvmrc` and CI pin **22.14.0**. Author source, tests, and tools in strict TypeScript. The installed userscript remains a single self-contained ES2018 browser bundle.
 
+Shared TypeScript defaults live in `tsconfig.json`; scoped compiler and tool configurations live in `tools/config`. Release configuration is in the `release` field of `package.json`, and CI workflows live in `.github/workflows`.
+
 ```sh
 nvm use
 npm ci
@@ -92,6 +95,8 @@ npm run verify
 ```
 
 If you do not use nvm, install the supported Node version first. The one verification command runs formatting, lint, strict browser/core/tool/test typechecks, Jest tests, locale and governance checks, then builds and validates the userscript. It checks metadata, no external runtime dependencies, unchanged source assets, and reproducible output. Commit the rebuilt `fb-clean-my-feeds.user.js` with source changes; never edit it by hand.
+
+Maintainers can reconstruct sanitized DOM fixtures and test a proposed selector from pasted report data with `npm run report:inspect -- report.json output-directory "CSS selector"`. This decodes the report locally and writes the captured regions and diagnostic context for investigation.
 
 All 17 icons are manually authored SVGs with theme-native inline colors and explicit light/dark colors for standalone documentation and userscript-manager icons. Builds validate inert SVG geometry and leave the original PNG references unchanged. Modules warn above 350 non-comment lines and require a reviewed exception above 500. Named functions, methods, classes, and exported contracts need useful JSDoc. See [CONTRIBUTING.md](CONTRIBUTING.md) for architecture, temporary exceptions, and the release gate. Keep this README and its Vietnamese version synchronized.
 

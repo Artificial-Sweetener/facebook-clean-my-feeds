@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
+import { getPostEvidence } from "../dom/post-evidence";
 
 /** Narrow foreign values before using browser element APIs. */
 export function isElement(value: unknown): value is Element {
@@ -43,14 +44,18 @@ export function querySelectorAllNoChildren(
   executeAllQueries = false
 ): Element[] {
   const queryList = typeof queries === "string" ? [queries] : queries;
+  const evidence = container instanceof Element ? getPostEvidence(container) : null;
   if (queryList.length === 0) return [];
   if (executeAllQueries) {
-    return Array.from(container.querySelectorAll(queryList.join(","))).filter(
+    return (
+      evidence?.select(queryList.join(",")) ||
+      Array.from(container.querySelectorAll(queryList.join(",")))
+    ).filter(
       (element) => element.children.length === 0 && (element.textContent?.length ?? 0) >= minText
     );
   }
   for (const query of queryList) {
-    for (const element of container.querySelectorAll(query)) {
+    for (const element of evidence?.select(query) || container.querySelectorAll(query)) {
       if (element.children.length === 0 && (element.textContent?.length ?? 0) >= minText) {
         return [element];
       }

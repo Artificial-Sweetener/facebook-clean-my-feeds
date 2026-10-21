@@ -50,6 +50,7 @@ export function buildDialogSections({
     "NF_FOLLOW",
     "NF_PARTICIPATE",
     "NF_PEOPLE_YOU_MAY_KNOW",
+    "NF_FRIEND_REQUESTS",
     "NF_SUGGESTIONS",
     "NF_EVENTS_YOU_MAY_LIKE",
     "NF_SURVEY",

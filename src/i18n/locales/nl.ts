@@ -21,6 +21,9 @@ export const catalog: Keywords = {
   NF_FILTER_VERIFIED_BADGE: "Geverifieerde accounts filteren",
   NF_AI_SIDE_PANELS: "AI in zijpanelen",
   NF_SURVEY: "Vragenlijst",
+  NF_FRIEND_REQUESTS: "Vriendschapsverzoeken (rechterzijbalk)",
+  DLG_FRIEND_REQUESTS_DESC:
+    "Verberg het paneel met vriendschapsverzoeken in de rechterzijbalk van het nieuwsoverzicht.",
   NF_PEOPLE_YOU_MAY_KNOW: "Mensen die je misschien kent",
   NF_PAID_PARTNERSHIP: "Betaald partnerschap",
   NF_SPONSORED_PAID: "Gesponsord · Betaald door ______",

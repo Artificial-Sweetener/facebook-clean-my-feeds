@@ -20,6 +20,8 @@ export const catalog: Keywords = {
   NF_FILTER_VERIFIED_BADGE: "تصفية الحسابات الموثقة",
   NF_AI_SIDE_PANELS: "الذكاء الاصطناعي في اللوحات الجانبية",
   NF_SURVEY: "استبيان",
+  NF_FRIEND_REQUESTS: "طلبات الصداقة (الشريط الجانبي الأيمن)",
+  DLG_FRIEND_REQUESTS_DESC: "إخفاء لوحة طلبات الصداقة في الشريط الجانبي الأيمن لآخر الأخبار.",
   NF_PEOPLE_YOU_MAY_KNOW: "أشخاص قد تعرفهم",
   NF_PAID_PARTNERSHIP: "شراكة مدفوعة",
   NF_SPONSORED_PAID: "برعاية · مدفوعة بواسطة ______",

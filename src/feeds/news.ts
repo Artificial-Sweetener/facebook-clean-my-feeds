@@ -52,6 +52,7 @@ import {
 export * from "./news-features";
 import { scrubMetaAiPromptSuggestions } from "./news-meta-ai";
 import { rememberHiddenNewsContent, resetChangedNewsPosts } from "./news-revalidation";
+import { scrubRightRailFriendRequests } from "./news-friend-requests";
 import { restoreNewsPresentation } from "./news-presentation";
 export * from "./news-meta-ai";
 
@@ -75,6 +76,7 @@ export function mopNewsFeed(context: FeedContext | null) {
 
   if (!options.NF_HIDE_VERIFIED_BADGE) restoreNewsPresentation("badge");
   if (!options.NF_AI_SIDE_PANELS) restoreNewsPresentation("sidebar");
+  if (!options.NF_FRIEND_REQUESTS) restoreNewsPresentation("friendRequests");
 
   const [dirtyMainColumn, dirtyDialog] = isNewsDirty(state);
   const mainColumn = dirtyMainColumn || document.querySelector(newsSelectors.mainColumn);
@@ -109,6 +111,10 @@ export function mopNewsFeed(context: FeedContext | null) {
   }
   if (options.NF_AI_SIDE_PANELS && shouldSweepPosts) {
     scrubSidePanelAi(context);
+  }
+
+  if (options.NF_FRIEND_REQUESTS && shouldSweepPosts) {
+    scrubRightRailFriendRequests(context);
   }
 
   if (options.NF_SPONSORED && shouldSweepPosts) {

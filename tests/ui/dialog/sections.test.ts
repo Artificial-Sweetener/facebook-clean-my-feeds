@@ -18,6 +18,32 @@ function buildState() {
 }
 
 describe("ui/dialog/sections", () => {
+  test.each(Object.entries(translations))(
+    "friend requests has one translated, editable selection in %s",
+    (_locale, catalog) => {
+      const sections = buildDialogSections({
+        state: buildState(),
+        options: { ...defaults, NF_FRIEND_REQUESTS: true },
+        keyWords: catalog,
+        translations,
+      });
+      const section = requireValue(sections[0]);
+      const controls = section.querySelectorAll<HTMLInputElement>(
+        'input[name="NF_FRIEND_REQUESTS"]'
+      );
+      expect(controls).toHaveLength(1);
+      const checkbox = requireValue(controls[0]);
+      expect(checkbox.checked).toBe(true);
+      expect(checkbox.disabled).toBe(false);
+      expect(checkbox.closest("label")?.textContent).toBe(catalog.NF_FRIEND_REQUESTS);
+      expect(checkbox.getAttribute("aria-description")).toBe(catalog.DLG_FRIEND_REQUESTS_DESC);
+      expect(checkbox.closest(".cmf-row")?.getAttribute("title")).toBe(
+        catalog.DLG_FRIEND_REQUESTS_DESC
+      );
+      expect(section.querySelector('input[name="DLG_FRIEND_REQUESTS_DESC"]')).toBeNull();
+    }
+  );
+
   test("blocked text textareas split by separator", () => {
     const state = buildState();
     const options = {

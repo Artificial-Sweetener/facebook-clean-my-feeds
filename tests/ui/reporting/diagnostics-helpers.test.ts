@@ -3,7 +3,6 @@ import { buildDomSignature, samplePosts } from "../../../src/diagnostics/collect
 import {
   collectSafeReasons,
   getSanitizedReason,
-  hashText,
   redactFilters,
   redactOptions,
   summarizeList,
@@ -22,17 +21,13 @@ describe("diagnostics privacy and bounded collection", () => {
     jest.restoreAllMocks();
   });
 
-  test("keeps recognized labels readable and hashes arbitrary reasons", () => {
+  test("keeps recognized labels readable and redacts arbitrary reasons", () => {
     const safeReasons = collectSafeReasons(translations.en);
     expect(getSanitizedReason(translations.en.NF_FOLLOW, safeReasons)).toBe(
       translations.en.NF_FOLLOW
     );
-    expect(getSanitizedReason("private matched keyword", safeReasons)).toBe(
-      `hash:${hashText("private matched keyword")}`
-    );
+    expect(getSanitizedReason("private matched keyword", safeReasons)).toBe("private-reason");
     expect(getSanitizedReason(" ", safeReasons)).toBe("unlabeled");
-    expect(hashText(null)).toBe("");
-    expect(hashText("")).toBe("");
   });
 
   test("redacts copied options and filter lists without mutating their sources", () => {
@@ -45,12 +40,10 @@ describe("diagnostics privacy and bounded collection", () => {
     expect(redactFilters(filters)).toEqual({ NF_BLOCKED_TEXT_LC: "[redacted]" });
     expect(options.NF_BLOCKED_TEXT).toBe("private keyword");
     expect(filters.NF_BLOCKED_TEXT_LC).toEqual(["private keyword"]);
-    expect(summarizeList(filters.NF_BLOCKED_TEXT_LC, 0)).toEqual({
+    expect(summarizeList(filters.NF_BLOCKED_TEXT_LC)).toEqual({
       count: 1,
-      hashes: [],
-      truncated: true,
     });
-    expect(summarizeList(null)).toEqual({ count: 0, hashes: [], truncated: false });
+    expect(summarizeList(null)).toEqual({ count: 0 });
   });
 
   test("strips page and script query strings and fragments", () => {
@@ -64,7 +57,7 @@ describe("diagnostics privacy and bounded collection", () => {
       pathname: "/feed",
       search: "",
     });
-    expect(getScriptsSample()).toEqual(["https://example.com/assets/runtime.js", "inline-script"]);
+    expect(getScriptsSample()).toEqual(["external-script", "inline-script"]);
     expect(getScriptsSample(1)).toHaveLength(1);
   });
 
@@ -106,7 +99,7 @@ describe("diagnostics privacy and bounded collection", () => {
     expect(buildDomSignature(post)).toEqual({
       tag: "ARTICLE",
       role: "article",
-      classHash: hashText("private-class"),
+      classCount: 1,
       childCount: 0,
       hasReason: false,
     });

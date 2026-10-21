@@ -21,6 +21,8 @@ export const catalog: Keywords = {
   NF_FILTER_VERIFIED_BADGE: "Filtrovat ověřené účty",
   NF_AI_SIDE_PANELS: "AI v postranních panelech",
   NF_SURVEY: "Průzkum",
+  NF_FRIEND_REQUESTS: "Žádosti o přátelství (pravý panel)",
+  DLG_FRIEND_REQUESTS_DESC: "Skrýt panel žádostí o přátelství vpravo v kanálu příspěvků.",
   NF_PEOPLE_YOU_MAY_KNOW: "Koho možná znáte",
   NF_PAID_PARTNERSHIP: "Placené partnerství",
   NF_SPONSORED_PAID: "Sponzorováno · Platí za to ______",

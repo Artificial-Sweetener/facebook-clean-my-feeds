@@ -4,6 +4,12 @@
 const newsSelectors = {
   mainColumn: 'div[role="navigation"] ~ div[role="main"]',
   dialog: 'div[role="dialog"]',
+  rightRail: '[role="complementary"]',
+  railHeadings: 'h1, h2, h3, h4, h5, h6, [role="heading"]',
+  railFriendLinks: 'a[href*="/friends"]',
+  railRequestLinks: 'a[href*="/friends/requests"]',
+  railActions: 'button, [role="button"]',
+  railContentBoundary: '[role="article"], [role="feed"], [role="navigation"], [role="dialog"]',
   surveyButton: 'a[href*="/survey/?session="] > div[role="none"]',
   standardPost: 'div[role="article"], div[aria-posinset]',
   sponsoredLink: 'a[href*="/ads/about/"]',

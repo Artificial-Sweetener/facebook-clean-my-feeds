@@ -21,6 +21,9 @@ export const catalog: Keywords = {
   NF_FILTER_VERIFIED_BADGE: "Filtrar contas verificadas",
   NF_AI_SIDE_PANELS: "IA nos painéis laterais",
   NF_SURVEY: "Enquete",
+  NF_FRIEND_REQUESTS: "Solicitações de amizade (barra lateral direita)",
+  DLG_FRIEND_REQUESTS_DESC:
+    "Ocultar o painel de solicitações de amizade na barra lateral direita do Feed de Notícias.",
   NF_PEOPLE_YOU_MAY_KNOW: "Pessoas que talvez conheças",
   NF_PAID_PARTNERSHIP: "Parceria paga",
   NF_SPONSORED_PAID: "Patrocinado · Financiado por ______",

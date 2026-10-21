@@ -7,6 +7,7 @@ export const defaults = {
   NF_STORIES: false,
   NF_SURVEY: true,
   NF_PEOPLE_YOU_MAY_KNOW: false,
+  NF_FRIEND_REQUESTS: false,
   NF_PAID_PARTNERSHIP: true,
   NF_SPONSORED_PAID: true,
   NF_SUGGESTIONS: true,

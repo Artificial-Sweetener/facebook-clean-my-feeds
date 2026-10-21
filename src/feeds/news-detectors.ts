@@ -1,10 +1,13 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { matchesNewsLabel, matchesNewsPaidBy } from "../core/filters/labels";
+import { isNewsBadgeCollapsed } from "./news-presentation";
 import type { Keywords } from "../i18n";
 import type { HydratedOptions } from "../core/options/types";
-import { cleanText } from "../core/filters/text-normalize";
+import { matchesDisclosureLabel, containsMetaAiCopy } from "../core/filters/disclosure-labels";
+import { facebookUrl, getPostEvidence } from "../dom/post-evidence";
 import { getFullNumber } from "../core/filters/classifiers/shares-likes";
-import { extractTextContent, isNestedMarkedNode } from "../dom/walker";
+import { extractTextContent } from "../dom/walker";
 import { querySelectorAllNoChildren } from "../utils/dom";
 import { getNewsBlocksQuery } from "./shared/blocks";
 import {
@@ -13,8 +16,6 @@ import {
   hasNewsCardHeading,
   isOwnedNewsElement,
   isOwnedNewsMetadata,
-  matchesNewsLabel,
-  matchesNewsPaidBy,
   ownNewsHeaders,
   ownPostReelLinks,
   ownVerifiedBadges,
@@ -37,6 +38,8 @@ export function isNewsSuggested(
     "div[aria-describedby] > div > div > div > div > div > div:nth-of-type(2) > div > div > div:nth-of-type(2) > div > div:nth-of-type(2) > div > div:nth-of-type(2) > span > div > span:nth-of-type(1)",
   ];
 
+  const semantic = hasNewsCardHeading(post, "suggested");
+  if (semantic) return isNewsReelsAndShortVideos(post, keyWords) ? "" : keyWords.NF_SUGGESTIONS;
   const elSuggestion = querySelectorAllNoChildren(post, queries, 1);
   if (elSuggestion.length > 0) {
     if (isNewsReelsAndShortVideos(post, keyWords).length > 0) {
@@ -59,10 +62,13 @@ export function isNewsSuggested(
 export function isGroupsYouMightLike(post: Element) {
   return (
     hasNewsCardHeading(post, "groups") &&
-    Array.from(post.querySelectorAll("a[href]")).some(
-      (link) =>
-        /^\/groups\/discover\/?$/.test(facebookPath(link) || "") && isOwnedNewsMetadata(link, post)
-    )
+    getPostEvidence(post)
+      .select("a[href]")
+      .some(
+        (link) =>
+          /^\/groups\/discover\/?$/.test(facebookPath(link) || "") &&
+          isOwnedNewsMetadata(link, post)
+      )
   );
 }
 
@@ -73,10 +79,12 @@ export function isNewsPeopleYouMayKnow(
 ) {
   const matches =
     hasNewsCardHeading(post, "people") &&
-    Array.from(post.querySelectorAll('a[href][role="link"]')).some(
-      (link) =>
-        /^\/friends(?:\/|$)/.test(facebookPath(link) || "") && isOwnedNewsMetadata(link, post)
-    );
+    getPostEvidence(post)
+      .select('a[href][role="link"]')
+      .some(
+        (link) =>
+          /^\/friends(?:\/|$)/.test(facebookPath(link) || "") && isOwnedNewsMetadata(link, post)
+      );
   return matches ? keyWords.NF_PEOPLE_YOU_MAY_KNOW : "";
 }
 
@@ -86,8 +94,8 @@ export function isNewsPaidPartnership(
   keyWords: Pick<Keywords, "NF_PAID_PARTNERSHIP">
 ) {
   const queryPP = 'span[dir] > span[id] a[href^="/business/help/"]';
-  const elPaidPartnership = post.querySelector(queryPP);
-  return elPaidPartnership === null ? "" : keyWords.NF_PAID_PARTNERSHIP;
+  const elPaidPartnership = getPostEvidence(post).select(queryPP)[0];
+  return elPaidPartnership === undefined ? "" : keyWords.NF_PAID_PARTNERSHIP;
 }
 
 /** Require the owned disclosure layout and a localized paid-by statement with a nonempty payer. */
@@ -112,14 +120,12 @@ export function isNewsReelsAndShortVideos(
 ) {
   const shelf =
     hasNewsCardHeading(post, "reels") &&
-    Array.from(post.querySelectorAll("a[href]")).some((link) => {
-      if (facebookPath(link) !== "/reel/" || !isOwnedNewsMetadata(link, post)) return false;
-      return (
-        new URL(link.getAttribute("href") || "", "https://www.facebook.com/").searchParams.get(
-          "s"
-        ) === "ifu_see_more"
-      );
-    });
+    getPostEvidence(post)
+      .select("a[href]")
+      .some((link) => {
+        if (facebookPath(link) !== "/reel/" || !isOwnedNewsMetadata(link, post)) return false;
+        return facebookUrl(link)?.searchParams.get("s") === "ifu_see_more";
+      });
   return shelf || ownPostReelLinks(post).length > 4 ? keyWords.NF_REELS_SHORT_VIDEOS : "";
 }
 
@@ -137,6 +143,16 @@ export function isNewsEventsYouMayLike(
   keyWords: Pick<Keywords, "NF_EVENTS_YOU_MAY_LIKE">
 ) {
   const query = ":scope div > div:nth-of-type(2) > div > div >  h3 > span";
+  if (
+    hasNewsCardHeading(post, "events") &&
+    getPostEvidence(post)
+      .select("a[href]")
+      .some(
+        (link) =>
+          isOwnedNewsMetadata(link, post) && /^\/events(?:\/|$)/.test(facebookPath(link) || "")
+      )
+  )
+    return keyWords.NF_EVENTS_YOU_MAY_LIKE;
   const events = querySelectorAllNoChildren(post, query, 0);
   return events.some(
     (heading) =>
@@ -149,15 +165,18 @@ export function isNewsEventsYouMayLike(
 /** Match a named action in an owned author header, requiring a compatible Facebook author or group link. */
 function hasHeaderAction(post: Element, kind: "follow" | "join"): boolean {
   return ownNewsHeaders(post).some((header) => {
-    const paths = Array.from(header.querySelectorAll("a[href]"))
+    const paths = getPostEvidence(post)
+      .select("a[href]", header)
       .map(facebookPath)
       .filter((path): path is string => path !== null);
     const hasGroup = paths.some((path) => /^\/groups\/[^/]+/.test(path));
     const hasAuthor = paths.some((path) => path !== "/" && !/^\/groups(?:\/|$)/.test(path));
     if (kind === "join" ? !hasGroup : !hasAuthor || hasGroup) return false;
-    return Array.from(header.querySelectorAll('button, [role="button"]')).some(
-      (control) => isOwnedNewsElement(control, post) && hasNewsActionName(control, kind)
-    );
+    return getPostEvidence(post)
+      .select('button, [role="button"]', header)
+      .some(
+        (control) => isOwnedNewsElement(control, post) && hasNewsActionName(control, post, kind)
+      );
   });
 }
 
@@ -171,7 +190,9 @@ export function isNewsFollow(post: Element, keyWords: Pick<Keywords, "NF_FOLLOW"
   const leaves = querySelectorAllNoChildren(post, queries, 0, false);
   const fallback =
     leaves.length === 1 &&
-    leaves.some((leaf) => isOwnedNewsMetadata(leaf, post) && hasNewsActionName(leaf, "follow"));
+    leaves.some(
+      (leaf) => isOwnedNewsMetadata(leaf, post) && hasNewsActionName(leaf, post, "follow")
+    );
   return hasHeaderAction(post, "follow") || fallback ? keyWords.NF_FOLLOW : "";
 }
 
@@ -180,7 +201,7 @@ export function isNewsParticipate(post: Element, keyWords: Pick<Keywords, "NF_PA
   const leaves = querySelectorAllNoChildren(post, ":scope h4 > span > span[class] > span", 0);
   const fallback =
     leaves.length === 1 &&
-    leaves.some((leaf) => isOwnedNewsMetadata(leaf, post) && hasNewsActionName(leaf, "join"));
+    leaves.some((leaf) => isOwnedNewsMetadata(leaf, post) && hasNewsActionName(leaf, post, "join"));
   return hasHeaderAction(post, "join") || fallback ? keyWords.NF_PARTICIPATE : "";
 }
 
@@ -206,17 +227,22 @@ export function isMetaAiLink(link: Element): boolean {
 
 /** Detect explicit Meta AI promotional controls, verified destination links, or known creation-tool copy in content blocks. */
 export function isNewsMetaAICard(post: Element, keyWords: Pick<Keywords, "NF_META_AI">) {
-  const branding = post.querySelector(
-    'a[aria-label="Visit Meta AI"], a[aria-label="Meta AI branding"]'
-  );
-  if (branding || Array.from(post.querySelectorAll("a[href]")).some(isMetaAiLink)) {
+  const evidence = getPostEvidence(post);
+  const branding = evidence
+    .select("a[aria-label], a[aria-labelledby]")
+    .some(
+      (link) =>
+        isOwnedNewsMetadata(link, post) &&
+        evidence.isRendered(link) &&
+        evidence.explicitNames(link).some((name) => matchesDisclosureLabel(name, "metaAiBrand"))
+    );
+  if (
+    branding ||
+    evidence.select("a[href]").some((link) => isOwnedNewsElement(link, post) && isMetaAiLink(link))
+  )
     return keyWords.NF_META_AI;
-  }
-
-  const postTexts = extractTextContent(post, getNewsBlocksQuery(post), 3).join(" ").toLowerCase();
-  if (postTexts.includes("try meta ai") || postTexts.includes("free ai creation tools")) {
-    return keyWords.NF_META_AI;
-  }
+  const postTexts = extractTextContent(post, getNewsBlocksQuery(post), 3).join(" ");
+  if (containsMetaAiCopy(postTexts)) return keyWords.NF_META_AI;
 
   return "";
 }
@@ -227,15 +253,13 @@ export function isNewsAiInfoPost(post: Element, keyWords: Pick<Keywords, "NF_AI_
     return "";
   }
 
-  const controls = Array.from(post.querySelectorAll('button, [role="button"]'));
-  const hasAiInfoLabel = controls.some((control) => {
-    if (isNestedMarkedNode(control, post)) return false;
-    const text = cleanText(control.textContent || "")
-      .replace(/\s+/g, " ")
-      .trim()
-      .toLocaleLowerCase();
-
-    return text === "ai info";
+  const evidence = getPostEvidence(post);
+  const hasAiInfoLabel = evidence.select('button, [role="button"]').some((control) => {
+    if (!isOwnedNewsElement(control, post) || !evidence.isRendered(control)) return false;
+    const names = evidence.explicitNames(control);
+    return (names.length ? names : [evidence.visibleText(control)]).some((name) =>
+      matchesDisclosureLabel(name, "aiInfo")
+    );
   });
 
   return hasAiInfoLabel && typeof keyWords.NF_AI_INFO_POSTS === "string"
@@ -246,7 +270,7 @@ export function isNewsAiInfoPost(post: Element, keyWords: Pick<Keywords, "NF_AI_
 /** Return the localized story reason only for feed-origin story links. */
 export function isNewsStoriesPost(post: Element, keyWords: Pick<Keywords, "NF_STORIES">) {
   const queryForStory = '[href^="/stories/"][href*="source=from_feed"]';
-  const elStory = post.querySelector(queryForStory);
+  const elStory = getPostEvidence(post).select(queryForStory)[0];
   return elStory ? keyWords.NF_STORIES : "";
 }
 
@@ -255,7 +279,11 @@ export function isNewsVerifiedBadge(
   post: Element,
   keyWords: Pick<Keywords, "NF_FILTER_VERIFIED_BADGE">
 ) {
-  return ownVerifiedBadges(post).length > 0 ? keyWords.NF_FILTER_VERIFIED_BADGE : "";
+  return ownVerifiedBadges(post).some(
+    (icon) => getPostEvidence(post).isRendered(icon) || isNewsBadgeCollapsed(icon)
+  )
+    ? keyWords.NF_FILTER_VERIFIED_BADGE
+    : "";
 }
 
 /** Compare rendered likes against the configured threshold and preserve the legacy false result when absent. */
@@ -266,7 +294,7 @@ export function postExceedsLikeCount(
 ) {
   const queryLikes =
     'span[role="toolbar"] ~ div div[role="button"] > span[class][aria-hidden] > span:not([class]) > span[class]';
-  const elLikes = post.querySelectorAll(queryLikes);
+  const elLikes = getPostEvidence(post).select(queryLikes);
   if (elLikes.length > 0) {
     const maxLikes = parseInt(options.NF_LIKES_MAXIMUM_COUNT, 10);
     const postLikesCount = getFullNumber((elLikes[0]?.textContent ?? "").trim());

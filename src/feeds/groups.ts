@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { matchesNewsLabel } from "../core/filters/labels";
 import { cleanGroupsSuggestions, setPostLinkToOpenInNewTab } from "./groups-features";
+import { getPostEvidence } from "../dom/post-evidence";
 import type { Keywords } from "../i18n";
 import type { FeedContext, FeedProcessingState, DirtyFeedRoots } from "./types";
 import { mainColumnAtt, postAtt } from "../dom/attributes";
@@ -19,7 +21,7 @@ import {
 import { doLightDusting, getDustingCount } from "../dom/dusting";
 import { hideGroupPost } from "../dom/hide";
 import { scrubInfoBoxes } from "../dom/info-boxes";
-import { isOwnedNewsElement, matchesNewsLabel, ownPostReelLinks } from "./news-identity";
+import { isOwnedNewsElement, ownPostReelLinks } from "./news-identity";
 
 import { findGroupsBlockedText } from "./shared/blocked-text";
 import { hasGroupsAnimatedGifContent } from "./shared/animated-gifs";
@@ -115,7 +117,7 @@ function hasGroupsSuggestionLabel(element: Element, post: Element): boolean {
 
 /** Retain both supported layouts, but require owned recommendation text instead of treating every styled privacy icon or nested heading as a suggestion. */
 function isGroupsSuggested(post: Element, keyWords: Pick<Keywords, "GF_SUGGESTIONS">) {
-  const blocks = post.querySelectorAll(getGroupsBlocksQuery(post));
+  const blocks = getPostEvidence(post).select(getGroupsBlocksQuery(post));
   if (blocks.length <= 1) return "";
   const icons = blocks[0]?.querySelectorAll('i[data-visualcompletion="css-img"][style]') || [];
   const hasSuggestionIcon = Array.from(icons).some(

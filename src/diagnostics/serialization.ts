@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
 import type { DiagnosticsState } from "./types";
 import { sanitizePathname } from "./location";
+import { browserIdentity, diagnosticLocale } from "../core/diagnostics/environment";
+import { buildIdentity } from "../core/diagnostics/build-identity";
 /** The build-source classifier needs only download metadata, not runtime manager capabilities. */
 export interface ScriptSourceMetadata {
   downloadURL?: string;
@@ -29,11 +31,27 @@ export function getScriptInfo() {
   const gm = typeof globalThis !== "undefined" ? globalThis.GM : undefined;
   const script = gm && gm.info && gm.info.script ? gm.info.script : null;
   return {
-    name: script && script.name ? script.name : "FB - Clean my feeds",
-    version: script && script.version ? script.version : "unknown",
+    name: "FB - Clean my feeds",
+    version:
+      script?.version && /^\d+(?:\.\d+){0,4}(?:[-+][a-z0-9.-]+)?$/i.test(script.version)
+        ? script.version
+        : "unknown",
     buildSource: getBuildSource(script),
-    supportURL: script && script.supportURL ? script.supportURL : getSupportUrl(),
-    handler: gm && gm.info && gm.info.scriptHandler ? gm.info.scriptHandler : "unknown",
+    supportURL: getSupportUrl() === SUPPORT_URL_FALLBACK ? SUPPORT_URL_FALLBACK : "custom",
+    handler:
+      [
+        "Violentmonkey",
+        "Tampermonkey",
+        "Greasemonkey",
+        "FireMonkey",
+        "ScriptCat",
+        "Userscripts",
+      ].find((name) => name === gm?.info?.scriptHandler) || "unknown",
+    handlerVersion:
+      gm?.info?.version && /^\d+(?:\.\d+){0,4}(?:[-+][a-z0-9.-]+)?$/i.test(gm.info.version)
+        ? gm.info.version
+        : "unknown",
+    buildIdentity,
   };
 }
 
@@ -79,10 +97,10 @@ export function getBuildSource(script: ScriptSourceMetadata | null) {
 export function buildEnvironmentSnapshot() {
   const gm = typeof globalThis !== "undefined" ? globalThis.GM : undefined;
   return {
-    userAgent: navigator.userAgent,
-    platform: navigator.platform,
-    language: navigator.language,
-    languages: navigator.languages,
+    browser: browserIdentity(navigator.userAgent),
+    language: diagnosticLocale(navigator.language),
+    languages: navigator.languages.slice(0, 8).map((value) => diagnosticLocale(value)),
+    facebookLanguage: diagnosticLocale(document.documentElement.lang),
     hasGM: !!gm,
     hasGMInfo: !!(gm && gm.info),
     readyState: document.readyState,
@@ -110,7 +128,13 @@ export function getScriptsSample(limit = 20) {
       try {
         const url = new URL(script.src, window.location.href);
         if (url.protocol === "http:" || url.protocol === "https:") {
-          samples.push(`${url.origin}${url.pathname}`);
+          samples.push(
+            /(^|\.)facebook\.com$/i.test(url.hostname)
+              ? "facebook-script"
+              : /(^|\.)fbcdn\.net$/i.test(url.hostname)
+                ? "facebook-cdn-script"
+                : "external-script"
+          );
         } else if (url.protocol === "data:") {
           samples.push("data-script");
         } else if (url.protocol === "blob:") {

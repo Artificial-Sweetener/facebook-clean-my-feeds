@@ -18,6 +18,8 @@ export const catalog: Keywords = {
   NF_FILTER_VERIFIED_BADGE: "Filter verified accounts",
   NF_AI_SIDE_PANELS: "AI in Side Panels",
   NF_SURVEY: "Survey",
+  NF_FRIEND_REQUESTS: "Friend requests (right sidebar)",
+  DLG_FRIEND_REQUESTS_DESC: "Hide the Friend requests panel in the right sidebar of News Feed.",
   NF_PEOPLE_YOU_MAY_KNOW: "People you may know",
   NF_PAID_PARTNERSHIP: "Paid partnership",
   NF_SPONSORED_PAID: "Sponsored · Paid for by ______",

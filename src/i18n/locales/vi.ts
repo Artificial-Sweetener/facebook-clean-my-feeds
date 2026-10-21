@@ -21,6 +21,8 @@ export const catalog: Keywords = {
   NF_FILTER_VERIFIED_BADGE: "Lọc tài khoản đã xác minh",
   NF_AI_SIDE_PANELS: "AI ở bảng bên",
   NF_SURVEY: "Khảo sát",
+  NF_FRIEND_REQUESTS: "Lời mời kết bạn (thanh bên phải)",
+  DLG_FRIEND_REQUESTS_DESC: "Ẩn khung lời mời kết bạn ở thanh bên phải của Bảng tin.",
   NF_PEOPLE_YOU_MAY_KNOW: "Những người bạn có thể biết",
   NF_PAID_PARTNERSHIP: "Mối quan hệ tài trợ",
   NF_SPONSORED_PAID: "Được tài trợ · Tài trợ bởi ______",

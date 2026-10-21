@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { matchesNewsLabel } from "../core/filters/labels";
 import type { FeedContext } from "./types";
-import { hasNewsCardHeading, matchesNewsLabel } from "./news-identity";
+import { hasNewsCardHeading } from "./news-identity";
 import { cleanText } from "../core/filters/text-normalize";
 import { postAtt, postAttTab } from "../dom/attributes";
 import { hideNewsPost, hideFeature } from "../dom/hide";

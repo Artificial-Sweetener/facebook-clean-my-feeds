@@ -1,66 +1,29 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { isNestedMarkedNode } from "../../dom/walker";
-import { translations } from "../../i18n";
+import { ownsPostElement } from "../../dom/ownership";
+import { facebookUrl, getPostEvidence, PostEvidence } from "../../dom/post-evidence";
+import { matchesSponsoredLabel } from "../../core/filters/disclosure-labels";
 import { videosSelectors } from "../../selectors/videos";
+import { sharedSelectors } from "../../selectors/shared";
 import type { SponsoredState } from "../types";
 import { getNewsBlocksQuery } from "./blocks";
 
 const cftParam = "__cft__[0]=";
 const maximumCandidateLinks = 10;
-const postOwnerSelector = 'div[role="article"], div[aria-posinset]';
-const authoredRegionSelector =
-  'p, blockquote, [data-ad-preview="message"], [data-ad-comet-preview="message"], [data-ad-rendering-role="story_message"], [data-ad-rendering-role="creative_body"], [contenteditable="true"], [data-commentid], [data-testid^="UFI2Comment/"], [role="comment"]';
-const sponsoredLabels = new Set(
-  Object.values(translations).flatMap((catalog) =>
-    [catalog.SPONSORED, catalog.SPONSORED_EXTRA]
-      .filter((label): label is string => typeof label === "string")
-      .map(normalizeLabel)
-  )
-);
-
-/** Fold display-only Unicode variants while retaining exact words, punctuation, and diacritics. */
-function normalizeLabel(label: string): string {
-  return label
-    .normalize("NFKC")
-    .replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g, "")
-    .replace(/\s+/g, " ")
-    .trim()
-    .toLowerCase();
-}
-
-/** Reject lookalike hosts, redirect query text, malformed links, and non-web destinations. */
-function facebookUrl(link: Element): URL | null {
-  const href = link.getAttribute("href");
-  if (!href) return null;
-  try {
-    const url = new URL(href, "https://www.facebook.com/");
-    return (url.protocol === "https:" || url.protocol === "http:") &&
-      !url.username &&
-      !url.password &&
-      (url.hostname === "facebook.com" || url.hostname.endsWith(".facebook.com"))
-      ? url
-      : null;
-  } catch {
-    return null;
-  }
-}
-
 /**
  * Exclude authored text and independent nested posts/comments before considering any advertising signal.
  * A generic feed wrapper may enclose one owning article; additional article ancestry is not its metadata.
  */
-function isOwnedControl(control: Element, post: Element, bodies: readonly Element[]): boolean {
-  if (isNestedMarkedNode(control, post)) return false;
-  const authoredRegion = control.closest(authoredRegionSelector);
-  if (authoredRegion && post.contains(authoredRegion)) return false;
-  if (bodies.some((body) => body.contains(control))) return false;
-  const owner = control.closest(postOwnerSelector);
-  if (!owner || owner === post || !post.contains(owner)) return true;
-  if (post.matches(`${postOwnerSelector}, div[aria-describedby], div[data-virtualized]`))
-    return false;
-  const parentOwner = owner.parentElement?.closest(postOwnerSelector);
-  return !parentOwner || !post.contains(parentOwner);
+function isOwnedControl(
+  control: Element,
+  post: Element,
+  bodies: readonly Element[],
+  evidence: PostEvidence
+): boolean {
+  return (
+    ownsPostElement(control, post, { bodies, allowArticleWrapper: true }) &&
+    evidence.isRendered(control)
+  );
 }
 
 /**
@@ -69,7 +32,7 @@ function isOwnedControl(control: Element, post: Element, bodies: readonly Elemen
  */
 function authoredBlocks(post: Element, state: SponsoredState): Element[] {
   if (state.isNF || state.isGF || state.isSF) {
-    return Array.from(post.querySelectorAll(getNewsBlocksQuery(post))).slice(1);
+    return getPostEvidence(post).select(getNewsBlocksQuery(post)).slice(1);
   }
   if (state.isVF) {
     return Array.from(
@@ -81,83 +44,143 @@ function authoredBlocks(post: Element, state: SponsoredState): Element[] {
   return [];
 }
 
-/** Extract fragmented label text while ignoring hidden decoys and non-rendered script/style content. */
-function visibleControlText(control: Element): string {
-  const walker = control.ownerDocument.createTreeWalker(control, NodeFilter.SHOW_TEXT);
-  let text = "";
-  let node: Node | null;
-  while ((node = walker.nextNode())) {
-    let element = node.parentElement;
-    let visible = true;
-    while (element && control.contains(element)) {
-      const style = element.ownerDocument.defaultView?.getComputedStyle(element);
-      if (
-        element.matches('script, style, [hidden], [aria-hidden="true"]') ||
-        style?.display === "none" ||
-        style?.visibility === "hidden"
-      ) {
-        visible = false;
-        break;
-      }
-      if (element === control) break;
-      element = element.parentElement;
-    }
-    if (visible) text += node.textContent || "";
-  }
-  return text;
+/** Per-classification name memoization also serves detached posts and observer-free hosts. */
+interface SponsoredScope {
+  dom: PostEvidence;
+  names: Map<Element, boolean>;
+}
+
+/** Reuse both positive and negative names across tracking and same-header corroboration routes. */
+function hasSponsoredName(
+  control: Element,
+  post: Element,
+  bodies: readonly Element[],
+  scope: SponsoredScope
+): boolean {
+  const cached = scope.names.get(control);
+  if (cached !== undefined) return cached;
+  const result = readSponsoredName(control, post, bodies, scope);
+  scope.names.set(control, result);
+  return result;
 }
 
 /**
  * Read a control's own accessible name or visible label, never text from a surrounding post.
- * Referenced labels must be owned by this post and cannot be an enclosing post/body container.
+ * Direct references must be owned; separately named graphics may use constrained shared labels.
  * @param control Candidate disclosure or tracking control whose own name may identify sponsorship.
  * @param post Ownership boundary used to resolve referenced labels without reading unrelated content.
  * @param bodies Authored regions excluded even when they omit explicit message attributes.
+ * @param scope Shared per-version DOM facts and per-classification name results.
  * @returns Whether a supported exact sponsorship label is present on the owned control.
  */
-function hasSponsoredName(control: Element, post: Element, bodies: readonly Element[]): boolean {
+function readSponsoredName(
+  control: Element,
+  post: Element,
+  bodies: readonly Element[],
+  scope: SponsoredScope
+): boolean {
   const ariaLabel = control.getAttribute("aria-label");
-  if (ariaLabel) return sponsoredLabels.has(normalizeLabel(ariaLabel));
+  if (ariaLabel) return matchesSponsoredLabel(ariaLabel);
   const labelIds = control.getAttribute("aria-labelledby");
   if (labelIds) {
-    const labels = labelIds
-      .trim()
-      .split(/\s+/)
-      .map((id) =>
-        Array.from(post.querySelectorAll("[id]")).find(
-          (element) =>
-            element.id === id && !element.contains(control) && isOwnedControl(element, post, bodies)
-        )
+    const labels = scope.dom
+      .referencedLabels(control)
+      .map((label) =>
+        label &&
+        post.contains(label) &&
+        !label.contains(control) &&
+        isOwnedControl(label, post, bodies, scope.dom)
+          ? label
+          : null
       );
-    if (labels.every((label) => label !== undefined)) {
-      return sponsoredLabels.has(
-        normalizeLabel(labels.map((label) => label?.textContent || "").join(" "))
+    if (labels.every((label) => label !== null)) {
+      return matchesSponsoredLabel(
+        labels.map((label) => (label ? scope.dom.labelText(label) : "")).join(" ")
       );
     }
     return false;
   }
-  return [visibleControlText(control), control.getAttribute("title") || ""].some((label) =>
-    sponsoredLabels.has(normalizeLabel(label))
+  return (
+    [scope.dom.visibleText(control), control.getAttribute("title") || ""].some((label) =>
+      matchesSponsoredLabel(label)
+    ) || hasSponsoredGraphicName(control, post, bodies, scope)
   );
+}
+
+/**
+ * Resolve an owned disclosure graphic's accessible name, including Facebook's shared SVG labels.
+ * External references must be plain leaf spans outside posts, authored regions, and controls;
+ * arbitrary external aria-labelledby on the tracking link itself remains unsupported.
+ * @param control Tracking or disclosure control already checked against the post's ownership boundary.
+ * @param post Owning post; referenced labels cannot enclose it or the disclosure control.
+ * @param bodies Legacy authored regions that cannot supply advertising evidence.
+ * @param scope Shared names, label dependencies and bounded style reads.
+ * @returns Whether an independently named graphic supplies an exact supported advertising label.
+ */
+function hasSponsoredGraphicName(
+  control: Element,
+  post: Element,
+  bodies: readonly Element[],
+  scope: SponsoredScope
+): boolean {
+  return scope.dom
+    .select("svg[aria-label], svg[aria-labelledby], span[aria-labelledby]", control)
+    .slice(0, 16)
+    .some((graphic) => {
+      if (
+        !isOwnedControl(graphic, post, bodies, scope.dom) ||
+        graphic.closest('a, button, [role="button"], [role="link"]') !== control ||
+        graphic.closest('[hidden], [aria-hidden="true"]') ||
+        !scope.dom.isVisible(graphic) ||
+        (graphic.localName === "span" &&
+          (graphic.childElementCount !== 1 || graphic.firstElementChild?.localName !== "svg"))
+      )
+        return false;
+      const ariaLabel = graphic.getAttribute("aria-label");
+      if (ariaLabel) return matchesSponsoredLabel(ariaLabel);
+      const ids = graphic.getAttribute("aria-labelledby")?.trim().split(/\s+/);
+      if (!ids?.length) return false;
+      const labels = scope.dom.referencedLabels(graphic).map((label) => {
+        if (!label || label.contains(control) || label.contains(post)) return null;
+        if (post.contains(label))
+          return isOwnedControl(label, post, bodies, scope.dom) ? label : null;
+        return label.localName === "span" &&
+          label.childElementCount === 0 &&
+          !label.closest(
+            `${sharedSelectors.authoredContent}, ${sharedSelectors.postOwner}, a, button, [role="link"], [role="button"]`
+          )
+          ? label
+          : null;
+      });
+      return (
+        labels.every((label) => label !== null) &&
+        matchesSponsoredLabel(
+          labels.map((label) => (label ? scope.dom.labelText(label) : "")).join(" ")
+        )
+      );
+    });
 }
 
 /** Require sponsorship on the tracking control itself or another control in its own author heading. */
 function hasSponsoredCorroboration(
   link: Element,
   post: Element,
-  bodies: readonly Element[]
+  bodies: readonly Element[],
+  scope: SponsoredScope
 ): boolean {
-  if (hasSponsoredName(link, post, bodies)) return true;
+  if (hasSponsoredName(link, post, bodies, scope)) return true;
   const header = link.closest("h4, h5");
   return (
     !!header &&
     post.contains(header) &&
-    Array.from(header.querySelectorAll('a, button, [role="button"], [role="link"]')).some(
-      (control) =>
-        control !== link &&
-        isOwnedControl(control, post, bodies) &&
-        hasSponsoredName(control, post, bodies)
-    )
+    scope.dom
+      .select('a, button, [role="button"], [role="link"]', header)
+      .some(
+        (control) =>
+          control !== link &&
+          isOwnedControl(control, post, bodies, scope.dom) &&
+          hasSponsoredName(control, post, bodies, scope)
+      )
   );
 }
 
@@ -175,13 +198,16 @@ function isSponsored(post: Element | null, state: SponsoredState | null) {
 export function isSponsoredDisclosure(control: Element, post: Element): boolean {
   if (!control.matches("a[href]")) return false;
   const url = facebookUrl(control);
-  const owner = control.closest(postOwnerSelector);
+  const scope = { dom: getPostEvidence(post), names: new Map<Element, boolean>() };
+  const owner = control.closest(sharedSelectors.postOwner);
   return (
     url?.pathname === "/ads/about/" &&
     (!owner || owner === post || !post.contains(owner)) &&
-    isOwnedControl(control, post, []) &&
-    Array.from(control.querySelectorAll("*")).every((child) => isOwnedControl(child, post, [])) &&
-    hasSponsoredName(control, post, [])
+    isOwnedControl(control, post, [], scope.dom) &&
+    Array.from(control.querySelectorAll("*")).every((child) =>
+      isOwnedControl(child, post, [], scope.dom)
+    ) &&
+    hasSponsoredName(control, post, [], scope)
   );
 }
 
@@ -203,13 +229,14 @@ function getSponsoredDiagnostics(post: Element | null, state: SponsoredState | n
 function inspectSponsored(post: Element | null, state: SponsoredState | null) {
   const diagnostics = createSponsoredDiagnostics(post, state);
   if (!post || !state) return { isSponsored: false, diagnostics };
+  const scope = { dom: getPostEvidence(post), names: new Map<Element, boolean>() };
   const bodies = authoredBlocks(post, state);
-  diagnostics.adsAboutLinkCount = Array.from(post.querySelectorAll("a[href]")).filter((link) => {
+  diagnostics.adsAboutLinkCount = scope.dom.select("a[href]").filter((link) => {
     const url = facebookUrl(link);
     return (
       url?.pathname === "/ads/about/" &&
-      isOwnedControl(link, post, bodies) &&
-      hasSponsoredName(link, post, bodies)
+      isOwnedControl(link, post, bodies, scope.dom) &&
+      hasSponsoredName(link, post, bodies, scope)
     );
   }).length;
   if (diagnostics.adsAboutLinkCount > 0) {
@@ -217,7 +244,7 @@ function inspectSponsored(post: Element | null, state: SponsoredState | null) {
     return { isSponsored: true, diagnostics };
   }
 
-  const candidates = collectCftLinkCandidates(post, state, bodies);
+  const candidates = collectCftLinkCandidates(post, state, bodies, scope);
   diagnostics.cftLinks.selectedSource = candidates.selectedSource;
   diagnostics.cftLinks.selectedCount = candidates.links.length;
   diagnostics.cftLinks.rejectedForVolume = candidates.links.length >= maximumCandidateLinks;
@@ -246,12 +273,14 @@ function inspectSponsored(post: Element | null, state: SponsoredState | null) {
  * @param post Read-only feed item containing supported metadata wrapper families.
  * @param state Feed flags choose the existing wrapper priority and route-specific layouts.
  * @param bodies Authored regions that cannot corroborate a sponsorship control.
+ * @param scope Shared facts reused across wrapper and semantic candidate routes.
  * @returns Eligible controls from the first matching family and its diagnostic source label.
  */
 function collectCftLinkCandidates(
   post: Element,
   state: SponsoredState,
-  bodies: readonly Element[]
+  bodies: readonly Element[],
+  scope: SponsoredScope
 ) {
   const queries: string[] = [];
   let selectedSource = "none";
@@ -267,18 +296,32 @@ function collectCftLinkCandidates(
     selectedSource = "nested-article";
   }
   for (const query of queries) {
-    const links = Array.from(post.querySelectorAll<HTMLAnchorElement>(query)).filter((link) => {
+    const links = scope.dom.select(query).filter((link) => {
       const url = facebookUrl(link);
       return (
         url !== null &&
         !url.pathname.startsWith("/groups/") &&
         !url.searchParams.has("section_header_type") &&
         url.searchParams.has("__cft__[0]") &&
-        isOwnedControl(link, post, bodies) &&
-        hasSponsoredCorroboration(link, post, bodies)
+        isOwnedControl(link, post, bodies, scope.dom) &&
+        hasSponsoredCorroboration(link, post, bodies, scope)
       );
     });
     if (links.length > 0) return { links, selectedSource };
+  }
+  if (state.isNF || state.isGF || state.isVF || state.isSF) {
+    const links = scope.dom.select("h4 a[href], h5 a[href]").filter((link) => {
+      const url = facebookUrl(link);
+      return (
+        url !== null &&
+        !url.pathname.startsWith("/groups/") &&
+        !url.searchParams.has("section_header_type") &&
+        url.searchParams.has("__cft__[0]") &&
+        isOwnedControl(link, post, bodies, scope.dom) &&
+        hasSponsoredCorroboration(link, post, bodies, scope)
+      );
+    });
+    if (links.length) return { links, selectedSource: "semantic-header" };
   }
   return { links: [], selectedSource: "none" };
 }

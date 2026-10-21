@@ -21,6 +21,8 @@ export const catalog: Keywords = {
   NF_FILTER_VERIFIED_BADGE: "Suodata varmennetut tilit",
   NF_AI_SIDE_PANELS: "Tekoäly sivupaneeleissa",
   NF_SURVEY: "Kysely",
+  NF_FRIEND_REQUESTS: "Kaveripyynnöt (oikea sivupalkki)",
+  DLG_FRIEND_REQUESTS_DESC: "Piilota uutisvirran oikean sivupalkin kaveripyyntöpaneeli.",
   NF_PEOPLE_YOU_MAY_KNOW: "Ihmiset, jotka saatat tuntea",
   NF_PAID_PARTNERSHIP: "Maksettu kumppanuus",
   NF_SPONSORED_PAID: "Sponsoroitu · Maksaja ______",

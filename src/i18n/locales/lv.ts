@@ -21,6 +21,8 @@ export const catalog: Keywords = {
   NF_FILTER_VERIFIED_BADGE: "Filtrēt verificētos kontus",
   NF_AI_SIDE_PANELS: "AI sānu paneļos",
   NF_SURVEY: "Aptauja",
+  NF_FRIEND_REQUESTS: "Draudzības uzaicinājumi (labā sānjosla)",
+  DLG_FRIEND_REQUESTS_DESC: "Paslēpt draudzības uzaicinājumu paneli ziņu plūsmas labajā sānjoslā.",
   NF_PEOPLE_YOU_MAY_KNOW: "Cilvēki, kurus tu varētu pazīt",
   NF_PAID_PARTNERSHIP: "Apmaksāta sadarbība",
   NF_SPONSORED_PAID: "Apmaksāta reklāma · Apmaksā ______",

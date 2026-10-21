@@ -12,15 +12,16 @@
     "icons:optimize": "node --import tsx tools/optimize-icons.ts",
     "release": "semantic-release",
     "test": "jest --config tools/config/jest.json --runInBand",
-    "typecheck:browser": "tsc --project tsconfig.browser.json",
-    "typecheck:core": "tsc --project tsconfig.core.json",
-    "typecheck:tools": "tsc --project tsconfig.tools.json",
-    "typecheck:tests": "tsc --project tsconfig.tests.json",
+    "typecheck:browser": "tsc --project tools/config/tsconfig.browser.json",
+    "typecheck:core": "tsc --project tools/config/tsconfig.core.json",
+    "typecheck:tools": "tsc --project tools/config/tsconfig.tools.json",
+    "typecheck:tests": "tsc --project tools/config/tsconfig.tests.json",
     "typecheck": "npm run typecheck:browser && npm run typecheck:core && npm run typecheck:tools && npm run typecheck:tests",
     "check:locales": "node --import tsx tools/check-locales.ts",
     "check:governance": "node --import tsx tools/governance/check.ts",
     "check:artifact": "node --import tsx tools/verify-artifact.ts",
-    "verify": "npm run check:node && npm run format:check && npm run lint && npm run typecheck && npm test && npm run check:locales && npm run check:governance && npm run build && npm run check:artifact"
+    "verify": "npm run check:node && npm run format:check && npm run lint && npm run typecheck && npm test && npm run check:locales && npm run check:governance && npm run build && npm run check:artifact",
+    "report:inspect": "node --import tsx tools/inspect-report.ts"
   },
   "engines": {
     "node": ">=22.14.0 <23"
@@ -52,5 +53,45 @@
     "typescript": "5.9.3",
     "typescript-eslint": "8.46.1"
   },
-  "license": "GPL-3.0-only"
+  "license": "GPL-3.0-only",
+  "release": {
+    "branches": [
+      "main"
+    ],
+    "tagFormat": "v${version}",
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      [
+        "@semantic-release/changelog",
+        {
+          "changelogFile": "CHANGELOG.md"
+        }
+      ],
+      [
+        "@semantic-release/npm",
+        {
+          "npmPublish": false
+        }
+      ],
+      [
+        "@semantic-release/exec",
+        {
+          "prepareCmd": "npm run verify"
+        }
+      ],
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json",
+            "package-lock.json",
+            "CHANGELOG.md",
+            "fb-clean-my-feeds.user.js"
+          ],
+          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        }
+      ]
+    ]
+  }
 }

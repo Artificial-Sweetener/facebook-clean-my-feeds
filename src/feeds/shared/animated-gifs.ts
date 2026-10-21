@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { getPostEvidence } from "../../dom/post-evidence";
 import type { Keywords } from "../../i18n";
 import { getMosquitosQuery } from "../../dom/animated-gifs";
 
@@ -16,7 +17,7 @@ function hasNewsAnimatedGifContent(
     return "";
   }
 
-  const postBlocks = post.querySelectorAll(getNewsBlocksQuery(post));
+  const postBlocks = getPostEvidence(post).select(getNewsBlocksQuery(post));
   if (postBlocks.length >= 2) {
     const contentBlock = postBlocks[1];
     if (!contentBlock) return "";
@@ -38,7 +39,7 @@ function hasGroupsAnimatedGifContent(
     return "";
   }
 
-  const postBlocks = post.querySelectorAll(getGroupsBlocksQuery(post));
+  const postBlocks = getPostEvidence(post).select(getGroupsBlocksQuery(post));
   if (postBlocks.length >= 2) {
     const contentBlock = postBlocks[1];
     if (!contentBlock) return "";

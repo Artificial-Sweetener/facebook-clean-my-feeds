@@ -22,8 +22,8 @@ export interface BugReportContext {
   pathInfo: Partial<PathInfo>;
 }
 
-/** Match evidence contains only enabled flags or hashes of user-configured blocked text. */
-export type MatchEvidence = Record<string, boolean | string>;
+/** Match evidence contains only positive detector flags, including private configured-text matches. */
+export type MatchEvidence = Record<string, boolean>;
 
 /** Numeric diagnostic counters are keyed by selector, signal, or privacy-safe reason. */
 export type DiagnosticCounts = Record<string, number>;

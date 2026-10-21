@@ -21,6 +21,9 @@ export const catalog: Keywords = {
   NF_FILTER_VERIFIED_BADGE: "Φιλτράρισμα επαληθευμένων λογαριασμών",
   NF_AI_SIDE_PANELS: "AI στα πλευρικά πάνελ",
   NF_SURVEY: "Τοπογράφηση",
+  NF_FRIEND_REQUESTS: "Αιτήματα φιλίας (δεξιά πλευρική στήλη)",
+  DLG_FRIEND_REQUESTS_DESC:
+    "Απόκρυψη του πλαισίου αιτημάτων φιλίας στη δεξιά πλευρική στήλη της ροής.",
   NF_PEOPLE_YOU_MAY_KNOW: "Άτομα που ίσως γνωρίζετε",
   NF_PAID_PARTNERSHIP: "Πληρωμένη συνεργασία",
   NF_SPONSORED_PAID: "Χορηγούμενο · Πληρωμένο από ______",

@@ -1,8 +1,8 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "types": ["node"],
     "lib": ["ES2022"]
   },
-  "include": ["tools/**/*.ts"]
+  "include": ["../../tools/**/*.ts"]
 }

@@ -20,6 +20,8 @@ If you do not use nvm, install the supported Node version before running npm. `t
 
 Author executable source, tests, and tools in TypeScript. The package remains CommonJS for tooling. Browser output remains a single self-contained esbuild IIFE targeting ES2018. `fb-clean-my-feeds.user.js` is the only tracked JavaScript and must never be edited by hand. Change source, run `npm run verify`, and include the rebuilt artifact with the source change.
 
+Shared compiler defaults live in the root `tsconfig.json` for editor and tool discovery. Browser, pure core, Node tools, and Jest scopes live in `tools/config/tsconfig.*.json` alongside the ESLint, Jest, and Prettier configurations. Release configuration lives in the `release` field of `package.json`; the workflow is in `.github/workflows/release.yml`.
+
 TypeScript checking uses `strict`, `noEmit`, `allowJs: false`, `noUncheckedIndexedAccess`, and `exactOptionalPropertyTypes`. Browser globals, Node globals, and Jest globals have separate configurations. The pure core scope has neither DOM nor Node ambient types. Do not repair errors with `any`, double assertions, suppression directives, or excluded problem files; validate unknown data at its boundary instead.
 
 Responsibilities and permitted directions are declared in `governance/policy.json`:
@@ -102,4 +104,4 @@ Use Conventional Commits (`type(scope): subject`), such as `fix(feeds): handle m
 
 Pull requests and pushes to `main` run the same full verification on Node 22.14.0. CI also checks that the generated userscript was committed. The release job depends on successful verification and runs only for `main`; no repository branch-protection changes are made by this setup.
 
-semantic-release uses Conventional Commits for versioning and changelog entries. After version preparation it reruns `npm run verify`, then commits the manifest, lockfile, changelog, and rebuilt userscript. Automatic releases require an existing version-tag baseline; maintainers can use the manual dry-run input to inspect the release plan. The workflow uses GitHub's existing token and does not add credentials or publish to npm.
+semantic-release uses Conventional Commits for versioning and changelog entries. After version preparation it reruns `npm run verify`, then commits the manifest, lockfile, changelog, and rebuilt userscript. Automatic releases require an existing version-tag baseline; maintainers can use the manual dry-run input to inspect the release plan. Release commits use `Daisy-Bluemel <daisy@artificialsweetener.ai>` as both author and committer. The workflow uses GitHub's existing token and does not add credentials or publish to npm.

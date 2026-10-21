@@ -187,9 +187,15 @@ describe("compiled userscript smoke", () => {
 
       requiredElement<HTMLButtonElement>(dialog, "#BTNReportGenerate").click();
       const report = requiredElement<HTMLTextAreaElement>(dialog, ".cmf-report-output");
+      await waitFor(() => report.value.length > 0, "independent DOM snapshot capture");
       const reportData: unknown = JSON.parse(report.value);
       expect(reportData).toEqual(
         expect.objectContaining({
+          schemaVersion: 2,
+          snapshot: expect.objectContaining({ version: 1, regions: expect.any(Array) }),
+          script: expect.objectContaining({
+            buildIdentity: expect.stringMatching(/^source-sha256:[a-f0-9]{64}$/),
+          }),
           page: expect.objectContaining({
             url: "https://www.facebook.com/",
             pathname: "/",

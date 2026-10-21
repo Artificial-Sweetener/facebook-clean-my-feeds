@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
 import { getRegexValidationIssues } from "../core/options/regex-validation";
-import { newsSelectors } from "../selectors/news";
+import { encodeReport } from "./report-encoding";
+import { captureDomSnapshot } from "./dom-capture";
+import type { SnapshotCaptureOptions } from "./dom-capture";
 import {
   getScriptInfo,
   buildSafeLocation,
@@ -15,7 +17,6 @@ import {
   collectReasonCounts,
   buildHiddenCounts,
   collectHiddenSample,
-  collectSignalCounts,
 } from "./snapshots";
 import { buildNewsDiscoveryDiagnostics } from "./collection";
 import { buildSamples } from "./samples";
@@ -26,9 +27,9 @@ export type { BugReportContext, DiagnosticsState } from "./types";
 export { getSupportUrl } from "./serialization";
 
 /** Serializable report shape inferred from the deliberately bounded collection pipeline. */
-export type BugReportData = ReturnType<typeof collectBugReportData>;
+export type BugReportData = Awaited<ReturnType<typeof collectBugReportData>>;
 
-/** Complete generated report; text is the formatted JSON representation of data. */
+/** Complete generated report; text is a copyable encoding of the automatically redacted data. */
 export interface GeneratedBugReport {
   data: BugReportData;
   text: string;
@@ -48,46 +49,61 @@ export type BugReportResult = GeneratedBugReport | UnavailableBugReport;
  * @param context Initialized options, translated labels, filters, and narrow feed state.
  * @returns The report data and formatted JSON, or a startup error with empty text.
  */
-export function buildBugReport(context: BugReportContext): GeneratedBugReport;
+export function buildBugReport(
+  context: BugReportContext,
+  capture?: SnapshotCaptureOptions
+): Promise<GeneratedBugReport>;
 /**
  * Preserve the historical empty report when the runtime is not available.
  * @param context Initialized options, translated labels, filters, and narrow feed state.
  * @returns The report data and formatted JSON, or a startup error with empty text.
  */
-export function buildBugReport(context: null | undefined): UnavailableBugReport;
+export function buildBugReport(
+  context: null | undefined,
+  capture?: SnapshotCaptureOptions
+): Promise<UnavailableBugReport>;
 /**
  * Accept deferred contexts supplied by UI capability implementations.
  * @param context Initialized options, translated labels, filters, and narrow feed state.
  * @returns The report data and formatted JSON, or a startup error with empty text.
  */
-export function buildBugReport(context?: BugReportContext | null): BugReportResult;
+export function buildBugReport(
+  context?: BugReportContext | null,
+  capture?: SnapshotCaptureOptions
+): Promise<BugReportResult>;
 /**
  * Serialize a fresh read-only snapshot, or retain the startup error contract without context.
  * @param context Initialized options, translated labels, filters, and narrow feed state.
  * @returns The report data and formatted JSON, or a startup error with empty text.
  */
-export function buildBugReport(context?: BugReportContext | null): BugReportResult {
+export async function buildBugReport(
+  context?: BugReportContext | null,
+  capture: SnapshotCaptureOptions = {}
+): Promise<BugReportResult> {
   if (!context) {
     return { data: { error: "No context available." }, text: "" };
   }
-  const data = collectBugReportData(context);
-  return { data, text: JSON.stringify(data, null, 2) };
+  const data = await collectBugReportData(context, capture);
+  return { data, text: await encodeReport(data) };
 }
 
 /**
  * Gather privacy-safe diagnostics without mutating page content or runtime state.
  * @param context Initialized options, translated labels, filters, and narrow feed state.
+ * @param capture Selected complaint element and bounded independent snapshot settings.
  * @returns The complete structured support snapshot ready for JSON serialization.
  */
-function collectBugReportData(context: BugReportContext) {
+async function collectBugReportData(context: BugReportContext, capture: SnapshotCaptureOptions) {
   const { state, options, filters, keyWords, pathInfo } = context;
   const now = new Date();
   const scriptInfo = getScriptInfo();
   const safeLocation = buildSafeLocation();
-  const newsMainColumn = document.querySelector(newsSelectors.mainColumn);
+  const snapshot = await captureDomSnapshot(document, capture);
   const samples = buildSamples(context);
   return {
+    schemaVersion: 2,
     generatedAt: now.toISOString(),
+    snapshot,
     script: scriptInfo,
     page: {
       url: safeLocation.url,
@@ -112,13 +128,12 @@ function collectBugReportData(context: BugReportContext) {
       hiddenElements: buildHiddenCounts(state),
       sample: collectHiddenSample(keyWords),
     },
-    signals: {
-      page: collectSignalCounts(document),
-      newsMain: collectSignalCounts(newsMainColumn),
-    },
     samples: { ...samples, summary: buildMatchSummary(samples.samples) },
     notes: {
-      redaction: "Post text, names, and IDs are not included. Blocked keywords are hashed.",
+      redaction:
+        "Authored text and media are removed. Interface labels are automatically sanitized. IDs and classes are report-local aliases; destinations are structural templates.",
+      limitations:
+        "Unknown text is explicitly redacted. Coverage and attribute transformations qualify offline selector results.",
     },
   };
 }

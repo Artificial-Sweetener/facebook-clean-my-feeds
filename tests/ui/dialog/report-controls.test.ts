@@ -26,6 +26,11 @@ jest.mock("../../../src/ui/controls/toggle-button", () => ({
   }),
 }));
 
+/** Deliver asynchronous report collection and clipboard feedback without real timers. */
+async function flushReport(): Promise<void> {
+  for (let tick = 0; tick < 8; tick++) await Promise.resolve();
+}
+
 describe("ui/reporting/report-controls", () => {
   beforeEach(() => {
     document.body.innerHTML = "";
@@ -48,6 +53,10 @@ describe("ui/reporting/report-controls", () => {
     initDialog(context, createCapabilities(context));
 
     const dialog = findElement(document, `#${"fbcmf"}`);
+    expect(
+      Array.from(dialog.querySelectorAll(".cmf-report-actions button"), (button) => button.id)
+    ).toEqual(["BTNReportGenerate", "BTNReportCopy", "BTNReportOpenIssues"]);
+    expect(dialog.textContent).toContain(translations.en.DLG_REPORT_BUG_NOTICE);
     const btnGenerate = findElement<HTMLElement>(dialog, "#BTNReportGenerate");
     const btnCopy = findElement<HTMLElement>(dialog, "#BTNReportCopy");
     const btnOpen = findElement<HTMLElement>(dialog, "#BTNReportOpenIssues");
@@ -55,6 +64,7 @@ describe("ui/reporting/report-controls", () => {
     const outputEl = findElement<HTMLTextAreaElement>(dialog, ".cmf-report-output");
 
     btnGenerate.click();
+    await flushReport();
     expect(outputEl.value).toBe("report");
     expect(outputEl.classList.contains("cmf-report-output--visible")).toBe(true);
     expect(statusEl.textContent).toBe(translations.en.DLG_REPORT_BUG_STATUS_READY);
@@ -64,7 +74,7 @@ describe("ui/reporting/report-controls", () => {
       value: { writeText: jest.fn(() => Promise.resolve()) },
     });
     btnCopy.click();
-    await Promise.resolve();
+    await flushReport();
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith("report");
     expect(statusEl.textContent).toBe(translations.en.DLG_REPORT_BUG_STATUS_COPIED);
 
@@ -72,7 +82,7 @@ describe("ui/reporting/report-controls", () => {
     expect(window.open).toHaveBeenCalledWith("https://example.com/support", "_blank");
   });
 
-  test("report bug copy falls back to execCommand without clipboard", () => {
+  test("report bug copy falls back to execCommand without clipboard", async () => {
     const state = buildState();
     const context = {
       state,
@@ -92,7 +102,9 @@ describe("ui/reporting/report-controls", () => {
     document.execCommand = jest.fn(() => true);
 
     btnGenerate.click();
+    await flushReport();
     btnCopy.click();
+    await flushReport();
 
     expect(outputEl.select).toHaveBeenCalled();
     expect(document.execCommand).toHaveBeenCalledWith("copy");
@@ -115,6 +127,7 @@ describe("ui/reporting/report-controls", () => {
     const dialog = findElement(document, "#fbcmf");
     const firstGenerate = findElement<HTMLButtonElement>(dialog, "#BTNReportGenerate");
     firstGenerate.click();
+    await flushReport();
     expect(capabilities.buildReport).toHaveBeenCalledTimes(1);
 
     findElement<HTMLSelectElement>(dialog, 'select[name="CMF_DIALOG_LANGUAGE"]').value = "de";
@@ -123,6 +136,7 @@ describe("ui/reporting/report-controls", () => {
     const nextGenerate = findElement<HTMLButtonElement>(dialog, "#BTNReportGenerate");
     expect(nextGenerate).not.toBe(firstGenerate);
     nextGenerate.click();
+    await flushReport();
     expect(capabilities.buildReport).toHaveBeenCalledTimes(2);
     expect(findElement<HTMLTextAreaElement>(dialog, ".cmf-report-output").value).toBe(
       "localized-report"

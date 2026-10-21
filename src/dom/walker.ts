@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
+import { getPostEvidence } from "./post-evidence";
 import { cleanText } from "../core/filters/text-normalize";
 
 import { postAtt } from "./attributes";
@@ -138,7 +139,14 @@ export function scanImagesForAltText(node: Element): string[] {
  * @returns Nonempty text and image-description fragments in discovery order.
  */
 export function extractTextContent(post: Element, selector: string, maxBlocks: number): string[] {
-  const blocks = post.querySelectorAll(selector);
+  return getPostEvidence(post).readText(`${maxBlocks}|${selector}`, () =>
+    extractBlockText(post, selector, maxBlocks)
+  );
+}
+
+/** Extract a fresh bounded body snapshot when the post's content version changes. */
+function extractBlockText(post: Element, selector: string, maxBlocks: number): string[] {
+  const blocks = getPostEvidence(post).select(selector);
   const arrayTextValues: string[] = [];
 
   for (let b = 0; b < Math.min(maxBlocks, blocks.length); b++) {

@@ -174,7 +174,7 @@ describe("news discovery role-only virtualized evidence", () => {
     const serialized = JSON.stringify(evidence);
     expect(serialized).not.toMatch(/private-|Private /);
     expect(evidence.virtualized.adRenderingRoleOnlySamples[0]).toMatchObject({
-      signature: { tag: "DIV", role: "other", classHash: expect.stringMatching(/^fnv1a:/) },
+      signature: { tag: "DIV", role: "other", classCount: 1 },
       dataVirtualized: "other",
       hasPostMarker: true,
       hasHideMarker: true,

@@ -9,6 +9,7 @@ import { loadBanner } from "./banner";
 import { iconDirectory, projectRoot } from "./optimize-icons";
 
 import { inlineSvg, loadSvgIcons } from "./svg-assets";
+import { sourceIdentity } from "./source-identity";
 
 export const artifactPath = path.join(projectRoot, "fb-clean-my-feeds.user.js");
 
@@ -40,6 +41,9 @@ export async function buildUserscript(): Promise<UserscriptBuild> {
     platform: "browser",
     target: ["es2018"],
     charset: "utf8",
+    define: {
+      __CMF_SOURCE_DIGEST__: JSON.stringify(await sourceIdentity(projectRoot)),
+    },
     legalComments: "inline",
     banner: { js: await loadBanner(mop) },
     footer: {

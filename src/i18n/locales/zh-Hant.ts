@@ -20,6 +20,8 @@ export const catalog: Keywords = {
   NF_META_AI_PROMPTS: "Meta AI 提示建議",
   NF_AI_INFO_POSTS: "帶有「AI info」標籤的貼文",
   NF_SURVEY: "調查",
+  NF_FRIEND_REQUESTS: "交友邀請（右側欄）",
+  DLG_FRIEND_REQUESTS_DESC: "隱藏動態消息右側欄中的交友邀請面板。",
   NF_PEOPLE_YOU_MAY_KNOW: "你可能認識的人",
   NF_PAID_PARTNERSHIP: "付費合作",
   NF_SPONSORED_PAID: "贊助 · 出資者：______",

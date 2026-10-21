@@ -15,8 +15,9 @@ import type { Violation } from "./types";
 export function configurationProblems(files: string[]): Violation[] {
   const problems: Violation[] = [];
   for (const scope of ["browser", "core", "tools", "tests"]) {
-    const file = `tsconfig.${scope}.json`;
-    const result = ts.readConfigFile(path.join(projectRoot, file), ts.sys.readFile);
+    const file = `tools/config/tsconfig.${scope}.json`;
+    const configPath = path.join(projectRoot, file);
+    const result = ts.readConfigFile(configPath, ts.sys.readFile);
     if (result.error) {
       problems.push({
         rule: "type-coverage",
@@ -25,7 +26,13 @@ export function configurationProblems(files: string[]): Violation[] {
       });
       continue;
     }
-    const parsed = ts.parseJsonConfigFileContent(result.config, ts.sys, projectRoot);
+    const parsed = ts.parseJsonConfigFileContent(
+      result.config,
+      ts.sys,
+      path.dirname(configPath),
+      undefined,
+      configPath
+    );
     problems.push(...compilerPolicyProblems(parsed.options, file));
     for (const error of parsed.errors) {
       problems.push({

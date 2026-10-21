@@ -21,6 +21,8 @@ export const catalog: Keywords = {
   NF_FILTER_VERIFIED_BADGE: "Filtruj zweryfikowane konta",
   NF_AI_SIDE_PANELS: "AI w panelach bocznych",
   NF_SURVEY: "Badanie",
+  NF_FRIEND_REQUESTS: "Zaproszenia do znajomych (prawy panel)",
+  DLG_FRIEND_REQUESTS_DESC: "Ukryj sekcję zaproszeń do znajomych w prawym panelu aktualności.",
   NF_PEOPLE_YOU_MAY_KNOW: "Osoby, które możesz znać",
   NF_PAID_PARTNERSHIP: "Post sponsorowany",
   NF_SPONSORED_PAID: "Sponsorowane · Opłacona przez ______",

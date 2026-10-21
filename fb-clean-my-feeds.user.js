@@ -48,6 +48,8 @@
         NF_FILTER_VERIFIED_BADGE: "Filter verified accounts",
         NF_AI_SIDE_PANELS: "AI in Side Panels",
         NF_SURVEY: "Survey",
+        NF_FRIEND_REQUESTS: "Friend requests (right sidebar)",
+        DLG_FRIEND_REQUESTS_DESC: "Hide the Friend requests panel in the right sidebar of News Feed.",
         NF_PEOPLE_YOU_MAY_KNOW: "People you may know",
         NF_PAID_PARTNERSHIP: "Paid partnership",
         NF_SPONSORED_PAID: "Sponsored · Paid for by ______",
@@ -196,6 +198,8 @@
         NF_FILTER_VERIFIED_BADGE: "تصفية الحسابات الموثقة",
         NF_AI_SIDE_PANELS: "الذكاء الاصطناعي في اللوحات الجانبية",
         NF_SURVEY: "استبيان",
+        NF_FRIEND_REQUESTS: "طلبات الصداقة (الشريط الجانبي الأيمن)",
+        DLG_FRIEND_REQUESTS_DESC: "إخفاء لوحة طلبات الصداقة في الشريط الجانبي الأيمن لآخر الأخبار.",
         NF_PEOPLE_YOU_MAY_KNOW: "أشخاص قد تعرفهم",
         NF_PAID_PARTNERSHIP: "شراكة مدفوعة",
         NF_SPONSORED_PAID: "برعاية · مدفوعة بواسطة ______",
@@ -342,6 +346,8 @@
         NF_FILTER_VERIFIED_BADGE: "Филтриране на потвърдени акаунти",
         NF_AI_SIDE_PANELS: "AI в страничните панели",
         NF_SURVEY: "Анкета",
+        NF_FRIEND_REQUESTS: "Покани за приятелство (дясна лента)",
+        DLG_FRIEND_REQUESTS_DESC: "Скриване на панела с покани за приятелство в дясната лента на новинарския поток.",
         NF_PEOPLE_YOU_MAY_KNOW: "Хора, които може би познавате",
         NF_PAID_PARTNERSHIP: "Платено партньорство",
         NF_SPONSORED_PAID: "Спонсорирано · Платено от ______",
@@ -488,6 +494,8 @@
         NF_FILTER_VERIFIED_BADGE: "Filtrovat ověřené účty",
         NF_AI_SIDE_PANELS: "AI v postranních panelech",
         NF_SURVEY: "Průzkum",
+        NF_FRIEND_REQUESTS: "Žádosti o přátelství (pravý panel)",
+        DLG_FRIEND_REQUESTS_DESC: "Skrýt panel žádostí o přátelství vpravo v kanálu příspěvků.",
         NF_PEOPLE_YOU_MAY_KNOW: "Koho možná znáte",
         NF_PAID_PARTNERSHIP: "Placené partnerství",
         NF_SPONSORED_PAID: "Sponzorováno · Platí za to ______",
@@ -635,6 +643,8 @@
         NF_FILTER_VERIFIED_BADGE: "Verifizierte Konten filtern",
         NF_AI_SIDE_PANELS: "KI in Seitenleisten",
         NF_SURVEY: "Umfrage",
+        NF_FRIEND_REQUESTS: "Freundschaftsanfragen (rechte Seitenleiste)",
+        DLG_FRIEND_REQUESTS_DESC: "Blendet den Bereich für Freundschaftsanfragen in der rechten Seitenleiste des Feeds aus.",
         NF_PEOPLE_YOU_MAY_KNOW: "Personen, die du kennen könntest",
         NF_PAID_PARTNERSHIP: "Bezahlte Werbepartnerschaft",
         NF_SPONSORED_PAID: "Gesponsert · Finanziert von ______",
@@ -781,6 +791,8 @@
         NF_FILTER_VERIFIED_BADGE: "Φιλτράρισμα επαληθευμένων λογαριασμών",
         NF_AI_SIDE_PANELS: "AI στα πλευρικά πάνελ",
         NF_SURVEY: "Τοπογράφηση",
+        NF_FRIEND_REQUESTS: "Αιτήματα φιλίας (δεξιά πλευρική στήλη)",
+        DLG_FRIEND_REQUESTS_DESC: "Απόκρυψη του πλαισίου αιτημάτων φιλίας στη δεξιά πλευρική στήλη της ροής.",
         NF_PEOPLE_YOU_MAY_KNOW: "Άτομα που ίσως γνωρίζετε",
         NF_PAID_PARTNERSHIP: "Πληρωμένη συνεργασία",
         NF_SPONSORED_PAID: "Χορηγούμενο · Πληρωμένο από ______",
@@ -927,6 +939,8 @@
         NF_FILTER_VERIFIED_BADGE: "Filtrar cuentas verificadas",
         NF_AI_SIDE_PANELS: "IA en paneles laterales",
         NF_SURVEY: "Encuesta",
+        NF_FRIEND_REQUESTS: "Solicitudes de amistad (barra lateral derecha)",
+        DLG_FRIEND_REQUESTS_DESC: "Oculta el panel de solicitudes de amistad de la barra lateral derecha del inicio.",
         NF_PEOPLE_YOU_MAY_KNOW: "Personas que quizá conozcas",
         NF_PAID_PARTNERSHIP: "Colaboración pagada",
         NF_SPONSORED_PAID: "Publicidad · Pagado por ______",
@@ -1073,6 +1087,8 @@
         NF_FILTER_VERIFIED_BADGE: "Suodata varmennetut tilit",
         NF_AI_SIDE_PANELS: "Tekoäly sivupaneeleissa",
         NF_SURVEY: "Kysely",
+        NF_FRIEND_REQUESTS: "Kaveripyynnöt (oikea sivupalkki)",
+        DLG_FRIEND_REQUESTS_DESC: "Piilota uutisvirran oikean sivupalkin kaveripyyntöpaneeli.",
         NF_PEOPLE_YOU_MAY_KNOW: "Ihmiset, jotka saatat tuntea",
         NF_PAID_PARTNERSHIP: "Maksettu kumppanuus",
         NF_SPONSORED_PAID: "Sponsoroitu · Maksaja ______",
@@ -1219,6 +1235,8 @@
         NF_FILTER_VERIFIED_BADGE: "Filtrer les comptes vérifiés",
         NF_AI_SIDE_PANELS: "IA dans les panneaux latéraux",
         NF_SURVEY: "Enquête",
+        NF_FRIEND_REQUESTS: "Invitations (barre latérale droite)",
+        DLG_FRIEND_REQUESTS_DESC: "Masquer le panneau des invitations dans la barre latérale droite du fil d’actualité.",
         NF_PEOPLE_YOU_MAY_KNOW: "Connaissez-vous...",
         NF_PAID_PARTNERSHIP: "Partenariat rémunéré",
         NF_SPONSORED_PAID: "Sponsorisé · Financé par ______",
@@ -1365,6 +1383,8 @@
         NF_FILTER_VERIFIED_BADGE: "סנן חשבונות מאומתים",
         NF_AI_SIDE_PANELS: "בינה מלאכותית בלוחות הצד",
         NF_SURVEY: "סקר",
+        NF_FRIEND_REQUESTS: "בקשות חברות (סרגל צד ימני)",
+        DLG_FRIEND_REQUESTS_DESC: "הסתרת חלונית בקשות החברות בסרגל הצד הימני של הפיד.",
         NF_PEOPLE_YOU_MAY_KNOW: "אנשים שאולי אתה מכיר",
         NF_PAID_PARTNERSHIP: "שותפות בתשלום",
         NF_SPONSORED_PAID: "ממומן · שולם על ידי ______",
@@ -1511,6 +1531,8 @@
         NF_FILTER_VERIFIED_BADGE: "Filter akun terverifikasi",
         NF_AI_SIDE_PANELS: "AI di panel samping",
         NF_SURVEY: "Survei",
+        NF_FRIEND_REQUESTS: "Permintaan pertemanan (bilah sisi kanan)",
+        DLG_FRIEND_REQUESTS_DESC: "Sembunyikan panel permintaan pertemanan di bilah sisi kanan Kabar Beranda.",
         NF_PEOPLE_YOU_MAY_KNOW: "Orang yang Mungkin Anda Kenal",
         NF_PAID_PARTNERSHIP: "Kemitraan berbayar",
         NF_SPONSORED_PAID: "Disponsori · Dibayar oleh ______",
@@ -1657,6 +1679,8 @@
         NF_FILTER_VERIFIED_BADGE: "Filtra account verificati",
         NF_AI_SIDE_PANELS: "IA nei pannelli laterali",
         NF_SURVEY: "Sondaggio",
+        NF_FRIEND_REQUESTS: "Richieste di amicizia (barra laterale destra)",
+        DLG_FRIEND_REQUESTS_DESC: "Nascondi il riquadro delle richieste di amicizia nella barra laterale destra del feed.",
         NF_PEOPLE_YOU_MAY_KNOW: "Persone che potresti conoscere",
         NF_PAID_PARTNERSHIP: "Partnership pubblicizzata",
         NF_SPONSORED_PAID: "Sponsorizzato · Finanziato da ______",
@@ -1803,6 +1827,8 @@
         NF_FILTER_VERIFIED_BADGE: "認証済みアカウントをフィルター",
         NF_AI_SIDE_PANELS: "サイドパネルのAI",
         NF_SURVEY: "アンケート",
+        NF_FRIEND_REQUESTS: "友達リクエスト（右サイドバー）",
+        DLG_FRIEND_REQUESTS_DESC: "ニュースフィードの右サイドバーにある友達リクエストのパネルを非表示にします。",
         NF_PEOPLE_YOU_MAY_KNOW: "あなたが知っているかもしれない人々",
         NF_PAID_PARTNERSHIP: "有償パートナーシップ",
         NF_SPONSORED_PAID: "後援 · ______ による支払い",
@@ -1949,6 +1975,8 @@
         NF_FILTER_VERIFIED_BADGE: "Filtrēt verificētos kontus",
         NF_AI_SIDE_PANELS: "AI sānu paneļos",
         NF_SURVEY: "Aptauja",
+        NF_FRIEND_REQUESTS: "Draudzības uzaicinājumi (labā sānjosla)",
+        DLG_FRIEND_REQUESTS_DESC: "Paslēpt draudzības uzaicinājumu paneli ziņu plūsmas labajā sānjoslā.",
         NF_PEOPLE_YOU_MAY_KNOW: "Cilvēki, kurus tu varētu pazīt",
         NF_PAID_PARTNERSHIP: "Apmaksāta sadarbība",
         NF_SPONSORED_PAID: "Apmaksāta reklāma · Apmaksā ______",
@@ -2095,6 +2123,8 @@
         NF_FILTER_VERIFIED_BADGE: "Geverifieerde accounts filteren",
         NF_AI_SIDE_PANELS: "AI in zijpanelen",
         NF_SURVEY: "Vragenlijst",
+        NF_FRIEND_REQUESTS: "Vriendschapsverzoeken (rechterzijbalk)",
+        DLG_FRIEND_REQUESTS_DESC: "Verberg het paneel met vriendschapsverzoeken in de rechterzijbalk van het nieuwsoverzicht.",
         NF_PEOPLE_YOU_MAY_KNOW: "Mensen die je misschien kent",
         NF_PAID_PARTNERSHIP: "Betaald partnerschap",
         NF_SPONSORED_PAID: "Gesponsord · Betaald door ______",
@@ -2241,6 +2271,8 @@
         NF_FILTER_VERIFIED_BADGE: "Filtruj zweryfikowane konta",
         NF_AI_SIDE_PANELS: "AI w panelach bocznych",
         NF_SURVEY: "Badanie",
+        NF_FRIEND_REQUESTS: "Zaproszenia do znajomych (prawy panel)",
+        DLG_FRIEND_REQUESTS_DESC: "Ukryj sekcję zaproszeń do znajomych w prawym panelu aktualności.",
         NF_PEOPLE_YOU_MAY_KNOW: "Osoby, które możesz znać",
         NF_PAID_PARTNERSHIP: "Post sponsorowany",
         NF_SPONSORED_PAID: "Sponsorowane · Opłacona przez ______",
@@ -2387,6 +2419,8 @@
         NF_FILTER_VERIFIED_BADGE: "Filtrar contas verificadas",
         NF_AI_SIDE_PANELS: "IA nos painéis laterais",
         NF_SURVEY: "Enquete",
+        NF_FRIEND_REQUESTS: "Solicitações de amizade (barra lateral direita)",
+        DLG_FRIEND_REQUESTS_DESC: "Ocultar o painel de solicitações de amizade na barra lateral direita do Feed de Notícias.",
         NF_PEOPLE_YOU_MAY_KNOW: "Pessoas que talvez conheças",
         NF_PAID_PARTNERSHIP: "Parceria paga",
         NF_SPONSORED_PAID: "Patrocinado · Financiado por ______",
@@ -2533,6 +2567,8 @@
         NF_FILTER_VERIFIED_BADGE: "Фильтровать подтвержденные аккаунты",
         NF_AI_SIDE_PANELS: "ИИ в боковых панелях",
         NF_SURVEY: "Опрос",
+        NF_FRIEND_REQUESTS: "Запросы в друзья (правая панель)",
+        DLG_FRIEND_REQUESTS_DESC: "Скрывать блок запросов в друзья на правой панели ленты новостей.",
         NF_PEOPLE_YOU_MAY_KNOW: "Люди, которых вы можете знать",
         NF_PAID_PARTNERSHIP: "Платное партнерство",
         NF_SPONSORED_PAID: "Реклама · Оплачено ______",
@@ -2679,6 +2715,8 @@
         NF_FILTER_VERIFIED_BADGE: "Doğrulanmış hesapları filtrele",
         NF_AI_SIDE_PANELS: "Yan panellerde Yapay Zeka",
         NF_SURVEY: "Anket",
+        NF_FRIEND_REQUESTS: "Arkadaşlık istekleri (sağ kenar çubuğu)",
+        DLG_FRIEND_REQUESTS_DESC: "Haber Kaynağı’nın sağ kenar çubuğundaki arkadaşlık istekleri panelini gizle.",
         NF_PEOPLE_YOU_MAY_KNOW: "Tanıyor olabileceğin kişiler",
         NF_PAID_PARTNERSHIP: "ücretli ortaklık",
         NF_SPONSORED_PAID: "Sponsorlu · ______ tarafından ödendi",
@@ -2825,6 +2863,8 @@
         NF_FILTER_VERIFIED_BADGE: "Фільтрувати підтверджені облікові записи",
         NF_AI_SIDE_PANELS: "ШІ в бічних панелях",
         NF_SURVEY: "Опитування",
+        NF_FRIEND_REQUESTS: "Запити на дружбу (права панель)",
+        DLG_FRIEND_REQUESTS_DESC: "Приховувати блок запитів на дружбу на правій панелі стрічки новин.",
         NF_PEOPLE_YOU_MAY_KNOW: "Люди, яких Ви можете знати",
         NF_PAID_PARTNERSHIP: "Оплачуване партнерство",
         NF_SPONSORED_PAID: "Спонсоровано · Оплачено ______",
@@ -2971,6 +3011,8 @@
         NF_FILTER_VERIFIED_BADGE: "Lọc tài khoản đã xác minh",
         NF_AI_SIDE_PANELS: "AI ở bảng bên",
         NF_SURVEY: "Khảo sát",
+        NF_FRIEND_REQUESTS: "Lời mời kết bạn (thanh bên phải)",
+        DLG_FRIEND_REQUESTS_DESC: "Ẩn khung lời mời kết bạn ở thanh bên phải của Bảng tin.",
         NF_PEOPLE_YOU_MAY_KNOW: "Những người bạn có thể biết",
         NF_PAID_PARTNERSHIP: "Mối quan hệ tài trợ",
         NF_SPONSORED_PAID: "Được tài trợ · Tài trợ bởi ______",
@@ -3117,6 +3159,8 @@
         NF_FILTER_VERIFIED_BADGE: "过滤已验证帐户",
         NF_AI_SIDE_PANELS: "侧边栏中的 AI",
         NF_SURVEY: "调查",
+        NF_FRIEND_REQUESTS: "好友请求（右侧边栏）",
+        DLG_FRIEND_REQUESTS_DESC: "隐藏动态消息右侧边栏中的好友请求面板。",
         NF_PEOPLE_YOU_MAY_KNOW: "你可能认识的人",
         NF_PAID_PARTNERSHIP: "付费合伙",
         NF_SPONSORED_PAID: "赞助 · 由 ______ 付费",
@@ -3258,6 +3302,8 @@
         NF_META_AI_PROMPTS: "Meta AI 提示建議",
         NF_AI_INFO_POSTS: "帶有「AI info」標籤的貼文",
         NF_SURVEY: "調查",
+        NF_FRIEND_REQUESTS: "交友邀請（右側欄）",
+        DLG_FRIEND_REQUESTS_DESC: "隱藏動態消息右側欄中的交友邀請面板。",
         NF_PEOPLE_YOU_MAY_KNOW: "你可能認識的人",
         NF_PAID_PARTNERSHIP: "付費合作",
         NF_SPONSORED_PAID: "贊助 · 出資者：______",
@@ -3451,6 +3497,7 @@
         NF_STORIES: false,
         NF_SURVEY: true,
         NF_PEOPLE_YOU_MAY_KNOW: false,
+        NF_FRIEND_REQUESTS: false,
         NF_PAID_PARTNERSHIP: true,
         NF_SPONSORED_PAID: true,
         NF_SUGGESTIONS: true,
@@ -3800,6 +3847,7 @@
         "NF_STORIES",
         "NF_SURVEY",
         "NF_PEOPLE_YOU_MAY_KNOW",
+        "NF_FRIEND_REQUESTS",
         "NF_PAID_PARTNERSHIP",
         "NF_SPONSORED_PAID",
         "NF_SUGGESTIONS",
@@ -3879,6 +3927,7 @@
         "NF_STORIES",
         "NF_SURVEY",
         "NF_PEOPLE_YOU_MAY_KNOW",
+        "NF_FRIEND_REQUESTS",
         "NF_PAID_PARTNERSHIP",
         "NF_SPONSORED_PAID",
         "NF_SUGGESTIONS",
@@ -4257,31 +4306,47 @@
     }
   });
 
-  // src/selectors/news.ts
-  var newsSelectors;
-  var init_news = __esm({
-    "src/selectors/news.ts"() {
+  // src/diagnostics/report-encoding.ts
+  async function encodeReport(data) {
+    const text = JSON.stringify(data);
+    if (typeof CompressionStream === "undefined") return JSON.stringify(data, null, 2);
+    try {
+      const compressed = new Blob([text]).stream().pipeThrough(new CompressionStream("gzip"));
+      const bytes = new Uint8Array(await new Response(compressed).arrayBuffer());
+      let binary = "";
+      for (let offset = 0; offset < bytes.length; offset += 8192)
+        binary += String.fromCharCode(...bytes.subarray(offset, offset + 8192));
+      return JSON.stringify({
+        format: "cmf-report",
+        version: 2,
+        encoding: "gzip-base64",
+        data: btoa(binary)
+      });
+    } catch (e) {
+      return JSON.stringify(data, null, 2);
+    }
+  }
+  var init_report_encoding = __esm({
+    "src/diagnostics/report-encoding.ts"() {
       "use strict";
-      newsSelectors = {
-        mainColumn: 'div[role="navigation"] ~ div[role="main"]',
-        dialog: 'div[role="dialog"]',
-        surveyButton: 'a[href*="/survey/?session="] > div[role="none"]',
-        standardPost: 'div[role="article"], div[aria-posinset]',
-        sponsoredLink: 'a[href*="/ads/about/"]',
-        virtualizedContainer: "div[data-virtualized]",
-        postQueries: [
-          'h3[dir="auto"] ~ div div[aria-posinset]',
-          'h2[dir="auto"] ~ div div[aria-posinset]',
-          'h3[dir="auto"] ~ div div[role="article"]',
-          'h2[dir="auto"] ~ div div[role="article"]',
-          'div[role="main"] div[aria-posinset]',
-          'div[role="main"] div[role="article"]',
-          'div[role="main"] div[data-virtualized] div[role="article"]',
-          'h3[dir="auto"] ~ div:not([class]) > div > div > div > div > div',
-          'h2[dir="auto"] ~ div:not([class]) > div > div > div > div > div',
-          'div[role="feed"] > h3[dir="auto"] ~ div:not([class]) > div[data-pagelet*="FeedUnit_"] > div > div > div > div',
-          'div[role="feed"] > h2[dir="auto"] ~ div:not([class]) > div[data-pagelet*="FeedUnit_"] > div > div > div > div'
-        ]
+    }
+  });
+
+  // src/core/diagnostics/dom-snapshot.ts
+  var snapshotLimits;
+  var init_dom_snapshot = __esm({
+    "src/core/diagnostics/dom-snapshot.ts"() {
+      "use strict";
+      snapshotLimits = {
+        nodes: 6e3,
+        nodesPerRegion: 1600,
+        depth: 36,
+        regions: 12,
+        labelCharacters: 180,
+        totalLabelCharacters: 16e3,
+        discoveryNodes: 12e3,
+        references: 64,
+        attributes: 24e3
       };
     }
   });
@@ -4400,6 +4465,1046 @@
     }
   });
 
+  // src/selectors/shared.ts
+  var sharedSelectors;
+  var init_shared = __esm({
+    "src/selectors/shared.ts"() {
+      "use strict";
+      sharedSelectors = {
+        dialog: 'div[role="dialog"]',
+        postOwner: 'div[role="article"], div[aria-posinset]',
+        profileName: '[data-ad-rendering-role="profile_name"]',
+        storyMessage: '[data-ad-rendering-role="story_message"]',
+        authoredContent: 'p, blockquote, [data-ad-preview="message"], [data-ad-comet-preview="message"], [data-ad-rendering-role="story_message"], [data-ad-rendering-role="creative_body"], [contenteditable="true"], [data-commentid], [data-testid^="UFI2Comment/"], [role="comment"]'
+      };
+    }
+  });
+
+  // src/i18n/disclosure-labels.ts
+  var disclosureLabels;
+  var init_disclosure_labels = __esm({
+    "src/i18n/disclosure-labels.ts"() {
+      "use strict";
+      disclosureLabels = {
+        en: ["Ad", "AI info", "Visit Meta AI|Meta AI branding", "Try Meta AI|Free AI creation tools"],
+        ar: [
+          "إعلان",
+          "معلومات الذكاء الاصطناعي|معلومات عن الذكاء الاصطناعي",
+          "زيارة Meta AI|علامة Meta AI التجارية",
+          "جرّب Meta AI|أدوات إنشاء مجانية بالذكاء الاصطناعي"
+        ],
+        bg: [
+          "Реклама",
+          "Информация за AI|Информация за ИИ",
+          "Посетете Meta AI|Брандиране на Meta AI",
+          "Изпробвайте Meta AI|Безплатни инструменти за създаване с AI"
+        ],
+        cs: [
+          "Reklama",
+          "Informace o AI",
+          "Navštívit Meta AI|Značka Meta AI",
+          "Vyzkoušejte Meta AI|Bezplatné nástroje pro tvorbu s AI"
+        ],
+        de: [
+          "Anzeige|Werbung",
+          "KI-Info|KI-Informationen",
+          "Meta AI besuchen|Meta AI-Branding",
+          "Meta AI ausprobieren|Kostenlose KI-Kreativtools"
+        ],
+        el: [
+          "Διαφήμιση",
+          "Πληροφορίες AI|Πληροφορίες τεχνητής νοημοσύνης",
+          "Επισκεφτείτε το Meta AI|Επωνυμία Meta AI",
+          "Δοκιμάστε το Meta AI|Δωρεάν εργαλεία δημιουργίας AI"
+        ],
+        es: [
+          "Anuncio",
+          "Información de IA|Información sobre IA",
+          "Visitar Meta AI|Marca de Meta AI",
+          "Prueba Meta AI|Herramientas gratuitas de creación con IA"
+        ],
+        fi: [
+          "Mainos",
+          "Tekoälytiedot|Tietoja tekoälystä",
+          "Siirry Meta AI:hin|Meta AI -brändäys",
+          "Kokeile Meta AI:ta|Maksuttomat tekoälyluontityökalut"
+        ],
+        fr: [
+          "Publicité|Pub",
+          "Infos IA|Informations sur l’IA|Informations sur l'IA",
+          "Visiter Meta AI|Marque Meta AI",
+          "Essayez Meta AI|Outils de création IA gratuits"
+        ],
+        he: [
+          "מודעה",
+          "מידע על AI|מידע על בינה מלאכותית",
+          "ביקור ב-Meta AI|מיתוג Meta AI",
+          "נסו את Meta AI|כלי יצירה חינמיים עם בינה מלאכותית"
+        ],
+        id: [
+          "Iklan",
+          "Info AI",
+          "Kunjungi Meta AI|Branding Meta AI",
+          "Coba Meta AI|Alat kreasi AI gratis"
+        ],
+        it: [
+          "Inserzione|Pubblicità",
+          "Informazioni sull'IA|Informazioni sull’IA",
+          "Visita Meta AI|Branding di Meta AI",
+          "Prova Meta AI|Strumenti di creazione IA gratuiti"
+        ],
+        ja: [
+          "広告",
+          "AI情報|AIに関する情報",
+          "Meta AIにアクセス|Meta AIのブランド",
+          "Meta AIを試す|無料のAI作成ツール"
+        ],
+        lv: [
+          "Reklāma",
+          "MI informācija|Informācija par MI",
+          "Apmeklēt Meta AI|Meta AI zīmols",
+          "Izmēģiniet Meta AI|Bezmaksas MI satura veidošanas rīki"
+        ],
+        nl: [
+          "Advertentie",
+          "AI-info|AI-informatie",
+          "Meta AI bezoeken|Meta AI-branding",
+          "Probeer Meta AI|Gratis AI-creatietools"
+        ],
+        pl: [
+          "Reklama",
+          "Informacje o AI|Informacje o sztucznej inteligencji",
+          "Odwiedź Meta AI|Marka Meta AI",
+          "Wypróbuj Meta AI|Bezpłatne narzędzia do tworzenia z AI"
+        ],
+        pt: [
+          "Anúncio",
+          "Informações de IA|Informações sobre IA",
+          "Visitar Meta AI|Marca da Meta AI",
+          "Experimenta a Meta AI|Experimente a Meta AI|Ferramentas gratuitas de criação com IA"
+        ],
+        ru: [
+          "Реклама",
+          "Информация об ИИ",
+          "Посетить Meta AI|Брендинг Meta AI",
+          "Попробуйте Meta AI|Бесплатные инструменты для творчества с ИИ"
+        ],
+        tr: [
+          "Reklam",
+          "Yapay zeka bilgisi|Yapay zekâ bilgisi",
+          "Meta AI'ı ziyaret et|Meta AI markası",
+          "Meta AI'ı dene|Ücretsiz yapay zeka oluşturma araçları"
+        ],
+        uk: [
+          "Реклама",
+          "Інформація про ШІ",
+          "Відвідати Meta AI|Брендинг Meta AI",
+          "Спробуйте Meta AI|Безкоштовні інструменти для творчості зі ШІ"
+        ],
+        vi: [
+          "Quảng cáo",
+          "Thông tin về AI|Thông tin AI",
+          "Truy cập Meta AI|Thương hiệu Meta AI",
+          "Dùng thử Meta AI|Công cụ sáng tạo AI miễn phí"
+        ],
+        "zh-Hans": [
+          "广告",
+          "AI 信息|AI信息|人工智能信息",
+          "访问 Meta AI|Meta AI 品牌",
+          "试用 Meta AI|免费 AI 创作工具"
+        ],
+        "zh-Hant": [
+          "廣告",
+          "AI 資訊|AI資訊|人工智慧資訊",
+          "造訪 Meta AI|Meta AI 品牌",
+          "試用 Meta AI|免費 AI 創作工具"
+        ]
+      };
+    }
+  });
+
+  // src/core/filters/disclosure-labels.ts
+  function normalize(text) {
+    return text.normalize("NFKC").replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g, "").replace(/\s+/g, " ").trim().toLowerCase();
+  }
+  function matchesDisclosureLabel(text, kind) {
+    var _a;
+    return ((_a = labels.get(kind)) == null ? void 0 : _a.has(normalize(text))) === true;
+  }
+  function containsMetaAiCopy(text) {
+    const normalized = normalize(text);
+    return Array.from(labels.get("metaAiCopy") || []).some(
+      (label) => label !== "" && normalized.includes(label)
+    );
+  }
+  function matchesSponsoredLabel(text) {
+    return sponsorshipLabels.has(normalize(text)) || matchesDisclosureLabel(text, "ad");
+  }
+  var kinds, labels, sponsorshipLabels;
+  var init_disclosure_labels2 = __esm({
+    "src/core/filters/disclosure-labels.ts"() {
+      "use strict";
+      init_i18n();
+      init_disclosure_labels();
+      kinds = ["ad", "aiInfo", "metaAiBrand", "metaAiCopy"];
+      labels = new Map(
+        kinds.map((kind, index) => [
+          kind,
+          new Set(
+            Object.values(disclosureLabels).flatMap(
+              (values) => (values[index] || "").split("|").map(normalize)
+            )
+          )
+        ])
+      );
+      sponsorshipLabels = new Set(
+        Object.values(translations).flatMap(
+          (catalog24) => [catalog24.SPONSORED, catalog24.SPONSORED_EXTRA].filter((label) => typeof label === "string").map(normalize)
+        )
+      );
+    }
+  });
+
+  // src/diagnostics/dom-privacy.ts
+  function boundedText(element, maximum = 180) {
+    const walker = element.ownerDocument.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+    let text = "";
+    let count = 0;
+    let node;
+    while (node = walker.nextNode()) {
+      if (++count > 24 || text.length > maximum) return "";
+      text += node.textContent || "";
+    }
+    return text.length <= maximum ? text.trim() : "";
+  }
+  function isInterfaceLink(element) {
+    const href = element.getAttribute("href");
+    if (!href) return element.hasAttribute("aria-label") || element.hasAttribute("aria-labelledby");
+    try {
+      const url = new URL(href, "https://www.facebook.com/");
+      if (!/^https?:$/.test(url.protocol) || url.username || url.password) return false;
+      if (url.hostname === "meta.ai" || url.hostname.endsWith(".meta.ai")) return true;
+      if (!(url.hostname === "facebook.com" || url.hostname.endsWith(".facebook.com"))) return false;
+      return /^\/(?:ads\/about|business\/help|help|settings|privacy)(?:\/|$)/.test(url.pathname) || /^\/(?:groups\/discover|friends|reel|stories|watch)\/?$/.test(url.pathname) || url.searchParams.has("__cft__[0]") && element.closest("h4, h5") !== null && (element.querySelector("svg[aria-label], svg[aria-labelledby], span[aria-labelledby]") !== null || matchesSponsoredLabel(element.getAttribute("aria-label") || boundedText(element)));
+    } catch (e) {
+      return false;
+    }
+  }
+  function isProfileLink(element) {
+    if (!element.matches("a[href]") || isInterfaceLink(element)) return false;
+    try {
+      const url = new URL(element.getAttribute("href") || "", "https://www.facebook.com/");
+      return /(^|\.)facebook\.com$/.test(url.hostname) && (url.pathname === "/profile.php" || sanitizePathname(url.pathname).replace(/\/$/, "") === "/[profile]");
+    } catch (e) {
+      return false;
+    }
+  }
+  var authored, identity, control, heading, excluded, SnapshotPrivacy;
+  var init_dom_privacy = __esm({
+    "src/diagnostics/dom-privacy.ts"() {
+      "use strict";
+      init_location();
+      init_shared();
+      init_disclosure_labels2();
+      authored = `${sharedSelectors.authoredContent}, textarea, input, [role="textbox"], [role="log"], [data-lexical-editor]`;
+      identity = '[data-ad-rendering-role="profile_name"], [data-hovercard], [data-profileid], [data-userid]';
+      control = 'button, [role="button"], [role="menuitem"], [role="tab"], [role="checkbox"], [role="switch"], [role="option"]';
+      heading = 'h1, h2, h3, h4, h5, h6, [role="heading"]';
+      excluded = "script, style, noscript, template, iframe, object, embed, canvas, foreignObject";
+      SnapshotPrivacy = class {
+        constructor() {
+          this.identities = /* @__PURE__ */ new Set();
+          this.identityPattern = null;
+          this.compiledIdentities = -1;
+        }
+        /** Derive identity evidence from bounded discovery rather than retaining or hashing private page text. */
+        remember(element) {
+          if (this.identities.size >= 500) return;
+          if (element.matches(identity) || element.matches("h4 a, h5 a") && !isInterfaceLink(element) || isProfileLink(element)) {
+            const name = boundedText(element);
+            if (name) {
+              this.identities.add(name);
+              const parts = name.split(/\s+/);
+              if (parts.length <= 4) {
+                for (const part of parts)
+                  if (part.length >= 3 && this.identities.size < 500) this.identities.add(part);
+              }
+            }
+          }
+          if (element.matches("img[alt]")) {
+            const alt = element.getAttribute("alt") || "";
+            if (alt && alt.length <= 180) this.identities.add(alt);
+          }
+        }
+        /** Prefer private provenance over public-control heuristics; unfamiliar ordinary content stays uncertain and redacted. */
+        content(element) {
+          if (element.closest(excluded)) return "excluded";
+          if (element.closest(authored)) return "authored";
+          if (element.closest(identity)) return "identity";
+          const link = element.closest("a");
+          if (link && !isInterfaceLink(link)) return "identity";
+          if (element.closest(control) || element.closest(heading)) return "interface";
+          if (link && isInterfaceLink(link)) return "interface";
+          return "uncertain";
+        }
+        /**
+         * Retain novel interface words while removing observed names, addresses, contact details and opaque identifiers.
+         * @param value Candidate public interface copy, never an authored-content source allowed to bypass provenance checks.
+         * @returns Normalized interface copy with private substrings replaced by explicit category placeholders.
+         */
+        interfaceText(value) {
+          let text = value.normalize("NFKC").replace(/(?:https?:\/\/|www\.)[^\s<>]+/giu, "[destination]").replace(/[\w.+-]+@[\w.-]+\.[\p{L}]{2,}/gu, "[email]").replace(/(?:\+?\d[\d\s().-]{6,}\d)/g, "[number]");
+          if (this.compiledIdentities !== this.identities.size) {
+            const escaped = Array.from(this.identities).sort((left, right) => right.length - left.length).map(
+              (name) => name.normalize("NFKC").replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s+")
+            );
+            this.identityPattern = escaped.length ? new RegExp(escaped.join("|"), "giu") : null;
+            this.compiledIdentities = this.identities.size;
+          }
+          if (this.identityPattern) text = text.replace(this.identityPattern, "[identity]");
+          return text.replace(/(?:https?:\/\/|www\.)[^\s<>]+/giu, "[destination]").replace(/[\w.+-]+@[\w.-]+\.[\p{L}]{2,}/gu, "[email]").replace(/(?:\+?\d[\d\s().-]{6,}\d)/g, "[number]").replace(/\b[\w-]{28,}\b/g, "[identifier]").split("").filter(
+            (character) => character.charCodeAt(0) >= 32 || [9, 10, 13].includes(character.charCodeAt(0))
+          ).join("").replace(/\s+/g, " ").trim();
+        }
+        /** Text provenance controls disclosure; unknown text does not become public just because a detector missed it. */
+        text(value, content) {
+          if (!value.trim()) return "";
+          return content === "interface" ? this.interfaceText(value) : `[${content} text]`;
+        }
+      };
+    }
+  });
+
+  // src/diagnostics/dom-destinations.ts
+  function snapshotDestination(href) {
+    const facts = {};
+    try {
+      let url = new URL(href, "https://www.facebook.com/");
+      if (url.hostname === "l.facebook.com" && url.pathname === "/l.php") {
+        facts["data-cmf-redirect"] = "facebook-outbound";
+        const destination = url.searchParams.get("u");
+        if (destination) url = new URL(destination);
+      }
+      if (!/^https?:$/.test(url.protocol) || url.username || url.password)
+        return { value: "[non-web]", facts };
+      if (url.hostname === "meta.ai" || url.hostname.endsWith(".meta.ai"))
+        return { value: "https://meta.ai/", facts };
+      if (!(url.hostname === "facebook.com" || url.hostname.endsWith(".facebook.com")))
+        return { value: "https://external.invalid/[path]", facts };
+      const publicPath = publicPaths.find(
+        (path) => url.pathname === path.slice(0, -1) || url.pathname.startsWith(path)
+      );
+      let value = publicPath || sanitizePathname(url.pathname);
+      const query = new URLSearchParams();
+      for (const [key, values] of publicQuery) {
+        const original = url.searchParams.get(key);
+        if (original !== null) query.set(key, values.has(original) ? original : "[value]");
+      }
+      const signature = url.searchParams.get("__cft__[0]");
+      if (signature !== null) {
+        facts["data-cmf-cft-length"] = String(signature.length + "__cft__[0]=".length);
+        query.set("__cft__[0]", "x".repeat(Math.min(signature.length, 1024)));
+      }
+      if (query.size)
+        value += `?${Array.from(query, ([key, entry]) => `${key}=${encodeURIComponent(entry)}`).join("&")}`;
+      facts["data-cmf-destination"] = "facebook";
+      return { value, facts };
+    } catch (e) {
+      return { value: "[invalid-destination]", facts };
+    }
+  }
+  var publicPaths, publicQuery;
+  var init_dom_destinations = __esm({
+    "src/diagnostics/dom-destinations.ts"() {
+      "use strict";
+      init_location();
+      publicPaths = [
+        "/ads/about/",
+        "/business/help/",
+        "/help/",
+        "/privacy/",
+        "/settings/",
+        "/events/",
+        "/friends/"
+      ];
+      publicQuery = /* @__PURE__ */ new Map([
+        ["s", /* @__PURE__ */ new Set(["ifu_see_more"])],
+        ["source", /* @__PURE__ */ new Set(["from_feed", "profile"])],
+        ["section_header_type", /* @__PURE__ */ new Set()]
+      ]);
+    }
+  });
+
+  // src/diagnostics/dom-attributes.ts
+  var references, booleans, states, numbers, roles, publicMarkers, SnapshotAttributes;
+  var init_dom_attributes = __esm({
+    "src/diagnostics/dom-attributes.ts"() {
+      "use strict";
+      init_dom_destinations();
+      references = /* @__PURE__ */ new Set([
+        "aria-labelledby",
+        "aria-describedby",
+        "aria-controls",
+        "aria-owns",
+        "aria-details",
+        "aria-activedescendant",
+        "for",
+        "headers"
+      ]);
+      booleans = /* @__PURE__ */ new Set([
+        "hidden",
+        "disabled",
+        "checked",
+        "selected",
+        "multiple",
+        "open",
+        "inert",
+        "controls",
+        "loop",
+        "muted",
+        "autoplay"
+      ]);
+      states = /* @__PURE__ */ new Set([
+        "aria-hidden",
+        "aria-expanded",
+        "aria-selected",
+        "aria-checked",
+        "aria-disabled",
+        "aria-pressed",
+        "aria-busy",
+        "aria-modal",
+        "aria-haspopup",
+        "contenteditable",
+        "draggable",
+        "data-virtualized"
+      ]);
+      numbers = /* @__PURE__ */ new Set([
+        "aria-level",
+        "aria-posinset",
+        "aria-setsize",
+        "aria-colcount",
+        "aria-rowcount",
+        "colspan",
+        "rowspan",
+        "width",
+        "height",
+        "tabindex"
+      ]);
+      roles = new Set(
+        "article banner button checkbox columnheader combobox complementary contentinfo definition dialog document feed figure form generic grid gridcell group heading img link list listbox listitem log main marquee math menu menubar menuitem menuitemcheckbox menuitemradio navigation none note option paragraph presentation progressbar radio radiogroup region row rowgroup rowheader scrollbar search searchbox separator slider spinbutton status strong subscript suggestion superscript switch tab table tablist tabpanel term textbox time timer toolbar tooltip tree treegrid treeitem comment".split(
+          " "
+        )
+      );
+      publicMarkers = /* @__PURE__ */ new Set([
+        "data-ad-rendering-role",
+        "data-ad-preview",
+        "data-ad-comet-preview",
+        "data-visualcompletion",
+        "data-type"
+      ]);
+      SnapshotAttributes = class {
+        /** Keep privacy dictionaries local and share aliases without publishing their reverse mapping. */
+        constructor(privacy, attributeLimit = 24e3, referenceLimit = 64) {
+          this.privacy = privacy;
+          this.attributeLimit = attributeLimit;
+          this.referenceLimit = referenceLimit;
+          this.ids = /* @__PURE__ */ new Map();
+          this.classes = /* @__PURE__ */ new Map();
+          this.privateNames = /* @__PURE__ */ new Map();
+          this.pending = /* @__PURE__ */ new Map();
+          this.omissions = {};
+          this.redacted = 0;
+          this.attributeReads = 0;
+        }
+        /** Expose skipped attribute work explicitly instead of presenting a partial projection as complete. */
+        omit(reason, count = 1) {
+          this.omissions[reason] = (this.omissions[reason] || 0) + count;
+        }
+        /** Stable aliases preserve equality and reference edges only within the current exported report. */
+        alias(value, values, prefix) {
+          let token = values.get(value);
+          if (!token) {
+            token = `${prefix}${values.size + 1}`;
+            values.set(value, token);
+          }
+          return token;
+        }
+        /** Record external label dependencies even when their targets are absent or outside the sampled feed. */
+        reference(value, interfaceLabel) {
+          const id = this.alias(value, this.ids, "cmf-id-");
+          const previous = this.pending.get(value);
+          if (!previous && this.pending.size >= this.referenceLimit) {
+            this.omit("reference-limit");
+            return id;
+          }
+          this.pending.set(value, {
+            original: value,
+            id,
+            interfaceLabel: interfaceLabel || (previous == null ? void 0 : previous.interfaceLabel) === true
+          });
+          return id;
+        }
+        /**
+         * Project safe attribute semantics and annotate every transformation that affects selector portability.
+         * @param element Original node; attribute values are read only and never retained outside aliases or safe projections.
+         * @param content Provenance controlling whether accessible-name copy is eligible for retention.
+         * @returns Safe attribute values plus transformation categories for the offline inspector.
+         */
+        read(element, content) {
+          const attributes = {};
+          const changes = {};
+          const maximum = Math.max(0, Math.min(64, this.attributeLimit - this.attributeReads));
+          if (element.attributes.length > maximum)
+            this.omit("attribute-limit", element.attributes.length - maximum);
+          for (let index = 0; index < Math.min(element.attributes.length, maximum); index++) {
+            const attribute = element.attributes.item(index);
+            if (!attribute) continue;
+            this.attributeReads++;
+            let name = attribute.name;
+            const value = attribute.value;
+            if (!/^[a-z][a-z0-9_.:-]{0,63}$/.test(name) || this.privacy.interfaceText(name) !== name) {
+              name = this.alias(name, this.privateNames, "data-cmf-attribute-");
+            }
+            if (value.length > 4096) {
+              attributes[name] = "";
+              changes[name] = "redacted";
+              this.omit("attribute-value-limit");
+              continue;
+            }
+            if (name === "id") {
+              attributes.id = this.alias(value, this.ids, "cmf-id-");
+              changes.id = "alias";
+            } else if (name === "class") {
+              if (value.trim().split(/\s+/, 33).length > 32) this.omit("class-token-limit");
+              attributes.class = value.trim().split(/\s+/, 32).filter(Boolean).slice(0, 32).map((token) => this.alias(token, this.classes, "cmf-class-")).join(" ");
+              changes.class = "alias";
+            } else if (references.has(name)) {
+              if (value.trim().split(/\s+/, 9).length > 8) this.omit("reference-token-limit");
+              attributes[name] = value.trim().split(/\s+/, 8).filter(Boolean).slice(0, 8).map(
+                (id) => this.reference(id, content === "interface" && /labelledby|describedby/.test(name))
+              ).join(" ");
+              changes[name] = "alias";
+            } else if (booleans.has(name)) {
+              attributes[name] = "";
+            } else if (states.has(name)) {
+              attributes[name] = [
+                "",
+                "true",
+                "false",
+                "mixed",
+                "menu",
+                "listbox",
+                "tree",
+                "grid",
+                "dialog",
+                "plaintext-only"
+              ].includes(value) ? value : "[value]";
+              if (attributes[name] === "[value]") changes[name] = "redacted";
+            } else if (numbers.has(name)) {
+              const number = Number(value);
+              attributes[name] = Number.isFinite(number) ? String(Math.max(-1, Math.min(9999, Math.trunc(number)))) : "[number]";
+              changes[name] = "bounded";
+            } else if (name === "role") {
+              attributes.role = roles.has(value) ? value : "[role]";
+              if (attributes.role === "[role]") changes.role = "redacted";
+            } else if (name === "dir" && ["auto", "ltr", "rtl"].includes(value)) {
+              attributes.dir = value;
+            } else if (name === "lang" && /^[a-z]{2,3}(?:-[a-z0-9]{2,8}){0,3}$/i.test(value)) {
+              attributes.lang = value;
+            } else if (["aria-label", "title"].includes(name)) {
+              attributes[name] = this.privacy.text(value, content).slice(0, 180);
+              if (attributes[name] !== value) changes[name] = "redacted";
+            } else if (name === "href" || name === "xlink:href") {
+              if (value.startsWith("#") && element.namespaceURI === "http://www.w3.org/2000/svg") {
+                attributes[name] = `#${this.reference(value.slice(1), false)}`;
+                changes[name] = "alias";
+              } else {
+                const destination = snapshotDestination(value);
+                attributes[name] = destination.value;
+                Object.assign(attributes, destination.facts);
+                changes[name] = "route";
+              }
+            } else if (publicMarkers.has(name) && /^[a-z][a-z_-]{0,63}$/.test(value) && this.privacy.interfaceText(value) === value) {
+              attributes[name] = value;
+            } else if (name === "type" && /^(?:button|submit|reset|checkbox|radio|text|search|email|password|hidden|number|range|date|file)$/.test(
+              value
+            )) {
+              attributes[name] = value;
+            } else {
+              attributes[name.startsWith("on") || [
+                "src",
+                "srcset",
+                "poster",
+                "action",
+                "formaction",
+                "srcdoc",
+                "style",
+                "value",
+                "alt",
+                "d",
+                "points"
+              ].includes(name) ? `data-cmf-original-${name.replace(/[^a-z0-9-]/g, "-")}` : name] = "";
+              changes[name] = "presence";
+            }
+          }
+          this.redacted += Object.keys(changes).length;
+          return { attributes, changes };
+        }
+      };
+    }
+  });
+
+  // src/diagnostics/dom-selection.ts
+  function yieldSnapshotWork() {
+    return new Promise((resolve) => setTimeout(resolve, 0));
+  }
+  function isReportUi(element) {
+    return element.closest("#fbcmf, #fbcmfToggle") !== null;
+  }
+  function visible(element) {
+    const rect = element.getBoundingClientRect();
+    const view = element.ownerDocument.defaultView;
+    return rect.width > 0 && rect.height > 0 && rect.bottom >= 0 && rect.right >= 0 && rect.top < ((view == null ? void 0 : view.innerHeight) || 0) && rect.left < ((view == null ? void 0 : view.innerWidth) || 0);
+  }
+  function snapshotTargetRegion(target) {
+    const semantic = target.closest('[role="article"], [aria-posinset], section, [role="region"]');
+    if (semantic && !semantic.matches('[role="main"], body, html')) return semantic;
+    let region = target;
+    let fallback = target;
+    for (let depth = 0; depth < 8; depth++) {
+      const parent = region.parentElement;
+      if (!parent || parent.matches(
+        'body, html, main, [role="main"], [role="navigation"], [role="dialog"], [role="feed"], [role="banner"]'
+      ))
+        break;
+      region = parent;
+      if (depth < 3) fallback = region;
+      if (region.querySelector('h1, h2, h3, h4, h5, h6, [role="heading"]') && region.querySelector('button, [role="button"]'))
+        return region;
+    }
+    region = fallback;
+    return region;
+  }
+  async function selectSnapshotRegions(document2, target, limits, privacy) {
+    let seeded = 0;
+    if ((target == null ? void 0 : target.isConnected) && !isReportUi(target)) {
+      const region = snapshotTargetRegion(target);
+      for (const scope of [region, region.previousElementSibling, region.nextElementSibling]) {
+        if (!scope || isReportUi(scope)) continue;
+        const identities = document2.createTreeWalker(scope, NodeFilter.SHOW_ELEMENT);
+        let identity2 = scope;
+        let local = 0;
+        while (identity2 && local++ < limits.nodesPerRegion) {
+          if (identity2 instanceof Element && !isReportUi(identity2)) privacy.remember(identity2);
+          if (++seeded % 128 === 0) await yieldSnapshotWork();
+          identity2 = identities.nextNode();
+        }
+      }
+    }
+    const root = document2.body || document2.documentElement;
+    const walker = document2.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, {
+      /** Prune CMF's own subtree so copied reports never become input to later reports. */
+      acceptNode: (node2) => node2 instanceof Element && isReportUi(node2) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+    });
+    const candidates = /* @__PURE__ */ new Set();
+    const surfaces = [];
+    let discovered = 0;
+    let node = root;
+    while (node && discovered < limits.discoveryNodes) {
+      if (node instanceof Element && !isReportUi(node)) {
+        discovered++;
+        privacy.remember(node);
+        if (node.matches(
+          '[role="main"], [role="dialog"], [role="navigation"], [role="complementary"], [role="banner"]'
+        ))
+          surfaces.push(node);
+        if (node.matches('[role="article"], [aria-posinset], section, [role="region"]'))
+          candidates.add(node);
+        if (node.matches('button, [role="button"], [role="heading"]') && !node.closest('[role="article"], [aria-posinset]'))
+          candidates.add(snapshotTargetRegion(node));
+      }
+      if (discovered > 0 && discovered % 128 === 0) await yieldSnapshotWork();
+      node = walker.nextNode();
+    }
+    for (const surface of surfaces) {
+      let branch = surface;
+      for (let depth = 0; depth < 8 && branch.children.length === 1; depth++) {
+        const child = branch.firstElementChild;
+        if (!child || isReportUi(child)) break;
+        branch = child;
+      }
+      for (const child of Array.from(branch.children).slice(0, 128))
+        if (!isReportUi(child)) candidates.add(child);
+      if (branch.children.length === 0) candidates.add(branch);
+    }
+    const regions = [];
+    const add = (element, selection) => {
+      if (!element || !element.isConnected || isReportUi(element) || regions.some(
+        (region) => region.element === element || region.element.contains(element) || element.contains(region.element)
+      ))
+        return;
+      if (regions.length < limits.regions) regions.push({ element, selection });
+    };
+    if ((target == null ? void 0 : target.isConnected) && target.ownerDocument === document2 && !isReportUi(target)) {
+      const region = snapshotTargetRegion(target);
+      add(region, "target");
+      add(region.previousElementSibling, "neighbor");
+      add(region.nextElementSibling, "neighbor");
+    }
+    const inView = Array.from(candidates).filter(visible).sort(
+      (left, right) => Number(!!right.closest('main, [role="main"], [role="feed"]')) - Number(!!left.closest('main, [role="main"], [role="feed"]'))
+    );
+    for (const candidate of inView) add(candidate, "viewport");
+    for (const candidate of inView.slice(0, 3)) {
+      add(candidate.previousElementSibling, "neighbor");
+      add(candidate.nextElementSibling, "neighbor");
+    }
+    for (const candidate of candidates) add(candidate, "surface");
+    for (const surface of surfaces) add(surface, "surface");
+    if (!regions.length) add(root, "surface");
+    return {
+      regions,
+      discovered,
+      seeded,
+      discoveryComplete: node === null,
+      selectionComplete: Array.from(candidates).every(
+        (candidate) => regions.some((region) => region.element.contains(candidate))
+      )
+    };
+  }
+  var init_dom_selection = __esm({
+    "src/diagnostics/dom-selection.ts"() {
+      "use strict";
+    }
+  });
+
+  // src/diagnostics/dom-capture.ts
+  function dimension(value) {
+    return Number.isFinite(value) ? Math.max(-1e5, Math.min(1e5, Math.round(value / 4) * 4)) : 0;
+  }
+  function layout(element) {
+    var _a;
+    const rect = element.getBoundingClientRect();
+    const view = element.ownerDocument.defaultView;
+    const style = view == null ? void 0 : view.getComputedStyle(element);
+    let ancestor = element.parentElement;
+    let concealedByAncestor = false;
+    for (let depth = 0; ancestor && depth < 40; depth++, ancestor = ancestor.parentElement) {
+      if (ancestor.matches('[hidden], [aria-hidden="true"]') || ((_a = ancestor.getAttribute("style")) == null ? void 0 : _a.match(/display\s*:\s*none|visibility\s*:\s*hidden/i))) {
+        concealedByAncestor = true;
+        break;
+      }
+    }
+    return {
+      x: dimension(rect.x),
+      y: dimension(rect.y),
+      width: dimension(rect.width),
+      height: dimension(rect.height),
+      display: (style == null ? void 0 : style.display) || "unknown",
+      visibility: (style == null ? void 0 : style.visibility) || "unknown",
+      position: (style == null ? void 0 : style.position) || "unknown",
+      order: (style == null ? void 0 : style.order) || "0",
+      direction: (style == null ? void 0 : style.direction) || "unknown",
+      inViewport: rect.width > 0 && rect.height > 0 && rect.bottom >= 0 && rect.right >= 0 && rect.top < ((view == null ? void 0 : view.innerHeight) || 0) && rect.left < ((view == null ? void 0 : view.innerWidth) || 0),
+      concealedByAncestor
+    };
+  }
+  async function captureDomSnapshot(document2, options = {}) {
+    var _a, _b;
+    const start = performance.now();
+    const limits = { ...snapshotLimits };
+    for (const key of Object.keys(limits)) {
+      const value = (_a = options.limits) == null ? void 0 : _a[key];
+      if (typeof value === "number" && Number.isFinite(value))
+        limits[key] = Math.max(1, Math.min(limits[key], Math.floor(value)));
+    }
+    let mutationsDuringCapture = 0;
+    const countMutations = (records) => {
+      for (const record of records) {
+        const element = record.target instanceof Element ? record.target : record.target.parentElement;
+        if (element && !isReportUi(element)) mutationsDuringCapture++;
+      }
+    };
+    const observer = typeof MutationObserver === "undefined" ? null : new MutationObserver(countMutations);
+    observer == null ? void 0 : observer.observe(document2.documentElement, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      characterData: true
+    });
+    try {
+      const capture = new DomCapture(limits);
+      const selection = await selectSnapshotRegions(
+        document2,
+        options.target || null,
+        limits,
+        capture.privacy
+      );
+      const regions = [];
+      for (const selected of selection.regions) {
+        if (capture.nodes >= limits.nodes) {
+          capture.omit("node-limit");
+          break;
+        }
+        const root = await capture.region(selected.element);
+        const ancestors = [];
+        let ancestor = selected.element.parentElement;
+        while (ancestor && ancestors.length < 8) {
+          ancestors.unshift(capture.shell(ancestor));
+          ancestor = ancestor.parentElement;
+        }
+        regions.push({ ref: root.ref, selection: selected.selection, ancestors, root });
+        await yieldSnapshotWork();
+      }
+      const references2 = [];
+      for (const pending of capture.attributes.pending.values()) {
+        if (references2.length >= limits.references) {
+          capture.omissions["reference-limit"] = capture.attributes.pending.size - references2.length;
+          break;
+        }
+        const target = document2.getElementById(pending.original);
+        if (!target) {
+          references2.push({ id: pending.id, status: "missing", target: null });
+          continue;
+        }
+        const existing = capture.captured.get(target);
+        if (existing) {
+          references2.push({ id: pending.id, status: "captured", target: null });
+          continue;
+        }
+        if (capture.nodes >= limits.nodes) {
+          references2.push({ id: pending.id, status: "budget-exceeded", target: null });
+          continue;
+        }
+        const publicLeaf = pending.interfaceLabel && target.localName === "span" && target.childElementCount === 0 && capture.privacy.content(target) === "uncertain";
+        const copy = await capture.region(target, publicLeaf ? "interface" : void 0);
+        references2.push({ id: pending.id, status: "external", target: copy });
+      }
+      if (observer) countMutations(observer.takeRecords());
+      return {
+        version: 1,
+        limits,
+        regions,
+        references: references2,
+        target: options.target ? ((_b = capture.captured.get(options.target)) == null ? void 0 : _b.ref) || null : null,
+        coverage: {
+          scope: "selected-regions",
+          capturedNodes: capture.nodes,
+          discoveredNodes: selection.discovered,
+          identitySeedNodes: selection.seeded,
+          retainedLabelCharacters: capture.labels,
+          redactedTextNodes: capture.redacted,
+          redactedAttributes: capture.attributes.redacted,
+          omissions: { ...capture.omissions, ...capture.attributes.omissions },
+          elapsedMs: Math.round(performance.now() - start),
+          discoveryComplete: selection.discoveryComplete,
+          regionSelectionComplete: selection.selectionComplete,
+          mutationsDuringCapture
+        },
+        privacy: {
+          policy: "content-boundaries-v1",
+          interfaceLabels: "automatically-sanitized",
+          authoredText: "redacted",
+          mediaContent: "omitted",
+          identifiers: "report-local-aliases",
+          classes: "report-local-aliases",
+          destinations: "structural-templates"
+        }
+      };
+    } finally {
+      observer == null ? void 0 : observer.disconnect();
+    }
+  }
+  var DomCapture;
+  var init_dom_capture = __esm({
+    "src/diagnostics/dom-capture.ts"() {
+      "use strict";
+      init_dom_snapshot();
+      init_dom_privacy();
+      init_dom_attributes();
+      init_dom_selection();
+      DomCapture = class {
+        /** Capture budgets are immutable for the lifetime of a report generation request. */
+        constructor(limits) {
+          this.limits = limits;
+          this.privacy = new SnapshotPrivacy();
+          this.attributes = new SnapshotAttributes(
+            this.privacy,
+            this.limits.attributes,
+            this.limits.references
+          );
+          this.captured = /* @__PURE__ */ new Map();
+          this.omissions = {};
+          this.nodes = 0;
+          this.labels = 0;
+          this.redacted = 0;
+          this.nextRef = 0;
+          this.customTags = /* @__PURE__ */ new Map();
+          this.layouts = /* @__PURE__ */ new WeakMap();
+        }
+        /** Bound unknown custom tag names while retaining equality and sibling structure through local aliases. */
+        tag(element) {
+          if (!element.localName.includes("-") && /^[a-z][a-z0-9]{0,24}$/i.test(element.localName))
+            return element.localName;
+          let tag = this.customTags.get(element.localName);
+          if (!tag) {
+            tag = `cmf-element-${this.customTags.size + 1}`;
+            this.customTags.set(element.localName, tag);
+          }
+          return tag;
+        }
+        /** Count every structural gap so a partial capture cannot be mistaken for a complete DOM. */
+        omit(reason) {
+          this.omissions[reason] = (this.omissions[reason] || 0) + 1;
+          return { kind: "omitted", reason };
+        }
+        /**
+         * Copy safe element facts once, including ancestry shells whose omitted descendants remain explicit.
+         * @param element Source node read without mutation or retention in serialized output.
+         * @param override Interface provenance for a separately referenced plain label, when permitted by the caller.
+         * @returns A detached data record with safe attributes, rendering facts and initially empty children.
+         */
+        shell(element, override) {
+          const content = override || this.privacy.content(element);
+          const attributes = this.attributes.read(element, content);
+          let rendering = this.layouts.get(element);
+          if (!rendering) {
+            rendering = layout(element);
+            this.layouts.set(element, rendering);
+          }
+          return {
+            kind: "element",
+            ref: `n${++this.nextRef}`,
+            tag: this.tag(element),
+            namespace: element.namespaceURI === "http://www.w3.org/2000/svg" ? "svg" : element.namespaceURI === "http://www.w3.org/1999/xhtml" ? "html" : "other",
+            content,
+            attributes: attributes.attributes,
+            attributeChanges: attributes.changes,
+            layout: rendering,
+            childNodeCount: element.childNodes.length,
+            children: []
+          };
+        }
+        /**
+         * Redact private text at its source; retain bounded unfamiliar interface labels without a known-phrase lookup.
+         * @param node Original text node; raw content is used only for immediate redaction and size bucketing.
+         * @param inherited Optional explicit provenance for a separately referenced accessible label.
+         * @returns A safe text record with either interface copy or an explicit redaction/omission placeholder.
+         */
+        text(node, inherited) {
+          const value = node.textContent || "";
+          const content = inherited || (node.parentElement ? this.privacy.content(node.parentElement) : "uncertain");
+          let safe = this.privacy.text(value, content);
+          if (content !== "interface" && value.trim()) this.redacted++;
+          if (content === "interface" && (safe.length > this.limits.labelCharacters || this.labels + safe.length > this.limits.totalLabelCharacters)) {
+            safe = "[interface text omitted: label budget]";
+            this.omissions["label-limit"] = (this.omissions["label-limit"] || 0) + 1;
+          } else if (content === "interface") this.labels += safe.length;
+          return {
+            kind: "text",
+            ref: `n${++this.nextRef}`,
+            content,
+            value: safe,
+            size: !value.trim() ? "empty" : value.length <= 32 ? "short" : value.length <= 180 ? "medium" : "long"
+          };
+        }
+        /**
+         * Copy one region using iterative traversal, releasing the event loop between bounded batches.
+         * @param element Region root selected independently of filter outcomes.
+         * @param override Only a constrained external accessible-label leaf may receive explicit interface provenance.
+         * @returns Ordered sanitized tree, with explicit gaps wherever work limits stop traversal.
+         */
+        async region(element, override) {
+          this.nodes++;
+          const root = this.shell(element, override);
+          this.captured.set(element, root);
+          const queue = [
+            { source: element, copy: root, depth: 0 }
+          ];
+          let localNodes = 1;
+          while (queue.length) {
+            const entry = queue.pop();
+            if (!entry) break;
+            if (entry.copy.content === "excluded") {
+              entry.copy.children.push(this.omit("excluded-content"));
+              continue;
+            }
+            if (entry.depth >= this.limits.depth) {
+              if (entry.source.childNodes.length) entry.copy.children.push(this.omit("depth-limit"));
+              continue;
+            }
+            const branches = [];
+            for (let child = entry.source.firstChild; child; child = child.nextSibling) {
+              if (this.nodes >= this.limits.nodes || localNodes >= this.limits.nodesPerRegion) {
+                entry.copy.children.push(
+                  this.omit(this.nodes >= this.limits.nodes ? "node-limit" : "region-limit")
+                );
+                break;
+              }
+              this.nodes++;
+              localNodes++;
+              if (child.nodeType === Node.TEXT_NODE) entry.copy.children.push(this.text(child, override));
+              else if (child instanceof Element) {
+                if (isReportUi(child)) {
+                  entry.copy.children.push(this.omit("excluded-content"));
+                  continue;
+                }
+                const copy = this.shell(child);
+                this.captured.set(child, copy);
+                entry.copy.children.push(copy);
+                branches.push({ source: child, copy, depth: entry.depth + 1 });
+              } else entry.copy.children.push(this.omit("excluded-content"));
+              if (localNodes % 64 === 0) await yieldSnapshotWork();
+            }
+            queue.push(...branches.reverse());
+          }
+          return root;
+        }
+      };
+    }
+  });
+
+  // src/core/diagnostics/environment.ts
+  function browserIdentity(userAgent) {
+    var _a, _b, _c, _d;
+    const products = [
+      ["Edge", /(?:Edg|EdgA|EdgiOS)\/([\d.]+)/],
+      ["Opera", /(?:OPR|OPiOS)\/([\d.]+)/],
+      ["Firefox", /(?:Firefox|FxiOS)\/([\d.]+)/],
+      ["Chrome", /(?:Chrome|CriOS)\/([\d.]+)/],
+      ["Safari", /Version\/([\d.]+).*Safari\//]
+    ];
+    const product = products.find(([, pattern]) => pattern.test(userAgent));
+    const chromium = (_a = /(?:Chrome|Chromium)\/([\d.]+)/.exec(userAgent)) == null ? void 0 : _a[1];
+    const webkit = (_b = /AppleWebKit\/([\d.]+)/.exec(userAgent)) == null ? void 0 : _b[1];
+    const gecko = /Gecko\//.test(userAgent) ? (_c = /rv:([\d.]+)/.exec(userAgent)) == null ? void 0 : _c[1] : void 0;
+    return {
+      name: (product == null ? void 0 : product[0]) || "unknown",
+      version: ((_d = product == null ? void 0 : product[1].exec(userAgent)) == null ? void 0 : _d[1]) || "unknown",
+      engine: chromium ? "Blink" : webkit ? "WebKit" : gecko ? "Gecko" : "unknown",
+      engineVersion: chromium || webkit || gecko || "unknown",
+      os: /Android/i.test(userAgent) ? "Android" : /iPhone|iPad|iPod/.test(userAgent) ? "iOS" : /Windows/.test(userAgent) ? "Windows" : /Macintosh|Mac OS X/.test(userAgent) ? "macOS" : /Linux/.test(userAgent) ? "Linux" : "unknown",
+      mobile: /Mobile|Android|iPhone|iPad|iPod/.test(userAgent)
+    };
+  }
+  function diagnosticLocale(value) {
+    return value && /^[a-z]{2,3}(?:-[a-z0-9]{2,8}){0,3}$/i.test(value) ? value : "unknown";
+  }
+  var init_environment = __esm({
+    "src/core/diagnostics/environment.ts"() {
+      "use strict";
+    }
+  });
+
+  // src/core/diagnostics/build-identity.ts
+  var buildIdentity;
+  var init_build_identity = __esm({
+    "src/core/diagnostics/build-identity.ts"() {
+      "use strict";
+      buildIdentity = true ? "source-sha256:97bd59df32cf4531bc3d739c34f675bac1fe19f2eac774de5b80467f95d8db5e" : "unbundled";
+    }
+  });
+
   // src/diagnostics/serialization.ts
   function getSupportUrl() {
     const gm = typeof globalThis !== "undefined" ? globalThis.GM : void 0;
@@ -4409,14 +5514,27 @@
     return SUPPORT_URL_FALLBACK;
   }
   function getScriptInfo() {
+    var _a;
     const gm = typeof globalThis !== "undefined" ? globalThis.GM : void 0;
     const script = gm && gm.info && gm.info.script ? gm.info.script : null;
     return {
-      name: script && script.name ? script.name : "FB - Clean my feeds",
-      version: script && script.version ? script.version : "unknown",
+      name: "FB - Clean my feeds",
+      version: (script == null ? void 0 : script.version) && /^\d+(?:\.\d+){0,4}(?:[-+][a-z0-9.-]+)?$/i.test(script.version) ? script.version : "unknown",
       buildSource: getBuildSource(script),
-      supportURL: script && script.supportURL ? script.supportURL : getSupportUrl(),
-      handler: gm && gm.info && gm.info.scriptHandler ? gm.info.scriptHandler : "unknown"
+      supportURL: getSupportUrl() === SUPPORT_URL_FALLBACK ? SUPPORT_URL_FALLBACK : "custom",
+      handler: [
+        "Violentmonkey",
+        "Tampermonkey",
+        "Greasemonkey",
+        "FireMonkey",
+        "ScriptCat",
+        "Userscripts"
+      ].find((name) => {
+        var _a2;
+        return name === ((_a2 = gm == null ? void 0 : gm.info) == null ? void 0 : _a2.scriptHandler);
+      }) || "unknown",
+      handlerVersion: ((_a = gm == null ? void 0 : gm.info) == null ? void 0 : _a.version) && /^\d+(?:\.\d+){0,4}(?:[-+][a-z0-9.-]+)?$/i.test(gm.info.version) ? gm.info.version : "unknown",
+      buildIdentity
     };
   }
   function getBuildSource(script) {
@@ -4447,10 +5565,10 @@
   function buildEnvironmentSnapshot() {
     const gm = typeof globalThis !== "undefined" ? globalThis.GM : void 0;
     return {
-      userAgent: navigator.userAgent,
-      platform: navigator.platform,
-      language: navigator.language,
-      languages: navigator.languages,
+      browser: browserIdentity(navigator.userAgent),
+      language: diagnosticLocale(navigator.language),
+      languages: navigator.languages.slice(0, 8).map((value) => diagnosticLocale(value)),
+      facebookLanguage: diagnosticLocale(document.documentElement.lang),
       hasGM: !!gm,
       hasGMInfo: !!(gm && gm.info),
       readyState: document.readyState,
@@ -4472,7 +5590,9 @@
         try {
           const url = new URL(script.src, window.location.href);
           if (url.protocol === "http:" || url.protocol === "https:") {
-            samples.push(`${url.origin}${url.pathname}`);
+            samples.push(
+              /(^|\.)facebook\.com$/i.test(url.hostname) ? "facebook-script" : /(^|\.)fbcdn\.net$/i.test(url.hostname) ? "facebook-cdn-script" : "external-script"
+            );
           } else if (url.protocol === "data:") {
             samples.push("data-script");
           } else if (url.protocol === "blob:") {
@@ -4519,32 +5639,15 @@
     "src/diagnostics/serialization.ts"() {
       "use strict";
       init_location();
+      init_environment();
+      init_build_identity();
       SUPPORT_URL_FALLBACK = "https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/issues";
     }
   });
 
   // src/diagnostics/redaction.ts
-  function hashText(value) {
-    if (typeof value !== "string" || value.length === 0) {
-      return "";
-    }
-    let hash = 2166136261;
-    for (let i = 0; i < value.length; i += 1) {
-      hash ^= value.charCodeAt(i);
-      hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
-    }
-    return `fnv1a:${(hash >>> 0).toString(16)}`;
-  }
-  function summarizeList(list, limit = 20) {
-    if (!Array.isArray(list)) {
-      return { count: 0, hashes: [], truncated: false };
-    }
-    const hashes = list.slice(0, limit).map((value) => hashText(String(value)));
-    return {
-      count: list.length,
-      hashes,
-      truncated: list.length > limit
-    };
+  function summarizeList(list) {
+    return { count: Array.isArray(list) ? list.length : 0 };
   }
   function redactOptions(options) {
     const redacted = { ...options };
@@ -4608,7 +5711,7 @@
     if (!reason || reason.trim() === "") {
       return "unlabeled";
     }
-    return safeReasons.has(reason) ? reason : `hash:${hashText(reason)}`;
+    return safeReasons.has(reason) ? reason : "private-reason";
   }
   var BLOCKED_TEXT_OPTION_KEYS, BLOCKED_TEXT_FILTER_KEYS;
   var init_redaction = __esm({
@@ -4674,6 +5777,41 @@
       postAttMPSkip = "cmfsmp";
       rvAtt = "cmfrv";
       mainColumnAtt = "cmfmc";
+    }
+  });
+
+  // src/selectors/news.ts
+  var newsSelectors;
+  var init_news = __esm({
+    "src/selectors/news.ts"() {
+      "use strict";
+      newsSelectors = {
+        mainColumn: 'div[role="navigation"] ~ div[role="main"]',
+        dialog: 'div[role="dialog"]',
+        rightRail: '[role="complementary"]',
+        railHeadings: 'h1, h2, h3, h4, h5, h6, [role="heading"]',
+        railFriendLinks: 'a[href*="/friends"]',
+        railRequestLinks: 'a[href*="/friends/requests"]',
+        railActions: 'button, [role="button"]',
+        railContentBoundary: '[role="article"], [role="feed"], [role="navigation"], [role="dialog"]',
+        surveyButton: 'a[href*="/survey/?session="] > div[role="none"]',
+        standardPost: 'div[role="article"], div[aria-posinset]',
+        sponsoredLink: 'a[href*="/ads/about/"]',
+        virtualizedContainer: "div[data-virtualized]",
+        postQueries: [
+          'h3[dir="auto"] ~ div div[aria-posinset]',
+          'h2[dir="auto"] ~ div div[aria-posinset]',
+          'h3[dir="auto"] ~ div div[role="article"]',
+          'h2[dir="auto"] ~ div div[role="article"]',
+          'div[role="main"] div[aria-posinset]',
+          'div[role="main"] div[role="article"]',
+          'div[role="main"] div[data-virtualized] div[role="article"]',
+          'h3[dir="auto"] ~ div:not([class]) > div > div > div > div > div',
+          'h2[dir="auto"] ~ div:not([class]) > div > div > div > div > div',
+          'div[role="feed"] > h3[dir="auto"] ~ div:not([class]) > div[data-pagelet*="FeedUnit_"] > div > div > div > div',
+          'div[role="feed"] > h2[dir="auto"] ~ div:not([class]) > div[data-pagelet*="FeedUnit_"] > div > div > div > div'
+        ]
+      };
     }
   });
 
@@ -4762,6 +5900,298 @@
     }
   });
 
+  // src/dom/content-version.ts
+  function ignoreContentAttributes(attributes) {
+    for (const attribute of attributes) if (attribute) ignoredAttributes.add(attribute);
+  }
+  function invalidate(scope, document2, records) {
+    if (!records.length) return;
+    const changed = /* @__PURE__ */ new Set();
+    for (const record of records) {
+      const presentationOnly = record.type === "attributes" && ignoredAttributes.has(record.attributeName || "");
+      let node = record.target;
+      while (node) {
+        if (node instanceof Element && scope.versions.has(node) && !(presentationOnly && node === record.target))
+          changed.add(node);
+        node = node.parentNode;
+      }
+      if (record.type === "attributes" && !presentationOnly) {
+        for (const post of scope.versions.keys()) {
+          if (record.target !== post && record.target.contains(post)) changed.add(post);
+        }
+      }
+      if (record.type === "childList") {
+        const moved = [...record.addedNodes, ...record.removedNodes];
+        for (const post of scope.versions.keys()) {
+          if (moved.some((node2) => node2.contains(post))) changed.add(post);
+        }
+      }
+    }
+    for (const [id, reference] of scope.references) {
+      const target = document2.getElementById(id);
+      if (target !== reference.target || records.some(
+        (record) => !!target && (target.contains(record.target) || record.target.contains(target))
+      )) {
+        for (const post of reference.posts) changed.add(post);
+      }
+      reference.target = target;
+    }
+    for (const post of changed) scope.versions.set(post, ++nextVersion);
+  }
+  function getContentVersion(post) {
+    var _a;
+    if (!post.isConnected || typeof MutationObserver === "undefined") return null;
+    const document2 = post.ownerDocument;
+    let scope = scopes.get(document2);
+    if (!scope) {
+      const versions = /* @__PURE__ */ new Map();
+      const references2 = /* @__PURE__ */ new Map();
+      const observer = new MutationObserver((records) => {
+        const current = scopes.get(document2);
+        if (current) invalidate(current, document2, records);
+      });
+      const onLoad = (event) => {
+        let node = event.target instanceof Node ? event.target : null;
+        while (node) {
+          if (node instanceof Element && versions.has(node)) versions.set(node, ++nextVersion);
+          node = node.parentNode;
+        }
+      };
+      scope = { observer, onLoad, versions, references: references2 };
+      document2.addEventListener("load", onLoad, true);
+      observer.observe(document2, {
+        subtree: true,
+        childList: true,
+        attributes: true,
+        characterData: true
+      });
+      scopes.set(document2, scope);
+    }
+    invalidate(scope, document2, scope.observer.takeRecords());
+    if (!scope.versions.has(post)) scope.versions.set(post, ++nextVersion);
+    return (_a = scope.versions.get(post)) != null ? _a : null;
+  }
+  function trackLabelReference(post, id) {
+    const scope = scopes.get(post.ownerDocument);
+    if (!scope || !post.isConnected) return;
+    let reference = scope.references.get(id);
+    if (!reference) {
+      reference = { target: post.ownerDocument.getElementById(id), posts: /* @__PURE__ */ new Set() };
+      scope.references.set(id, reference);
+    }
+    reference.posts.add(post);
+  }
+  function forgetLabelReferences(post) {
+    const scope = scopes.get(post.ownerDocument);
+    if (!scope) return;
+    for (const [id, reference] of scope.references) {
+      reference.posts.delete(post);
+      if (!reference.posts.size) scope.references.delete(id);
+    }
+  }
+  function pruneContentVersions() {
+    for (const [document2, scope] of scopes) {
+      for (const post of scope.versions.keys()) {
+        if (post.isConnected) continue;
+        scope.versions.delete(post);
+        forgetLabelReferences(post);
+      }
+      if (!scope.versions.size) {
+        scope.observer.disconnect();
+        document2.removeEventListener("load", scope.onLoad, true);
+        scopes.delete(document2);
+      }
+    }
+  }
+  function clearContentVersions() {
+    for (const [document2, scope] of scopes) {
+      scope.observer.disconnect();
+      document2.removeEventListener("load", scope.onLoad, true);
+    }
+    scopes.clear();
+  }
+  function contentStamp(post) {
+    var _a;
+    return (_a = getContentVersion(post)) != null ? _a : `${post.getAttribute("aria-posinset") || ""}|${post.innerHTML}`;
+  }
+  var scopes, ignoredAttributes, nextVersion;
+  var init_content_version = __esm({
+    "src/dom/content-version.ts"() {
+      "use strict";
+      scopes = /* @__PURE__ */ new Map();
+      ignoredAttributes = /* @__PURE__ */ new Set([
+        "cmfr",
+        "cmfcpid",
+        "cmfcf",
+        "cmftsb",
+        "cmfsmp",
+        "cmfrv",
+        "cmfmc"
+      ]);
+      nextVersion = 0;
+    }
+  });
+
+  // src/dom/post-evidence.ts
+  function facebookUrl(link) {
+    const href = link.getAttribute("href");
+    const previous = destinations.get(link);
+    if ((previous == null ? void 0 : previous.href) === href) return previous.url;
+    let url = null;
+    try {
+      const parsed = href ? new URL(href, "https://www.facebook.com/") : null;
+      if (parsed && /^(https?:)$/.test(parsed.protocol) && !parsed.username && !parsed.password && (parsed.hostname === "facebook.com" || parsed.hostname.endsWith(".facebook.com")))
+        url = parsed;
+    } catch (e) {
+    }
+    destinations.set(link, { href, url });
+    return url;
+  }
+  function getPostEvidence(post) {
+    const version = getContentVersion(post);
+    const previous = cached.get(post);
+    if (version !== null && (previous == null ? void 0 : previous.version) === version) return previous.evidence;
+    forgetLabelReferences(post);
+    const evidence = new PostEvidence(post);
+    if (version !== null) cached.set(post, { version, evidence });
+    return evidence;
+  }
+  var destinations, PostEvidence, cached;
+  var init_post_evidence = __esm({
+    "src/dom/post-evidence.ts"() {
+      "use strict";
+      init_content_version();
+      destinations = /* @__PURE__ */ new WeakMap();
+      PostEvidence = class {
+        /** Keep every query, name and referenced label attached to its owning post scope. */
+        constructor(post) {
+          this.post = post;
+          this.queries = /* @__PURE__ */ new WeakMap();
+          this.visibility = /* @__PURE__ */ new WeakMap();
+          this.texts = /* @__PURE__ */ new WeakMap();
+          this.names = /* @__PURE__ */ new WeakMap();
+          this.contentTexts = /* @__PURE__ */ new Map();
+        }
+        /** Execute each selector once per scope and content version without collecting unused filter facts. */
+        select(selector, root = this.post) {
+          let queries = this.queries.get(root);
+          if (!queries) {
+            queries = /* @__PURE__ */ new Map();
+            this.queries.set(root, queries);
+          }
+          let elements = queries.get(selector);
+          if (!elements) {
+            elements = Array.from(root.querySelectorAll(selector));
+            queries.set(selector, elements);
+          }
+          return elements;
+        }
+        /** Reuse bounded body-text extraction across enabled filters and stable recovery sweeps. */
+        readText(key, read) {
+          let text = this.contentTexts.get(key);
+          if (!text) {
+            text = read();
+            this.contentTexts.set(key, text);
+          }
+          return text;
+        }
+        /** Bound style work to one computed-style read per encountered element during this version. */
+        isVisible(element) {
+          var _a;
+          const previous = this.visibility.get(element);
+          if (previous !== void 0) return previous;
+          const style = (_a = element.ownerDocument.defaultView) == null ? void 0 : _a.getComputedStyle(element);
+          const visible2 = !element.matches('script, style, [hidden], [aria-hidden="true"]') && (style == null ? void 0 : style.display) !== "none" && (style == null ? void 0 : style.visibility) !== "hidden";
+          this.visibility.set(element, visible2);
+          return visible2;
+        }
+        /** Ignore concealed metadata ancestors while allowing diagnostics on a post CMF itself has collapsed. */
+        isRendered(element) {
+          let ancestor = element;
+          while (ancestor && ancestor !== this.post) {
+            if (!this.isVisible(ancestor)) return false;
+            ancestor = ancestor.parentElement;
+          }
+          return ancestor === this.post;
+        }
+        /**
+         * Read fragmented control copy with strict node/character ceilings; oversized labels remain unmatched.
+         * @param control Owned metadata control; surrounding post copy cannot contribute to its label.
+         * @returns Visible label text or an empty string when the traversal budget is exhausted.
+         */
+        visibleText(control2) {
+          const previous = this.texts.get(control2);
+          if (previous !== void 0) return previous;
+          const walker = control2.ownerDocument.createTreeWalker(control2, NodeFilter.SHOW_ALL);
+          let node = control2;
+          let text = "";
+          let nodes = 0;
+          while (node) {
+            if (++nodes > 128 || text.length > 256) {
+              text = "";
+              break;
+            }
+            let element = node instanceof Element ? node : node.parentElement;
+            let visible2 = true;
+            while (element && control2.contains(element)) {
+              if (!this.isVisible(element)) {
+                visible2 = false;
+                break;
+              }
+              if (element === control2) break;
+              element = element.parentElement;
+            }
+            if (visible2 && node.nodeType === Node.TEXT_NODE) text += node.textContent || "";
+            node = walker.nextNode();
+          }
+          if (text.length > 256) text = "";
+          this.texts.set(control2, text);
+          return text;
+        }
+        /** Read non-rendered accessible label text without allowing oversized referenced subtrees to monopolize a scan. */
+        labelText(label) {
+          const walker = label.ownerDocument.createTreeWalker(label, NodeFilter.SHOW_ALL);
+          let node = label;
+          let text = "";
+          let nodes = 0;
+          while (node) {
+            if (++nodes > 128) return "";
+            if (node.nodeType === Node.TEXT_NODE) text += node.textContent || "";
+            if (text.length > 256) return "";
+            node = walker.nextNode();
+          }
+          return text;
+        }
+        /** Resolve bounded ARIA dependencies, including IDs that have not appeared in the document yet. */
+        referencedLabels(element) {
+          var _a;
+          const ids = ((_a = element.getAttribute("aria-labelledby")) == null ? void 0 : _a.trim().split(/\s+/)) || [];
+          if (!ids.length || ids.length > 8) return [null];
+          return ids.map((id) => {
+            trackLabelReference(this.post, id);
+            return element.ownerDocument.getElementById(id) || this.select("[id]").find((label) => label.id === id) || null;
+          });
+        }
+        /** Preserve accessible-name precedence without borrowing ancestor copy or unbounded referenced text. */
+        explicitNames(element) {
+          var _a;
+          const previous = this.names.get(element);
+          if (previous) return previous;
+          const labels2 = element.hasAttribute("aria-labelledby") ? this.referencedLabels(element) : [];
+          const reference = labels2.length && labels2.every((label) => label && !label.contains(element)) ? labels2.map((label) => label ? this.labelText(label) : "").join(" ").trim() : "";
+          const title = (_a = Array.from(element.children).find(
+            (child) => child.localName === "title"
+          )) == null ? void 0 : _a.textContent;
+          const name = reference || element.getAttribute("aria-label") || title || element.getAttribute("title") || "";
+          const names = name.trim() && name.length <= 256 ? [name] : [];
+          this.names.set(element, names);
+          return names;
+        }
+      };
+      cached = /* @__PURE__ */ new WeakMap();
+    }
+  });
+
   // src/utils/dom.ts
   function climbUpTheTree(element, numberOfBranches = 1) {
     let current = element;
@@ -4775,9 +6205,10 @@
   function querySelectorAllNoChildren(container = document, queries = [], minText = 0, executeAllQueries = false) {
     var _a, _b;
     const queryList = typeof queries === "string" ? [queries] : queries;
+    const evidence = container instanceof Element ? getPostEvidence(container) : null;
     if (queryList.length === 0) return [];
     if (executeAllQueries) {
-      return Array.from(container.querySelectorAll(queryList.join(","))).filter(
+      return ((evidence == null ? void 0 : evidence.select(queryList.join(","))) || Array.from(container.querySelectorAll(queryList.join(",")))).filter(
         (element) => {
           var _a2, _b2;
           return element.children.length === 0 && ((_b2 = (_a2 = element.textContent) == null ? void 0 : _a2.length) != null ? _b2 : 0) >= minText;
@@ -4785,7 +6216,7 @@
       );
     }
     for (const query of queryList) {
-      for (const element of container.querySelectorAll(query)) {
+      for (const element of (evidence == null ? void 0 : evidence.select(query)) || container.querySelectorAll(query)) {
         if (element.children.length === 0 && ((_b = (_a = element.textContent) == null ? void 0 : _a.length) != null ? _b : 0) >= minText) {
           return [element];
         }
@@ -4796,6 +6227,7 @@
   var init_dom = __esm({
     "src/utils/dom.ts"() {
       "use strict";
+      init_post_evidence();
     }
   });
 
@@ -4809,8 +6241,8 @@
     }
     const animatedGIFs = post.querySelectorAll(getMosquitosQuery());
     for (const gif of animatedGIFs) {
-      const control = gif.parentElement;
-      if (!control || control.hasAttribute(postAtt)) continue;
+      const control2 = gif.parentElement;
+      if (!control2 || control2.hasAttribute(postAtt)) continue;
       let parent = climbUpTheTree(gif, 2);
       let sibling = parent instanceof Element ? parent.querySelector(":scope > a") : null;
       if (!sibling) {
@@ -4819,9 +6251,9 @@
       }
       if (sibling) {
         const siblingCS = window.getComputedStyle(sibling);
-        control.setAttribute(postAtt, "1");
+        control2.setAttribute(postAtt, "1");
         if (siblingCS.opacity === "0") {
-          control.click();
+          control2.click();
         }
       }
     }
@@ -4860,14 +6292,11 @@
     const entry = getDirtyEntry(target);
     return entry ? entry.dirtyToken : 0;
   }
-  function buildPostSignature(post) {
-    return post ? `${post.getAttribute("aria-posinset") || ""}|${post.innerHTML}` : "";
-  }
   function hasPostChanged(post) {
     if (!post) {
       return false;
     }
-    const signature = buildPostSignature(post);
+    const signature = contentStamp(post);
     const previous = postSignatures.get(post);
     postSignatures.set(post, signature);
     if (previous === void 0) {
@@ -4879,13 +6308,14 @@
     if (!post) {
       return;
     }
-    postSignatures.set(post, buildPostSignature(post));
+    postSignatures.set(post, contentStamp(post));
   }
   function revalidateTrackedPosts(root, state) {
+    ignoreContentAttributes([state.hideAtt, state.showAtt, state.hideWithNoCaptionAtt]);
     if (!root) return;
     for (const post of root.querySelectorAll(`[${postAtt}]`)) {
       const previous = postSignatures.get(post);
-      if (previous === void 0 || previous === buildPostSignature(post)) continue;
+      if (previous === void 0 || previous === contentStamp(post)) continue;
       resetPostState(post, state);
       postSignatures.delete(post);
     }
@@ -4981,6 +6411,7 @@
   function releaseDirtyObservers() {
     for (const observer of activeObservers.values()) observer.disconnect();
     activeObservers.clear();
+    clearContentVersions();
     observers = /* @__PURE__ */ new WeakMap();
   }
   function clearDirtyTracking() {
@@ -4989,6 +6420,7 @@
     postSignatures = /* @__PURE__ */ new WeakMap();
   }
   function pruneDirtyObservers() {
+    pruneContentVersions();
     for (const [target, observer] of activeObservers) {
       if (target.isConnected) continue;
       observer.disconnect();
@@ -5000,6 +6432,7 @@
   var init_dirty_check = __esm({
     "src/dom/dirty-check.ts"() {
       "use strict";
+      init_content_version();
       init_attributes();
       dirtyTokens = /* @__PURE__ */ new WeakMap();
       postSignatures = /* @__PURE__ */ new WeakMap();
@@ -5465,7 +6898,13 @@
     return arrayAltTextValues;
   }
   function extractTextContent(post, selector, maxBlocks) {
-    const blocks = post.querySelectorAll(selector);
+    return getPostEvidence(post).readText(
+      `${maxBlocks}|${selector}`,
+      () => extractBlockText(post, selector, maxBlocks)
+    );
+  }
+  function extractBlockText(post, selector, maxBlocks) {
+    const blocks = getPostEvidence(post).select(selector);
     const arrayTextValues = [];
     for (let b = 0; b < Math.min(maxBlocks, blocks.length); b++) {
       const block = blocks[b];
@@ -5483,31 +6922,69 @@
   var init_walker = __esm({
     "src/dom/walker.ts"() {
       "use strict";
+      init_post_evidence();
       init_text_normalize();
       init_attributes();
     }
   });
 
   // src/feeds/shared/blocks.ts
+  function isOwnedLayoutSignal(element, post) {
+    var _a;
+    if (!getPostEvidence(post).isRendered(element)) return false;
+    const owner = element.closest(sharedSelectors.postOwner);
+    const authoredParent = (_a = element.parentElement) == null ? void 0 : _a.closest(sharedSelectors.authoredContent);
+    return (!owner || owner === post || !post.contains(owner)) && (!authoredParent || authoredParent === post || !post.contains(authoredParent));
+  }
+  function getSemanticBlocksQuery(post) {
+    const profile = getPostEvidence(post).select(sharedSelectors.profileName).find((element) => isOwnedLayoutSignal(element, post));
+    const message = getPostEvidence(post).select(sharedSelectors.storyMessage).find((element) => isOwnedLayoutSignal(element, post));
+    if (!profile || !message || profile.contains(message) || message.contains(profile)) return null;
+    let container = profile.parentElement;
+    while (container && container !== post && !container.contains(message))
+      container = container.parentElement;
+    if (!container || !container.contains(message)) return null;
+    const children = Array.from(container.children);
+    const headerIndex = children.findIndex((child) => child.contains(profile));
+    const messageIndex = children.findIndex((child) => child.contains(message));
+    if (headerIndex < 0 || messageIndex <= headerIndex) return null;
+    const path = [];
+    let ancestor = container;
+    while (ancestor !== post) {
+      const parent = ancestor.parentElement;
+      if (!parent) return null;
+      path.unshift(Array.from(parent.children).indexOf(ancestor) + 1);
+      ancestor = parent;
+    }
+    return `:scope${path.map((index) => ` > :nth-child(${index})`).join("")} > :nth-child(n+${headerIndex + 1})`;
+  }
   function getNewsBlocksQuery(post) {
+    const evidence = getPostEvidence(post);
+    const cached2 = cachedQueries.get(evidence);
+    if (cached2) return cached2;
+    const semanticQuery = getSemanticBlocksQuery(post);
+    if (semanticQuery) {
+      cachedQueries.set(evidence, semanticQuery);
+      return semanticQuery;
+    }
     let blocksQuery = "div[aria-posinset] > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div";
-    const blocks = post.querySelectorAll(blocksQuery);
+    const blocks = evidence.select(blocksQuery);
     if (blocks.length <= 1) {
       blocksQuery = "div[aria-posinset] > div > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div > div";
     }
+    cachedQueries.set(evidence, blocksQuery);
     return blocksQuery;
   }
   function getGroupsBlocksQuery(post) {
-    let blocksQuery = "div[aria-posinset] > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div";
-    const blocks = post.querySelectorAll(blocksQuery);
-    if (blocks.length <= 1) {
-      blocksQuery = "div[aria-posinset] > div > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div > div";
-    }
-    return blocksQuery;
+    return getNewsBlocksQuery(post);
   }
+  var cachedQueries;
   var init_blocks = __esm({
     "src/feeds/shared/blocks.ts"() {
       "use strict";
+      init_post_evidence();
+      init_shared();
+      cachedQueries = /* @__PURE__ */ new WeakMap();
     }
   });
 
@@ -5574,7 +7051,7 @@
     if (!post || !keyWords) {
       return "";
     }
-    const postBlocks = post.querySelectorAll(getNewsBlocksQuery(post));
+    const postBlocks = getPostEvidence(post).select(getNewsBlocksQuery(post));
     if (postBlocks.length >= 2) {
       const contentBlock = postBlocks[1];
       if (!contentBlock) return "";
@@ -5587,7 +7064,7 @@
     if (!post || !keyWords) {
       return "";
     }
-    const postBlocks = post.querySelectorAll(getGroupsBlocksQuery(post));
+    const postBlocks = getPostEvidence(post).select(getGroupsBlocksQuery(post));
     if (postBlocks.length >= 2) {
       const contentBlock = postBlocks[1];
       if (!contentBlock) return "";
@@ -5599,41 +7076,43 @@
   var init_animated_gifs2 = __esm({
     "src/feeds/shared/animated-gifs.ts"() {
       "use strict";
+      init_post_evidence();
       init_animated_gifs();
       init_blocks();
     }
   });
 
-  // src/feeds/shared/sponsored.ts
-  function normalizeLabel(label) {
-    return label.normalize("NFKC").replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g, "").replace(/\s+/g, " ").trim().toLowerCase();
-  }
-  function facebookUrl(link) {
-    const href = link.getAttribute("href");
-    if (!href) return null;
-    try {
-      const url = new URL(href, "https://www.facebook.com/");
-      return (url.protocol === "https:" || url.protocol === "http:") && !url.username && !url.password && (url.hostname === "facebook.com" || url.hostname.endsWith(".facebook.com")) ? url : null;
-    } catch (e) {
-      return null;
-    }
-  }
-  function isOwnedControl(control, post, bodies) {
-    var _a;
-    if (isNestedMarkedNode(control, post)) return false;
-    const authoredRegion = control.closest(authoredRegionSelector);
-    if (authoredRegion && post.contains(authoredRegion)) return false;
-    if (bodies.some((body) => body.contains(control))) return false;
-    const owner = control.closest(postOwnerSelector);
+  // src/dom/ownership.ts
+  function ownsPostElement(element, post, boundary = {}) {
+    var _a, _b;
+    if (!post.contains(element)) return false;
+    const marked = element.closest(`[${postAtt}]`);
+    if (marked && marked !== post) return false;
+    const authored2 = element.closest(sharedSelectors.authoredContent);
+    if (authored2 && post.contains(authored2)) return false;
+    if ((_a = boundary.bodies) == null ? void 0 : _a.some((body) => body.contains(element))) return false;
+    const owner = element.closest(sharedSelectors.postOwner);
     if (!owner || owner === post || !post.contains(owner)) return true;
-    if (post.matches(`${postOwnerSelector}, div[aria-describedby], div[data-virtualized]`))
+    if (!boundary.allowArticleWrapper || post.matches(`${sharedSelectors.postOwner}, div[aria-describedby], div[data-virtualized]`))
       return false;
-    const parentOwner = (_a = owner.parentElement) == null ? void 0 : _a.closest(postOwnerSelector);
+    const parentOwner = (_b = owner.parentElement) == null ? void 0 : _b.closest(sharedSelectors.postOwner);
     return !parentOwner || !post.contains(parentOwner);
+  }
+  var init_ownership = __esm({
+    "src/dom/ownership.ts"() {
+      "use strict";
+      init_attributes();
+      init_shared();
+    }
+  });
+
+  // src/feeds/shared/sponsored.ts
+  function isOwnedControl(control2, post, bodies, evidence) {
+    return ownsPostElement(control2, post, { bodies, allowArticleWrapper: true }) && evidence.isRendered(control2);
   }
   function authoredBlocks(post, state) {
     if (state.isNF || state.isGF || state.isSF) {
-      return Array.from(post.querySelectorAll(getNewsBlocksQuery(post))).slice(1);
+      return getPostEvidence(post).select(getNewsBlocksQuery(post)).slice(1);
     }
     if (state.isVF) {
       return Array.from(
@@ -5644,63 +7123,72 @@
     }
     return [];
   }
-  function visibleControlText(control) {
-    var _a;
-    const walker = control.ownerDocument.createTreeWalker(control, NodeFilter.SHOW_TEXT);
-    let text = "";
-    let node;
-    while (node = walker.nextNode()) {
-      let element = node.parentElement;
-      let visible = true;
-      while (element && control.contains(element)) {
-        const style = (_a = element.ownerDocument.defaultView) == null ? void 0 : _a.getComputedStyle(element);
-        if (element.matches('script, style, [hidden], [aria-hidden="true"]') || (style == null ? void 0 : style.display) === "none" || (style == null ? void 0 : style.visibility) === "hidden") {
-          visible = false;
-          break;
-        }
-        if (element === control) break;
-        element = element.parentElement;
-      }
-      if (visible) text += node.textContent || "";
-    }
-    return text;
+  function hasSponsoredName(control2, post, bodies, scope) {
+    const cached2 = scope.names.get(control2);
+    if (cached2 !== void 0) return cached2;
+    const result = readSponsoredName(control2, post, bodies, scope);
+    scope.names.set(control2, result);
+    return result;
   }
-  function hasSponsoredName(control, post, bodies) {
-    const ariaLabel = control.getAttribute("aria-label");
-    if (ariaLabel) return sponsoredLabels.has(normalizeLabel(ariaLabel));
-    const labelIds = control.getAttribute("aria-labelledby");
+  function readSponsoredName(control2, post, bodies, scope) {
+    const ariaLabel = control2.getAttribute("aria-label");
+    if (ariaLabel) return matchesSponsoredLabel(ariaLabel);
+    const labelIds = control2.getAttribute("aria-labelledby");
     if (labelIds) {
-      const labels = labelIds.trim().split(/\s+/).map(
-        (id) => Array.from(post.querySelectorAll("[id]")).find(
-          (element) => element.id === id && !element.contains(control) && isOwnedControl(element, post, bodies)
-        )
+      const labels2 = scope.dom.referencedLabels(control2).map(
+        (label) => label && post.contains(label) && !label.contains(control2) && isOwnedControl(label, post, bodies, scope.dom) ? label : null
       );
-      if (labels.every((label) => label !== void 0)) {
-        return sponsoredLabels.has(
-          normalizeLabel(labels.map((label) => (label == null ? void 0 : label.textContent) || "").join(" "))
+      if (labels2.every((label) => label !== null)) {
+        return matchesSponsoredLabel(
+          labels2.map((label) => label ? scope.dom.labelText(label) : "").join(" ")
         );
       }
       return false;
     }
-    return [visibleControlText(control), control.getAttribute("title") || ""].some(
-      (label) => sponsoredLabels.has(normalizeLabel(label))
-    );
+    return [scope.dom.visibleText(control2), control2.getAttribute("title") || ""].some(
+      (label) => matchesSponsoredLabel(label)
+    ) || hasSponsoredGraphicName(control2, post, bodies, scope);
   }
-  function hasSponsoredCorroboration(link, post, bodies) {
-    if (hasSponsoredName(link, post, bodies)) return true;
+  function hasSponsoredGraphicName(control2, post, bodies, scope) {
+    return scope.dom.select("svg[aria-label], svg[aria-labelledby], span[aria-labelledby]", control2).slice(0, 16).some((graphic) => {
+      var _a, _b;
+      if (!isOwnedControl(graphic, post, bodies, scope.dom) || graphic.closest('a, button, [role="button"], [role="link"]') !== control2 || graphic.closest('[hidden], [aria-hidden="true"]') || !scope.dom.isVisible(graphic) || graphic.localName === "span" && (graphic.childElementCount !== 1 || ((_a = graphic.firstElementChild) == null ? void 0 : _a.localName) !== "svg"))
+        return false;
+      const ariaLabel = graphic.getAttribute("aria-label");
+      if (ariaLabel) return matchesSponsoredLabel(ariaLabel);
+      const ids = (_b = graphic.getAttribute("aria-labelledby")) == null ? void 0 : _b.trim().split(/\s+/);
+      if (!(ids == null ? void 0 : ids.length)) return false;
+      const labels2 = scope.dom.referencedLabels(graphic).map((label) => {
+        if (!label || label.contains(control2) || label.contains(post)) return null;
+        if (post.contains(label))
+          return isOwnedControl(label, post, bodies, scope.dom) ? label : null;
+        return label.localName === "span" && label.childElementCount === 0 && !label.closest(
+          `${sharedSelectors.authoredContent}, ${sharedSelectors.postOwner}, a, button, [role="link"], [role="button"]`
+        ) ? label : null;
+      });
+      return labels2.every((label) => label !== null) && matchesSponsoredLabel(
+        labels2.map((label) => label ? scope.dom.labelText(label) : "").join(" ")
+      );
+    });
+  }
+  function hasSponsoredCorroboration(link, post, bodies, scope) {
+    if (hasSponsoredName(link, post, bodies, scope)) return true;
     const header = link.closest("h4, h5");
-    return !!header && post.contains(header) && Array.from(header.querySelectorAll('a, button, [role="button"], [role="link"]')).some(
-      (control) => control !== link && isOwnedControl(control, post, bodies) && hasSponsoredName(control, post, bodies)
+    return !!header && post.contains(header) && scope.dom.select('a, button, [role="button"], [role="link"]', header).some(
+      (control2) => control2 !== link && isOwnedControl(control2, post, bodies, scope.dom) && hasSponsoredName(control2, post, bodies, scope)
     );
   }
   function isSponsored(post, state) {
     return inspectSponsored(post, state).isSponsored;
   }
-  function isSponsoredDisclosure(control, post) {
-    if (!control.matches("a[href]")) return false;
-    const url = facebookUrl(control);
-    const owner = control.closest(postOwnerSelector);
-    return (url == null ? void 0 : url.pathname) === "/ads/about/" && (!owner || owner === post || !post.contains(owner)) && isOwnedControl(control, post, []) && Array.from(control.querySelectorAll("*")).every((child) => isOwnedControl(child, post, [])) && hasSponsoredName(control, post, []);
+  function isSponsoredDisclosure(control2, post) {
+    if (!control2.matches("a[href]")) return false;
+    const url = facebookUrl(control2);
+    const scope = { dom: getPostEvidence(post), names: /* @__PURE__ */ new Map() };
+    const owner = control2.closest(sharedSelectors.postOwner);
+    return (url == null ? void 0 : url.pathname) === "/ads/about/" && (!owner || owner === post || !post.contains(owner)) && isOwnedControl(control2, post, [], scope.dom) && Array.from(control2.querySelectorAll("*")).every(
+      (child) => isOwnedControl(child, post, [], scope.dom)
+    ) && hasSponsoredName(control2, post, [], scope);
   }
   function getSponsoredDiagnostics(post, state) {
     return inspectSponsored(post, state).diagnostics;
@@ -5708,16 +7196,17 @@
   function inspectSponsored(post, state) {
     const diagnostics = createSponsoredDiagnostics(post, state);
     if (!post || !state) return { isSponsored: false, diagnostics };
+    const scope = { dom: getPostEvidence(post), names: /* @__PURE__ */ new Map() };
     const bodies = authoredBlocks(post, state);
-    diagnostics.adsAboutLinkCount = Array.from(post.querySelectorAll("a[href]")).filter((link) => {
+    diagnostics.adsAboutLinkCount = scope.dom.select("a[href]").filter((link) => {
       const url = facebookUrl(link);
-      return (url == null ? void 0 : url.pathname) === "/ads/about/" && isOwnedControl(link, post, bodies) && hasSponsoredName(link, post, bodies);
+      return (url == null ? void 0 : url.pathname) === "/ads/about/" && isOwnedControl(link, post, bodies, scope.dom) && hasSponsoredName(link, post, bodies, scope);
     }).length;
     if (diagnostics.adsAboutLinkCount > 0) {
       diagnostics.matchedBy = "ads-about";
       return { isSponsored: true, diagnostics };
     }
-    const candidates = collectCftLinkCandidates(post, state, bodies);
+    const candidates = collectCftLinkCandidates(post, state, bodies, scope);
     diagnostics.cftLinks.selectedSource = candidates.selectedSource;
     diagnostics.cftLinks.selectedCount = candidates.links.length;
     diagnostics.cftLinks.rejectedForVolume = candidates.links.length >= maximumCandidateLinks;
@@ -5738,7 +7227,7 @@
     if (isSponsoredPost) diagnostics.matchedBy = "cft-link-signature";
     return { isSponsored: isSponsoredPost, diagnostics };
   }
-  function collectCftLinkCandidates(post, state, bodies) {
+  function collectCftLinkCandidates(post, state, bodies, scope) {
     const queries = [];
     let selectedSource = "none";
     if (state.isNF || state.isGF) {
@@ -5753,11 +7242,18 @@
       selectedSource = "nested-article";
     }
     for (const query of queries) {
-      const links = Array.from(post.querySelectorAll(query)).filter((link) => {
+      const links = scope.dom.select(query).filter((link) => {
         const url = facebookUrl(link);
-        return url !== null && !url.pathname.startsWith("/groups/") && !url.searchParams.has("section_header_type") && url.searchParams.has("__cft__[0]") && isOwnedControl(link, post, bodies) && hasSponsoredCorroboration(link, post, bodies);
+        return url !== null && !url.pathname.startsWith("/groups/") && !url.searchParams.has("section_header_type") && url.searchParams.has("__cft__[0]") && isOwnedControl(link, post, bodies, scope.dom) && hasSponsoredCorroboration(link, post, bodies, scope);
       });
       if (links.length > 0) return { links, selectedSource };
+    }
+    if (state.isNF || state.isGF || state.isVF || state.isSF) {
+      const links = scope.dom.select("h4 a[href], h5 a[href]").filter((link) => {
+        const url = facebookUrl(link);
+        return url !== null && !url.pathname.startsWith("/groups/") && !url.searchParams.has("section_header_type") && url.searchParams.has("__cft__[0]") && isOwnedControl(link, post, bodies, scope.dom) && hasSponsoredCorroboration(link, post, bodies, scope);
+      });
+      if (links.length) return { links, selectedSource: "semantic-header" };
     }
     return { links: [], selectedSource: "none" };
   }
@@ -5781,23 +7277,18 @@
       }
     };
   }
-  var cftParam, maximumCandidateLinks, postOwnerSelector, authoredRegionSelector, sponsoredLabels;
+  var cftParam, maximumCandidateLinks;
   var init_sponsored = __esm({
     "src/feeds/shared/sponsored.ts"() {
       "use strict";
-      init_walker();
-      init_i18n();
+      init_ownership();
+      init_post_evidence();
+      init_disclosure_labels2();
       init_videos();
+      init_shared();
       init_blocks();
       cftParam = "__cft__[0]=";
       maximumCandidateLinks = 10;
-      postOwnerSelector = 'div[role="article"], div[aria-posinset]';
-      authoredRegionSelector = 'p, blockquote, [data-ad-preview="message"], [data-ad-comet-preview="message"], [data-ad-rendering-role="story_message"], [data-ad-rendering-role="creative_body"], [contenteditable="true"], [data-commentid], [data-testid^="UFI2Comment/"], [role="comment"]';
-      sponsoredLabels = new Set(
-        Object.values(translations).flatMap(
-          (catalog24) => [catalog24.SPONSORED, catalog24.SPONSORED_EXTRA].filter((label) => typeof label === "string").map(normalizeLabel)
-        )
-      );
     }
   });
 
@@ -5832,14 +7323,15 @@
 
   // src/feeds/news-revalidation.ts
   function rememberHiddenNewsContent(post) {
-    if (post.hasAttribute(postAtt)) hiddenNewsContent.set(post, post.innerHTML);
+    if (post.hasAttribute(postAtt)) hiddenNewsContent.set(post, contentStamp(post));
     else hiddenNewsContent.delete(post);
   }
   function resetChangedNewsPosts(root, state) {
+    ignoreContentAttributes([state.hideAtt, state.showAtt, state.hideWithNoCaptionAtt]);
     if (!root) return;
     for (const post of root.querySelectorAll(`[${postAtt}]`)) {
       const previous = hiddenNewsContent.get(post);
-      if (previous === void 0 || previous === post.innerHTML) continue;
+      if (previous === void 0 || previous === contentStamp(post)) continue;
       hiddenNewsContent.delete(post);
       for (const caption of post.querySelectorAll(`:scope > h6[${postAttTab}]`)) caption.remove();
       post.removeAttribute(postAtt);
@@ -5853,6 +7345,7 @@
   var init_news_revalidation = __esm({
     "src/feeds/news-revalidation.ts"() {
       "use strict";
+      init_content_version();
       init_attributes();
       hiddenNewsContent = /* @__PURE__ */ new WeakMap();
     }
@@ -5970,43 +7463,6 @@
           ...newsSelectors.postQueries
         ])
       );
-    }
-  });
-
-  // src/core/filters/classifiers/shares-likes.ts
-  function getGroupedInteger(value) {
-    const match = /^[1-9]\d{0,2}([,.\u00a0\u202f])\d{3}(?:\1\d{3})*$/.exec(value);
-    return match && match[0] === value ? Number(value.replace(/[,.\u00a0\u202f]/g, "")) : void 0;
-  }
-  function getFullNumber(value) {
-    var _a, _b;
-    let numericValue = 0;
-    if (value !== "") {
-      const upperValue = value.toUpperCase();
-      if (upperValue.endsWith("K") || upperValue.endsWith("M")) {
-        let multiplier = 1;
-        let powY = 0;
-        if (upperValue.endsWith("K")) {
-          multiplier = 1e3;
-          powY = 3;
-        } else if (upperValue.endsWith("M")) {
-          multiplier = 1e6;
-          powY = 6;
-        }
-        const bits = upperValue.replace(/[KM]/g, "").replace(",", ".").split(".");
-        numericValue = parseInt((_a = bits[0]) != null ? _a : "", 10) * multiplier;
-        if (bits[1] !== void 0) {
-          numericValue += parseInt(bits[1], 10) * Math.pow(10, powY - bits[1].length);
-        }
-      } else {
-        numericValue = (_b = getGroupedInteger(upperValue)) != null ? _b : parseInt(upperValue, 10);
-      }
-    }
-    return numericValue;
-  }
-  var init_shares_likes = __esm({
-    "src/core/filters/classifiers/shares-likes.ts"() {
-      "use strict";
     }
   });
 
@@ -6273,125 +7729,30 @@
     }
   });
 
-  // src/feeds/news-identity.ts
-  function normalizeLabel2(text) {
+  // src/core/filters/labels.ts
+  function normalizeLabel(text) {
     return cleanText(text).replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g, "").replace(/\s+/g, " ").trim().toLowerCase();
   }
   function matchesNewsLabel(text, kind) {
     var _a;
-    const normalized = normalizeLabel2(text);
+    const normalized = normalizeLabel(text);
     return normalized !== "" && ((_a = labelsByKind.get(kind)) == null ? void 0 : _a.has(normalized)) === true;
   }
-  function isOwnedNewsElement(element, post) {
-    if (isNestedMarkedNode(element, post)) return false;
-    const body = element.closest(
-      'p, blockquote, [data-ad-preview="message"], [data-ad-comet-preview="message"], [data-ad-rendering-role="story_message"], [data-ad-rendering-role="creative_body"], [contenteditable="true"], [data-commentid], [data-testid^="UFI2Comment/"], [role="comment"]'
-    );
-    if (body && post.contains(body)) return false;
-    const owner = element.closest(newsSelectors.standardPost);
-    return !owner || owner === post || !post.contains(owner);
-  }
-  function isOwnedNewsMetadata(element, post) {
-    return isOwnedNewsElement(element, post) && !Array.from(post.querySelectorAll(getNewsBlocksQuery(post))).slice(1).some((body) => body.contains(element));
-  }
-  function facebookPath(link) {
-    const href = link.getAttribute("href");
-    if (!href) return null;
-    try {
-      const url = new URL(href, "https://www.facebook.com/");
-      return (url.protocol === "https:" || url.protocol === "http:") && !url.username && !url.password && (url.hostname === "facebook.com" || url.hostname.endsWith(".facebook.com")) ? url.pathname : null;
-    } catch (e) {
-      return null;
-    }
-  }
-  function ownNewsHeaders(post) {
-    return Array.from(post.querySelectorAll("h4, h5")).filter(
-      (header) => isOwnedNewsMetadata(header, post)
-    );
-  }
-  function explicitNewsNames(element) {
-    var _a;
-    const labelledBy = element.getAttribute("aria-labelledby");
-    if (labelledBy) {
-      const text = labelledBy.trim().split(/\s+/).map((id) => {
-        var _a2;
-        return ((_a2 = element.ownerDocument.getElementById(id)) == null ? void 0 : _a2.textContent) || "";
-      }).join(" ").trim();
-      if (text !== "") return [text];
-    }
-    const label = element.getAttribute("aria-label");
-    if (label == null ? void 0 : label.trim()) return [label];
-    const svgTitle = (_a = Array.from(element.children).find(
-      (child) => child.localName === "title"
-    )) == null ? void 0 : _a.textContent;
-    if (svgTitle == null ? void 0 : svgTitle.trim()) return [svgTitle];
-    const title = element.getAttribute("title");
-    return (title == null ? void 0 : title.trim()) ? [title] : [];
-  }
-  function hasNewsCardHeading(post, kind) {
-    return Array.from(post.querySelectorAll('h2, h3, [role="heading"]')).some(
-      (heading) => isOwnedNewsMetadata(heading, post) && matchesNewsLabel(heading.textContent || "", kind)
-    );
-  }
-  function hasNewsActionName(element, kind) {
-    const names = explicitNewsNames(element);
-    return (names.length > 0 ? names : [element.textContent || ""]).some(
-      (name) => matchesNewsLabel(name, kind)
-    );
-  }
-  function ownVerifiedBadges(post) {
-    return ownNewsHeaders(post).flatMap(
-      (header) => Array.from(header.querySelectorAll("svg")).filter((icon) => {
-        if (!isOwnedNewsElement(icon, post)) return false;
-        const iconNames = explicitNewsNames(icon);
-        if (iconNames.length > 0) return iconNames.some((name) => matchesNewsLabel(name, "verified"));
-        let wrapper = icon.parentElement;
-        while (wrapper && wrapper !== header && wrapper.tagName === "SPAN") {
-          if (!isBadgeOnlyWrapper(wrapper, icon)) return false;
-          if (explicitNewsNames(wrapper).some((name) => matchesNewsLabel(name, "verified")))
-            return true;
-          wrapper = wrapper.parentElement;
-        }
-        return false;
-      })
-    );
-  }
-  function isBadgeOnlyWrapper(wrapper, icon) {
-    var _a;
-    if (wrapper.matches('a, button, [role="button"]') || wrapper.querySelector('a, button, [role="button"], img, video'))
-      return false;
-    if (wrapper.querySelectorAll("svg").length !== 1 || !wrapper.contains(icon)) return false;
-    const walker = document.createTreeWalker(wrapper, NodeFilter.SHOW_TEXT);
-    let node;
-    while (node = walker.nextNode()) {
-      if (((_a = node.textContent) == null ? void 0 : _a.trim()) && !icon.contains(node)) return false;
-    }
-    return true;
-  }
-  function ownPostReelLinks(post) {
-    return Array.from(post.querySelectorAll("a[href]")).filter((link) => {
-      const path = facebookPath(link);
-      return path !== null && /^\/reel\/[^/]+\/?$/.test(path) && isOwnedNewsElement(link, post) && link.querySelector('video, img, [role="img"]') !== null;
-    });
-  }
   function matchesNewsPaidBy(text) {
-    const label = normalizeLabel2(text);
+    const label = normalizeLabel(text);
     return Object.values(newsLabels).some(
-      (labels) => labels[8].split("|").some((template) => {
-        const [prefix = "", suffix = ""] = normalizeLabel2(template).split("______");
+      (labels2) => labels2[8].split("|").some((template) => {
+        const [prefix = "", suffix = ""] = normalizeLabel(template).split("______");
         return (prefix !== "" || suffix !== "") && label.startsWith(prefix) && label.endsWith(suffix) && label.slice(prefix.length, label.length - suffix.length).trim() !== "";
       })
     );
   }
   var labelKinds, labelsByKind;
-  var init_news_identity = __esm({
-    "src/feeds/news-identity.ts"() {
+  var init_labels = __esm({
+    "src/core/filters/labels.ts"() {
       "use strict";
       init_text_normalize();
-      init_walker();
       init_news_labels();
-      init_news();
-      init_blocks();
       labelKinds = [
         "follow",
         "join",
@@ -6407,7 +7768,7 @@
           kind,
           new Set(
             Object.values(newsLabels).flatMap(
-              (labels) => (labels[index] || "").split("|").map(normalizeLabel2)
+              (labels2) => (labels2[index] || "").split("|").map(normalizeLabel)
             )
           )
         ])
@@ -6415,283 +7776,10 @@
     }
   });
 
-  // src/feeds/news-detectors.ts
-  function isNewsSuggested(post, state, keyWords) {
-    const queries = [
-      "div[aria-posinset] > div > div > div > div > div > div:nth-of-type(2) > div > div > div:nth-of-type(2) > div > div:nth-of-type(2) > div > div:nth-of-type(2) > span > div > span:nth-of-type(1)",
-      "div[aria-describedby] > div > div > div > div > div > div:nth-of-type(2) > div > div > div:nth-of-type(2) > div > div:nth-of-type(2) > div > div:nth-of-type(2) > span > div > span:nth-of-type(1)"
-    ];
-    const elSuggestion = querySelectorAllNoChildren(post, queries, 1);
-    if (elSuggestion.length > 0) {
-      if (isNewsReelsAndShortVideos(post, keyWords).length > 0) {
-        return "";
-      }
-      const label = elSuggestion[0];
-      return label && isOwnedNewsElement(label, post) && matchesNewsLabel(label.textContent || "", "suggested") ? keyWords.NF_SUGGESTIONS : "";
-    }
-    if (isGroupsYouMightLike(post)) {
-      return keyWords.NF_SUGGESTIONS;
-    }
-    return "";
-  }
-  function isGroupsYouMightLike(post) {
-    return hasNewsCardHeading(post, "groups") && Array.from(post.querySelectorAll("a[href]")).some(
-      (link) => /^\/groups\/discover\/?$/.test(facebookPath(link) || "") && isOwnedNewsMetadata(link, post)
-    );
-  }
-  function isNewsPeopleYouMayKnow(post, keyWords) {
-    const matches = hasNewsCardHeading(post, "people") && Array.from(post.querySelectorAll('a[href][role="link"]')).some(
-      (link) => /^\/friends(?:\/|$)/.test(facebookPath(link) || "") && isOwnedNewsMetadata(link, post)
-    );
-    return matches ? keyWords.NF_PEOPLE_YOU_MAY_KNOW : "";
-  }
-  function isNewsPaidPartnership(post, keyWords) {
-    const queryPP = 'span[dir] > span[id] a[href^="/business/help/"]';
-    const elPaidPartnership = post.querySelector(queryPP);
-    return elPaidPartnership === null ? "" : keyWords.NF_PAID_PARTNERSHIP;
-  }
-  function isNewsSponsoredPaidBy(post, keyWords) {
-    const querySPB = "div:nth-child(2) > div > div:nth-child(2) > span[class] > span[id] > div:nth-child(2)";
-    const sponsoredPaidBy = querySelectorAllNoChildren(post, querySPB, 1);
-    return sponsoredPaidBy.some(
-      (label) => isOwnedNewsMetadata(label, post) && matchesNewsPaidBy(label.textContent || "")
-    ) ? keyWords.NF_SPONSORED_PAID : "";
-  }
-  function isNewsReelsAndShortVideos(post, keyWords) {
-    const shelf = hasNewsCardHeading(post, "reels") && Array.from(post.querySelectorAll("a[href]")).some((link) => {
-      if (facebookPath(link) !== "/reel/" || !isOwnedNewsMetadata(link, post)) return false;
-      return new URL(link.getAttribute("href") || "", "https://www.facebook.com/").searchParams.get(
-        "s"
-      ) === "ifu_see_more";
-    });
-    return shelf || ownPostReelLinks(post).length > 4 ? keyWords.NF_REELS_SHORT_VIDEOS : "";
-  }
-  function isNewsShortReelVideo(post, keyWords) {
-    return ownPostReelLinks(post).length === 1 ? keyWords.NF_SHORT_REEL_VIDEO : "";
-  }
-  function isNewsEventsYouMayLike(post, keyWords) {
-    const query = ":scope div > div:nth-of-type(2) > div > div >  h3 > span";
-    const events = querySelectorAllNoChildren(post, query, 0);
-    return events.some(
-      (heading) => isOwnedNewsMetadata(heading, post) && matchesNewsLabel(heading.textContent || "", "events")
-    ) ? keyWords.NF_EVENTS_YOU_MAY_LIKE : "";
-  }
-  function hasHeaderAction(post, kind) {
-    return ownNewsHeaders(post).some((header) => {
-      const paths = Array.from(header.querySelectorAll("a[href]")).map(facebookPath).filter((path) => path !== null);
-      const hasGroup = paths.some((path) => /^\/groups\/[^/]+/.test(path));
-      const hasAuthor = paths.some((path) => path !== "/" && !/^\/groups(?:\/|$)/.test(path));
-      if (kind === "join" ? !hasGroup : !hasAuthor || hasGroup) return false;
-      return Array.from(header.querySelectorAll('button, [role="button"]')).some(
-        (control) => isOwnedNewsElement(control, post) && hasNewsActionName(control, kind)
-      );
-    });
-  }
-  function isNewsFollow(post, keyWords) {
-    const queries = [
-      ":scope h4[id] > span > div > span",
-      ":scope h4[id] > span > span > div > span",
-      ":scope h4[id] > div > span > span[class] > div[class] > span[class]"
-    ];
-    const leaves = querySelectorAllNoChildren(post, queries, 0, false);
-    const fallback = leaves.length === 1 && leaves.some((leaf) => isOwnedNewsMetadata(leaf, post) && hasNewsActionName(leaf, "follow"));
-    return hasHeaderAction(post, "follow") || fallback ? keyWords.NF_FOLLOW : "";
-  }
-  function isNewsParticipate(post, keyWords) {
-    const leaves = querySelectorAllNoChildren(post, ":scope h4 > span > span[class] > span", 0);
-    const fallback = leaves.length === 1 && leaves.some((leaf) => isOwnedNewsMetadata(leaf, post) && hasNewsActionName(leaf, "join"));
-    return hasHeaderAction(post, "join") || fallback ? keyWords.NF_PARTICIPATE : "";
-  }
-  function isMetaAiLink(link) {
-    const href = link.getAttribute("href");
-    if (!href) return false;
-    try {
-      let url = new URL(href, document.baseURI);
-      if (url.hostname === "l.facebook.com" && url.pathname === "/l.php") {
-        const destination = url.searchParams.get("u");
-        if (!destination) return false;
-        url = new URL(destination);
-      }
-      return (url.protocol === "https:" || url.protocol === "http:") && (url.hostname === "meta.ai" || url.hostname.endsWith(".meta.ai"));
-    } catch (e) {
-      return false;
-    }
-  }
-  function isNewsMetaAICard(post, keyWords) {
-    const branding = post.querySelector(
-      'a[aria-label="Visit Meta AI"], a[aria-label="Meta AI branding"]'
-    );
-    if (branding || Array.from(post.querySelectorAll("a[href]")).some(isMetaAiLink)) {
-      return keyWords.NF_META_AI;
-    }
-    const postTexts = extractTextContent(post, getNewsBlocksQuery(post), 3).join(" ").toLowerCase();
-    if (postTexts.includes("try meta ai") || postTexts.includes("free ai creation tools")) {
-      return keyWords.NF_META_AI;
-    }
-    return "";
-  }
-  function isNewsAiInfoPost(post, keyWords) {
-    if (!post || !keyWords || typeof post.querySelectorAll !== "function") {
-      return "";
-    }
-    const controls = Array.from(post.querySelectorAll('button, [role="button"]'));
-    const hasAiInfoLabel = controls.some((control) => {
-      if (isNestedMarkedNode(control, post)) return false;
-      const text = cleanText(control.textContent || "").replace(/\s+/g, " ").trim().toLocaleLowerCase();
-      return text === "ai info";
-    });
-    return hasAiInfoLabel && typeof keyWords.NF_AI_INFO_POSTS === "string" ? keyWords.NF_AI_INFO_POSTS : "";
-  }
-  function isNewsStoriesPost(post, keyWords) {
-    const queryForStory = '[href^="/stories/"][href*="source=from_feed"]';
-    const elStory = post.querySelector(queryForStory);
-    return elStory ? keyWords.NF_STORIES : "";
-  }
-  function isNewsVerifiedBadge(post, keyWords) {
-    return ownVerifiedBadges(post).length > 0 ? keyWords.NF_FILTER_VERIFIED_BADGE : "";
-  }
-  function postExceedsLikeCount(post, options, keyWords) {
-    var _a, _b;
-    const queryLikes = 'span[role="toolbar"] ~ div div[role="button"] > span[class][aria-hidden] > span:not([class]) > span[class]';
-    const elLikes = post.querySelectorAll(queryLikes);
-    if (elLikes.length > 0) {
-      const maxLikes = parseInt(options.NF_LIKES_MAXIMUM_COUNT, 10);
-      const postLikesCount = getFullNumber(((_b = (_a = elLikes[0]) == null ? void 0 : _a.textContent) != null ? _b : "").trim());
-      return postLikesCount >= maxLikes ? keyWords.NF_LIKES_MAXIMUM : "";
-    }
-    return false;
-  }
-  var init_news_detectors = __esm({
-    "src/feeds/news-detectors.ts"() {
-      "use strict";
-      init_text_normalize();
-      init_shares_likes();
-      init_walker();
-      init_dom();
-      init_blocks();
-      init_news_identity();
-    }
-  });
-
-  // src/feeds/news-right-rail.ts
-  function getNormalizedElementText(element) {
-    if (!element) {
-      return "";
-    }
-    return cleanText(element.textContent || "").replace(/[\u200B-\u200D\uFEFF]/g, "").replace(/\s+/g, " ").trim();
-  }
-  function isRightRailHeadingText(element, text) {
-    const normalizedText = getNormalizedElementText(element);
-    const normalizedTarget = cleanText(text || "").replace(/\s+/g, " ").trim();
-    return normalizedText.length > 0 && normalizedTarget.length > 0 && normalizedText.toLocaleLowerCase() === normalizedTarget.toLocaleLowerCase();
-  }
-  function isAfterElement(source, target) {
-    if (!source || !target || typeof source.compareDocumentPosition !== "function") {
-      return false;
-    }
-    return !!(source.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING);
-  }
-  function isPlausibleRightRailAdLink(link) {
-    if (!link) {
-      return false;
-    }
-    const href = link.href || link.getAttribute("href") || "";
-    if (href.startsWith("https://l.facebook.com/l.php")) {
-      return true;
-    }
-    return /(?:utm_[a-z0-9_]+|fbclid|ad_id|adset_id|campaign_id)(?:=|%3D)/i.test(href);
-  }
-  function hasPlausibleRightRailAdLink(section, heading) {
-    if (!section || !heading) {
-      return false;
-    }
-    return Array.from(section.querySelectorAll("a")).some(
-      (link) => isAfterElement(heading, link) && isPlausibleRightRailAdLink(link)
-    );
-  }
-  function hasOtherRightRailHeading(section, sponsoredHeading, sponsoredLabel) {
-    if (!section || !sponsoredHeading) {
-      return false;
-    }
-    const headingQuery = 'h1, h2, h3, h4, [role="heading"]';
-    return Array.from(section.querySelectorAll(headingQuery)).some(
-      (heading) => heading !== sponsoredHeading && getNormalizedElementText(heading).length > 0 && !isRightRailHeadingText(heading, sponsoredLabel)
-    );
-  }
-  function findRightRailSponsoredSection(rightRail, sponsoredHeading, sponsoredLabel) {
-    if (!rightRail || !sponsoredHeading || !sponsoredLabel) {
-      return null;
-    }
-    let current = sponsoredHeading.parentElement;
-    while (current && current !== rightRail) {
-      if (current.hasAttribute(postAtt)) {
-        return null;
-      }
-      if (hasPlausibleRightRailAdLink(current, sponsoredHeading) && !hasOtherRightRailHeading(current, sponsoredHeading, sponsoredLabel)) {
-        return current;
-      }
-      current = current.parentElement;
-    }
-    return null;
-  }
-  function scrubRightRailSponsored(context) {
-    if (!context) return false;
-    const { keyWords, state, options } = context;
-    if (!keyWords || !state || !options || !keyWords.SPONSORED) {
-      return false;
-    }
-    const rightRail = document.querySelector('div[role="complementary"]');
-    if (!rightRail) {
-      return false;
-    }
-    const headings = Array.from(
-      rightRail.querySelectorAll('h1, h2, h3, h4, [role="heading"]')
-    ).filter((heading) => isRightRailHeadingText(heading, keyWords.SPONSORED));
-    let hidden = false;
-    for (const heading of headings) {
-      const section = findRightRailSponsoredSection(rightRail, heading, keyWords.SPONSORED);
-      if (section) {
-        hideFeature(section, keyWords.SPONSORED, false, context);
-        hidden = true;
-      }
-    }
-    return hidden;
-  }
-  function scrubRightRailSuggestions(context) {
-    if (!context) return false;
-    const { keyWords, state, options } = context;
-    const query = 'div[role="complementary"] > div > div > div > div > div:not([data-visualcompletion])';
-    for (const container of document.querySelectorAll(query)) {
-      for (const item of container.querySelectorAll(`:scope > div:not([${postAtt}])`)) {
-        const kinds = ["suggested", "groups", "people"];
-        if (!kinds.some((kind) => hasNewsCardHeading(item, kind))) continue;
-        const otherHeading = Array.from(
-          item.querySelectorAll('h1, h2, h3, h4, [role="heading"]')
-        ).some((heading) => {
-          const label = heading.textContent || "";
-          return label.trim() !== "" && !kinds.some((kind) => matchesNewsLabel(label, kind));
-        });
-        if (otherHeading || item.querySelector('a[href="/events/birthdays/"]')) continue;
-        hideNewsPost(item, keyWords.NF_SUGGESTIONS, false, {
-          options,
-          keyWords,
-          attributes: { postAtt, postAttTab },
-          state
-        });
-      }
-    }
-  }
-  var init_news_right_rail = __esm({
-    "src/feeds/news-right-rail.ts"() {
-      "use strict";
-      init_news_identity();
-      init_text_normalize();
-      init_attributes();
-      init_hide();
-    }
-  });
-
   // src/feeds/news-presentation.ts
+  function isNewsBadgeCollapsed(element) {
+    return (element instanceof HTMLElement || element instanceof SVGElement) && presentations.badge.has(element);
+  }
   function inlinePriority(style, name) {
     var _a;
     const shorthand = (_a = /^(margin|padding)-/.exec(name)) == null ? void 0 : _a[1];
@@ -6735,7 +7823,7 @@
     else element.setAttribute(change.marker, change.originalMarker);
   }
   function restoreNewsPresentation(feature) {
-    const features = feature ? [feature] : ["badge", "sidebar"];
+    const features = feature ? [feature] : ["badge", "sidebar", "friendRequests"];
     for (const name of features) {
       for (const [element, change] of presentations[name]) restoreElement(element, change);
       presentations[name].clear();
@@ -6787,7 +7875,8 @@
       "use strict";
       presentations = {
         badge: /* @__PURE__ */ new Map(),
-        sidebar: /* @__PURE__ */ new Map()
+        sidebar: /* @__PURE__ */ new Map(),
+        friendRequests: /* @__PURE__ */ new Map()
       };
       newsCollapsedSpacing = [
         "display",
@@ -6800,6 +7889,407 @@
         "padding-bottom",
         "padding-left"
       ];
+    }
+  });
+
+  // src/core/filters/classifiers/shares-likes.ts
+  function getGroupedInteger(value) {
+    const match = /^[1-9]\d{0,2}([,.\u00a0\u202f])\d{3}(?:\1\d{3})*$/.exec(value);
+    return match && match[0] === value ? Number(value.replace(/[,.\u00a0\u202f]/g, "")) : void 0;
+  }
+  function getFullNumber(value) {
+    var _a, _b;
+    let numericValue = 0;
+    if (value !== "") {
+      const upperValue = value.toUpperCase();
+      if (upperValue.endsWith("K") || upperValue.endsWith("M")) {
+        let multiplier = 1;
+        let powY = 0;
+        if (upperValue.endsWith("K")) {
+          multiplier = 1e3;
+          powY = 3;
+        } else if (upperValue.endsWith("M")) {
+          multiplier = 1e6;
+          powY = 6;
+        }
+        const bits = upperValue.replace(/[KM]/g, "").replace(",", ".").split(".");
+        numericValue = parseInt((_a = bits[0]) != null ? _a : "", 10) * multiplier;
+        if (bits[1] !== void 0) {
+          numericValue += parseInt(bits[1], 10) * Math.pow(10, powY - bits[1].length);
+        }
+      } else {
+        numericValue = (_b = getGroupedInteger(upperValue)) != null ? _b : parseInt(upperValue, 10);
+      }
+    }
+    return numericValue;
+  }
+  var init_shares_likes = __esm({
+    "src/core/filters/classifiers/shares-likes.ts"() {
+      "use strict";
+    }
+  });
+
+  // src/feeds/news-identity.ts
+  function isOwnedNewsElement(element, post) {
+    return ownsPostElement(element, post);
+  }
+  function isOwnedNewsMetadata(element, post) {
+    return isOwnedNewsElement(element, post) && !getPostEvidence(post).select(getNewsBlocksQuery(post)).slice(1).some((body) => body.contains(element));
+  }
+  function facebookPath(link) {
+    var _a, _b;
+    return (_b = (_a = facebookUrl(link)) == null ? void 0 : _a.pathname) != null ? _b : null;
+  }
+  function ownNewsHeaders(post) {
+    return getPostEvidence(post).select("h4, h5").filter((header) => isOwnedNewsMetadata(header, post));
+  }
+  function explicitNewsNames(element, post) {
+    return getPostEvidence(post).explicitNames(element);
+  }
+  function hasNewsCardHeading(post, kind) {
+    return getPostEvidence(post).select('h2, h3, [role="heading"]').some(
+      (heading2) => isOwnedNewsMetadata(heading2, post) && getPostEvidence(post).isRendered(heading2) && matchesNewsLabel(getPostEvidence(post).visibleText(heading2), kind)
+    );
+  }
+  function hasNewsActionName(element, post, kind) {
+    if (!getPostEvidence(post).isRendered(element)) return false;
+    const names = explicitNewsNames(element, post);
+    return (names.length > 0 ? names : [getPostEvidence(post).visibleText(element)]).some(
+      (name) => matchesNewsLabel(name, kind)
+    );
+  }
+  function ownVerifiedBadges(post) {
+    return ownNewsHeaders(post).flatMap(
+      (header) => getPostEvidence(post).select("svg", header).filter((icon) => {
+        if (!isOwnedNewsElement(icon, post)) return false;
+        const iconNames = explicitNewsNames(icon, post);
+        if (iconNames.length > 0)
+          return iconNames.some((name) => matchesNewsLabel(name, "verified"));
+        let wrapper = icon.parentElement;
+        while (wrapper && wrapper !== header && wrapper.tagName === "SPAN") {
+          if (!isBadgeOnlyWrapper(wrapper, icon)) return false;
+          if (explicitNewsNames(wrapper, post).some((name) => matchesNewsLabel(name, "verified")))
+            return true;
+          wrapper = wrapper.parentElement;
+        }
+        return false;
+      })
+    );
+  }
+  function isBadgeOnlyWrapper(wrapper, icon) {
+    var _a;
+    if (wrapper.matches('a, button, [role="button"]') || wrapper.querySelector('a, button, [role="button"], img, video'))
+      return false;
+    if (wrapper.querySelectorAll("svg").length !== 1 || !wrapper.contains(icon)) return false;
+    const walker = document.createTreeWalker(wrapper, NodeFilter.SHOW_TEXT);
+    let node;
+    while (node = walker.nextNode()) {
+      if (((_a = node.textContent) == null ? void 0 : _a.trim()) && !icon.contains(node)) return false;
+    }
+    return true;
+  }
+  function ownPostReelLinks(post) {
+    return getPostEvidence(post).select("a[href]").filter((link) => {
+      const path = facebookPath(link);
+      return path !== null && /^\/reel\/[^/]+\/?$/.test(path) && isOwnedNewsElement(link, post) && link.querySelector('video, img, [role="img"]') !== null;
+    });
+  }
+  var init_news_identity = __esm({
+    "src/feeds/news-identity.ts"() {
+      "use strict";
+      init_labels();
+      init_post_evidence();
+      init_ownership();
+      init_blocks();
+    }
+  });
+
+  // src/feeds/news-detectors.ts
+  function isNewsSuggested(post, state, keyWords) {
+    const queries = [
+      "div[aria-posinset] > div > div > div > div > div > div:nth-of-type(2) > div > div > div:nth-of-type(2) > div > div:nth-of-type(2) > div > div:nth-of-type(2) > span > div > span:nth-of-type(1)",
+      "div[aria-describedby] > div > div > div > div > div > div:nth-of-type(2) > div > div > div:nth-of-type(2) > div > div:nth-of-type(2) > div > div:nth-of-type(2) > span > div > span:nth-of-type(1)"
+    ];
+    const semantic = hasNewsCardHeading(post, "suggested");
+    if (semantic) return isNewsReelsAndShortVideos(post, keyWords) ? "" : keyWords.NF_SUGGESTIONS;
+    const elSuggestion = querySelectorAllNoChildren(post, queries, 1);
+    if (elSuggestion.length > 0) {
+      if (isNewsReelsAndShortVideos(post, keyWords).length > 0) {
+        return "";
+      }
+      const label = elSuggestion[0];
+      return label && isOwnedNewsElement(label, post) && matchesNewsLabel(label.textContent || "", "suggested") ? keyWords.NF_SUGGESTIONS : "";
+    }
+    if (isGroupsYouMightLike(post)) {
+      return keyWords.NF_SUGGESTIONS;
+    }
+    return "";
+  }
+  function isGroupsYouMightLike(post) {
+    return hasNewsCardHeading(post, "groups") && getPostEvidence(post).select("a[href]").some(
+      (link) => /^\/groups\/discover\/?$/.test(facebookPath(link) || "") && isOwnedNewsMetadata(link, post)
+    );
+  }
+  function isNewsPeopleYouMayKnow(post, keyWords) {
+    const matches = hasNewsCardHeading(post, "people") && getPostEvidence(post).select('a[href][role="link"]').some(
+      (link) => /^\/friends(?:\/|$)/.test(facebookPath(link) || "") && isOwnedNewsMetadata(link, post)
+    );
+    return matches ? keyWords.NF_PEOPLE_YOU_MAY_KNOW : "";
+  }
+  function isNewsPaidPartnership(post, keyWords) {
+    const queryPP = 'span[dir] > span[id] a[href^="/business/help/"]';
+    const elPaidPartnership = getPostEvidence(post).select(queryPP)[0];
+    return elPaidPartnership === void 0 ? "" : keyWords.NF_PAID_PARTNERSHIP;
+  }
+  function isNewsSponsoredPaidBy(post, keyWords) {
+    const querySPB = "div:nth-child(2) > div > div:nth-child(2) > span[class] > span[id] > div:nth-child(2)";
+    const sponsoredPaidBy = querySelectorAllNoChildren(post, querySPB, 1);
+    return sponsoredPaidBy.some(
+      (label) => isOwnedNewsMetadata(label, post) && matchesNewsPaidBy(label.textContent || "")
+    ) ? keyWords.NF_SPONSORED_PAID : "";
+  }
+  function isNewsReelsAndShortVideos(post, keyWords) {
+    const shelf = hasNewsCardHeading(post, "reels") && getPostEvidence(post).select("a[href]").some((link) => {
+      var _a;
+      if (facebookPath(link) !== "/reel/" || !isOwnedNewsMetadata(link, post)) return false;
+      return ((_a = facebookUrl(link)) == null ? void 0 : _a.searchParams.get("s")) === "ifu_see_more";
+    });
+    return shelf || ownPostReelLinks(post).length > 4 ? keyWords.NF_REELS_SHORT_VIDEOS : "";
+  }
+  function isNewsShortReelVideo(post, keyWords) {
+    return ownPostReelLinks(post).length === 1 ? keyWords.NF_SHORT_REEL_VIDEO : "";
+  }
+  function isNewsEventsYouMayLike(post, keyWords) {
+    const query = ":scope div > div:nth-of-type(2) > div > div >  h3 > span";
+    if (hasNewsCardHeading(post, "events") && getPostEvidence(post).select("a[href]").some(
+      (link) => isOwnedNewsMetadata(link, post) && /^\/events(?:\/|$)/.test(facebookPath(link) || "")
+    ))
+      return keyWords.NF_EVENTS_YOU_MAY_LIKE;
+    const events = querySelectorAllNoChildren(post, query, 0);
+    return events.some(
+      (heading2) => isOwnedNewsMetadata(heading2, post) && matchesNewsLabel(heading2.textContent || "", "events")
+    ) ? keyWords.NF_EVENTS_YOU_MAY_LIKE : "";
+  }
+  function hasHeaderAction(post, kind) {
+    return ownNewsHeaders(post).some((header) => {
+      const paths = getPostEvidence(post).select("a[href]", header).map(facebookPath).filter((path) => path !== null);
+      const hasGroup = paths.some((path) => /^\/groups\/[^/]+/.test(path));
+      const hasAuthor = paths.some((path) => path !== "/" && !/^\/groups(?:\/|$)/.test(path));
+      if (kind === "join" ? !hasGroup : !hasAuthor || hasGroup) return false;
+      return getPostEvidence(post).select('button, [role="button"]', header).some(
+        (control2) => isOwnedNewsElement(control2, post) && hasNewsActionName(control2, post, kind)
+      );
+    });
+  }
+  function isNewsFollow(post, keyWords) {
+    const queries = [
+      ":scope h4[id] > span > div > span",
+      ":scope h4[id] > span > span > div > span",
+      ":scope h4[id] > div > span > span[class] > div[class] > span[class]"
+    ];
+    const leaves = querySelectorAllNoChildren(post, queries, 0, false);
+    const fallback = leaves.length === 1 && leaves.some(
+      (leaf) => isOwnedNewsMetadata(leaf, post) && hasNewsActionName(leaf, post, "follow")
+    );
+    return hasHeaderAction(post, "follow") || fallback ? keyWords.NF_FOLLOW : "";
+  }
+  function isNewsParticipate(post, keyWords) {
+    const leaves = querySelectorAllNoChildren(post, ":scope h4 > span > span[class] > span", 0);
+    const fallback = leaves.length === 1 && leaves.some((leaf) => isOwnedNewsMetadata(leaf, post) && hasNewsActionName(leaf, post, "join"));
+    return hasHeaderAction(post, "join") || fallback ? keyWords.NF_PARTICIPATE : "";
+  }
+  function isMetaAiLink(link) {
+    const href = link.getAttribute("href");
+    if (!href) return false;
+    try {
+      let url = new URL(href, document.baseURI);
+      if (url.hostname === "l.facebook.com" && url.pathname === "/l.php") {
+        const destination = url.searchParams.get("u");
+        if (!destination) return false;
+        url = new URL(destination);
+      }
+      return (url.protocol === "https:" || url.protocol === "http:") && (url.hostname === "meta.ai" || url.hostname.endsWith(".meta.ai"));
+    } catch (e) {
+      return false;
+    }
+  }
+  function isNewsMetaAICard(post, keyWords) {
+    const evidence = getPostEvidence(post);
+    const branding = evidence.select("a[aria-label], a[aria-labelledby]").some(
+      (link) => isOwnedNewsMetadata(link, post) && evidence.isRendered(link) && evidence.explicitNames(link).some((name) => matchesDisclosureLabel(name, "metaAiBrand"))
+    );
+    if (branding || evidence.select("a[href]").some((link) => isOwnedNewsElement(link, post) && isMetaAiLink(link)))
+      return keyWords.NF_META_AI;
+    const postTexts = extractTextContent(post, getNewsBlocksQuery(post), 3).join(" ");
+    if (containsMetaAiCopy(postTexts)) return keyWords.NF_META_AI;
+    return "";
+  }
+  function isNewsAiInfoPost(post, keyWords) {
+    if (!post || !keyWords || typeof post.querySelectorAll !== "function") {
+      return "";
+    }
+    const evidence = getPostEvidence(post);
+    const hasAiInfoLabel = evidence.select('button, [role="button"]').some((control2) => {
+      if (!isOwnedNewsElement(control2, post) || !evidence.isRendered(control2)) return false;
+      const names = evidence.explicitNames(control2);
+      return (names.length ? names : [evidence.visibleText(control2)]).some(
+        (name) => matchesDisclosureLabel(name, "aiInfo")
+      );
+    });
+    return hasAiInfoLabel && typeof keyWords.NF_AI_INFO_POSTS === "string" ? keyWords.NF_AI_INFO_POSTS : "";
+  }
+  function isNewsStoriesPost(post, keyWords) {
+    const queryForStory = '[href^="/stories/"][href*="source=from_feed"]';
+    const elStory = getPostEvidence(post).select(queryForStory)[0];
+    return elStory ? keyWords.NF_STORIES : "";
+  }
+  function isNewsVerifiedBadge(post, keyWords) {
+    return ownVerifiedBadges(post).some(
+      (icon) => getPostEvidence(post).isRendered(icon) || isNewsBadgeCollapsed(icon)
+    ) ? keyWords.NF_FILTER_VERIFIED_BADGE : "";
+  }
+  function postExceedsLikeCount(post, options, keyWords) {
+    var _a, _b;
+    const queryLikes = 'span[role="toolbar"] ~ div div[role="button"] > span[class][aria-hidden] > span:not([class]) > span[class]';
+    const elLikes = getPostEvidence(post).select(queryLikes);
+    if (elLikes.length > 0) {
+      const maxLikes = parseInt(options.NF_LIKES_MAXIMUM_COUNT, 10);
+      const postLikesCount = getFullNumber(((_b = (_a = elLikes[0]) == null ? void 0 : _a.textContent) != null ? _b : "").trim());
+      return postLikesCount >= maxLikes ? keyWords.NF_LIKES_MAXIMUM : "";
+    }
+    return false;
+  }
+  var init_news_detectors = __esm({
+    "src/feeds/news-detectors.ts"() {
+      "use strict";
+      init_labels();
+      init_news_presentation();
+      init_disclosure_labels2();
+      init_post_evidence();
+      init_shares_likes();
+      init_walker();
+      init_dom();
+      init_blocks();
+      init_news_identity();
+    }
+  });
+
+  // src/feeds/news-right-rail.ts
+  function getNormalizedElementText(element) {
+    if (!element) {
+      return "";
+    }
+    return cleanText(element.textContent || "").replace(/[\u200B-\u200D\uFEFF]/g, "").replace(/\s+/g, " ").trim();
+  }
+  function isRightRailHeadingText(element, text) {
+    const normalizedText = getNormalizedElementText(element);
+    const normalizedTarget = cleanText(text || "").replace(/\s+/g, " ").trim();
+    return normalizedText.length > 0 && normalizedTarget.length > 0 && normalizedText.toLocaleLowerCase() === normalizedTarget.toLocaleLowerCase();
+  }
+  function isAfterElement(source, target) {
+    if (!source || !target || typeof source.compareDocumentPosition !== "function") {
+      return false;
+    }
+    return !!(source.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING);
+  }
+  function isPlausibleRightRailAdLink(link) {
+    if (!link) {
+      return false;
+    }
+    const href = link.href || link.getAttribute("href") || "";
+    if (href.startsWith("https://l.facebook.com/l.php")) {
+      return true;
+    }
+    return /(?:utm_[a-z0-9_]+|fbclid|ad_id|adset_id|campaign_id)(?:=|%3D)/i.test(href);
+  }
+  function hasPlausibleRightRailAdLink(section, heading2) {
+    if (!section || !heading2) {
+      return false;
+    }
+    return Array.from(section.querySelectorAll("a")).some(
+      (link) => isAfterElement(heading2, link) && isPlausibleRightRailAdLink(link)
+    );
+  }
+  function hasOtherRightRailHeading(section, sponsoredHeading, sponsoredLabel) {
+    if (!section || !sponsoredHeading) {
+      return false;
+    }
+    const headingQuery = 'h1, h2, h3, h4, [role="heading"]';
+    return Array.from(section.querySelectorAll(headingQuery)).some(
+      (heading2) => heading2 !== sponsoredHeading && getNormalizedElementText(heading2).length > 0 && !isRightRailHeadingText(heading2, sponsoredLabel)
+    );
+  }
+  function findRightRailSponsoredSection(rightRail, sponsoredHeading, sponsoredLabel) {
+    if (!rightRail || !sponsoredHeading || !sponsoredLabel) {
+      return null;
+    }
+    let current = sponsoredHeading.parentElement;
+    while (current && current !== rightRail) {
+      if (current.hasAttribute(postAtt)) {
+        return null;
+      }
+      if (hasPlausibleRightRailAdLink(current, sponsoredHeading) && !hasOtherRightRailHeading(current, sponsoredHeading, sponsoredLabel)) {
+        return current;
+      }
+      current = current.parentElement;
+    }
+    return null;
+  }
+  function scrubRightRailSponsored(context) {
+    if (!context) return false;
+    const { keyWords, state, options } = context;
+    if (!keyWords || !state || !options || !keyWords.SPONSORED) {
+      return false;
+    }
+    const rightRail = document.querySelector('div[role="complementary"]');
+    if (!rightRail) {
+      return false;
+    }
+    const headings = Array.from(
+      rightRail.querySelectorAll('h1, h2, h3, h4, [role="heading"]')
+    ).filter((heading2) => isRightRailHeadingText(heading2, keyWords.SPONSORED));
+    let hidden = false;
+    for (const heading2 of headings) {
+      const section = findRightRailSponsoredSection(rightRail, heading2, keyWords.SPONSORED);
+      if (section) {
+        hideFeature(section, keyWords.SPONSORED, false, context);
+        hidden = true;
+      }
+    }
+    return hidden;
+  }
+  function scrubRightRailSuggestions(context) {
+    if (!context) return false;
+    const { keyWords, state, options } = context;
+    const query = 'div[role="complementary"] > div > div > div > div > div:not([data-visualcompletion])';
+    for (const container of document.querySelectorAll(query)) {
+      for (const item of container.querySelectorAll(`:scope > div:not([${postAtt}])`)) {
+        const kinds2 = ["suggested", "groups", "people"];
+        if (!kinds2.some((kind) => hasNewsCardHeading(item, kind))) continue;
+        const otherHeading = Array.from(
+          item.querySelectorAll('h1, h2, h3, h4, [role="heading"]')
+        ).some((heading2) => {
+          const label = heading2.textContent || "";
+          return label.trim() !== "" && !kinds2.some((kind) => matchesNewsLabel(label, kind));
+        });
+        if (otherHeading || item.querySelector('a[href="/events/birthdays/"]')) continue;
+        hideNewsPost(item, keyWords.NF_SUGGESTIONS, false, {
+          options,
+          keyWords,
+          attributes: { postAtt, postAttTab },
+          state
+        });
+      }
+    }
+  }
+  var init_news_right_rail = __esm({
+    "src/feeds/news-right-rail.ts"() {
+      "use strict";
+      init_labels();
+      init_news_identity();
+      init_text_normalize();
+      init_attributes();
+      init_hide();
     }
   });
 
@@ -7237,6 +8727,80 @@
     }
   });
 
+  // src/feeds/news-friend-requests.ts
+  function isFriendsDestination(link, requestsOnly = false) {
+    try {
+      const url = new URL(link.getAttribute("href") || "", "https://www.facebook.com");
+      if (!/^https?:$/.test(url.protocol)) return false;
+      if (!["facebook.com", "www.facebook.com", "web.facebook.com", "m.facebook.com"].includes(
+        url.hostname
+      ))
+        return false;
+      return /^\/friends\/requests\/?$/.test(url.pathname) || !requestsOnly && /^\/friends\/?$/.test(url.pathname);
+    } catch (e) {
+      return false;
+    }
+  }
+  function hasFriendsHeader(section, heading2) {
+    return Array.from(section.querySelectorAll(newsSelectors.railFriendLinks)).some((link) => {
+      if (!isFriendsDestination(link) || link.closest(sharedSelectors.authoredContent)) return false;
+      let row = link;
+      while (row && row !== section) {
+        if (row.contains(heading2) && !row.querySelector(newsSelectors.railActions)) return true;
+        row = row.parentElement;
+      }
+      return false;
+    });
+  }
+  function hasRequestCard(section) {
+    return Array.from(section.querySelectorAll(newsSelectors.railRequestLinks)).some((link) => {
+      if (!isFriendsDestination(link, true) || link.closest(sharedSelectors.authoredContent))
+        return false;
+      let card = link.parentElement;
+      while (card && card !== section) {
+        if (card.querySelector(newsSelectors.railHeadings)) return false;
+        if (card.querySelectorAll(newsSelectors.railActions).length >= 2) return true;
+        card = card.parentElement;
+      }
+      return false;
+    });
+  }
+  function getRightRailFriendRequestPanels() {
+    const panels = /* @__PURE__ */ new Set();
+    for (const rail of document.querySelectorAll(newsSelectors.rightRail)) {
+      if (rail.closest(newsSelectors.railContentBoundary)) continue;
+      for (const heading2 of rail.querySelectorAll(newsSelectors.railHeadings)) {
+        if (heading2.closest(`${newsSelectors.railContentBoundary}, ${sharedSelectors.authoredContent}`))
+          continue;
+        let section = heading2.parentElement;
+        while (section && section !== rail) {
+          if (section.querySelectorAll(newsSelectors.railHeadings).length !== 1) break;
+          if (section.querySelector(newsSelectors.railContentBoundary)) break;
+          if (hasFriendsHeader(section, heading2) && hasRequestCard(section)) {
+            panels.add(section);
+            break;
+          }
+          section = section.parentElement;
+        }
+      }
+    }
+    return Array.from(panels);
+  }
+  function scrubRightRailFriendRequests(context) {
+    const targets = new Map(
+      getRightRailFriendRequestPanels().map((panel) => [panel, ["display"]])
+    );
+    reconcileNewsPresentation("friendRequests", targets, context.state.hideWithNoCaptionAtt);
+  }
+  var init_news_friend_requests = __esm({
+    "src/feeds/news-friend-requests.ts"() {
+      "use strict";
+      init_news();
+      init_shared();
+      init_news_presentation();
+    }
+  });
+
   // src/feeds/news.ts
   function mopNewsFeed(context) {
     if (!context) {
@@ -7248,6 +8812,7 @@
     }
     if (!options.NF_HIDE_VERIFIED_BADGE) restoreNewsPresentation("badge");
     if (!options.NF_AI_SIDE_PANELS) restoreNewsPresentation("sidebar");
+    if (!options.NF_FRIEND_REQUESTS) restoreNewsPresentation("friendRequests");
     const [dirtyMainColumn, dirtyDialog] = isNewsDirty(state);
     const mainColumn = dirtyMainColumn || document.querySelector(newsSelectors.mainColumn);
     const elDialog = dirtyDialog || document.querySelector(newsSelectors.dialog);
@@ -7277,6 +8842,9 @@
     }
     if (options.NF_AI_SIDE_PANELS && shouldSweepPosts) {
       scrubSidePanelAi(context);
+    }
+    if (options.NF_FRIEND_REQUESTS && shouldSweepPosts) {
+      scrubRightRailFriendRequests(context);
     }
     if (options.NF_SPONSORED && shouldSweepPosts) {
       scrubRightRailSponsored(context);
@@ -7419,6 +8987,7 @@
       init_news_features();
       init_news_meta_ai();
       init_news_revalidation();
+      init_news_friend_requests();
       init_news_presentation();
       init_news_meta_ai();
     }
@@ -7605,8 +9174,8 @@
     const className = typeof post.className === "string" ? post.className : "";
     return {
       tag: post.tagName,
-      role: post.getAttribute("role") || "",
-      classHash: className ? hashText(className) : "",
+      role: ["article", "feed", "main", "dialog", "region"].includes(post.getAttribute("role") || "") ? post.getAttribute("role") || "" : post.hasAttribute("role") ? "other" : "",
+      classCount: className.trim() ? className.trim().split(/\s+/).length : 0,
       childCount: post.children ? post.children.length : 0,
       hasReason: post.hasAttribute(postAtt)
     };
@@ -7660,44 +9229,10 @@
       init_search();
       init_news2();
       init_sponsored();
-      init_redaction();
     }
   });
 
   // src/diagnostics/snapshots.ts
-  function collectSignalCounts(root = document) {
-    var _a, _b;
-    const signals = [
-      "Sponsored",
-      "Suggested",
-      "Follow",
-      "Reels",
-      "Stories",
-      "People you may know",
-      "Paid partnership",
-      "Try Meta AI",
-      "Events you may like"
-    ];
-    const counts = {};
-    for (const signal of signals) {
-      counts[signal] = 0;
-    }
-    if (!root || typeof root.querySelectorAll !== "function") {
-      return counts;
-    }
-    const spans = Array.from(root.querySelectorAll("span[dir], span, div")).filter(
-      (el) => typeof el.textContent === "string" && el.textContent.trim() !== ""
-    );
-    for (const el of spans) {
-      const text = (_a = el.textContent) != null ? _a : "";
-      for (const signal of signals) {
-        if (text.includes(signal)) {
-          counts[signal] = ((_b = counts[signal]) != null ? _b : 0) + 1;
-        }
-      }
-    }
-    return counts;
-  }
   function collectReasonCounts(keyWords) {
     const safeReasons = collectSafeReasons(keyWords);
     const counts = {};
@@ -7781,7 +9316,9 @@
   }
   function buildFeedDomSnapshot() {
     const feedNodes = Array.from(document.querySelectorAll('[role="feed"]'));
-    const pageletSample = Array.from(document.querySelectorAll('[role="feed"] [data-pagelet]')).slice(0, 5).map((el) => el.getAttribute("data-pagelet"));
+    const pageletSample = Array.from(document.querySelectorAll('[role="feed"] [data-pagelet]')).slice(0, 5).map(
+      (el) => /^FeedUnit_\d+$/.test(el.getAttribute("data-pagelet") || "") ? "FeedUnit_:index" : "other-pagelet"
+    );
     const mainNode = document.querySelector('div[role="main"]');
     const feedRoot = feedNodes[0] || null;
     const feedRootParent = feedRoot && feedRoot.parentElement ? feedRoot.parentElement : null;
@@ -7832,10 +9369,10 @@
       if (!rail || !rail.contains(asideBox) || asideBox.querySelector('[role="main"], [role="feed"], [role="navigation"]')) {
         continue;
       }
-      const labels = asideBox.querySelectorAll(
+      const labels2 = asideBox.querySelectorAll(
         ':scope > span, :scope > h2, :scope > h3, :scope > [role="heading"]'
       );
-      const hasSuggestionLabel = Array.from(labels).some(
+      const hasSuggestionLabel = Array.from(labels2).some(
         (label) => isOwnedNewsElement(label, asideBox) && !label.closest('[hidden], [aria-hidden="true"]') && !label.querySelector('[hidden], [aria-hidden="true"]') && Array.from(label.querySelectorAll("*")).every(
           (child) => isOwnedNewsElement(child, asideBox)
         ) && (matchesNewsLabel(label.textContent || "", "groups") || matchesNewsLabel(label.textContent || "", "suggested"))
@@ -7897,6 +9434,7 @@
   var init_groups_features = __esm({
     "src/feeds/groups-features.ts"() {
       "use strict";
+      init_labels();
       init_attributes();
       init_hide();
       init_dom();
@@ -7973,7 +9511,7 @@
   }
   function isGroupsSuggested(post, keyWords) {
     var _a, _b;
-    const blocks = post.querySelectorAll(getGroupsBlocksQuery(post));
+    const blocks = getPostEvidence(post).select(getGroupsBlocksQuery(post));
     if (blocks.length <= 1) return "";
     const icons = ((_a = blocks[0]) == null ? void 0 : _a.querySelectorAll('i[data-visualcompletion="css-img"][style]')) || [];
     const hasSuggestionIcon = Array.from(icons).some(
@@ -7981,7 +9519,7 @@
     );
     const headings = ((_b = blocks[1]) == null ? void 0 : _b.querySelectorAll("h3 > div > span ~ span > span > div > div")) || [];
     const hasSuggestionHeading = Array.from(headings).some(
-      (heading) => hasGroupsSuggestionLabel(heading, post)
+      (heading2) => hasGroupsSuggestionLabel(heading2, post)
     );
     return hasSuggestionIcon || hasSuggestionHeading ? keyWords.GF_SUGGESTIONS : "";
   }
@@ -8150,7 +9688,9 @@
   var init_groups2 = __esm({
     "src/feeds/groups.ts"() {
       "use strict";
+      init_labels();
       init_groups_features();
+      init_post_evidence();
       init_attributes();
       init_animated_gifs();
       init_dirty_check();
@@ -8328,8 +9868,8 @@
   function isOwnedVideoSignal(signal, post) {
     if (!isOwnedNewsElement(signal, post) || signal.closest('[hidden], [aria-hidden="true"]') || signal.querySelector('[hidden], [aria-hidden="true"]') || Array.from(signal.querySelectorAll("*")).some((child) => !isOwnedNewsElement(child, post)))
       return false;
-    const references = signal.getAttribute("aria-labelledby");
-    return !references || references.trim().split(/\s+/).every((id) => {
+    const references2 = signal.getAttribute("aria-labelledby");
+    return !references2 || references2.trim().split(/\s+/).every((id) => {
       const label = signal.ownerDocument.getElementById(id);
       return !!label && post.contains(label) && !label.contains(signal) && isOwnedNewsElement(label, post);
     });
@@ -8343,7 +9883,7 @@
   function isInstagram(post, keyWords) {
     const instagramRule = 'div > div > div > div > div > a[href="#"] > div > svg';
     return Array.from(post.querySelectorAll(instagramRule)).some(
-      (icon) => isOwnedVideoSignal(icon, post) && explicitNewsNames(icon).some((name) => normalizeVideoLabel(name) === "instagram")
+      (icon) => isOwnedVideoSignal(icon, post) && explicitNewsNames(icon, post).some((name) => normalizeVideoLabel(name) === "instagram")
     ) ? keyWords.VF_INSTAGRAM : "";
   }
   function hideSponsoredBlock(post, queryBlocks, context) {
@@ -8583,12 +10123,12 @@
     const boxes = /* @__PURE__ */ new Set();
     for (const link of root.querySelectorAll(marketplaceSponsoredHeadingQuery)) {
       const parent = link.parentElement;
-      const heading = (parent == null ? void 0 : parent.tagName) === "OBJECT" ? parent.parentElement : parent;
-      if (!heading || heading === root || !root.contains(heading)) continue;
-      let tile = heading.nextElementSibling;
+      const heading2 = (parent == null ? void 0 : parent.tagName) === "OBJECT" ? parent.parentElement : parent;
+      if (!heading2 || heading2 === root || !root.contains(heading2)) continue;
+      let tile = heading2.nextElementSibling;
       while (tile == null ? void 0 : tile.matches("div[style]")) {
         if (!tile.querySelector(marketplaceSponsoredTileQuery)) break;
-        boxes.add(heading);
+        boxes.add(heading2);
         boxes.add(tile);
         tile = tile.nextElementSibling;
       }
@@ -8840,7 +10380,7 @@
     if (options.NF_BLOCKED_ENABLED) {
       const blockedText = findNewsBlockedText(post, options, filters);
       if (blockedText) {
-        matches.NF_BLOCKED_TEXT_HASH = hashText(blockedText);
+        matches.NF_BLOCKED_TEXT = true;
       }
     }
     if (options.NF_LIKES_MAXIMUM) {
@@ -8875,7 +10415,7 @@
     if (options.GF_BLOCKED_ENABLED) {
       const blockedText = findGroupsBlockedText(post, options, filters);
       if (blockedText) {
-        matches.GF_BLOCKED_TEXT_HASH = hashText(blockedText);
+        matches.GF_BLOCKED_TEXT = true;
       }
     }
     if (options.GF_SHARES) {
@@ -8895,7 +10435,7 @@
     if (options.VF_BLOCKED_ENABLED && queryBlocks) {
       const blockedText = findVideosBlockedText(post, options, filters, queryBlocks);
       if (blockedText) {
-        matches.VF_BLOCKED_TEXT_HASH = hashText(blockedText);
+        matches.VF_BLOCKED_TEXT = true;
       }
     }
     return matches;
@@ -8911,7 +10451,7 @@
     if (options.PP_BLOCKED_ENABLED) {
       const blockedText = findProfileBlockedText(post, options, filters);
       if (blockedText) {
-        matches.PP_BLOCKED_TEXT_HASH = hashText(blockedText);
+        matches.PP_BLOCKED_TEXT = true;
       }
     }
     return matches;
@@ -8924,11 +10464,11 @@
     if (priceBlock) {
       const blockedPrices = mpGetBlockedPrices(priceBlock, filters);
       if (blockedPrices) {
-        matches.MP_BLOCKED_TEXT_HASH = hashText(blockedPrices);
+        matches.MP_BLOCKED_TEXT = true;
       }
       const blockedDesc = mpGetBlockedTextDescription(blocksOfText, filters, true);
       if (blockedDesc) {
-        matches.MP_BLOCKED_TEXT_DESCRIPTION_HASH = hashText(blockedDesc);
+        matches.MP_BLOCKED_TEXT_DESCRIPTION = true;
       }
     }
     return matches;
@@ -8939,7 +10479,7 @@
       const matches = sample.matches || {};
       Object.keys(matches).forEach((key) => {
         const value = matches[key];
-        if (value === true || typeof value === "string" && value.trim() !== "") {
+        if (value === true) {
           summary[key] = (summary[key] || 0) + 1;
         }
       });
@@ -8957,7 +10497,6 @@
       init_videos2();
       init_marketplace2();
       init_sponsored();
-      init_redaction();
     }
   });
 
@@ -9028,22 +10567,24 @@
   });
 
   // src/diagnostics/bug-report.ts
-  function buildBugReport(context) {
+  async function buildBugReport(context, capture = {}) {
     if (!context) {
       return { data: { error: "No context available." }, text: "" };
     }
-    const data = collectBugReportData(context);
-    return { data, text: JSON.stringify(data, null, 2) };
+    const data = await collectBugReportData(context, capture);
+    return { data, text: await encodeReport(data) };
   }
-  function collectBugReportData(context) {
+  async function collectBugReportData(context, capture) {
     const { state, options, filters, keyWords, pathInfo: pathInfo2 } = context;
     const now = /* @__PURE__ */ new Date();
     const scriptInfo = getScriptInfo();
     const safeLocation = buildSafeLocation();
-    const newsMainColumn = document.querySelector(newsSelectors.mainColumn);
+    const snapshot = await captureDomSnapshot(document, capture);
     const samples = buildSamples(context);
     return {
+      schemaVersion: 2,
       generatedAt: now.toISOString(),
+      snapshot,
       script: scriptInfo,
       page: {
         url: safeLocation.url,
@@ -9068,13 +10609,10 @@
         hiddenElements: buildHiddenCounts(state),
         sample: collectHiddenSample(keyWords)
       },
-      signals: {
-        page: collectSignalCounts(document),
-        newsMain: collectSignalCounts(newsMainColumn)
-      },
       samples: { ...samples, summary: buildMatchSummary(samples.samples) },
       notes: {
-        redaction: "Post text, names, and IDs are not included. Blocked keywords are hashed."
+        redaction: "Authored text and media are removed. Interface labels are automatically sanitized. IDs and classes are report-local aliases; destinations are structural templates.",
+        limitations: "Unknown text is explicitly redacted. Coverage and attribute transformations qualify offline selector results."
       }
     };
   }
@@ -9082,7 +10620,8 @@
     "src/diagnostics/bug-report.ts"() {
       "use strict";
       init_regex_validation();
-      init_news();
+      init_report_encoding();
+      init_dom_capture();
       init_serialization();
       init_redaction();
       init_snapshots();
@@ -10757,7 +12296,7 @@
   }
   function dedupeOverlappingControls(controls) {
     return controls.filter(
-      (control, index) => !controls.slice(0, index).some((existingControl) => isSameRect(existingControl.rect, control.rect))
+      (control2, index) => !controls.slice(0, index).some((existingControl) => isSameRect(existingControl.rect, control2.rect))
     );
   }
   function isTopbarControlCandidate(element, bannerRect) {
@@ -10782,28 +12321,28 @@
   }
   function buildControlClusters(controls) {
     const clusters = [];
-    controls.forEach((control) => {
+    controls.forEach((control2) => {
       const currentCluster = clusters[clusters.length - 1];
       if (!currentCluster) {
         clusters.push({
-          controls: [control],
-          rightEdge: control.rect.right
+          controls: [control2],
+          rightEdge: control2.rect.right
         });
         return;
       }
       const previous = currentCluster.controls[currentCluster.controls.length - 1];
       if (!previous) return;
-      const gap = control.rect.left - previous.rect.right;
-      const sameRow = Math.abs(control.rect.top - previous.rect.top) <= MAX_ROW_OFFSET;
-      const similarHeight = Math.abs(control.rect.height - previous.rect.height) <= MAX_ROW_OFFSET;
+      const gap = control2.rect.left - previous.rect.right;
+      const sameRow = Math.abs(control2.rect.top - previous.rect.top) <= MAX_ROW_OFFSET;
+      const similarHeight = Math.abs(control2.rect.height - previous.rect.height) <= MAX_ROW_OFFSET;
       if (sameRow && similarHeight && gap >= -1 && gap <= MAX_CLUSTER_GAP) {
-        currentCluster.controls.push(control);
-        currentCluster.rightEdge = control.rect.right;
+        currentCluster.controls.push(control2);
+        currentCluster.rightEdge = control2.rect.right;
         return;
       }
       clusters.push({
-        controls: [control],
-        rightEdge: control.rect.right
+        controls: [control2],
+        rightEdge: control2.rect.right
       });
     });
     return clusters;
@@ -10825,10 +12364,10 @@
     var _a, _b;
     const bannerRect = getRect(banner);
     const controls = dedupeOverlappingControls(
-      Array.from(new Set(Array.from(banner.querySelectorAll(topbarControlSelector)))).filter((control) => isTopbarControlCandidate(control, bannerRect)).map((control) => ({
-        element: control,
-        rect: getRect(control)
-      })).filter((control) => control.rect !== null).sort((a, b) => a.rect.left - b.rect.left)
+      Array.from(new Set(Array.from(banner.querySelectorAll(topbarControlSelector)))).filter((control2) => isTopbarControlCandidate(control2, bannerRect)).map((control2) => ({
+        element: control2,
+        rect: getRect(control2)
+      })).filter((control2) => control2.rect !== null).sort((a, b) => a.rect.left - b.rect.left)
     );
     if (controls.length === 0) {
       return [];
@@ -10838,7 +12377,7 @@
     candidateClusters.sort(
       (a, b) => b.rightEdge - a.rightEdge || b.controls.length - a.controls.length
     );
-    return (_b = (_a = candidateClusters[0]) == null ? void 0 : _a.controls.map((control) => control.element)) != null ? _b : [];
+    return (_b = (_a = candidateClusters[0]) == null ? void 0 : _a.controls.map((control2) => control2.element)) != null ? _b : [];
   }
   function getTopbarMenuButton(root = document) {
     var _a;
@@ -10846,7 +12385,7 @@
     return (_a = controls[0]) != null ? _a : null;
   }
   function isTopbarControlButton(element, root = document) {
-    return getTopbarControlButtons(root).some((control) => control === element);
+    return getTopbarControlButtons(root).some((control2) => control2 === element);
   }
   var MIN_CONTROL_SIZE, MAX_CONTROL_SIZE, MIN_ASPECT_RATIO, MAX_ASPECT_RATIO, MAX_CLUSTER_GAP, MAX_ROW_OFFSET, RECT_MATCH_TOLERANCE, topbarControlSelector;
   var init_topbar_controls = __esm({
@@ -11578,8 +13117,8 @@
     if (!element || typeof element.closest !== "function") {
       return false;
     }
-    const control = element.closest('button, [role="button"]');
-    return control ? isTopbarControlButton(control) : false;
+    const control2 = element.closest('button, [role="button"]');
+    return control2 ? isTopbarControlButton(control2) : false;
   }
   function mountToggleButton(state, keyWords) {
     if (!state || !keyWords) {
@@ -12070,9 +13609,9 @@
     fieldsets.forEach((fieldset) => {
       const legend = fieldset.querySelector("legend");
       const legendText = legend ? (legend.dataset.cmfTitle || legend.textContent || "").trim().toLowerCase() : "";
-      const labels = Array.from(fieldset.querySelectorAll("label"));
+      const labels2 = Array.from(fieldset.querySelectorAll("label"));
       let anyMatch = false;
-      labels.forEach((label) => {
+      labels2.forEach((label) => {
         const labelText = (label.textContent || "").trim().toLowerCase();
         const matches = normalized.length === 0 || labelText.includes(normalized);
         label.style.display = matches ? "" : "none";
@@ -12481,6 +14020,10 @@
     const div = document.createElement("div");
     div.classList.add("cmf-row");
     div.appendChild(label);
+    if (cbName === "NF_FRIEND_REQUESTS") {
+      div.title = keyWords.DLG_FRIEND_REQUESTS_DESC;
+      cb.setAttribute("aria-description", keyWords.DLG_FRIEND_REQUESTS_DESC);
+    }
     return div;
   }
   function createMultipleCBs(keyWords, options, cbName, cbReadOnlyIdx = -1) {
@@ -12807,6 +14350,7 @@
       "NF_FOLLOW",
       "NF_PARTICIPATE",
       "NF_PEOPLE_YOU_MAY_KNOW",
+      "NF_FRIEND_REQUESTS",
       "NF_SUGGESTIONS",
       "NF_EVENTS_YOU_MAY_LIKE",
       "NF_SURVEY",
@@ -13398,31 +14942,43 @@
       const value = keyWords[key];
       statusEl.textContent = typeof value === "string" ? value : "";
     };
-    const ensureReport = () => {
+    let pending = null;
+    const ensureReport = async () => {
       if (state && typeof state.cmfReportText === "string" && state.cmfReportText.length > 0) {
         return state.cmfReportText;
       }
-      const { text } = capabilities.buildReport();
-      if (state) {
-        state.cmfReportText = text;
-      }
-      outputEl.value = text;
-      outputEl.classList.add("cmf-report-output--visible");
-      setStatus("DLG_REPORT_BUG_STATUS_READY");
-      const fieldset = outputEl.closest("fieldset");
-      if (fieldset && fieldset.classList.contains("cmf-visible")) {
-        updateFieldsetState(fieldset, true, { animateHeight: false });
-      }
-      return text;
+      if (pending) return pending;
+      pending = Promise.resolve().then(() => capabilities.buildReport()).then(({ text }) => {
+        if (!outputEl.isConnected || lifecycle && !lifecycle.active) return "";
+        if (state) {
+          state.cmfReportText = text;
+        }
+        outputEl.value = text;
+        outputEl.classList.add("cmf-report-output--visible");
+        setStatus("DLG_REPORT_BUG_STATUS_READY");
+        const fieldset = outputEl.closest("fieldset");
+        if (fieldset && fieldset.classList.contains("cmf-visible")) {
+          updateFieldsetState(fieldset, true, { animateHeight: false });
+        }
+        return text;
+      }).catch(() => {
+        setStatus("DLG_REPORT_BUG_STATUS_FAILED");
+        return "";
+      }).finally(() => {
+        pending = null;
+        btnGenerate.disabled = false;
+      });
+      btnGenerate.disabled = true;
+      return pending;
     };
     lifecycle == null ? void 0 : lifecycle.listen(btnGenerate, "click", () => {
       if (state) {
         state.cmfReportText = "";
       }
-      ensureReport();
+      void ensureReport();
     });
     lifecycle == null ? void 0 : lifecycle.listen(btnCopy, "click", async () => {
-      const reportText = ensureReport();
+      const reportText = await ensureReport();
       if (!reportText) {
         setStatus("DLG_REPORT_BUG_STATUS_FAILED");
         return;

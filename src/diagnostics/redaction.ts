@@ -21,39 +21,9 @@ const BLOCKED_TEXT_FILTER_KEYS = [
   "PP_BLOCKED_TEXT_LC",
 ];
 
-/**
- * Produce a stable diagnostic hash without including the source text.
- * @param value Text to hash; non-string or empty inputs intentionally yield no identifier.
- * @returns An FNV-1a hexadecimal identifier, or an empty string for absent text.
- */
-export function hashText(value: unknown) {
-  if (typeof value !== "string" || value.length === 0) {
-    return "";
-  }
-  let hash = 2166136261;
-  for (let i = 0; i < value.length; i += 1) {
-    hash ^= value.charCodeAt(i);
-    hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
-  }
-  return `fnv1a:${(hash >>> 0).toString(16)}`;
-}
-
-/**
- * Limit hashed keyword examples while retaining the original count and truncation signal.
- * @param list Potential keyword list; malformed values are treated as an empty list.
- * @param limit Maximum number of examples to include; counts still describe the full collection.
- * @returns The original count, bounded string hashes, and whether any examples were omitted.
- */
-export function summarizeList(list: unknown, limit = 20) {
-  if (!Array.isArray(list)) {
-    return { count: 0, hashes: [], truncated: false };
-  }
-  const hashes = list.slice(0, limit).map((value) => hashText(String(value)));
-  return {
-    count: list.length,
-    hashes,
-    truncated: list.length > limit,
-  };
+/** Summarize private keyword configuration without disclosing guessable hashes or examples. */
+export function summarizeList(list: unknown) {
+  return { count: Array.isArray(list) ? list.length : 0 };
 }
 
 /**
@@ -92,9 +62,9 @@ export function redactFilters(filters: PendingFilters) {
 }
 
 /**
- * Report bounded hash summaries of each configurable blocked-keyword list.
+ * Report counts of each configurable private keyword list.
  * @param filters Materialized keyword lists used by the active filtering pass.
- * @returns One bounded keyword-hash summary for each supported blocked-text filter.
+ * @returns One count summary for each supported blocked-text filter.
  */
 export function summarizeBlockedFilters(filters: PendingFilters) {
   return {
@@ -139,14 +109,14 @@ export function collectSafeReasons(keyWords: Keywords) {
 }
 
 /**
- * Preserve recognized reason labels and hash unrecognized content to avoid exposing post text.
+ * Preserve recognized reason labels and redact unrecognized content to avoid exposing post text.
  * @param reason Existing post marker that may contain a private matched keyword.
- * @param safeReasons Known product labels that may be emitted without hashing.
- * @returns A safe product label, hashed unknown reason, or unlabeled sentinel.
+ * @param safeReasons Known product labels that may be emitted without redaction.
+ * @returns A safe product label, redacted unknown reason, or unlabeled sentinel.
  */
 export function getSanitizedReason(reason: string, safeReasons: ReadonlySet<string>) {
   if (!reason || reason.trim() === "") {
     return "unlabeled";
   }
-  return safeReasons.has(reason) ? reason : `hash:${hashText(reason)}`;
+  return safeReasons.has(reason) ? reason : "private-reason";
 }

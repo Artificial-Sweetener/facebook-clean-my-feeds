@@ -21,6 +21,8 @@ export const catalog: Keywords = {
   NF_FILTER_VERIFIED_BADGE: "Фильтровать подтвержденные аккаунты",
   NF_AI_SIDE_PANELS: "ИИ в боковых панелях",
   NF_SURVEY: "Опрос",
+  NF_FRIEND_REQUESTS: "Запросы в друзья (правая панель)",
+  DLG_FRIEND_REQUESTS_DESC: "Скрывать блок запросов в друзья на правой панели ленты новостей.",
   NF_PEOPLE_YOU_MAY_KNOW: "Люди, которых вы можете знать",
   NF_PAID_PARTNERSHIP: "Платное партнерство",
   NF_SPONSORED_PAID: "Реклама · Оплачено ______",

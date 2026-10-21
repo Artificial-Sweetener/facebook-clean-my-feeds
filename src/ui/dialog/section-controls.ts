@@ -48,6 +48,10 @@ export function createSingleCB(
   const div = document.createElement("div");
   div.classList.add("cmf-row");
   div.appendChild(label);
+  if (cbName === "NF_FRIEND_REQUESTS") {
+    div.title = keyWords.DLG_FRIEND_REQUESTS_DESC;
+    cb.setAttribute("aria-description", keyWords.DLG_FRIEND_REQUESTS_DESC);
+  }
   return div;
 }
 

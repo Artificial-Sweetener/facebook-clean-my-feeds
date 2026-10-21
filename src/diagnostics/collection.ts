@@ -7,7 +7,6 @@ import { profileSelectors } from "../selectors/profile";
 import { searchSelectors } from "../selectors/search";
 import { getNewsPostDiscovery, getOrphanSponsoredNewsPosts } from "../feeds/news";
 import { getSponsoredDiagnostics } from "../feeds/shared/sponsored";
-import { hashText } from "./redaction";
 import type { DiagnosticsState } from "./types";
 
 /**
@@ -269,8 +268,12 @@ export function buildDomSignature(post: Element | null) {
   const className = typeof post.className === "string" ? post.className : "";
   return {
     tag: post.tagName,
-    role: post.getAttribute("role") || "",
-    classHash: className ? hashText(className) : "",
+    role: ["article", "feed", "main", "dialog", "region"].includes(post.getAttribute("role") || "")
+      ? post.getAttribute("role") || ""
+      : post.hasAttribute("role")
+        ? "other"
+        : "",
+    classCount: className.trim() ? className.trim().split(/\s+/).length : 0,
     childCount: post.children ? post.children.length : 0,
     hasReason: post.hasAttribute(postAtt),
   };

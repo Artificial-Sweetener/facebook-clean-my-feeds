@@ -2,15 +2,6 @@
 
 import { sanitizePathname } from "./location";
 
-const publicPaths = [
-  "/ads/about/",
-  "/business/help/",
-  "/help/",
-  "/privacy/",
-  "/settings/",
-  "/events/",
-  "/friends/",
-];
 const publicQuery = new Map([
   ["s", new Set(["ifu_see_more"])],
   ["source", new Set(["from_feed", "profile"])],
@@ -40,10 +31,7 @@ export function snapshotDestination(href: string): {
       return { value: "https://meta.ai/", facts };
     if (!(url.hostname === "facebook.com" || url.hostname.endsWith(".facebook.com")))
       return { value: "https://external.invalid/[path]", facts };
-    const publicPath = publicPaths.find(
-      (path) => url.pathname === path.slice(0, -1) || url.pathname.startsWith(path)
-    );
-    let value = publicPath || sanitizePathname(url.pathname);
+    let value = sanitizePathname(url.pathname);
     const query = new URLSearchParams();
     for (const [key, values] of publicQuery) {
       const original = url.searchParams.get(key);

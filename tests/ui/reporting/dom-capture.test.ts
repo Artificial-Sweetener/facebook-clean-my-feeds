@@ -49,9 +49,10 @@ describe("independent sanitized DOM capture", () => {
     const target = mountComplaint();
     const snapshot = await captureDomSnapshot(document, { target });
     const text = JSON.stringify(snapshot);
-    expect(text).toContain("Neighborhood discoveries");
-    expect(text).toContain("Explore nearby topics");
-    expect(text).toContain("Keep this module");
+    expect(text).not.toContain("Neighborhood discoveries");
+    expect(text).toContain("[uncertain text]");
+    expect(text).not.toContain("Explore nearby topics");
+    expect(elements(snapshot).filter((node) => node.tag === "button").length).toBeGreaterThan(2);
     expect(snapshot.target).not.toBeNull();
     expect(snapshot.regions[0]?.selection).toBe("target");
     expect(snapshot.regions[0]?.root.tag).toBe("section");
@@ -59,9 +60,7 @@ describe("independent sanitized DOM capture", () => {
       snapshot.regions[0]?.ancestors.some((ancestor) => ancestor.attributes.role === "main")
     ).toBe(true);
     const buttons = elements(snapshot).filter((node) => node.tag === "button");
-    expect(buttons.some((node) => node.attributes["aria-label"] === "Explore nearby topics")).toBe(
-      true
-    );
+    expect(buttons.some((node) => node.attributes["aria-label"] === "[uncertain text]")).toBe(true);
     expect(
       elements(snapshot).some(
         (node) =>
@@ -126,8 +125,7 @@ describe("independent sanitized DOM capture", () => {
     const text = JSON.stringify(snapshot);
     for (const secret of ["Alice", "PrivateSurname", "alice@example.test", "555 123 4567"])
       expect(text).not.toContain(secret);
-    expect(text).toContain("[identity]");
-    expect(text).toContain("[email]");
+    expect(text).toContain("[uncertain text]");
   });
 
   test("does not promote an external authored label into public interface text", async () => {
@@ -185,7 +183,7 @@ describe("independent sanitized DOM capture", () => {
 
   test("oversized interface labels are explicitly omitted rather than partially exported", async () => {
     const target = mountComplaint();
-    target.textContent = "long interface label ".repeat(30);
+    target.innerHTML = `<h4><a href="/publisher?__cft__[0]=${"x".repeat(400)}"><span aria-labelledby="oversized"><svg></svg></span></a></h4><span id="oversized">${"long interface label ".repeat(30)}</span>`;
     const snapshot = await captureDomSnapshot(document, {
       target,
       limits: { labelCharacters: 24 },
@@ -233,13 +231,13 @@ describe("independent sanitized DOM capture", () => {
   });
 
   test.each(["محتوى ترويجي جديد", "新しいおすすめ", "Nouveaux sujets à découvrir", "Нова добірка"])(
-    "retains unfamiliar interface copy without guessing its language: %s",
+    "redacts unfamiliar control copy without guessing its language: %s",
     async (label) => {
       const target = mountComplaint();
       target.textContent = label;
       target.setAttribute("aria-label", label);
       const snapshot = await captureDomSnapshot(document, { target });
-      expect(JSON.stringify(snapshot)).toContain(label);
+      expect(JSON.stringify(snapshot).includes(label)).toBe(false);
     }
   );
 });
@@ -249,8 +247,8 @@ test("identity names from ordinary profile anchors are removed from personalized
   const snapshot = await captureDomSnapshot(document);
   expect(JSON.stringify(snapshot)).not.toContain("PrivateOwner");
   expect(JSON.stringify(snapshot)).not.toContain("FamilyName");
-  expect(JSON.stringify(snapshot)).toContain("Create a post");
-  expect(JSON.stringify(snapshot)).toContain("[identity]");
+  expect(JSON.stringify(snapshot).includes("Create a post")).toBe(false);
+  expect(JSON.stringify(snapshot)).toContain("[uncertain text]");
 });
 
 test("a selected unfamiliar heading includes its nearby controls through wrapper-only ancestors", async () => {
@@ -260,7 +258,9 @@ test("a selected unfamiliar heading includes its nearby controls through wrapper
   const region = snapshot.regions[0];
   expect(region?.selection).toBe("target");
   expect(region?.root.attributes).toHaveProperty("data-new-card");
-  expect(JSON.stringify(region)).toContain("Dismiss");
+  expect(
+    region?.root.children.some((node) => node.kind === "element" && node.tag === "button")
+  ).toBe(true);
   expect(JSON.stringify(snapshot)).not.toContain("Private text");
   expect(snapshot.regions[1]?.selection).toBe("neighbor");
 });

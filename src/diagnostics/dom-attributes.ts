@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import type { SnapshotAttributeChange, SnapshotContent } from "../core/diagnostics/dom-snapshot";
-import { SnapshotPrivacy } from "./dom-privacy";
+import { isDisclosureLink, SnapshotPrivacy } from "./dom-privacy";
 import { snapshotDestination } from "./dom-destinations";
 
 const references = new Set([
@@ -172,7 +172,12 @@ export class SnapshotAttributes {
           .filter(Boolean)
           .slice(0, 8)
           .map((id) =>
-            this.reference(id, content === "interface" && /labelledby|describedby/.test(name))
+            this.reference(
+              id,
+              content === "interface" &&
+                name === "aria-labelledby" &&
+                isDisclosureLink(element.closest("a") || element)
+            )
           )
           .join(" ");
         changes[name] = "alias";
@@ -208,7 +213,7 @@ export class SnapshotAttributes {
       } else if (name === "lang" && /^[a-z]{2,3}(?:-[a-z0-9]{2,8}){0,3}$/i.test(value)) {
         attributes.lang = value;
       } else if (["aria-label", "title"].includes(name)) {
-        attributes[name] = this.privacy.text(value, content).slice(0, 180);
+        attributes[name] = this.privacy.accessibleText(element, value, content).slice(0, 180);
         if (attributes[name] !== value) changes[name] = "redacted";
       } else if (name === "href" || name === "xlink:href") {
         if (value.startsWith("#") && element.namespaceURI === "http://www.w3.org/2000/svg") {

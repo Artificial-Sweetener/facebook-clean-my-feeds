@@ -4,6 +4,7 @@ import type { SnapshotContent } from "../core/diagnostics/dom-snapshot";
 import { sanitizePathname } from "./location";
 import { sharedSelectors } from "../selectors/shared";
 import { matchesSponsoredLabel } from "../core/filters/disclosure-labels";
+import { translations } from "../i18n";
 
 const authored = `${sharedSelectors.authoredContent}, textarea, input, [role="textbox"], [role="log"], [data-lexical-editor]`;
 const identity =
@@ -13,17 +14,56 @@ const control =
 const heading = 'h1, h2, h3, h4, h5, h6, [role="heading"]';
 const excluded = "script, style, noscript, template, iframe, object, embed, canvas, foreignObject";
 
+/** Compare complete fixed product copy across all locales; partial word matches cannot establish public provenance. */
+function normalizeLabel(value: string): string {
+  return value.normalize("NFKC").replace(/\s+/g, " ").trim().toLocaleLowerCase("en-US");
+}
+
+const fixedLabels = new Set(
+  Object.values(translations).flatMap((catalog) =>
+    Object.values(catalog).flatMap((value) =>
+      (Array.isArray(value) ? value : [value])
+        .filter((label): label is string => typeof label === "string" && label.trim() !== "")
+        .map(normalizeLabel)
+    )
+  )
+);
+
+/** Require a header disclosure relationship rather than assuming every accessible name is public copy. */
+export function isDisclosureLink(element: Element): boolean {
+  if (!element.matches("a[href]") || !element.closest("h4, h5")) return false;
+  try {
+    const url = new URL(element.getAttribute("href") || "", "https://www.facebook.com/");
+    const text = boundedText(element);
+    return (
+      /^https?:$/.test(url.protocol) &&
+      !url.username &&
+      !url.password &&
+      /(^|\.)facebook\.com$/.test(url.hostname) &&
+      url.searchParams.has("__cft__[0]") &&
+      !element.matches(identity) &&
+      text !== null &&
+      (!text || matchesSponsoredLabel(text)) &&
+      (element.querySelector("svg[aria-label], svg[aria-labelledby], span[aria-labelledby]") !==
+        null ||
+        matchesSponsoredLabel(element.getAttribute("aria-label") || text || ""))
+    );
+  } catch {
+    return false;
+  }
+}
+
 /** Collect only bounded text used to recognize identity strings locally; none of this dictionary is serialized. */
-function boundedText(element: Element, maximum = 180): string {
+function boundedText(element: Element, maximum = 180): string | null {
   const walker = element.ownerDocument.createTreeWalker(element, NodeFilter.SHOW_TEXT);
   let text = "";
   let count = 0;
   let node: Node | null;
   while ((node = walker.nextNode())) {
-    if (++count > 24 || text.length > maximum) return "";
+    if (++count > 24 || text.length > maximum) return null;
     text += node.textContent || "";
   }
-  return text.length <= maximum ? text.trim() : "";
+  return text.length <= maximum ? text.trim() : null;
 }
 
 /** Classify destinations before interpreting their labels; profile/content anchors are never public UI by default. */
@@ -38,11 +78,7 @@ export function isInterfaceLink(element: Element): boolean {
     return (
       /^\/(?:ads\/about|business\/help|help|settings|privacy)(?:\/|$)/.test(url.pathname) ||
       /^\/(?:groups\/discover|friends|reel|stories|watch)\/?$/.test(url.pathname) ||
-      (url.searchParams.has("__cft__[0]") &&
-        element.closest("h4, h5") !== null &&
-        (element.querySelector("svg[aria-label], svg[aria-labelledby], span[aria-labelledby]") !==
-          null ||
-          matchesSponsoredLabel(element.getAttribute("aria-label") || boundedText(element))))
+      isDisclosureLink(element)
     );
   } catch {
     return false;
@@ -93,16 +129,44 @@ export class SnapshotPrivacy {
     }
   }
 
-  /** Prefer private provenance over public-control heuristics; unfamiliar ordinary content stays uncertain and redacted. */
+  /**
+   * Keep private boundaries authoritative; headings and controls require complete fixed copy before text retention.
+   * Novel disclosure labels use their constrained header/graphic relationship instead of a vocabulary match.
+   * @param element Original page element whose ancestors and bounded caption establish text provenance.
+   * @returns Privacy category shared by text and attribute capture; uncertain copy is automatically redacted.
+   */
   content(element: Element): SnapshotContent {
     if (element.closest(excluded)) return "excluded";
     if (element.closest(authored)) return "authored";
     if (element.closest(identity)) return "identity";
     const link = element.closest("a");
     if (link && !isInterfaceLink(link)) return "identity";
-    if (element.closest(control) || element.closest(heading)) return "interface";
-    if (link && isInterfaceLink(link)) return "interface";
+    if (
+      link &&
+      isDisclosureLink(link) &&
+      element.closest("svg[aria-label], svg[aria-labelledby], span[aria-labelledby]")
+    )
+      return "interface";
+    const labelOwner = element.closest(`${control}, ${heading}, a`);
+    if (labelOwner) {
+      const text = boundedText(labelOwner);
+      const label = labelOwner.getAttribute("aria-label");
+      if (
+        ((text && fixedLabels.has(normalizeLabel(text))) ||
+          (!text && label && fixedLabels.has(normalizeLabel(label)))) &&
+        (!label || !text || normalizeLabel(label) === normalizeLabel(text))
+      )
+        return "interface";
+    }
     return "uncertain";
+  }
+
+  /** An attribute must establish its own fixed-copy provenance; a safe visible caption cannot authorize a private title. */
+  accessibleText(element: Element, value: string, content: SnapshotContent): string {
+    const link = element.closest("a");
+    const publicLabel =
+      fixedLabels.has(normalizeLabel(value)) || (link !== null && isDisclosureLink(link));
+    return this.text(value, content === "interface" && !publicLabel ? "uncertain" : content);
   }
 
   /**
@@ -147,6 +211,7 @@ export class SnapshotPrivacy {
   /** Text provenance controls disclosure; unknown text does not become public just because a detector missed it. */
   text(value: string, content: SnapshotContent): string {
     if (!value.trim()) return "";
-    return content === "interface" ? this.interfaceText(value) : `[${content} text]`;
+    if (content !== "interface") return `[${content} text]`;
+    return this.interfaceText(value);
   }
 }

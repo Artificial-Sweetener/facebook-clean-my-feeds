@@ -173,6 +173,17 @@ class DomCapture {
     };
   }
 
+  /** Restore a bounded disclosure leaf already visited before its ARIA source, using the same budgets as external labels. */
+  promoteLabel(source: Element, copy: SnapshotElement): void {
+    copy.content = "interface";
+    for (const [index, node] of Array.from(source.childNodes).entries()) {
+      const previous = copy.children[index];
+      if (node.nodeType !== Node.TEXT_NODE || previous?.kind !== "text") continue;
+      if (previous.content !== "interface" && node.textContent?.trim()) this.redacted--;
+      copy.children[index] = this.text(node, "interface");
+    }
+  }
+
   /**
    * Copy one region using iterative traversal, releasing the event loop between bounded batches.
    * @param element Region root selected independently of filter outcomes.
@@ -297,7 +308,13 @@ export async function captureDomSnapshot(
         continue;
       }
       const existing = capture.captured.get(target);
+      const publicLeaf =
+        pending.interfaceLabel &&
+        target.localName === "span" &&
+        target.childElementCount === 0 &&
+        capture.privacy.content(target) === "uncertain";
       if (existing) {
+        if (publicLeaf) capture.promoteLabel(target, existing);
         references.push({ id: pending.id, status: "captured", target: null });
         continue;
       }
@@ -305,11 +322,6 @@ export async function captureDomSnapshot(
         references.push({ id: pending.id, status: "budget-exceeded", target: null });
         continue;
       }
-      const publicLeaf =
-        pending.interfaceLabel &&
-        target.localName === "span" &&
-        target.childElementCount === 0 &&
-        capture.privacy.content(target) === "uncertain";
       const copy = await capture.region(target, publicLeaf ? "interface" : undefined);
       references.push({ id: pending.id, status: "external", target: copy });
     }

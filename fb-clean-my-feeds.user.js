@@ -4412,7 +4412,25 @@
         ["listing", "[item]"],
         ["category", "[category]"]
       ]);
-      routeRules = /* @__PURE__ */ new Map([
+      routeRules = new Map([
+        [
+          "friends",
+          {
+            identifier: "[profile]",
+            firstSegments: /* @__PURE__ */ new Set(["requests", "suggestions", "all", "birthdays"]),
+            laterSegments: /* @__PURE__ */ new Set()
+          }
+        ],
+        ["stories", { identifier: "[profile]", firstSegments: /* @__PURE__ */ new Set(), laterSegments: /* @__PURE__ */ new Set() }],
+        ["ads", { identifier: "[segment]", firstSegments: /* @__PURE__ */ new Set(["about"]), laterSegments: /* @__PURE__ */ new Set() }],
+        [
+          "business",
+          { identifier: "[segment]", firstSegments: /* @__PURE__ */ new Set(["help"]), laterSegments: /* @__PURE__ */ new Set() }
+        ],
+        ...["help", "privacy", "settings", "events"].map((root) => [
+          root,
+          { identifier: "[segment]", firstSegments: /* @__PURE__ */ new Set(), laterSegments: /* @__PURE__ */ new Set() }
+        ]),
         [
           "groups",
           {
@@ -4666,16 +4684,29 @@
   });
 
   // src/diagnostics/dom-privacy.ts
+  function normalizeLabel(value) {
+    return value.normalize("NFKC").replace(/\s+/g, " ").trim().toLocaleLowerCase("en-US");
+  }
+  function isDisclosureLink(element) {
+    if (!element.matches("a[href]") || !element.closest("h4, h5")) return false;
+    try {
+      const url = new URL(element.getAttribute("href") || "", "https://www.facebook.com/");
+      const text = boundedText(element);
+      return /^https?:$/.test(url.protocol) && !url.username && !url.password && /(^|\.)facebook\.com$/.test(url.hostname) && url.searchParams.has("__cft__[0]") && !element.matches(identity) && text !== null && (!text || matchesSponsoredLabel(text)) && (element.querySelector("svg[aria-label], svg[aria-labelledby], span[aria-labelledby]") !== null || matchesSponsoredLabel(element.getAttribute("aria-label") || text || ""));
+    } catch (e) {
+      return false;
+    }
+  }
   function boundedText(element, maximum = 180) {
     const walker = element.ownerDocument.createTreeWalker(element, NodeFilter.SHOW_TEXT);
     let text = "";
     let count = 0;
     let node;
     while (node = walker.nextNode()) {
-      if (++count > 24 || text.length > maximum) return "";
+      if (++count > 24 || text.length > maximum) return null;
       text += node.textContent || "";
     }
-    return text.length <= maximum ? text.trim() : "";
+    return text.length <= maximum ? text.trim() : null;
   }
   function isInterfaceLink(element) {
     const href = element.getAttribute("href");
@@ -4685,7 +4716,7 @@
       if (!/^https?:$/.test(url.protocol) || url.username || url.password) return false;
       if (url.hostname === "meta.ai" || url.hostname.endsWith(".meta.ai")) return true;
       if (!(url.hostname === "facebook.com" || url.hostname.endsWith(".facebook.com"))) return false;
-      return /^\/(?:ads\/about|business\/help|help|settings|privacy)(?:\/|$)/.test(url.pathname) || /^\/(?:groups\/discover|friends|reel|stories|watch)\/?$/.test(url.pathname) || url.searchParams.has("__cft__[0]") && element.closest("h4, h5") !== null && (element.querySelector("svg[aria-label], svg[aria-labelledby], span[aria-labelledby]") !== null || matchesSponsoredLabel(element.getAttribute("aria-label") || boundedText(element)));
+      return /^\/(?:ads\/about|business\/help|help|settings|privacy)(?:\/|$)/.test(url.pathname) || /^\/(?:groups\/discover|friends|reel|stories|watch)\/?$/.test(url.pathname) || isDisclosureLink(element);
     } catch (e) {
       return false;
     }
@@ -4699,18 +4730,26 @@
       return false;
     }
   }
-  var authored, identity, control, heading, excluded, SnapshotPrivacy;
+  var authored, identity, control, heading, excluded, fixedLabels, SnapshotPrivacy;
   var init_dom_privacy = __esm({
     "src/diagnostics/dom-privacy.ts"() {
       "use strict";
       init_location();
       init_shared();
       init_disclosure_labels2();
+      init_i18n();
       authored = `${sharedSelectors.authoredContent}, textarea, input, [role="textbox"], [role="log"], [data-lexical-editor]`;
       identity = '[data-ad-rendering-role="profile_name"], [data-hovercard], [data-profileid], [data-userid]';
       control = 'button, [role="button"], [role="menuitem"], [role="tab"], [role="checkbox"], [role="switch"], [role="option"]';
       heading = 'h1, h2, h3, h4, h5, h6, [role="heading"]';
       excluded = "script, style, noscript, template, iframe, object, embed, canvas, foreignObject";
+      fixedLabels = new Set(
+        Object.values(translations).flatMap(
+          (catalog24) => Object.values(catalog24).flatMap(
+            (value) => (Array.isArray(value) ? value : [value]).filter((label) => typeof label === "string" && label.trim() !== "").map(normalizeLabel)
+          )
+        )
+      );
       SnapshotPrivacy = class {
         constructor() {
           this.identities = /* @__PURE__ */ new Set();
@@ -4736,16 +4775,34 @@
             if (alt && alt.length <= 180) this.identities.add(alt);
           }
         }
-        /** Prefer private provenance over public-control heuristics; unfamiliar ordinary content stays uncertain and redacted. */
+        /**
+         * Keep private boundaries authoritative; headings and controls require complete fixed copy before text retention.
+         * Novel disclosure labels use their constrained header/graphic relationship instead of a vocabulary match.
+         * @param element Original page element whose ancestors and bounded caption establish text provenance.
+         * @returns Privacy category shared by text and attribute capture; uncertain copy is automatically redacted.
+         */
         content(element) {
           if (element.closest(excluded)) return "excluded";
           if (element.closest(authored)) return "authored";
           if (element.closest(identity)) return "identity";
           const link = element.closest("a");
           if (link && !isInterfaceLink(link)) return "identity";
-          if (element.closest(control) || element.closest(heading)) return "interface";
-          if (link && isInterfaceLink(link)) return "interface";
+          if (link && isDisclosureLink(link) && element.closest("svg[aria-label], svg[aria-labelledby], span[aria-labelledby]"))
+            return "interface";
+          const labelOwner = element.closest(`${control}, ${heading}, a`);
+          if (labelOwner) {
+            const text = boundedText(labelOwner);
+            const label = labelOwner.getAttribute("aria-label");
+            if ((text && fixedLabels.has(normalizeLabel(text)) || !text && label && fixedLabels.has(normalizeLabel(label))) && (!label || !text || normalizeLabel(label) === normalizeLabel(text)))
+              return "interface";
+          }
           return "uncertain";
+        }
+        /** An attribute must establish its own fixed-copy provenance; a safe visible caption cannot authorize a private title. */
+        accessibleText(element, value, content) {
+          const link = element.closest("a");
+          const publicLabel = fixedLabels.has(normalizeLabel(value)) || link !== null && isDisclosureLink(link);
+          return this.text(value, content === "interface" && !publicLabel ? "uncertain" : content);
         }
         /**
          * Retain novel interface words while removing observed names, addresses, contact details and opaque identifiers.
@@ -4769,7 +4826,8 @@
         /** Text provenance controls disclosure; unknown text does not become public just because a detector missed it. */
         text(value, content) {
           if (!value.trim()) return "";
-          return content === "interface" ? this.interfaceText(value) : `[${content} text]`;
+          if (content !== "interface") return `[${content} text]`;
+          return this.interfaceText(value);
         }
       };
     }
@@ -4791,10 +4849,7 @@
         return { value: "https://meta.ai/", facts };
       if (!(url.hostname === "facebook.com" || url.hostname.endsWith(".facebook.com")))
         return { value: "https://external.invalid/[path]", facts };
-      const publicPath = publicPaths.find(
-        (path) => url.pathname === path.slice(0, -1) || url.pathname.startsWith(path)
-      );
-      let value = publicPath || sanitizePathname(url.pathname);
+      let value = sanitizePathname(url.pathname);
       const query = new URLSearchParams();
       for (const [key, values] of publicQuery) {
         const original = url.searchParams.get(key);
@@ -4813,20 +4868,11 @@
       return { value: "[invalid-destination]", facts };
     }
   }
-  var publicPaths, publicQuery;
+  var publicQuery;
   var init_dom_destinations = __esm({
     "src/diagnostics/dom-destinations.ts"() {
       "use strict";
       init_location();
-      publicPaths = [
-        "/ads/about/",
-        "/business/help/",
-        "/help/",
-        "/privacy/",
-        "/settings/",
-        "/events/",
-        "/friends/"
-      ];
       publicQuery = /* @__PURE__ */ new Map([
         ["s", /* @__PURE__ */ new Set(["ifu_see_more"])],
         ["source", /* @__PURE__ */ new Set(["from_feed", "profile"])],
@@ -4840,6 +4886,7 @@
   var init_dom_attributes = __esm({
     "src/diagnostics/dom-attributes.ts"() {
       "use strict";
+      init_dom_privacy();
       init_dom_destinations();
       references = /* @__PURE__ */ new Set([
         "aria-labelledby",
@@ -4981,7 +5028,10 @@
             } else if (references.has(name)) {
               if (value.trim().split(/\s+/, 9).length > 8) this.omit("reference-token-limit");
               attributes[name] = value.trim().split(/\s+/, 8).filter(Boolean).slice(0, 8).map(
-                (id) => this.reference(id, content === "interface" && /labelledby|describedby/.test(name))
+                (id) => this.reference(
+                  id,
+                  content === "interface" && name === "aria-labelledby" && isDisclosureLink(element.closest("a") || element)
+                )
               ).join(" ");
               changes[name] = "alias";
             } else if (booleans.has(name)) {
@@ -5012,7 +5062,7 @@
             } else if (name === "lang" && /^[a-z]{2,3}(?:-[a-z0-9]{2,8}){0,3}$/i.test(value)) {
               attributes.lang = value;
             } else if (["aria-label", "title"].includes(name)) {
-              attributes[name] = this.privacy.text(value, content).slice(0, 180);
+              attributes[name] = this.privacy.accessibleText(element, value, content).slice(0, 180);
               if (attributes[name] !== value) changes[name] = "redacted";
             } else if (name === "href" || name === "xlink:href") {
               if (value.startsWith("#") && element.namespaceURI === "http://www.w3.org/2000/svg") {
@@ -5268,7 +5318,9 @@
           continue;
         }
         const existing = capture.captured.get(target);
+        const publicLeaf = pending.interfaceLabel && target.localName === "span" && target.childElementCount === 0 && capture.privacy.content(target) === "uncertain";
         if (existing) {
+          if (publicLeaf) capture.promoteLabel(target, existing);
           references2.push({ id: pending.id, status: "captured", target: null });
           continue;
         }
@@ -5276,7 +5328,6 @@
           references2.push({ id: pending.id, status: "budget-exceeded", target: null });
           continue;
         }
-        const publicLeaf = pending.interfaceLabel && target.localName === "span" && target.childElementCount === 0 && capture.privacy.content(target) === "uncertain";
         const copy = await capture.region(target, publicLeaf ? "interface" : void 0);
         references2.push({ id: pending.id, status: "external", target: copy });
       }
@@ -5408,6 +5459,17 @@
             size: !value.trim() ? "empty" : value.length <= 32 ? "short" : value.length <= 180 ? "medium" : "long"
           };
         }
+        /** Restore a bounded disclosure leaf already visited before its ARIA source, using the same budgets as external labels. */
+        promoteLabel(source, copy) {
+          var _a;
+          copy.content = "interface";
+          for (const [index, node] of Array.from(source.childNodes).entries()) {
+            const previous = copy.children[index];
+            if (node.nodeType !== Node.TEXT_NODE || (previous == null ? void 0 : previous.kind) !== "text") continue;
+            if (previous.content !== "interface" && ((_a = node.textContent) == null ? void 0 : _a.trim())) this.redacted--;
+            copy.children[index] = this.text(node, "interface");
+          }
+        }
         /**
          * Copy one region using iterative traversal, releasing the event loop between bounded batches.
          * @param element Region root selected independently of filter outcomes.
@@ -5501,7 +5563,7 @@
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:b699d1d7e54d522938df95a5972dce170321113a9500f72a11cbfce7157479fc" : "unbundled";
+      buildIdentity = true ? "source-sha256:5aa9b73a53e0df49dc91beec99418ad3adf57379bb4833e3fe047a5e2ecc54d8" : "unbundled";
     }
   });
 
@@ -7730,19 +7792,19 @@
   });
 
   // src/core/filters/labels.ts
-  function normalizeLabel(text) {
+  function normalizeLabel2(text) {
     return cleanText(text).replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g, "").replace(/\s+/g, " ").trim().toLowerCase();
   }
   function matchesNewsLabel(text, kind) {
     var _a;
-    const normalized = normalizeLabel(text);
+    const normalized = normalizeLabel2(text);
     return normalized !== "" && ((_a = labelsByKind.get(kind)) == null ? void 0 : _a.has(normalized)) === true;
   }
   function matchesNewsPaidBy(text) {
-    const label = normalizeLabel(text);
+    const label = normalizeLabel2(text);
     return Object.values(newsLabels).some(
       (labels2) => labels2[8].split("|").some((template) => {
-        const [prefix = "", suffix = ""] = normalizeLabel(template).split("______");
+        const [prefix = "", suffix = ""] = normalizeLabel2(template).split("______");
         return (prefix !== "" || suffix !== "") && label.startsWith(prefix) && label.endsWith(suffix) && label.slice(prefix.length, label.length - suffix.length).trim() !== "";
       })
     );
@@ -7768,7 +7830,7 @@
           kind,
           new Set(
             Object.values(newsLabels).flatMap(
-              (labels2) => (labels2[index] || "").split("|").map(normalizeLabel)
+              (labels2) => (labels2[index] || "").split("|").map(normalizeLabel2)
             )
           )
         ])

@@ -43,6 +43,24 @@ const identifierLabels = new Map([
 ]);
 const routeRules = new Map<string, RoutePrivacyRule>([
   [
+    "friends",
+    {
+      identifier: "[profile]",
+      firstSegments: new Set(["requests", "suggestions", "all", "birthdays"]),
+      laterSegments: new Set(),
+    },
+  ],
+  ["stories", { identifier: "[profile]", firstSegments: new Set(), laterSegments: new Set() }],
+  ["ads", { identifier: "[segment]", firstSegments: new Set(["about"]), laterSegments: new Set() }],
+  [
+    "business",
+    { identifier: "[segment]", firstSegments: new Set(["help"]), laterSegments: new Set() },
+  ],
+  ...["help", "privacy", "settings", "events"].map((root): [string, RoutePrivacyRule] => [
+    root,
+    { identifier: "[segment]", firstSegments: new Set(), laterSegments: new Set() },
+  ]),
+  [
     "groups",
     {
       identifier: "[group]",

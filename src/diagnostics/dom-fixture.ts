@@ -129,9 +129,18 @@ export function snapshotRegionHtml(snapshot: DomSnapshot, region: SnapshotRegion
     if (node.attributes.id) rootIds.add(node.attributes.id);
     queue.push(...node.children);
   }
+  const capturedIds = new Map<string, SnapshotElement>();
+  const captured: SnapshotNode[] = snapshot.regions.map((entry) => entry.root);
+  while (captured.length) {
+    const node = captured.pop();
+    if (node?.kind !== "element") continue;
+    if (node.attributes.id) capturedIds.set(node.attributes.id, node);
+    captured.push(...node.children);
+  }
   const references = snapshot.references
-    .filter((reference) => reference.target && !rootIds.has(reference.id))
-    .map((reference) => (reference.target ? nodeHtml(reference.target) : ""))
+    .filter((reference) => !rootIds.has(reference.id))
+    .map((reference) => reference.target || capturedIds.get(reference.id))
+    .map((target) => (target ? nodeHtml(target) : ""))
     .join("");
   return `<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; form-action 'none'; base-uri 'none'"><title>CMF sanitized DOM fixture</title></head><body>${tree}${references}</body></html>`;
 }
@@ -171,6 +180,8 @@ export function testSnapshotSelector(
     result.warnings.push("identifiers-and-classes-are-report-local");
   if (/data-cmf-/.test(selector))
     result.warnings.push("diagnostic-attributes-do-not-exist-on-facebook");
+  if (/\[(?:xlink\\:)?href\b/i.test(structure))
+    result.warnings.push("destinations-are-redacted-structural-templates");
   if (/style|:visible|:hidden/.test(selector))
     result.warnings.push("styles-are-projected-from-rendering-facts");
   if (/:nth-|:first-|:last-|:only-|[+~]/.test(selector))

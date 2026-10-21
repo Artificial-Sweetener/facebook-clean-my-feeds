@@ -21,7 +21,8 @@ test("the normal no-selection workflow captures an unknown disclosure and module
   document.body.replaceChildren();
   const fixtures = snapshot.regions.map((region) => snapshotRegionHtml(snapshot, region));
   expect(fixtures.join("")).toContain("Commercial notice beta");
-  expect(fixtures.join("")).toContain("Local discovery capsule");
+  expect(fixtures.join("").includes("Local discovery capsule")).toBe(false);
+  expect(fixtures.join("")).toContain("data-new-widget");
   expect(fixtures.join("")).not.toMatch(
     /PrivateAuthor|PrivateFriend|PrivateCreative|secret-session/
   );

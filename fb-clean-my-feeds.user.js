@@ -5912,7 +5912,7 @@
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:df4ea621d9b9dfdc80f82b9e98075c327906fb72ca959b37ce2d2ed668274fdd" : "unbundled";
+      buildIdentity = true ? "source-sha256:5ead7322280dc89f2218173ce210094dad3667c09f7250be8afe58251d7a41fb" : "unbundled";
     }
   });
 
@@ -7126,57 +7126,125 @@
     }
   });
 
+  // src/dom/ownership.ts
+  function ownsPostElement(element, post, boundary = {}) {
+    var _a, _b;
+    if (!post.contains(element)) return false;
+    const marked = element.closest(`[${postAtt}]`);
+    if (marked && marked !== post) return false;
+    const authored2 = element.closest(sharedSelectors.authoredContent);
+    if (authored2 && post.contains(authored2)) return false;
+    if ((_a = boundary.bodies) == null ? void 0 : _a.some((body) => body.contains(element))) return false;
+    const owner = element.closest(sharedSelectors.postOwner);
+    if (!owner || owner === post || !post.contains(owner)) return true;
+    if (!boundary.allowArticleWrapper || post.matches(`${sharedSelectors.postOwner}, div[aria-describedby], div[data-virtualized]`))
+      return false;
+    const parentOwner = (_b = owner.parentElement) == null ? void 0 : _b.closest(sharedSelectors.postOwner);
+    return !parentOwner || !post.contains(parentOwner);
+  }
+  var init_ownership = __esm({
+    "src/dom/ownership.ts"() {
+      "use strict";
+      init_attributes();
+      init_shared();
+    }
+  });
+
   // src/dom/info-boxes.ts
-  function getMatch(value) {
-    return typeof value === "object" ? value.pathMatch : void 0;
+  function restoreDebug(box, record) {
+    if (!record.debugApplied || box.getAttribute(record.showAttribute) !== "") return;
+    if (record.originalShow === null) box.removeAttribute(record.showAttribute);
+    else box.setAttribute(record.showAttribute, record.originalShow);
+    record.debugApplied = false;
   }
-  function scrubInfoBoxes(post, options, keyWords, pathInfo2, state) {
-    if (!post || !options || !keyWords || !pathInfo2 || !state) {
-      return;
-    }
-    let hiding = false;
-    if (options.OTHER_INFO_BOX_CLIMATE_SCIENCE && pathInfo2.OTHER_INFO_BOX_CLIMATE_SCIENCE && getMatch(pathInfo2.OTHER_INFO_BOX_CLIMATE_SCIENCE)) {
-      const elLink = post.querySelector(
-        `a[href*="${getMatch(pathInfo2.OTHER_INFO_BOX_CLIMATE_SCIENCE)}"]:not([${postAtt}])`
-      );
-      if (elLink) {
-        const block = climbUpTheTree(elLink, 5);
-        hideBlock(block, elLink, keyWords.OTHER_INFO_BOX_CLIMATE_SCIENCE, state, options, {
-          postAtt
-        });
-        hiding = true;
-      }
-    }
-    if (!hiding && options.OTHER_INFO_BOX_CORONAVIRUS && pathInfo2.OTHER_INFO_BOX_CORONAVIRUS && getMatch(pathInfo2.OTHER_INFO_BOX_CORONAVIRUS)) {
-      const elLink = post.querySelector(
-        `a[href*="${getMatch(pathInfo2.OTHER_INFO_BOX_CORONAVIRUS)}"]:not([${postAtt}])`
-      );
-      if (elLink) {
-        const block = climbUpTheTree(elLink, 5);
-        hideBlock(block, elLink, keyWords.OTHER_INFO_BOX_CORONAVIRUS, state, options, {
-          postAtt
-        });
-        hiding = true;
-      }
-    }
-    if (!hiding && options.OTHER_INFO_BOX_SUBSCRIBE && pathInfo2.OTHER_INFO_BOX_SUBSCRIBE && getMatch(pathInfo2.OTHER_INFO_BOX_SUBSCRIBE)) {
-      const elLink = post.querySelector(
-        `a[href*="${getMatch(pathInfo2.OTHER_INFO_BOX_SUBSCRIBE)}"]:not([${postAtt}])`
-      );
-      if (elLink) {
-        const block = climbUpTheTree(elLink, 5);
-        hideBlock(block, elLink, keyWords.OTHER_INFO_BOX_SUBSCRIBE, state, options, {
-          postAtt
-        });
-      }
-    }
+  function restoreBox(box, record) {
+    if (box.getAttribute(record.hideAttribute) === "") box.removeAttribute(record.hideAttribute);
+    if (record.link.getAttribute(postAtt) === record.reason) record.link.removeAttribute(postAtt);
+    restoreDebug(box, record);
   }
+  function findInfoBox(link, post, previous, state) {
+    const box = climbUpTheTree(link, 5);
+    if (!(box instanceof Element) || box === post || !post.contains(box)) return null;
+    if (box.matches(sharedSelectors.postOwner) || box.querySelector(
+      `${sharedSelectors.postOwner}, ${sharedSelectors.profileName}, ${sharedSelectors.storyMessage}, h4, h5, [role="feed"], [role="navigation"], [role="main"]`
+    ))
+      return null;
+    const owned = previous.get(box);
+    const marker = link.getAttribute(postAtt);
+    const ownLink = (owned == null ? void 0 : owned.link) === link && (marker === null || marker === owned.reason);
+    if (marker !== null && !ownLink) return null;
+    if (box.hasAttribute(state.cssHideEl) && !owned) return null;
+    const control2 = ownLink ? link.parentElement : link;
+    if (!control2 || link.matches(sharedSelectors.authoredContent) || !ownsPostElement(control2, post))
+      return null;
+    const evidence = getPostEvidence(post);
+    if (owned && box.getAttribute(owned.hideAttribute) === "") {
+      if (box.matches('[hidden], [aria-hidden="true"]') || !box.parentElement || !evidence.isRendered(box.parentElement) || !getPostEvidence(box).isRendered(link))
+        return null;
+    } else if (!evidence.isRendered(link)) return null;
+    return box;
+  }
+  function scrubInfoBoxes(post, options, keyWords, paths, state) {
+    var _a, _b;
+    if (!post || !options || !keyWords || !paths || !state) return;
+    const previous = (_a = ownedBoxes.get(post)) != null ? _a : /* @__PURE__ */ new Map();
+    const targets = /* @__PURE__ */ new Map();
+    const links = getPostEvidence(post).select("a[href]");
+    for (const topic of topics) {
+      const path = paths[topic];
+      if (!options[topic] || !path) continue;
+      for (const link of links) {
+        const url = facebookUrl(link);
+        if (!url || !url.pathname.startsWith(path)) continue;
+        const box = findInfoBox(link, post, previous, state);
+        if (box && !targets.has(box)) targets.set(box, { link, reason: keyWords[topic] });
+      }
+    }
+    for (const [box, record] of previous) {
+      const target = targets.get(box);
+      if (!target || target.link !== record.link || record.hideAttribute !== state.cssHideEl || record.showAttribute !== state.showAtt) {
+        restoreBox(box, record);
+        previous.delete(box);
+      }
+    }
+    for (const [box, target] of targets) {
+      const record = (_b = previous.get(box)) != null ? _b : {
+        link: target.link,
+        reason: target.reason,
+        hideAttribute: state.cssHideEl,
+        showAttribute: state.showAtt,
+        originalShow: box.getAttribute(state.showAtt),
+        debugApplied: false
+      };
+      if (!options.VERBOSITY_DEBUG) restoreDebug(box, record);
+      else if (box.getAttribute(state.showAtt) !== "")
+        record.originalShow = box.getAttribute(state.showAtt);
+      if (box.getAttribute(state.cssHideEl) !== "" || target.link.getAttribute(postAtt) !== target.reason || options.VERBOSITY_DEBUG && box.getAttribute(state.showAtt) !== "") {
+        hideBlock(box, target.link, target.reason, state, options, { postAtt });
+      }
+      record.reason = target.reason;
+      record.debugApplied = !!options.VERBOSITY_DEBUG;
+      previous.set(box, record);
+    }
+    if (previous.size) ownedBoxes.set(post, previous);
+    else ownedBoxes.delete(post);
+  }
+  var topics, ownedBoxes;
   var init_info_boxes = __esm({
     "src/dom/info-boxes.ts"() {
       "use strict";
+      init_shared();
       init_dom();
+      init_post_evidence();
+      init_ownership();
       init_attributes();
       init_hide();
+      topics = [
+        "OTHER_INFO_BOX_CLIMATE_SCIENCE",
+        "OTHER_INFO_BOX_CORONAVIRUS",
+        "OTHER_INFO_BOX_SUBSCRIBE"
+      ];
+      ownedBoxes = /* @__PURE__ */ new WeakMap();
     }
   });
 
@@ -7499,30 +7567,6 @@
       "use strict";
       init_animated_gifs();
       init_blocks();
-    }
-  });
-
-  // src/dom/ownership.ts
-  function ownsPostElement(element, post, boundary = {}) {
-    var _a, _b;
-    if (!post.contains(element)) return false;
-    const marked = element.closest(`[${postAtt}]`);
-    if (marked && marked !== post) return false;
-    const authored2 = element.closest(sharedSelectors.authoredContent);
-    if (authored2 && post.contains(authored2)) return false;
-    if ((_a = boundary.bodies) == null ? void 0 : _a.some((body) => body.contains(element))) return false;
-    const owner = element.closest(sharedSelectors.postOwner);
-    if (!owner || owner === post || !post.contains(owner)) return true;
-    if (!boundary.allowArticleWrapper || post.matches(`${sharedSelectors.postOwner}, div[aria-describedby], div[data-virtualized]`))
-      return false;
-    const parentOwner = (_b = owner.parentElement) == null ? void 0 : _b.closest(sharedSelectors.postOwner);
-    return !parentOwner || !post.contains(parentOwner);
-  }
-  var init_ownership = __esm({
-    "src/dom/ownership.ts"() {
-      "use strict";
-      init_attributes();
-      init_shared();
     }
   });
 
@@ -12241,7 +12285,7 @@
     if (!state || !options || !filters || !keyWords || !pathInfo2) {
       return null;
     }
-    const proceed = options.PP_BLOCKED_ENABLED || options.PP_ANIMATED_GIFS_POSTS || options.PP_ANIMATED_GIFS_PAUSE;
+    const proceed = options.PP_BLOCKED_ENABLED || options.PP_ANIMATED_GIFS_POSTS || options.PP_ANIMATED_GIFS_PAUSE || state.hideAnInfoBox;
     if (!proceed) {
       return null;
     }

@@ -11,11 +11,6 @@ const topics = [
   "OTHER_INFO_BOX_CORONAVIRUS",
   "OTHER_INFO_BOX_SUBSCRIBE",
 ] as const;
-const legacyPaths = {
-  OTHER_INFO_BOX_CLIMATE_SCIENCE: { pathMatch: pathInfo.OTHER_INFO_BOX_CLIMATE_SCIENCE },
-  OTHER_INFO_BOX_CORONAVIRUS: { pathMatch: pathInfo.OTHER_INFO_BOX_CORONAVIRUS },
-  OTHER_INFO_BOX_SUBSCRIBE: { pathMatch: pathInfo.OTHER_INFO_BOX_SUBSCRIBE },
-};
 const visibility = { cssHideEl: "hide-info", showAtt: "show-info" };
 const enabled = {
   OTHER_INFO_BOX_CLIMATE_SCIENCE: true,
@@ -41,13 +36,13 @@ function infoBox(path: string) {
 
 describe("validation: shared informational boxes", () => {
   test.each(Object.entries(translations))(
-    "legacy object descriptors preserve all three %s reasons",
+    "production routes preserve all three %s reasons",
     (_locale, keywords) => {
       for (const topic of topics) {
         const post = sharedPost();
         const { box, link } = infoBox(pathInfo[topic]);
         post.append(box);
-        scrubInfoBoxes(post, enabled, keywords, legacyPaths, visibility);
+        scrubInfoBoxes(post, enabled, keywords, pathInfo, visibility);
         expect(box.hasAttribute(visibility.cssHideEl)).toBe(true);
         expect(link.getAttribute(postAtt)).toBe(keywords[topic]);
         expect(post.hasAttribute(visibility.cssHideEl)).toBe(false);
@@ -56,18 +51,18 @@ describe("validation: shared informational boxes", () => {
     }
   );
 
-  test("legacy object descriptors process one box per call in climate, coronavirus, subscribe order", () => {
+  test("every independent information box is filtered in one pass", () => {
     const post = sharedPost();
     const fixtures = topics.map((topic) => infoBox(pathInfo[topic]));
     post.append(...fixtures.map(({ box }) => box).reverse());
     for (let iteration = 0; iteration < topics.length; iteration += 1) {
-      scrubInfoBoxes(post, enabled, translations.en, legacyPaths, visibility);
-      fixtures.forEach(({ box }, index) => {
-        expect(box.hasAttribute(visibility.cssHideEl)).toBe(index <= iteration);
+      scrubInfoBoxes(post, enabled, translations.en, pathInfo, visibility);
+      fixtures.forEach(({ box }) => {
+        expect(box.hasAttribute(visibility.cssHideEl)).toBe(true);
       });
     }
     const before = post.outerHTML;
-    scrubInfoBoxes(post, enabled, translations.en, legacyPaths, visibility);
+    scrubInfoBoxes(post, enabled, translations.en, pathInfo, visibility);
     expect(post.outerHTML).toBe(before);
   });
 
@@ -75,7 +70,7 @@ describe("validation: shared informational boxes", () => {
     const post = sharedPost();
     const { box, link } = infoBox(pathInfo[topic]);
     post.append(box);
-    scrubInfoBoxes(post, { ...enabled, [topic]: false }, translations.en, legacyPaths, visibility);
+    scrubInfoBoxes(post, { ...enabled, [topic]: false }, translations.en, pathInfo, visibility);
     expect(box.hasAttribute(visibility.cssHideEl)).toBe(false);
     expect(link.hasAttribute(postAtt)).toBe(false);
   });
@@ -88,7 +83,7 @@ describe("validation: shared informational boxes", () => {
       post,
       { ...enabled, VERBOSITY_DEBUG: true },
       translations.en,
-      legacyPaths,
+      pathInfo,
       visibility
     );
     expect(box.hasAttribute(visibility.showAtt)).toBe(true);
@@ -96,23 +91,23 @@ describe("validation: shared informational boxes", () => {
     expect(post.hasAttribute(postAtt)).toBe(false);
   });
 
-  test("production string descriptors retain the documented no-op compatibility behavior", () => {
+  test("query-only route mentions do not identify information boxes", () => {
     const post = sharedPost();
-    post.append(...topics.map((topic) => infoBox(pathInfo[topic]).box));
+    post.append(...topics.map((topic) => infoBox(`/help/?next=${pathInfo[topic]}`).box));
     const before = post.outerHTML;
     scrubInfoBoxes(post, enabled, translations.en, pathInfo, visibility);
     expect(post.outerHTML).toBe(before);
   });
 
   test("null roots, absent descriptors, unrelated links, and marked links remain unchanged", () => {
-    scrubInfoBoxes(null, enabled, translations.en, legacyPaths, visibility);
+    scrubInfoBoxes(null, enabled, translations.en, pathInfo, visibility);
     for (const path of ["/ordinary/", pathInfo.OTHER_INFO_BOX_CLIMATE_SCIENCE]) {
       const post = sharedPost();
       const { box, link } = infoBox(path);
       if (path !== "/ordinary/") link.setAttribute(postAtt, "already processed");
       post.append(box);
       const before = post.outerHTML;
-      scrubInfoBoxes(post, enabled, translations.en, legacyPaths, visibility);
+      scrubInfoBoxes(post, enabled, translations.en, pathInfo, visibility);
       scrubInfoBoxes(post, enabled, translations.en, {}, visibility);
       expect(post.outerHTML).toBe(before);
     }

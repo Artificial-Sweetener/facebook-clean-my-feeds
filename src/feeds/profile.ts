@@ -172,7 +172,10 @@ function mopProfileFeed(context: FeedContext | null) {
   }
 
   const proceed =
-    options.PP_BLOCKED_ENABLED || options.PP_ANIMATED_GIFS_POSTS || options.PP_ANIMATED_GIFS_PAUSE;
+    options.PP_BLOCKED_ENABLED ||
+    options.PP_ANIMATED_GIFS_POSTS ||
+    options.PP_ANIMATED_GIFS_PAUSE ||
+    state.hideAnInfoBox;
   if (!proceed) {
     return null;
   }

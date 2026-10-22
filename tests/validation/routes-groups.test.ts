@@ -212,7 +212,7 @@ describe("group route option integration", () => {
     expect(element("post").querySelector('a[href="/reel/1/"]')).not.toBeNull();
   });
 
-  test("aggregated groups intentionally scan only the latest 25 posts", () => {
+  test("aggregated groups filter all mounted posts beyond the former 25-post boundary", () => {
     const context = routeContext("/groups/feed", { GF_SHORT_REEL_VIDEO: true });
     mountGroups(
       "/groups/feed",
@@ -221,7 +221,7 @@ describe("group route option integration", () => {
       ).join("")
     );
     mopGroupsFeed(context);
-    expect(element("post-0").hasAttribute(postAtt)).toBe(false);
+    expect(element("post-0").hasAttribute(postAtt)).toBe(true);
     expect(element("post-1").hasAttribute(postAtt)).toBe(true);
     expect(element("post-25").hasAttribute(postAtt)).toBe(true);
   });

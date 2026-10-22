@@ -60,7 +60,7 @@ describe("global search route integration", () => {
       [true, false].map((sponsoredEnabled) => ({ blockedEnabled, sponsoredEnabled }))
     )
   )(
-    "NF_SPONSORED=$sponsoredEnabled respects the historical search blocked gate=$blockedEnabled",
+    "NF_SPONSORED=$sponsoredEnabled works independently of keyword filtering=$blockedEnabled",
     ({ blockedEnabled, sponsoredEnabled }) => {
       const context = routeContext("/search/posts/", {
         NF_BLOCKED_ENABLED: blockedEnabled,
@@ -73,7 +73,7 @@ describe("global search route integration", () => {
       );
       mopSearchFeed(context);
       expect(element("ad").getAttribute(postAtt)).toBe(
-        blockedEnabled && sponsoredEnabled ? context.keyWords.SPONSORED : null
+        sponsoredEnabled ? context.keyWords.SPONSORED : null
       );
       expect(element("ordinary").hasAttribute(postAtt)).toBe(false);
       expect(element("body-disclosure").hasAttribute(postAtt)).toBe(false);
@@ -85,7 +85,7 @@ describe("global search route integration", () => {
       [true, false].map((pauseEnabled) => ({ blockedEnabled, pauseEnabled }))
     )
   )(
-    "search GIF pause=$pauseEnabled respects blocked gate=$blockedEnabled",
+    "search GIF pause=$pauseEnabled works independently of keyword filtering=$blockedEnabled",
     ({ blockedEnabled, pauseEnabled }) => {
       const context = routeContext("/search/posts/", {
         NF_BLOCKED_ENABLED: blockedEnabled,
@@ -94,7 +94,7 @@ describe("global search route integration", () => {
       mountSearch(textPost("post", gifControl()));
       const click = jest.spyOn(element("gif"), "click");
       mopSearchFeed(context);
-      expect(click).toHaveBeenCalledTimes(blockedEnabled && pauseEnabled ? 1 : 0);
+      expect(click).toHaveBeenCalledTimes(pauseEnabled ? 1 : 0);
       expect(element("post").hasAttribute(postAtt)).toBe(false);
     }
   );

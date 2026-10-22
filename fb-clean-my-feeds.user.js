@@ -5912,7 +5912,7 @@
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:a51fe14567bbdf8a99ae59e5ff26dd82b3c9454693f8a69e475948f80d35db15" : "unbundled";
+      buildIdentity = true ? "source-sha256:f73fddc8fd85d27bfb56ecadafd4213ddff67bae9a144cbff68ec5d29948ba5b" : "unbundled";
     }
   });
 
@@ -8206,6 +8206,24 @@
     }
   });
 
+  // src/feeds/shared/paid-partnership.ts
+  function hasPaidPartnershipDisclosure(post) {
+    const evidence = getPostEvidence(post);
+    return evidence.select("span[dir] > span[id] a[href]").some(
+      (link) => {
+        var _a;
+        return ((_a = facebookUrl(link)) == null ? void 0 : _a.pathname.startsWith("/business/help/")) && isOwnedNewsMetadata(link, post);
+      }
+    );
+  }
+  var init_paid_partnership = __esm({
+    "src/feeds/shared/paid-partnership.ts"() {
+      "use strict";
+      init_post_evidence();
+      init_news_identity();
+    }
+  });
+
   // src/feeds/news-detectors.ts
   function isNewsSuggested(post, state, keyWords) {
     const queries = [
@@ -8239,14 +8257,7 @@
     return matches ? keyWords.NF_PEOPLE_YOU_MAY_KNOW : "";
   }
   function isNewsPaidPartnership(post, keyWords) {
-    const evidence = getPostEvidence(post);
-    const matched = evidence.select("span[dir] > span[id] a[href]").some(
-      (link) => {
-        var _a;
-        return ((_a = facebookUrl(link)) == null ? void 0 : _a.pathname.startsWith("/business/help/")) && isOwnedNewsMetadata(link, post) && evidence.isRendered(link);
-      }
-    );
-    return matched ? keyWords.NF_PAID_PARTNERSHIP : "";
+    return hasPaidPartnershipDisclosure(post) ? keyWords.NF_PAID_PARTNERSHIP : "";
   }
   function isNewsSponsoredPaidBy(post, keyWords) {
     const querySPB = "div:nth-child(2) > div > div:nth-child(2) > span[class] > span[id] > div:nth-child(2)";
@@ -8384,6 +8395,7 @@
       init_walker();
       init_dom();
       init_blocks();
+      init_paid_partnership();
       init_news_stories();
       init_news_identity();
     }
@@ -9775,11 +9787,7 @@
         const query = state.gfType === "groups-recent" ? 'h2[dir="auto"] + div > div' : 'div[role="feed"] > div';
         const posts = Array.from(document.querySelectorAll(query));
         if (posts.length > 0) {
-          const count = posts.length;
-          const start = count < 25 ? 0 : count - 25;
-          for (let i = start; i < count; i += 1) {
-            const post = posts[i];
-            if (!post) continue;
+          for (const post of posts) {
             if (post.innerHTML.length === 0) {
               continue;
             }
@@ -9796,6 +9804,9 @@
               alreadyHidden = true;
             } else {
               doLightDusting(post, state);
+              if (options.GF_PAID_PARTNERSHIP && hasPaidPartnershipDisclosure(post)) {
+                hideReason = keyWords.GF_PAID_PARTNERSHIP;
+              }
               if (hideReason === "" && options.GF_SPONSORED && isSponsored(post, state)) {
                 hideReason = keyWords.SPONSORED;
               }
@@ -9854,6 +9865,9 @@
               alreadyHidden = true;
             } else {
               doLightDusting(post, state);
+              if (options.GF_PAID_PARTNERSHIP && hasPaidPartnershipDisclosure(post)) {
+                hideReason = keyWords.GF_PAID_PARTNERSHIP;
+              }
               if (hideReason === "" && options.GF_SHORT_REEL_VIDEO) {
                 hideReason = isGroupsShortReelVideo(post, keyWords);
               }
@@ -9927,6 +9941,7 @@
       init_animated_gifs2();
       init_blocks();
       init_sponsored();
+      init_paid_partnership();
       init_shares();
     }
   });
@@ -12298,7 +12313,7 @@
     }
     const mainColumnToken = getDirtyToken(mainColumn);
     revalidateTrackedPosts(mainColumn, state);
-    if (options.NF_BLOCKED_ENABLED) {
+    if (options.NF_BLOCKED_ENABLED || options.NF_SPONSORED || options.NF_ANIMATED_GIFS_PAUSE || state.hideAnInfoBox) {
       const posts = Array.from(document.querySelectorAll(searchSelectors.postsQuery));
       for (const post of posts) {
         if (post.innerHTML.length === 0) {

@@ -26,6 +26,7 @@ import { findGroupsBlockedText } from "./shared/blocked-text";
 import { hasGroupsAnimatedGifContent } from "./shared/animated-gifs";
 import { getGroupsBlocks } from "./shared/blocks";
 import { isSponsored } from "./shared/sponsored";
+import { hasPaidPartnershipDisclosure } from "./shared/paid-partnership";
 import { hideNumberOfShares } from "./shared/shares";
 
 /**
@@ -121,7 +122,7 @@ function isGroupsShortReelVideo(post: Element, keyWords: Pick<Keywords, "GF_SHOR
 
 /**
  * Apply group filters to dirty roots, distinguishing the aggregated/recent/search feed from an individual group's page.
- * Aggregated routes inspect only the last 25 posts and enable sponsored/suggestion filtering; individual group pages use the smaller filter set.
+ * Aggregated routes inspect all loaded posts and enable sponsored/suggestion filtering; paid partnerships, reels and content filters also apply within individual groups.
  * Recycled posts have old presentation reset before classification. Consecutive hidden posts share caption state, while visible posts reset that run.
  * Mutation tokens prevent a root changed during processing from being marked clean.
  * @param context gfType selects the layout; group options and text filters determine reasons, and state receives scan and consecutive-caption updates. Null skips the pass.
@@ -160,12 +161,7 @@ function mopGroupsFeed(context: FeedContext | null) {
         state.gfType === "groups-recent" ? 'h2[dir="auto"] + div > div' : 'div[role="feed"] > div';
       const posts = Array.from(document.querySelectorAll(query));
       if (posts.length > 0) {
-        const count = posts.length;
-        const start = count < 25 ? 0 : count - 25;
-
-        for (let i = start; i < count; i += 1) {
-          const post = posts[i];
-          if (!post) continue;
+        for (const post of posts) {
           if (post.innerHTML.length === 0) {
             continue;
           }
@@ -187,6 +183,9 @@ function mopGroupsFeed(context: FeedContext | null) {
           } else {
             doLightDusting(post, state);
 
+            if (options.GF_PAID_PARTNERSHIP && hasPaidPartnershipDisclosure(post)) {
+              hideReason = keyWords.GF_PAID_PARTNERSHIP;
+            }
             if (hideReason === "" && options.GF_SPONSORED && isSponsored(post, state)) {
               hideReason = keyWords.SPONSORED;
             }
@@ -250,6 +249,9 @@ function mopGroupsFeed(context: FeedContext | null) {
             alreadyHidden = true;
           } else {
             doLightDusting(post, state);
+            if (options.GF_PAID_PARTNERSHIP && hasPaidPartnershipDisclosure(post)) {
+              hideReason = keyWords.GF_PAID_PARTNERSHIP;
+            }
             if (hideReason === "" && options.GF_SHORT_REEL_VIDEO) {
               hideReason = isGroupsShortReelVideo(post, keyWords);
             }

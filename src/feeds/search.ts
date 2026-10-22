@@ -51,9 +51,9 @@ function isSearchColumnDirty(state: FeedProcessingState) {
 }
 
 /**
- * Filter dirty search results under the historical NF_BLOCKED_ENABLED gate, which also controls sponsored detection on this route.
+ * Filter dirty search results with independent sponsored, blocked-text and GIF-pause preferences.
  * Reset recycled posts before checking sponsorship and news blocked-text rules. Track consecutive hidden results, and pause GIFs or scrub info boxes only in visible results.
- * Even when the gate is disabled, acknowledge an unchanged dirty token and reset the idle counter after locating the root.
+ * When all actions are disabled, acknowledge an unchanged dirty token and reset the idle counter after locating the root.
  * @param context News filtering preferences and text terms are reused for search; state holds sponsorship route flags, caption counters, and visibility markers. Null skips discovery.
  * @returns The inspected search main column, or null when it is absent or unchanged.
  */
@@ -75,7 +75,12 @@ function mopSearchFeed(context: FeedContext | null) {
   const mainColumnToken = getDirtyToken(mainColumn);
   revalidateTrackedPosts(mainColumn, state);
 
-  if (options.NF_BLOCKED_ENABLED) {
+  if (
+    options.NF_BLOCKED_ENABLED ||
+    options.NF_SPONSORED ||
+    options.NF_ANIMATED_GIFS_PAUSE ||
+    state.hideAnInfoBox
+  ) {
     const posts = Array.from(document.querySelectorAll(searchSelectors.postsQuery));
 
     for (const post of posts) {

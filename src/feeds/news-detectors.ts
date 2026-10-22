@@ -10,6 +10,7 @@ import { getFullNumber } from "../core/filters/classifiers/shares-likes";
 import { extractFeedBlockText } from "../dom/walker";
 import { querySelectorAllNoChildren } from "../utils/dom";
 import { getNewsBlocks } from "./shared/blocks";
+import { hasPaidPartnershipDisclosure } from "./shared/paid-partnership";
 import { isNewsStoryShelf } from "./news-stories";
 import {
   facebookPath,
@@ -95,16 +96,7 @@ export function isNewsPaidPartnership(
   post: Element,
   keyWords: Pick<Keywords, "NF_PAID_PARTNERSHIP">
 ) {
-  const evidence = getPostEvidence(post);
-  const matched = evidence
-    .select("span[dir] > span[id] a[href]")
-    .some(
-      (link) =>
-        facebookUrl(link)?.pathname.startsWith("/business/help/") &&
-        isOwnedNewsMetadata(link, post) &&
-        evidence.isRendered(link)
-    );
-  return matched ? keyWords.NF_PAID_PARTNERSHIP : "";
+  return hasPaidPartnershipDisclosure(post) ? keyWords.NF_PAID_PARTNERSHIP : "";
 }
 
 /** Require the owned disclosure layout and a localized paid-by statement with a nonempty payer. */

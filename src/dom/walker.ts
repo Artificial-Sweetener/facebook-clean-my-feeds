@@ -92,12 +92,13 @@ export function scanTreeForText(node: Element): string[] {
 /**
  * Read rendered Marketplace text with lowercase signals, excluding concealed prices and descriptions.
  * @param node Listing root whose descendant text nodes are inspected.
+ * @param boundary Owning listing used to reject concealed ancestors outside an individual text block.
  * @returns Ordered lowercase text fragments, retaining duplicates for historical matching.
  */
-export function mpScanTreeForText(node: Element): string[] {
+export function mpScanTreeForText(node: Element, boundary = node): string[] {
   const arrayTextValues: string[] = [];
-  const evidence = getPostEvidence(node);
-  if (!evidence.isVisible(node)) return arrayTextValues;
+  const evidence = getPostEvidence(boundary);
+  if (!evidence.isVisible(node) || !evidence.isRendered(node)) return arrayTextValues;
   let currentNode;
   const walk = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, null);
 

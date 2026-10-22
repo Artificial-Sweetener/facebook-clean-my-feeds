@@ -5,8 +5,7 @@ import type { HydratedOptions } from "../core/options/types";
 import type { Filters } from "../core/filters/types";
 import type { FeedContext, FeedProcessingState } from "./types";
 import { findFirstMatch } from "../core/filters/matching";
-import { matchesSponsoredLabel } from "../core/filters/disclosure-labels";
-import { getPostEvidence } from "../dom/post-evidence";
+import { facebookUrl } from "../dom/post-evidence";
 import { mainColumnAtt, postAtt, postAttMPSkip } from "../dom/attributes";
 import {
   ensureDirtyObserver,
@@ -15,6 +14,7 @@ import {
   markElementCleanIfUnchanged,
   markElementDirty,
   revalidateTrackedPosts,
+  resetPostState,
   trackPostSignature,
 } from "../dom/dirty-check";
 import { mpScanTreeForText } from "../dom/walker";
@@ -25,6 +25,8 @@ import {
   collectMarketplaceSponsoredBoxes,
   revalidateMarketplaceListings,
 } from "./marketplace-discovery";
+
+const sponsoredBoxes = new WeakSet<Element>();
 
 /** Mark a Marketplace box hidden without a caption and optionally add its debug marker. */
 function mpHideBox(
@@ -37,44 +39,50 @@ function mpHideBox(
     return;
   }
 
-  box.setAttribute(state.hideWithNoCaptionAtt, "");
-  box.setAttribute(postAtt, sanitizeReason(reason));
+  if (!box.hasAttribute(state.hideWithNoCaptionAtt))
+    box.setAttribute(state.hideWithNoCaptionAtt, "");
+  const label = sanitizeReason(reason);
+  if (box.getAttribute(postAtt) !== label) box.setAttribute(postAtt, label);
   if (options.VERBOSITY_DEBUG) {
-    box.setAttribute(state.showAtt, "");
+    if (!box.hasAttribute(state.showAtt)) box.setAttribute(state.showAtt, "");
   }
   trackPostSignature(box);
 }
 
 /**
- * Remove the /?ref suffix from every matching document anchor, including any later query or fragment text; this is not scoped to the Marketplace root.
+ * Remove only Facebook referral parameters in the active surface, preserving video/listing identities and fragments.
  */
-function mpStopTrackingDirtIntoMyHouse() {
-  const collectionOfLinks = document.querySelectorAll<HTMLAnchorElement>('a[href*="/?ref="]');
+function mpStopTrackingDirtIntoMyHouse(root: Element) {
+  const collectionOfLinks = root.querySelectorAll<HTMLAnchorElement>("a[href]");
   for (const trackingLink of collectionOfLinks) {
-    trackingLink.href = trackingLink.href.split("/?ref")[0] ?? trackingLink.href;
+    const url = facebookUrl(trackingLink);
+    if (!url?.searchParams.has("ref")) continue;
+    const cleaned = new URL(url.href);
+    cleaned.searchParams.delete("ref");
+    trackingLink.href = cleaned.href;
   }
 }
 
-/** Require a rendered sponsorship label in the legacy slot; arbitrary styled listing spans remain visible. */
-function mpHideSponsoredItems(
-  root: Element,
-  keyWords: Pick<Keywords, "SPONSORED">,
-  state: Pick<FeedProcessingState, "hideWithNoCaptionAtt" | "showAtt">,
-  options: Pick<HydratedOptions, "VERBOSITY_DEBUG">
-) {
-  const query = ":scope > div > div > div > div > div > div[style] > span";
-  const items = root.querySelectorAll(query);
-  for (const item of items) {
-    const box = item.parentElement;
-    if (!box) continue;
-    const evidence = getPostEvidence(box);
-    if (!evidence.isRendered(item) || !matchesSponsoredLabel(evidence.visibleText(item))) continue;
+/** Reconcile current ad evidence so unchanged tiles are restored when their external heading disappears. */
+function reconcileSponsoredItems(root: Element, context: FeedContext) {
+  const { state, options, keyWords } = context;
+  const targets = new Set(
+    options.MP_SPONSORED ? collectMarketplaceSponsoredBoxes(root, state.mpType === "item") : []
+  );
+  for (const box of root.querySelectorAll(`[${postAtt}]`)) {
+    if (sponsoredBoxes.has(box) && !targets.has(box)) {
+      resetPostState(box, state);
+      sponsoredBoxes.delete(box);
+    }
+  }
+  for (const box of targets) {
     if (box.hasAttribute(postAttMPSkip)) {
       if (String(box.innerHTML.length) === box.getAttribute(postAttMPSkip)) {
         continue;
       }
     }
     mpHideBox(box, keyWords.SPONSORED, state, options);
+    sponsoredBoxes.add(box);
   }
 }
 
@@ -83,10 +91,11 @@ function mpHideSponsoredItems(
  */
 function mpGetBlockedPrices(
   elBlockOfText: Element | undefined,
-  filters: Pick<Filters, "MP_BLOCKED_TEXT" | "MP_BLOCKED_TEXT_LC">
+  filters: Pick<Filters, "MP_BLOCKED_TEXT" | "MP_BLOCKED_TEXT_LC">,
+  boundary = elBlockOfText
 ) {
   if (filters.MP_BLOCKED_TEXT.length > 0) {
-    const itemPrices = elBlockOfText ? mpScanTreeForText(elBlockOfText) : [];
+    const itemPrices = elBlockOfText ? mpScanTreeForText(elBlockOfText, boundary) : [];
     return findFirstMatch(itemPrices, filters.MP_BLOCKED_TEXT_LC);
   }
   return "";
@@ -98,14 +107,15 @@ function mpGetBlockedPrices(
 function mpGetBlockedTextDescription(
   collectionBlocksOfText: ArrayLike<Element>,
   filters: Pick<Filters, "MP_BLOCKED_TEXT_DESCRIPTION" | "MP_BLOCKED_TEXT_DESCRIPTION_LC">,
-  skipFirstBlock = true
+  skipFirstBlock = true,
+  boundary?: Element
 ) {
   if (filters.MP_BLOCKED_TEXT_DESCRIPTION.length > 0) {
     const startIndex = skipFirstBlock ? 1 : 0;
     for (let i = startIndex; i < collectionBlocksOfText.length; i += 1) {
       const block = collectionBlocksOfText[i];
       if (!block) continue;
-      const descriptionTextList = mpScanTreeForText(block);
+      const descriptionTextList = mpScanTreeForText(block, boundary);
       const descriptionText = descriptionTextList.join(" ").toLowerCase();
       const blockedText = findFirstMatch(descriptionText, filters.MP_BLOCKED_TEXT_DESCRIPTION_LC);
       if (blockedText.length > 0) {
@@ -149,8 +159,8 @@ function mpDoBlockingByBlockedText(
     const queryTextBlock = ":scope > div > div:nth-of-type(2) > div";
     const blocksOfText = item.querySelectorAll(queryTextBlock);
     if (blocksOfText.length > 0) {
-      const blockedTextPrices = mpGetBlockedPrices(blocksOfText[0], filters);
-      const blockedTextDescription = mpGetBlockedTextDescription(blocksOfText, filters, true);
+      const blockedTextPrices = mpGetBlockedPrices(blocksOfText[0], filters, box);
+      const blockedTextDescription = mpGetBlockedTextDescription(blocksOfText, filters, true, box);
 
       if (blockedTextPrices.length > 0) {
         mpHideBox(box, blockedTextPrices, state, options);
@@ -159,6 +169,7 @@ function mpDoBlockingByBlockedText(
       } else {
         box.setAttribute(postAtt, "");
       }
+      trackPostSignature(box);
     }
   }
 }
@@ -223,38 +234,12 @@ function mopMarketplaceFeed(context: FeedContext | null) {
   }
   const mainColumnToken = getDirtyToken(mainColumn);
 
-  mpStopTrackingDirtIntoMyHouse();
+  mpStopTrackingDirtIntoMyHouse(mainColumn);
   revalidateTrackedPosts(mainColumn, state);
   revalidateMarketplaceListings(mainColumn, state);
 
-  if (state.mpType === "marketplace" || state.mpType === "item") {
-    if (options.MP_SPONSORED) {
-      mpHideSponsoredItems(mainColumn, keyWords, state, options);
-
-      for (const box of collectMarketplaceSponsoredBoxes(mainColumn)) {
-        mpHideBox(box, keyWords.SPONSORED, state, options);
-      }
-    }
-
-    if (options.MP_BLOCKED_ENABLED) {
-      mpDoBlockingByBlockedText(mainColumn, filters, keyWords, state, options);
-    }
-  }
-
-  if (state.mpType === "item") {
-    if (options.MP_SPONSORED) {
-      const query = `span h2 [href*="/ads/about/"]:not([${postAtt}])`;
-      const elLink = mainColumn.querySelector(query);
-      if (elLink) {
-        const box = elLink.closest("h2")?.closest("span") ?? null;
-        mpHideBox(box, keyWords.SPONSORED, state, options);
-        elLink.setAttribute(postAtt, keyWords.SPONSORED);
-      }
-    }
-  } else if (state.mpType === "category" || state.mpType === "search") {
-    if (options.MP_SPONSORED) {
-      mpHideSponsoredItems(mainColumn, keyWords, state, options);
-    }
+  if (["marketplace", "item", "category", "search"].includes(state.mpType)) {
+    reconcileSponsoredItems(mainColumn, context);
     if (options.MP_BLOCKED_ENABLED) {
       mpDoBlockingByBlockedText(mainColumn, filters, keyWords, state, options);
     }

@@ -2,11 +2,16 @@
 
 import { postAtt, postAttMPSkip } from "../dom/attributes";
 import { resetPostState } from "../dom/dirty-check";
+import { getPostEvidence } from "../dom/post-evidence";
+import { matchesSponsoredLabel } from "../core/filters/disclosure-labels";
+import { isSponsoredDisclosure } from "./shared/sponsored";
 import type { VisibilityState } from "../dom/types";
 import {
   marketplaceListingQueries,
   marketplaceSponsoredHeadingQuery,
   marketplaceSponsoredTileQuery,
+  marketplaceItemSponsoredHeadingQuery,
+  marketplaceLegacySponsoredQuery,
 } from "../selectors/marketplace";
 
 /** Pair each independently styled listing with its content anchor, never once per matching selector. */
@@ -74,19 +79,41 @@ export function revalidateMarketplaceListings(
  * Find heading-owned sponsored tile runs without borrowing a heading from another page or section.
  * Each heading must directly precede one or more supported tiles. An unrelated sibling ends the
  * run, and nested navigation or listing sections are never promoted to ad containers.
+ * @param root Active listing surface; only rendered, exactly named Facebook disclosures establish headings.
+ * @param itemHeadings Include standalone recommendation headings on item routes.
+ * @returns Independent ad headings and tiles, including validated legacy inline slots.
  */
-export function collectMarketplaceSponsoredBoxes(root: Element): Element[] {
+export function collectMarketplaceSponsoredBoxes(root: Element, itemHeadings = false): Element[] {
   const boxes = new Set<Element>();
+  for (const item of root.querySelectorAll(marketplaceLegacySponsoredQuery)) {
+    const box = item.parentElement;
+    if (!box) continue;
+    const evidence = getPostEvidence(box);
+    if (evidence.isRendered(item) && matchesSponsoredLabel(evidence.visibleText(item)))
+      boxes.add(box);
+  }
   for (const link of root.querySelectorAll(marketplaceSponsoredHeadingQuery)) {
     const parent = link.parentElement;
     const heading = parent?.tagName === "OBJECT" ? parent.parentElement : parent;
-    if (!heading || heading === root || !root.contains(heading)) continue;
+    if (
+      !heading ||
+      heading === root ||
+      !root.contains(heading) ||
+      !isSponsoredDisclosure(link, heading)
+    )
+      continue;
     let tile = heading.nextElementSibling;
     while (tile?.matches("div[style]")) {
       if (!tile.querySelector(marketplaceSponsoredTileQuery)) break;
       boxes.add(heading);
       boxes.add(tile);
       tile = tile.nextElementSibling;
+    }
+  }
+  if (itemHeadings) {
+    for (const link of root.querySelectorAll(marketplaceItemSponsoredHeadingQuery)) {
+      const box = link.closest("h2")?.closest("span");
+      if (box && root.contains(box) && isSponsoredDisclosure(link, box)) boxes.add(box);
     }
   }
   return Array.from(boxes);

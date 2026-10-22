@@ -20,7 +20,14 @@ export const marketplaceListingQueries = [
 
 /** Explicit ad-disclosure headings own only adjacent independently styled tiles. */
 export const marketplaceSponsoredHeadingQuery =
-  'div > a[href="/ads/about/?entry_product=ad_preferences"], div > object > a[href="/ads/about/?entry_product=ad_preferences"]';
+  'div > a[href*="/ads/about/"], div > object > a[href*="/ads/about/"]';
+
+/** Item recommendations expose standalone ad headings instead of adjacent listing tiles. */
+export const marketplaceItemSponsoredHeadingQuery = 'span h2 a[href*="/ads/about/"]';
+
+/** Legacy inline listings still require an exact rendered sponsorship label inside this slot. */
+export const marketplaceLegacySponsoredQuery =
+  ":scope > div > div > div > div > div > div[style] > span";
 
 /** Supported ad bodies differ by one wrapper; neither shape alone establishes sponsorship. */
 export const marketplaceSponsoredTileQuery =

@@ -77,12 +77,12 @@ describe("Marketplace ownership and recycled-box restoration", () => {
   });
 
   test.each(["/marketplace/category/furniture", "/marketplace/search"])(
-    "%s retains its separate structural sponsored-card contract",
+    "%s filters both heading-owned and structural sponsored cards",
     (route) => {
       const context = routeContext(route, { MP_SPONSORED: true });
       mountMarketplace(sponsoredSection("heading-ad") + sponsoredListing("structural-ad"));
       mopMarketplaceFeed(context);
-      expect(element("heading-ad").hasAttribute(postAtt)).toBe(false);
+      expect(element("heading-ad").getAttribute(postAtt)).toBe(context.keyWords.SPONSORED);
       expect(element("structural-ad").getAttribute(postAtt)).toBe(context.keyWords.SPONSORED);
     }
   );

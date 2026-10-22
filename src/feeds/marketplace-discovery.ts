@@ -3,7 +3,8 @@
 import { postAtt, postAttMPSkip } from "../dom/attributes";
 import { resetPostState } from "../dom/dirty-check";
 import type { PostPresentationState } from "../dom/dirty-check";
-import { getPostEvidence } from "../dom/post-evidence";
+import { facebookUrl, getPostEvidence } from "../dom/post-evidence";
+import { sharedSelectors } from "../selectors/shared";
 import { matchesSponsoredLabel } from "../core/filters/disclosure-labels";
 import { isSponsoredDisclosure } from "./shared/sponsored";
 import {
@@ -12,26 +13,89 @@ import {
   marketplaceSponsoredTileQuery,
   marketplaceItemSponsoredHeadingQuery,
   marketplaceLegacySponsoredQuery,
+  marketplaceVirtualizedListingQuery,
+  marketplaceVirtualizedAnchorQuery,
+  marketplaceSelectors,
+  marketplaceTextBlockQuery,
+  marketplaceVirtualizedTextBlockQuery,
 } from "../selectors/marketplace";
 
 /** Pair each independently styled listing with its content anchor, never once per matching selector. */
-interface MarketplaceListing {
+export interface MarketplaceListing {
   box: Element;
   item: Element;
+  textBlocks: Element[];
+  visualText: boolean;
 }
 
 let listingSignatures = new WeakMap<Element, string>();
 
-/** Collect every supported layout while deduplicating boxes with repeated links or selector matches. */
+/**
+ * Combine legacy styled tiles with current independent virtualized cards without class-name dependencies.
+ * Current cells require one named Facebook listing destination and separate media/caption regions;
+ * authored links and containers owning multiple listings cannot become filtering roots.
+ * @param root Active Marketplace column or item dialog, excluding retained background pages.
+ * @returns Deduplicated listing roots, content anchors, ordered caption rows and their text-visibility policy.
+ */
 export function collectMarketplaceListings(root: Element): MarketplaceListing[] {
-  const boxes = new Map<Element, Element>();
+  const boxes = new Map<Element, MarketplaceListing>();
   for (const query of marketplaceListingQueries) {
     for (const item of root.querySelectorAll(query)) {
       const box = item.closest("div[style]");
-      if (box && box !== root && root.contains(box) && !boxes.has(box)) boxes.set(box, item);
+      if (box && box !== root && root.contains(box) && !boxes.has(box))
+        boxes.set(box, {
+          box,
+          item,
+          textBlocks: Array.from(item.querySelectorAll(marketplaceTextBlockQuery)),
+          visualText: false,
+        });
     }
   }
-  return Array.from(boxes, ([box, item]) => ({ box, item }));
+  for (const item of root.querySelectorAll(marketplaceVirtualizedListingQuery)) {
+    const box = item.closest("[data-virtualized]");
+    const url = facebookUrl(item);
+    const content =
+      item.childElementCount === 1 && item.firstElementChild?.localName === "div"
+        ? item.firstElementChild
+        : item;
+    if (
+      !box ||
+      box === root ||
+      !root.contains(box) ||
+      boxes.has(box) ||
+      !url ||
+      !/^\/marketplace\/(?:np\/)?item\/\d+\/?$/.test(url.pathname) ||
+      item.closest(
+        `${sharedSelectors.authoredContent}, ${sharedSelectors.postOwner}, article, [role="article"], nav, [role="navigation"]`
+      ) ||
+      box.querySelectorAll(marketplaceVirtualizedAnchorQuery).length !== 1 ||
+      content.childElementCount !== 2 ||
+      content.firstElementChild?.localName !== "div" ||
+      content.lastElementChild?.localName !== "div"
+    )
+      continue;
+    const textBlocks = Array.from(content.querySelectorAll(marketplaceVirtualizedTextBlockQuery));
+    if (textBlocks.length < 2) continue;
+    boxes.set(box, { box, item, textBlocks, visualText: true });
+  }
+  return Array.from(boxes.values());
+}
+
+/**
+ * Select the current dialog or visible listing column, excluding retained background surfaces.
+ * @param item Whether an item-route dialog takes precedence over its background listing column.
+ * @returns The active supported surface, or null before Facebook mounts one.
+ */
+export function getMarketplaceRoot(item = false): Element | null {
+  const queries = item
+    ? [marketplaceSelectors.dialogItem, marketplaceSelectors.mainColumn]
+    : [marketplaceSelectors.mainColumn];
+  for (const query of queries) {
+    for (const root of document.querySelectorAll(query)) {
+      if (!root.closest('[hidden], [inert], [aria-hidden="true"]')) return root;
+    }
+  }
+  return null;
 }
 
 /**

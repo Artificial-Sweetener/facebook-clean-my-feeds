@@ -5912,7 +5912,7 @@
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:5ead7322280dc89f2218173ce210094dad3667c09f7250be8afe58251d7a41fb" : "unbundled";
+      buildIdentity = true ? "source-sha256:c3d08268de6eca5d47060083cc27e10896ded6eeafc66755290e24320fb9d31d" : "unbundled";
     }
   });
 
@@ -6272,7 +6272,7 @@
   });
 
   // src/selectors/marketplace.ts
-  var marketplaceSelectors, marketplaceListingQueries, marketplaceSponsoredHeadingQuery, marketplaceItemSponsoredHeadingQuery, marketplaceLegacySponsoredQuery, marketplaceSponsoredTileQuery;
+  var marketplaceSelectors, marketplaceListingQueries, marketplaceVirtualizedAnchorQuery, marketplaceVirtualizedListingQuery, marketplaceTextBlockQuery, marketplaceVirtualizedTextBlockQuery, marketplaceSponsoredHeadingQuery, marketplaceItemSponsoredHeadingQuery, marketplaceLegacySponsoredQuery, marketplaceSponsoredTileQuery;
   var init_marketplace = __esm({
     "src/selectors/marketplace.ts"() {
       "use strict";
@@ -6288,6 +6288,10 @@
         'div[style] > div > div > span > div > div > a[href*="/marketplace/item/"]',
         'div[style] > div > div > span > div > div > a[href*="/marketplace/np/item/"]'
       ];
+      marketplaceVirtualizedAnchorQuery = 'a[role="link"][aria-label][href*="/marketplace/"]';
+      marketplaceVirtualizedListingQuery = `[data-virtualized] ${marketplaceVirtualizedAnchorQuery}`;
+      marketplaceTextBlockQuery = ":scope > div > div:nth-of-type(2) > div";
+      marketplaceVirtualizedTextBlockQuery = ":scope > div:nth-of-type(2) > div";
       marketplaceSponsoredHeadingQuery = 'div > a[href*="/ads/about/"], div > object > a[href*="/ads/about/"]';
       marketplaceItemSponsoredHeadingQuery = 'span h2 a[href*="/ads/about/"]';
       marketplaceLegacySponsoredQuery = ":scope > div > div > div > div > div > div[style] > span";
@@ -7340,16 +7344,25 @@
     }
     return [...new Set(arrayTextValues)];
   }
-  function mpScanTreeForText(node, boundary = node) {
+  function mpScanTreeForText(node, boundary = node, visualText = false) {
     var _a;
     const arrayTextValues = [];
     const evidence = getPostEvidence(boundary);
-    if (!evidence.isVisible(node) || !evidence.isRendered(node)) return arrayTextValues;
+    function rendered(element) {
+      if (!visualText) return evidence.isVisible(element) && evidence.isRendered(element);
+      let ancestor = element;
+      while (ancestor && ancestor !== boundary) {
+        if (!evidence.isPainted(ancestor)) return false;
+        ancestor = ancestor.parentElement;
+      }
+      return ancestor === boundary;
+    }
+    if (!rendered(node)) return arrayTextValues;
     let currentNode;
     const walk = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, null);
     while (currentNode = walk.nextNode()) {
       const parent = currentNode.parentElement;
-      if (!parent || !evidence.isRendered(parent)) continue;
+      if (!parent || !rendered(parent)) continue;
       const val = cleanText((_a = currentNode.textContent) != null ? _a : "").trim();
       if (val !== "" && val.length > 1 && val.toLowerCase() !== "facebook") {
         arrayTextValues.push(val.toLowerCase());
@@ -9374,6 +9387,121 @@
     }
   });
 
+  // src/feeds/marketplace-discovery.ts
+  function collectMarketplaceListings(root) {
+    var _a, _b, _c;
+    const boxes = /* @__PURE__ */ new Map();
+    for (const query of marketplaceListingQueries) {
+      for (const item of root.querySelectorAll(query)) {
+        const box = item.closest("div[style]");
+        if (box && box !== root && root.contains(box) && !boxes.has(box))
+          boxes.set(box, {
+            box,
+            item,
+            textBlocks: Array.from(item.querySelectorAll(marketplaceTextBlockQuery)),
+            visualText: false
+          });
+      }
+    }
+    for (const item of root.querySelectorAll(marketplaceVirtualizedListingQuery)) {
+      const box = item.closest("[data-virtualized]");
+      const url = facebookUrl(item);
+      const content = item.childElementCount === 1 && ((_a = item.firstElementChild) == null ? void 0 : _a.localName) === "div" ? item.firstElementChild : item;
+      if (!box || box === root || !root.contains(box) || boxes.has(box) || !url || !/^\/marketplace\/(?:np\/)?item\/\d+\/?$/.test(url.pathname) || item.closest(
+        `${sharedSelectors.authoredContent}, ${sharedSelectors.postOwner}, article, [role="article"], nav, [role="navigation"]`
+      ) || box.querySelectorAll(marketplaceVirtualizedAnchorQuery).length !== 1 || content.childElementCount !== 2 || ((_b = content.firstElementChild) == null ? void 0 : _b.localName) !== "div" || ((_c = content.lastElementChild) == null ? void 0 : _c.localName) !== "div")
+        continue;
+      const textBlocks = Array.from(content.querySelectorAll(marketplaceVirtualizedTextBlockQuery));
+      if (textBlocks.length < 2) continue;
+      boxes.set(box, { box, item, textBlocks, visualText: true });
+    }
+    return Array.from(boxes.values());
+  }
+  function getMarketplaceRoot(item = false) {
+    const queries = item ? [marketplaceSelectors.dialogItem, marketplaceSelectors.mainColumn] : [marketplaceSelectors.mainColumn];
+    for (const query of queries) {
+      for (const root of document.querySelectorAll(query)) {
+        if (!root.closest('[hidden], [inert], [aria-hidden="true"]')) return root;
+      }
+    }
+    return null;
+  }
+  function revalidateMarketplaceListings(root, state) {
+    var _a, _b;
+    const listings = collectMarketplaceListings(root);
+    const currentBoxes = new Set(listings.map(({ box }) => box));
+    const markedQuery = [
+      postAtt,
+      postAttMPSkip,
+      state.hideAtt,
+      state.hideWithNoCaptionAtt,
+      state.showAtt
+    ].map((attribute) => `[${attribute}]`).join(", ");
+    for (const box of root.querySelectorAll(markedQuery)) {
+      if (!listingSignatures.has(box) || currentBoxes.has(box)) continue;
+      resetPostState(box, state);
+      box.removeAttribute(postAttMPSkip);
+      listingSignatures.delete(box);
+    }
+    for (const { box, item } of listings) {
+      const signature = `${(_a = item.getAttribute("href")) != null ? _a : ""}\0${(_b = item.textContent) != null ? _b : ""}`;
+      const previous = listingSignatures.get(box);
+      if (previous !== void 0 && previous !== signature) {
+        resetPostState(box, state);
+        box.removeAttribute(postAttMPSkip);
+      }
+      listingSignatures.set(box, signature);
+    }
+  }
+  function collectMarketplaceSponsoredBoxes(root, itemHeadings = false) {
+    var _a;
+    const boxes = /* @__PURE__ */ new Set();
+    for (const item of root.querySelectorAll(marketplaceLegacySponsoredQuery)) {
+      const box = item.parentElement;
+      if (!box) continue;
+      const evidence = getPostEvidence(box);
+      if (evidence.isRendered(item) && matchesSponsoredLabel(evidence.visibleText(item)))
+        boxes.add(box);
+    }
+    for (const link of root.querySelectorAll(marketplaceSponsoredHeadingQuery)) {
+      const parent = link.parentElement;
+      const heading2 = (parent == null ? void 0 : parent.tagName) === "OBJECT" ? parent.parentElement : parent;
+      if (!heading2 || heading2 === root || !root.contains(heading2) || !isSponsoredDisclosure(link, heading2))
+        continue;
+      let tile = heading2.nextElementSibling;
+      while (tile == null ? void 0 : tile.matches("div[style]")) {
+        if (!tile.querySelector(marketplaceSponsoredTileQuery)) break;
+        boxes.add(heading2);
+        boxes.add(tile);
+        tile = tile.nextElementSibling;
+      }
+    }
+    if (itemHeadings) {
+      for (const link of root.querySelectorAll(marketplaceItemSponsoredHeadingQuery)) {
+        const box = (_a = link.closest("h2")) == null ? void 0 : _a.closest("span");
+        if (box && root.contains(box) && isSponsoredDisclosure(link, box)) boxes.add(box);
+      }
+    }
+    return Array.from(boxes);
+  }
+  function clearMarketplaceListingTracking() {
+    listingSignatures = /* @__PURE__ */ new WeakMap();
+  }
+  var listingSignatures;
+  var init_marketplace_discovery = __esm({
+    "src/feeds/marketplace-discovery.ts"() {
+      "use strict";
+      init_attributes();
+      init_dirty_check();
+      init_post_evidence();
+      init_shared();
+      init_disclosure_labels2();
+      init_sponsored();
+      init_marketplace();
+      listingSignatures = /* @__PURE__ */ new WeakMap();
+    }
+  });
+
   // src/diagnostics/collection.ts
   function getNewsPostCollection() {
     const results = newsSelectors.postQueries.map((query) => {
@@ -9523,24 +9651,9 @@
     const posts = state && state.vfType === "search" ? Array.from(document.querySelectorAll(query)) : Array.from(container.querySelectorAll(query));
     return { query, queryBlocks, posts };
   }
-  function getMarketplaceItems() {
-    const queries = [
-      `div[style]:not([${postAtt}]) > div > div > span > div > div > div > div > a[href*="/marketplace/item/"]`,
-      `div[style]:not([${postAtt}]) > div > div > span > div > div > div > div > a[href*="/marketplace/np/item/"]`,
-      `div[style]:not([${postAtt}]) > div > span > div > div > a[href*="/marketplace/item/"]`,
-      `div[style]:not([${postAtt}]) > div > span > div > div > a[href*="/marketplace/np/item/"]`,
-      `div[style]:not([${postAtt}]) > div > div > span > div > div > a[href*="/marketplace/item/"]`,
-      `div[style]:not([${postAtt}]) > div > div > span > div > div > a[href*="/marketplace/np/item/"]`,
-      `div[style]:not([${postAtt}]) > div > span > div > div > a[href*="/marketplace/item/"]`,
-      `div[style]:not([${postAtt}]) > div > span > div > div > a[href*="/marketplace/np/item/"]`
-    ];
-    for (const query of queries) {
-      const items = document.querySelectorAll(query);
-      if (items.length > 0) {
-        return { query, items: Array.from(items) };
-      }
-    }
-    return { query: "", items: [] };
+  function getMarketplaceItems(state) {
+    const root = getMarketplaceRoot(state.mpType === "item");
+    return { query: root ? "combined" : "", listings: root ? collectMarketplaceListings(root) : [] };
   }
   function getProfilePostCollection() {
     const posts = document.querySelectorAll(profileSelectors.postsQuery);
@@ -9612,6 +9725,7 @@
       init_search();
       init_news2();
       init_sponsored();
+      init_marketplace_discovery();
     }
   });
 
@@ -10498,92 +10612,6 @@
     }
   });
 
-  // src/feeds/marketplace-discovery.ts
-  function collectMarketplaceListings(root) {
-    const boxes = /* @__PURE__ */ new Map();
-    for (const query of marketplaceListingQueries) {
-      for (const item of root.querySelectorAll(query)) {
-        const box = item.closest("div[style]");
-        if (box && box !== root && root.contains(box) && !boxes.has(box)) boxes.set(box, item);
-      }
-    }
-    return Array.from(boxes, ([box, item]) => ({ box, item }));
-  }
-  function revalidateMarketplaceListings(root, state) {
-    var _a, _b;
-    const listings = collectMarketplaceListings(root);
-    const currentBoxes = new Set(listings.map(({ box }) => box));
-    const markedQuery = [
-      postAtt,
-      postAttMPSkip,
-      state.hideAtt,
-      state.hideWithNoCaptionAtt,
-      state.showAtt
-    ].map((attribute) => `[${attribute}]`).join(", ");
-    for (const box of root.querySelectorAll(markedQuery)) {
-      if (!listingSignatures.has(box) || currentBoxes.has(box)) continue;
-      resetPostState(box, state);
-      box.removeAttribute(postAttMPSkip);
-      listingSignatures.delete(box);
-    }
-    for (const { box, item } of listings) {
-      const signature = `${(_a = item.getAttribute("href")) != null ? _a : ""}\0${(_b = item.textContent) != null ? _b : ""}`;
-      const previous = listingSignatures.get(box);
-      if (previous !== void 0 && previous !== signature) {
-        resetPostState(box, state);
-        box.removeAttribute(postAttMPSkip);
-      }
-      listingSignatures.set(box, signature);
-    }
-  }
-  function collectMarketplaceSponsoredBoxes(root, itemHeadings = false) {
-    var _a;
-    const boxes = /* @__PURE__ */ new Set();
-    for (const item of root.querySelectorAll(marketplaceLegacySponsoredQuery)) {
-      const box = item.parentElement;
-      if (!box) continue;
-      const evidence = getPostEvidence(box);
-      if (evidence.isRendered(item) && matchesSponsoredLabel(evidence.visibleText(item)))
-        boxes.add(box);
-    }
-    for (const link of root.querySelectorAll(marketplaceSponsoredHeadingQuery)) {
-      const parent = link.parentElement;
-      const heading2 = (parent == null ? void 0 : parent.tagName) === "OBJECT" ? parent.parentElement : parent;
-      if (!heading2 || heading2 === root || !root.contains(heading2) || !isSponsoredDisclosure(link, heading2))
-        continue;
-      let tile = heading2.nextElementSibling;
-      while (tile == null ? void 0 : tile.matches("div[style]")) {
-        if (!tile.querySelector(marketplaceSponsoredTileQuery)) break;
-        boxes.add(heading2);
-        boxes.add(tile);
-        tile = tile.nextElementSibling;
-      }
-    }
-    if (itemHeadings) {
-      for (const link of root.querySelectorAll(marketplaceItemSponsoredHeadingQuery)) {
-        const box = (_a = link.closest("h2")) == null ? void 0 : _a.closest("span");
-        if (box && root.contains(box) && isSponsoredDisclosure(link, box)) boxes.add(box);
-      }
-    }
-    return Array.from(boxes);
-  }
-  function clearMarketplaceListingTracking() {
-    listingSignatures = /* @__PURE__ */ new WeakMap();
-  }
-  var listingSignatures;
-  var init_marketplace_discovery = __esm({
-    "src/feeds/marketplace-discovery.ts"() {
-      "use strict";
-      init_attributes();
-      init_dirty_check();
-      init_post_evidence();
-      init_disclosure_labels2();
-      init_sponsored();
-      init_marketplace();
-      listingSignatures = /* @__PURE__ */ new WeakMap();
-    }
-  });
-
   // src/feeds/marketplace.ts
   function mpHideBox(box, reason, state, options) {
     if (!box || !state || !options) {
@@ -10629,20 +10657,20 @@
       sponsoredBoxes.add(box);
     }
   }
-  function mpGetBlockedPrices(elBlockOfText, filters, boundary = elBlockOfText) {
+  function mpGetBlockedPrices(elBlockOfText, filters, boundary = elBlockOfText, visualText = false) {
     if (filters.MP_BLOCKED_TEXT.length > 0) {
-      const itemPrices = elBlockOfText ? mpScanTreeForText(elBlockOfText, boundary) : [];
+      const itemPrices = elBlockOfText ? mpScanTreeForText(elBlockOfText, boundary, visualText) : [];
       return findFirstMatch(itemPrices, filters.MP_BLOCKED_TEXT_LC);
     }
     return "";
   }
-  function mpGetBlockedTextDescription(collectionBlocksOfText, filters, skipFirstBlock = true, boundary) {
+  function mpGetBlockedTextDescription(collectionBlocksOfText, filters, skipFirstBlock = true, boundary, visualText = false) {
     if (filters.MP_BLOCKED_TEXT_DESCRIPTION.length > 0) {
       const startIndex = skipFirstBlock ? 1 : 0;
       for (let i = startIndex; i < collectionBlocksOfText.length; i += 1) {
         const block = collectionBlocksOfText[i];
         if (!block) continue;
-        const descriptionTextList = mpScanTreeForText(block, boundary);
+        const descriptionTextList = mpScanTreeForText(block, boundary, visualText);
         const descriptionText = descriptionTextList.join(" ").toLowerCase();
         const blockedText = findFirstMatch(descriptionText, filters.MP_BLOCKED_TEXT_DESCRIPTION_LC);
         if (blockedText.length > 0) {
@@ -10652,19 +10680,23 @@
     }
     return "";
   }
-  function mpDoBlockingByBlockedText(root, filters, keyWords, state, options) {
-    for (const { box, item } of collectMarketplaceListings(root)) {
+  function mpDoBlockingByBlockedText(root, filters, state, options) {
+    for (const { box, textBlocks, visualText } of collectMarketplaceListings(root)) {
       if (box.hasAttribute(postAtt)) continue;
       if (box.hasAttribute(postAttMPSkip)) {
         if (String(box.innerHTML.length) === box.getAttribute(postAttMPSkip)) {
           continue;
         }
       }
-      const queryTextBlock = ":scope > div > div:nth-of-type(2) > div";
-      const blocksOfText = item.querySelectorAll(queryTextBlock);
-      if (blocksOfText.length > 0) {
-        const blockedTextPrices = mpGetBlockedPrices(blocksOfText[0], filters, box);
-        const blockedTextDescription = mpGetBlockedTextDescription(blocksOfText, filters, true, box);
+      if (textBlocks.length > 0) {
+        const blockedTextPrices = mpGetBlockedPrices(textBlocks[0], filters, box, visualText);
+        const blockedTextDescription = mpGetBlockedTextDescription(
+          textBlocks,
+          filters,
+          true,
+          box,
+          visualText
+        );
         if (blockedTextPrices.length > 0) {
           mpHideBox(box, blockedTextPrices, state, options);
         } else if (blockedTextDescription.length > 0) {
@@ -10676,15 +10708,8 @@
       }
     }
   }
-  function findMarketplaceSurface(query) {
-    for (const root of document.querySelectorAll(query)) {
-      if (!root.closest('[hidden], [inert], [aria-hidden="true"]')) return root;
-    }
-    return null;
-  }
   function isMarketplaceDirty(state) {
-    var _a;
-    const mainColumn = state.mpType === "item" ? (_a = findMarketplaceSurface(marketplaceSelectors.dialogItem)) != null ? _a : findMarketplaceSurface(marketplaceSelectors.mainColumn) : findMarketplaceSurface(marketplaceSelectors.mainColumn);
+    const mainColumn = getMarketplaceRoot(state.mpType === "item");
     if (mainColumn) {
       ensureDirtyObserver(mainColumn);
       if (!mainColumn.hasAttribute(mainColumnAtt)) {
@@ -10716,7 +10741,7 @@
     if (["marketplace", "item", "category", "search"].includes(state.mpType)) {
       reconcileSponsoredItems(mainColumn, context);
       if (options.MP_BLOCKED_ENABLED) {
-        mpDoBlockingByBlockedText(mainColumn, filters, keyWords, state, options);
+        mpDoBlockingByBlockedText(mainColumn, filters, state, options);
       }
     }
     if (!mainColumn.hasAttribute(mainColumnAtt)) {
@@ -10736,7 +10761,6 @@
       init_dirty_check();
       init_walker();
       init_hide();
-      init_marketplace();
       init_marketplace_discovery();
       sponsoredBoxes = /* @__PURE__ */ new WeakSet();
     }
@@ -10885,17 +10909,16 @@
     }
     return matches;
   }
-  function buildMarketplaceMatches(item, filters) {
+  function buildMarketplaceMatches(listing, filters) {
     const matches = {};
-    const queryTextBlock = ":scope > div > div:nth-of-type(2) > div";
-    const blocksOfText = item.querySelectorAll(queryTextBlock);
+    const { textBlocks: blocksOfText, box, visualText } = listing;
     const priceBlock = blocksOfText[0];
     if (priceBlock) {
-      const blockedPrices = mpGetBlockedPrices(priceBlock, filters);
+      const blockedPrices = mpGetBlockedPrices(priceBlock, filters, box, visualText);
       if (blockedPrices) {
         matches.MP_BLOCKED_TEXT = true;
       }
-      const blockedDesc = mpGetBlockedTextDescription(blocksOfText, filters, true);
+      const blockedDesc = mpGetBlockedTextDescription(blocksOfText, filters, true, box, visualText);
       if (blockedDesc) {
         matches.MP_BLOCKED_TEXT_DESCRIPTION = true;
       }
@@ -10960,10 +10983,10 @@
       return { feed: "videos", query, samples };
     }
     if (state.isMF) {
-      const { query, items } = getMarketplaceItems();
-      const samples = items.filter((item) => item && item.closest && item.closest("div[style]")).slice(0, maxSamples).map((item) => ({
-        signature: buildDomSignature(item),
-        matches: buildMarketplaceMatches(item, filters)
+      const { query, listings } = getMarketplaceItems(state);
+      const samples = listings.slice(0, maxSamples).map((listing) => ({
+        signature: buildDomSignature(listing.item),
+        matches: buildMarketplaceMatches(listing, filters)
       }));
       return { feed: "marketplace", query, samples };
     }

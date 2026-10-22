@@ -29,6 +29,7 @@ import {
 import { isGroupsShortReelVideo, isGroupsSuggested } from "../feeds/groups";
 import { isInstagram, isVideoLive } from "../feeds/videos";
 import { mpGetBlockedPrices, mpGetBlockedTextDescription } from "../feeds/marketplace";
+import type { MarketplaceListing } from "../feeds/marketplace-discovery";
 
 import { isSponsored } from "../feeds/shared/sponsored";
 import type { BugReportContext, MatchEvidence, DiagnosticCounts } from "./types";
@@ -228,21 +229,20 @@ export function buildProfileMatches(post: HTMLElement, context: BugReportContext
 
 /**
  * Annotate price and description matches from the marketplace item text blocks.
- * @param item Marketplace item whose price and description blocks are inspected.
+ * @param listing Production listing ownership and rendered caption blocks.
  * @param filters Materialized keyword lists used by the active filtering pass.
  * @returns Flags for matched price and description filters, with no item content.
  */
-export function buildMarketplaceMatches(item: HTMLElement, filters: Filters) {
+export function buildMarketplaceMatches(listing: MarketplaceListing, filters: Filters) {
   const matches: MatchEvidence = {};
-  const queryTextBlock = ":scope > div > div:nth-of-type(2) > div";
-  const blocksOfText = item.querySelectorAll<HTMLElement>(queryTextBlock);
+  const { textBlocks: blocksOfText, box, visualText } = listing;
   const priceBlock = blocksOfText[0];
   if (priceBlock) {
-    const blockedPrices = mpGetBlockedPrices(priceBlock, filters);
+    const blockedPrices = mpGetBlockedPrices(priceBlock, filters, box, visualText);
     if (blockedPrices) {
       matches.MP_BLOCKED_TEXT = true;
     }
-    const blockedDesc = mpGetBlockedTextDescription(blocksOfText, filters, true);
+    const blockedDesc = mpGetBlockedTextDescription(blocksOfText, filters, true, box, visualText);
     if (blockedDesc) {
       matches.MP_BLOCKED_TEXT_DESCRIPTION = true;
     }

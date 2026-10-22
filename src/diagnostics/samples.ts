@@ -55,14 +55,11 @@ export function buildSamples(context: BugReportContext, maxSamples = 20) {
     return { feed: "videos", query, samples };
   }
   if (state.isMF) {
-    const { query, items } = getMarketplaceItems();
-    const samples = items
-      .filter((item) => item && item.closest && item.closest("div[style]"))
-      .slice(0, maxSamples)
-      .map((item) => ({
-        signature: buildDomSignature(item),
-        matches: buildMarketplaceMatches(item, filters),
-      }));
+    const { query, listings } = getMarketplaceItems(state);
+    const samples = listings.slice(0, maxSamples).map((listing) => ({
+      signature: buildDomSignature(listing.item),
+      matches: buildMarketplaceMatches(listing, filters),
+    }));
     return { feed: "marketplace", query, samples };
   }
   if (state.isSF) {

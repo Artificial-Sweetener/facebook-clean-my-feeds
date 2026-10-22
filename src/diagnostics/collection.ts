@@ -8,6 +8,7 @@ import { searchSelectors } from "../selectors/search";
 import { getNewsPostDiscovery, getOrphanSponsoredNewsPosts } from "../feeds/news";
 import { getSponsoredDiagnostics } from "../feeds/shared/sponsored";
 import type { DiagnosticsState } from "./types";
+import { collectMarketplaceListings, getMarketplaceRoot } from "../feeds/marketplace-discovery";
 
 /**
  * Union every known news selector without changing runtime discovery or processing posts twice.
@@ -217,27 +218,13 @@ export function getVideosPostCollection(state: DiagnosticsState) {
 }
 
 /**
- * Use the first supported marketplace layout, preserving the runtime query order.
- * @returns The first successful marketplace query and matching item links.
+ * Share production listing ownership so diagnostics also see current virtualized cards and recycled hides.
+ * @param state Active Marketplace subtype; item dialogs take precedence over background columns.
+ * @returns The combined production discovery and its independently owned listings.
  */
-export function getMarketplaceItems() {
-  const queries = [
-    `div[style]:not([${postAtt}]) > div > div > span > div > div > div > div > a[href*="/marketplace/item/"]`,
-    `div[style]:not([${postAtt}]) > div > div > span > div > div > div > div > a[href*="/marketplace/np/item/"]`,
-    `div[style]:not([${postAtt}]) > div > span > div > div > a[href*="/marketplace/item/"]`,
-    `div[style]:not([${postAtt}]) > div > span > div > div > a[href*="/marketplace/np/item/"]`,
-    `div[style]:not([${postAtt}]) > div > div > span > div > div > a[href*="/marketplace/item/"]`,
-    `div[style]:not([${postAtt}]) > div > div > span > div > div > a[href*="/marketplace/np/item/"]`,
-    `div[style]:not([${postAtt}]) > div > span > div > div > a[href*="/marketplace/item/"]`,
-    `div[style]:not([${postAtt}]) > div > span > div > div > a[href*="/marketplace/np/item/"]`,
-  ];
-  for (const query of queries) {
-    const items = document.querySelectorAll<HTMLElement>(query);
-    if (items.length > 0) {
-      return { query, items: Array.from(items) };
-    }
-  }
-  return { query: "", items: [] };
+export function getMarketplaceItems(state: Pick<DiagnosticsState, "mpType">) {
+  const root = getMarketplaceRoot(state.mpType === "item");
+  return { query: root ? "combined" : "", listings: root ? collectMarketplaceListings(root) : [] };
 }
 
 /**

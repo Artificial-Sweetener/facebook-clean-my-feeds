@@ -93,18 +93,29 @@ export function scanTreeForText(node: Element): string[] {
  * Read rendered Marketplace text with lowercase signals, excluding concealed prices and descriptions.
  * @param node Listing root whose descendant text nodes are inspected.
  * @param boundary Owning listing used to reject concealed ancestors outside an individual text block.
+ * @param visualText Current named virtualized cards duplicate their accessible name in painted aria-hidden caption rows.
  * @returns Ordered lowercase text fragments, retaining duplicates for historical matching.
  */
-export function mpScanTreeForText(node: Element, boundary = node): string[] {
+export function mpScanTreeForText(node: Element, boundary = node, visualText = false): string[] {
   const arrayTextValues: string[] = [];
   const evidence = getPostEvidence(boundary);
-  if (!evidence.isVisible(node) || !evidence.isRendered(node)) return arrayTextValues;
+  /** Keep hidden/display/visibility checks even for visually displayed accessibility duplicates. */
+  function rendered(element: Element): boolean {
+    if (!visualText) return evidence.isVisible(element) && evidence.isRendered(element);
+    let ancestor: Element | null = element;
+    while (ancestor && ancestor !== boundary) {
+      if (!evidence.isPainted(ancestor)) return false;
+      ancestor = ancestor.parentElement;
+    }
+    return ancestor === boundary;
+  }
+  if (!rendered(node)) return arrayTextValues;
   let currentNode;
   const walk = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, null);
 
   while ((currentNode = walk.nextNode())) {
     const parent = currentNode.parentElement;
-    if (!parent || !evidence.isRendered(parent)) continue;
+    if (!parent || !rendered(parent)) continue;
     const val = cleanText(currentNode.textContent ?? "").trim();
     if (val !== "" && val.length > 1 && val.toLowerCase() !== "facebook") {
       arrayTextValues.push(val.toLowerCase());

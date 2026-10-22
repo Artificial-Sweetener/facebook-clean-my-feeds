@@ -18,6 +18,15 @@ export const marketplaceListingQueries = [
   'div[style] > div > div > span > div > div > a[href*="/marketplace/np/item/"]',
 ];
 
+/** Current cards have a named listing anchor inside their own virtualized cell, without inline sizing. */
+export const marketplaceVirtualizedAnchorQuery =
+  'a[role="link"][aria-label][href*="/marketplace/"]';
+export const marketplaceVirtualizedListingQuery = `[data-virtualized] ${marketplaceVirtualizedAnchorQuery}`;
+
+/** Caption rows follow the media region in either the legacy wrapper or current direct-child layout. */
+export const marketplaceTextBlockQuery = ":scope > div > div:nth-of-type(2) > div";
+export const marketplaceVirtualizedTextBlockQuery = ":scope > div:nth-of-type(2) > div";
+
 /** Explicit ad-disclosure headings own only adjacent independently styled tiles. */
 export const marketplaceSponsoredHeadingQuery =
   'div > a[href*="/ads/about/"], div > object > a[href*="/ads/about/"]';

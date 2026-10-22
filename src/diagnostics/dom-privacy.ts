@@ -4,6 +4,7 @@ import type { SnapshotContent } from "../core/diagnostics/dom-snapshot";
 import { sanitizePathname } from "./location";
 import { sharedSelectors } from "../selectors/shared";
 import { matchesSponsoredLabel } from "../core/filters/disclosure-labels";
+import { matchesNewsLabel } from "../core/filters/labels";
 import { translations } from "../i18n";
 
 const authored = `${sharedSelectors.authoredContent}, textarea, input, [role="textbox"], [role="log"], [data-lexical-editor]`;
@@ -100,6 +101,42 @@ function isProfileLink(element: Element): boolean {
   }
 }
 
+/** Recognize only complete supported author actions; private or personalized action text never gains public provenance. */
+function isAuthorActionLabel(value: string): boolean {
+  return matchesNewsLabel(value, "follow") || matchesNewsLabel(value, "join");
+}
+
+/**
+ * Separate a fixed action from a broad profile-name wrapper while keeping actual profile anchors and identifying attributes private.
+ * @param element Descendant being captured; only an independently named button beside a separate author link is eligible.
+ * @returns Whether the surrounding control supplies supported fixed copy without conflicting accessible text or identity markers.
+ */
+function isPublicAuthorAction(element: Element): boolean {
+  const action = element.closest('button, [role="button"]');
+  const profile = action?.closest('[data-ad-rendering-role="profile_name"]');
+  const header = action?.closest("h4, h5");
+  if (
+    !action ||
+    !profile ||
+    !header ||
+    profile === action ||
+    action.closest("a, [data-hovercard], [data-profileid], [data-userid]") ||
+    element.closest(identity) !== profile ||
+    action.querySelector("a, [data-hovercard], [data-profileid], [data-userid]") ||
+    !Array.from(header.querySelectorAll("a[href]")).some(
+      (link) => !action.contains(link) && isProfileLink(link)
+    )
+  )
+    return false;
+  const text = boundedText(action);
+  const label = action.getAttribute("aria-label");
+  return (
+    text !== null &&
+    ((!!text && isAuthorActionLabel(text)) || (!text && !!label && isAuthorActionLabel(label))) &&
+    (!label || !text || normalizeLabel(label) === normalizeLabel(text))
+  );
+}
+
 /** Locally remember identity strings and replace them within otherwise useful personalized interface labels. */
 export class SnapshotPrivacy {
   private identities = new Set<string>();
@@ -110,7 +147,7 @@ export class SnapshotPrivacy {
   remember(element: Element): void {
     if (this.identities.size >= 500) return;
     if (
-      element.matches(identity) ||
+      (element.matches(identity) && !element.querySelector('button, [role="button"]')) ||
       (element.matches("h4 a, h5 a") && !isInterfaceLink(element)) ||
       isProfileLink(element)
     ) {
@@ -138,6 +175,7 @@ export class SnapshotPrivacy {
   content(element: Element): SnapshotContent {
     if (element.closest(excluded)) return "excluded";
     if (element.closest(authored)) return "authored";
+    if (isPublicAuthorAction(element)) return "interface";
     if (element.closest(identity)) return "identity";
     const link = element.closest("a");
     if (link && !isInterfaceLink(link)) return "identity";
@@ -165,7 +203,9 @@ export class SnapshotPrivacy {
   accessibleText(element: Element, value: string, content: SnapshotContent): string {
     const link = element.closest("a");
     const publicLabel =
-      fixedLabels.has(normalizeLabel(value)) || (link !== null && isDisclosureLink(link));
+      fixedLabels.has(normalizeLabel(value)) ||
+      (isPublicAuthorAction(element) && isAuthorActionLabel(value)) ||
+      (link !== null && isDisclosureLink(link));
     return this.text(value, content === "interface" && !publicLabel ? "uncertain" : content);
   }
 

@@ -140,13 +140,29 @@ export function scanImagesForAltText(node: Element): string[] {
  */
 export function extractTextContent(post: Element, selector: string, maxBlocks: number): string[] {
   return getPostEvidence(post).readText(`${maxBlocks}|${selector}`, () =>
-    extractBlockText(post, selector, maxBlocks)
+    extractBlockText(post, getPostEvidence(post).select(selector), maxBlocks)
+  );
+}
+
+/**
+ * Reuse text extracted from the versioned news/group block collection without re-querying structural paths.
+ * @param post Owning feed root used for nested-feature exclusion and per-version memoization.
+ * @param blocks The shared header-first collection returned by the feed's content-block provider.
+ * @param maxBlocks Maximum number of blocks to inspect in collection order.
+ * @returns Visible text and loaded image descriptions from the selected content blocks.
+ */
+export function extractFeedBlockText(
+  post: Element,
+  blocks: readonly Element[],
+  maxBlocks: number
+): string[] {
+  return getPostEvidence(post).readText(`feed-blocks:${maxBlocks}`, () =>
+    extractBlockText(post, blocks, maxBlocks)
   );
 }
 
 /** Extract a fresh bounded body snapshot when the post's content version changes. */
-function extractBlockText(post: Element, selector: string, maxBlocks: number): string[] {
-  const blocks = getPostEvidence(post).select(selector);
+function extractBlockText(post: Element, blocks: readonly Element[], maxBlocks: number): string[] {
   const arrayTextValues: string[] = [];
 
   for (let b = 0; b < Math.min(maxBlocks, blocks.length); b++) {

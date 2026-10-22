@@ -55,7 +55,9 @@ export function isNewsStoryShelf(post: Element): boolean {
       !post.contains(card) ||
       !ownsPostElement(link, post) ||
       !evidence.isRendered(link) ||
-      !link.querySelector(newsSelectors.storyShelfMedia)
+      !evidence
+        .select(newsSelectors.storyShelfMedia, link)
+        .some((media) => evidence.isRendered(media))
     )
       continue;
     cards.add(card);

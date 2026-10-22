@@ -6,7 +6,7 @@ import { matchesSponsoredLabel } from "../../core/filters/disclosure-labels";
 import { videosSelectors } from "../../selectors/videos";
 import { sharedSelectors } from "../../selectors/shared";
 import type { SponsoredState } from "../types";
-import { getNewsBlocksQuery } from "./blocks";
+import { getNewsBlocks } from "./blocks";
 
 const cftParam = "__cft__[0]=";
 const maximumCandidateLinks = 10;
@@ -32,7 +32,7 @@ function isOwnedControl(
  */
 function authoredBlocks(post: Element, state: SponsoredState): Element[] {
   if (state.isNF || state.isGF || state.isSF) {
-    return getPostEvidence(post).select(getNewsBlocksQuery(post)).slice(1);
+    return getNewsBlocks(post).slice(1);
   }
   if (state.isVF) {
     return Array.from(

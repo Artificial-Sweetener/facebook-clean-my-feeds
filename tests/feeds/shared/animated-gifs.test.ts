@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 jest.mock("../../../src/feeds/shared/blocks", () => ({
-  getGroupsBlocksQuery: jest.fn(() => ".block"),
-  getNewsBlocksQuery: jest.fn(() => ".block"),
+  getGroupsBlocks: jest.fn((post: Element) => Array.from(post.querySelectorAll(".block"))),
+  getNewsBlocks: jest.fn((post: Element) => Array.from(post.querySelectorAll(".block"))),
 }));
 
 import {

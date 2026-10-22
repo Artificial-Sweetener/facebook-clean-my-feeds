@@ -7,9 +7,9 @@ import type { HydratedOptions } from "../core/options/types";
 import { matchesDisclosureLabel, containsMetaAiCopy } from "../core/filters/disclosure-labels";
 import { facebookUrl, getPostEvidence } from "../dom/post-evidence";
 import { getFullNumber } from "../core/filters/classifiers/shares-likes";
-import { extractTextContent } from "../dom/walker";
+import { extractFeedBlockText } from "../dom/walker";
 import { querySelectorAllNoChildren } from "../utils/dom";
-import { getNewsBlocksQuery } from "./shared/blocks";
+import { getNewsBlocks } from "./shared/blocks";
 import { isNewsStoryShelf } from "./news-stories";
 import {
   facebookPath,
@@ -17,6 +17,7 @@ import {
   hasNewsCardHeading,
   isOwnedNewsElement,
   isOwnedNewsMetadata,
+  isNewsReelShelf,
   ownNewsHeaders,
   ownPostReelLinks,
   ownVerifiedBadges,
@@ -121,11 +122,12 @@ export function isNewsSponsoredPaidBy(
     : "";
 }
 
-/** Recognize an owned labelled shelf with a feed-specific see-more link, or more than four owned reel media previews. */
+/** Recognize separate preview cards before all carousel items load, retaining established labelled and larger-shelf routes. */
 export function isNewsReelsAndShortVideos(
   post: Element,
   keyWords: Pick<Keywords, "NF_REELS_SHORT_VIDEOS">
 ) {
+  if (isNewsReelShelf(post)) return keyWords.NF_REELS_SHORT_VIDEOS;
   const shelf =
     hasNewsCardHeading(post, "reels") &&
     getPostEvidence(post)
@@ -253,7 +255,7 @@ export function isNewsMetaAICard(post: Element, keyWords: Pick<Keywords, "NF_MET
       )
   )
     return keyWords.NF_META_AI;
-  const postTexts = extractTextContent(post, getNewsBlocksQuery(post), 3).join(" ");
+  const postTexts = extractFeedBlockText(post, getNewsBlocks(post), 3).join(" ");
   if (containsMetaAiCopy(postTexts)) return keyWords.NF_META_AI;
 
   return "";

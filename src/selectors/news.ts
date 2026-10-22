@@ -19,6 +19,10 @@ const newsSelectors = {
   storyShelfItems: '[data-type="hscroll-child"]',
   storyShelfAuthors: "h4 a[href], h5 a[href]",
   storyShelfMedia: 'img, video, [role="img"]',
+  reelShelfItems: '[data-type="hscroll-child"]',
+  reelShelfContent:
+    '[data-ad-rendering-role="profile_name"], [data-ad-rendering-role="story_message"]',
+  reelShelfAuthors: "h4 a[href], h5 a[href]",
   postQueries: [
     'h3[dir="auto"] ~ div div[aria-posinset]',
     'h2[dir="auto"] ~ div div[aria-posinset]',

@@ -1,47 +1,34 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { getGroupsBlocksQuery, getNewsBlocksQuery } from "../../../src/feeds/shared/blocks";
+import { getGroupsBlocks, getNewsBlocks } from "../../../src/feeds/shared/blocks";
 
-const NEWS_QUERY =
-  "div[aria-posinset] > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div";
-const NEWS_FALLBACK =
-  "div[aria-posinset] > div > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div > div";
+/** Exercise actual legacy wrapper depths without mocking the DOM selectors being verified. */
+function mountLegacyBlocks(depth: number): Element {
+  document.body.innerHTML = `<div aria-posinset="1">${"<div>".repeat(depth)}<div id="header">Author</div><div id="body">Message</div><div id="footer">Reactions</div>${"</div>".repeat(depth)}</div>`;
+  const post = document.querySelector("[aria-posinset]");
+  if (!post) throw new Error("Missing legacy post fixture");
+  return post;
+}
 
-const GROUPS_QUERY =
-  "div[aria-posinset] > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div";
-const GROUPS_FALLBACK =
-  "div[aria-posinset] > div > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div > div";
+afterEach(() => document.body.replaceChildren());
 
-describe("feeds/shared/blocks", () => {
-  test("getNewsBlocksQuery returns fallback for small block counts", () => {
-    const post = document.createElement("div");
-    const fixture = document.createElement("div");
-    fixture.innerHTML = "<span></span>";
-    jest.spyOn(post, "querySelectorAll").mockReturnValue(fixture.querySelectorAll("span"));
-    expect(getNewsBlocksQuery(post)).toBe(NEWS_FALLBACK);
+describe.each([getNewsBlocks, getGroupsBlocks])("legacy block ownership", (getQuery) => {
+  test.each([7, 8])("selects header, body and footer at wrapper depth %s", (depth) => {
+    const post = mountLegacyBlocks(depth);
+    expect(Array.from(getQuery(post), (block) => block.id)).toEqual(["header", "body", "footer"]);
   });
 
-  test("getNewsBlocksQuery keeps base query for larger block counts", () => {
+  test("an empty post produces no content blocks", () => {
     const post = document.createElement("div");
-    const fixture = document.createElement("div");
-    fixture.innerHTML = "<span></span><span></span>";
-    jest.spyOn(post, "querySelectorAll").mockReturnValue(fixture.querySelectorAll("span"));
-    expect(getNewsBlocksQuery(post)).toBe(NEWS_QUERY);
+    post.setAttribute("aria-posinset", "1");
+    expect(getQuery(post)).toHaveLength(0);
   });
 
-  test("getGroupsBlocksQuery returns fallback for small block counts", () => {
-    const post = document.createElement("div");
-    const fixture = document.createElement("div");
-    fixture.innerHTML = "<span></span>";
-    jest.spyOn(post, "querySelectorAll").mockReturnValue(fixture.querySelectorAll("span"));
-    expect(getGroupsBlocksQuery(post)).toBe(GROUPS_FALLBACK);
-  });
-
-  test("getGroupsBlocksQuery keeps base query for larger block counts", () => {
-    const post = document.createElement("div");
-    const fixture = document.createElement("div");
-    fixture.innerHTML = "<span></span><span></span>";
-    jest.spyOn(post, "querySelectorAll").mockReturnValue(fixture.querySelectorAll("span"));
-    expect(getGroupsBlocksQuery(post)).toBe(GROUPS_QUERY);
+  test("hidden siblings do not shift the first authored metadata block", () => {
+    const post = mountLegacyBlocks(7);
+    document
+      .getElementById("header")
+      ?.insertAdjacentHTML("beforebegin", '<div aria-hidden="true">Private decoy</div>');
+    expect(Array.from(getQuery(post), (block) => block.id)).toEqual(["header", "body", "footer"]);
   });
 });

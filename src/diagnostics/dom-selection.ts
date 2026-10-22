@@ -123,13 +123,21 @@ export async function selectSnapshotRegions(
       if (
         node.matches('button, [role="button"], [role="heading"]') &&
         !node.closest('[role="article"], [aria-posinset]')
-      )
-        candidates.add(snapshotTargetRegion(node));
+      ) {
+        const navigation = node.closest(
+          'nav, [role="navigation"], header[role="banner"], [role="banner"]'
+        );
+        candidates.add(navigation || snapshotTargetRegion(node));
+      }
     }
     if (discovered > 0 && discovered % 128 === 0) await yieldSnapshotWork();
     node = walker.nextNode();
   }
   for (const surface of surfaces) {
+    if (surface.matches('[role="navigation"], [role="banner"]')) {
+      candidates.add(surface);
+      continue;
+    }
     let branch = surface;
     for (let depth = 0; depth < 8 && branch.children.length === 1; depth++) {
       const child = branch.firstElementChild;
@@ -170,11 +178,15 @@ export async function selectSnapshotRegions(
         Number(!!right.closest('main, [role="main"], [role="feed"]')) -
         Number(!!left.closest('main, [role="main"], [role="feed"]'))
     );
-  for (const candidate of inView) add(candidate, "viewport");
-  for (const candidate of inView.slice(0, 3)) {
+  const feedCandidates = inView.filter((candidate) =>
+    candidate.closest('main, [role="main"], [role="feed"]')
+  );
+  for (const candidate of feedCandidates) add(candidate, "viewport");
+  for (const candidate of feedCandidates.slice(0, 3)) {
     add(candidate.previousElementSibling, "neighbor");
     add(candidate.nextElementSibling, "neighbor");
   }
+  for (const candidate of inView) add(candidate, "viewport");
   for (const candidate of candidates) add(candidate, "surface");
   for (const surface of surfaces) add(surface, "surface");
   if (!regions.length) add(root, "surface");

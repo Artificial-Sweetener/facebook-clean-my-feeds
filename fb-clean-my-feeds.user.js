@@ -4683,8 +4683,328 @@
     }
   });
 
+  // src/core/filters/text-normalize.ts
+  function cleanText(text) {
+    return text.normalize("NFKC");
+  }
+  var init_text_normalize = __esm({
+    "src/core/filters/text-normalize.ts"() {
+      "use strict";
+    }
+  });
+
+  // src/i18n/news-labels.ts
+  var newsLabels;
+  var init_news_labels = __esm({
+    "src/i18n/news-labels.ts"() {
+      "use strict";
+      newsLabels = {
+        en: [
+          "Follow",
+          "Join|Join group",
+          "Verified|Verified account",
+          "Suggested for you|Recommended for you|Suggested Pages|Pages you may like",
+          "Groups you might like|Suggested groups",
+          "People you may know",
+          "Reels|Reels and short videos",
+          "Events you may like",
+          "Paid for by ______"
+        ],
+        ar: [
+          "متابعة|تابع",
+          "انضمام|انضمام إلى المجموعة",
+          "تم التحقق|حساب تم التحقق منه|حساب موثّق",
+          "مقترح لك|مقترحات لك|صفحات قد تعجبك",
+          "مجموعات قد تعجبك|مجموعات مقترحة",
+          "أشخاص قد تعرفهم",
+          "ريلز|مقاطع ريلز",
+          "أحداث قد تعجبك",
+          "مدفوعة بواسطة ______"
+        ],
+        bg: [
+          "Следване|Следвай",
+          "Присъединяване|Присъединяване към групата",
+          "Потвърден|Потвърден акаунт",
+          "Предложения за вас|Страници, които може да харесате",
+          "Групи, които може да харесате|Предложени групи",
+          "Хора, които може би познавате",
+          "Ленти|Reels",
+          "Събития, които може да ви харесат",
+          "Платено от ______"
+        ],
+        cs: [
+          "Sledovat",
+          "Přidat se|Přidat se ke skupině",
+          "Ověřeno|Ověřený účet",
+          "Navrhované pro vás|Stránky, které by se vám mohly líbit",
+          "Skupiny, které by se vám mohly líbit|Navrhované skupiny",
+          "Lidé, které možná znáte|Koho možná znáte",
+          "Reely|Reels",
+          "Události, které se vám mohou líbit",
+          "Platí za to ______"
+        ],
+        de: [
+          "Folgen",
+          "Beitreten|Gruppe beitreten",
+          "Verifiziert|Verifiziertes Konto",
+          "Vorschläge für dich|Für dich empfohlen|Seiten, die dir gefallen könnten",
+          "Gruppen, die dir gefallen könnten|Vorgeschlagene Gruppen",
+          "Personen, die du kennen könntest",
+          "Reels",
+          "Veranstaltungen, die dir gefallen könnten|Veranstaltungen, die Ihnen gefallen könnten",
+          "Finanziert von ______"
+        ],
+        el: [
+          "Ακολούθηση|Ακολούθησε",
+          "Συμμετοχή|Γίνετε μέλος",
+          "Επαληθευμένος|Επαληθευμένος λογαριασμός",
+          "Προτεινόμενα για εσάς|Σελίδες που μπορεί να σας αρέσουν",
+          "Ομάδες που μπορεί να σας αρέσουν|Προτεινόμενες ομάδες",
+          "Άτομα που ίσως γνωρίζετε",
+          "Reels",
+          "Εκδηλώσεις που μπορεί να σας αρέσουν",
+          "Πληρωμένο από ______"
+        ],
+        es: [
+          "Seguir",
+          "Unirte|Unirse|Unirte al grupo",
+          "Verificado|Cuenta verificada",
+          "Sugerencias para ti|Sugerido para ti|Páginas que te pueden gustar",
+          "Grupos que te pueden gustar|Grupos sugeridos",
+          "Personas que quizá conozcas|Personas que quizás conozcas",
+          "Reels|Reels y vídeos cortos",
+          "Eventos que te pueden gustar",
+          "Pagado por ______"
+        ],
+        fi: [
+          "Seuraa",
+          "Liity|Liity ryhmään",
+          "Vahvistettu|Vahvistettu tili",
+          "Ehdotuksia sinulle|Sivut, joista saatat pitää",
+          "Ryhmät, joista saatat pitää|Ehdotetut ryhmät",
+          "Ihmisiä, jotka saatat tuntea|Ihmiset, jotka saatat tuntea",
+          "Kelat|Reels",
+          "Tapahtumat, joista saatat pitää",
+          "Maksaja ______"
+        ],
+        fr: [
+          "Suivre|S’abonner|S'abonner",
+          "Rejoindre|Rejoindre le groupe",
+          "Vérifié|Compte vérifié",
+          "Suggestion pour vous|Suggestions pour vous|Pages qui pourraient vous plaire",
+          "Groupes qui pourraient vous plaire|Groupes suggérés",
+          "Vous connaissez peut-être|Connaissez-vous...",
+          "Reels|Reels et vidéos courtes",
+          "Évènements qui pourraient vous intéresser",
+          "Financé par ______"
+        ],
+        he: [
+          "עקוב|מעקב",
+          "הצטרף|הצטרפות לקבוצה",
+          "מאומת|חשבון מאומת",
+          "הצעות עבורך|דפים שאולי תאהב",
+          "קבוצות שאולי תאהב|קבוצות מוצעות",
+          "אנשים שאולי אתה מכיר",
+          "רילס|Reels",
+          "אירועים שאולי תאהבו",
+          "שולם על ידי ______"
+        ],
+        id: [
+          "Ikuti",
+          "Gabung|Gabung grup",
+          "Terverifikasi|Akun terverifikasi",
+          "Disarankan untuk Anda|Halaman yang mungkin Anda sukai",
+          "Grup yang mungkin Anda sukai|Grup yang disarankan",
+          "Orang yang Mungkin Anda Kenal",
+          "Reel|Reels",
+          "Acara yang mungkin Anda sukai",
+          "Dibayar oleh ______"
+        ],
+        it: [
+          "Segui",
+          "Iscriviti|Iscriviti al gruppo",
+          "Verificato|Account verificato",
+          "Contenuti suggeriti per te|Suggerimenti per te|Pagine che potrebbero piacerti",
+          "Gruppi che potrebbero piacerti|Gruppi suggeriti",
+          "Persone che potresti conoscere",
+          "Reel|Reels",
+          "Eventi che potrebbero piacerti",
+          "Finanziato da ______"
+        ],
+        ja: [
+          "フォロー|フォローする",
+          "参加|グループに参加",
+          "認証済み|認証済みアカウント",
+          "おすすめ|おすすめのページ",
+          "おすすめのグループ",
+          "知り合いかも|あなたが知っているかもしれない人々",
+          "リール|リール動画",
+          "おすすめのイベント",
+          "______ による支払い|______による支払い"
+        ],
+        lv: [
+          "Sekot",
+          "Pievienoties|Pievienoties grupai",
+          "Verificēts|Verificēts konts",
+          "Ieteikumi jums|Lapas, kas tev varētu patikt",
+          "Grupas, kas tev varētu patikt|Ieteiktās grupas",
+          "Cilvēki, kurus tu varētu pazīt",
+          "Reels|Rullīši",
+          "Notikumi, kas jums varētu patikt",
+          "Apmaksā ______"
+        ],
+        nl: [
+          "Volgen",
+          "Lid worden|Lid worden van groep",
+          "Geverifieerd|Geverifieerd account",
+          "Voorgesteld voor jou|Pagina’s die je misschien leuk vindt|Pagina's die je misschien leuk vindt",
+          "Groepen die je misschien leuk vindt|Voorgestelde groepen",
+          "Mensen die je misschien kent",
+          "Reels",
+          "Evenementen die je misschien leuk vindt",
+          "Betaald door ______"
+        ],
+        pl: [
+          "Obserwuj",
+          "Dołącz|Dołącz do grupy",
+          "Zweryfikowano|Zweryfikowane konto",
+          "Proponowane dla Ciebie|Strony, które możesz polubić",
+          "Grupy, które mogą Ci się spodobać|Proponowane grupy",
+          "Osoby, które możesz znać",
+          "Rolki",
+          "Wydarzenia, które mogą Ci się spodobać",
+          "Opłacona przez ______"
+        ],
+        pt: [
+          "Seguir",
+          "Participar|Aderir|Entrar no grupo",
+          "Verificado|Conta verificada",
+          "Sugestões para ti|Sugestões para você|Páginas de que poderás gostar|Páginas que você pode curtir",
+          "Grupos de que poderás gostar|Grupos que você pode gostar|Grupos sugeridos",
+          "Pessoas que talvez conheças|Pessoas que você talvez conheça",
+          "Reels|Reels e vídeos curtos",
+          "Eventos que você pode gostar",
+          "Financiado por ______"
+        ],
+        ru: [
+          "Подписаться",
+          "Вступить|Вступить в группу",
+          "Подтверждено|Подтвержденный аккаунт",
+          "Рекомендуем вам|Предлагаемое для вас|Страницы, которые могут вам понравиться",
+          "Группы, которые могут вам понравиться|Рекомендуемые группы",
+          "Люди, которых вы можете знать",
+          "Reels|Короткие видео",
+          "Мероприятия, которые вам могут понравиться",
+          "Оплачено ______"
+        ],
+        tr: [
+          "Takip Et",
+          "Katıl|Gruba Katıl",
+          "Doğrulanmış|Doğrulanmış Hesap",
+          "Senin için önerilenler|Beğenebileceğin Sayfalar",
+          "Beğenebileceğin Gruplar|Önerilen Gruplar",
+          "Tanıyor olabileceğin kişiler",
+          "Reels|Reels videoları",
+          "İlgini çekebilecek etkinlikler",
+          "______ tarafından ödendi"
+        ],
+        uk: [
+          "Стежити|Підписатися",
+          "Приєднатися|Приєднатися до групи",
+          "Підтверджено|Підтверджений обліковий запис",
+          "Рекомендовано для вас|Сторінки, які можуть вам сподобатися",
+          "Групи, які можуть вам сподобатися|Рекомендовані групи",
+          "Люди, яких ви можете знати",
+          "Reels|Короткі відео",
+          "Події, які можуть вам сподобатися",
+          "Оплачено ______"
+        ],
+        vi: [
+          "Theo dõi",
+          "Tham gia|Tham gia nhóm",
+          "Đã xác minh|Tài khoản đã xác minh",
+          "Gợi ý cho bạn|Đề xuất cho bạn|Trang bạn có thể thích",
+          "Nhóm bạn có thể thích|Nhóm được gợi ý",
+          "Những người bạn có thể biết",
+          "Reels|Thước phim",
+          "Sự kiện bạn có thể thích",
+          "Tài trợ bởi ______"
+        ],
+        "zh-Hans": [
+          "关注",
+          "加入|加入小组",
+          "已验证|已认证|已验证账户",
+          "为你推荐|推荐给你|你可能喜欢的公共主页",
+          "你可能喜欢的小组|推荐小组",
+          "你可能认识的人",
+          "Reels|短视频",
+          "您可能喜欢的活动",
+          "由 ______ 付费|由______付费"
+        ],
+        "zh-Hant": [
+          "追蹤",
+          "加入|加入社團",
+          "已驗證|已驗證帳號",
+          "為你推薦|推薦給你|你可能會喜歡的粉絲專頁",
+          "你可能會喜歡的社團|推薦社團",
+          "你可能認識的人",
+          "Reels|連續短片",
+          "你可能感興趣的活動",
+          "出資者：______"
+        ]
+      };
+    }
+  });
+
+  // src/core/filters/labels.ts
+  function normalizeLabel(text) {
+    return cleanText(text).replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g, "").replace(/\s+/g, " ").trim().toLowerCase();
+  }
+  function matchesNewsLabel(text, kind) {
+    var _a;
+    const normalized = normalizeLabel(text);
+    return normalized !== "" && ((_a = labelsByKind.get(kind)) == null ? void 0 : _a.has(normalized)) === true;
+  }
+  function matchesNewsPaidBy(text) {
+    const label = normalizeLabel(text);
+    return Object.values(newsLabels).some(
+      (labels2) => labels2[8].split("|").some((template) => {
+        const [prefix = "", suffix = ""] = normalizeLabel(template).split("______");
+        return (prefix !== "" || suffix !== "") && label.startsWith(prefix) && label.endsWith(suffix) && label.slice(prefix.length, label.length - suffix.length).trim() !== "";
+      })
+    );
+  }
+  var labelKinds, labelsByKind;
+  var init_labels = __esm({
+    "src/core/filters/labels.ts"() {
+      "use strict";
+      init_text_normalize();
+      init_news_labels();
+      labelKinds = [
+        "follow",
+        "join",
+        "verified",
+        "suggested",
+        "groups",
+        "people",
+        "reels",
+        "events"
+      ];
+      labelsByKind = new Map(
+        labelKinds.map((kind, index) => [
+          kind,
+          new Set(
+            Object.values(newsLabels).flatMap(
+              (labels2) => (labels2[index] || "").split("|").map(normalizeLabel)
+            )
+          )
+        ])
+      );
+    }
+  });
+
   // src/diagnostics/dom-privacy.ts
-  function normalizeLabel(value) {
+  function normalizeLabel2(value) {
     return value.normalize("NFKC").replace(/\s+/g, " ").trim().toLocaleLowerCase("en-US");
   }
   function isDisclosureLink(element) {
@@ -4730,6 +5050,21 @@
       return false;
     }
   }
+  function isAuthorActionLabel(value) {
+    return matchesNewsLabel(value, "follow") || matchesNewsLabel(value, "join");
+  }
+  function isPublicAuthorAction(element) {
+    const action = element.closest('button, [role="button"]');
+    const profile = action == null ? void 0 : action.closest('[data-ad-rendering-role="profile_name"]');
+    const header = action == null ? void 0 : action.closest("h4, h5");
+    if (!action || !profile || !header || profile === action || action.closest("a, [data-hovercard], [data-profileid], [data-userid]") || element.closest(identity) !== profile || action.querySelector("a, [data-hovercard], [data-profileid], [data-userid]") || !Array.from(header.querySelectorAll("a[href]")).some(
+      (link) => !action.contains(link) && isProfileLink(link)
+    ))
+      return false;
+    const text = boundedText(action);
+    const label = action.getAttribute("aria-label");
+    return text !== null && (!!text && isAuthorActionLabel(text) || !text && !!label && isAuthorActionLabel(label)) && (!label || !text || normalizeLabel2(label) === normalizeLabel2(text));
+  }
   var authored, identity, control, heading, excluded, fixedLabels, SnapshotPrivacy;
   var init_dom_privacy = __esm({
     "src/diagnostics/dom-privacy.ts"() {
@@ -4737,6 +5072,7 @@
       init_location();
       init_shared();
       init_disclosure_labels2();
+      init_labels();
       init_i18n();
       authored = `${sharedSelectors.authoredContent}, textarea, input, [role="textbox"], [role="log"], [data-lexical-editor]`;
       identity = '[data-ad-rendering-role="profile_name"], [data-hovercard], [data-profileid], [data-userid]';
@@ -4746,7 +5082,7 @@
       fixedLabels = new Set(
         Object.values(translations).flatMap(
           (catalog24) => Object.values(catalog24).flatMap(
-            (value) => (Array.isArray(value) ? value : [value]).filter((label) => typeof label === "string" && label.trim() !== "").map(normalizeLabel)
+            (value) => (Array.isArray(value) ? value : [value]).filter((label) => typeof label === "string" && label.trim() !== "").map(normalizeLabel2)
           )
         )
       );
@@ -4759,7 +5095,7 @@
         /** Derive identity evidence from bounded discovery rather than retaining or hashing private page text. */
         remember(element) {
           if (this.identities.size >= 500) return;
-          if (element.matches(identity) || element.matches("h4 a, h5 a") && !isInterfaceLink(element) || isProfileLink(element)) {
+          if (element.matches(identity) && !element.querySelector('button, [role="button"]') || element.matches("h4 a, h5 a") && !isInterfaceLink(element) || isProfileLink(element)) {
             const name = boundedText(element);
             if (name) {
               this.identities.add(name);
@@ -4784,6 +5120,7 @@
         content(element) {
           if (element.closest(excluded)) return "excluded";
           if (element.closest(authored)) return "authored";
+          if (isPublicAuthorAction(element)) return "interface";
           if (element.closest(identity)) return "identity";
           const link = element.closest("a");
           if (link && !isInterfaceLink(link)) return "identity";
@@ -4793,7 +5130,7 @@
           if (labelOwner) {
             const text = boundedText(labelOwner);
             const label = labelOwner.getAttribute("aria-label");
-            if ((text && fixedLabels.has(normalizeLabel(text)) || !text && label && fixedLabels.has(normalizeLabel(label))) && (!label || !text || normalizeLabel(label) === normalizeLabel(text)))
+            if ((text && fixedLabels.has(normalizeLabel2(text)) || !text && label && fixedLabels.has(normalizeLabel2(label))) && (!label || !text || normalizeLabel2(label) === normalizeLabel2(text)))
               return "interface";
           }
           return "uncertain";
@@ -4801,7 +5138,7 @@
         /** An attribute must establish its own fixed-copy provenance; a safe visible caption cannot authorize a private title. */
         accessibleText(element, value, content) {
           const link = element.closest("a");
-          const publicLabel = fixedLabels.has(normalizeLabel(value)) || link !== null && isDisclosureLink(link);
+          const publicLabel = fixedLabels.has(normalizeLabel2(value)) || isPublicAuthorAction(element) && isAuthorActionLabel(value) || link !== null && isDisclosureLink(link);
           return this.text(value, content === "interface" && !publicLabel ? "uncertain" : content);
         }
         /**
@@ -5170,13 +5507,21 @@
           surfaces.push(node);
         if (node.matches('[role="article"], [aria-posinset], section, [role="region"]'))
           candidates.add(node);
-        if (node.matches('button, [role="button"], [role="heading"]') && !node.closest('[role="article"], [aria-posinset]'))
-          candidates.add(snapshotTargetRegion(node));
+        if (node.matches('button, [role="button"], [role="heading"]') && !node.closest('[role="article"], [aria-posinset]')) {
+          const navigation = node.closest(
+            'nav, [role="navigation"], header[role="banner"], [role="banner"]'
+          );
+          candidates.add(navigation || snapshotTargetRegion(node));
+        }
       }
       if (discovered > 0 && discovered % 128 === 0) await yieldSnapshotWork();
       node = walker.nextNode();
     }
     for (const surface of surfaces) {
+      if (surface.matches('[role="navigation"], [role="banner"]')) {
+        candidates.add(surface);
+        continue;
+      }
       let branch = surface;
       for (let depth = 0; depth < 8 && branch.children.length === 1; depth++) {
         const child = branch.firstElementChild;
@@ -5204,11 +5549,15 @@
     const inView = Array.from(candidates).filter(visible).sort(
       (left, right) => Number(!!right.closest('main, [role="main"], [role="feed"]')) - Number(!!left.closest('main, [role="main"], [role="feed"]'))
     );
-    for (const candidate of inView) add(candidate, "viewport");
-    for (const candidate of inView.slice(0, 3)) {
+    const feedCandidates = inView.filter(
+      (candidate) => candidate.closest('main, [role="main"], [role="feed"]')
+    );
+    for (const candidate of feedCandidates) add(candidate, "viewport");
+    for (const candidate of feedCandidates.slice(0, 3)) {
       add(candidate.previousElementSibling, "neighbor");
       add(candidate.nextElementSibling, "neighbor");
     }
+    for (const candidate of inView) add(candidate, "viewport");
     for (const candidate of candidates) add(candidate, "surface");
     for (const surface of surfaces) add(surface, "surface");
     if (!regions.length) add(root, "surface");
@@ -5563,7 +5912,7 @@
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:0ca92a992ab6f1b6ee11c3878b1da751009c95f5e9b635c36f501c4db1e959c9" : "unbundled";
+      buildIdentity = true ? "source-sha256:f5e55f3220994b36485991000ebf6c9f4dec06a0ddeaecbee2b81396dbf789ee" : "unbundled";
     }
   });
 
@@ -5864,6 +6213,9 @@
         storyShelfItems: '[data-type="hscroll-child"]',
         storyShelfAuthors: "h4 a[href], h5 a[href]",
         storyShelfMedia: 'img, video, [role="img"]',
+        reelShelfItems: '[data-type="hscroll-child"]',
+        reelShelfContent: '[data-ad-rendering-role="profile_name"], [data-ad-rendering-role="story_message"]',
+        reelShelfAuthors: "h4 a[href], h5 a[href]",
         postQueries: [
           'h3[dir="auto"] ~ div div[aria-posinset]',
           'h2[dir="auto"] ~ div div[aria-posinset]',
@@ -6869,16 +7221,6 @@
     }
   });
 
-  // src/core/filters/text-normalize.ts
-  function cleanText(text) {
-    return text.normalize("NFKC");
-  }
-  var init_text_normalize = __esm({
-    "src/core/filters/text-normalize.ts"() {
-      "use strict";
-    }
-  });
-
   // src/dom/walker.ts
   function countDescendants(element) {
     return element.querySelectorAll("div, span").length;
@@ -6966,11 +7308,16 @@
   function extractTextContent(post, selector, maxBlocks) {
     return getPostEvidence(post).readText(
       `${maxBlocks}|${selector}`,
-      () => extractBlockText(post, selector, maxBlocks)
+      () => extractBlockText(post, getPostEvidence(post).select(selector), maxBlocks)
     );
   }
-  function extractBlockText(post, selector, maxBlocks) {
-    const blocks = getPostEvidence(post).select(selector);
+  function extractFeedBlockText(post, blocks, maxBlocks) {
+    return getPostEvidence(post).readText(
+      `feed-blocks:${maxBlocks}`,
+      () => extractBlockText(post, blocks, maxBlocks)
+    );
+  }
+  function extractBlockText(post, blocks, maxBlocks) {
     const arrayTextValues = [];
     for (let b = 0; b < Math.min(maxBlocks, blocks.length); b++) {
       const block = blocks[b];
@@ -7002,10 +7349,24 @@
     const authoredParent = (_a = element.parentElement) == null ? void 0 : _a.closest(sharedSelectors.authoredContent);
     return (!owner || owner === post || !post.contains(owner)) && (!authoredParent || authoredParent === post || !post.contains(authoredParent));
   }
-  function getSemanticBlocksQuery(post) {
-    const profile = getPostEvidence(post).select(sharedSelectors.profileName).find((element) => isOwnedLayoutSignal(element, post));
-    const message = getPostEvidence(post).select(sharedSelectors.storyMessage).find((element) => isOwnedLayoutSignal(element, post));
-    if (!profile || !message || profile.contains(message) || message.contains(profile)) return null;
+  function getSemanticBlocks(post) {
+    const evidence = getPostEvidence(post);
+    const profile = evidence.select(sharedSelectors.profileName).find((element) => isOwnedLayoutSignal(element, post));
+    if (!profile) return null;
+    const message = evidence.select(sharedSelectors.storyMessage).find((element) => isOwnedLayoutSignal(element, post));
+    const contents = message ? [message] : evidence.select("img, video").filter(
+      (media) => isOwnedLayoutSignal(media, post) && !media.closest(
+        'h4, h5, button, [role="button"], [data-ad-rendering-role="profile_name"]'
+      )
+    );
+    for (const content of contents) {
+      const blocks = semanticBlocks(post, profile, content);
+      if (blocks) return blocks;
+    }
+    return null;
+  }
+  function semanticBlocks(post, profile, message) {
+    if (profile.contains(message) || message.contains(profile)) return null;
     let container = profile.parentElement;
     while (container && container !== post && !container.contains(message))
       container = container.parentElement;
@@ -7014,43 +7375,37 @@
     const headerIndex = children.findIndex((child) => child.contains(profile));
     const messageIndex = children.findIndex((child) => child.contains(message));
     if (headerIndex < 0 || messageIndex <= headerIndex) return null;
-    const path = [];
-    let ancestor = container;
-    while (ancestor !== post) {
-      const parent = ancestor.parentElement;
-      if (!parent) return null;
-      path.unshift(Array.from(parent.children).indexOf(ancestor) + 1);
-      ancestor = parent;
-    }
-    return `:scope${path.map((index) => ` > :nth-child(${index})`).join("")} > :nth-child(n+${headerIndex + 1})`;
+    return children.slice(headerIndex).filter((block) => getPostEvidence(post).isRendered(block));
   }
-  function getNewsBlocksQuery(post) {
+  function getNewsBlocks(post) {
     const evidence = getPostEvidence(post);
-    const cached2 = cachedQueries.get(evidence);
+    const cached2 = cachedBlocks.get(evidence);
     if (cached2) return cached2;
-    const semanticQuery = getSemanticBlocksQuery(post);
-    if (semanticQuery) {
-      cachedQueries.set(evidence, semanticQuery);
-      return semanticQuery;
+    const semantic = getSemanticBlocks(post);
+    if (semantic) {
+      cachedBlocks.set(evidence, semantic);
+      return semantic;
     }
-    let blocksQuery = "div[aria-posinset] > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div";
-    const blocks = evidence.select(blocksQuery);
+    let query = "div[aria-posinset] > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div";
+    let blocks = evidence.select(query).filter((block) => evidence.isRendered(block));
     if (blocks.length <= 1) {
-      blocksQuery = "div[aria-posinset] > div > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div > div";
+      query = "div[aria-posinset] > div > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div > div";
+      blocks = evidence.select(query).filter((block) => evidence.isRendered(block));
     }
-    cachedQueries.set(evidence, blocksQuery);
-    return blocksQuery;
+    const selected = blocks.length > 1 ? blocks : evidence.select(query);
+    cachedBlocks.set(evidence, selected);
+    return selected;
   }
-  function getGroupsBlocksQuery(post) {
-    return getNewsBlocksQuery(post);
+  function getGroupsBlocks(post) {
+    return getNewsBlocks(post);
   }
-  var cachedQueries;
+  var cachedBlocks;
   var init_blocks = __esm({
     "src/feeds/shared/blocks.ts"() {
       "use strict";
       init_post_evidence();
       init_shared();
-      cachedQueries = /* @__PURE__ */ new WeakMap();
+      cachedBlocks = /* @__PURE__ */ new WeakMap();
     }
   });
 
@@ -7059,7 +7414,7 @@
     if (!post || !options || !filters) {
       return "";
     }
-    const postTexts = extractTextContent(post, getNewsBlocksQuery(post), 3).join(" ");
+    const postTexts = extractFeedBlockText(post, getNewsBlocks(post), 3).join(" ");
     const useRegExp = options.NF_BLOCKED_RE;
     return findBlockedText(
       useRegExp ? postTexts : postTexts.toLowerCase(),
@@ -7071,7 +7426,7 @@
     if (!post || !options || !filters) {
       return "";
     }
-    const postTexts = extractTextContent(post, getGroupsBlocksQuery(post), 3).join(" ");
+    const postTexts = extractFeedBlockText(post, getGroupsBlocks(post), 3).join(" ");
     const useRegExp = options.GF_BLOCKED_RE;
     return findBlockedText(
       useRegExp ? postTexts : postTexts.toLowerCase(),
@@ -7095,7 +7450,7 @@
     if (!post || !options || !filters) {
       return "";
     }
-    const postTexts = extractTextContent(post, getNewsBlocksQuery(post), 3).join(" ");
+    const postTexts = extractFeedBlockText(post, getNewsBlocks(post), 3).join(" ");
     const useRegExp = options.PP_BLOCKED_RE;
     return findBlockedText(
       useRegExp ? postTexts : postTexts.toLowerCase(),
@@ -7117,7 +7472,7 @@
     if (!post || !keyWords) {
       return "";
     }
-    const postBlocks = getPostEvidence(post).select(getNewsBlocksQuery(post));
+    const postBlocks = getNewsBlocks(post);
     if (postBlocks.length >= 2) {
       const contentBlock = postBlocks[1];
       if (!contentBlock) return "";
@@ -7130,7 +7485,7 @@
     if (!post || !keyWords) {
       return "";
     }
-    const postBlocks = getPostEvidence(post).select(getGroupsBlocksQuery(post));
+    const postBlocks = getGroupsBlocks(post);
     if (postBlocks.length >= 2) {
       const contentBlock = postBlocks[1];
       if (!contentBlock) return "";
@@ -7142,7 +7497,6 @@
   var init_animated_gifs2 = __esm({
     "src/feeds/shared/animated-gifs.ts"() {
       "use strict";
-      init_post_evidence();
       init_animated_gifs();
       init_blocks();
     }
@@ -7178,7 +7532,7 @@
   }
   function authoredBlocks(post, state) {
     if (state.isNF || state.isGF || state.isSF) {
-      return getPostEvidence(post).select(getNewsBlocksQuery(post)).slice(1);
+      return getNewsBlocks(post).slice(1);
     }
     if (state.isVF) {
       return Array.from(
@@ -7443,7 +7797,7 @@
       if (/^\/stories\/create\/?$/.test(url.pathname)) return false;
       if (!/^\/stories\/[^/]+(?:\/[^/]+)?\/?$/.test(url.pathname)) continue;
       const card = link.closest(newsSelectors.storyShelfItems);
-      if (!card || !post.contains(card) || !ownsPostElement(link, post) || !evidence.isRendered(link) || !link.querySelector(newsSelectors.storyShelfMedia))
+      if (!card || !post.contains(card) || !ownsPostElement(link, post) || !evidence.isRendered(link) || !evidence.select(newsSelectors.storyShelfMedia, link).some((media) => evidence.isRendered(media)))
         continue;
       cards.add(card);
     }
@@ -7597,316 +7951,6 @@
           'div[role="main"] div[aria-posinset]',
           'div[role="main"] div[role="article"]',
           ...newsSelectors.postQueries
-        ])
-      );
-    }
-  });
-
-  // src/i18n/news-labels.ts
-  var newsLabels;
-  var init_news_labels = __esm({
-    "src/i18n/news-labels.ts"() {
-      "use strict";
-      newsLabels = {
-        en: [
-          "Follow",
-          "Join|Join group",
-          "Verified|Verified account",
-          "Suggested for you|Recommended for you|Suggested Pages|Pages you may like",
-          "Groups you might like|Suggested groups",
-          "People you may know",
-          "Reels|Reels and short videos",
-          "Events you may like",
-          "Paid for by ______"
-        ],
-        ar: [
-          "متابعة|تابع",
-          "انضمام|انضمام إلى المجموعة",
-          "تم التحقق|حساب تم التحقق منه|حساب موثّق",
-          "مقترح لك|مقترحات لك|صفحات قد تعجبك",
-          "مجموعات قد تعجبك|مجموعات مقترحة",
-          "أشخاص قد تعرفهم",
-          "ريلز|مقاطع ريلز",
-          "أحداث قد تعجبك",
-          "مدفوعة بواسطة ______"
-        ],
-        bg: [
-          "Следване|Следвай",
-          "Присъединяване|Присъединяване към групата",
-          "Потвърден|Потвърден акаунт",
-          "Предложения за вас|Страници, които може да харесате",
-          "Групи, които може да харесате|Предложени групи",
-          "Хора, които може би познавате",
-          "Ленти|Reels",
-          "Събития, които може да ви харесат",
-          "Платено от ______"
-        ],
-        cs: [
-          "Sledovat",
-          "Přidat se|Přidat se ke skupině",
-          "Ověřeno|Ověřený účet",
-          "Navrhované pro vás|Stránky, které by se vám mohly líbit",
-          "Skupiny, které by se vám mohly líbit|Navrhované skupiny",
-          "Lidé, které možná znáte|Koho možná znáte",
-          "Reely|Reels",
-          "Události, které se vám mohou líbit",
-          "Platí za to ______"
-        ],
-        de: [
-          "Folgen",
-          "Beitreten|Gruppe beitreten",
-          "Verifiziert|Verifiziertes Konto",
-          "Vorschläge für dich|Für dich empfohlen|Seiten, die dir gefallen könnten",
-          "Gruppen, die dir gefallen könnten|Vorgeschlagene Gruppen",
-          "Personen, die du kennen könntest",
-          "Reels",
-          "Veranstaltungen, die dir gefallen könnten|Veranstaltungen, die Ihnen gefallen könnten",
-          "Finanziert von ______"
-        ],
-        el: [
-          "Ακολούθηση|Ακολούθησε",
-          "Συμμετοχή|Γίνετε μέλος",
-          "Επαληθευμένος|Επαληθευμένος λογαριασμός",
-          "Προτεινόμενα για εσάς|Σελίδες που μπορεί να σας αρέσουν",
-          "Ομάδες που μπορεί να σας αρέσουν|Προτεινόμενες ομάδες",
-          "Άτομα που ίσως γνωρίζετε",
-          "Reels",
-          "Εκδηλώσεις που μπορεί να σας αρέσουν",
-          "Πληρωμένο από ______"
-        ],
-        es: [
-          "Seguir",
-          "Unirte|Unirse|Unirte al grupo",
-          "Verificado|Cuenta verificada",
-          "Sugerencias para ti|Sugerido para ti|Páginas que te pueden gustar",
-          "Grupos que te pueden gustar|Grupos sugeridos",
-          "Personas que quizá conozcas|Personas que quizás conozcas",
-          "Reels|Reels y vídeos cortos",
-          "Eventos que te pueden gustar",
-          "Pagado por ______"
-        ],
-        fi: [
-          "Seuraa",
-          "Liity|Liity ryhmään",
-          "Vahvistettu|Vahvistettu tili",
-          "Ehdotuksia sinulle|Sivut, joista saatat pitää",
-          "Ryhmät, joista saatat pitää|Ehdotetut ryhmät",
-          "Ihmisiä, jotka saatat tuntea|Ihmiset, jotka saatat tuntea",
-          "Kelat|Reels",
-          "Tapahtumat, joista saatat pitää",
-          "Maksaja ______"
-        ],
-        fr: [
-          "Suivre|S’abonner|S'abonner",
-          "Rejoindre|Rejoindre le groupe",
-          "Vérifié|Compte vérifié",
-          "Suggestion pour vous|Suggestions pour vous|Pages qui pourraient vous plaire",
-          "Groupes qui pourraient vous plaire|Groupes suggérés",
-          "Vous connaissez peut-être|Connaissez-vous...",
-          "Reels|Reels et vidéos courtes",
-          "Évènements qui pourraient vous intéresser",
-          "Financé par ______"
-        ],
-        he: [
-          "עקוב|מעקב",
-          "הצטרף|הצטרפות לקבוצה",
-          "מאומת|חשבון מאומת",
-          "הצעות עבורך|דפים שאולי תאהב",
-          "קבוצות שאולי תאהב|קבוצות מוצעות",
-          "אנשים שאולי אתה מכיר",
-          "רילס|Reels",
-          "אירועים שאולי תאהבו",
-          "שולם על ידי ______"
-        ],
-        id: [
-          "Ikuti",
-          "Gabung|Gabung grup",
-          "Terverifikasi|Akun terverifikasi",
-          "Disarankan untuk Anda|Halaman yang mungkin Anda sukai",
-          "Grup yang mungkin Anda sukai|Grup yang disarankan",
-          "Orang yang Mungkin Anda Kenal",
-          "Reel|Reels",
-          "Acara yang mungkin Anda sukai",
-          "Dibayar oleh ______"
-        ],
-        it: [
-          "Segui",
-          "Iscriviti|Iscriviti al gruppo",
-          "Verificato|Account verificato",
-          "Contenuti suggeriti per te|Suggerimenti per te|Pagine che potrebbero piacerti",
-          "Gruppi che potrebbero piacerti|Gruppi suggeriti",
-          "Persone che potresti conoscere",
-          "Reel|Reels",
-          "Eventi che potrebbero piacerti",
-          "Finanziato da ______"
-        ],
-        ja: [
-          "フォロー|フォローする",
-          "参加|グループに参加",
-          "認証済み|認証済みアカウント",
-          "おすすめ|おすすめのページ",
-          "おすすめのグループ",
-          "知り合いかも|あなたが知っているかもしれない人々",
-          "リール|リール動画",
-          "おすすめのイベント",
-          "______ による支払い|______による支払い"
-        ],
-        lv: [
-          "Sekot",
-          "Pievienoties|Pievienoties grupai",
-          "Verificēts|Verificēts konts",
-          "Ieteikumi jums|Lapas, kas tev varētu patikt",
-          "Grupas, kas tev varētu patikt|Ieteiktās grupas",
-          "Cilvēki, kurus tu varētu pazīt",
-          "Reels|Rullīši",
-          "Notikumi, kas jums varētu patikt",
-          "Apmaksā ______"
-        ],
-        nl: [
-          "Volgen",
-          "Lid worden|Lid worden van groep",
-          "Geverifieerd|Geverifieerd account",
-          "Voorgesteld voor jou|Pagina’s die je misschien leuk vindt|Pagina's die je misschien leuk vindt",
-          "Groepen die je misschien leuk vindt|Voorgestelde groepen",
-          "Mensen die je misschien kent",
-          "Reels",
-          "Evenementen die je misschien leuk vindt",
-          "Betaald door ______"
-        ],
-        pl: [
-          "Obserwuj",
-          "Dołącz|Dołącz do grupy",
-          "Zweryfikowano|Zweryfikowane konto",
-          "Proponowane dla Ciebie|Strony, które możesz polubić",
-          "Grupy, które mogą Ci się spodobać|Proponowane grupy",
-          "Osoby, które możesz znać",
-          "Rolki",
-          "Wydarzenia, które mogą Ci się spodobać",
-          "Opłacona przez ______"
-        ],
-        pt: [
-          "Seguir",
-          "Participar|Aderir|Entrar no grupo",
-          "Verificado|Conta verificada",
-          "Sugestões para ti|Sugestões para você|Páginas de que poderás gostar|Páginas que você pode curtir",
-          "Grupos de que poderás gostar|Grupos que você pode gostar|Grupos sugeridos",
-          "Pessoas que talvez conheças|Pessoas que você talvez conheça",
-          "Reels|Reels e vídeos curtos",
-          "Eventos que você pode gostar",
-          "Financiado por ______"
-        ],
-        ru: [
-          "Подписаться",
-          "Вступить|Вступить в группу",
-          "Подтверждено|Подтвержденный аккаунт",
-          "Рекомендуем вам|Предлагаемое для вас|Страницы, которые могут вам понравиться",
-          "Группы, которые могут вам понравиться|Рекомендуемые группы",
-          "Люди, которых вы можете знать",
-          "Reels|Короткие видео",
-          "Мероприятия, которые вам могут понравиться",
-          "Оплачено ______"
-        ],
-        tr: [
-          "Takip Et",
-          "Katıl|Gruba Katıl",
-          "Doğrulanmış|Doğrulanmış Hesap",
-          "Senin için önerilenler|Beğenebileceğin Sayfalar",
-          "Beğenebileceğin Gruplar|Önerilen Gruplar",
-          "Tanıyor olabileceğin kişiler",
-          "Reels|Reels videoları",
-          "İlgini çekebilecek etkinlikler",
-          "______ tarafından ödendi"
-        ],
-        uk: [
-          "Стежити|Підписатися",
-          "Приєднатися|Приєднатися до групи",
-          "Підтверджено|Підтверджений обліковий запис",
-          "Рекомендовано для вас|Сторінки, які можуть вам сподобатися",
-          "Групи, які можуть вам сподобатися|Рекомендовані групи",
-          "Люди, яких ви можете знати",
-          "Reels|Короткі відео",
-          "Події, які можуть вам сподобатися",
-          "Оплачено ______"
-        ],
-        vi: [
-          "Theo dõi",
-          "Tham gia|Tham gia nhóm",
-          "Đã xác minh|Tài khoản đã xác minh",
-          "Gợi ý cho bạn|Đề xuất cho bạn|Trang bạn có thể thích",
-          "Nhóm bạn có thể thích|Nhóm được gợi ý",
-          "Những người bạn có thể biết",
-          "Reels|Thước phim",
-          "Sự kiện bạn có thể thích",
-          "Tài trợ bởi ______"
-        ],
-        "zh-Hans": [
-          "关注",
-          "加入|加入小组",
-          "已验证|已认证|已验证账户",
-          "为你推荐|推荐给你|你可能喜欢的公共主页",
-          "你可能喜欢的小组|推荐小组",
-          "你可能认识的人",
-          "Reels|短视频",
-          "您可能喜欢的活动",
-          "由 ______ 付费|由______付费"
-        ],
-        "zh-Hant": [
-          "追蹤",
-          "加入|加入社團",
-          "已驗證|已驗證帳號",
-          "為你推薦|推薦給你|你可能會喜歡的粉絲專頁",
-          "你可能會喜歡的社團|推薦社團",
-          "你可能認識的人",
-          "Reels|連續短片",
-          "你可能感興趣的活動",
-          "出資者：______"
-        ]
-      };
-    }
-  });
-
-  // src/core/filters/labels.ts
-  function normalizeLabel2(text) {
-    return cleanText(text).replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g, "").replace(/\s+/g, " ").trim().toLowerCase();
-  }
-  function matchesNewsLabel(text, kind) {
-    var _a;
-    const normalized = normalizeLabel2(text);
-    return normalized !== "" && ((_a = labelsByKind.get(kind)) == null ? void 0 : _a.has(normalized)) === true;
-  }
-  function matchesNewsPaidBy(text) {
-    const label = normalizeLabel2(text);
-    return Object.values(newsLabels).some(
-      (labels2) => labels2[8].split("|").some((template) => {
-        const [prefix = "", suffix = ""] = normalizeLabel2(template).split("______");
-        return (prefix !== "" || suffix !== "") && label.startsWith(prefix) && label.endsWith(suffix) && label.slice(prefix.length, label.length - suffix.length).trim() !== "";
-      })
-    );
-  }
-  var labelKinds, labelsByKind;
-  var init_labels = __esm({
-    "src/core/filters/labels.ts"() {
-      "use strict";
-      init_text_normalize();
-      init_news_labels();
-      labelKinds = [
-        "follow",
-        "join",
-        "verified",
-        "suggested",
-        "groups",
-        "people",
-        "reels",
-        "events"
-      ];
-      labelsByKind = new Map(
-        labelKinds.map((kind, index) => [
-          kind,
-          new Set(
-            Object.values(newsLabels).flatMap(
-              (labels2) => (labels2[index] || "").split("|").map(normalizeLabel2)
-            )
-          )
         ])
       );
     }
@@ -8070,7 +8114,7 @@
     return ownsPostElement(element, post);
   }
   function isOwnedNewsMetadata(element, post) {
-    return isOwnedNewsElement(element, post) && !getPostEvidence(post).select(getNewsBlocksQuery(post)).slice(1).some((body) => body.contains(element));
+    return isOwnedNewsElement(element, post) && getPostEvidence(post).isRendered(element) && !getNewsBlocks(post).slice(1).some((body) => body.contains(element));
   }
   function facebookPath(link) {
     var _a, _b;
@@ -8125,10 +8169,30 @@
     return true;
   }
   function ownPostReelLinks(post) {
-    return getPostEvidence(post).select("a[href]").filter((link) => {
+    const evidence = getPostEvidence(post);
+    return evidence.select("a[href]").filter((link) => {
       const path = facebookPath(link);
-      return path !== null && /^\/reel\/[^/]+\/?$/.test(path) && isOwnedNewsElement(link, post) && link.querySelector('video, img, [role="img"]') !== null;
+      return path !== null && /^\/reel\/[^/]+\/?$/.test(path) && isOwnedNewsElement(link, post) && evidence.isRendered(link) && evidence.select('video, img, [role="img"]', link).some((media) => evidence.isRendered(media));
     });
+  }
+  function isNewsReelShelf(post) {
+    var _a;
+    if (!post.matches(newsSelectors.standardPost) || post.closest(sharedSelectors.authoredContent) || ((_a = post.parentElement) == null ? void 0 : _a.closest(newsSelectors.standardPost)) || post.querySelector(newsSelectors.standardPost))
+      return false;
+    const evidence = getPostEvidence(post);
+    if (evidence.select(
+      `${newsSelectors.reelShelfContent}, ${sharedSelectors.authoredContent}, ${newsSelectors.reelShelfAuthors}`
+    ).some(
+      (element) => evidence.isRendered(element) && !element.closest(newsSelectors.reelShelfItems)
+    ))
+      return false;
+    const cards = /* @__PURE__ */ new Set();
+    for (const link of ownPostReelLinks(post)) {
+      const card = link.closest(newsSelectors.reelShelfItems);
+      if (card && post.contains(card) && evidence.isRendered(link)) cards.add(card);
+      if (cards.size >= 2) return true;
+    }
+    return false;
   }
   var init_news_identity = __esm({
     "src/feeds/news-identity.ts"() {
@@ -8137,6 +8201,8 @@
       init_post_evidence();
       init_ownership();
       init_blocks();
+      init_news();
+      init_shared();
     }
   });
 
@@ -8190,6 +8256,7 @@
     ) ? keyWords.NF_SPONSORED_PAID : "";
   }
   function isNewsReelsAndShortVideos(post, keyWords) {
+    if (isNewsReelShelf(post)) return keyWords.NF_REELS_SHORT_VIDEOS;
     const shelf = hasNewsCardHeading(post, "reels") && getPostEvidence(post).select("a[href]").some((link) => {
       var _a;
       if (facebookPath(link) !== "/reel/" || !isOwnedNewsMetadata(link, post)) return false;
@@ -8263,7 +8330,7 @@
       (link) => isOwnedNewsMetadata(link, post) && evidence.isRendered(link) && isMetaAiLink(link)
     ))
       return keyWords.NF_META_AI;
-    const postTexts = extractTextContent(post, getNewsBlocksQuery(post), 3).join(" ");
+    const postTexts = extractFeedBlockText(post, getNewsBlocks(post), 3).join(" ");
     if (containsMetaAiCopy(postTexts)) return keyWords.NF_META_AI;
     return "";
   }
@@ -9661,7 +9728,7 @@
   }
   function isGroupsSuggested(post, keyWords) {
     var _a, _b;
-    const blocks = getPostEvidence(post).select(getGroupsBlocksQuery(post));
+    const blocks = getGroupsBlocks(post);
     if (blocks.length <= 1) return "";
     const icons = ((_a = blocks[0]) == null ? void 0 : _a.querySelectorAll('i[data-visualcompletion="css-img"][style]')) || [];
     const hasSuggestionIcon = Array.from(icons).some(
@@ -9840,7 +9907,6 @@
       "use strict";
       init_labels();
       init_groups_features();
-      init_post_evidence();
       init_attributes();
       init_animated_gifs();
       init_dirty_check();

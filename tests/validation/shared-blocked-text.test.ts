@@ -4,7 +4,7 @@ import type { Filters } from "../../src/core/filters/types";
 import { hydrateOptions } from "../../src/core/options/hydrate";
 import type { HydratedOptions } from "../../src/core/options/types";
 import { postAtt } from "../../src/dom/attributes";
-import { getGroupsBlocksQuery, getNewsBlocksQuery } from "../../src/feeds/shared/blocks";
+import { getGroupsBlocks, getNewsBlocks } from "../../src/feeds/shared/blocks";
 import {
   findGroupsBlockedText,
   findNewsBlockedText,
@@ -74,8 +74,8 @@ describe("validation: shared content blocks and blocked text", () => {
           attribute
         );
         const before = post.outerHTML;
-        expect(Array.from(post.querySelectorAll(getNewsBlocksQuery(post)))).toEqual(blocks);
-        expect(Array.from(post.querySelectorAll(getGroupsBlocksQuery(post)))).toEqual(blocks);
+        expect(Array.from(getNewsBlocks(post))).toEqual(blocks);
+        expect(Array.from(getGroupsBlocks(post))).toEqual(blocks);
         expect(post.outerHTML).toBe(before);
       }
     }

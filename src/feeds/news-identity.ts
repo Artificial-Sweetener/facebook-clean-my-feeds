@@ -4,19 +4,21 @@ import { matchesNewsLabel } from "../core/filters/labels";
 import type { NewsLabelKind } from "../core/filters/labels";
 import { facebookUrl, getPostEvidence } from "../dom/post-evidence";
 import { ownsPostElement } from "../dom/ownership";
-import { getNewsBlocksQuery } from "./shared/blocks";
+import { getNewsBlocks } from "./shared/blocks";
+import { newsSelectors } from "../selectors/news";
+import { sharedSelectors } from "../selectors/shared";
 
 /** Reject user-authored message blocks, paragraphs/quotes, nested posts/comments, and independently hidden child features. */
 export function isOwnedNewsElement(element: Element, post: Element): boolean {
   return ownsPostElement(element, post);
 }
 
-/** Reject legacy body/footer blocks for metadata signals even when message annotations are absent. */
+/** Require rendered metadata outside legacy body/footer blocks, even when message annotations are absent. */
 export function isOwnedNewsMetadata(element: Element, post: Element): boolean {
   return (
     isOwnedNewsElement(element, post) &&
-    !getPostEvidence(post)
-      .select(getNewsBlocksQuery(post))
+    getPostEvidence(post).isRendered(element) &&
+    !getNewsBlocks(post)
       .slice(1)
       .some((body) => body.contains(element))
   );
@@ -104,15 +106,48 @@ export function isBadgeOnlyWrapper(wrapper: Element, icon: Element): boolean {
 
 /** Restrict reels to owned media previews so pasted links and comment mentions cannot identify the parent post. */
 export function ownPostReelLinks(post: Element): Element[] {
-  return getPostEvidence(post)
-    .select("a[href]")
-    .filter((link) => {
-      const path = facebookPath(link);
-      return (
-        path !== null &&
-        /^\/reel\/[^/]+\/?$/.test(path) &&
-        isOwnedNewsElement(link, post) &&
-        link.querySelector('video, img, [role="img"]') !== null
-      );
-    });
+  const evidence = getPostEvidence(post);
+  return evidence.select("a[href]").filter((link) => {
+    const path = facebookPath(link);
+    return (
+      path !== null &&
+      /^\/reel\/[^/]+\/?$/.test(path) &&
+      isOwnedNewsElement(link, post) &&
+      evidence.isRendered(link) &&
+      evidence.select('video, img, [role="img"]', link).some((media) => evidence.isRendered(media))
+    );
+  });
+}
+
+/**
+ * Recognize a standalone carousel as soon as two media cards load, without depending on translated headings or a see-more link.
+ * @param post Independent feed root; visible authored content and author headings outside cards disqualify it.
+ * @returns Whether at least two separately rendered horizontal cards own real Facebook reel media previews.
+ */
+export function isNewsReelShelf(post: Element): boolean {
+  if (
+    !post.matches(newsSelectors.standardPost) ||
+    post.closest(sharedSelectors.authoredContent) ||
+    post.parentElement?.closest(newsSelectors.standardPost) ||
+    post.querySelector(newsSelectors.standardPost)
+  )
+    return false;
+  const evidence = getPostEvidence(post);
+  if (
+    evidence
+      .select(
+        `${newsSelectors.reelShelfContent}, ${sharedSelectors.authoredContent}, ${newsSelectors.reelShelfAuthors}`
+      )
+      .some(
+        (element) => evidence.isRendered(element) && !element.closest(newsSelectors.reelShelfItems)
+      )
+  )
+    return false;
+  const cards = new Set<Element>();
+  for (const link of ownPostReelLinks(post)) {
+    const card = link.closest(newsSelectors.reelShelfItems);
+    if (card && post.contains(card) && evidence.isRendered(link)) cards.add(card);
+    if (cards.size >= 2) return true;
+  }
+  return false;
 }

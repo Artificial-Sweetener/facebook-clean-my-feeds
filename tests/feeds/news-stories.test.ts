@@ -100,25 +100,36 @@ test.each([
   expect(getNewsPostDiscovery().posts).not.toContain(shelf);
 });
 
-test.each(["single", "one-card", "text-only", "no-cards", "hidden"])(
-  "requires independent visible preview evidence: %s",
-  (missing) => {
-    const shelf = mountShelf();
-    const links = Array.from(shelf.querySelectorAll("a"));
-    if (missing === "single") links.slice(1).forEach((link) => link.parentElement?.remove());
-    if (missing === "one-card") {
-      const card = requireElement(shelf.querySelector('[data-type="hscroll-child"]'));
-      links.slice(1).forEach((link) => card.append(link));
-    }
-    if (missing === "text-only") shelf.querySelectorAll("img").forEach((image) => image.remove());
-    if (missing === "no-cards")
-      shelf
-        .querySelectorAll('[data-type="hscroll-child"]')
-        .forEach((card) => card.removeAttribute("data-type"));
-    if (missing === "hidden") links.slice(1).forEach((link) => link.setAttribute("hidden", ""));
-    expect(isNewsStoryShelf(shelf)).toBe(false);
+test.each([
+  "single",
+  "one-card",
+  "text-only",
+  "no-cards",
+  "hidden",
+  "hidden-media",
+  "invisible-media",
+])("requires independent visible preview evidence: %s", (missing) => {
+  const shelf = mountShelf();
+  const links = Array.from(shelf.querySelectorAll("a"));
+  if (missing === "single") links.slice(1).forEach((link) => link.parentElement?.remove());
+  if (missing === "one-card") {
+    const card = requireElement(shelf.querySelector('[data-type="hscroll-child"]'));
+    links.slice(1).forEach((link) => card.append(link));
   }
-);
+  if (missing === "text-only") shelf.querySelectorAll("img").forEach((image) => image.remove());
+  if (missing === "no-cards")
+    shelf
+      .querySelectorAll('[data-type="hscroll-child"]')
+      .forEach((card) => card.removeAttribute("data-type"));
+  if (missing === "hidden") links.slice(1).forEach((link) => link.setAttribute("hidden", ""));
+  if (missing === "hidden-media" || missing === "invisible-media")
+    links.slice(1).forEach((link) => {
+      link
+        .querySelector("img")
+        ?.setAttribute("style", missing === "hidden-media" ? "display:none" : "visibility:hidden");
+    });
+  expect(isNewsStoryShelf(shelf)).toBe(false);
+});
 
 test("a nonsemantic title and a virtualized body inside an ordinary feed slot match the live ribbon", () => {
   const shelf = mountShelf();

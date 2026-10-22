@@ -3,9 +3,9 @@
 import type { HydratedOptions } from "../../core/options/types";
 import type { Filters } from "../../core/filters/types";
 import { findBlockedText } from "../../core/filters/classifiers/blocked-text";
-import { extractTextContent } from "../../dom/walker";
+import { extractTextContent, extractFeedBlockText } from "../../dom/walker";
 
-import { getGroupsBlocksQuery, getNewsBlocksQuery } from "./blocks";
+import { getGroupsBlocks, getNewsBlocks } from "./blocks";
 
 /**
  * Inspect text and image-alt content from up to three news blocks in configured term order.
@@ -21,7 +21,7 @@ function findNewsBlockedText(
     return "";
   }
 
-  const postTexts = extractTextContent(post, getNewsBlocksQuery(post), 3).join(" ");
+  const postTexts = extractFeedBlockText(post, getNewsBlocks(post), 3).join(" ");
   const useRegExp = options.NF_BLOCKED_RE;
   return findBlockedText(
     useRegExp ? postTexts : postTexts.toLowerCase(),
@@ -44,7 +44,7 @@ function findGroupsBlockedText(
     return "";
   }
 
-  const postTexts = extractTextContent(post, getGroupsBlocksQuery(post), 3).join(" ");
+  const postTexts = extractFeedBlockText(post, getGroupsBlocks(post), 3).join(" ");
   const useRegExp = options.GF_BLOCKED_RE;
   return findBlockedText(
     useRegExp ? postTexts : postTexts.toLowerCase(),
@@ -91,7 +91,7 @@ function findProfileBlockedText(
     return "";
   }
 
-  const postTexts = extractTextContent(post, getNewsBlocksQuery(post), 3).join(" ");
+  const postTexts = extractFeedBlockText(post, getNewsBlocks(post), 3).join(" ");
   const useRegExp = options.PP_BLOCKED_RE;
   return findBlockedText(
     useRegExp ? postTexts : postTexts.toLowerCase(),

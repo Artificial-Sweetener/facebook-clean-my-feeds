@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { getPostEvidence } from "../../dom/post-evidence";
 import type { Keywords } from "../../i18n";
 import { getMosquitosQuery } from "../../dom/animated-gifs";
 
-import { getGroupsBlocksQuery, getNewsBlocksQuery } from "./blocks";
+import { getGroupsBlocks, getNewsBlocks } from "./blocks";
 
 /**
  * Inspect only the second news-layout content block for an unprocessed GIF control; preserve the historical GF_ANIMATED_GIFS_POSTS reason used by news and profile callers.
@@ -17,7 +16,7 @@ function hasNewsAnimatedGifContent(
     return "";
   }
 
-  const postBlocks = getPostEvidence(post).select(getNewsBlocksQuery(post));
+  const postBlocks = getNewsBlocks(post);
   if (postBlocks.length >= 2) {
     const contentBlock = postBlocks[1];
     if (!contentBlock) return "";
@@ -39,7 +38,7 @@ function hasGroupsAnimatedGifContent(
     return "";
   }
 
-  const postBlocks = getPostEvidence(post).select(getGroupsBlocksQuery(post));
+  const postBlocks = getGroupsBlocks(post);
   if (postBlocks.length >= 2) {
     const contentBlock = postBlocks[1];
     if (!contentBlock) return "";

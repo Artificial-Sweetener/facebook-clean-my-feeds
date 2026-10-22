@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { getSponsoredDiagnostics } from "../../src/feeds/shared/sponsored";
-import { getGroupsBlocksQuery, getNewsBlocksQuery } from "../../src/feeds/shared/blocks";
+import { getGroupsBlocks, getNewsBlocks } from "../../src/feeds/shared/blocks";
 import { findGroupsBlockedText, findNewsBlockedText } from "../../src/feeds/shared/blocked-text";
 import { isNewsFollow, isNewsVerifiedBadge, mopNewsFeed } from "../../src/feeds/news";
 import { hydrateOptions } from "../../src/core/options/hydrate";
@@ -32,14 +32,16 @@ describe("semantic content blocks with layout decoys", () => {
     document.body.replaceChildren();
   });
 
-  test.each([getNewsBlocksQuery, getGroupsBlocksQuery])(
+  test.each([getNewsBlocks, getGroupsBlocks])(
     "locates the actual header, message, and footer without counting hidden preambles",
     (getQuery) => {
       const post = mountSemanticPost('<a href="/author">Author</a>');
       const before = post.outerHTML;
-      expect(
-        Array.from(post.querySelectorAll(getQuery(post))).map((element) => element.id)
-      ).toEqual(["header", "body", "footer"]);
+      expect(Array.from(getQuery(post)).map((element) => element.id)).toEqual([
+        "header",
+        "body",
+        "footer",
+      ]);
       expect(post.outerHTML).toBe(before);
     }
   );

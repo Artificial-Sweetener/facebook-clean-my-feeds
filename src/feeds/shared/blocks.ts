@@ -15,19 +15,40 @@ function isOwnedLayoutSignal(element: Element, post: Element): boolean {
 }
 
 /**
- * Locate sibling content blocks from the owning profile/message markers instead of wrapper depth.
- * Facebook inserts hidden preambles around the real layout; those preceding siblings are excluded.
- * @param post Current feed root; collection is read-only and does not rely on class names or IDs.
- * @returns A root-scoped structural selector, or null when semantic evidence is incomplete or nested.
+ * Locate owned header and message/media siblings even when wrapper depths or text-message markers change.
+ * @param post Feed root whose own profile and content signals establish boundaries independently of hidden preambles.
+ * @returns Rendered header-first blocks, or null when no ordered owned signal pair establishes a reliable layout.
  */
-function getSemanticBlocksQuery(post: Element): string | null {
-  const profile = getPostEvidence(post)
+function getSemanticBlocks(post: Element): Element[] | null {
+  const evidence = getPostEvidence(post);
+  const profile = evidence
     .select(sharedSelectors.profileName)
     .find((element) => isOwnedLayoutSignal(element, post));
-  const message = getPostEvidence(post)
+  if (!profile) return null;
+  const message = evidence
     .select(sharedSelectors.storyMessage)
     .find((element) => isOwnedLayoutSignal(element, post));
-  if (!profile || !message || profile.contains(message) || message.contains(profile)) return null;
+  const contents = message
+    ? [message]
+    : evidence
+        .select("img, video")
+        .filter(
+          (media) =>
+            isOwnedLayoutSignal(media, post) &&
+            !media.closest(
+              'h4, h5, button, [role="button"], [data-ad-rendering-role="profile_name"]'
+            )
+        );
+  for (const content of contents) {
+    const blocks = semanticBlocks(post, profile, content);
+    if (blocks) return blocks;
+  }
+  return null;
+}
+
+/** Resolve only following content siblings; an author avatar before the name cannot establish the message boundary. */
+function semanticBlocks(post: Element, profile: Element, message: Element): Element[] | null {
+  if (profile.contains(message) || message.contains(profile)) return null;
   let container = profile.parentElement;
   while (container && container !== post && !container.contains(message))
     container = container.parentElement;
@@ -36,47 +57,42 @@ function getSemanticBlocksQuery(post: Element): string | null {
   const headerIndex = children.findIndex((child) => child.contains(profile));
   const messageIndex = children.findIndex((child) => child.contains(message));
   if (headerIndex < 0 || messageIndex <= headerIndex) return null;
-  const path: number[] = [];
-  let ancestor: Element = container;
-  while (ancestor !== post) {
-    const parent = ancestor.parentElement;
-    if (!parent) return null;
-    path.unshift(Array.from(parent.children).indexOf(ancestor) + 1);
-    ancestor = parent;
-  }
-  return `:scope${path.map((index) => ` > :nth-child(${index})`).join("")} > :nth-child(n+${headerIndex + 1})`;
+  return children.slice(headerIndex).filter((block) => getPostEvidence(post).isRendered(block));
 }
 
-const cachedQueries = new WeakMap<PostEvidence, string>();
+const cachedBlocks = new WeakMap<PostEvidence, Element[]>();
 
 /**
- * Prefer owned semantic blocks, otherwise retain the two legacy depths; collection never mutates posts.
+ * Share ordered content blocks across metadata and text filters for one post version.
+ * Complete rendered legacy families exclude hidden preambles; incomplete layouts retain conservative body boundaries.
+ * @param post Owning post or legacy wrapper, read without DOM mutation.
+ * @returns Header-first block references in document order, invalidated with the post's content evidence.
  */
-function getNewsBlocksQuery(post: Element) {
+function getNewsBlocks(post: Element): Element[] {
   const evidence = getPostEvidence(post);
-  const cached = cachedQueries.get(evidence);
+  const cached = cachedBlocks.get(evidence);
   if (cached) return cached;
-  const semanticQuery = getSemanticBlocksQuery(post);
-  if (semanticQuery) {
-    cachedQueries.set(evidence, semanticQuery);
-    return semanticQuery;
+  const semantic = getSemanticBlocks(post);
+  if (semantic) {
+    cachedBlocks.set(evidence, semantic);
+    return semantic;
   }
-  let blocksQuery =
+  let query =
     "div[aria-posinset] > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div";
-  const blocks = evidence.select(blocksQuery);
+  let blocks = evidence.select(query).filter((block) => evidence.isRendered(block));
   if (blocks.length <= 1) {
-    blocksQuery =
+    query =
       "div[aria-posinset] > div > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div > div";
+    blocks = evidence.select(query).filter((block) => evidence.isRendered(block));
   }
-  cachedQueries.set(evidence, blocksQuery);
-  return blocksQuery;
+  const selected = blocks.length > 1 ? blocks : evidence.select(query);
+  cachedBlocks.set(evidence, selected);
+  return selected;
 }
 
-/**
- * Resolve owned group content semantically when available, retaining the two legacy wrapper families otherwise.
- */
-function getGroupsBlocksQuery(post: Element) {
-  return getNewsBlocksQuery(post);
+/** Use the same owned content boundaries for group posts and their metadata guards. */
+function getGroupsBlocks(post: Element): Element[] {
+  return getNewsBlocks(post);
 }
 
-export { getNewsBlocksQuery, getGroupsBlocksQuery };
+export { getNewsBlocks, getGroupsBlocks };

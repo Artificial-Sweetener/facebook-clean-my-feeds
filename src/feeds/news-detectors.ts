@@ -10,6 +10,7 @@ import { getFullNumber } from "../core/filters/classifiers/shares-likes";
 import { extractTextContent } from "../dom/walker";
 import { querySelectorAllNoChildren } from "../utils/dom";
 import { getNewsBlocksQuery } from "./shared/blocks";
+import { isNewsStoryShelf } from "./news-stories";
 import {
   facebookPath,
   hasNewsActionName,
@@ -278,8 +279,9 @@ export function isNewsAiInfoPost(post: Element, keyWords: Pick<Keywords, "NF_AI_
     : "";
 }
 
-/** Require an owned, rendered Facebook story destination with an exact feed-origin parameter. */
+/** Recognize independent story shelves structurally, retaining the exact feed-origin requirement for ordinary single-story posts. */
 export function isNewsStoriesPost(post: Element, keyWords: Pick<Keywords, "NF_STORIES">) {
+  if (isNewsStoryShelf(post)) return keyWords.NF_STORIES;
   const evidence = getPostEvidence(post);
   const matched = evidence.select("a[href]").some((link) => {
     const url = facebookUrl(link);

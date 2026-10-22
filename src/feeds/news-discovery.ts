@@ -12,6 +12,7 @@ import { hideNewsPost } from "../dom/hide";
 import { newsSelectors } from "../selectors/news";
 import { isSponsored } from "./shared/sponsored";
 import { rememberHiddenNewsContent } from "./news-revalidation";
+import { getInlineNewsStoryShelves } from "./news-stories";
 
 const newsPostSweepIntervalMs = 750;
 const prioritizedNewsPostQueries = Array.from(
@@ -21,6 +22,19 @@ const prioritizedNewsPostQueries = Array.from(
     ...newsSelectors.postQueries,
   ])
 );
+
+/** Merge independent article-less shelves in document order so normal hiding, recycling and diagnostics share the same roots. */
+function includeStoryShelves(query: string, posts: Element[]) {
+  const shelves = getInlineNewsStoryShelves(posts);
+  if (!shelves.length) return { query, posts };
+  const combined = [...posts, ...shelves].sort((left, right) =>
+    left.compareDocumentPosition(right) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1
+  );
+  return {
+    query: `${query}, div[role="main"] ${newsSelectors.virtualizedContainer}`,
+    posts: combined,
+  };
+}
 
 /**
  * Use observed content versions instead of serializing the complete feed on every idle tick.
@@ -74,12 +88,12 @@ export function getNewsPostDiscovery() {
       : concretePosts.every((post) => post.getAttribute("role") === "article")
         ? 'div[role="main"] div[role="article"]'
         : concreteQuery;
-    return { query, posts: concretePosts };
+    return includeStoryShelves(query, concretePosts);
   }
   for (const query of prioritizedNewsPostQueries) {
     const nodeList = document.querySelectorAll(query);
     if (nodeList.length > 0) {
-      return { query, posts: Array.from(nodeList) };
+      return includeStoryShelves(query, Array.from(nodeList));
     }
   }
 

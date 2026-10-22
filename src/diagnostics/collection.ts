@@ -26,6 +26,8 @@ export function getNewsPostCollection() {
       }
     });
   });
+  for (const post of getNewsPostDiscovery().posts)
+    if (post instanceof HTMLElement && !combined.includes(post)) combined.push(post);
   return {
     query: results.length > 0 ? "combined" : "",
     queries: results.map((entry) => entry.query),

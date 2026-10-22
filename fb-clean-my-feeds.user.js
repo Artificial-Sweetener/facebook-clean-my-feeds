@@ -5563,7 +5563,7 @@
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:5aa9b73a53e0df49dc91beec99418ad3adf57379bb4833e3fe047a5e2ecc54d8" : "unbundled";
+      buildIdentity = true ? "source-sha256:0ca92a992ab6f1b6ee11c3878b1da751009c95f5e9b635c36f501c4db1e959c9" : "unbundled";
     }
   });
 
@@ -5860,6 +5860,10 @@
         standardPost: 'div[role="article"], div[aria-posinset]',
         sponsoredLink: 'a[href*="/ads/about/"]',
         virtualizedContainer: "div[data-virtualized]",
+        storyShelfCandidates: 'div[role="main"] div[data-virtualized] [data-type="hscroll-child"] a[href*="/stories/"]',
+        storyShelfItems: '[data-type="hscroll-child"]',
+        storyShelfAuthors: "h4 a[href], h5 a[href]",
+        storyShelfMedia: 'img, video, [role="img"]',
         postQueries: [
           'h3[dir="auto"] ~ div div[aria-posinset]',
           'h2[dir="auto"] ~ div div[aria-posinset]',
@@ -7413,7 +7417,76 @@
     }
   });
 
+  // src/feeds/news-stories.ts
+  function isNewsStoryShelf(post) {
+    var _a;
+    if (!post.matches(`${newsSelectors.virtualizedContainer}, ${newsSelectors.standardPost}`) || post.closest(sharedSelectors.authoredContent) || ((_a = post.parentElement) == null ? void 0 : _a.closest(newsSelectors.standardPost)) || post.querySelector(newsSelectors.standardPost))
+      return false;
+    const evidence = getPostEvidence(post);
+    if (evidence.select(
+      `${sharedSelectors.profileName}, ${sharedSelectors.storyMessage}, ${sharedSelectors.authoredContent}`
+    ).some((content) => {
+      if (!evidence.isRendered(content)) return false;
+      const card = content.closest(newsSelectors.storyShelfItems);
+      return !card || !post.contains(card);
+    }))
+      return false;
+    if (evidence.select(newsSelectors.storyShelfAuthors).some((author) => {
+      const url = facebookUrl(author);
+      return evidence.isRendered(author) && !author.closest(newsSelectors.storyShelfItems) && (!url || !url.pathname.startsWith("/stories/"));
+    }))
+      return false;
+    const cards = /* @__PURE__ */ new Set();
+    for (const link of evidence.select('a[href*="/stories/"]')) {
+      const url = facebookUrl(link);
+      if (!url) continue;
+      if (/^\/stories\/create\/?$/.test(url.pathname)) return false;
+      if (!/^\/stories\/[^/]+(?:\/[^/]+)?\/?$/.test(url.pathname)) continue;
+      const card = link.closest(newsSelectors.storyShelfItems);
+      if (!card || !post.contains(card) || !ownsPostElement(link, post) || !evidence.isRendered(link) || !link.querySelector(newsSelectors.storyShelfMedia))
+        continue;
+      cards.add(card);
+    }
+    return cards.size >= 2;
+  }
+  function getInlineNewsStoryShelves(posts) {
+    if (!posts.length) return [];
+    const candidates = /* @__PURE__ */ new Set();
+    for (const link of document.querySelectorAll(newsSelectors.storyShelfCandidates)) {
+      const shelf = link.closest(newsSelectors.virtualizedContainer);
+      if (shelf) candidates.add(shelf);
+    }
+    return Array.from(candidates).filter((shelf) => {
+      if (posts.some((post) => post === shelf || post.contains(shelf) || shelf.contains(post)))
+        return false;
+      const main = shelf.closest('[role="main"]');
+      return posts.some(
+        (post) => post.closest('[role="main"]') === main && Boolean(post.compareDocumentPosition(shelf) & Node.DOCUMENT_POSITION_FOLLOWING)
+      ) && isNewsStoryShelf(shelf);
+    });
+  }
+  var init_news_stories = __esm({
+    "src/feeds/news-stories.ts"() {
+      "use strict";
+      init_post_evidence();
+      init_ownership();
+      init_news();
+      init_shared();
+    }
+  });
+
   // src/feeds/news-discovery.ts
+  function includeStoryShelves(query, posts) {
+    const shelves = getInlineNewsStoryShelves(posts);
+    if (!shelves.length) return { query, posts };
+    const combined = [...posts, ...shelves].sort(
+      (left, right) => left.compareDocumentPosition(right) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1
+    );
+    return {
+      query: `${query}, div[role="main"] ${newsSelectors.virtualizedContainer}`,
+      posts: combined
+    };
+  }
   function isNewsRootDirty(root, force) {
     if (!root) return false;
     const observer = ensureDirtyObserver(root);
@@ -7440,12 +7513,12 @@
     });
     if (concretePosts.length > 0) {
       const query = concretePosts.every((post) => post.hasAttribute("aria-posinset")) ? 'div[role="main"] div[aria-posinset]' : concretePosts.every((post) => post.getAttribute("role") === "article") ? 'div[role="main"] div[role="article"]' : concreteQuery;
-      return { query, posts: concretePosts };
+      return includeStoryShelves(query, concretePosts);
     }
     for (const query of prioritizedNewsPostQueries) {
       const nodeList = document.querySelectorAll(query);
       if (nodeList.length > 0) {
-        return { query, posts: Array.from(nodeList) };
+        return includeStoryShelves(query, Array.from(nodeList));
       }
     }
     return { query: "", posts: [] };
@@ -7517,6 +7590,7 @@
       init_news();
       init_sponsored();
       init_news_revalidation();
+      init_news_stories();
       newsPostSweepIntervalMs = 750;
       prioritizedNewsPostQueries = Array.from(
         /* @__PURE__ */ new Set([
@@ -8208,6 +8282,7 @@
     return hasAiInfoLabel && typeof keyWords.NF_AI_INFO_POSTS === "string" ? keyWords.NF_AI_INFO_POSTS : "";
   }
   function isNewsStoriesPost(post, keyWords) {
+    if (isNewsStoryShelf(post)) return keyWords.NF_STORIES;
     const evidence = getPostEvidence(post);
     const matched = evidence.select("a[href]").some((link) => {
       const url = facebookUrl(link);
@@ -8242,6 +8317,7 @@
       init_walker();
       init_dom();
       init_blocks();
+      init_news_stories();
       init_news_identity();
     }
   });
@@ -9079,6 +9155,8 @@
         }
       });
     });
+    for (const post of getNewsPostDiscovery().posts)
+      if (post instanceof HTMLElement && !combined.includes(post)) combined.push(post);
     return {
       query: results.length > 0 ? "combined" : "",
       queries: results.map((entry) => entry.query),

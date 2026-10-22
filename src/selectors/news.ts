@@ -14,6 +14,11 @@ const newsSelectors = {
   standardPost: 'div[role="article"], div[aria-posinset]',
   sponsoredLink: 'a[href*="/ads/about/"]',
   virtualizedContainer: "div[data-virtualized]",
+  storyShelfCandidates:
+    'div[role="main"] div[data-virtualized] [data-type="hscroll-child"] a[href*="/stories/"]',
+  storyShelfItems: '[data-type="hscroll-child"]',
+  storyShelfAuthors: "h4 a[href], h5 a[href]",
+  storyShelfMedia: 'img, video, [role="img"]',
   postQueries: [
     'h3[dir="auto"] ~ div div[aria-posinset]',
     'h2[dir="auto"] ~ div div[aria-posinset]',

@@ -26,7 +26,7 @@ import type { BugReportContext } from "./types";
  * @returns Active feed identity, its selectors, and bounded detector samples.
  */
 export function buildSamples(context: BugReportContext, maxSamples = 20) {
-  const { state, filters } = context;
+  const { state, filters, options } = context;
   if (state.isNF) {
     const { query, queries, posts } = getNewsPostCollection();
     const samples = samplePosts(posts, maxSamples).map((post) => ({
@@ -58,7 +58,7 @@ export function buildSamples(context: BugReportContext, maxSamples = 20) {
     const { query, listings } = getMarketplaceItems(state);
     const samples = listings.slice(0, maxSamples).map((listing) => ({
       signature: buildDomSignature(listing.item),
-      matches: buildMarketplaceMatches(listing, filters),
+      matches: buildMarketplaceMatches(listing, filters, options),
     }));
     return { feed: "marketplace", query, samples };
   }

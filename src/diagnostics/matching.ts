@@ -28,12 +28,16 @@ import {
 } from "../feeds/news";
 import { isGroupsShortReelVideo, isGroupsSuggested } from "../feeds/groups";
 import { isInstagram, isVideoLive } from "../feeds/videos";
-import { mpGetBlockedPrices, mpGetBlockedTextDescription } from "../feeds/marketplace";
+import {
+  findMarketplacePriceMatch,
+  findMarketplaceDescriptionMatch,
+} from "../feeds/marketplace-text";
 import type { MarketplaceListing } from "../feeds/marketplace-discovery";
 
 import { isSponsored } from "../feeds/shared/sponsored";
 import type { BugReportContext, MatchEvidence, DiagnosticCounts } from "./types";
 import type { Filters } from "../core/filters/types";
+import type { HydratedOptions } from "../core/options/types";
 
 /**
  * Record positive enabled-filter evidence and omit negative results to keep reports compact.
@@ -231,21 +235,20 @@ export function buildProfileMatches(post: HTMLElement, context: BugReportContext
  * Annotate price and description matches from the marketplace item text blocks.
  * @param listing Production listing ownership and rendered caption blocks.
  * @param filters Materialized keyword lists used by the active filtering pass.
+ * @param options The current Marketplace regex preference, shared with production matching.
  * @returns Flags for matched price and description filters, with no item content.
  */
-export function buildMarketplaceMatches(listing: MarketplaceListing, filters: Filters) {
+export function buildMarketplaceMatches(
+  listing: MarketplaceListing,
+  filters: Filters,
+  options: Pick<HydratedOptions, "MP_BLOCKED_RE">
+) {
   const matches: MatchEvidence = {};
-  const { textBlocks: blocksOfText, box, visualText } = listing;
-  const priceBlock = blocksOfText[0];
-  if (priceBlock) {
-    const blockedPrices = mpGetBlockedPrices(priceBlock, filters, box, visualText);
-    if (blockedPrices) {
-      matches.MP_BLOCKED_TEXT = true;
-    }
-    const blockedDesc = mpGetBlockedTextDescription(blocksOfText, filters, true, box, visualText);
-    if (blockedDesc) {
-      matches.MP_BLOCKED_TEXT_DESCRIPTION = true;
-    }
+  if (findMarketplacePriceMatch(listing, filters, options.MP_BLOCKED_RE === true)) {
+    matches.MP_BLOCKED_TEXT = true;
+  }
+  if (findMarketplaceDescriptionMatch(listing, filters, options.MP_BLOCKED_RE === true)) {
+    matches.MP_BLOCKED_TEXT_DESCRIPTION = true;
   }
   return matches;
 }

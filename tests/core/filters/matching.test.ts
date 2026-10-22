@@ -23,6 +23,12 @@ describe("core/filters/matching", () => {
     expect(findFirstMatchRegExp("FOO1 bar", ["foo\\d"])).toBe("foo\\d");
   });
 
+  test("regex price tokens preserve pattern priority and independent anchors", () => {
+    expect(findFirstMatchRegExp(["$100", "$50"], ["^\\$50$", "^\\$100$"])).toBe("^\\$50$");
+    expect(findFirstMatchRegExp(["$500", "$100"], ["^\\$50$"])).toBe("");
+    expect(findFirstMatchRegExp([], [".*"])).toBe("");
+  });
+
   test("findFirstMatchRegExp returns empty string when none match", () => {
     expect(findFirstMatchRegExp("hello", ["foo\\d"])).toBe("");
   });

@@ -31,11 +31,11 @@ test.each(["/marketplace", "/marketplace/search", "/marketplace/category/furnitu
     const discovered = collectMarketplaceListings(root);
     expect(discovered).toHaveLength(3);
     expect(getMarketplaceItems(context.state).listings).toHaveLength(3);
-    expect(discovered.map((listing) => buildMarketplaceMatches(listing, context.filters))).toEqual([
-      { MP_BLOCKED_TEXT: true },
-      { MP_BLOCKED_TEXT_DESCRIPTION: true },
-      {},
-    ]);
+    expect(
+      discovered.map((listing) =>
+        buildMarketplaceMatches(listing, context.filters, context.options)
+      )
+    ).toEqual([{ MP_BLOCKED_TEXT: true }, { MP_BLOCKED_TEXT_DESCRIPTION: true }, {}]);
     mopMarketplaceFeed(context);
     expect(element("101").getAttribute(postAtt)).toBe("$50");
     expect(element("102").getAttribute(postAtt)).toBe("damaged");

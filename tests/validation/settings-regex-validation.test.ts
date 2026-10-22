@@ -17,7 +17,7 @@ beforeEach(() => {
   jest.mocked(deleteOptions).mockReset().mockResolvedValue(undefined);
 });
 
-const feeds: readonly RegexFeed[] = ["NF", "GF", "VF", "PP"];
+const feeds: readonly RegexFeed[] = ["NF", "GF", "VF", "PP", "MP"];
 
 /** Persisted scope flags deliberately match the production exact-string activation convention. */
 function flags(mask: number): string[] {
@@ -99,15 +99,18 @@ describe("regex boundary validation and provenance", () => {
     expect(result.filters.VF_BLOCKED_TEXT).toEqual(["^video$", "literal"]);
   });
 
-  test("Marketplace's currently inert regex flags do not reject or reinterpret its literal rules", () => {
+  test("Marketplace validates both price and description lists with independent source coordinates", () => {
     const options: Options = {
       MP_BLOCKED_ENABLED: true,
       MP_BLOCKED_RE: true,
       MP_BLOCKED_TEXT: "[",
       MP_BLOCKED_TEXT_DESCRIPTION: "(",
     };
-    expect(getRegexValidationIssues(options)).toEqual([]);
-    expect(resolveRegexFilters(options).filters).toEqual(buildFilters(options));
+    expect(getRegexValidationIssues(options)).toEqual([
+      { field: "MP_BLOCKED_TEXT", line: 1, destination: "MP" },
+      { field: "MP_BLOCKED_TEXT_DESCRIPTION", line: 1, destination: "MP" },
+    ]);
+    expect(resolveRegexFilters(options).filters.MP_BLOCKED_ENABLED).toBe(false);
   });
 
   test.each(["[", "(", "*", "\\", "(?<", "[z-a]"])(

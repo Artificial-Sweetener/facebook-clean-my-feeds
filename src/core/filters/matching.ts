@@ -9,14 +9,18 @@ export function findFirstMatch(
   return foundText !== undefined ? foundText : "";
 }
 
-/** Match case-insensitive patterns in order. Invalid patterns intentionally raise SyntaxError at the caller boundary. */
+/** Match case-insensitive patterns in priority order against text or independent tokens; invalid syntax raises at the caller boundary. */
 export function findFirstMatchRegExp(
-  postFullText: string,
+  postFullText: string | readonly string[],
   regexpTextValuesToFind: readonly string[]
 ): string {
   for (const pattern of regexpTextValuesToFind) {
     const regex = new RegExp(pattern, "i");
-    if (regex.test(postFullText)) {
+    if (
+      typeof postFullText === "string"
+        ? regex.test(postFullText)
+        : postFullText.some((token) => regex.test(token))
+    ) {
       return pattern;
     }
   }

@@ -6,9 +6,9 @@ import { SEPARATOR } from "./constants";
 import type { Options } from "./types";
 
 /** Only feeds whose processors actually implement regex matching participate in validation. */
-export type RegexFeed = "NF" | "GF" | "VF" | "PP";
+export type RegexFeed = "NF" | "GF" | "VF" | "PP" | "MP";
 /** A validation issue points to an editable source list rather than a merged destination offset. */
-export type RegexSourceField = `${RegexFeed}_BLOCKED_TEXT`;
+export type RegexSourceField = `${RegexFeed}_BLOCKED_TEXT` | "MP_BLOCKED_TEXT_DESCRIPTION";
 
 /** Safe provenance can appear in diagnostics: neither pattern text nor engine errors are retained. */
 export interface RegexValidationIssue {
@@ -33,13 +33,16 @@ interface EffectiveRule {
   pattern: string;
 }
 
-const regexFeeds: readonly RegexFeed[] = ["NF", "GF", "VF", "PP"];
+const regexFeeds: readonly RegexFeed[] = ["NF", "GF", "VF", "PP", "MP"];
 const sharedFeeds = ["NF", "GF", "VF"] as const;
 
 /** Split one enabled, nonempty source exactly as filter construction does, retaining blank tokens. */
-function sourceRules(options: Options, source: RegexFeed): EffectiveRule[] {
+function sourceRules(
+  options: Options,
+  source: RegexFeed,
+  field: RegexSourceField = `${source}_BLOCKED_TEXT`
+): EffectiveRule[] {
   if (options[`${source}_BLOCKED_ENABLED`] !== true) return [];
-  const field: RegexSourceField = `${source}_BLOCKED_TEXT`;
   const text = options[field] ?? "";
   return text.length
     ? text.split(SEPARATOR).map((pattern, index) => ({ field, line: index + 1, pattern }))
@@ -50,6 +53,8 @@ function sourceRules(options: Options, source: RegexFeed): EffectiveRule[] {
 function effectiveRules(options: Options, destination: RegexFeed): EffectiveRule[] {
   if (options[`${destination}_BLOCKED_ENABLED`] !== true) return [];
   const own = sourceRules(options, destination);
+  if (destination === "MP")
+    return [...own, ...sourceRules(options, "MP", "MP_BLOCKED_TEXT_DESCRIPTION")];
   if (destination === "PP") return own;
   const destinationIndex = sharedFeeds.indexOf(destination);
   for (const source of sharedFeeds) {
@@ -75,7 +80,7 @@ function isValidExpression(pattern: string): boolean {
  * Isolate invalid effective rules at a persistence boundary without editing the user's saved text.
  * An invalid source remains available as literal text in literal-mode destinations. Only destinations
  * using regex lose that rule; valid patterns keep their source text, ordering and case-folded peers.
- * Marketplace's inert regex preference is excluded until its matching behavior is explicitly changed.
+ * Marketplace price and description lists retain independent validation coordinates and matching arrays.
  * @param options Decoded settings; source arrays contain persisted string scope flags.
  * @returns Fresh safe runtime filters and field/line/feed diagnostics with no raw expressions.
  */
@@ -87,16 +92,26 @@ export function resolveRegexFilters(options: Options): {
   const issues: RegexValidationIssue[] = [];
   for (const destination of regexFeeds) {
     if (options[`${destination}_BLOCKED_RE`] !== true) continue;
-    const validPatterns: string[] = [];
+    const validRules: EffectiveRule[] = [];
     for (const rule of effectiveRules(options, destination)) {
-      if (isValidExpression(rule.pattern)) validPatterns.push(rule.pattern);
+      if (isValidExpression(rule.pattern)) validRules.push(rule);
       else issues.push({ field: rule.field, line: rule.line, destination });
     }
+    const validPatterns = validRules
+      .filter((rule) => destination !== "MP" || rule.field === "MP_BLOCKED_TEXT")
+      .map((rule) => rule.pattern);
     filters[`${destination}_BLOCKED_TEXT`] = validPatterns;
     filters[`${destination}_BLOCKED_TEXT_LC`] = validPatterns.map((pattern) =>
       pattern.toLowerCase()
     );
-    filters[`${destination}_BLOCKED_ENABLED`] = validPatterns.length > 0;
+    if (destination === "MP") {
+      const descriptions = validRules
+        .filter((rule) => rule.field === "MP_BLOCKED_TEXT_DESCRIPTION")
+        .map((rule) => rule.pattern);
+      filters.MP_BLOCKED_TEXT_DESCRIPTION = descriptions;
+      filters.MP_BLOCKED_TEXT_DESCRIPTION_LC = descriptions.map((pattern) => pattern.toLowerCase());
+    }
+    filters[`${destination}_BLOCKED_ENABLED`] = validRules.length > 0;
   }
   return { filters, issues };
 }

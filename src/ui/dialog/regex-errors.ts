@@ -72,7 +72,9 @@ export function showRegexErrors(
           ? "GF"
           : issue.field === "VF_BLOCKED_TEXT"
             ? "VF"
-            : "PP";
+            : issue.field.startsWith("MP_")
+              ? "MP"
+              : "PP";
     const line =
       source === "draft" ? visibleLine(input, issue.line, context.state.SEP) : issue.line;
     const message = context.keyWords.DLG_REGEX_ERROR.replace(

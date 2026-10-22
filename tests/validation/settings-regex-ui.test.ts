@@ -37,6 +37,37 @@ afterEach(() => {
 });
 
 describe("localized invalid regex field errors", () => {
+  test.each(
+    Object.entries(translations).flatMap(([language, catalog]) =>
+      ["MP_BLOCKED_TEXT", "MP_BLOCKED_TEXT_DESCRIPTION"].map((field) => ({
+        language,
+        catalog,
+        field,
+      }))
+    )
+  )(
+    "$language Marketplace errors focus the original $field without leaking the pattern",
+    async ({ language, catalog, field }) => {
+      const { handlers, state } = mount(language);
+      control<HTMLInputElement>('[name="MP_BLOCKED_ENABLED"]').checked = true;
+      control<HTMLInputElement>('[name="MP_BLOCKED_RE"]').checked = true;
+      const input = control<HTMLTextAreaElement>(`[name="${field}"]`);
+      input.value = "Private invalid [";
+      const before = JSON.stringify(state.options);
+      await handlers.saveUserOptions();
+      expect(JSON.stringify(state.options)).toBe(before);
+      expect(setOptions).not.toHaveBeenCalled();
+      expect(document.activeElement).toBe(input);
+      const expected = catalog.DLG_REGEX_ERROR.replace(
+        "{field}",
+        `${catalog.DLG_MP}: ${catalog.DLG_BLOCK_TEXT_FILTER_TITLE}`
+      )
+        .replace("{line}", "1")
+        .replace("{feed}", catalog.DLG_MP);
+      expect(input.validationMessage).toBe(expected);
+      expect(input.validationMessage).not.toContain("Private invalid");
+    }
+  );
   test.each(Object.entries(translations))(
     "invalid draft is retained with translated source-line error in %s",
     async (language, catalog) => {

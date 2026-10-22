@@ -4039,10 +4039,9 @@
   });
 
   // src/core/options/regex-validation.ts
-  function sourceRules(options, source) {
+  function sourceRules(options, source, field = `${source}_BLOCKED_TEXT`) {
     var _a;
     if (options[`${source}_BLOCKED_ENABLED`] !== true) return [];
-    const field = `${source}_BLOCKED_TEXT`;
     const text = (_a = options[field]) != null ? _a : "";
     return text.length ? text.split(SEPARATOR).map((pattern, index) => ({ field, line: index + 1, pattern })) : [];
   }
@@ -4050,6 +4049,8 @@
     var _a;
     if (options[`${destination}_BLOCKED_ENABLED`] !== true) return [];
     const own = sourceRules(options, destination);
+    if (destination === "MP")
+      return [...own, ...sourceRules(options, "MP", "MP_BLOCKED_TEXT_DESCRIPTION")];
     if (destination === "PP") return own;
     const destinationIndex = sharedFeeds.indexOf(destination);
     for (const source of sharedFeeds) {
@@ -4073,16 +4074,22 @@
     const issues = [];
     for (const destination of regexFeeds) {
       if (options[`${destination}_BLOCKED_RE`] !== true) continue;
-      const validPatterns = [];
+      const validRules = [];
       for (const rule of effectiveRules(options, destination)) {
-        if (isValidExpression(rule.pattern)) validPatterns.push(rule.pattern);
+        if (isValidExpression(rule.pattern)) validRules.push(rule);
         else issues.push({ field: rule.field, line: rule.line, destination });
       }
+      const validPatterns = validRules.filter((rule) => destination !== "MP" || rule.field === "MP_BLOCKED_TEXT").map((rule) => rule.pattern);
       filters[`${destination}_BLOCKED_TEXT`] = validPatterns;
       filters[`${destination}_BLOCKED_TEXT_LC`] = validPatterns.map(
         (pattern) => pattern.toLowerCase()
       );
-      filters[`${destination}_BLOCKED_ENABLED`] = validPatterns.length > 0;
+      if (destination === "MP") {
+        const descriptions = validRules.filter((rule) => rule.field === "MP_BLOCKED_TEXT_DESCRIPTION").map((rule) => rule.pattern);
+        filters.MP_BLOCKED_TEXT_DESCRIPTION = descriptions;
+        filters.MP_BLOCKED_TEXT_DESCRIPTION_LC = descriptions.map((pattern) => pattern.toLowerCase());
+      }
+      filters[`${destination}_BLOCKED_ENABLED`] = validRules.length > 0;
     }
     return { filters, issues };
   }
@@ -4103,7 +4110,7 @@
           this.name = "InvalidRegexOptionsError";
         }
       };
-      regexFeeds = ["NF", "GF", "VF", "PP"];
+      regexFeeds = ["NF", "GF", "VF", "PP", "MP"];
       sharedFeeds = ["NF", "GF", "VF"];
     }
   });
@@ -5912,7 +5919,7 @@
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:c3d08268de6eca5d47060083cc27e10896ded6eeafc66755290e24320fb9d31d" : "unbundled";
+      buildIdentity = true ? "source-sha256:2ab79a675ab1c4313f4d158bf82ca0f05eb39fcb15c325729e59c670c7f1aee0" : "unbundled";
     }
   });
 
@@ -7260,7 +7267,7 @@
   function findFirstMatchRegExp(postFullText, regexpTextValuesToFind) {
     for (const pattern of regexpTextValuesToFind) {
       const regex = new RegExp(pattern, "i");
-      if (regex.test(postFullText)) {
+      if (typeof postFullText === "string" ? regex.test(postFullText) : postFullText.some((token) => regex.test(token))) {
         return pattern;
       }
     }
@@ -10612,157 +10619,27 @@
     }
   });
 
-  // src/feeds/marketplace.ts
-  function mpHideBox(box, reason, state, options) {
-    if (!box || !state || !options) {
-      return;
-    }
-    if (!box.hasAttribute(state.hideWithNoCaptionAtt))
-      box.setAttribute(state.hideWithNoCaptionAtt, "");
-    const label = sanitizeReason(reason);
-    if (box.getAttribute(postAtt) !== label) box.setAttribute(postAtt, label);
-    if (options.VERBOSITY_DEBUG) {
-      if (!box.hasAttribute(state.showAtt)) box.setAttribute(state.showAtt, "");
-    }
-    trackPostSignature(box);
+  // src/feeds/marketplace-text.ts
+  function findMarketplacePriceMatch(listing, filters, regex) {
+    const price = listing.textBlocks[0];
+    if (!price) return "";
+    const tokens = mpScanTreeForText(price, listing.box, listing.visualText);
+    return regex ? findFirstMatchRegExp(tokens, filters.MP_BLOCKED_TEXT) : findFirstMatch(tokens, filters.MP_BLOCKED_TEXT_LC);
   }
-  function mpStopTrackingDirtIntoMyHouse(root) {
-    const collectionOfLinks = root.querySelectorAll("a[href]");
-    for (const trackingLink of collectionOfLinks) {
-      const url = facebookUrl(trackingLink);
-      if (!(url == null ? void 0 : url.searchParams.has("ref"))) continue;
-      const cleaned = new URL(url.href);
-      cleaned.searchParams.delete("ref");
-      trackingLink.href = cleaned.href;
-    }
-  }
-  function reconcileSponsoredItems(root, context) {
-    const { state, options, keyWords } = context;
-    const targets = new Set(
-      options.MP_SPONSORED ? collectMarketplaceSponsoredBoxes(root, state.mpType === "item") : []
-    );
-    for (const box of root.querySelectorAll(`[${postAtt}]`)) {
-      if (sponsoredBoxes.has(box) && !targets.has(box)) {
-        resetPostState(box, state);
-        sponsoredBoxes.delete(box);
-      }
-    }
-    for (const box of targets) {
-      if (box.hasAttribute(postAttMPSkip)) {
-        if (String(box.innerHTML.length) === box.getAttribute(postAttMPSkip)) {
-          continue;
-        }
-      }
-      mpHideBox(box, keyWords.SPONSORED, state, options);
-      sponsoredBoxes.add(box);
-    }
-  }
-  function mpGetBlockedPrices(elBlockOfText, filters, boundary = elBlockOfText, visualText = false) {
-    if (filters.MP_BLOCKED_TEXT.length > 0) {
-      const itemPrices = elBlockOfText ? mpScanTreeForText(elBlockOfText, boundary, visualText) : [];
-      return findFirstMatch(itemPrices, filters.MP_BLOCKED_TEXT_LC);
+  function findMarketplaceDescriptionMatch(listing, filters, regex) {
+    for (const block of listing.textBlocks.slice(1)) {
+      const text = mpScanTreeForText(block, listing.box, listing.visualText).join(" ");
+      if (!text) continue;
+      const match = regex ? findFirstMatchRegExp(text, filters.MP_BLOCKED_TEXT_DESCRIPTION) : findFirstMatch(text, filters.MP_BLOCKED_TEXT_DESCRIPTION_LC);
+      if (match) return match;
     }
     return "";
   }
-  function mpGetBlockedTextDescription(collectionBlocksOfText, filters, skipFirstBlock = true, boundary, visualText = false) {
-    if (filters.MP_BLOCKED_TEXT_DESCRIPTION.length > 0) {
-      const startIndex = skipFirstBlock ? 1 : 0;
-      for (let i = startIndex; i < collectionBlocksOfText.length; i += 1) {
-        const block = collectionBlocksOfText[i];
-        if (!block) continue;
-        const descriptionTextList = mpScanTreeForText(block, boundary, visualText);
-        const descriptionText = descriptionTextList.join(" ").toLowerCase();
-        const blockedText = findFirstMatch(descriptionText, filters.MP_BLOCKED_TEXT_DESCRIPTION_LC);
-        if (blockedText.length > 0) {
-          return blockedText;
-        }
-      }
-    }
-    return "";
-  }
-  function mpDoBlockingByBlockedText(root, filters, state, options) {
-    for (const { box, textBlocks, visualText } of collectMarketplaceListings(root)) {
-      if (box.hasAttribute(postAtt)) continue;
-      if (box.hasAttribute(postAttMPSkip)) {
-        if (String(box.innerHTML.length) === box.getAttribute(postAttMPSkip)) {
-          continue;
-        }
-      }
-      if (textBlocks.length > 0) {
-        const blockedTextPrices = mpGetBlockedPrices(textBlocks[0], filters, box, visualText);
-        const blockedTextDescription = mpGetBlockedTextDescription(
-          textBlocks,
-          filters,
-          true,
-          box,
-          visualText
-        );
-        if (blockedTextPrices.length > 0) {
-          mpHideBox(box, blockedTextPrices, state, options);
-        } else if (blockedTextDescription.length > 0) {
-          mpHideBox(box, blockedTextDescription, state, options);
-        } else {
-          box.setAttribute(postAtt, "");
-        }
-        trackPostSignature(box);
-      }
-    }
-  }
-  function isMarketplaceDirty(state) {
-    const mainColumn = getMarketplaceRoot(state.mpType === "item");
-    if (mainColumn) {
-      ensureDirtyObserver(mainColumn);
-      if (!mainColumn.hasAttribute(mainColumnAtt)) {
-        mainColumn.setAttribute(mainColumnAtt, "1");
-        markElementDirty(mainColumn);
-      }
-      if (state.forceProcess) markElementDirty(mainColumn);
-      if (isElementDirty(mainColumn)) return mainColumn;
-    }
-    state.noChangeCounter += 1;
-    return null;
-  }
-  function mopMarketplaceFeed(context) {
-    if (!context) {
-      return null;
-    }
-    const { state, options, filters, keyWords } = context;
-    if (!state || !options || !filters || !keyWords) {
-      return null;
-    }
-    const mainColumn = isMarketplaceDirty(state);
-    if (!mainColumn) {
-      return null;
-    }
-    const mainColumnToken = getDirtyToken(mainColumn);
-    mpStopTrackingDirtIntoMyHouse(mainColumn);
-    revalidateTrackedPosts(mainColumn, state);
-    revalidateMarketplaceListings(mainColumn, state);
-    if (["marketplace", "item", "category", "search"].includes(state.mpType)) {
-      reconcileSponsoredItems(mainColumn, context);
-      if (options.MP_BLOCKED_ENABLED) {
-        mpDoBlockingByBlockedText(mainColumn, filters, state, options);
-      }
-    }
-    if (!mainColumn.hasAttribute(mainColumnAtt)) {
-      mainColumn.setAttribute(mainColumnAtt, "1");
-    }
-    markElementCleanIfUnchanged(mainColumn, mainColumnToken);
-    state.noChangeCounter = 0;
-    return mainColumn;
-  }
-  var sponsoredBoxes;
-  var init_marketplace2 = __esm({
-    "src/feeds/marketplace.ts"() {
+  var init_marketplace_text = __esm({
+    "src/feeds/marketplace-text.ts"() {
       "use strict";
       init_matching();
-      init_post_evidence();
-      init_attributes();
-      init_dirty_check();
       init_walker();
-      init_hide();
-      init_marketplace_discovery();
-      sponsoredBoxes = /* @__PURE__ */ new WeakSet();
     }
   });
 
@@ -10909,19 +10786,13 @@
     }
     return matches;
   }
-  function buildMarketplaceMatches(listing, filters) {
+  function buildMarketplaceMatches(listing, filters, options) {
     const matches = {};
-    const { textBlocks: blocksOfText, box, visualText } = listing;
-    const priceBlock = blocksOfText[0];
-    if (priceBlock) {
-      const blockedPrices = mpGetBlockedPrices(priceBlock, filters, box, visualText);
-      if (blockedPrices) {
-        matches.MP_BLOCKED_TEXT = true;
-      }
-      const blockedDesc = mpGetBlockedTextDescription(blocksOfText, filters, true, box, visualText);
-      if (blockedDesc) {
-        matches.MP_BLOCKED_TEXT_DESCRIPTION = true;
-      }
+    if (findMarketplacePriceMatch(listing, filters, options.MP_BLOCKED_RE === true)) {
+      matches.MP_BLOCKED_TEXT = true;
+    }
+    if (findMarketplaceDescriptionMatch(listing, filters, options.MP_BLOCKED_RE === true)) {
+      matches.MP_BLOCKED_TEXT_DESCRIPTION = true;
     }
     return matches;
   }
@@ -10947,14 +10818,14 @@
       init_news2();
       init_groups2();
       init_videos2();
-      init_marketplace2();
+      init_marketplace_text();
       init_sponsored();
     }
   });
 
   // src/diagnostics/samples.ts
   function buildSamples(context, maxSamples = 20) {
-    const { state, filters } = context;
+    const { state, filters, options } = context;
     if (state.isNF) {
       const { query, queries, posts } = getNewsPostCollection();
       const samples = samplePosts(posts, maxSamples).map((post) => ({
@@ -10986,7 +10857,7 @@
       const { query, listings } = getMarketplaceItems(state);
       const samples = listings.slice(0, maxSamples).map((listing) => ({
         signature: buildDomSignature(listing.item),
-        matches: buildMarketplaceMatches(listing, filters)
+        matches: buildMarketplaceMatches(listing, filters, options)
       }));
       return { feed: "marketplace", query, samples };
     }
@@ -12199,6 +12070,139 @@
   var init_loop = __esm({
     "src/runtime/loop.ts"() {
       "use strict";
+    }
+  });
+
+  // src/feeds/marketplace.ts
+  function mpHideBox(box, reason, state, options) {
+    if (!box || !state || !options) {
+      return;
+    }
+    if (!box.hasAttribute(state.hideWithNoCaptionAtt))
+      box.setAttribute(state.hideWithNoCaptionAtt, "");
+    const label = sanitizeReason(reason);
+    if (box.getAttribute(postAtt) !== label) box.setAttribute(postAtt, label);
+    if (options.VERBOSITY_DEBUG) {
+      if (!box.hasAttribute(state.showAtt)) box.setAttribute(state.showAtt, "");
+    }
+    trackPostSignature(box);
+  }
+  function mpStopTrackingDirtIntoMyHouse(root) {
+    const collectionOfLinks = root.querySelectorAll("a[href]");
+    for (const trackingLink of collectionOfLinks) {
+      const url = facebookUrl(trackingLink);
+      if (!(url == null ? void 0 : url.searchParams.has("ref"))) continue;
+      const cleaned = new URL(url.href);
+      cleaned.searchParams.delete("ref");
+      trackingLink.href = cleaned.href;
+    }
+  }
+  function reconcileSponsoredItems(root, context) {
+    const { state, options, keyWords } = context;
+    const targets = new Set(
+      options.MP_SPONSORED ? collectMarketplaceSponsoredBoxes(root, state.mpType === "item") : []
+    );
+    for (const box of root.querySelectorAll(`[${postAtt}]`)) {
+      if (sponsoredBoxes.has(box) && !targets.has(box)) {
+        resetPostState(box, state);
+        sponsoredBoxes.delete(box);
+      }
+    }
+    for (const box of targets) {
+      if (box.hasAttribute(postAttMPSkip)) {
+        if (String(box.innerHTML.length) === box.getAttribute(postAttMPSkip)) {
+          continue;
+        }
+      }
+      mpHideBox(box, keyWords.SPONSORED, state, options);
+      sponsoredBoxes.add(box);
+    }
+  }
+  function mpDoBlockingByBlockedText(root, filters, state, options) {
+    for (const listing of collectMarketplaceListings(root)) {
+      const { box, textBlocks } = listing;
+      if (box.hasAttribute(postAtt)) continue;
+      if (box.hasAttribute(postAttMPSkip)) {
+        if (String(box.innerHTML.length) === box.getAttribute(postAttMPSkip)) {
+          continue;
+        }
+      }
+      if (textBlocks.length > 0) {
+        const blockedTextPrices = findMarketplacePriceMatch(
+          listing,
+          filters,
+          options.MP_BLOCKED_RE === true
+        );
+        const blockedTextDescription = findMarketplaceDescriptionMatch(
+          listing,
+          filters,
+          options.MP_BLOCKED_RE === true
+        );
+        if (blockedTextPrices.length > 0) {
+          mpHideBox(box, blockedTextPrices, state, options);
+        } else if (blockedTextDescription.length > 0) {
+          mpHideBox(box, blockedTextDescription, state, options);
+        } else {
+          box.setAttribute(postAtt, "");
+        }
+        trackPostSignature(box);
+      }
+    }
+  }
+  function isMarketplaceDirty(state) {
+    const mainColumn = getMarketplaceRoot(state.mpType === "item");
+    if (mainColumn) {
+      ensureDirtyObserver(mainColumn);
+      if (!mainColumn.hasAttribute(mainColumnAtt)) {
+        mainColumn.setAttribute(mainColumnAtt, "1");
+        markElementDirty(mainColumn);
+      }
+      if (state.forceProcess) markElementDirty(mainColumn);
+      if (isElementDirty(mainColumn)) return mainColumn;
+    }
+    state.noChangeCounter += 1;
+    return null;
+  }
+  function mopMarketplaceFeed(context) {
+    if (!context) {
+      return null;
+    }
+    const { state, options, filters, keyWords } = context;
+    if (!state || !options || !filters || !keyWords) {
+      return null;
+    }
+    const mainColumn = isMarketplaceDirty(state);
+    if (!mainColumn) {
+      return null;
+    }
+    const mainColumnToken = getDirtyToken(mainColumn);
+    mpStopTrackingDirtIntoMyHouse(mainColumn);
+    revalidateTrackedPosts(mainColumn, state);
+    revalidateMarketplaceListings(mainColumn, state);
+    if (["marketplace", "item", "category", "search"].includes(state.mpType)) {
+      reconcileSponsoredItems(mainColumn, context);
+      if (options.MP_BLOCKED_ENABLED) {
+        mpDoBlockingByBlockedText(mainColumn, filters, state, options);
+      }
+    }
+    if (!mainColumn.hasAttribute(mainColumnAtt)) {
+      mainColumn.setAttribute(mainColumnAtt, "1");
+    }
+    markElementCleanIfUnchanged(mainColumn, mainColumnToken);
+    state.noChangeCounter = 0;
+    return mainColumn;
+  }
+  var sponsoredBoxes;
+  var init_marketplace2 = __esm({
+    "src/feeds/marketplace.ts"() {
+      "use strict";
+      init_post_evidence();
+      init_attributes();
+      init_dirty_check();
+      init_hide();
+      init_marketplace_discovery();
+      init_marketplace_text();
+      sponsoredBoxes = /* @__PURE__ */ new WeakSet();
     }
   });
 
@@ -14187,7 +14191,7 @@
     for (const issue of issues) {
       const input = dialog.querySelector(`textarea[name="${issue.field}"]`);
       if (!input) continue;
-      const origin = issue.field === "NF_BLOCKED_TEXT" ? "NF" : issue.field === "GF_BLOCKED_TEXT" ? "GF" : issue.field === "VF_BLOCKED_TEXT" ? "VF" : "PP";
+      const origin = issue.field === "NF_BLOCKED_TEXT" ? "NF" : issue.field === "GF_BLOCKED_TEXT" ? "GF" : issue.field === "VF_BLOCKED_TEXT" ? "VF" : issue.field.startsWith("MP_") ? "MP" : "PP";
       const line = source === "draft" ? visibleLine(input, issue.line, context.state.SEP) : issue.line;
       const message = context.keyWords.DLG_REGEX_ERROR.replace(
         "{field}",

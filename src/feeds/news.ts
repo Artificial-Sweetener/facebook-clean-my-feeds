@@ -37,9 +37,10 @@ import {
   isNewsAiInfoPost,
   isNewsStoriesPost,
   isNewsVerifiedBadge,
-  postExceedsLikeCount,
 } from "./news-detectors";
 export * from "./news-detectors";
+import { postExceedsLikeCount } from "./news-likes";
+export * from "./news-likes";
 import { scrubRightRailSponsored, scrubRightRailSuggestions } from "./news-right-rail";
 export * from "./news-right-rail";
 import {

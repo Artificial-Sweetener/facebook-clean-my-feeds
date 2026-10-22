@@ -168,7 +168,7 @@ describe("validation: pure filter contracts", () => {
     expect(getFullNumber("1.2M")).toBe(1200000);
   });
 
-  test.each(["Likes", "K", "1.K", "١٢", "１２", "NaN"])(
+  test.each(["Likes", "K", "1.K", "NaN"])(
     "unsupported or malformed count %p does not cross a positive limit",
     (input) => {
       expect(getFullNumber(input)).toBeNaN();

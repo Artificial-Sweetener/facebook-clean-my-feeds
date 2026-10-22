@@ -40,6 +40,21 @@ function mountProfile(posts: string): void {
 afterEach(cleanRouteDocument);
 
 describe("global search route integration", () => {
+  test("the active results scan leaves a retained background feed untouched", () => {
+    const context = routeContext("/search/posts/", {
+      NF_BLOCKED_ENABLED: true,
+      NF_BLOCKED_TEXT: "unwanted",
+    });
+    mountSearch(textPost("current", "Unwanted result"));
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      `<div hidden><div role="feed"><div>${textPost("background", "Unwanted background result")}</div></div></div>`
+    );
+    mopSearchFeed(context);
+    expect(element("current").getAttribute(postAtt)).toBe("unwanted");
+    expect(element("background").hasAttribute(postAtt)).toBe(false);
+  });
+
   test.each(searchRoutes.flatMap((route) => [true, false].map((enabled) => ({ route, enabled }))))(
     "$route NF_BLOCKED_ENABLED=$enabled filters result content only",
     ({ route, enabled }) => {

@@ -81,10 +81,10 @@ function mopSearchFeed(context: FeedContext | null) {
     options.NF_ANIMATED_GIFS_PAUSE ||
     state.hideAnInfoBox
   ) {
-    const posts = Array.from(document.querySelectorAll(searchSelectors.postsQuery));
+    const posts = Array.from(mainColumn.querySelectorAll(searchSelectors.postsQuery));
 
     for (const post of posts) {
-      if (post.innerHTML.length === 0) {
+      if (!post.hasChildNodes()) {
         continue;
       }
 

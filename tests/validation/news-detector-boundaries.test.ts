@@ -37,8 +37,13 @@ describe("news-specific detector boundaries", () => {
     expect(isNewsSuggested(post, {}, keyWords)).toBe(keyWords.NF_SUGGESTIONS);
   });
 
-  test("does not treat child-rich legacy header text as the leaf-label signature", () => {
+  test("recognizes formatted recommendation copy only in its owning legacy header", () => {
     const { post } = mountNewsPost(suggestionHeader("<b>Suggested for you</b>"));
+    expect(isNewsSuggested(post, {}, keyWords)).toBe(keyWords.NF_SUGGESTIONS);
+    requireElement(post.querySelector("b")).parentElement?.setAttribute(
+      "data-ad-preview",
+      "message"
+    );
     expect(isNewsSuggested(post, {}, keyWords)).toBe("");
   });
 

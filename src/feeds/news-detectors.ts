@@ -3,12 +3,9 @@
 import { matchesNewsLabel, matchesNewsPaidBy } from "../core/filters/labels";
 import { isNewsFeatureCollapsed } from "./news-presentation";
 import type { Keywords } from "../i18n";
-import type { HydratedOptions } from "../core/options/types";
 import { matchesDisclosureLabel, containsMetaAiCopy } from "../core/filters/disclosure-labels";
 import { facebookUrl, getPostEvidence } from "../dom/post-evidence";
-import { getFullNumber } from "../core/filters/classifiers/shares-likes";
 import { extractFeedBlockText } from "../dom/walker";
-import { querySelectorAllNoChildren } from "../utils/dom";
 import { getNewsBlocks } from "./shared/blocks";
 import { hasPaidPartnershipDisclosure } from "./shared/paid-partnership";
 import { isNewsStoryShelf } from "./news-stories";
@@ -25,7 +22,7 @@ import {
 } from "./news-identity";
 
 /**
- * Treat an exactly labelled supported leaf header as a suggestion, except when that post is a reel shelf; group-discovery cards are a separate fallback signal.
+ * Read exact rendered recommendation copy in the supported legacy header, including inline formatting; reel shelves retain their separate classification.
  * @param post News post whose header structure and discovery links are inspected without mutation.
  * @param state Unused compatibility argument retained for existing callers; it must not be forwarded as reel keyword copy.
  * @param keyWords NF_SUGGESTIONS is the returned reason; NF_REELS_SHORT_VIDEOS lets the exclusion check recognize a reel shelf.
@@ -43,17 +40,20 @@ export function isNewsSuggested(
 
   const semantic = hasNewsCardHeading(post, "suggested");
   if (semantic) return isNewsReelsAndShortVideos(post, keyWords) ? "" : keyWords.NF_SUGGESTIONS;
-  const elSuggestion = querySelectorAllNoChildren(post, queries, 1);
+  const elSuggestion = getPostEvidence(post).select(queries.join(","));
   if (elSuggestion.length > 0) {
     if (isNewsReelsAndShortVideos(post, keyWords).length > 0) {
       return "";
     }
-    const label = elSuggestion[0];
-    return label &&
-      isOwnedNewsElement(label, post) &&
-      matchesNewsLabel(label.textContent || "", "suggested")
-      ? keyWords.NF_SUGGESTIONS
-      : "";
+    if (
+      elSuggestion.some(
+        (label) =>
+          isOwnedNewsElement(label, post) &&
+          getPostEvidence(post).isRendered(label) &&
+          matchesNewsLabel(getPostEvidence(post).visibleText(label), "suggested")
+      )
+    )
+      return keyWords.NF_SUGGESTIONS;
   }
   if (isGroupsYouMightLike(post)) {
     return keyWords.NF_SUGGESTIONS;
@@ -106,9 +106,11 @@ export function isNewsSponsoredPaidBy(
 ) {
   const querySPB =
     "div:nth-child(2) > div > div:nth-child(2) > span[class] > span[id] > div:nth-child(2)";
-  const sponsoredPaidBy = querySelectorAllNoChildren(post, querySPB, 1);
+  const sponsoredPaidBy = getPostEvidence(post).select(querySPB);
   return sponsoredPaidBy.some(
-    (label) => isOwnedNewsMetadata(label, post) && matchesNewsPaidBy(label.textContent || "")
+    (label) =>
+      isOwnedNewsMetadata(label, post) &&
+      matchesNewsPaidBy(getPostEvidence(post).visibleText(label))
   )
     ? keyWords.NF_SPONSORED_PAID
     : "";
@@ -155,10 +157,11 @@ export function isNewsEventsYouMayLike(
       )
   )
     return keyWords.NF_EVENTS_YOU_MAY_LIKE;
-  const events = querySelectorAllNoChildren(post, query, 0);
+  const events = getPostEvidence(post).select(query);
   return events.some(
     (heading) =>
-      isOwnedNewsMetadata(heading, post) && matchesNewsLabel(heading.textContent || "", "events")
+      isOwnedNewsMetadata(heading, post) &&
+      matchesNewsLabel(getPostEvidence(post).visibleText(heading), "events")
   )
     ? keyWords.NF_EVENTS_YOU_MAY_LIKE
     : "";
@@ -189,7 +192,9 @@ export function isNewsFollow(post: Element, keyWords: Pick<Keywords, "NF_FOLLOW"
     ":scope h4[id] > span > span > div > span",
     ":scope h4[id] > div > span > span[class] > div[class] > span[class]",
   ];
-  const leaves = querySelectorAllNoChildren(post, queries, 0, false);
+  const leaves = getPostEvidence(post)
+    .select(queries.join(","))
+    .filter((leaf) => leaf.childElementCount === 0 && isOwnedNewsMetadata(leaf, post));
   const fallback =
     leaves.length === 1 &&
     leaves.some(
@@ -200,7 +205,9 @@ export function isNewsFollow(post: Element, keyWords: Pick<Keywords, "NF_FOLLOW"
 
 /** Preserve exact localized Join controls and the supported named leaf-header fallback, rejecting arbitrary group actions. */
 export function isNewsParticipate(post: Element, keyWords: Pick<Keywords, "NF_PARTICIPATE">) {
-  const leaves = querySelectorAllNoChildren(post, ":scope h4 > span > span[class] > span", 0);
+  const leaves = getPostEvidence(post)
+    .select(":scope h4 > span > span[class] > span")
+    .filter((leaf) => leaf.childElementCount === 0 && isOwnedNewsMetadata(leaf, post));
   const fallback =
     leaves.length === 1 &&
     leaves.some((leaf) => isOwnedNewsMetadata(leaf, post) && hasNewsActionName(leaf, post, "join"));
@@ -300,21 +307,4 @@ export function isNewsVerifiedBadge(
   )
     ? keyWords.NF_FILTER_VERIFIED_BADGE
     : "";
-}
-
-/** Compare rendered likes against the configured threshold and preserve the legacy false result when absent. */
-export function postExceedsLikeCount(
-  post: Element,
-  options: Pick<HydratedOptions, "NF_LIKES_MAXIMUM_COUNT">,
-  keyWords: Pick<Keywords, "NF_LIKES_MAXIMUM">
-) {
-  const queryLikes =
-    'span[role="toolbar"] ~ div div[role="button"] > span[class][aria-hidden] > span:not([class]) > span[class]';
-  const elLikes = getPostEvidence(post).select(queryLikes);
-  if (elLikes.length > 0) {
-    const maxLikes = parseInt(options.NF_LIKES_MAXIMUM_COUNT, 10);
-    const postLikesCount = getFullNumber((elLikes[0]?.textContent ?? "").trim());
-    return postLikesCount >= maxLikes ? keyWords.NF_LIKES_MAXIMUM : "";
-  }
-  return false;
 }

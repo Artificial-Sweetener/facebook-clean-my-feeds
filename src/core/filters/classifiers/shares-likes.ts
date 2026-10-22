@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { normalizeCountDigits, readLocalizedCompactCount } from "./localized-counts";
+
 /**
  * Parse only complete positive integer counts with uniform comma, dot, or nonbreaking-space
  * thousands groups. Reject ambiguous/malformed grouping so legacy fallback parsing remains unchanged.
@@ -13,12 +15,14 @@ function getGroupedInteger(value: string): number | undefined {
 }
 
 /**
- * Expand Facebook K/M abbreviations and complete uniform thousands groups.
+ * Expand localized Facebook compact counts, Unicode decimal digits and complete uniform thousands groups.
  * K/M decimal separators retain their existing meaning; unsupported unsuffixed formats retain parseInt fallback behavior.
  * @param value Rendered count, including K/M decimal suffixes or consistently grouped integers.
+ * @param locale Facebook document language; compact-unit interpretation follows this locale, not the userscript language.
  * @returns Expanded count; an empty string means zero and nonnumeric leading text returns NaN.
  */
-export function getFullNumber(value: string): number {
+export function getFullNumber(value: string, locale = "en"): number {
+  value = normalizeCountDigits(value).replace(/\s+([KM])$/i, "$1");
   let numericValue = 0;
   if (value !== "") {
     const upperValue = value.toUpperCase();
@@ -41,7 +45,10 @@ export function getFullNumber(value: string): number {
         numericValue += parseInt(bits[1], 10) * Math.pow(10, powY - bits[1].length);
       }
     } else {
-      numericValue = getGroupedInteger(upperValue) ?? parseInt(upperValue, 10);
+      numericValue =
+        readLocalizedCompactCount(value, locale) ??
+        getGroupedInteger(upperValue) ??
+        parseInt(upperValue, 10);
     }
   }
 

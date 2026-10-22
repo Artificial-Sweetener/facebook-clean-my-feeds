@@ -193,7 +193,7 @@ function mopProfileFeed(context: FeedContext | null) {
     }
 
     for (const post of posts) {
-      if (post.innerHTML.length === 0) {
+      if (!post.hasChildNodes()) {
         continue;
       }
 

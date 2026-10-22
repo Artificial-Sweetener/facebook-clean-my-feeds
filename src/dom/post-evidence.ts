@@ -36,6 +36,7 @@ export function facebookUrl(link: Element): URL | null {
 export class PostEvidence {
   private queries = new WeakMap<Element, Map<string, Element[]>>();
   private visibility = new WeakMap<Element, boolean>();
+  private painted = new WeakMap<Element, boolean>();
   private texts = new WeakMap<Element, string>();
   private names = new WeakMap<Element, string[]>();
   private contentTexts = new Map<string, string[]>();
@@ -68,16 +69,25 @@ export class PostEvidence {
     return text;
   }
 
-  /** Bound style work to one computed-style read per encountered element during this version. */
+  /** Exclude accessibility-hidden metadata while sharing its physical-visibility cache with visual-only counters. */
   isVisible(element: Element): boolean {
     const previous = this.visibility.get(element);
     if (previous !== undefined) return previous;
+    const visible = this.isPainted(element) && element.getAttribute("aria-hidden") !== "true";
+    this.visibility.set(element, visible);
+    return visible;
+  }
+
+  /** Read physical visibility once per version, retaining visually displayed counters that Facebook intentionally marks aria-hidden. */
+  isPainted(element: Element): boolean {
+    const previous = this.painted.get(element);
+    if (previous !== undefined) return previous;
     const style = element.ownerDocument.defaultView?.getComputedStyle(element);
     const visible =
-      !element.matches('script, style, [hidden], [aria-hidden="true"]') &&
+      !element.matches("script, style, [hidden]") &&
       style?.display !== "none" &&
       style?.visibility !== "hidden";
-    this.visibility.set(element, visible);
+    this.painted.set(element, visible);
     return visible;
   }
 

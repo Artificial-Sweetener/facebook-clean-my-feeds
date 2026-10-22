@@ -5912,7 +5912,7 @@
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:ca12a0a1f507ba3c2695b19a05168cbd43a120d985b4f60d252827b4cf7b6292" : "unbundled";
+      buildIdentity = true ? "source-sha256:df4ea621d9b9dfdc80f82b9e98075c327906fb72ca959b37ce2d2ed668274fdd" : "unbundled";
     }
   });
 
@@ -6488,6 +6488,7 @@
           this.post = post;
           this.queries = /* @__PURE__ */ new WeakMap();
           this.visibility = /* @__PURE__ */ new WeakMap();
+          this.painted = /* @__PURE__ */ new WeakMap();
           this.texts = /* @__PURE__ */ new WeakMap();
           this.names = /* @__PURE__ */ new WeakMap();
           this.contentTexts = /* @__PURE__ */ new Map();
@@ -6515,14 +6516,22 @@
           }
           return text;
         }
-        /** Bound style work to one computed-style read per encountered element during this version. */
+        /** Exclude accessibility-hidden metadata while sharing its physical-visibility cache with visual-only counters. */
         isVisible(element) {
-          var _a;
           const previous = this.visibility.get(element);
           if (previous !== void 0) return previous;
-          const style = (_a = element.ownerDocument.defaultView) == null ? void 0 : _a.getComputedStyle(element);
-          const visible2 = !element.matches('script, style, [hidden], [aria-hidden="true"]') && (style == null ? void 0 : style.display) !== "none" && (style == null ? void 0 : style.visibility) !== "hidden";
+          const visible2 = this.isPainted(element) && element.getAttribute("aria-hidden") !== "true";
           this.visibility.set(element, visible2);
+          return visible2;
+        }
+        /** Read physical visibility once per version, retaining visually displayed counters that Facebook intentionally marks aria-hidden. */
+        isPainted(element) {
+          var _a;
+          const previous = this.painted.get(element);
+          if (previous !== void 0) return previous;
+          const style = (_a = element.ownerDocument.defaultView) == null ? void 0 : _a.getComputedStyle(element);
+          const visible2 = !element.matches("script, style, [hidden]") && (style == null ? void 0 : style.display) !== "none" && (style == null ? void 0 : style.visibility) !== "hidden";
+          this.painted.set(element, visible2);
           return visible2;
         }
         /** Ignore concealed metadata ancestors while allowing diagnostics on a post CMF itself has collapsed. */
@@ -6621,28 +6630,6 @@
       remaining -= 1;
     }
     return current;
-  }
-  function querySelectorAllNoChildren(container = document, queries = [], minText = 0, executeAllQueries = false) {
-    var _a, _b;
-    const queryList = typeof queries === "string" ? [queries] : queries;
-    const evidence = container instanceof Element ? getPostEvidence(container) : null;
-    if (queryList.length === 0) return [];
-    if (executeAllQueries) {
-      return ((evidence == null ? void 0 : evidence.select(queryList.join(","))) || Array.from(container.querySelectorAll(queryList.join(",")))).filter(
-        (element) => {
-          var _a2, _b2;
-          return element.children.length === 0 && ((_b2 = (_a2 = element.textContent) == null ? void 0 : _a2.length) != null ? _b2 : 0) >= minText;
-        }
-      );
-    }
-    for (const query of queryList) {
-      for (const element of (evidence == null ? void 0 : evidence.select(query)) || container.querySelectorAll(query)) {
-        if (element.children.length === 0 && ((_b = (_a = element.textContent) == null ? void 0 : _a.length) != null ? _b : 0) >= minText) {
-          return [element];
-        }
-      }
-    }
-    return [];
   }
   var init_dom = __esm({
     "src/utils/dom.ts"() {
@@ -8090,43 +8077,6 @@
     }
   });
 
-  // src/core/filters/classifiers/shares-likes.ts
-  function getGroupedInteger(value) {
-    const match = /^[1-9]\d{0,2}([,.\u00a0\u202f])\d{3}(?:\1\d{3})*$/.exec(value);
-    return match && match[0] === value ? Number(value.replace(/[,.\u00a0\u202f]/g, "")) : void 0;
-  }
-  function getFullNumber(value) {
-    var _a, _b;
-    let numericValue = 0;
-    if (value !== "") {
-      const upperValue = value.toUpperCase();
-      if (upperValue.endsWith("K") || upperValue.endsWith("M")) {
-        let multiplier = 1;
-        let powY = 0;
-        if (upperValue.endsWith("K")) {
-          multiplier = 1e3;
-          powY = 3;
-        } else if (upperValue.endsWith("M")) {
-          multiplier = 1e6;
-          powY = 6;
-        }
-        const bits = upperValue.replace(/[KM]/g, "").replace(",", ".").split(".");
-        numericValue = parseInt((_a = bits[0]) != null ? _a : "", 10) * multiplier;
-        if (bits[1] !== void 0) {
-          numericValue += parseInt(bits[1], 10) * Math.pow(10, powY - bits[1].length);
-        }
-      } else {
-        numericValue = (_b = getGroupedInteger(upperValue)) != null ? _b : parseInt(upperValue, 10);
-      }
-    }
-    return numericValue;
-  }
-  var init_shares_likes = __esm({
-    "src/core/filters/classifiers/shares-likes.ts"() {
-      "use strict";
-    }
-  });
-
   // src/feeds/news-identity.ts
   function isOwnedNewsElement(element, post) {
     return ownsPostElement(element, post);
@@ -8250,13 +8200,15 @@
     ];
     const semantic = hasNewsCardHeading(post, "suggested");
     if (semantic) return isNewsReelsAndShortVideos(post, keyWords) ? "" : keyWords.NF_SUGGESTIONS;
-    const elSuggestion = querySelectorAllNoChildren(post, queries, 1);
+    const elSuggestion = getPostEvidence(post).select(queries.join(","));
     if (elSuggestion.length > 0) {
       if (isNewsReelsAndShortVideos(post, keyWords).length > 0) {
         return "";
       }
-      const label = elSuggestion[0];
-      return label && isOwnedNewsElement(label, post) && matchesNewsLabel(label.textContent || "", "suggested") ? keyWords.NF_SUGGESTIONS : "";
+      if (elSuggestion.some(
+        (label) => isOwnedNewsElement(label, post) && getPostEvidence(post).isRendered(label) && matchesNewsLabel(getPostEvidence(post).visibleText(label), "suggested")
+      ))
+        return keyWords.NF_SUGGESTIONS;
     }
     if (isGroupsYouMightLike(post)) {
       return keyWords.NF_SUGGESTIONS;
@@ -8279,9 +8231,9 @@
   }
   function isNewsSponsoredPaidBy(post, keyWords) {
     const querySPB = "div:nth-child(2) > div > div:nth-child(2) > span[class] > span[id] > div:nth-child(2)";
-    const sponsoredPaidBy = querySelectorAllNoChildren(post, querySPB, 1);
+    const sponsoredPaidBy = getPostEvidence(post).select(querySPB);
     return sponsoredPaidBy.some(
-      (label) => isOwnedNewsMetadata(label, post) && matchesNewsPaidBy(label.textContent || "")
+      (label) => isOwnedNewsMetadata(label, post) && matchesNewsPaidBy(getPostEvidence(post).visibleText(label))
     ) ? keyWords.NF_SPONSORED_PAID : "";
   }
   function isNewsReelsAndShortVideos(post, keyWords) {
@@ -8302,9 +8254,9 @@
       (link) => isOwnedNewsMetadata(link, post) && /^\/events(?:\/|$)/.test(facebookPath(link) || "")
     ))
       return keyWords.NF_EVENTS_YOU_MAY_LIKE;
-    const events = querySelectorAllNoChildren(post, query, 0);
+    const events = getPostEvidence(post).select(query);
     return events.some(
-      (heading2) => isOwnedNewsMetadata(heading2, post) && matchesNewsLabel(heading2.textContent || "", "events")
+      (heading2) => isOwnedNewsMetadata(heading2, post) && matchesNewsLabel(getPostEvidence(post).visibleText(heading2), "events")
     ) ? keyWords.NF_EVENTS_YOU_MAY_LIKE : "";
   }
   function hasHeaderAction(post, kind) {
@@ -8324,14 +8276,14 @@
       ":scope h4[id] > span > span > div > span",
       ":scope h4[id] > div > span > span[class] > div[class] > span[class]"
     ];
-    const leaves = querySelectorAllNoChildren(post, queries, 0, false);
+    const leaves = getPostEvidence(post).select(queries.join(",")).filter((leaf) => leaf.childElementCount === 0 && isOwnedNewsMetadata(leaf, post));
     const fallback = leaves.length === 1 && leaves.some(
       (leaf) => isOwnedNewsMetadata(leaf, post) && hasNewsActionName(leaf, post, "follow")
     );
     return hasHeaderAction(post, "follow") || fallback ? keyWords.NF_FOLLOW : "";
   }
   function isNewsParticipate(post, keyWords) {
-    const leaves = querySelectorAllNoChildren(post, ":scope h4 > span > span[class] > span", 0);
+    const leaves = getPostEvidence(post).select(":scope h4 > span > span[class] > span").filter((leaf) => leaf.childElementCount === 0 && isOwnedNewsMetadata(leaf, post));
     const fallback = leaves.length === 1 && leaves.some((leaf) => isOwnedNewsMetadata(leaf, post) && hasNewsActionName(leaf, post, "join"));
     return hasHeaderAction(post, "join") || fallback ? keyWords.NF_PARTICIPATE : "";
   }
@@ -8391,17 +8343,6 @@
       (icon) => getPostEvidence(post).isRendered(icon) || isNewsFeatureCollapsed(icon, "badge")
     ) ? keyWords.NF_FILTER_VERIFIED_BADGE : "";
   }
-  function postExceedsLikeCount(post, options, keyWords) {
-    var _a, _b;
-    const queryLikes = 'span[role="toolbar"] ~ div div[role="button"] > span[class][aria-hidden] > span:not([class]) > span[class]';
-    const elLikes = getPostEvidence(post).select(queryLikes);
-    if (elLikes.length > 0) {
-      const maxLikes = parseInt(options.NF_LIKES_MAXIMUM_COUNT, 10);
-      const postLikesCount = getFullNumber(((_b = (_a = elLikes[0]) == null ? void 0 : _a.textContent) != null ? _b : "").trim());
-      return postLikesCount >= maxLikes ? keyWords.NF_LIKES_MAXIMUM : "";
-    }
-    return false;
-  }
   var init_news_detectors = __esm({
     "src/feeds/news-detectors.ts"() {
       "use strict";
@@ -8409,13 +8350,149 @@
       init_news_presentation();
       init_disclosure_labels2();
       init_post_evidence();
-      init_shares_likes();
       init_walker();
-      init_dom();
       init_blocks();
       init_paid_partnership();
       init_news_stories();
       init_news_identity();
+    }
+  });
+
+  // src/core/filters/classifiers/localized-counts.ts
+  function normalizeCountDigits(value) {
+    return value.replace(/\p{Nd}/gu, (digit) => {
+      if (digit >= "0" && digit <= "9") return digit;
+      const cached2 = digits.get(digit);
+      if (cached2 !== void 0) return cached2;
+      const point = digit.codePointAt(0);
+      if (point === void 0) return digit;
+      let start = point;
+      while (start > 0 && decimalDigit.test(String.fromCodePoint(start - 1))) start -= 1;
+      const decoded = String((point - start) % 10);
+      digits.set(digit, decoded);
+      return decoded;
+    }).replace(/[\u200e\u200f\u061c]/g, "").replace(/\u066b/g, ".").replace(/\u066c/g, ",");
+  }
+  function normalizeUnit(value) {
+    return value.normalize("NFKC").replace(/\s/g, "").toLowerCase();
+  }
+  function unitsForLocale(locale) {
+    var _a;
+    const previous = compactUnits.get(locale);
+    if (previous) return previous;
+    const units = /* @__PURE__ */ new Map();
+    for (const compactDisplay of ["short", "long"]) {
+      let formatter;
+      try {
+        formatter = new Intl.NumberFormat(locale || "en", { notation: "compact", compactDisplay });
+      } catch (e) {
+        formatter = new Intl.NumberFormat("en", { notation: "compact", compactDisplay });
+      }
+      for (let exponent = 3; exponent <= 12; exponent += 1) {
+        for (const factor of [1, 2, 5]) {
+          const count = factor * 10 ** exponent;
+          const parts = formatter.formatToParts(count);
+          const unit = (_a = parts.find((part) => part.type === "compact")) == null ? void 0 : _a.value;
+          if (!unit) continue;
+          const numeric = parts.filter((part) => ["integer", "fraction", "decimal"].includes(part.type)).map((part) => part.type === "decimal" ? "." : normalizeCountDigits(part.value)).join("");
+          const divisor = Number(numeric);
+          if (divisor > 0) units.set(normalizeUnit(unit), count / divisor);
+        }
+      }
+    }
+    compactUnits.set(locale, units);
+    return units;
+  }
+  function readLocalizedCompactCount(value, locale) {
+    const match = /^([0-9]+(?:[.,][0-9]+)?)\s*([^\d\s].*)$/u.exec(value);
+    if (!(match == null ? void 0 : match[1]) || !match[2]) return void 0;
+    const multiplier = unitsForLocale(locale).get(normalizeUnit(match[2]));
+    if (multiplier === void 0) return void 0;
+    return Math.round(Number(match[1].replace(",", ".")) * multiplier);
+  }
+  var decimalDigit, digits, compactUnits;
+  var init_localized_counts = __esm({
+    "src/core/filters/classifiers/localized-counts.ts"() {
+      "use strict";
+      decimalDigit = /\p{Nd}/u;
+      digits = /* @__PURE__ */ new Map();
+      compactUnits = /* @__PURE__ */ new Map();
+    }
+  });
+
+  // src/core/filters/classifiers/shares-likes.ts
+  function getGroupedInteger(value) {
+    const match = /^[1-9]\d{0,2}([,.\u00a0\u202f])\d{3}(?:\1\d{3})*$/.exec(value);
+    return match && match[0] === value ? Number(value.replace(/[,.\u00a0\u202f]/g, "")) : void 0;
+  }
+  function getFullNumber(value, locale = "en") {
+    var _a, _b, _c;
+    value = normalizeCountDigits(value).replace(/\s+([KM])$/i, "$1");
+    let numericValue = 0;
+    if (value !== "") {
+      const upperValue = value.toUpperCase();
+      if (upperValue.endsWith("K") || upperValue.endsWith("M")) {
+        let multiplier = 1;
+        let powY = 0;
+        if (upperValue.endsWith("K")) {
+          multiplier = 1e3;
+          powY = 3;
+        } else if (upperValue.endsWith("M")) {
+          multiplier = 1e6;
+          powY = 6;
+        }
+        const bits = upperValue.replace(/[KM]/g, "").replace(",", ".").split(".");
+        numericValue = parseInt((_a = bits[0]) != null ? _a : "", 10) * multiplier;
+        if (bits[1] !== void 0) {
+          numericValue += parseInt(bits[1], 10) * Math.pow(10, powY - bits[1].length);
+        }
+      } else {
+        numericValue = (_c = (_b = readLocalizedCompactCount(value, locale)) != null ? _b : getGroupedInteger(upperValue)) != null ? _c : parseInt(upperValue, 10);
+      }
+    }
+    return numericValue;
+  }
+  var init_shares_likes = __esm({
+    "src/core/filters/classifiers/shares-likes.ts"() {
+      "use strict";
+      init_localized_counts();
+    }
+  });
+
+  // src/feeds/news-likes.ts
+  function isRenderedCount(counter, post) {
+    const evidence = getPostEvidence(post);
+    const visualCounter = counter.closest("span[class][aria-hidden]");
+    let ancestor = counter;
+    while (ancestor && ancestor !== post) {
+      if (!(ancestor === visualCounter ? evidence.isPainted(ancestor) : evidence.isVisible(ancestor)))
+        return false;
+      ancestor = ancestor.parentElement;
+    }
+    return ancestor === post;
+  }
+  function postExceedsLikeCount(post, options, keyWords) {
+    const evidence = getPostEvidence(post);
+    const counters = evidence.select(
+      'span[role="toolbar"] ~ div div[role="button"] > span[class][aria-hidden] > span:not([class]) > span[class]'
+    );
+    for (const counter of counters) {
+      if (!ownsPostElement(counter, post) || !isRenderedCount(counter, post)) continue;
+      const count = getFullNumber(
+        evidence.visibleText(counter).trim(),
+        post.ownerDocument.documentElement.lang
+      );
+      if (!Number.isFinite(count)) continue;
+      return count >= parseInt(options.NF_LIKES_MAXIMUM_COUNT, 10) ? keyWords.NF_LIKES_MAXIMUM : "";
+    }
+    return false;
+  }
+  var init_news_likes = __esm({
+    "src/feeds/news-likes.ts"() {
+      "use strict";
+      init_shares_likes();
+      init_post_evidence();
+      init_ownership();
     }
   });
 
@@ -9239,6 +9316,8 @@
       init_news_discovery();
       init_news_detectors();
       init_news_detectors();
+      init_news_likes();
+      init_news_likes();
       init_news_right_rail();
       init_news_right_rail();
       init_news_features();
@@ -12179,7 +12258,7 @@
         return { mainColumn, elDialog };
       }
       for (const post of posts) {
-        if (post.innerHTML.length === 0) {
+        if (!post.hasChildNodes()) {
           continue;
         }
         let hideReason = "";
@@ -12379,9 +12458,9 @@
     const mainColumnToken = getDirtyToken(mainColumn);
     revalidateTrackedPosts(mainColumn, state);
     if (options.NF_BLOCKED_ENABLED || options.NF_SPONSORED || options.NF_ANIMATED_GIFS_PAUSE || state.hideAnInfoBox) {
-      const posts = Array.from(document.querySelectorAll(searchSelectors.postsQuery));
+      const posts = Array.from(mainColumn.querySelectorAll(searchSelectors.postsQuery));
       for (const post of posts) {
-        if (post.innerHTML.length === 0) {
+        if (!post.hasChildNodes()) {
           continue;
         }
         let hideReason = "";

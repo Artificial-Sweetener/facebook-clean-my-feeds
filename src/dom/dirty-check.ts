@@ -8,6 +8,12 @@ import {
 import type { VisibilityState } from "./types";
 import { postAtt, postAttTab, postAttCPID } from "./attributes";
 
+/** Every reversible marker that a post processor may apply to its root or independently filtered child features. */
+export type PostPresentationState = Pick<
+  VisibilityState,
+  "hideAtt" | "hideWithNoCaptionAtt" | "showAtt" | "cssHideEl" | "cssHideNumberOfShares"
+>;
+
 /** Tokens distinguish content changes that arrive while a scan is in progress. */
 interface DirtyEntry {
   dirtyToken: number;
@@ -106,11 +112,14 @@ export function trackPostSignature(post: Element | null): void {
  * @param root Current feed boundary; a missing root has no tracked content to restore.
  * @param state Visibility markers belonging to the active userscript session.
  */
-export function revalidateTrackedPosts(
-  root: Element | null,
-  state: Pick<VisibilityState, "hideAtt" | "hideWithNoCaptionAtt" | "showAtt">
-): void {
-  ignoreContentAttributes([state.hideAtt, state.showAtt, state.hideWithNoCaptionAtt]);
+export function revalidateTrackedPosts(root: Element | null, state: PostPresentationState): void {
+  ignoreContentAttributes([
+    state.hideAtt,
+    state.showAtt,
+    state.hideWithNoCaptionAtt,
+    state.cssHideEl,
+    state.cssHideNumberOfShares,
+  ]);
   if (!root) return;
   for (const post of root.querySelectorAll(`[${postAtt}]`)) {
     const previous = postSignatures.get(post);
@@ -125,10 +134,7 @@ export function revalidateTrackedPosts(
  * @param post Reused page element whose previous classification must be discarded.
  * @param state Page-specific marker names; unrelated Facebook attributes are retained.
  */
-export function resetPostState(
-  post: Element | null,
-  state: Pick<VisibilityState, "hideAtt" | "hideWithNoCaptionAtt" | "showAtt"> | null
-): void {
+export function resetPostState(post: Element | null, state: PostPresentationState | null): void {
   if (!post || !state) {
     return;
   }
@@ -152,22 +158,22 @@ export function resetPostState(
     details.remove();
   });
 
+  const markers = [
+    state.hideAtt,
+    state.hideWithNoCaptionAtt,
+    state.cssHideEl,
+    state.cssHideNumberOfShares,
+  ].filter(Boolean);
   post.removeAttribute(postAtt);
-  post.removeAttribute(state.hideAtt);
-  post.removeAttribute(state.hideWithNoCaptionAtt);
   post.removeAttribute(state.showAtt);
-
-  const nestedNoCaptionRows = Array.from(post.querySelectorAll(`[${state.hideWithNoCaptionAtt}]`));
-  nestedNoCaptionRows.forEach((element) => {
-    element.removeAttribute(postAtt);
-    element.removeAttribute(state.hideWithNoCaptionAtt);
-    element.removeAttribute(state.showAtt);
-  });
+  for (const marker of markers) post.removeAttribute(marker);
 
   for (const caption of post.querySelectorAll(`h6[${postAttTab}]`)) caption.remove();
-  for (const child of post.querySelectorAll(`[${postAttCPID}], [${state.hideAtt}]`)) {
+  const nestedQuery = [postAttCPID, ...markers].map((marker) => `[${marker}]`).join(", ");
+  for (const child of post.querySelectorAll(nestedQuery)) {
+    child.removeAttribute(postAtt);
     child.removeAttribute(postAttCPID);
-    child.removeAttribute(state.hideAtt);
+    for (const marker of markers) child.removeAttribute(marker);
     child.removeAttribute(state.showAtt);
   }
 }

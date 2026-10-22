@@ -2,10 +2,10 @@
 
 import { postAtt, postAttMPSkip } from "../dom/attributes";
 import { resetPostState } from "../dom/dirty-check";
+import type { PostPresentationState } from "../dom/dirty-check";
 import { getPostEvidence } from "../dom/post-evidence";
 import { matchesSponsoredLabel } from "../core/filters/disclosure-labels";
 import { isSponsoredDisclosure } from "./shared/sponsored";
-import type { VisibilityState } from "../dom/types";
 import {
   marketplaceListingQueries,
   marketplaceSponsoredHeadingQuery,
@@ -43,10 +43,7 @@ export function collectMarketplaceListings(root: Element): MarketplaceListing[] 
  * @param root Active Marketplace surface; background pages behind item dialogs are excluded.
  * @param state Owned visibility markers to remove from recycled boxes without changing their content.
  */
-export function revalidateMarketplaceListings(
-  root: Element,
-  state: Pick<VisibilityState, "hideAtt" | "hideWithNoCaptionAtt" | "showAtt">
-): void {
+export function revalidateMarketplaceListings(root: Element, state: PostPresentationState): void {
   const listings = collectMarketplaceListings(root);
   const currentBoxes = new Set(listings.map(({ box }) => box));
   const markedQuery = [

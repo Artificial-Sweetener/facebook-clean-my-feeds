@@ -204,8 +204,8 @@ export function isSponsoredDisclosure(control: Element, post: Element): boolean 
     url?.pathname === "/ads/about/" &&
     (!owner || owner === post || !post.contains(owner)) &&
     isOwnedControl(control, post, [], scope.dom) &&
-    Array.from(control.querySelectorAll("*")).every((child) =>
-      isOwnedControl(child, post, [], scope.dom)
+    Array.from(control.querySelectorAll("*")).every(
+      (child) => !scope.dom.isRendered(child) || isOwnedControl(child, post, [], scope.dom)
     ) &&
     hasSponsoredName(control, post, [], scope)
   );

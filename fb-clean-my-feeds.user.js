@@ -5912,7 +5912,7 @@
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:4c8842b9670eeb44d609efcaa7b61473a0fc3f83bd050f9e62aa55284196979f" : "unbundled";
+      buildIdentity = true ? "source-sha256:ca12a0a1f507ba3c2695b19a05168cbd43a120d985b4f60d252827b4cf7b6292" : "unbundled";
     }
   });
 
@@ -6731,7 +6731,13 @@
     postSignatures.set(post, contentStamp(post));
   }
   function revalidateTrackedPosts(root, state) {
-    ignoreContentAttributes([state.hideAtt, state.showAtt, state.hideWithNoCaptionAtt]);
+    ignoreContentAttributes([
+      state.hideAtt,
+      state.showAtt,
+      state.hideWithNoCaptionAtt,
+      state.cssHideEl,
+      state.cssHideNumberOfShares
+    ]);
     if (!root) return;
     for (const post of root.querySelectorAll(`[${postAtt}]`)) {
       const previous = postSignatures.get(post);
@@ -6762,20 +6768,21 @@
       }
       details.remove();
     });
+    const markers = [
+      state.hideAtt,
+      state.hideWithNoCaptionAtt,
+      state.cssHideEl,
+      state.cssHideNumberOfShares
+    ].filter(Boolean);
     post.removeAttribute(postAtt);
-    post.removeAttribute(state.hideAtt);
-    post.removeAttribute(state.hideWithNoCaptionAtt);
     post.removeAttribute(state.showAtt);
-    const nestedNoCaptionRows = Array.from(post.querySelectorAll(`[${state.hideWithNoCaptionAtt}]`));
-    nestedNoCaptionRows.forEach((element) => {
-      element.removeAttribute(postAtt);
-      element.removeAttribute(state.hideWithNoCaptionAtt);
-      element.removeAttribute(state.showAtt);
-    });
+    for (const marker of markers) post.removeAttribute(marker);
     for (const caption of post.querySelectorAll(`h6[${postAttTab}]`)) caption.remove();
-    for (const child of post.querySelectorAll(`[${postAttCPID}], [${state.hideAtt}]`)) {
+    const nestedQuery = [postAttCPID, ...markers].map((marker) => `[${marker}]`).join(", ");
+    for (const child of post.querySelectorAll(nestedQuery)) {
+      child.removeAttribute(postAtt);
       child.removeAttribute(postAttCPID);
-      child.removeAttribute(state.hideAtt);
+      for (const marker of markers) child.removeAttribute(marker);
       child.removeAttribute(state.showAtt);
     }
   }
@@ -7613,7 +7620,7 @@
     const scope = { dom: getPostEvidence(post), names: /* @__PURE__ */ new Map() };
     const owner = control2.closest(sharedSelectors.postOwner);
     return (url == null ? void 0 : url.pathname) === "/ads/about/" && (!owner || owner === post || !post.contains(owner)) && isOwnedControl(control2, post, [], scope.dom) && Array.from(control2.querySelectorAll("*")).every(
-      (child) => isOwnedControl(child, post, [], scope.dom)
+      (child) => !scope.dom.isRendered(child) || isOwnedControl(child, post, [], scope.dom)
     ) && hasSponsoredName(control2, post, [], scope);
   }
   function getSponsoredDiagnostics(post, state) {
@@ -7726,6 +7733,7 @@
     const query = `div[data-visualcompletion="ignore-dynamic"] > div:not([class]) > div:not([class]) > div:not([class]) > div[class] > div:nth-of-type(1) > div > div > span > div:not([id]) > span[dir]:not([${postAtt}])`;
     const shares = post.querySelectorAll(query);
     for (const share of shares) {
+      if (!ownsPostElement(share, post) || !getPostEvidence(post).isRendered(share)) continue;
       share.setAttribute(state.cssHideNumberOfShares, "");
       if (options.VERBOSITY_DEBUG) {
         share.setAttribute(state.showAtt, "");
@@ -7738,12 +7746,16 @@
       return 0;
     }
     const query = `div[data-visualcompletion="ignore-dynamic"] > div:not([class]) > div:not([class]) > div:not([class]) > div[class] > div:nth-of-type(1) > div > div > span > div:not([id]) > span[dir]:not([${postAtt}])`;
-    return post.querySelectorAll(query).length;
+    return Array.from(post.querySelectorAll(query)).filter(
+      (share) => ownsPostElement(share, post) && getPostEvidence(post).isRendered(share)
+    ).length;
   }
   var init_shares = __esm({
     "src/feeds/shared/shares.ts"() {
       "use strict";
       init_attributes();
+      init_ownership();
+      init_post_evidence();
     }
   });
 
@@ -7963,8 +7975,8 @@
   });
 
   // src/feeds/news-presentation.ts
-  function isNewsBadgeCollapsed(element) {
-    return (element instanceof HTMLElement || element instanceof SVGElement) && presentations.badge.has(element);
+  function isNewsFeatureCollapsed(element, feature) {
+    return (element instanceof HTMLElement || element instanceof SVGElement) && presentations[feature].has(element);
   }
   function inlinePriority(style, name) {
     var _a;
@@ -8376,7 +8388,7 @@
   }
   function isNewsVerifiedBadge(post, keyWords) {
     return ownVerifiedBadges(post).some(
-      (icon) => getPostEvidence(post).isRendered(icon) || isNewsBadgeCollapsed(icon)
+      (icon) => getPostEvidence(post).isRendered(icon) || isNewsFeatureCollapsed(icon, "badge")
     ) ? keyWords.NF_FILTER_VERIFIED_BADGE : "";
   }
   function postExceedsLikeCount(post, options, keyWords) {
@@ -8962,24 +8974,21 @@
 
   // src/feeds/news-friend-requests.ts
   function isFriendsDestination(link, requestsOnly = false) {
-    try {
-      const url = new URL(link.getAttribute("href") || "", "https://www.facebook.com");
-      if (!/^https?:$/.test(url.protocol)) return false;
-      if (!["facebook.com", "www.facebook.com", "web.facebook.com", "m.facebook.com"].includes(
-        url.hostname
-      ))
-        return false;
-      return /^\/friends\/requests\/?$/.test(url.pathname) || !requestsOnly && /^\/friends\/?$/.test(url.pathname);
-    } catch (e) {
-      return false;
-    }
+    const url = facebookUrl(link);
+    return !!url && (/^\/friends\/requests\/?$/.test(url.pathname) || !requestsOnly && /^\/friends\/?$/.test(url.pathname));
+  }
+  function isRequestSignal(element, section) {
+    return ownsPostElement(element, section) && getPostEvidence(section).isRendered(element);
   }
   function hasFriendsHeader(section, heading2) {
     return Array.from(section.querySelectorAll(newsSelectors.railFriendLinks)).some((link) => {
-      if (!isFriendsDestination(link) || link.closest(sharedSelectors.authoredContent)) return false;
+      if (!isFriendsDestination(link) || !isRequestSignal(link, section)) return false;
       let row = link;
       while (row && row !== section) {
-        if (row.contains(heading2) && !row.querySelector(newsSelectors.railActions)) return true;
+        if (row.contains(heading2) && !Array.from(row.querySelectorAll(newsSelectors.railActions)).some(
+          (action) => isRequestSignal(action, section)
+        ))
+          return true;
         row = row.parentElement;
       }
       return false;
@@ -8987,12 +8996,17 @@
   }
   function hasRequestCard(section) {
     return Array.from(section.querySelectorAll(newsSelectors.railRequestLinks)).some((link) => {
-      if (!isFriendsDestination(link, true) || link.closest(sharedSelectors.authoredContent))
-        return false;
+      if (!isFriendsDestination(link, true) || !isRequestSignal(link, section)) return false;
       let card = link.parentElement;
       while (card && card !== section) {
-        if (card.querySelector(newsSelectors.railHeadings)) return false;
-        if (card.querySelectorAll(newsSelectors.railActions).length >= 2) return true;
+        if (Array.from(card.querySelectorAll(newsSelectors.railHeadings)).some(
+          (heading2) => isRequestSignal(heading2, section)
+        ))
+          return false;
+        if (Array.from(card.querySelectorAll(newsSelectors.railActions)).filter(
+          (action) => isRequestSignal(action, section)
+        ).length >= 2)
+          return true;
         card = card.parentElement;
       }
       return false;
@@ -9002,12 +9016,21 @@
     const panels = /* @__PURE__ */ new Set();
     for (const rail of document.querySelectorAll(newsSelectors.rightRail)) {
       if (rail.closest(newsSelectors.railContentBoundary)) continue;
+      if (!getPostEvidence(rail.ownerDocument.documentElement).isRendered(rail)) continue;
       for (const heading2 of rail.querySelectorAll(newsSelectors.railHeadings)) {
         if (heading2.closest(`${newsSelectors.railContentBoundary}, ${sharedSelectors.authoredContent}`))
           continue;
         let section = heading2.parentElement;
         while (section && section !== rail) {
-          if (section.querySelectorAll(newsSelectors.railHeadings).length !== 1) break;
+          if (section.closest('[hidden], [inert], [aria-hidden="true"]')) break;
+          if (!getPostEvidence(section).isVisible(section) && !isNewsFeatureCollapsed(section, "friendRequests"))
+            break;
+          if (!isRequestSignal(heading2, section)) break;
+          const boundary = section;
+          if (Array.from(boundary.querySelectorAll(newsSelectors.railHeadings)).filter(
+            (candidate) => isRequestSignal(candidate, boundary)
+          ).length !== 1)
+            break;
           if (section.querySelector(newsSelectors.railContentBoundary)) break;
           if (hasFriendsHeader(section, heading2) && hasRequestCard(section)) {
             panels.add(section);
@@ -9031,6 +9054,8 @@
       init_news();
       init_shared();
       init_news_presentation();
+      init_post_evidence();
+      init_ownership();
     }
   });
 
@@ -9832,7 +9857,7 @@
         const posts = collectGroupsPosts(mainColumn, state.gfType === "groups-recent");
         if (posts.length > 0) {
           for (const post of posts) {
-            if (post.innerHTML.length === 0) {
+            if (!post.hasChildNodes()) {
               continue;
             }
             let hideReason = "";
@@ -9895,7 +9920,7 @@
         const posts = collectGroupsPosts(mainColumn, false);
         if (posts.length) {
           for (const post of posts) {
-            if (post.innerHTML.length === 0) {
+            if (!post.hasChildNodes()) {
               continue;
             }
             let hideReason = "";

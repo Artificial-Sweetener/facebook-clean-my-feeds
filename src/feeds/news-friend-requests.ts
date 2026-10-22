@@ -3,35 +3,38 @@
 import type { FeedContext } from "./types";
 import { newsSelectors } from "../selectors/news";
 import { sharedSelectors } from "../selectors/shared";
-import { reconcileNewsPresentation } from "./news-presentation";
+import { isNewsFeatureCollapsed, reconcileNewsPresentation } from "./news-presentation";
+import { facebookUrl, getPostEvidence } from "../dom/post-evidence";
+import { ownsPostElement } from "../dom/ownership";
 
 /** Accept only Facebook's exact Friends routes, excluding lookalike hosts, paths and query-only mentions. */
 function isFriendsDestination(link: Element, requestsOnly = false): boolean {
-  try {
-    const url = new URL(link.getAttribute("href") || "", "https://www.facebook.com");
-    if (!/^https?:$/.test(url.protocol)) return false;
-    if (
-      !["facebook.com", "www.facebook.com", "web.facebook.com", "m.facebook.com"].includes(
-        url.hostname
-      )
-    )
-      return false;
-    return (
-      /^\/friends\/requests\/?$/.test(url.pathname) ||
-      (!requestsOnly && /^\/friends\/?$/.test(url.pathname))
-    );
-  } catch {
-    return false;
-  }
+  const url = facebookUrl(link);
+  return (
+    !!url &&
+    (/^\/friends\/requests\/?$/.test(url.pathname) ||
+      (!requestsOnly && /^\/friends\/?$/.test(url.pathname)))
+  );
+}
+
+/** Concealed, authored and independently nested controls cannot identify the surrounding rail section. */
+function isRequestSignal(element: Element, section: Element): boolean {
+  return ownsPostElement(element, section) && getPostEvidence(section).isRendered(element);
 }
 
 /** Require the destination in the heading's own header row rather than in an unrelated card below it. */
 function hasFriendsHeader(section: Element, heading: Element): boolean {
   return Array.from(section.querySelectorAll(newsSelectors.railFriendLinks)).some((link) => {
-    if (!isFriendsDestination(link) || link.closest(sharedSelectors.authoredContent)) return false;
+    if (!isFriendsDestination(link) || !isRequestSignal(link, section)) return false;
     let row: Element | null = link;
     while (row && row !== section) {
-      if (row.contains(heading) && !row.querySelector(newsSelectors.railActions)) return true;
+      if (
+        row.contains(heading) &&
+        !Array.from(row.querySelectorAll(newsSelectors.railActions)).some((action) =>
+          isRequestSignal(action, section)
+        )
+      )
+        return true;
       row = row.parentElement;
     }
     return false;
@@ -41,12 +44,21 @@ function hasFriendsHeader(section: Element, heading: Element): boolean {
 /** Require a request-list destination and paired actions within one heading-free request card. */
 function hasRequestCard(section: Element): boolean {
   return Array.from(section.querySelectorAll(newsSelectors.railRequestLinks)).some((link) => {
-    if (!isFriendsDestination(link, true) || link.closest(sharedSelectors.authoredContent))
-      return false;
+    if (!isFriendsDestination(link, true) || !isRequestSignal(link, section)) return false;
     let card = link.parentElement;
     while (card && card !== section) {
-      if (card.querySelector(newsSelectors.railHeadings)) return false;
-      if (card.querySelectorAll(newsSelectors.railActions).length >= 2) return true;
+      if (
+        Array.from(card.querySelectorAll(newsSelectors.railHeadings)).some((heading) =>
+          isRequestSignal(heading, section)
+        )
+      )
+        return false;
+      if (
+        Array.from(card.querySelectorAll(newsSelectors.railActions)).filter((action) =>
+          isRequestSignal(action, section)
+        ).length >= 2
+      )
+        return true;
       card = card.parentElement;
     }
     return false;
@@ -62,6 +74,7 @@ export function getRightRailFriendRequestPanels(): Element[] {
   const panels = new Set<Element>();
   for (const rail of document.querySelectorAll(newsSelectors.rightRail)) {
     if (rail.closest(newsSelectors.railContentBoundary)) continue;
+    if (!getPostEvidence(rail.ownerDocument.documentElement).isRendered(rail)) continue;
     for (const heading of rail.querySelectorAll(newsSelectors.railHeadings)) {
       if (
         heading.closest(`${newsSelectors.railContentBoundary}, ${sharedSelectors.authoredContent}`)
@@ -69,7 +82,20 @@ export function getRightRailFriendRequestPanels(): Element[] {
         continue;
       let section = heading.parentElement;
       while (section && section !== rail) {
-        if (section.querySelectorAll(newsSelectors.railHeadings).length !== 1) break;
+        if (section.closest('[hidden], [inert], [aria-hidden="true"]')) break;
+        if (
+          !getPostEvidence(section).isVisible(section) &&
+          !isNewsFeatureCollapsed(section, "friendRequests")
+        )
+          break;
+        if (!isRequestSignal(heading, section)) break;
+        const boundary = section;
+        if (
+          Array.from(boundary.querySelectorAll(newsSelectors.railHeadings)).filter((candidate) =>
+            isRequestSignal(candidate, boundary)
+          ).length !== 1
+        )
+          break;
         if (section.querySelector(newsSelectors.railContentBoundary)) break;
         if (hasFriendsHeader(section, heading) && hasRequestCard(section)) {
           panels.add(section);

@@ -81,6 +81,38 @@ describe("Video attribution requires an owned Instagram name", () => {
 });
 
 describe("Video embedded advertising needs evidence and its option", () => {
+  test.each(["third-block", "direct-anchor"])(
+    "%s is restored when Facebook reuses the ad slot",
+    (kind) => {
+      const context = routeContext("/watch", { VF_SPONSORED: true });
+      mountEmbeddedSlot(
+        kind,
+        kind === "third-block"
+          ? '<div id="target"><a href="/ads/about/">Sponsored</a></div>'
+          : '<a id="target" href="/ads/about/">Sponsored</a>'
+      );
+      mopVideosFeed(context);
+      expect(element("target").getAttribute(postAtt)).toBe(context.keyWords.SPONSORED);
+      element("target").innerHTML = "Community transcript";
+      element("target").setAttribute("href", "/help/transcript/");
+      context.state.forceProcess = true;
+      mopVideosFeed(context);
+      for (const attribute of [postAtt, context.state.hideAtt, context.state.cssHideEl])
+        expect(element("target").hasAttribute(attribute)).toBe(false);
+    }
+  );
+
+  test("concealed label decoys cannot veto a real fragmented embedded disclosure", () => {
+    const context = routeContext("/watch", { VF_SPONSORED: true });
+    mountEmbeddedSlot(
+      "third-block",
+      '<div id="target"><a href="/ads/about/"><span>Spon</span><span hidden>decoy</span><span>sored</span></a></div>'
+    );
+    mopVideosFeed(context);
+    expect(element("target").getAttribute(postAtt)).toBe(context.keyWords.SPONSORED);
+    expect(element("owner").hasAttribute(postAtt)).toBe(false);
+  });
+
   test.each([true, false])(
     "VF_SPONSORED=%s preserves ordinary transcript and help blocks",
     (enabled) => {

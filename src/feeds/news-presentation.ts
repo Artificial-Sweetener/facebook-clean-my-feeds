@@ -26,11 +26,11 @@ const presentations: Record<NewsFeature, Map<HTMLElement | SVGElement, NewsPrese
   friendRequests: new Map(),
 };
 
-/** Preserve badge identity while CMF's reversible presentation intentionally conceals its icon. */
-export function isNewsBadgeCollapsed(element: Element): boolean {
+/** Preserve feature identity while its own reversible presentation intentionally conceals the root. */
+export function isNewsFeatureCollapsed(element: Element, feature: NewsFeature): boolean {
   return (
     (element instanceof HTMLElement || element instanceof SVGElement) &&
-    presentations.badge.has(element)
+    presentations[feature].has(element)
   );
 }
 

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { matchesNewsLabel, matchesNewsPaidBy } from "../core/filters/labels";
-import { isNewsBadgeCollapsed } from "./news-presentation";
+import { isNewsFeatureCollapsed } from "./news-presentation";
 import type { Keywords } from "../i18n";
 import type { HydratedOptions } from "../core/options/types";
 import { matchesDisclosureLabel, containsMetaAiCopy } from "../core/filters/disclosure-labels";
@@ -296,7 +296,7 @@ export function isNewsVerifiedBadge(
   keyWords: Pick<Keywords, "NF_FILTER_VERIFIED_BADGE">
 ) {
   return ownVerifiedBadges(post).some(
-    (icon) => getPostEvidence(post).isRendered(icon) || isNewsBadgeCollapsed(icon)
+    (icon) => getPostEvidence(post).isRendered(icon) || isNewsFeatureCollapsed(icon, "badge")
   )
     ? keyWords.NF_FILTER_VERIFIED_BADGE
     : "";

@@ -32,6 +32,37 @@ afterEach(() => {
 });
 
 describe("right-rail friend requests", () => {
+  test.each(["h3", "h3 a", "#card a", '#card [role="button"]'])(
+    "concealed required evidence cannot hide an ordinary rail panel: %s",
+    (selector) => {
+      const panel = mountPanel();
+      requireElement(panel.querySelector(selector)).setAttribute("style", "display:none");
+      expect(getRightRailFriendRequestPanels()).toEqual([]);
+    }
+  );
+
+  test("paired actions in authored or nested content cannot establish a request card", () => {
+    const panel = mountPanel();
+    requireElement(panel.querySelector('#card [role="button"]')?.parentElement).setAttribute(
+      "role",
+      "comment"
+    );
+    expect(getRightRailFriendRequestPanels()).toEqual([]);
+  });
+
+  test("repeated reconciliation keeps a filtered panel collapsed and restores it when its actions disappear", () => {
+    const panel = mountPanel();
+    const context = createNewsContext({ options: { NF_FRIEND_REQUESTS: true } });
+    mopNewsFeed(context);
+    context.state.forceProcess = true;
+    mopNewsFeed(context);
+    expect(panel.style.display).toBe("none");
+    requireElement(panel.querySelector('#card [role="button"]')).setAttribute("hidden", "");
+    mopNewsFeed(context);
+    expect(panel.style.display).toBe("");
+    expect(panel.hasAttribute(context.state.hideWithNoCaptionAtt)).toBe(false);
+  });
+
   test.each(["طلبات الصداقة", "好友请求", "Запити на дружбу", "Unrecognized interface label", ""])(
     "detects destination and action structure with heading %p",
     (heading) => {

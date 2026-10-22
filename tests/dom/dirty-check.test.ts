@@ -98,6 +98,8 @@ describe("dom/dirty-check", () => {
       hideAtt: "hide",
       hideWithNoCaptionAtt: "hideNoCaption",
       showAtt: "show",
+      cssHideEl: "hide-element",
+      cssHideNumberOfShares: "hide-shares",
     });
 
     expect(row.hasAttribute(postAtt)).toBe(false);

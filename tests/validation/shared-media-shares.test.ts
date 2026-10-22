@@ -166,6 +166,24 @@ describe("validation: shared GIF detection and pausing", () => {
 });
 
 describe("validation: share-indicator presentation", () => {
+  test.each([
+    '<div role="article">',
+    '<div role="comment">',
+    '<div data-ad-preview="message">',
+    "<div hidden>",
+  ])("share controls inside unrelated or concealed descendants stay untouched: %s", (opening) => {
+    const { post } = sharedShares(["5"]);
+    const parent = document.createElement("div");
+    parent.innerHTML = `${opening}${post.outerHTML}</div>`;
+    expect(findNumberOfShares(parent)).toBe(0);
+    hideNumberOfShares(
+      parent,
+      { cssHideNumberOfShares: "hide-shares", showAtt: "show" },
+      { VERBOSITY_DEBUG: false }
+    );
+    expect(parent.querySelector("[hide-shares]")).toBeNull();
+  });
+
   test("counts structural indicators independently of locale, count, or missing label", () => {
     const { post, shares } = sharedShares([
       "",

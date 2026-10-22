@@ -161,7 +161,7 @@ function mopGroupsFeed(context: FeedContext | null) {
       const posts = collectGroupsPosts(mainColumn, state.gfType === "groups-recent");
       if (posts.length > 0) {
         for (const post of posts) {
-          if (post.innerHTML.length === 0) {
+          if (!post.hasChildNodes()) {
             continue;
           }
 
@@ -231,7 +231,7 @@ function mopGroupsFeed(context: FeedContext | null) {
       const posts = collectGroupsPosts(mainColumn, false);
       if (posts.length) {
         for (const post of posts) {
-          if (post.innerHTML.length === 0) {
+          if (!post.hasChildNodes()) {
             continue;
           }
 

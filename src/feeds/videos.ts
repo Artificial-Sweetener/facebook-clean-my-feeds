@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { hideDuplicateVideos, setPostLinkToOpenInNewTab } from "./video-links";
+import { getVideoIdentity, setPostLinkToOpenInNewTab } from "./video-links";
 import type { Keywords } from "../i18n";
 import { translations } from "../i18n";
 import { cleanText } from "../core/filters/text-normalize";
@@ -240,21 +240,26 @@ function mopVideosFeed(context: FeedContext | null) {
     let query;
     let queryBlocks;
     if (state.vfType === "videos") {
-      query = ":scope > div > div:not([class]) > div";
+      query = `:scope > div > div:not([class]) > :is(div, details[${postAtt}])`;
       queryBlocks = ":scope > div > div > div > div > div:nth-of-type(2) > div";
     } else if (state.vfType === "search") {
-      query = 'div[role="feed"] > div[role="article"]';
+      query = `div[role="feed"] > :is(div[role="article"], details[${postAtt}])`;
       queryBlocks = ":scope > div > div > div > div > div > div > div:nth-of-type(2)";
     } else if (state.vfType === "item") {
-      query =
-        'div[id="watch_feed"] > div > div:nth-of-type(2) > div > div > div > div:nth-of-type(2) > div > div > div > div';
+      query = `div[id="watch_feed"] > div > div:nth-of-type(2) > div > div > div > div:nth-of-type(2) > div > div > div > :is(div, details[${postAtt}])`;
       queryBlocks = ":scope > div > div > div > div > div:nth-of-type(2) > div";
     } else {
       return null;
     }
 
+    const posts = Array.from(container.querySelectorAll(query)).flatMap((candidate) => {
+      const post = candidate.matches(`details[${postAtt}]`)
+        ? candidate.querySelector(":scope > div")
+        : candidate;
+      return post ? [post] : [];
+    });
     if (state.vfType !== "search") {
-      const posts = container.querySelectorAll(query);
+      const seenVideoIds = new Set<string>();
       for (const post of posts) {
         if (countDescendants(post) < 3) {
           continue;
@@ -272,7 +277,8 @@ function mopVideosFeed(context: FeedContext | null) {
           setPostLinkToOpenInNewTab(post, state);
         }
 
-        if (post.hasAttribute(postAtt)) {
+        const wasDuplicate = post.getAttribute(postAtt) === keyWords.VF_DUPLICATE_VIDEOS;
+        if (post.hasAttribute(postAtt) && !wasDuplicate) {
           alreadyHidden = true;
         } else {
           doLightDusting(post, state);
@@ -286,14 +292,19 @@ function mopVideosFeed(context: FeedContext | null) {
           if (hideReason === "" && options.VF_INSTAGRAM) {
             hideReason = isInstagram(post, keyWords);
           }
+          if (hideReason === "" && options.VF_BLOCKED_ENABLED) {
+            hideReason = findVideosBlockedText(post, options, filters, queryBlocks);
+          }
           if (hideReason === "" && options.VF_DUPLICATE_VIDEOS) {
-            hideDuplicateVideos(post, query, keyWords, context);
-            if (post.hasAttribute(postAtt)) {
-              alreadyHidden = true;
+            const identity = getVideoIdentity(post, queryBlocks);
+            if (identity) {
+              if (seenVideoIds.has(identity)) hideReason = keyWords.VF_DUPLICATE_VIDEOS;
+              else seenVideoIds.add(identity);
             }
           }
-          if (!alreadyHidden && hideReason === "" && options.VF_BLOCKED_ENABLED) {
-            hideReason = findVideosBlockedText(post, options, filters, queryBlocks);
+          if (wasDuplicate) {
+            if (hideReason === keyWords.VF_DUPLICATE_VIDEOS) alreadyHidden = true;
+            else resetPostState(post, state);
           }
         }
 
@@ -322,7 +333,6 @@ function mopVideosFeed(context: FeedContext | null) {
         trackPostSignature(post);
       }
     } else {
-      const posts = document.querySelectorAll(query);
       for (const post of posts) {
         let hideReason = "";
         let alreadyHidden = false;

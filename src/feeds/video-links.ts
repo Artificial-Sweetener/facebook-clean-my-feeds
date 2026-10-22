@@ -1,71 +1,36 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-import type { Keywords } from "../i18n";
-import type { FeedContext, FeedProcessingState } from "./types";
-import { hideVideoPost } from "../dom/hide";
+import type { FeedProcessingState } from "./types";
+import { facebookUrl, getPostEvidence } from "../dom/post-evidence";
+import { ownsPostElement } from "../dom/ownership";
 import { climbUpTheTree } from "../utils/dom";
 
 /**
- * Skip the first matching video link and forward each later enclosing post to hideVideoPost; actual hiding still requires the caller's hide context to supply its attributes.
+ * Resolve one canonical video identity from owned, rendered header links, independent of URL parameter order and UI language.
+ * Authored links and nested posts cannot suppress another video. Ambiguous headers supply no identity.
+ * @param post Current video root; no other document or feed is searched.
+ * @param queryBlocks Route-specific body and action blocks excluded from header evidence.
+ * @returns Numeric Facebook video identifier, or null when no unambiguous owned permalink exists.
  */
-export function findDuplicateVideos(
-  urlQuery: string,
-  postQuery: string,
-  keyWords: Pick<Keywords, "VF_DUPLICATE_VIDEOS">,
-  context: FeedContext | null
-) {
-  const watchVideos = document.querySelectorAll(urlQuery);
-  if (watchVideos.length < 2) {
-    return;
+export function getVideoIdentity(post: Element, queryBlocks: string): string | null {
+  const evidence = getPostEvidence(post);
+  const bodies = evidence.select(queryBlocks);
+  const identities = new Set<string>();
+  for (const link of evidence.select("a[href]")) {
+    if (
+      (!link.closest("h4, h5") && !link.matches("div > span > a")) ||
+      !ownsPostElement(link, post, { bodies }) ||
+      !evidence.isRendered(link)
+    )
+      continue;
+    const url = facebookUrl(link);
+    if (!url) continue;
+    const id = /^\/watch\/?$/.test(url.pathname)
+      ? url.searchParams.get("v")
+      : /^\/(?:[^/]+\/)?videos\/(\d+)\/?$/.exec(url.pathname)?.[1];
+    if (id && /^\d+$/.test(id)) identities.add(id);
   }
-
-  for (let i = 1; i < watchVideos.length; i += 1) {
-    const videoPost = watchVideos[i]?.closest(postQuery);
-    if (videoPost) {
-      hideVideoPost(videoPost, keyWords.VF_DUPLICATE_VIDEOS, "", context);
-    }
-  }
-}
-
-/**
- * Extract the current video's identifier from a watch query or video permalink, then look for later matching links across the document.
- * This helper forwards the supplied context unchanged; the legacy caller without hide attributes therefore retains hideVideoPost's no-op behavior.
- * @param post Video post whose first supported watch or permalink anchor supplies the identity.
- * @param postQuery Selector used to climb from each duplicate link to its enclosing post.
- * @param keyWords VF_DUPLICATE_VIDEOS supplies the reason passed to the hide helper.
- * @param context Forwarded caption/visibility context; null or missing hide attributes prevents the downstream hide action.
- */
-export function hideDuplicateVideos(
-  post: Element,
-  postQuery: string,
-  keyWords: Keywords,
-  context: FeedContext | null
-) {
-  const elWatchVideo = post.querySelector('div > span > a[href*="/watch/?v="]');
-  if (elWatchVideo instanceof HTMLAnchorElement) {
-    const watchVideoVID = new URL(elWatchVideo.href).searchParams.get("v");
-    if (watchVideoVID) {
-      findDuplicateVideos(
-        `div > span > a[href*="/watch/?v=${watchVideoVID}&"]`,
-        postQuery,
-        keyWords,
-        context
-      );
-    }
-  } else {
-    const elUserVideo = post.querySelector('div > span > a[href*="/videos/"]');
-    if (elUserVideo instanceof HTMLAnchorElement) {
-      const watchVideoVID = elUserVideo.href.split("/videos/")[1]?.split("/")[0];
-      if (watchVideoVID) {
-        findDuplicateVideos(
-          `div > span > a[href*="/videos/${watchVideoVID}/"]`,
-          postQuery,
-          keyWords,
-          context
-        );
-      }
-    }
-  }
+  return identities.size === 1 ? (identities.values().next().value ?? null) : null;
 }
 
 /** Derive a publisher base from a watch URL, returning an empty string for unsupported paths. */

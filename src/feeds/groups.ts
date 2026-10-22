@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { hasGroupsSuggestionLabel } from "./groups-identity";
+import { collectGroupsPosts } from "./groups-discovery";
 import { cleanGroupsSuggestions, setPostLinkToOpenInNewTab } from "./groups-features";
 import type { Keywords } from "../i18n";
 import type { FeedContext, FeedProcessingState, DirtyFeedRoots } from "./types";
@@ -157,9 +158,7 @@ function mopGroupsFeed(context: FeedContext | null) {
         cleanGroupsSuggestions(context);
       }
 
-      const query =
-        state.gfType === "groups-recent" ? 'h2[dir="auto"] + div > div' : 'div[role="feed"] > div';
-      const posts = Array.from(document.querySelectorAll(query));
+      const posts = collectGroupsPosts(mainColumn, state.gfType === "groups-recent");
       if (posts.length > 0) {
         for (const post of posts) {
           if (post.innerHTML.length === 0) {
@@ -229,8 +228,7 @@ function mopGroupsFeed(context: FeedContext | null) {
         }
       }
     } else {
-      const query = 'div[role="feed"] > div';
-      const posts = Array.from(document.querySelectorAll(query));
+      const posts = collectGroupsPosts(mainColumn, false);
       if (posts.length) {
         for (const post of posts) {
           if (post.innerHTML.length === 0) {

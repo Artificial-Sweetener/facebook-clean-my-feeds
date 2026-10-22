@@ -5912,7 +5912,7 @@
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:75dd246ec81957c8569e1dfdffa8d506d0f56c2a3210cd361d46bbebc34d1975" : "unbundled";
+      buildIdentity = true ? "source-sha256:f7d4e3131454762e4507e48f30a086e15cf34d77c73ea9eee2700a9260750109" : "unbundled";
     }
   });
 
@@ -9600,6 +9600,45 @@
     }
   });
 
+  // src/feeds/groups-discovery.ts
+  function collectGroupsPosts(root, recent) {
+    var _a;
+    const query = recent ? groupsSelectors.feedQueryRecent : groupsSelectors.feedQueryMultiple;
+    const posts = /* @__PURE__ */ new Set();
+    for (const wrapper of root.querySelectorAll(query)) {
+      const enclosingPost = (_a = wrapper.parentElement) == null ? void 0 : _a.closest(
+        `${sharedSelectors.postOwner}, ${sharedSelectors.authoredContent}`
+      );
+      if (enclosingPost && root.contains(enclosingPost)) continue;
+      if (wrapper.matches(sharedSelectors.postOwner)) {
+        posts.add(wrapper);
+        continue;
+      }
+      const evidence = getPostEvidence(wrapper);
+      const hasOwnContent = evidence.select(`h4, h5, ${sharedSelectors.profileName}, ${sharedSelectors.authoredContent}`).some((signal) => {
+        const owner = signal.closest(sharedSelectors.postOwner);
+        return (!owner || !wrapper.contains(owner)) && evidence.isRendered(signal);
+      });
+      const concrete = hasOwnContent ? [] : evidence.select(sharedSelectors.postOwner).filter((post) => {
+        var _a2, _b;
+        const parentOwner = (_a2 = post.parentElement) == null ? void 0 : _a2.closest(sharedSelectors.postOwner);
+        const authored2 = (_b = post.parentElement) == null ? void 0 : _b.closest(sharedSelectors.authoredContent);
+        return (!parentOwner || !wrapper.contains(parentOwner)) && (!authored2 || !wrapper.contains(authored2)) && evidence.isRendered(post);
+      });
+      if (concrete.length) for (const post of concrete) posts.add(post);
+      else posts.add(wrapper);
+    }
+    return Array.from(posts);
+  }
+  var init_groups_discovery = __esm({
+    "src/feeds/groups-discovery.ts"() {
+      "use strict";
+      init_post_evidence();
+      init_groups();
+      init_shared();
+    }
+  });
+
   // src/feeds/groups-features.ts
   function cleanGroupsSuggestions(context) {
     if (!context) return;
@@ -9788,8 +9827,7 @@
         if (options.GF_SUGGESTIONS) {
           cleanGroupsSuggestions(context);
         }
-        const query = state.gfType === "groups-recent" ? 'h2[dir="auto"] + div > div' : 'div[role="feed"] > div';
-        const posts = Array.from(document.querySelectorAll(query));
+        const posts = collectGroupsPosts(mainColumn, state.gfType === "groups-recent");
         if (posts.length > 0) {
           for (const post of posts) {
             if (post.innerHTML.length === 0) {
@@ -9852,8 +9890,7 @@
           }
         }
       } else {
-        const query = 'div[role="feed"] > div';
-        const posts = Array.from(document.querySelectorAll(query));
+        const posts = collectGroupsPosts(mainColumn, false);
         if (posts.length) {
           for (const post of posts) {
             if (post.innerHTML.length === 0) {
@@ -9933,6 +9970,7 @@
     "src/feeds/groups.ts"() {
       "use strict";
       init_groups_identity();
+      init_groups_discovery();
       init_groups_features();
       init_attributes();
       init_animated_gifs();
@@ -9951,46 +9989,20 @@
   });
 
   // src/feeds/video-links.ts
-  function findDuplicateVideos(urlQuery, postQuery, keyWords, context) {
-    var _a;
-    const watchVideos = document.querySelectorAll(urlQuery);
-    if (watchVideos.length < 2) {
-      return;
+  function getVideoIdentity(post, queryBlocks) {
+    var _a, _b;
+    const evidence = getPostEvidence(post);
+    const bodies = evidence.select(queryBlocks);
+    const identities = /* @__PURE__ */ new Set();
+    for (const link of evidence.select("a[href]")) {
+      if (!link.closest("h4, h5") && !link.matches("div > span > a") || !ownsPostElement(link, post, { bodies }) || !evidence.isRendered(link))
+        continue;
+      const url = facebookUrl(link);
+      if (!url) continue;
+      const id = /^\/watch\/?$/.test(url.pathname) ? url.searchParams.get("v") : (_a = /^\/(?:[^/]+\/)?videos\/(\d+)\/?$/.exec(url.pathname)) == null ? void 0 : _a[1];
+      if (id && /^\d+$/.test(id)) identities.add(id);
     }
-    for (let i = 1; i < watchVideos.length; i += 1) {
-      const videoPost = (_a = watchVideos[i]) == null ? void 0 : _a.closest(postQuery);
-      if (videoPost) {
-        hideVideoPost(videoPost, keyWords.VF_DUPLICATE_VIDEOS, "", context);
-      }
-    }
-  }
-  function hideDuplicateVideos(post, postQuery, keyWords, context) {
-    var _a;
-    const elWatchVideo = post.querySelector('div > span > a[href*="/watch/?v="]');
-    if (elWatchVideo instanceof HTMLAnchorElement) {
-      const watchVideoVID = new URL(elWatchVideo.href).searchParams.get("v");
-      if (watchVideoVID) {
-        findDuplicateVideos(
-          `div > span > a[href*="/watch/?v=${watchVideoVID}&"]`,
-          postQuery,
-          keyWords,
-          context
-        );
-      }
-    } else {
-      const elUserVideo = post.querySelector('div > span > a[href*="/videos/"]');
-      if (elUserVideo instanceof HTMLAnchorElement) {
-        const watchVideoVID = (_a = elUserVideo.href.split("/videos/")[1]) == null ? void 0 : _a.split("/")[0];
-        if (watchVideoVID) {
-          findDuplicateVideos(
-            `div > span > a[href*="/videos/${watchVideoVID}/"]`,
-            postQuery,
-            keyWords,
-            context
-          );
-        }
-      }
-    }
+    return identities.size === 1 ? (_b = identities.values().next().value) != null ? _b : null : null;
   }
   function getVideoPublisherPathFromURL(videoURL) {
     const beginURL = videoURL.split("?")[0];
@@ -10056,7 +10068,8 @@
   var init_video_links = __esm({
     "src/feeds/video-links.ts"() {
       "use strict";
-      init_hide();
+      init_post_evidence();
+      init_ownership();
       init_dom();
     }
   });
@@ -10188,19 +10201,23 @@
       let query;
       let queryBlocks;
       if (state.vfType === "videos") {
-        query = ":scope > div > div:not([class]) > div";
+        query = `:scope > div > div:not([class]) > :is(div, details[${postAtt}])`;
         queryBlocks = ":scope > div > div > div > div > div:nth-of-type(2) > div";
       } else if (state.vfType === "search") {
-        query = 'div[role="feed"] > div[role="article"]';
+        query = `div[role="feed"] > :is(div[role="article"], details[${postAtt}])`;
         queryBlocks = ":scope > div > div > div > div > div > div > div:nth-of-type(2)";
       } else if (state.vfType === "item") {
-        query = 'div[id="watch_feed"] > div > div:nth-of-type(2) > div > div > div > div:nth-of-type(2) > div > div > div > div';
+        query = `div[id="watch_feed"] > div > div:nth-of-type(2) > div > div > div > div:nth-of-type(2) > div > div > div > :is(div, details[${postAtt}])`;
         queryBlocks = ":scope > div > div > div > div > div:nth-of-type(2) > div";
       } else {
         return null;
       }
+      const posts = Array.from(container.querySelectorAll(query)).flatMap((candidate) => {
+        const post = candidate.matches(`details[${postAtt}]`) ? candidate.querySelector(":scope > div") : candidate;
+        return post ? [post] : [];
+      });
       if (state.vfType !== "search") {
-        const posts = container.querySelectorAll(query);
+        const seenVideoIds = /* @__PURE__ */ new Set();
         for (const post of posts) {
           if (countDescendants(post) < 3) {
             continue;
@@ -10214,7 +10231,8 @@
           if (state.vfType === "videos" && getDustingCount(post) === void 0) {
             setPostLinkToOpenInNewTab2(post, state);
           }
-          if (post.hasAttribute(postAtt)) {
+          const wasDuplicate = post.getAttribute(postAtt) === keyWords.VF_DUPLICATE_VIDEOS;
+          if (post.hasAttribute(postAtt) && !wasDuplicate) {
             alreadyHidden = true;
           } else {
             doLightDusting(post, state);
@@ -10227,14 +10245,19 @@
             if (hideReason === "" && options.VF_INSTAGRAM) {
               hideReason = isInstagram(post, keyWords);
             }
+            if (hideReason === "" && options.VF_BLOCKED_ENABLED) {
+              hideReason = findVideosBlockedText(post, options, filters, queryBlocks);
+            }
             if (hideReason === "" && options.VF_DUPLICATE_VIDEOS) {
-              hideDuplicateVideos(post, query, keyWords, context);
-              if (post.hasAttribute(postAtt)) {
-                alreadyHidden = true;
+              const identity2 = getVideoIdentity(post, queryBlocks);
+              if (identity2) {
+                if (seenVideoIds.has(identity2)) hideReason = keyWords.VF_DUPLICATE_VIDEOS;
+                else seenVideoIds.add(identity2);
               }
             }
-            if (!alreadyHidden && hideReason === "" && options.VF_BLOCKED_ENABLED) {
-              hideReason = findVideosBlockedText(post, options, filters, queryBlocks);
+            if (wasDuplicate) {
+              if (hideReason === keyWords.VF_DUPLICATE_VIDEOS) alreadyHidden = true;
+              else resetPostState(post, state);
             }
           }
           if (alreadyHidden || hideReason.length > 0) {
@@ -10259,7 +10282,6 @@
           trackPostSignature(post);
         }
       } else {
-        const posts = document.querySelectorAll(query);
         for (const post of posts) {
           let hideReason = "";
           let alreadyHidden = false;

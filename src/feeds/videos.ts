@@ -4,6 +4,7 @@ import { hideDuplicateVideos, setPostLinkToOpenInNewTab } from "./video-links";
 import type { Keywords } from "../i18n";
 import { translations } from "../i18n";
 import { cleanText } from "../core/filters/text-normalize";
+import { getPostEvidence } from "../dom/post-evidence";
 import type { FeedContext, FeedProcessingState, DirtyFeedRoots } from "./types";
 import { mainColumnAtt, postAtt, postAttTab } from "../dom/attributes";
 import { swatTheMosquitos } from "../dom/animated-gifs";
@@ -109,8 +110,7 @@ const liveStatusLabels = new Set(
 function isOwnedVideoSignal(signal: Element, post: Element): boolean {
   if (
     !isOwnedNewsElement(signal, post) ||
-    signal.closest('[hidden], [aria-hidden="true"]') ||
-    signal.querySelector('[hidden], [aria-hidden="true"]') ||
+    !getPostEvidence(post).isRendered(signal) ||
     Array.from(signal.querySelectorAll("*")).some((child) => !isOwnedNewsElement(child, post))
   )
     return false;
@@ -138,7 +138,7 @@ function isVideoLive(post: Element, keyWords: Pick<Keywords, "VF_LIVE">) {
   return Array.from(post.querySelectorAll(liveRule)).some(
     (status) =>
       isOwnedVideoSignal(status, post) &&
-      liveStatusLabels.has(normalizeVideoLabel(status.textContent || ""))
+      liveStatusLabels.has(normalizeVideoLabel(getPostEvidence(post).visibleText(status)))
   )
     ? keyWords.VF_LIVE
     : "";

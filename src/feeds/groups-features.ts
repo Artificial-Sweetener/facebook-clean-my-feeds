@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { matchesNewsLabel } from "../core/filters/labels";
+import { hasGroupsSuggestionLabel } from "./groups-identity";
 import type { FeedContext, FeedProcessingState } from "./types";
 import { postAtt } from "../dom/attributes";
 import { hideFeature } from "../dom/hide";
 import { climbUpTheTree } from "../utils/dom";
-import { isOwnedNewsElement } from "./news-identity";
 import {
   hasPostChanged,
   resetPostState,
@@ -48,16 +47,8 @@ export function cleanGroupsSuggestions(context: FeedContext | null) {
     const labels = asideBox.querySelectorAll(
       ':scope > span, :scope > h2, :scope > h3, :scope > [role="heading"]'
     );
-    const hasSuggestionLabel = Array.from(labels).some(
-      (label) =>
-        isOwnedNewsElement(label, asideBox) &&
-        !label.closest('[hidden], [aria-hidden="true"]') &&
-        !label.querySelector('[hidden], [aria-hidden="true"]') &&
-        Array.from(label.querySelectorAll("*")).every((child) =>
-          isOwnedNewsElement(child, asideBox)
-        ) &&
-        (matchesNewsLabel(label.textContent || "", "groups") ||
-          matchesNewsLabel(label.textContent || "", "suggested"))
+    const hasSuggestionLabel = Array.from(labels).some((label) =>
+      hasGroupsSuggestionLabel(label, asideBox)
     );
     if (hasSuggestionLabel && !asideBox.hasAttribute(postAtt)) {
       hideFeature(asideBox, keyWords.GF_SUGGESTIONS, true, { options, keyWords, state });

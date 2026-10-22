@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { matchesNewsLabel } from "../core/filters/labels";
+import { hasGroupsSuggestionLabel } from "./groups-identity";
 import { cleanGroupsSuggestions, setPostLinkToOpenInNewTab } from "./groups-features";
 import type { Keywords } from "../i18n";
 import type { FeedContext, FeedProcessingState, DirtyFeedRoots } from "./types";
@@ -94,24 +94,6 @@ function isGroupsColumnDirty(state: FeedProcessingState): DirtyFeedRoots {
   }
 
   return arrReturn;
-}
-
-/** Require a complete localized recommendation label whose text and accessible name belong to this post. */
-function hasGroupsSuggestionLabel(element: Element, post: Element): boolean {
-  if (
-    !isOwnedNewsElement(element, post) ||
-    element.closest('[hidden], [aria-hidden="true"]') ||
-    element.querySelector('[hidden], [aria-hidden="true"]') ||
-    Array.from(element.querySelectorAll("*")).some((child) => !isOwnedNewsElement(child, post))
-  ) {
-    return false;
-  }
-  const label =
-    element.getAttribute("aria-label") ||
-    element.getAttribute("title") ||
-    element.textContent ||
-    "";
-  return matchesNewsLabel(label, "suggested") || matchesNewsLabel(label, "groups");
 }
 
 /** Retain both supported layouts, but require owned recommendation text instead of treating every styled privacy icon or nested heading as a suggestion. */

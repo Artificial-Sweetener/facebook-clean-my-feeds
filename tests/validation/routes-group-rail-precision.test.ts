@@ -12,6 +12,27 @@ function mountRail(label: string): void {
 
 afterEach(cleanRouteDocument);
 
+test.each(["display:none", "visibility:hidden"])(
+  "a concealed rail label does not classify an ordinary section: %s",
+  (style) => {
+    mountRail(`<span style="${style}">Suggested groups</span>`);
+    mopGroupsFeed(routeContext("/groups/feed", { GF_SUGGESTIONS: true }));
+    expect(element("target").hasAttribute(postAtt)).toBe(false);
+    expect(element("chat").hasAttribute(postAtt)).toBe(false);
+  }
+);
+
+test.each(["hidden", 'aria-hidden="true"', 'style="display:none"', 'style="visibility:hidden"'])(
+  "a concealed decoy cannot mask visible rail recommendations: %s",
+  (attribute) => {
+    const context = routeContext("/groups/feed", { GF_SUGGESTIONS: true });
+    mountRail(`Suggested<span ${attribute}>decoy</span> groups`);
+    mopGroupsFeed(context);
+    expect(element("target").getAttribute(postAtt)).toBe(context.keyWords.GF_SUGGESTIONS);
+    expect(element("chat").hasAttribute(postAtt)).toBe(false);
+  }
+);
+
 describe("Group suggestion rail never takes ownership of the app or feed", () => {
   test.each(["Group chats", "I read Suggested groups", "Friends online"])(
     "preserves ordinary complementary content %s",

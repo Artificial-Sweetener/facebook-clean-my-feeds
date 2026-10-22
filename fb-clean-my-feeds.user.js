@@ -5912,7 +5912,7 @@
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:f5e55f3220994b36485991000ebf6c9f4dec06a0ddeaecbee2b81396dbf789ee" : "unbundled";
+      buildIdentity = true ? "source-sha256:a51fe14567bbdf8a99ae59e5ff26dd82b3c9454693f8a69e475948f80d35db15" : "unbundled";
     }
   });
 
@@ -9565,6 +9565,25 @@
     }
   });
 
+  // src/feeds/groups-identity.ts
+  function hasGroupsSuggestionLabel(element, post) {
+    const evidence = getPostEvidence(post);
+    if (!isOwnedNewsElement(element, post) || !evidence.isRendered(element) || Array.from(element.querySelectorAll("*")).some((child) => !isOwnedNewsElement(child, post)))
+      return false;
+    const names = evidence.explicitNames(element);
+    return (names.length ? names : [evidence.visibleText(element)]).some(
+      (label) => matchesNewsLabel(label, "suggested") || matchesNewsLabel(label, "groups")
+    );
+  }
+  var init_groups_identity = __esm({
+    "src/feeds/groups-identity.ts"() {
+      "use strict";
+      init_labels();
+      init_post_evidence();
+      init_news_identity();
+    }
+  });
+
   // src/feeds/groups-features.ts
   function cleanGroupsSuggestions(context) {
     if (!context) return;
@@ -9590,9 +9609,7 @@
         ':scope > span, :scope > h2, :scope > h3, :scope > [role="heading"]'
       );
       const hasSuggestionLabel = Array.from(labels2).some(
-        (label) => isOwnedNewsElement(label, asideBox) && !label.closest('[hidden], [aria-hidden="true"]') && !label.querySelector('[hidden], [aria-hidden="true"]') && Array.from(label.querySelectorAll("*")).every(
-          (child) => isOwnedNewsElement(child, asideBox)
-        ) && (matchesNewsLabel(label.textContent || "", "groups") || matchesNewsLabel(label.textContent || "", "suggested"))
+        (label) => hasGroupsSuggestionLabel(label, asideBox)
       );
       if (hasSuggestionLabel && !asideBox.hasAttribute(postAtt)) {
         hideFeature(asideBox, keyWords.GF_SUGGESTIONS, true, { options, keyWords, state });
@@ -9651,11 +9668,10 @@
   var init_groups_features = __esm({
     "src/feeds/groups-features.ts"() {
       "use strict";
-      init_labels();
+      init_groups_identity();
       init_attributes();
       init_hide();
       init_dom();
-      init_news_identity();
       init_dirty_check();
     }
   });
@@ -9718,13 +9734,6 @@
       state.noChangeCounter += 1;
     }
     return arrReturn;
-  }
-  function hasGroupsSuggestionLabel(element, post) {
-    if (!isOwnedNewsElement(element, post) || element.closest('[hidden], [aria-hidden="true"]') || element.querySelector('[hidden], [aria-hidden="true"]') || Array.from(element.querySelectorAll("*")).some((child) => !isOwnedNewsElement(child, post))) {
-      return false;
-    }
-    const label = element.getAttribute("aria-label") || element.getAttribute("title") || element.textContent || "";
-    return matchesNewsLabel(label, "suggested") || matchesNewsLabel(label, "groups");
   }
   function isGroupsSuggested(post, keyWords) {
     var _a, _b;
@@ -9905,7 +9914,7 @@
   var init_groups2 = __esm({
     "src/feeds/groups.ts"() {
       "use strict";
-      init_labels();
+      init_groups_identity();
       init_groups_features();
       init_attributes();
       init_animated_gifs();
@@ -10082,7 +10091,7 @@
     return cleanText(label).replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g, "").replace(/\s+/g, " ").trim().toLowerCase();
   }
   function isOwnedVideoSignal(signal, post) {
-    if (!isOwnedNewsElement(signal, post) || signal.closest('[hidden], [aria-hidden="true"]') || signal.querySelector('[hidden], [aria-hidden="true"]') || Array.from(signal.querySelectorAll("*")).some((child) => !isOwnedNewsElement(child, post)))
+    if (!isOwnedNewsElement(signal, post) || !getPostEvidence(post).isRendered(signal) || Array.from(signal.querySelectorAll("*")).some((child) => !isOwnedNewsElement(child, post)))
       return false;
     const references2 = signal.getAttribute("aria-labelledby");
     return !references2 || references2.trim().split(/\s+/).every((id) => {
@@ -10093,7 +10102,7 @@
   function isVideoLive(post, keyWords) {
     const liveRule = 'div[role="presentation"] ~ div > div:nth-of-type(1) > span';
     return Array.from(post.querySelectorAll(liveRule)).some(
-      (status) => isOwnedVideoSignal(status, post) && liveStatusLabels.has(normalizeVideoLabel(status.textContent || ""))
+      (status) => isOwnedVideoSignal(status, post) && liveStatusLabels.has(normalizeVideoLabel(getPostEvidence(post).visibleText(status)))
     ) ? keyWords.VF_LIVE : "";
   }
   function isInstagram(post, keyWords) {
@@ -10279,6 +10288,7 @@
       init_video_links();
       init_i18n();
       init_text_normalize();
+      init_post_evidence();
       init_attributes();
       init_animated_gifs();
       init_dirty_check();

@@ -90,16 +90,20 @@ export function scanTreeForText(node: Element): string[] {
 }
 
 /**
- * Use marketplace-wide text traversal with lowercase signals for its simpler layout.
+ * Read rendered Marketplace text with lowercase signals, excluding concealed prices and descriptions.
  * @param node Listing root whose descendant text nodes are inspected.
  * @returns Ordered lowercase text fragments, retaining duplicates for historical matching.
  */
 export function mpScanTreeForText(node: Element): string[] {
   const arrayTextValues: string[] = [];
+  const evidence = getPostEvidence(node);
+  if (!evidence.isVisible(node)) return arrayTextValues;
   let currentNode;
   const walk = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, null);
 
   while ((currentNode = walk.nextNode())) {
+    const parent = currentNode.parentElement;
+    if (!parent || !evidence.isRendered(parent)) continue;
     const val = cleanText(currentNode.textContent ?? "").trim();
     if (val !== "" && val.length > 1 && val.toLowerCase() !== "facebook") {
       arrayTextValues.push(val.toLowerCase());

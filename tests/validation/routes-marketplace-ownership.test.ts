@@ -280,12 +280,14 @@ describe("Marketplace ownership and recycled-box restoration", () => {
     });
     const firstRoot = mountMarketplace(listing("first", "$50", "Damaged chair"));
     const firstBox = element("first");
+    const observe = jest.spyOn(MutationObserver.prototype, "observe");
     mopMarketplaceFeed(context);
+    const firstObservers = [...new Set(observe.mock.contexts)];
     const disconnect = jest.spyOn(MutationObserver.prototype, "disconnect");
     mountMarketplace(listing("second", "$50", "Damaged table"));
     firstBox.innerHTML = '<a href="/marketplace/category/furniture/">Browse furniture</a>';
     pruneDirtyObservers();
-    expect(disconnect).toHaveBeenCalledTimes(1);
+    expect(disconnect.mock.contexts).toEqual(expect.arrayContaining(firstObservers));
     mopMarketplaceFeed(context);
     expect(element("second").getAttribute(postAtt)).toBe("damaged");
     expect(firstBox.getAttribute(postAtt)).toBe("damaged");

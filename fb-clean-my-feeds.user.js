@@ -5912,7 +5912,7 @@
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:f73fddc8fd85d27bfb56ecadafd4213ddff67bae9a144cbff68ec5d29948ba5b" : "unbundled";
+      buildIdentity = true ? "source-sha256:75dd246ec81957c8569e1dfdffa8d506d0f56c2a3210cd361d46bbebc34d1975" : "unbundled";
     }
   });
 
@@ -7279,9 +7279,13 @@
   function mpScanTreeForText(node) {
     var _a;
     const arrayTextValues = [];
+    const evidence = getPostEvidence(node);
+    if (!evidence.isVisible(node)) return arrayTextValues;
     let currentNode;
     const walk = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, null);
     while (currentNode = walk.nextNode()) {
+      const parent = currentNode.parentElement;
+      if (!parent || !evidence.isRendered(parent)) continue;
       const val = cleanText((_a = currentNode.textContent) != null ? _a : "").trim();
       if (val !== "" && val.length > 1 && val.toLowerCase() !== "facebook") {
         arrayTextValues.push(val.toLowerCase());
@@ -10400,6 +10404,7 @@
     if (options.VERBOSITY_DEBUG) {
       box.setAttribute(state.showAtt, "");
     }
+    trackPostSignature(box);
   }
   function mpStopTrackingDirtIntoMyHouse() {
     var _a;
@@ -10414,6 +10419,8 @@
     for (const item of items) {
       const box = item.parentElement;
       if (!box) continue;
+      const evidence = getPostEvidence(box);
+      if (!evidence.isRendered(item) || !matchesSponsoredLabel(evidence.visibleText(item))) continue;
       if (box.hasAttribute(postAttMPSkip)) {
         if (String(box.innerHTML.length) === box.getAttribute(postAttMPSkip)) {
           continue;
@@ -10504,6 +10511,7 @@
     }
     const mainColumnToken = getDirtyToken(mainColumn);
     mpStopTrackingDirtIntoMyHouse();
+    revalidateTrackedPosts(mainColumn, state);
     revalidateMarketplaceListings(mainColumn, state);
     if (state.mpType === "marketplace" || state.mpType === "item") {
       if (options.MP_SPONSORED) {
@@ -10545,6 +10553,8 @@
     "src/feeds/marketplace.ts"() {
       "use strict";
       init_matching();
+      init_disclosure_labels2();
+      init_post_evidence();
       init_attributes();
       init_dirty_check();
       init_walker();

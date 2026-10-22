@@ -5,6 +5,8 @@ import type { HydratedOptions } from "../core/options/types";
 import type { Filters } from "../core/filters/types";
 import type { FeedContext, FeedProcessingState } from "./types";
 import { findFirstMatch } from "../core/filters/matching";
+import { matchesSponsoredLabel } from "../core/filters/disclosure-labels";
+import { getPostEvidence } from "../dom/post-evidence";
 import { mainColumnAtt, postAtt, postAttMPSkip } from "../dom/attributes";
 import {
   ensureDirtyObserver,
@@ -12,6 +14,8 @@ import {
   isElementDirty,
   markElementCleanIfUnchanged,
   markElementDirty,
+  revalidateTrackedPosts,
+  trackPostSignature,
 } from "../dom/dirty-check";
 import { mpScanTreeForText } from "../dom/walker";
 import { sanitizeReason } from "../dom/hide";
@@ -38,6 +42,7 @@ function mpHideBox(
   if (options.VERBOSITY_DEBUG) {
     box.setAttribute(state.showAtt, "");
   }
+  trackPostSignature(box);
 }
 
 /**
@@ -50,7 +55,7 @@ function mpStopTrackingDirtIntoMyHouse() {
   }
 }
 
-/** Hide sponsored Marketplace boxes unless their stored skip length still matches the current markup. */
+/** Require a rendered sponsorship label in the legacy slot; arbitrary styled listing spans remain visible. */
 function mpHideSponsoredItems(
   root: Element,
   keyWords: Pick<Keywords, "SPONSORED">,
@@ -62,6 +67,8 @@ function mpHideSponsoredItems(
   for (const item of items) {
     const box = item.parentElement;
     if (!box) continue;
+    const evidence = getPostEvidence(box);
+    if (!evidence.isRendered(item) || !matchesSponsoredLabel(evidence.visibleText(item))) continue;
     if (box.hasAttribute(postAttMPSkip)) {
       if (String(box.innerHTML.length) === box.getAttribute(postAttMPSkip)) {
         continue;
@@ -217,6 +224,7 @@ function mopMarketplaceFeed(context: FeedContext | null) {
   const mainColumnToken = getDirtyToken(mainColumn);
 
   mpStopTrackingDirtIntoMyHouse();
+  revalidateTrackedPosts(mainColumn, state);
   revalidateMarketplaceListings(mainColumn, state);
 
   if (state.mpType === "marketplace" || state.mpType === "item") {

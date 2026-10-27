@@ -1,3 +1,40 @@
+# [6.4.0](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.3.2...v6.4.0) (2026-10-27)
+
+
+### Bug Fixes
+
+* **diagnostics:** redact private labels and preserve filter evidence ([969b63b](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/969b63bf3d8540ded7d1964153efa3978afb3ca4))
+* **feeds:** filter inline Stories ribbons by preview structure ([076f165](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/076f165dd2ed0a44cd4f1c8f5ee01992024aa592))
+* **feeds:** inspect all eligible sponsored candidates ([538b8b3](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/538b8b3204df788edde7e3b956114ce3ecab2ecb)), closes [#19](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/issues/19)
+* **feeds:** scope disclosure evidence to owning post metadata ([16ddd68](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/16ddd686af214986dd6994136776f7f2289ed27f))
+* **filters:** classify rendered group and video labels ([98bb58d](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/98bb58d8b8cf662eb1c60823f334489d5323f70e))
+* **filters:** enable owned reversible information-box filtering ([b06914a](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/b06914ab2fa6f3aa0d7252d17fe5337cbe0448cb))
+* **filters:** honor independent options across groups and search ([d1f0776](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/d1f0776d85cd2f343cddf30af09a2dfe84d20674))
+* **filters:** preserve owned evidence and reject concealed previews ([c04f242](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/c04f24292bcc0dd6b9229ad7e9fe6818e6318980))
+* **filters:** read owned rendered labels and localized reaction counts ([9d82b27](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/9d82b271dc4b9730bb287f64378ff42025616fb1))
+* **filters:** restore duplicate videos and scope group post discovery ([d88175e](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/d88175ea092c8e44bcfbd448169a2d70bd17274c))
+* **filters:** validate feature visibility and restore reused ad slots ([c7cc35f](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/c7cc35f027d3b21c59c25693a8184642699423b7))
+* **marketplace:** honor validated regex filters ([b04664b](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/b04664b02dea7eadbca2d7a86048edce681034af))
+* **marketplace:** recognize current virtualized listing cards ([2b0ce56](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/2b0ce56fe1ddaebf4f8a78d3653089ec243df72f))
+* **marketplace:** reconcile disclosed ads and visibility changes ([e83cacb](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/e83cacb8e0f8f2716314d67185c5b2df911b07bc))
+* **marketplace:** require visible evidence and restore recycled cards ([9a77344](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/9a773441991d027527c14edd75b7dac816573a9e))
+* **runtime:** recover stalled scans and release replaced resources ([0c2fdd2](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/0c2fdd21c450978f1310be50c06fe02583aab88a))
+* **ui:** adapt standalone SVG colors to light and dark themes ([27efd71](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/27efd7104458be799252c724d39fddeec8fc09d5))
+* **ui:** restore faithful icons and harden toolbar navigation ([2f30d50](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/2f30d50d9dda79d936867c5bf46f44f03dce4456))
+
+
+### Features
+
+* harden filters and capture redacted session reports ([605c587](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/605c5870c11c192e9c066c9faff7ae1c74382bba))
+* migrate to TypeScript and enforce architecture governance ([c509e7e](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/c509e7ef3c4cd388ababa0fc44150e9d6d900458))
+* release TypeScript migration, filter fixes, and redacted diagnostics ([d2d7cc2](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/d2d7cc2bd1f29505e5d51cb5c7cc1ace5dc5e251))
+* **ui:** replace raster icons with hand-authored SVG ([ad48e17](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/ad48e17aa91a11074645d3e3bb71efca876edf1b))
+
+
+### Performance Improvements
+
+* **runtime:** reduce duplicate reads and release settings resources ([cebaeeb](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/cebaeebd16b1e18a7d48c334752c7a285528c35d))
+
 ## [6.3.2](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.3.1...v6.3.2) (2026-10-05)
 
 

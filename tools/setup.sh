@@ -1,24 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Bootstrap with the same supported Node range and immutable lockfile used by CI.
 if ! command -v node >/dev/null 2>&1; then
-  echo "Node.js is not available. Install Node 22.x and retry."
+  echo "Install Node 22.14.0 (or a newer Node 22 release) and retry."
   exit 1
 fi
-
-node_version="$(node --version)"
-node_major="${node_version#v}"
-node_major="${node_major%%.*}"
-
-if [[ "$node_major" != "22" ]]; then
-  echo "Warning: Node.js 22.x is recommended. Detected ${node_major}.x."
-fi
-
-echo "Installing dependencies..."
-npm install
-
-echo "Running checks..."
-npm run lint
-npm run format:check
-
-echo "Setup complete."
+node -e 'const [major, minor] = process.versions.node.split(".").map(Number); if (major !== 22 || minor < 14) { console.error("Node >=22.14.0 <23 is required"); process.exit(1); }'
+npm ci
+npm run verify

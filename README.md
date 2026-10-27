@@ -1,4 +1,4 @@
-# <img src="src/res/mop.png" alt="mop" width="36"/> FB - Clean My Feeds
+# <img src="src/res/mop.svg" alt="mop" width="36"/> FB - Clean My Feeds
 
 [![GreasyFork](https://img.shields.io/greasyfork/v/552339-fb-clean-my-feeds-5-05?label=GreasyFork)](https://greasyfork.org/en/scripts/552339-fb-clean-my-feeds-5-05) [![GreasyFork installs](https://img.shields.io/greasyfork/dt/552339-fb-clean-my-feeds-5-05?label=GreasyFork%20installs)](https://greasyfork.org/en/scripts/552339-fb-clean-my-feeds-5-05) [![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE)
 
@@ -10,7 +10,7 @@ Originally built by **[zbluebugz](https://github.com/zbluebugz)** and battle-tes
 
 Thanks to **[trinhquocviet](https://github.com/trinhquocviet)** for helping maintain filters in 2025.
 
-## <img src="src/res/import.png" alt="install" width="36"/> Installation
+## <img src="src/res/import.svg" alt="install" width="36"/> Installation
 
 1. Install a userscript manager such as **[Violentmonkey](https://violentmonkey.github.io/)**, **[Tampermonkey](https://www.tampermonkey.net/)**, or **[FireMonkey](https://addons.mozilla.org/en-US/firefox/addon/firemonkey/)**.
 2. Add the script (your preference of method):
@@ -18,24 +18,28 @@ Thanks to **[trinhquocviet](https://github.com/trinhquocviet)** for helping main
    - Visit the [GreasyFork release page](https://greasyfork.org/en/scripts/552339-fb-clean-my-feeds-5-05) and click **install this script**.
 3. Reload Facebook. You can set the mop icon to appear in the bottom-left, top-right, or hide it completely.
 
-## <img src="src/res/check.png" alt="features" width="36"/> Features
+## <img src="src/res/check.svg" alt="features" width="36"/> Features
 
 "FB - Clean My Feeds" is designed to make your browsing experience calm, clean, and completely under your control.
 
 - **Nuke the Ads:** We automatically scrub "Sponsored" posts, "Paid Partnership" labels, and "Suggested for you" sections across News, Groups, Watch, Marketplace, Search, and Reels.
-- **Built for Any Locale:** The core filters are designed to work across Facebook languages without depending on translation dictionaries, so they keep doing their job even when your Facebook isn't in English.
+- **Localized Signals:** Filters combine supported Facebook layouts with exact labels from 23 locale catalogs where a label is needed to distinguish the intended control. Changing the settings language does not change those recognized labels. New labels and unfamiliar markup can be missed.
 - **Cut the AI Clutter:** Hide "Try Meta AI" cards, Meta AI prompt suggestions, posts labeled with Facebook's "AI info" marker, and AI side-panel distractions before they take over your feed. The "AI info" filter relies on Facebook's label and does not detect every AI-generated post.
 - **Tame the Layout:** Hide Reels, "Short Videos," and those massive "Stories" shelves that eat up your screen. You can even toggle off entire sections like Marketplace if you never use them.
 - **Filter the Noise:** Create custom blocklists for specific words or phrases (with regex support!). You can also cap viral posts by "Like" count to keep your feed personal.
 - **Quiet Down:** We strip out "People You May Know," "Follow" suggestions, survey promos, and other engagement traps. Plus, you can pause autoplaying GIFs and videos so you're not ambushed by motion.
+- **Friend Requests:** Optionally hide the Friend requests panel in the right sidebar from **News Feed** settings. This filter is off by default and uses panel structure and link destinations independently of Facebook’s display language.
 - **Easy Controls:** Enjoy a refined, dark-mode friendly settings menu with translated labels. Just click the mop icon, flip a switch, and see the results instantly.
 
-## <img src="src/res/pref.png" alt="options" width="36"/> Using the Control Panel
+## <img src="src/res/pref.svg" alt="options" width="36"/> Using the Control Panel
 
 - Click the **Clean My Feeds** mop icon (or open it from your userscript manager menu) to bring up the settings dialog.
+- The toolbar follows supported feeds and profiles and closes its dialog when navigation leaves those routes. Settings, privacy, sign-in and help pages are excluded. On Reels, it appears only when playback controls or loop disabling are enabled.
 - Options are grouped by feed (News, Groups, Watch, Marketplace, Profiles, Search, Reels). Flip the switches you want, save, and the script immediately re-sweeps the page.
 - Toggle **Debug** to reveal hidden posts with dotted outlines so you can verify what's being filtered.
 - Use **Export / Import** to back up your settings. The script stores preferences locally; incognito/private browsing wipes them when the session ends.
+- When regex matching is enabled for News, Groups, Watch, Marketplace, or Profiles, invalid expressions block saving or importing and show the original field, line, and affected feed. Your draft and previous settings stay intact. Invalid expressions in older saved settings are skipped individually while valid rules and other filters keep working; open settings to repair them. Marketplace supports regex in both price and description lists.
+- Syntax validation does not guarantee safe execution time. An expensive valid regex can still freeze the tab because this build retains native JavaScript matching, which cannot be interrupted here. A worker-based prototype was excluded because Facebook's security policy blocked its worker source.
 
 ### Language Support
 
@@ -72,20 +76,38 @@ The control panel ships with many UI languages so the settings, labels, and hidd
 
 If you spot gaps or mistranslations, open an issue. I'd love to make the UI feel smoother and clearer for non-English users too.
 
-## <img src="src/res/bug.png" alt="bugs" width="36"/> Contributing & Support
+## <img src="src/res/bug.svg" alt="bugs" width="36"/> Contributing & Support
 
 - **Issues & Features:** Open an issue if something breaks or Facebook changes the markup again. I read them.
 - **Pull Requests:** Yes please. Keep them focused and describe what you touched.
 - **Translations:** If you can help keep the UI text sharp across languages, I'm all ears.
 
-## <img src="src/res/info.png" alt="license" width="36"/> License & Credits
+## Development
 
-- **License:** GNU General Public License v3.0. You are free to share, tweak, and improve as long as you pass those freedoms on.
+Use Node **>=22.14.0 <23**; `.nvmrc` and CI pin **22.14.0**. Author source, tests, and tools in strict TypeScript. The installed userscript remains a single self-contained ES2018 browser bundle.
+
+Shared TypeScript defaults live in `tsconfig.json`; scoped compiler and tool configurations live in `tools/config`. Release configuration is in the `release` field of `package.json`, and CI workflows live in `.github/workflows`.
+
+```sh
+nvm use
+npm ci
+npm run verify
+```
+
+If you do not use nvm, install the supported Node version first. The one verification command runs formatting, lint, strict browser/core/tool/test typechecks, Jest tests, locale and governance checks, then builds and validates the userscript. It checks metadata, no external runtime dependencies, unchanged source assets, and reproducible output. Commit the rebuilt `fb-clean-my-feeds.user.js` with source changes; never edit it by hand.
+
+Maintainers can reconstruct sanitized DOM fixtures and test a proposed selector from pasted report data with `npm run report:inspect -- report.json output-directory "CSS selector"`. This decodes the report locally and writes the captured regions and diagnostic context for investigation.
+
+All 17 icons are manually authored SVGs with theme-native inline colors and explicit light/dark colors for standalone documentation and userscript-manager icons. Builds validate inert SVG geometry and leave the original PNG references unchanged. Modules warn above 350 non-comment lines and require a reviewed exception above 500. Named functions, methods, classes, and exported contracts need useful JSDoc. See [CONTRIBUTING.md](CONTRIBUTING.md) for architecture, temporary exceptions, and the release gate. Keep this README and its Vietnamese version synchronized.
+
+## <img src="src/res/info.svg" alt="license" width="36"/> License & Credits
+
+- **License:** GNU General Public License v3.0 only (GPL-3.0-only). You are free to share, tweak, and improve as long as you pass those freedoms on.
 - **Original Project:** [facebook-clean-my-feeds](https://github.com/zbluebugz/facebook-clean-my-feeds) by [zbluebugz](https://github.com/zbluebugz)
 - **Filter maintenance (2025):** [trinhquocviet](https://github.com/trinhquocviet)
 - **Current Maintainer:** [Artificial Sweetener](https://github.com/Artificial-Sweetener) - me!~
 
-## <img src="src/res/about.png" alt="about" width="36"/> From the Maintainer
+## <img src="src/res/about.svg" alt="about" width="36"/> From the Maintainer
 
 I hope this script helps you reclaim your feed. I promise to be your ally in the fight against stuff you don't wanna see online.
 

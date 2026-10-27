@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "note": "Decoded RGBA pixels verified against the pre-TypeScript generated userscript; review intentional artwork changes explicitly.",
+  "images": {
+    "about.png": {
+      "sourceSha256": "7fb3c2c953aab5205f25d6c9c168087d82849924fe386134cba5446a166235eb",
+      "rgbaSha256": "7024b0f6d72ea63ea36d09eeb5391ee88ecfd831d0b8840b00d5419c59697f10",
+      "width": 64,
+      "height": 64
+    },
+    "bug.png": {
+      "sourceSha256": "c78a665a6ac7d2cda83022b1e77c4af4834e749237dc37baaa52d9ddb7c57f8c",
+      "rgbaSha256": "b815161425b8cdb7270be69cb1c4911f62a36751da85c3de7d09ce00a4dcaeba",
+      "width": 64,
+      "height": 64
+    },
+    "check.png": {
+      "sourceSha256": "a5fab2f80af5ffed338437bb19a40d77a8119577686d381181a0b9935fa23587",
+      "rgbaSha256": "b21003776e258de0153c80fad05f28e344c92cdc3fcfa4f5f979b98c4aea0639",
+      "width": 64,
+      "height": 64
+    },
+    "export.png": {
+      "sourceSha256": "5e7e0d1203a4fa8dde0b8a77da18b32964eaa96676ca46ec1bfaa86a3aa1bac1",
+      "rgbaSha256": "a92ff5f873585c3731ece20a3b72d8f42fe25a054649bd468cdd211406476c8e",
+      "width": 64,
+      "height": 64
+    },
+    "groups.png": {
+      "sourceSha256": "8a21053ad487f1bcc733fded7449f2454a6e0406f9d0a61f8c31e5ce3a702468",
+      "rgbaSha256": "0a16c84ac7ec56c6f149ee6ea270e815654c9ac5b93a5ae4c6e63268274e95a7",
+      "width": 64,
+      "height": 64
+    },
+    "import.png": {
+      "sourceSha256": "40fa6b9a5b118a9a3d13fefd413601221a2aea98c262e8a874753718ee99ebcd",
+      "rgbaSha256": "3fd6149b4fd3149935697b7c6ec7eee1c43ad4e86c54fee658b76e4b75266a23",
+      "width": 64,
+      "height": 64
+    },
+    "info.png": {
+      "sourceSha256": "88f5e95d03955d9bf640aaa36dc85620f813c2ce0704c60c646020174792c72a",
+      "rgbaSha256": "4464915212dfac8cd844750ffcd53783eeb13b0bc2a9f21bb4d5adaf6b937c7c",
+      "width": 64,
+      "height": 64
+    },
+    "marketplace.png": {
+      "sourceSha256": "164f11210b0f22626bd99b7069447ae04e09e72ffb1140b51530793f1592470e",
+      "rgbaSha256": "9cf916482692ea95704bc59af2ed802f6eeaf20d63e2c88b1739b8c8e6944d21",
+      "width": 64,
+      "height": 64
+    },
+    "mop.png": {
+      "sourceSha256": "04758fa3719d6765ae08f88d31323ab1b55e1693fabcace373ba41c19835771c",
+      "rgbaSha256": "649acd38541b98db1bcc6612be88003f5866d683678af4ec3d98be916be48bfc",
+      "width": 64,
+      "height": 64
+    },
+    "news.png": {
+      "sourceSha256": "54b0b882f9e32c1a4eaf5b8dec9dcb6b45e444b73946c5c6583eff2e37afbfca",
+      "rgbaSha256": "b575793cc329a017b748975401462899655d29811256b96c1d03fdcfe7196a81",
+      "width": 64,
+      "height": 64
+    },
+    "pref.png": {
+      "sourceSha256": "42a92bd5ab71c48ab47c4ef71c4c37e32c54df84a5c48a4c9f71e7bd9b7c59a8",
+      "rgbaSha256": "1a962b74a247dd10224acba865d6e5848e76303d122fc794ae667e89771d8779",
+      "width": 64,
+      "height": 64
+    },
+    "profile.png": {
+      "sourceSha256": "3322b55b690d7d06763edf58b168594f30397de35b6e9c14504172e2e46423ce",
+      "rgbaSha256": "3bd9b236fa4bceb6c3604c526f9dfab317acf775ea9d0469649fb1c7696cae2b",
+      "width": 64,
+      "height": 64
+    },
+    "reels.png": {
+      "sourceSha256": "19e49fc15d17bb8449afd0ead3c478a7c410117b5ae0ac203c0d472da26d8f70",
+      "rgbaSha256": "cf794fd99b15935fadf89b647108f9d04aec556ff776e2c71daeb3743f54bc6f",
+      "width": 64,
+      "height": 64
+    },
+    "reset.png": {
+      "sourceSha256": "504849998267ed40a5fcbfbca5e5e938d713675c54ec0a76da501db3ce033f85",
+      "rgbaSha256": "8978facb1c4d4ceae25b22896046c3a192d3dffcf4345d04a710cbf173f3871c",
+      "width": 64,
+      "height": 64
+    },
+    "save.png": {
+      "sourceSha256": "891dfeb0e6fde021ec10b2d725fbfd1e3dd8d5b284d7f84ddfb21f61b9f72287",
+      "rgbaSha256": "7d4fd5fb32add048f89867dcf70b9ffb543cd766ab2ac561f446e0e952fb47e0",
+      "width": 64,
+      "height": 64
+    },
+    "search.png": {
+      "sourceSha256": "a8a93f65487e476c79935ede85145f48a09d9c73e0770f2ed9ffe9387d84b0eb",
+      "rgbaSha256": "e0c3521fc12ed47ed72a0f71e22fe8806bf7f297a53a9b5bf471818438ad1527",
+      "width": 64,
+      "height": 64
+    },
+    "videos.png": {
+      "sourceSha256": "8c36e1bfd5917eba6cff244d64e6e25613ee4eb48bbdad518bc9cf2f023df939",
+      "rgbaSha256": "751ffb2a11259b2cf4a54faa4a1a745ab91507b5dd7ce32cb7ddb7dd680013d1",
+      "width": 64,
+      "height": 64
+    }
+  }
+}

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import type { DomSnapshot } from "./dom-snapshot";
+import { unwrapReportMarkdown } from "./report-markdown";
 
 /** Offline consumers depend on the versioned snapshot while retaining the complete environment and diagnostic envelope. */
 export interface ReportDocument {
@@ -205,7 +206,7 @@ function snapshot(value: unknown): value is DomSnapshot {
 export function parseReportDocument(text: string): ReportDocument | null {
   if (text.length > 12_000_000) return null;
   try {
-    const value: unknown = JSON.parse(text);
+    const value: unknown = JSON.parse(unwrapReportMarkdown(text));
     return record(value) &&
       value.schemaVersion === 2 &&
       typeof value.generatedAt === "string" &&

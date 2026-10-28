@@ -131,6 +131,7 @@ export class SnapshotAttributes {
     element: Element,
     content: SnapshotContent
   ): { attributes: Record<string, string>; changes: Record<string, SnapshotAttributeChange> } {
+    this.privacy.rememberSvgDisclosure(element);
     const attributes: Record<string, string> = {};
     const changes: Record<string, SnapshotAttributeChange> = {};
     const maximum = Math.max(0, Math.min(64, this.attributeLimit - this.attributeReads));

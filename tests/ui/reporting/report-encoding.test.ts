@@ -3,6 +3,11 @@
 
 import { gzipSync } from "node:zlib";
 import { encodeReport } from "../../../src/diagnostics/report-encoding";
+import {
+  formatReportMarkdown,
+  unwrapReportMarkdown,
+} from "../../../src/core/diagnostics/report-markdown";
+import { translations } from "../../../src/i18n";
 import { decodeReport, inspectReportSelector } from "../../../tools/inspect-report";
 import { snapshotLimits } from "../../../src/core/diagnostics/dom-snapshot";
 import type { ReportDocument } from "../../../src/core/diagnostics/report-document";
@@ -140,6 +145,38 @@ test("automatic packing makes repeated structural evidence substantially smaller
   const pasted = await encodeReport(data);
   expect(pasted.length).toBeLessThan(JSON.stringify(data).length / 4);
   expect(decodeReport(pasted)).toEqual(data);
+});
+
+test.each(Object.values(translations))(
+  "localized collapsible reports round-trip through pasted and quoted comments: $DLG_REPORT_BUG",
+  async (catalog) => {
+    const original = report();
+    const encoded = await encodeReport(original);
+    const markdown = formatReportMarkdown(encoded, `${catalog.DLG_REPORT_BUG} — CMF 6.4.0`);
+    expect(markdown).toMatch(/^<details>\n<summary>/);
+    expect(markdown).not.toContain("<details open");
+    expect(decodeReport(markdown)).toEqual(original);
+    expect(
+      decodeReport(
+        markdown
+          .split("\n")
+          .map((line) => `> ${line}`)
+          .join("\n")
+      )
+    ).toEqual(original);
+    expect(unwrapReportMarkdown(markdown)).toBe(encoded);
+  }
+);
+
+test("HTML summaries and fence-like captured copy cannot escape the collapsible report", () => {
+  const original = report();
+  original.extra = "```json </details> ```";
+  const payload = JSON.stringify(original);
+  const markdown = formatReportMarkdown(payload, '</summary><script>alert("private")</script>');
+  expect(markdown).toContain("&lt;/summary&gt;&lt;script&gt;");
+  expect(markdown).toContain("````json");
+  expect(decodeReport(markdown)).toEqual(original);
+  expect(() => decodeReport(markdown.replace(/<\/details>$/, ""))).toThrow();
 });
 
 test("corrupted, unsupported and oversized compressed reports fail before fixture reconstruction", () => {

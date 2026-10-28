@@ -6,11 +6,13 @@ import { gunzipSync } from "node:zlib";
 import { JSDOM } from "jsdom";
 import { parseReportDocument } from "../src/core/diagnostics/report-document";
 import type { ReportDocument } from "../src/core/diagnostics/report-document";
+import { unwrapReportMarkdown } from "../src/core/diagnostics/report-markdown";
 import { snapshotRegionHtml, testSnapshotSelector } from "../src/diagnostics/dom-fixture";
 
 /** Decode pasted report text with strict compressed and inflated bounds before inspecting any DOM record. */
 export function decodeReport(text: string): ReportDocument {
   if (text.length > 16_000_000) throw new Error("Report exceeds supported size");
+  text = unwrapReportMarkdown(text);
   const value: unknown = JSON.parse(text);
   if (typeof value === "object" && value !== null && "encoding" in value) {
     if (

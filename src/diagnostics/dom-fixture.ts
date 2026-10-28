@@ -140,7 +140,13 @@ export function snapshotRegionHtml(snapshot: DomSnapshot, region: SnapshotRegion
   const references = snapshot.references
     .filter((reference) => !rootIds.has(reference.id))
     .map((reference) => reference.target || capturedIds.get(reference.id))
-    .map((target) => (target ? nodeHtml(target) : ""))
+    .map((target) => {
+      if (!target) return "";
+      const markup = nodeHtml(target);
+      return target.namespace === "svg" && target.tag !== "svg"
+        ? `<svg xmlns="http://www.w3.org/2000/svg">${markup}</svg>`
+        : markup;
+    })
     .join("");
   return `<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; form-action 'none'; base-uri 'none'"><title>CMF sanitized DOM fixture</title></head><body>${tree}${references}</body></html>`;
 }

@@ -5,6 +5,7 @@ import { runInContext } from "node:vm";
 import { IDBFactory } from "fake-indexeddb";
 import { JSDOM, VirtualConsole, type DOMWindow } from "jsdom";
 import { buildUserscript } from "../../tools/build";
+import { decodeReport } from "../../tools/inspect-report";
 
 /** A synthetic page owns its errors and manager callbacks so bundle globals cannot leak between runs. */
 interface BundleFixture {
@@ -188,7 +189,8 @@ describe("compiled userscript smoke", () => {
       requiredElement<HTMLButtonElement>(dialog, "#BTNReportGenerate").click();
       const report = requiredElement<HTMLTextAreaElement>(dialog, ".cmf-report-output");
       await waitFor(() => report.value.length > 0, "independent DOM snapshot capture");
-      const reportData: unknown = JSON.parse(report.value);
+      expect(report.value).toMatch(/^<details>\n<summary>/);
+      const reportData = decodeReport(report.value);
       expect(reportData).toEqual(
         expect.objectContaining({
           schemaVersion: 2,

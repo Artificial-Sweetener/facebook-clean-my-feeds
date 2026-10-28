@@ -7,6 +7,7 @@ import { videosSelectors } from "../../selectors/videos";
 import { sharedSelectors } from "../../selectors/shared";
 import type { SponsoredState } from "../types";
 import { getNewsBlocks } from "./blocks";
+import { getSvgDisclosure } from "./svg-disclosure";
 
 const cftParam = "__cft__[0]=";
 const maximumCandidateLinks = 10;
@@ -241,6 +242,17 @@ function inspectSponsored(post: Element | null, state: SponsoredState | null) {
   }).length;
   if (diagnostics.adsAboutLinkCount > 0) {
     diagnostics.matchedBy = "ads-about";
+    return { isSponsored: true, diagnostics };
+  }
+
+  if (
+    (state.isNF || state.isGF || state.isVF || state.isSF) &&
+    scope.dom.select("a[href] svg").some((graphic) => {
+      const link = graphic.closest("a[href]");
+      return link !== null && getSvgDisclosure(link, post) !== null;
+    })
+  ) {
+    diagnostics.matchedBy = "svg-disclosure";
     return { isSponsored: true, diagnostics };
   }
 

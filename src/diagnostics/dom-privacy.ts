@@ -6,6 +6,7 @@ import { sharedSelectors } from "../selectors/shared";
 import { matchesSponsoredLabel } from "../core/filters/disclosure-labels";
 import { matchesNewsLabel } from "../core/filters/labels";
 import { translations } from "../i18n";
+import { getSvgDisclosure } from "../feeds/shared/svg-disclosure";
 
 const authored = `${sharedSelectors.authoredContent}, textarea, input, [role="textbox"], [role="log"], [data-lexical-editor]`;
 const identity =
@@ -30,9 +31,18 @@ const fixedLabels = new Set(
   )
 );
 
-/** Require a header disclosure relationship rather than assuming every accessible name is public copy. */
+/**
+ * Require a header disclosure relationship before treating a link's label as public copy.
+ * @param element Candidate link whose metadata and label must establish sponsorship provenance.
+ * @returns Whether the link supplies a recognized public disclosure within its owning post header.
+ */
 export function isDisclosureLink(element: Element): boolean {
-  if (!element.matches("a[href]") || !element.closest("h4, h5")) return false;
+  if (!element.matches("a[href]")) return false;
+  const post =
+    element.closest(sharedSelectors.postOwner) ||
+    element.closest("div[aria-describedby], div[data-virtualized]");
+  if (post && getSvgDisclosure(element, post)) return true;
+  if (!element.closest("h4, h5")) return false;
   try {
     const url = new URL(element.getAttribute("href") || "", "https://www.facebook.com/");
     const text = boundedText(element);
@@ -139,9 +149,31 @@ function isPublicAuthorAction(element: Element): boolean {
 
 /** Locally remember identity strings and replace them within otherwise useful personalized interface labels. */
 export class SnapshotPrivacy {
+  readonly svgDisclosureText = new Map<Element, string>();
   private identities = new Set<string>();
   private identityPattern: RegExp | null = null;
   private compiledIdentities = -1;
+
+  /** Retain only complete recognized disclosure copy; unknown SVG names and timestamps keep ordinary redaction. */
+  rememberSvgDisclosure(element: Element): void {
+    if (!element.matches("a[href]") || this.svgDisclosureText.size >= 256) return;
+    const post =
+      element.closest(sharedSelectors.postOwner) ||
+      element.closest("div[aria-describedby], div[data-virtualized]");
+    const disclosure = post ? getSvgDisclosure(element, post) : null;
+    for (const target of disclosure?.textElements || []) {
+      if (this.svgDisclosureText.size >= 256) break;
+      this.svgDisclosureText.set(target, this.svgText(target));
+    }
+  }
+
+  /** Compare only direct contributing text so capture yields cannot transfer public provenance to replaced copy. */
+  private svgText(element: Element): string {
+    return Array.from(element.childNodes)
+      .filter((node) => node.nodeType === Node.TEXT_NODE)
+      .map((node) => node.textContent || "")
+      .join("");
+  }
 
   /** Derive identity evidence from bounded discovery rather than retaining or hashing private page text. */
   remember(element: Element): void {
@@ -177,6 +209,8 @@ export class SnapshotPrivacy {
     if (element.closest(authored)) return "authored";
     if (isPublicAuthorAction(element)) return "interface";
     if (element.closest(identity)) return "identity";
+    const publicSvgText = this.svgDisclosureText.get(element);
+    if (publicSvgText !== undefined && publicSvgText === this.svgText(element)) return "interface";
     const link = element.closest("a");
     if (link && !isInterfaceLink(link)) return "identity";
     if (

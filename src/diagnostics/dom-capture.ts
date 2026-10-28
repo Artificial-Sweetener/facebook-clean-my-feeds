@@ -179,7 +179,8 @@ class DomCapture {
     for (const [index, node] of Array.from(source.childNodes).entries()) {
       const previous = copy.children[index];
       if (node.nodeType !== Node.TEXT_NODE || previous?.kind !== "text") continue;
-      if (previous.content !== "interface" && node.textContent?.trim()) this.redacted--;
+      if (previous.content === "interface") continue;
+      if (node.textContent?.trim()) this.redacted--;
       copy.children[index] = this.text(node, "interface");
     }
   }
@@ -324,6 +325,11 @@ export async function captureDomSnapshot(
       }
       const copy = await capture.region(target, publicLeaf ? "interface" : undefined);
       references.push({ id: pending.id, status: "external", target: copy });
+    }
+    for (const source of capture.privacy.svgDisclosureText.keys()) {
+      const copy = capture.captured.get(source);
+      if (copy && capture.privacy.content(source) === "interface")
+        capture.promoteLabel(source, copy);
     }
     if (observer) countMutations(observer.takeRecords());
     return {

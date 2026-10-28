@@ -4339,6 +4339,29 @@
     }
   });
 
+  // src/core/diagnostics/report-markdown.ts
+  function formatReportMarkdown(payload, summary) {
+    const safeSummary = summary.replace(/\s+/g, " ").slice(0, 256).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+    let length = 3;
+    const runs = /`+/g;
+    let match;
+    while (match = runs.exec(payload)) length = Math.max(length, match[0].length + 1);
+    const fence = "`".repeat(length);
+    return `<details>
+<summary>${safeSummary}</summary>
+
+${fence}json
+${payload}
+${fence}
+
+</details>`;
+  }
+  var init_report_markdown = __esm({
+    "src/core/diagnostics/report-markdown.ts"() {
+      "use strict";
+    }
+  });
+
   // src/core/diagnostics/dom-snapshot.ts
   var snapshotLimits;
   var init_dom_snapshot = __esm({
@@ -5010,12 +5033,572 @@
     }
   });
 
+  // src/utils/random.ts
+  function generateRandomString(length = 13) {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const strArray = [chars.charAt(Math.floor(Math.random() * 52))];
+    for (let i = 1; i < length; i += 1) {
+      strArray.push(chars.charAt(Math.floor(Math.random() * chars.length)));
+    }
+    return strArray.join("");
+  }
+  var init_random = __esm({
+    "src/utils/random.ts"() {
+      "use strict";
+    }
+  });
+
+  // src/dom/attributes.ts
+  function initializeRuntimeAttributes(state) {
+    if (!state) {
+      return;
+    }
+    state.hideAtt = generateRandomString();
+    state.hideWithNoCaptionAtt = generateRandomString();
+    state.showAtt = generateRandomString();
+    state.cssHideEl = generateRandomString();
+    state.cssHideNumberOfShares = generateRandomString();
+    state.cssHideVerifiedBadge = generateRandomString();
+  }
+  var postAtt, postAttCPID, postPropDS, postAttChildFlag, postAttTab, postAttMPSkip, rvAtt, mainColumnAtt;
+  var init_attributes = __esm({
+    "src/dom/attributes.ts"() {
+      "use strict";
+      init_random();
+      postAtt = "cmfr";
+      postAttCPID = "cmfcpid";
+      postPropDS = "cmfDusted";
+      postAttChildFlag = "cmfcf";
+      postAttTab = "cmftsb";
+      postAttMPSkip = "cmfsmp";
+      rvAtt = "cmfrv";
+      mainColumnAtt = "cmfmc";
+    }
+  });
+
+  // src/dom/ownership.ts
+  function ownsPostElement(element, post, boundary = {}) {
+    var _a, _b;
+    if (!post.contains(element)) return false;
+    const marked = element.closest(`[${postAtt}]`);
+    if (marked && marked !== post) return false;
+    const authored2 = element.closest(sharedSelectors.authoredContent);
+    if (authored2 && post.contains(authored2)) return false;
+    if ((_a = boundary.bodies) == null ? void 0 : _a.some((body) => body.contains(element))) return false;
+    const owner = element.closest(sharedSelectors.postOwner);
+    if (!owner || owner === post || !post.contains(owner)) return true;
+    if (!boundary.allowArticleWrapper || post.matches(`${sharedSelectors.postOwner}, div[aria-describedby], div[data-virtualized]`))
+      return false;
+    const parentOwner = (_b = owner.parentElement) == null ? void 0 : _b.closest(sharedSelectors.postOwner);
+    return !parentOwner || !post.contains(parentOwner);
+  }
+  var init_ownership = __esm({
+    "src/dom/ownership.ts"() {
+      "use strict";
+      init_attributes();
+      init_shared();
+    }
+  });
+
+  // src/dom/content-version.ts
+  function ignoreContentAttributes(attributes) {
+    for (const attribute of attributes) if (attribute) ignoredAttributes.add(attribute);
+  }
+  function invalidate(scope, document2, records) {
+    if (!records.length) return;
+    const changed = /* @__PURE__ */ new Set();
+    for (const record of records) {
+      const presentationOnly = record.type === "attributes" && ignoredAttributes.has(record.attributeName || "");
+      let node = record.target;
+      while (node) {
+        if (node instanceof Element && scope.versions.has(node) && !(presentationOnly && node === record.target))
+          changed.add(node);
+        node = node.parentNode;
+      }
+      if (record.type === "attributes" && !presentationOnly) {
+        for (const post of scope.versions.keys()) {
+          if (record.target !== post && record.target.contains(post)) changed.add(post);
+        }
+      }
+      if (record.type === "childList") {
+        const moved = [...record.addedNodes, ...record.removedNodes];
+        for (const post of scope.versions.keys()) {
+          if (moved.some((node2) => node2.contains(post))) changed.add(post);
+        }
+      }
+    }
+    for (const [id, reference] of scope.references) {
+      const target = document2.getElementById(id);
+      if (target !== reference.target || records.some(
+        (record) => !!target && (target.contains(record.target) || record.target.contains(target))
+      )) {
+        for (const post of reference.posts) changed.add(post);
+      }
+      reference.target = target;
+    }
+    for (const post of changed) scope.versions.set(post, ++nextVersion);
+  }
+  function getContentVersion(post) {
+    var _a;
+    if (!post.isConnected || typeof MutationObserver === "undefined") return null;
+    const document2 = post.ownerDocument;
+    let scope = scopes.get(document2);
+    if (!scope) {
+      const versions = /* @__PURE__ */ new Map();
+      const references2 = /* @__PURE__ */ new Map();
+      const observer = new MutationObserver((records) => {
+        const current = scopes.get(document2);
+        if (current) invalidate(current, document2, records);
+      });
+      const onLoad = (event) => {
+        let node = event.target instanceof Node ? event.target : null;
+        while (node) {
+          if (node instanceof Element && versions.has(node)) versions.set(node, ++nextVersion);
+          node = node.parentNode;
+        }
+      };
+      scope = { observer, onLoad, versions, references: references2 };
+      document2.addEventListener("load", onLoad, true);
+      observer.observe(document2, {
+        subtree: true,
+        childList: true,
+        attributes: true,
+        characterData: true
+      });
+      scopes.set(document2, scope);
+    }
+    invalidate(scope, document2, scope.observer.takeRecords());
+    if (!scope.versions.has(post)) scope.versions.set(post, ++nextVersion);
+    return (_a = scope.versions.get(post)) != null ? _a : null;
+  }
+  function trackLabelReference(post, id) {
+    const scope = scopes.get(post.ownerDocument);
+    if (!scope || !post.isConnected) return;
+    let reference = scope.references.get(id);
+    if (!reference) {
+      reference = { target: post.ownerDocument.getElementById(id), posts: /* @__PURE__ */ new Set() };
+      scope.references.set(id, reference);
+    }
+    reference.posts.add(post);
+  }
+  function forgetLabelReferences(post) {
+    const scope = scopes.get(post.ownerDocument);
+    if (!scope) return;
+    for (const [id, reference] of scope.references) {
+      reference.posts.delete(post);
+      if (!reference.posts.size) scope.references.delete(id);
+    }
+  }
+  function pruneContentVersions() {
+    for (const [document2, scope] of scopes) {
+      for (const post of scope.versions.keys()) {
+        if (post.isConnected) continue;
+        scope.versions.delete(post);
+        forgetLabelReferences(post);
+      }
+      if (!scope.versions.size) {
+        scope.observer.disconnect();
+        document2.removeEventListener("load", scope.onLoad, true);
+        scopes.delete(document2);
+      }
+    }
+  }
+  function clearContentVersions() {
+    for (const [document2, scope] of scopes) {
+      scope.observer.disconnect();
+      document2.removeEventListener("load", scope.onLoad, true);
+    }
+    scopes.clear();
+  }
+  function contentStamp(post) {
+    var _a;
+    return (_a = getContentVersion(post)) != null ? _a : `${post.getAttribute("aria-posinset") || ""}|${post.innerHTML}`;
+  }
+  var scopes, ignoredAttributes, nextVersion;
+  var init_content_version = __esm({
+    "src/dom/content-version.ts"() {
+      "use strict";
+      scopes = /* @__PURE__ */ new Map();
+      ignoredAttributes = /* @__PURE__ */ new Set([
+        "cmfr",
+        "cmfcpid",
+        "cmfcf",
+        "cmftsb",
+        "cmfsmp",
+        "cmfrv",
+        "cmfmc"
+      ]);
+      nextVersion = 0;
+    }
+  });
+
+  // src/dom/post-evidence.ts
+  function facebookUrl(link) {
+    const href = link.getAttribute("href");
+    const previous = destinations.get(link);
+    if ((previous == null ? void 0 : previous.href) === href) return previous.url;
+    let url = null;
+    try {
+      const parsed = href ? new URL(href, "https://www.facebook.com/") : null;
+      if (parsed && /^(https?:)$/.test(parsed.protocol) && !parsed.username && !parsed.password && (parsed.hostname === "facebook.com" || parsed.hostname.endsWith(".facebook.com")))
+        url = parsed;
+    } catch (e) {
+    }
+    destinations.set(link, { href, url });
+    return url;
+  }
+  function getPostEvidence(post) {
+    const version = getContentVersion(post);
+    const previous = cached.get(post);
+    if (version !== null && (previous == null ? void 0 : previous.version) === version) return previous.evidence;
+    forgetLabelReferences(post);
+    const evidence = new PostEvidence(post);
+    if (version !== null) cached.set(post, { version, evidence });
+    return evidence;
+  }
+  var destinations, PostEvidence, cached;
+  var init_post_evidence = __esm({
+    "src/dom/post-evidence.ts"() {
+      "use strict";
+      init_content_version();
+      destinations = /* @__PURE__ */ new WeakMap();
+      PostEvidence = class {
+        /** Keep every query, name and referenced label attached to its owning post scope. */
+        constructor(post) {
+          this.post = post;
+          this.queries = /* @__PURE__ */ new WeakMap();
+          this.visibility = /* @__PURE__ */ new WeakMap();
+          this.painted = /* @__PURE__ */ new WeakMap();
+          this.texts = /* @__PURE__ */ new WeakMap();
+          this.names = /* @__PURE__ */ new WeakMap();
+          this.contentTexts = /* @__PURE__ */ new Map();
+        }
+        /** Execute each selector once per scope and content version without collecting unused filter facts. */
+        select(selector, root = this.post) {
+          let queries = this.queries.get(root);
+          if (!queries) {
+            queries = /* @__PURE__ */ new Map();
+            this.queries.set(root, queries);
+          }
+          let elements = queries.get(selector);
+          if (!elements) {
+            elements = Array.from(root.querySelectorAll(selector));
+            queries.set(selector, elements);
+          }
+          return elements;
+        }
+        /** Reuse bounded body-text extraction across enabled filters and stable recovery sweeps. */
+        readText(key, read) {
+          let text = this.contentTexts.get(key);
+          if (!text) {
+            text = read();
+            this.contentTexts.set(key, text);
+          }
+          return text;
+        }
+        /** Exclude accessibility-hidden metadata while sharing its physical-visibility cache with visual-only counters. */
+        isVisible(element) {
+          const previous = this.visibility.get(element);
+          if (previous !== void 0) return previous;
+          const visible2 = this.isPainted(element) && element.getAttribute("aria-hidden") !== "true";
+          this.visibility.set(element, visible2);
+          return visible2;
+        }
+        /** Read physical visibility once per version, retaining visually displayed counters that Facebook intentionally marks aria-hidden. */
+        isPainted(element) {
+          var _a;
+          const previous = this.painted.get(element);
+          if (previous !== void 0) return previous;
+          const style = (_a = element.ownerDocument.defaultView) == null ? void 0 : _a.getComputedStyle(element);
+          const visible2 = !element.matches("script, style, [hidden]") && (style == null ? void 0 : style.display) !== "none" && (style == null ? void 0 : style.visibility) !== "hidden";
+          this.painted.set(element, visible2);
+          return visible2;
+        }
+        /** Ignore concealed metadata ancestors while allowing diagnostics on a post CMF itself has collapsed. */
+        isRendered(element) {
+          let ancestor = element;
+          while (ancestor && ancestor !== this.post) {
+            if (!this.isVisible(ancestor)) return false;
+            ancestor = ancestor.parentElement;
+          }
+          return ancestor === this.post;
+        }
+        /**
+         * Read fragmented control copy with strict node/character ceilings; oversized labels remain unmatched.
+         * @param control Owned metadata control; surrounding post copy cannot contribute to its label.
+         * @returns Visible label text or an empty string when the traversal budget is exhausted.
+         */
+        visibleText(control2) {
+          const previous = this.texts.get(control2);
+          if (previous !== void 0) return previous;
+          const walker = control2.ownerDocument.createTreeWalker(control2, NodeFilter.SHOW_ALL);
+          let node = control2;
+          let text = "";
+          let nodes = 0;
+          while (node) {
+            if (++nodes > 128 || text.length > 256) {
+              text = "";
+              break;
+            }
+            let element = node instanceof Element ? node : node.parentElement;
+            let visible2 = true;
+            while (element && control2.contains(element)) {
+              if (!this.isVisible(element)) {
+                visible2 = false;
+                break;
+              }
+              if (element === control2) break;
+              element = element.parentElement;
+            }
+            if (visible2 && node.nodeType === Node.TEXT_NODE) text += node.textContent || "";
+            node = walker.nextNode();
+          }
+          if (text.length > 256) text = "";
+          this.texts.set(control2, text);
+          return text;
+        }
+        /** Read non-rendered accessible label text without allowing oversized referenced subtrees to monopolize a scan. */
+        labelText(label) {
+          const walker = label.ownerDocument.createTreeWalker(label, NodeFilter.SHOW_ALL);
+          let node = label;
+          let text = "";
+          let nodes = 0;
+          while (node) {
+            if (++nodes > 128) return "";
+            if (node.nodeType === Node.TEXT_NODE) text += node.textContent || "";
+            if (text.length > 256) return "";
+            node = walker.nextNode();
+          }
+          return text;
+        }
+        /** Resolve bounded ARIA dependencies, including IDs that have not appeared in the document yet. */
+        referencedLabels(element) {
+          var _a;
+          const ids = ((_a = element.getAttribute("aria-labelledby")) == null ? void 0 : _a.trim().split(/\s+/)) || [];
+          if (!ids.length || ids.length > 8) return [null];
+          return ids.map((id) => {
+            return this.referenceTarget(id);
+          });
+        }
+        /** Subscribe before resolving so late insertion, replacement or text edits invalidate a cached negative result. */
+        referenceTarget(id) {
+          trackLabelReference(this.post, id);
+          return this.post.ownerDocument.getElementById(id) || this.select("[id]").find((label) => label.id === id) || null;
+        }
+        /** Preserve accessible-name precedence without borrowing ancestor copy or unbounded referenced text. */
+        explicitNames(element) {
+          var _a;
+          const previous = this.names.get(element);
+          if (previous) return previous;
+          const labels2 = element.hasAttribute("aria-labelledby") ? this.referencedLabels(element) : [];
+          const reference = labels2.length && labels2.every((label) => label && !label.contains(element)) ? labels2.map((label) => label ? this.labelText(label) : "").join(" ").trim() : "";
+          const title = (_a = Array.from(element.children).find(
+            (child) => child.localName === "title"
+          )) == null ? void 0 : _a.textContent;
+          const name = reference || element.getAttribute("aria-label") || title || element.getAttribute("title") || "";
+          const names = name.trim() && name.length <= 256 ? [name] : [];
+          this.names.set(element, names);
+          return names;
+        }
+      };
+      cached = /* @__PURE__ */ new WeakMap();
+    }
+  });
+
+  // src/dom/svg-text.ts
+  function readSvgText(graphic, post) {
+    const evidence = getPostEvidence(post);
+    let results = cache.get(evidence);
+    if (!results) {
+      results = /* @__PURE__ */ new WeakMap();
+      cache.set(evidence, results);
+    }
+    if (results.has(graphic)) return results.get(graphic) || null;
+    const active = /* @__PURE__ */ new Set();
+    const textElements = /* @__PURE__ */ new Set();
+    let nodes = 0;
+    let characters = 0;
+    const control2 = graphic.closest('a, button, [role="button"], [role="link"]');
+    function read(element, depth) {
+      var _a;
+      if (++nodes > 128 || depth > 24 || active.has(element) || element.namespaceURI !== svgNamespace || !supportedTags.has(element.localName))
+        return null;
+      if (!evidence.isPainted(element)) return "";
+      if (element.closest(`${sharedSelectors.authoredContent}, ${sharedSelectors.profileName}`))
+        return null;
+      const owner = element.closest(sharedSelectors.postOwner);
+      const ownerControl = element.closest('a, button, [role="button"], [role="link"]');
+      if (owner && owner !== post || ownerControl && ownerControl !== control2) return null;
+      active.add(element);
+      let text2 = "";
+      if (element.localName === "use") {
+        const href = (_a = element.getAttribute("href")) != null ? _a : element.getAttribute("xlink:href");
+        if (!href || !/^#[^\s#]{1,512}$/.test(href)) return null;
+        const target = evidence.referenceTarget(href.slice(1));
+        if (!target) return null;
+        const resolved = read(target, depth + 1);
+        if (resolved === null) return null;
+        text2 = resolved;
+      } else {
+        for (const child of Array.from(element.childNodes)) {
+          if (++nodes > 128) return null;
+          if (child instanceof Element) {
+            const resolved = read(child, depth + 1);
+            if (resolved === null) return null;
+            text2 += resolved;
+          } else if (child.nodeType === Node.TEXT_NODE) {
+            const value = child.textContent || "";
+            if (value.trim() && !["text", "tspan"].includes(element.localName)) return null;
+            if (["text", "tspan"].includes(element.localName)) {
+              characters += value.length;
+              if (characters > 256) return null;
+              text2 += value;
+              textElements.add(element);
+            }
+          }
+        }
+      }
+      active.delete(element);
+      return text2;
+    }
+    const text = read(graphic, 0);
+    const result = (text == null ? void 0 : text.trim()) ? { text, textElements: Array.from(textElements) } : null;
+    results.set(graphic, result);
+    return result;
+  }
+  var cache, svgNamespace, supportedTags;
+  var init_svg_text = __esm({
+    "src/dom/svg-text.ts"() {
+      "use strict";
+      init_post_evidence();
+      init_shared();
+      cache = /* @__PURE__ */ new WeakMap();
+      svgNamespace = "http://www.w3.org/2000/svg";
+      supportedTags = /* @__PURE__ */ new Set(["svg", "g", "symbol", "use", "text", "tspan"]);
+    }
+  });
+
+  // src/feeds/shared/blocks.ts
+  function isOwnedLayoutSignal(element, post) {
+    var _a;
+    if (!getPostEvidence(post).isRendered(element)) return false;
+    const owner = element.closest(sharedSelectors.postOwner);
+    const authoredParent = (_a = element.parentElement) == null ? void 0 : _a.closest(sharedSelectors.authoredContent);
+    return (!owner || owner === post || !post.contains(owner)) && (!authoredParent || authoredParent === post || !post.contains(authoredParent));
+  }
+  function getSemanticBlocks(post) {
+    const evidence = getPostEvidence(post);
+    const profile = evidence.select(sharedSelectors.profileName).find((element) => isOwnedLayoutSignal(element, post));
+    if (!profile) return null;
+    const message = evidence.select(sharedSelectors.storyMessage).find((element) => isOwnedLayoutSignal(element, post));
+    const contents = message ? [message] : evidence.select("img, video").filter(
+      (media) => isOwnedLayoutSignal(media, post) && !media.closest(
+        'h4, h5, button, [role="button"], [data-ad-rendering-role="profile_name"]'
+      )
+    );
+    for (const content of contents) {
+      const blocks = semanticBlocks(post, profile, content);
+      if (blocks) return blocks;
+    }
+    return null;
+  }
+  function semanticBlocks(post, profile, message) {
+    if (profile.contains(message) || message.contains(profile)) return null;
+    let container = profile.parentElement;
+    while (container && container !== post && !container.contains(message))
+      container = container.parentElement;
+    if (!container || !container.contains(message)) return null;
+    const children = Array.from(container.children);
+    const headerIndex = children.findIndex((child) => child.contains(profile));
+    const messageIndex = children.findIndex((child) => child.contains(message));
+    if (headerIndex < 0 || messageIndex <= headerIndex) return null;
+    return children.slice(headerIndex).filter((block) => getPostEvidence(post).isRendered(block));
+  }
+  function getNewsBlocks(post) {
+    const evidence = getPostEvidence(post);
+    const cached2 = cachedBlocks.get(evidence);
+    if (cached2) return cached2;
+    const semantic = getSemanticBlocks(post);
+    if (semantic) {
+      cachedBlocks.set(evidence, semantic);
+      return semantic;
+    }
+    let query = "div[aria-posinset] > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div";
+    let blocks = evidence.select(query).filter((block) => evidence.isRendered(block));
+    if (blocks.length <= 1) {
+      query = "div[aria-posinset] > div > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div > div";
+      blocks = evidence.select(query).filter((block) => evidence.isRendered(block));
+    }
+    const selected = blocks.length > 1 ? blocks : evidence.select(query);
+    cachedBlocks.set(evidence, selected);
+    return selected;
+  }
+  function getGroupsBlocks(post) {
+    return getNewsBlocks(post);
+  }
+  var cachedBlocks;
+  var init_blocks = __esm({
+    "src/feeds/shared/blocks.ts"() {
+      "use strict";
+      init_post_evidence();
+      init_shared();
+      cachedBlocks = /* @__PURE__ */ new WeakMap();
+    }
+  });
+
+  // src/feeds/shared/svg-disclosure.ts
+  function getSvgDisclosure(control2, post) {
+    var _a;
+    if (!control2.querySelector("svg")) return null;
+    const evidence = getPostEvidence(post);
+    let results = cache2.get(evidence);
+    if (!results) {
+      results = /* @__PURE__ */ new WeakMap();
+      cache2.set(evidence, results);
+    }
+    if (results.has(control2)) return results.get(control2) || null;
+    const url = facebookUrl(control2);
+    const blocks = getNewsBlocks(post);
+    const name = control2.getAttribute("aria-label");
+    let result = null;
+    if (control2.matches("a[href]") && (url == null ? void 0 : url.searchParams.get("__cft__[0]")) && !url.pathname.startsWith("/groups/") && !url.searchParams.has("section_header_type") && !control2.hasAttribute("aria-labelledby") && (!name || matchesSponsoredLabel(name)) && (control2.closest("h4, h5") || ((_a = blocks[0]) == null ? void 0 : _a.contains(control2))) && ownsPostElement(control2, post, { bodies: blocks.slice(1) }) && evidence.isRendered(control2)) {
+      for (const graphic of evidence.select("svg", control2).slice(0, 16)) {
+        if (graphic.closest('a, button, [role="button"], [role="link"]') !== control2 || !evidence.isRendered(graphic) || graphic.hasAttribute("aria-labelledby"))
+          continue;
+        const graphicName = graphic.getAttribute("aria-label");
+        if (graphicName && !matchesSponsoredLabel(graphicName)) continue;
+        const resolved = readSvgText(graphic, post);
+        if (resolved && matchesSponsoredLabel(resolved.text)) {
+          result = resolved;
+          break;
+        }
+      }
+    }
+    results.set(control2, result);
+    return result;
+  }
+  var cache2;
+  var init_svg_disclosure = __esm({
+    "src/feeds/shared/svg-disclosure.ts"() {
+      "use strict";
+      init_disclosure_labels2();
+      init_ownership();
+      init_post_evidence();
+      init_svg_text();
+      init_blocks();
+      cache2 = /* @__PURE__ */ new WeakMap();
+    }
+  });
+
   // src/diagnostics/dom-privacy.ts
   function normalizeLabel2(value) {
     return value.normalize("NFKC").replace(/\s+/g, " ").trim().toLocaleLowerCase("en-US");
   }
   function isDisclosureLink(element) {
-    if (!element.matches("a[href]") || !element.closest("h4, h5")) return false;
+    if (!element.matches("a[href]")) return false;
+    const post = element.closest(sharedSelectors.postOwner) || element.closest("div[aria-describedby], div[data-virtualized]");
+    if (post && getSvgDisclosure(element, post)) return true;
+    if (!element.closest("h4, h5")) return false;
     try {
       const url = new URL(element.getAttribute("href") || "", "https://www.facebook.com/");
       const text = boundedText(element);
@@ -5081,6 +5664,7 @@
       init_disclosure_labels2();
       init_labels();
       init_i18n();
+      init_svg_disclosure();
       authored = `${sharedSelectors.authoredContent}, textarea, input, [role="textbox"], [role="log"], [data-lexical-editor]`;
       identity = '[data-ad-rendering-role="profile_name"], [data-hovercard], [data-profileid], [data-userid]';
       control = 'button, [role="button"], [role="menuitem"], [role="tab"], [role="checkbox"], [role="switch"], [role="option"]';
@@ -5095,9 +5679,24 @@
       );
       SnapshotPrivacy = class {
         constructor() {
+          this.svgDisclosureText = /* @__PURE__ */ new Map();
           this.identities = /* @__PURE__ */ new Set();
           this.identityPattern = null;
           this.compiledIdentities = -1;
+        }
+        /** Retain only complete recognized disclosure copy; unknown SVG names and timestamps keep ordinary redaction. */
+        rememberSvgDisclosure(element) {
+          if (!element.matches("a[href]") || this.svgDisclosureText.size >= 256) return;
+          const post = element.closest(sharedSelectors.postOwner) || element.closest("div[aria-describedby], div[data-virtualized]");
+          const disclosure = post ? getSvgDisclosure(element, post) : null;
+          for (const target of (disclosure == null ? void 0 : disclosure.textElements) || []) {
+            if (this.svgDisclosureText.size >= 256) break;
+            this.svgDisclosureText.set(target, this.svgText(target));
+          }
+        }
+        /** Compare only direct contributing text so capture yields cannot transfer public provenance to replaced copy. */
+        svgText(element) {
+          return Array.from(element.childNodes).filter((node) => node.nodeType === Node.TEXT_NODE).map((node) => node.textContent || "").join("");
         }
         /** Derive identity evidence from bounded discovery rather than retaining or hashing private page text. */
         remember(element) {
@@ -5129,6 +5728,8 @@
           if (element.closest(authored)) return "authored";
           if (isPublicAuthorAction(element)) return "interface";
           if (element.closest(identity)) return "identity";
+          const publicSvgText = this.svgDisclosureText.get(element);
+          if (publicSvgText !== void 0 && publicSvgText === this.svgText(element)) return "interface";
           const link = element.closest("a");
           if (link && !isInterfaceLink(link)) return "identity";
           if (link && isDisclosureLink(link) && element.closest("svg[aria-label], svg[aria-labelledby], span[aria-labelledby]"))
@@ -5342,6 +5943,7 @@
          * @returns Safe attribute values plus transformation categories for the offline inspector.
          */
         read(element, content) {
+          this.privacy.rememberSvgDisclosure(element);
           const attributes = {};
           const changes = {};
           const maximum = Math.max(0, Math.min(64, this.attributeLimit - this.attributeReads));
@@ -5687,6 +6289,11 @@
         const copy = await capture.region(target, publicLeaf ? "interface" : void 0);
         references2.push({ id: pending.id, status: "external", target: copy });
       }
+      for (const source of capture.privacy.svgDisclosureText.keys()) {
+        const copy = capture.captured.get(source);
+        if (copy && capture.privacy.content(source) === "interface")
+          capture.promoteLabel(source, copy);
+      }
       if (observer) countMutations(observer.takeRecords());
       return {
         version: 1,
@@ -5822,7 +6429,8 @@
           for (const [index, node] of Array.from(source.childNodes).entries()) {
             const previous = copy.children[index];
             if (node.nodeType !== Node.TEXT_NODE || (previous == null ? void 0 : previous.kind) !== "text") continue;
-            if (previous.content !== "interface" && ((_a = node.textContent) == null ? void 0 : _a.trim())) this.redacted--;
+            if (previous.content === "interface") continue;
+            if ((_a = node.textContent) == null ? void 0 : _a.trim()) this.redacted--;
             copy.children[index] = this.text(node, "interface");
           }
         }
@@ -5919,7 +6527,7 @@
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:5f0f979d98bb505c6521dcb634cc08b2fafd5528368c08feeced9e13d5791b40" : "unbundled";
+      buildIdentity = true ? "source-sha256:2f096dcc7f767a1717104f247cc16259537c3eaf4c402b97c5cb39e6a95df5aa" : "unbundled";
     }
   });
 
@@ -6155,49 +6763,6 @@
     }
   });
 
-  // src/utils/random.ts
-  function generateRandomString(length = 13) {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    const strArray = [chars.charAt(Math.floor(Math.random() * 52))];
-    for (let i = 1; i < length; i += 1) {
-      strArray.push(chars.charAt(Math.floor(Math.random() * chars.length)));
-    }
-    return strArray.join("");
-  }
-  var init_random = __esm({
-    "src/utils/random.ts"() {
-      "use strict";
-    }
-  });
-
-  // src/dom/attributes.ts
-  function initializeRuntimeAttributes(state) {
-    if (!state) {
-      return;
-    }
-    state.hideAtt = generateRandomString();
-    state.hideWithNoCaptionAtt = generateRandomString();
-    state.showAtt = generateRandomString();
-    state.cssHideEl = generateRandomString();
-    state.cssHideNumberOfShares = generateRandomString();
-    state.cssHideVerifiedBadge = generateRandomString();
-  }
-  var postAtt, postAttCPID, postPropDS, postAttChildFlag, postAttTab, postAttMPSkip, rvAtt, mainColumnAtt;
-  var init_attributes = __esm({
-    "src/dom/attributes.ts"() {
-      "use strict";
-      init_random();
-      postAtt = "cmfr";
-      postAttCPID = "cmfcpid";
-      postPropDS = "cmfDusted";
-      postAttChildFlag = "cmfcf";
-      postAttTab = "cmftsb";
-      postAttMPSkip = "cmfsmp";
-      rvAtt = "cmfrv";
-      mainColumnAtt = "cmfmc";
-    }
-  });
-
   // src/selectors/news.ts
   var newsSelectors;
   var init_news = __esm({
@@ -6328,307 +6893,6 @@
         mainColumn: 'div[role="region"] ~ div[role="main"]',
         postsQuery: 'div[role="feed"] > div > div'
       };
-    }
-  });
-
-  // src/dom/content-version.ts
-  function ignoreContentAttributes(attributes) {
-    for (const attribute of attributes) if (attribute) ignoredAttributes.add(attribute);
-  }
-  function invalidate(scope, document2, records) {
-    if (!records.length) return;
-    const changed = /* @__PURE__ */ new Set();
-    for (const record of records) {
-      const presentationOnly = record.type === "attributes" && ignoredAttributes.has(record.attributeName || "");
-      let node = record.target;
-      while (node) {
-        if (node instanceof Element && scope.versions.has(node) && !(presentationOnly && node === record.target))
-          changed.add(node);
-        node = node.parentNode;
-      }
-      if (record.type === "attributes" && !presentationOnly) {
-        for (const post of scope.versions.keys()) {
-          if (record.target !== post && record.target.contains(post)) changed.add(post);
-        }
-      }
-      if (record.type === "childList") {
-        const moved = [...record.addedNodes, ...record.removedNodes];
-        for (const post of scope.versions.keys()) {
-          if (moved.some((node2) => node2.contains(post))) changed.add(post);
-        }
-      }
-    }
-    for (const [id, reference] of scope.references) {
-      const target = document2.getElementById(id);
-      if (target !== reference.target || records.some(
-        (record) => !!target && (target.contains(record.target) || record.target.contains(target))
-      )) {
-        for (const post of reference.posts) changed.add(post);
-      }
-      reference.target = target;
-    }
-    for (const post of changed) scope.versions.set(post, ++nextVersion);
-  }
-  function getContentVersion(post) {
-    var _a;
-    if (!post.isConnected || typeof MutationObserver === "undefined") return null;
-    const document2 = post.ownerDocument;
-    let scope = scopes.get(document2);
-    if (!scope) {
-      const versions = /* @__PURE__ */ new Map();
-      const references2 = /* @__PURE__ */ new Map();
-      const observer = new MutationObserver((records) => {
-        const current = scopes.get(document2);
-        if (current) invalidate(current, document2, records);
-      });
-      const onLoad = (event) => {
-        let node = event.target instanceof Node ? event.target : null;
-        while (node) {
-          if (node instanceof Element && versions.has(node)) versions.set(node, ++nextVersion);
-          node = node.parentNode;
-        }
-      };
-      scope = { observer, onLoad, versions, references: references2 };
-      document2.addEventListener("load", onLoad, true);
-      observer.observe(document2, {
-        subtree: true,
-        childList: true,
-        attributes: true,
-        characterData: true
-      });
-      scopes.set(document2, scope);
-    }
-    invalidate(scope, document2, scope.observer.takeRecords());
-    if (!scope.versions.has(post)) scope.versions.set(post, ++nextVersion);
-    return (_a = scope.versions.get(post)) != null ? _a : null;
-  }
-  function trackLabelReference(post, id) {
-    const scope = scopes.get(post.ownerDocument);
-    if (!scope || !post.isConnected) return;
-    let reference = scope.references.get(id);
-    if (!reference) {
-      reference = { target: post.ownerDocument.getElementById(id), posts: /* @__PURE__ */ new Set() };
-      scope.references.set(id, reference);
-    }
-    reference.posts.add(post);
-  }
-  function forgetLabelReferences(post) {
-    const scope = scopes.get(post.ownerDocument);
-    if (!scope) return;
-    for (const [id, reference] of scope.references) {
-      reference.posts.delete(post);
-      if (!reference.posts.size) scope.references.delete(id);
-    }
-  }
-  function pruneContentVersions() {
-    for (const [document2, scope] of scopes) {
-      for (const post of scope.versions.keys()) {
-        if (post.isConnected) continue;
-        scope.versions.delete(post);
-        forgetLabelReferences(post);
-      }
-      if (!scope.versions.size) {
-        scope.observer.disconnect();
-        document2.removeEventListener("load", scope.onLoad, true);
-        scopes.delete(document2);
-      }
-    }
-  }
-  function clearContentVersions() {
-    for (const [document2, scope] of scopes) {
-      scope.observer.disconnect();
-      document2.removeEventListener("load", scope.onLoad, true);
-    }
-    scopes.clear();
-  }
-  function contentStamp(post) {
-    var _a;
-    return (_a = getContentVersion(post)) != null ? _a : `${post.getAttribute("aria-posinset") || ""}|${post.innerHTML}`;
-  }
-  var scopes, ignoredAttributes, nextVersion;
-  var init_content_version = __esm({
-    "src/dom/content-version.ts"() {
-      "use strict";
-      scopes = /* @__PURE__ */ new Map();
-      ignoredAttributes = /* @__PURE__ */ new Set([
-        "cmfr",
-        "cmfcpid",
-        "cmfcf",
-        "cmftsb",
-        "cmfsmp",
-        "cmfrv",
-        "cmfmc"
-      ]);
-      nextVersion = 0;
-    }
-  });
-
-  // src/dom/post-evidence.ts
-  function facebookUrl(link) {
-    const href = link.getAttribute("href");
-    const previous = destinations.get(link);
-    if ((previous == null ? void 0 : previous.href) === href) return previous.url;
-    let url = null;
-    try {
-      const parsed = href ? new URL(href, "https://www.facebook.com/") : null;
-      if (parsed && /^(https?:)$/.test(parsed.protocol) && !parsed.username && !parsed.password && (parsed.hostname === "facebook.com" || parsed.hostname.endsWith(".facebook.com")))
-        url = parsed;
-    } catch (e) {
-    }
-    destinations.set(link, { href, url });
-    return url;
-  }
-  function getPostEvidence(post) {
-    const version = getContentVersion(post);
-    const previous = cached.get(post);
-    if (version !== null && (previous == null ? void 0 : previous.version) === version) return previous.evidence;
-    forgetLabelReferences(post);
-    const evidence = new PostEvidence(post);
-    if (version !== null) cached.set(post, { version, evidence });
-    return evidence;
-  }
-  var destinations, PostEvidence, cached;
-  var init_post_evidence = __esm({
-    "src/dom/post-evidence.ts"() {
-      "use strict";
-      init_content_version();
-      destinations = /* @__PURE__ */ new WeakMap();
-      PostEvidence = class {
-        /** Keep every query, name and referenced label attached to its owning post scope. */
-        constructor(post) {
-          this.post = post;
-          this.queries = /* @__PURE__ */ new WeakMap();
-          this.visibility = /* @__PURE__ */ new WeakMap();
-          this.painted = /* @__PURE__ */ new WeakMap();
-          this.texts = /* @__PURE__ */ new WeakMap();
-          this.names = /* @__PURE__ */ new WeakMap();
-          this.contentTexts = /* @__PURE__ */ new Map();
-        }
-        /** Execute each selector once per scope and content version without collecting unused filter facts. */
-        select(selector, root = this.post) {
-          let queries = this.queries.get(root);
-          if (!queries) {
-            queries = /* @__PURE__ */ new Map();
-            this.queries.set(root, queries);
-          }
-          let elements = queries.get(selector);
-          if (!elements) {
-            elements = Array.from(root.querySelectorAll(selector));
-            queries.set(selector, elements);
-          }
-          return elements;
-        }
-        /** Reuse bounded body-text extraction across enabled filters and stable recovery sweeps. */
-        readText(key, read) {
-          let text = this.contentTexts.get(key);
-          if (!text) {
-            text = read();
-            this.contentTexts.set(key, text);
-          }
-          return text;
-        }
-        /** Exclude accessibility-hidden metadata while sharing its physical-visibility cache with visual-only counters. */
-        isVisible(element) {
-          const previous = this.visibility.get(element);
-          if (previous !== void 0) return previous;
-          const visible2 = this.isPainted(element) && element.getAttribute("aria-hidden") !== "true";
-          this.visibility.set(element, visible2);
-          return visible2;
-        }
-        /** Read physical visibility once per version, retaining visually displayed counters that Facebook intentionally marks aria-hidden. */
-        isPainted(element) {
-          var _a;
-          const previous = this.painted.get(element);
-          if (previous !== void 0) return previous;
-          const style = (_a = element.ownerDocument.defaultView) == null ? void 0 : _a.getComputedStyle(element);
-          const visible2 = !element.matches("script, style, [hidden]") && (style == null ? void 0 : style.display) !== "none" && (style == null ? void 0 : style.visibility) !== "hidden";
-          this.painted.set(element, visible2);
-          return visible2;
-        }
-        /** Ignore concealed metadata ancestors while allowing diagnostics on a post CMF itself has collapsed. */
-        isRendered(element) {
-          let ancestor = element;
-          while (ancestor && ancestor !== this.post) {
-            if (!this.isVisible(ancestor)) return false;
-            ancestor = ancestor.parentElement;
-          }
-          return ancestor === this.post;
-        }
-        /**
-         * Read fragmented control copy with strict node/character ceilings; oversized labels remain unmatched.
-         * @param control Owned metadata control; surrounding post copy cannot contribute to its label.
-         * @returns Visible label text or an empty string when the traversal budget is exhausted.
-         */
-        visibleText(control2) {
-          const previous = this.texts.get(control2);
-          if (previous !== void 0) return previous;
-          const walker = control2.ownerDocument.createTreeWalker(control2, NodeFilter.SHOW_ALL);
-          let node = control2;
-          let text = "";
-          let nodes = 0;
-          while (node) {
-            if (++nodes > 128 || text.length > 256) {
-              text = "";
-              break;
-            }
-            let element = node instanceof Element ? node : node.parentElement;
-            let visible2 = true;
-            while (element && control2.contains(element)) {
-              if (!this.isVisible(element)) {
-                visible2 = false;
-                break;
-              }
-              if (element === control2) break;
-              element = element.parentElement;
-            }
-            if (visible2 && node.nodeType === Node.TEXT_NODE) text += node.textContent || "";
-            node = walker.nextNode();
-          }
-          if (text.length > 256) text = "";
-          this.texts.set(control2, text);
-          return text;
-        }
-        /** Read non-rendered accessible label text without allowing oversized referenced subtrees to monopolize a scan. */
-        labelText(label) {
-          const walker = label.ownerDocument.createTreeWalker(label, NodeFilter.SHOW_ALL);
-          let node = label;
-          let text = "";
-          let nodes = 0;
-          while (node) {
-            if (++nodes > 128) return "";
-            if (node.nodeType === Node.TEXT_NODE) text += node.textContent || "";
-            if (text.length > 256) return "";
-            node = walker.nextNode();
-          }
-          return text;
-        }
-        /** Resolve bounded ARIA dependencies, including IDs that have not appeared in the document yet. */
-        referencedLabels(element) {
-          var _a;
-          const ids = ((_a = element.getAttribute("aria-labelledby")) == null ? void 0 : _a.trim().split(/\s+/)) || [];
-          if (!ids.length || ids.length > 8) return [null];
-          return ids.map((id) => {
-            trackLabelReference(this.post, id);
-            return element.ownerDocument.getElementById(id) || this.select("[id]").find((label) => label.id === id) || null;
-          });
-        }
-        /** Preserve accessible-name precedence without borrowing ancestor copy or unbounded referenced text. */
-        explicitNames(element) {
-          var _a;
-          const previous = this.names.get(element);
-          if (previous) return previous;
-          const labels2 = element.hasAttribute("aria-labelledby") ? this.referencedLabels(element) : [];
-          const reference = labels2.length && labels2.every((label) => label && !label.contains(element)) ? labels2.map((label) => label ? this.labelText(label) : "").join(" ").trim() : "";
-          const title = (_a = Array.from(element.children).find(
-            (child) => child.localName === "title"
-          )) == null ? void 0 : _a.textContent;
-          const name = reference || element.getAttribute("aria-label") || title || element.getAttribute("title") || "";
-          const names = name.trim() && name.length <= 256 ? [name] : [];
-          this.names.set(element, names);
-          return names;
-        }
-      };
-      cached = /* @__PURE__ */ new WeakMap();
     }
   });
 
@@ -7137,30 +7401,6 @@
     }
   });
 
-  // src/dom/ownership.ts
-  function ownsPostElement(element, post, boundary = {}) {
-    var _a, _b;
-    if (!post.contains(element)) return false;
-    const marked = element.closest(`[${postAtt}]`);
-    if (marked && marked !== post) return false;
-    const authored2 = element.closest(sharedSelectors.authoredContent);
-    if (authored2 && post.contains(authored2)) return false;
-    if ((_a = boundary.bodies) == null ? void 0 : _a.some((body) => body.contains(element))) return false;
-    const owner = element.closest(sharedSelectors.postOwner);
-    if (!owner || owner === post || !post.contains(owner)) return true;
-    if (!boundary.allowArticleWrapper || post.matches(`${sharedSelectors.postOwner}, div[aria-describedby], div[data-virtualized]`))
-      return false;
-    const parentOwner = (_b = owner.parentElement) == null ? void 0 : _b.closest(sharedSelectors.postOwner);
-    return !parentOwner || !post.contains(parentOwner);
-  }
-  var init_ownership = __esm({
-    "src/dom/ownership.ts"() {
-      "use strict";
-      init_attributes();
-      init_shared();
-    }
-  });
-
   // src/dom/info-boxes.ts
   function restoreDebug(box, record) {
     if (!record.debugApplied || box.getAttribute(record.showAttribute) !== "") return;
@@ -7429,74 +7669,6 @@
     }
   });
 
-  // src/feeds/shared/blocks.ts
-  function isOwnedLayoutSignal(element, post) {
-    var _a;
-    if (!getPostEvidence(post).isRendered(element)) return false;
-    const owner = element.closest(sharedSelectors.postOwner);
-    const authoredParent = (_a = element.parentElement) == null ? void 0 : _a.closest(sharedSelectors.authoredContent);
-    return (!owner || owner === post || !post.contains(owner)) && (!authoredParent || authoredParent === post || !post.contains(authoredParent));
-  }
-  function getSemanticBlocks(post) {
-    const evidence = getPostEvidence(post);
-    const profile = evidence.select(sharedSelectors.profileName).find((element) => isOwnedLayoutSignal(element, post));
-    if (!profile) return null;
-    const message = evidence.select(sharedSelectors.storyMessage).find((element) => isOwnedLayoutSignal(element, post));
-    const contents = message ? [message] : evidence.select("img, video").filter(
-      (media) => isOwnedLayoutSignal(media, post) && !media.closest(
-        'h4, h5, button, [role="button"], [data-ad-rendering-role="profile_name"]'
-      )
-    );
-    for (const content of contents) {
-      const blocks = semanticBlocks(post, profile, content);
-      if (blocks) return blocks;
-    }
-    return null;
-  }
-  function semanticBlocks(post, profile, message) {
-    if (profile.contains(message) || message.contains(profile)) return null;
-    let container = profile.parentElement;
-    while (container && container !== post && !container.contains(message))
-      container = container.parentElement;
-    if (!container || !container.contains(message)) return null;
-    const children = Array.from(container.children);
-    const headerIndex = children.findIndex((child) => child.contains(profile));
-    const messageIndex = children.findIndex((child) => child.contains(message));
-    if (headerIndex < 0 || messageIndex <= headerIndex) return null;
-    return children.slice(headerIndex).filter((block) => getPostEvidence(post).isRendered(block));
-  }
-  function getNewsBlocks(post) {
-    const evidence = getPostEvidence(post);
-    const cached2 = cachedBlocks.get(evidence);
-    if (cached2) return cached2;
-    const semantic = getSemanticBlocks(post);
-    if (semantic) {
-      cachedBlocks.set(evidence, semantic);
-      return semantic;
-    }
-    let query = "div[aria-posinset] > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div";
-    let blocks = evidence.select(query).filter((block) => evidence.isRendered(block));
-    if (blocks.length <= 1) {
-      query = "div[aria-posinset] > div > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div > div";
-      blocks = evidence.select(query).filter((block) => evidence.isRendered(block));
-    }
-    const selected = blocks.length > 1 ? blocks : evidence.select(query);
-    cachedBlocks.set(evidence, selected);
-    return selected;
-  }
-  function getGroupsBlocks(post) {
-    return getNewsBlocks(post);
-  }
-  var cachedBlocks;
-  var init_blocks = __esm({
-    "src/feeds/shared/blocks.ts"() {
-      "use strict";
-      init_post_evidence();
-      init_shared();
-      cachedBlocks = /* @__PURE__ */ new WeakMap();
-    }
-  });
-
   // src/feeds/shared/blocked-text.ts
   function findNewsBlockedText(post, options, filters) {
     if (!post || !options || !filters) {
@@ -7690,6 +7862,13 @@
       diagnostics.matchedBy = "ads-about";
       return { isSponsored: true, diagnostics };
     }
+    if ((state.isNF || state.isGF || state.isVF || state.isSF) && scope.dom.select("a[href] svg").some((graphic) => {
+      const link = graphic.closest("a[href]");
+      return link !== null && getSvgDisclosure(link, post) !== null;
+    })) {
+      diagnostics.matchedBy = "svg-disclosure";
+      return { isSponsored: true, diagnostics };
+    }
     const candidates = collectCftLinkCandidates(post, state, bodies, scope);
     diagnostics.cftLinks.selectedSource = candidates.selectedSource;
     diagnostics.cftLinks.selectedCount = candidates.links.length;
@@ -7771,6 +7950,7 @@
       init_videos();
       init_shared();
       init_blocks();
+      init_svg_disclosure();
       cftParam = "__cft__[0]=";
       maximumCandidateLinks = 10;
     }
@@ -10895,7 +11075,13 @@
       return { data: { error: "No context available." }, text: "" };
     }
     const data = await collectBugReportData(context, capture);
-    return { data, text: await encodeReport(data) };
+    return {
+      data,
+      text: formatReportMarkdown(
+        await encodeReport(data),
+        `${context.keyWords.DLG_REPORT_BUG} — CMF ${data.script.version}`
+      )
+    };
   }
   async function collectBugReportData(context, capture) {
     const { state, options, filters, keyWords, pathInfo: pathInfo2 } = context;
@@ -10944,6 +11130,7 @@
       "use strict";
       init_regex_validation();
       init_report_encoding();
+      init_report_markdown();
       init_dom_capture();
       init_serialization();
       init_redaction();

@@ -15,7 +15,7 @@ export function sanitizeReason(reason: unknown): string {
 }
 
 /**
- * Move the original post inside a details wrapper so users can inspect filtered content.
+ * Keep one in-place details wrapper per filtered post, preserving its open state across reclassification.
  * @param post Original content node; detached nodes are left untouched.
  * @param reason Human-readable filtering explanation.
  * @param marker Classification marker, with false preserving the empty-marker convention.
@@ -37,8 +37,6 @@ export function addCaptionForHiddenPost(
     return;
   }
 
-  const elDetails = document.createElement("details");
-  const elSummary = document.createElement("summary");
   if (!Array.isArray(keyWords.VERBOSITY_MESSAGE)) {
     return;
   }
@@ -47,27 +45,33 @@ export function addCaptionForHiddenPost(
     return;
   }
 
-  const elText = document.createTextNode(`${keyWords.VERBOSITY_MESSAGE[1]}${reason}`);
-
-  elSummary.appendChild(elText);
-  elDetails.appendChild(elSummary);
-  elDetails.setAttribute(attributes.postAtt, marker === false ? "" : String(marker));
-
-  if (post.classList.length > 0) {
-    elDetails.classList.add(...post.classList);
+  const parent = post.parentElement;
+  const existing = parent?.matches(`details[${attributes.postAtt}]`) ? parent : null;
+  const elDetails = existing || document.createElement("details");
+  let elSummary = elDetails.querySelector(":scope > summary");
+  if (!elSummary) {
+    elSummary = document.createElement("summary");
+    elDetails.prepend(elSummary);
+  }
+  const caption = `${keyWords.VERBOSITY_MESSAGE[1]}${reason}`;
+  if (elSummary.textContent !== caption) elSummary.textContent = caption;
+  const value = marker === false ? "" : String(marker);
+  if (elDetails.getAttribute(attributes.postAtt) !== value)
+    elDetails.setAttribute(attributes.postAtt, value);
+  if (!existing) {
+    if (post.classList.length > 0) elDetails.classList.add(...post.classList);
+    post.replaceWith(elDetails);
+    elDetails.appendChild(post);
   }
 
-  post.parentNode.appendChild(elDetails);
-  elDetails.appendChild(post);
-
   if (options.VERBOSITY_DEBUG) {
-    elDetails.setAttribute("open", "");
-    post.setAttribute(state.showAtt, "");
+    if (!elDetails.hasAttribute("open")) elDetails.setAttribute("open", "");
+    if (!post.hasAttribute(state.showAtt)) post.setAttribute(state.showAtt, "");
   }
 }
 
 /**
- * Attach a compact explanation inside a hidden post without introducing another wrapper.
+ * Reuse one compact explanation so repeated filtering cannot accumulate captions inside the post.
  */
 export function addMiniCaption(
   post: Element | null,
@@ -79,10 +83,12 @@ export function addMiniCaption(
     return;
   }
 
-  post.setAttribute(state.hideAtt, "");
-  const elTab = document.createElement("h6");
-  elTab.setAttribute(attributes.postAttTab, "0");
-  elTab.textContent = reason;
-
-  post.insertBefore(elTab, post.firstElementChild);
+  if (!post.hasAttribute(state.hideAtt)) post.setAttribute(state.hideAtt, "");
+  let elTab = post.querySelector(`:scope > h6[${attributes.postAttTab}]`);
+  if (!elTab) {
+    elTab = document.createElement("h6");
+    elTab.setAttribute(attributes.postAttTab, "0");
+    post.insertBefore(elTab, post.firstElementChild);
+  }
+  if (elTab.textContent !== reason) elTab.textContent = reason;
 }

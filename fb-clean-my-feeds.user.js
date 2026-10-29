@@ -6527,7 +6527,7 @@ ${fence}
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:2f096dcc7f767a1717104f247cc16259537c3eaf4c402b97c5cb39e6a95df5aa" : "unbundled";
+      buildIdentity = true ? "source-sha256:65b5870a8e56715ffcdf6571964c82f4ec1c7cdbba833532ba8f1c471cbe9a7e" : "unbundled";
     }
   });
 
@@ -7172,37 +7172,47 @@ ${fence}
     if (!post || !keyWords || !attributes || !state || !options) {
       return;
     }
-    const elDetails = document.createElement("details");
-    const elSummary = document.createElement("summary");
     if (!Array.isArray(keyWords.VERBOSITY_MESSAGE)) {
       return;
     }
     if (!post.parentNode) {
       return;
     }
-    const elText = document.createTextNode(`${keyWords.VERBOSITY_MESSAGE[1]}${reason}`);
-    elSummary.appendChild(elText);
-    elDetails.appendChild(elSummary);
-    elDetails.setAttribute(attributes.postAtt, marker === false ? "" : String(marker));
-    if (post.classList.length > 0) {
-      elDetails.classList.add(...post.classList);
+    const parent = post.parentElement;
+    const existing = (parent == null ? void 0 : parent.matches(`details[${attributes.postAtt}]`)) ? parent : null;
+    const elDetails = existing || document.createElement("details");
+    let elSummary = elDetails.querySelector(":scope > summary");
+    if (!elSummary) {
+      elSummary = document.createElement("summary");
+      elDetails.prepend(elSummary);
     }
-    post.parentNode.appendChild(elDetails);
-    elDetails.appendChild(post);
+    const caption = `${keyWords.VERBOSITY_MESSAGE[1]}${reason}`;
+    if (elSummary.textContent !== caption) elSummary.textContent = caption;
+    const value = marker === false ? "" : String(marker);
+    if (elDetails.getAttribute(attributes.postAtt) !== value)
+      elDetails.setAttribute(attributes.postAtt, value);
+    if (!existing) {
+      if (post.classList.length > 0) elDetails.classList.add(...post.classList);
+      post.replaceWith(elDetails);
+      elDetails.appendChild(post);
+    }
     if (options.VERBOSITY_DEBUG) {
-      elDetails.setAttribute("open", "");
-      post.setAttribute(state.showAtt, "");
+      if (!elDetails.hasAttribute("open")) elDetails.setAttribute("open", "");
+      if (!post.hasAttribute(state.showAtt)) post.setAttribute(state.showAtt, "");
     }
   }
   function addMiniCaption(post, reason, attributes, state) {
     if (!post || !attributes || !state) {
       return;
     }
-    post.setAttribute(state.hideAtt, "");
-    const elTab = document.createElement("h6");
-    elTab.setAttribute(attributes.postAttTab, "0");
-    elTab.textContent = reason;
-    post.insertBefore(elTab, post.firstElementChild);
+    if (!post.hasAttribute(state.hideAtt)) post.setAttribute(state.hideAtt, "");
+    let elTab = post.querySelector(`:scope > h6[${attributes.postAttTab}]`);
+    if (!elTab) {
+      elTab = document.createElement("h6");
+      elTab.setAttribute(attributes.postAttTab, "0");
+      post.insertBefore(elTab, post.firstElementChild);
+    }
+    if (elTab.textContent !== reason) elTab.textContent = reason;
   }
   var init_captions = __esm({
     "src/dom/captions.ts"() {
@@ -7991,24 +8001,49 @@ ${fence}
   });
 
   // src/feeds/news-revalidation.ts
+  function isUnloadedNewsPost(post) {
+    var _a;
+    const pending = [post];
+    let visited = 0;
+    let virtualized = false;
+    while (pending.length) {
+      const node = pending.pop();
+      if (!node || ++visited > 64) return false;
+      if (node.nodeType === Node.TEXT_NODE && ((_a = node.textContent) == null ? void 0 : _a.trim())) return false;
+      if (!(node instanceof Element)) continue;
+      if (node.parentElement === post && node.matches(`h6[${postAttTab}]`)) continue;
+      if (!node.matches("div, span") || node.hasAttribute("aria-label")) return false;
+      const role = node.getAttribute("role");
+      if (node !== post && role && role !== "none" && role !== "presentation") return false;
+      if (node.matches('div[data-virtualized="true"]')) virtualized = true;
+      if (visited + pending.length + node.childNodes.length > 64) return false;
+      pending.push(...Array.from(node.childNodes));
+    }
+    return virtualized;
+  }
   function rememberHiddenNewsContent(post) {
     if (post.hasAttribute(postAtt)) hiddenNewsContent.set(post, contentStamp(post));
     else hiddenNewsContent.delete(post);
   }
-  function resetChangedNewsPosts(root, state) {
+  function findChangedNewsPosts(root, state) {
     ignoreContentAttributes([state.hideAtt, state.showAtt, state.hideWithNoCaptionAtt]);
-    if (!root) return;
+    const changed = /* @__PURE__ */ new Set();
+    if (!root) return changed;
     for (const post of root.querySelectorAll(`[${postAtt}]`)) {
       const previous = hiddenNewsContent.get(post);
-      if (previous === void 0 || previous === contentStamp(post)) continue;
-      hiddenNewsContent.delete(post);
-      for (const caption of post.querySelectorAll(`:scope > h6[${postAttTab}]`)) caption.remove();
-      post.removeAttribute(postAtt);
-      post.removeAttribute(state.hideAtt);
-      post.removeAttribute(state.showAtt);
-      const wrapper = post.parentElement;
-      if (wrapper == null ? void 0 : wrapper.matches(`details[${postAtt}]`)) wrapper.replaceWith(post);
+      if (previous !== void 0 && previous !== contentStamp(post) && !isUnloadedNewsPost(post))
+        changed.add(post);
     }
+    return changed;
+  }
+  function restoreNewsPost(post, state) {
+    hiddenNewsContent.delete(post);
+    for (const caption of post.querySelectorAll(`:scope > h6[${postAttTab}]`)) caption.remove();
+    post.removeAttribute(postAtt);
+    post.removeAttribute(state.hideAtt);
+    post.removeAttribute(state.showAtt);
+    const wrapper = post.parentElement;
+    if (wrapper == null ? void 0 : wrapper.matches(`details[${postAtt}]`)) wrapper.replaceWith(post);
   }
   var hiddenNewsContent;
   var init_news_revalidation = __esm({
@@ -9401,7 +9436,7 @@ ${fence}
     }
     const mainToken = getDirtyToken(dirtyMainColumn);
     const dialogToken = getDirtyToken(dirtyDialog);
-    if (shouldSweepPosts) resetChangedNewsPosts(mainColumn, state);
+    const changedPosts = shouldSweepPosts ? findChangedNewsPosts(mainColumn, state) : /* @__PURE__ */ new Set();
     if (dirtyMainColumn) {
       if (options.NF_TABLIST_STORIES_REELS_ROOMS) {
         scrubTabbies(context);
@@ -9433,14 +9468,15 @@ ${fence}
       scrubMetaAiPromptSuggestions(context, mainColumn);
     }
     if (mainColumn && shouldSweepPosts) {
-      const posts = getCollectionOfNewsPosts();
+      const posts = /* @__PURE__ */ new Set([...getCollectionOfNewsPosts(), ...changedPosts]);
       for (const post of posts) {
         if (!post.hasChildNodes()) {
+          if (changedPosts.has(post)) restoreNewsPost(post, state);
           continue;
         }
         let hideReason = "";
         let isSponsoredPost = false;
-        const alreadyProcessed = post.hasAttribute(postAtt);
+        const alreadyProcessed = post.hasAttribute(postAtt) && !changedPosts.has(post);
         if (!alreadyProcessed) {
           doLightDusting(post, state);
           if (hideReason === "" && options.NF_REELS_SHORT_VIDEOS) {
@@ -9507,6 +9543,7 @@ ${fence}
             state
           });
         } else if (!alreadyProcessed) {
+          if (changedPosts.has(post)) restoreNewsPost(post, state);
           if (options.NF_ANIMATED_GIFS_PAUSE) {
             swatTheMosquitos(post);
           }

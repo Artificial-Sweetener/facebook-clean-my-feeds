@@ -52,7 +52,11 @@ import {
 } from "./news-features";
 export * from "./news-features";
 import { scrubMetaAiPromptSuggestions } from "./news-meta-ai";
-import { rememberHiddenNewsContent, resetChangedNewsPosts } from "./news-revalidation";
+import {
+  findChangedNewsPosts,
+  rememberHiddenNewsContent,
+  restoreNewsPost,
+} from "./news-revalidation";
 import { scrubRightRailFriendRequests } from "./news-friend-requests";
 import { restoreNewsPresentation } from "./news-presentation";
 export * from "./news-meta-ai";
@@ -90,7 +94,9 @@ export function mopNewsFeed(context: FeedContext | null) {
 
   const mainToken = getDirtyToken(dirtyMainColumn);
   const dialogToken = getDirtyToken(dirtyDialog);
-  if (shouldSweepPosts) resetChangedNewsPosts(mainColumn, state);
+  const changedPosts = shouldSweepPosts
+    ? findChangedNewsPosts(mainColumn, state)
+    : new Set<Element>();
 
   if (dirtyMainColumn) {
     if (options.NF_TABLIST_STORIES_REELS_ROOMS) {
@@ -128,16 +134,17 @@ export function mopNewsFeed(context: FeedContext | null) {
   }
 
   if (mainColumn && shouldSweepPosts) {
-    const posts = getCollectionOfNewsPosts();
+    const posts = new Set([...getCollectionOfNewsPosts(), ...changedPosts]);
     for (const post of posts) {
       if (!post.hasChildNodes()) {
+        if (changedPosts.has(post)) restoreNewsPost(post, state);
         continue;
       }
 
       let hideReason = "";
       let isSponsoredPost = false;
 
-      const alreadyProcessed = post.hasAttribute(postAtt);
+      const alreadyProcessed = post.hasAttribute(postAtt) && !changedPosts.has(post);
       if (!alreadyProcessed) {
         doLightDusting(post, state);
 
@@ -206,6 +213,7 @@ export function mopNewsFeed(context: FeedContext | null) {
           state,
         });
       } else if (!alreadyProcessed) {
+        if (changedPosts.has(post)) restoreNewsPost(post, state);
         if (options.NF_ANIMATED_GIFS_PAUSE) {
           swatTheMosquitos(post);
         }

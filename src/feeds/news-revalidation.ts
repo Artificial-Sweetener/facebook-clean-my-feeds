@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { beginPostTrace, finishPostTrace } from "../dom/post-trace";
 import { contentStamp, ignoreContentAttributes } from "../dom/content-version";
 import { postAtt, postAttTab } from "../dom/attributes";
 import type { FeedProcessingState } from "./types";
@@ -57,8 +58,11 @@ export function findChangedNewsPosts(
   if (!root) return changed;
   for (const post of root.querySelectorAll(`[${postAtt}]`)) {
     const previous = hiddenNewsContent.get(post);
-    if (previous !== undefined && previous !== contentStamp(post) && !isUnloadedNewsPost(post))
-      changed.add(post);
+    if (previous !== undefined && previous !== contentStamp(post)) {
+      if (isUnloadedNewsPost(post)) {
+        finishPostTrace(beginPostTrace(post, "virtualized-unload"), "defer");
+      } else changed.add(post);
+    }
   }
   return changed;
 }

@@ -8,6 +8,8 @@ import { parseReportDocument } from "../src/core/diagnostics/report-document";
 import type { ReportDocument } from "../src/core/diagnostics/report-document";
 import { unwrapReportMarkdown } from "../src/core/diagnostics/report-markdown";
 import { snapshotRegionHtml, testSnapshotSelector } from "../src/diagnostics/dom-fixture";
+import { buildHistoryFixture } from "../src/diagnostics/history-fixture";
+import { isPostHistory } from "../src/core/diagnostics/post-history";
 
 /** Decode pasted report text with strict compressed and inflated bounds before inspecting any DOM record. */
 export function decodeReport(text: string): ReportDocument {
@@ -62,11 +64,29 @@ async function main(args: string[]): Promise<void> {
       snapshotRegionHtml(report.snapshot, region)
     );
   await fs.writeFile(path.join(destination, "report.json"), JSON.stringify(report, null, 2));
+  if (isPostHistory(report.history)) {
+    const fixture = buildHistoryFixture(report.history);
+    for (const file of fixture.files)
+      await fs.writeFile(path.join(destination, file.file), file.html);
+    await fs.writeFile(
+      path.join(destination, "history-replay.json"),
+      JSON.stringify(fixture.manifest, null, 2)
+    );
+  }
   console.log(
     JSON.stringify(
       {
         regions: report.snapshot.regions.length,
         coverage: report.snapshot.coverage,
+        ...(isPostHistory(report.history)
+          ? {
+              history: {
+                events: report.history.events.length,
+                frames: report.history.frames.length,
+                dropped: report.history.dropped,
+              },
+            }
+          : {}),
         ...(selector ? { selector: inspectReportSelector(report, selector) } : {}),
       },
       null,

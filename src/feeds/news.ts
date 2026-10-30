@@ -9,6 +9,8 @@ import {
   markElementCleanIfUnchanged,
 } from "../dom/dirty-check";
 import { doLightDusting } from "../dom/dusting";
+import { beginPostTrace, finishPostTrace } from "../dom/post-trace";
+import type { NewsHistoryRule } from "../core/diagnostics/post-history";
 import { hideNewsPost } from "../dom/hide";
 import { scrubInfoBoxes } from "../dom/info-boxes";
 import { newsSelectors } from "../selectors/news";
@@ -137,68 +139,94 @@ export function mopNewsFeed(context: FeedContext | null) {
     const posts = new Set([...getCollectionOfNewsPosts(), ...changedPosts]);
     for (const post of posts) {
       if (!post.hasChildNodes()) {
-        if (changedPosts.has(post)) restoreNewsPost(post, state);
+        if (changedPosts.has(post)) {
+          const trace = beginPostTrace(post, "content-changed");
+          restoreNewsPost(post, state);
+          finishPostTrace(trace, "restore");
+        }
         continue;
       }
 
       let hideReason = "";
       let isSponsoredPost = false;
+      let matchedRule: NewsHistoryRule | null = null;
 
       const alreadyProcessed = post.hasAttribute(postAtt) && !changedPosts.has(post);
+      const trace = beginPostTrace(
+        post,
+        alreadyProcessed ? "retained" : changedPosts.has(post) ? "content-changed" : "discovered"
+      );
       if (!alreadyProcessed) {
         doLightDusting(post, state);
 
         if (hideReason === "" && options.NF_REELS_SHORT_VIDEOS) {
           hideReason = isNewsReelsAndShortVideos(post, keyWords);
+          if (hideReason) matchedRule = "NF_REELS_SHORT_VIDEOS";
         }
         if (hideReason === "" && options.NF_SHORT_REEL_VIDEO) {
           hideReason = isNewsShortReelVideo(post, keyWords);
+          if (hideReason) matchedRule = "NF_SHORT_REEL_VIDEO";
         }
         if (hideReason === "" && options.NF_META_AI) {
           hideReason = isNewsMetaAICard(post, keyWords);
+          if (hideReason) matchedRule = "NF_META_AI";
         }
         if (hideReason === "" && options.NF_AI_INFO_POSTS) {
           hideReason = isNewsAiInfoPost(post, keyWords);
+          if (hideReason) matchedRule = "NF_AI_INFO_POSTS";
         }
         if (hideReason === "" && options.NF_PAID_PARTNERSHIP) {
           hideReason = isNewsPaidPartnership(post, keyWords);
+          if (hideReason) matchedRule = "NF_PAID_PARTNERSHIP";
         }
         if (hideReason === "" && options.NF_PEOPLE_YOU_MAY_KNOW) {
           hideReason = isNewsPeopleYouMayKnow(post, keyWords);
+          if (hideReason) matchedRule = "NF_PEOPLE_YOU_MAY_KNOW";
         }
         if (hideReason === "" && options.NF_SUGGESTIONS) {
           hideReason = isNewsSuggested(post, state, keyWords);
+          if (hideReason) matchedRule = "NF_SUGGESTIONS";
         }
         if (hideReason === "" && options.NF_FOLLOW) {
           hideReason = isNewsFollow(post, keyWords);
+          if (hideReason) matchedRule = "NF_FOLLOW";
         }
         if (hideReason === "" && options.NF_PARTICIPATE) {
           hideReason = isNewsParticipate(post, keyWords);
+          if (hideReason) matchedRule = "NF_PARTICIPATE";
         }
         if (hideReason === "" && options.NF_SPONSORED_PAID) {
           hideReason = isNewsSponsoredPaidBy(post, keyWords);
+          if (hideReason) matchedRule = "NF_SPONSORED_PAID";
         }
         if (hideReason === "" && options.NF_EVENTS_YOU_MAY_LIKE) {
           hideReason = isNewsEventsYouMayLike(post, keyWords);
+          if (hideReason) matchedRule = "NF_EVENTS_YOU_MAY_LIKE";
         }
         if (hideReason === "" && options.NF_FILTER_VERIFIED_BADGE) {
           hideReason = isNewsVerifiedBadge(post, keyWords);
+          if (hideReason) matchedRule = "NF_FILTER_VERIFIED_BADGE";
         }
         if (hideReason === "" && options.NF_STORIES) {
           hideReason = isNewsStoriesPost(post, keyWords);
+          if (hideReason) matchedRule = "NF_STORIES";
         }
         if (hideReason === "" && options.NF_ANIMATED_GIFS_POSTS) {
           hideReason = hasNewsAnimatedGifContent(post, keyWords);
+          if (hideReason) matchedRule = "NF_ANIMATED_GIFS_POSTS";
         }
         if (hideReason === "" && options.NF_SPONSORED && isSponsored(post, state)) {
           isSponsoredPost = true;
           hideReason = keyWords.SPONSORED;
+          if (hideReason) matchedRule = "NF_SPONSORED";
         }
         if (hideReason === "" && options.NF_BLOCKED_ENABLED) {
           hideReason = findNewsBlockedText(post, options, filters);
+          if (hideReason) matchedRule = "NF_BLOCKED_ENABLED";
         }
         if (hideReason === "" && options.NF_LIKES_MAXIMUM) {
           hideReason = postExceedsLikeCount(post, options, keyWords) || "";
+          if (hideReason) matchedRule = "NF_LIKES_MAXIMUM";
         }
       }
 
@@ -224,6 +252,17 @@ export function mopNewsFeed(context: FeedContext | null) {
           hideNumberOfShares(post, state, options);
         }
       }
+      finishPostTrace(
+        trace,
+        hideReason
+          ? "hide"
+          : alreadyProcessed
+            ? "retain"
+            : changedPosts.has(post)
+              ? "restore"
+              : "allow",
+        matchedRule
+      );
       rememberHiddenNewsContent(post);
     }
 

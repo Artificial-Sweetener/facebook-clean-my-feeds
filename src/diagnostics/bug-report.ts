@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 import { getRegexValidationIssues } from "../core/options/regex-validation";
+import { readPostHistory } from "./post-history";
 import { encodeReport } from "./report-encoding";
 import { formatReportMarkdown } from "../core/diagnostics/report-markdown";
 import { captureDomSnapshot } from "./dom-capture";
@@ -109,6 +110,7 @@ async function collectBugReportData(context: BugReportContext, capture: Snapshot
   const samples = buildSamples(context);
   return {
     schemaVersion: 2,
+    history: readPostHistory(),
     generatedAt: now.toISOString(),
     snapshot,
     script: scriptInfo,

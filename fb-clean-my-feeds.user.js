@@ -3723,8 +3723,8 @@
   function enabledText(enabled, value) {
     return enabled === true ? value != null ? value : "" : "";
   }
-  function appendText(current, extra, separator) {
-    return extra.length > 0 ? current + (current.length > 0 ? separator : "") + extra : current;
+  function appendText(current2, extra, separator) {
+    return extra.length > 0 ? current2 + (current2.length > 0 ? separator : "") + extra : current2;
   }
   function splitText(enabled, value, separator) {
     return enabled ? value.split(separator) : [];
@@ -4313,52 +4313,206 @@
     }
   });
 
-  // src/diagnostics/report-encoding.ts
-  async function encodeReport(data) {
-    const text = JSON.stringify(data);
-    if (typeof CompressionStream === "undefined") return JSON.stringify(data, null, 2);
-    try {
-      const compressed = new Blob([text]).stream().pipeThrough(new CompressionStream("gzip"));
-      const bytes = new Uint8Array(await new Response(compressed).arrayBuffer());
-      let binary = "";
-      for (let offset = 0; offset < bytes.length; offset += 8192)
-        binary += String.fromCharCode(...bytes.subarray(offset, offset + 8192));
-      return JSON.stringify({
-        format: "cmf-report",
-        version: 2,
-        encoding: "gzip-base64",
-        data: btoa(binary)
+  // src/dom/content-version.ts
+  function ignoreContentAttributes(attributes) {
+    for (const attribute of attributes) if (attribute) ignoredAttributes.add(attribute);
+  }
+  function invalidate(scope, document2, records) {
+    if (!records.length) return;
+    const changed = /* @__PURE__ */ new Set();
+    for (const record of records) {
+      const presentationOnly = record.type === "attributes" && ignoredAttributes.has(record.attributeName || "");
+      let node = record.target;
+      while (node) {
+        if (node instanceof Element && scope.versions.has(node) && !(presentationOnly && node === record.target))
+          changed.add(node);
+        node = node.parentNode;
+      }
+      if (record.type === "attributes" && !presentationOnly) {
+        for (const post of scope.versions.keys()) {
+          if (record.target !== post && record.target.contains(post)) changed.add(post);
+        }
+      }
+      if (record.type === "childList") {
+        const moved = [...record.addedNodes, ...record.removedNodes];
+        for (const post of scope.versions.keys()) {
+          if (moved.some((node2) => node2.contains(post))) changed.add(post);
+        }
+      }
+    }
+    for (const [id, reference] of scope.references) {
+      const target = document2.getElementById(id);
+      if (target !== reference.target || records.some(
+        (record) => !!target && (target.contains(record.target) || record.target.contains(target))
+      )) {
+        for (const post of reference.posts) changed.add(post);
+      }
+      reference.target = target;
+    }
+    for (const post of changed) scope.versions.set(post, ++nextVersion);
+  }
+  function getContentVersion(post) {
+    var _a;
+    if (!post.isConnected || typeof MutationObserver === "undefined") return null;
+    const document2 = post.ownerDocument;
+    let scope = scopes.get(document2);
+    if (!scope) {
+      const versions = /* @__PURE__ */ new Map();
+      const references2 = /* @__PURE__ */ new Map();
+      const observer = new MutationObserver((records) => {
+        const current2 = scopes.get(document2);
+        if (current2) invalidate(current2, document2, records);
       });
-    } catch (e) {
-      return JSON.stringify(data, null, 2);
+      const onLoad = (event) => {
+        let node = event.target instanceof Node ? event.target : null;
+        while (node) {
+          if (node instanceof Element && versions.has(node)) versions.set(node, ++nextVersion);
+          node = node.parentNode;
+        }
+      };
+      scope = { observer, onLoad, versions, references: references2 };
+      document2.addEventListener("load", onLoad, true);
+      observer.observe(document2, {
+        subtree: true,
+        childList: true,
+        attributes: true,
+        characterData: true
+      });
+      scopes.set(document2, scope);
+    }
+    invalidate(scope, document2, scope.observer.takeRecords());
+    if (!scope.versions.has(post)) scope.versions.set(post, ++nextVersion);
+    return (_a = scope.versions.get(post)) != null ? _a : null;
+  }
+  function trackLabelReference(post, id) {
+    const scope = scopes.get(post.ownerDocument);
+    if (!scope || !post.isConnected) return;
+    let reference = scope.references.get(id);
+    if (!reference) {
+      reference = { target: post.ownerDocument.getElementById(id), posts: /* @__PURE__ */ new Set() };
+      scope.references.set(id, reference);
+    }
+    reference.posts.add(post);
+  }
+  function forgetLabelReferences(post) {
+    const scope = scopes.get(post.ownerDocument);
+    if (!scope) return;
+    for (const [id, reference] of scope.references) {
+      reference.posts.delete(post);
+      if (!reference.posts.size) scope.references.delete(id);
     }
   }
-  var init_report_encoding = __esm({
-    "src/diagnostics/report-encoding.ts"() {
+  function pruneContentVersions() {
+    for (const [document2, scope] of scopes) {
+      for (const post of scope.versions.keys()) {
+        if (post.isConnected) continue;
+        scope.versions.delete(post);
+        forgetLabelReferences(post);
+      }
+      if (!scope.versions.size) {
+        scope.observer.disconnect();
+        document2.removeEventListener("load", scope.onLoad, true);
+        scopes.delete(document2);
+      }
+    }
+  }
+  function clearContentVersions() {
+    for (const [document2, scope] of scopes) {
+      scope.observer.disconnect();
+      document2.removeEventListener("load", scope.onLoad, true);
+    }
+    scopes.clear();
+  }
+  function contentStamp(post) {
+    var _a;
+    return (_a = getContentVersion(post)) != null ? _a : `${post.getAttribute("aria-posinset") || ""}|${post.innerHTML}`;
+  }
+  var scopes, ignoredAttributes, nextVersion;
+  var init_content_version = __esm({
+    "src/dom/content-version.ts"() {
+      "use strict";
+      scopes = /* @__PURE__ */ new Map();
+      ignoredAttributes = /* @__PURE__ */ new Set([
+        "cmfr",
+        "cmfcpid",
+        "cmfcf",
+        "cmftsb",
+        "cmfsmp",
+        "cmfrv",
+        "cmfmc"
+      ]);
+      nextVersion = 0;
+    }
+  });
+
+  // src/utils/random.ts
+  function generateRandomString(length = 13) {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const strArray = [chars.charAt(Math.floor(Math.random() * 52))];
+    for (let i = 1; i < length; i += 1) {
+      strArray.push(chars.charAt(Math.floor(Math.random() * chars.length)));
+    }
+    return strArray.join("");
+  }
+  var init_random = __esm({
+    "src/utils/random.ts"() {
       "use strict";
     }
   });
 
-  // src/core/diagnostics/report-markdown.ts
-  function formatReportMarkdown(payload, summary) {
-    const safeSummary = summary.replace(/\s+/g, " ").slice(0, 256).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-    let length = 3;
-    const runs = /`+/g;
-    let match;
-    while (match = runs.exec(payload)) length = Math.max(length, match[0].length + 1);
-    const fence = "`".repeat(length);
-    return `<details>
-<summary>${safeSummary}</summary>
-
-${fence}json
-${payload}
-${fence}
-
-</details>`;
+  // src/dom/attributes.ts
+  function initializeRuntimeAttributes(state) {
+    if (!state) {
+      return;
+    }
+    state.hideAtt = generateRandomString();
+    state.hideWithNoCaptionAtt = generateRandomString();
+    state.showAtt = generateRandomString();
+    state.cssHideEl = generateRandomString();
+    state.cssHideNumberOfShares = generateRandomString();
+    state.cssHideVerifiedBadge = generateRandomString();
   }
-  var init_report_markdown = __esm({
-    "src/core/diagnostics/report-markdown.ts"() {
+  var postAtt, postAttCPID, postPropDS, postAttChildFlag, postAttTab, postAttMPSkip, rvAtt, mainColumnAtt;
+  var init_attributes = __esm({
+    "src/dom/attributes.ts"() {
       "use strict";
+      init_random();
+      postAtt = "cmfr";
+      postAttCPID = "cmfcpid";
+      postPropDS = "cmfDusted";
+      postAttChildFlag = "cmfcf";
+      postAttTab = "cmftsb";
+      postAttMPSkip = "cmfsmp";
+      rvAtt = "cmfrv";
+      mainColumnAtt = "cmfmc";
+    }
+  });
+
+  // src/dom/post-trace.ts
+  function installPostTraceSink(next) {
+    sink = next;
+    return () => {
+      if (sink === next) sink = null;
+    };
+  }
+  function beginPostTrace(post, trigger) {
+    try {
+      return (sink == null ? void 0 : sink(post, trigger)) || null;
+    } catch (e) {
+      return null;
+    }
+  }
+  function finishPostTrace(trace, action, rule = null) {
+    try {
+      trace == null ? void 0 : trace.complete(action, rule);
+    } catch (e) {
+    }
+  }
+  var sink;
+  var init_post_trace = __esm({
+    "src/dom/post-trace.ts"() {
+      "use strict";
+      sink = null;
     }
   });
 
@@ -5033,49 +5187,6 @@ ${fence}
     }
   });
 
-  // src/utils/random.ts
-  function generateRandomString(length = 13) {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    const strArray = [chars.charAt(Math.floor(Math.random() * 52))];
-    for (let i = 1; i < length; i += 1) {
-      strArray.push(chars.charAt(Math.floor(Math.random() * chars.length)));
-    }
-    return strArray.join("");
-  }
-  var init_random = __esm({
-    "src/utils/random.ts"() {
-      "use strict";
-    }
-  });
-
-  // src/dom/attributes.ts
-  function initializeRuntimeAttributes(state) {
-    if (!state) {
-      return;
-    }
-    state.hideAtt = generateRandomString();
-    state.hideWithNoCaptionAtt = generateRandomString();
-    state.showAtt = generateRandomString();
-    state.cssHideEl = generateRandomString();
-    state.cssHideNumberOfShares = generateRandomString();
-    state.cssHideVerifiedBadge = generateRandomString();
-  }
-  var postAtt, postAttCPID, postPropDS, postAttChildFlag, postAttTab, postAttMPSkip, rvAtt, mainColumnAtt;
-  var init_attributes = __esm({
-    "src/dom/attributes.ts"() {
-      "use strict";
-      init_random();
-      postAtt = "cmfr";
-      postAttCPID = "cmfcpid";
-      postPropDS = "cmfDusted";
-      postAttChildFlag = "cmfcf";
-      postAttTab = "cmftsb";
-      postAttMPSkip = "cmfsmp";
-      rvAtt = "cmfrv";
-      mainColumnAtt = "cmfmc";
-    }
-  });
-
   // src/dom/ownership.ts
   function ownsPostElement(element, post, boundary = {}) {
     var _a, _b;
@@ -5097,138 +5208,6 @@ ${fence}
       "use strict";
       init_attributes();
       init_shared();
-    }
-  });
-
-  // src/dom/content-version.ts
-  function ignoreContentAttributes(attributes) {
-    for (const attribute of attributes) if (attribute) ignoredAttributes.add(attribute);
-  }
-  function invalidate(scope, document2, records) {
-    if (!records.length) return;
-    const changed = /* @__PURE__ */ new Set();
-    for (const record of records) {
-      const presentationOnly = record.type === "attributes" && ignoredAttributes.has(record.attributeName || "");
-      let node = record.target;
-      while (node) {
-        if (node instanceof Element && scope.versions.has(node) && !(presentationOnly && node === record.target))
-          changed.add(node);
-        node = node.parentNode;
-      }
-      if (record.type === "attributes" && !presentationOnly) {
-        for (const post of scope.versions.keys()) {
-          if (record.target !== post && record.target.contains(post)) changed.add(post);
-        }
-      }
-      if (record.type === "childList") {
-        const moved = [...record.addedNodes, ...record.removedNodes];
-        for (const post of scope.versions.keys()) {
-          if (moved.some((node2) => node2.contains(post))) changed.add(post);
-        }
-      }
-    }
-    for (const [id, reference] of scope.references) {
-      const target = document2.getElementById(id);
-      if (target !== reference.target || records.some(
-        (record) => !!target && (target.contains(record.target) || record.target.contains(target))
-      )) {
-        for (const post of reference.posts) changed.add(post);
-      }
-      reference.target = target;
-    }
-    for (const post of changed) scope.versions.set(post, ++nextVersion);
-  }
-  function getContentVersion(post) {
-    var _a;
-    if (!post.isConnected || typeof MutationObserver === "undefined") return null;
-    const document2 = post.ownerDocument;
-    let scope = scopes.get(document2);
-    if (!scope) {
-      const versions = /* @__PURE__ */ new Map();
-      const references2 = /* @__PURE__ */ new Map();
-      const observer = new MutationObserver((records) => {
-        const current = scopes.get(document2);
-        if (current) invalidate(current, document2, records);
-      });
-      const onLoad = (event) => {
-        let node = event.target instanceof Node ? event.target : null;
-        while (node) {
-          if (node instanceof Element && versions.has(node)) versions.set(node, ++nextVersion);
-          node = node.parentNode;
-        }
-      };
-      scope = { observer, onLoad, versions, references: references2 };
-      document2.addEventListener("load", onLoad, true);
-      observer.observe(document2, {
-        subtree: true,
-        childList: true,
-        attributes: true,
-        characterData: true
-      });
-      scopes.set(document2, scope);
-    }
-    invalidate(scope, document2, scope.observer.takeRecords());
-    if (!scope.versions.has(post)) scope.versions.set(post, ++nextVersion);
-    return (_a = scope.versions.get(post)) != null ? _a : null;
-  }
-  function trackLabelReference(post, id) {
-    const scope = scopes.get(post.ownerDocument);
-    if (!scope || !post.isConnected) return;
-    let reference = scope.references.get(id);
-    if (!reference) {
-      reference = { target: post.ownerDocument.getElementById(id), posts: /* @__PURE__ */ new Set() };
-      scope.references.set(id, reference);
-    }
-    reference.posts.add(post);
-  }
-  function forgetLabelReferences(post) {
-    const scope = scopes.get(post.ownerDocument);
-    if (!scope) return;
-    for (const [id, reference] of scope.references) {
-      reference.posts.delete(post);
-      if (!reference.posts.size) scope.references.delete(id);
-    }
-  }
-  function pruneContentVersions() {
-    for (const [document2, scope] of scopes) {
-      for (const post of scope.versions.keys()) {
-        if (post.isConnected) continue;
-        scope.versions.delete(post);
-        forgetLabelReferences(post);
-      }
-      if (!scope.versions.size) {
-        scope.observer.disconnect();
-        document2.removeEventListener("load", scope.onLoad, true);
-        scopes.delete(document2);
-      }
-    }
-  }
-  function clearContentVersions() {
-    for (const [document2, scope] of scopes) {
-      scope.observer.disconnect();
-      document2.removeEventListener("load", scope.onLoad, true);
-    }
-    scopes.clear();
-  }
-  function contentStamp(post) {
-    var _a;
-    return (_a = getContentVersion(post)) != null ? _a : `${post.getAttribute("aria-posinset") || ""}|${post.innerHTML}`;
-  }
-  var scopes, ignoredAttributes, nextVersion;
-  var init_content_version = __esm({
-    "src/dom/content-version.ts"() {
-      "use strict";
-      scopes = /* @__PURE__ */ new Map();
-      ignoredAttributes = /* @__PURE__ */ new Set([
-        "cmfr",
-        "cmfcpid",
-        "cmfcf",
-        "cmftsb",
-        "cmfsmp",
-        "cmfrv",
-        "cmfmc"
-      ]);
-      nextVersion = 0;
     }
   });
 
@@ -6081,7 +6060,7 @@ ${fence}
     region = fallback;
     return region;
   }
-  async function selectSnapshotRegions(document2, target, limits, privacy) {
+  async function selectSnapshotRegions(document2, target, limits2, privacy) {
     let seeded = 0;
     if ((target == null ? void 0 : target.isConnected) && !isReportUi(target)) {
       const region = snapshotTargetRegion(target);
@@ -6090,7 +6069,7 @@ ${fence}
         const identities = document2.createTreeWalker(scope, NodeFilter.SHOW_ELEMENT);
         let identity2 = scope;
         let local = 0;
-        while (identity2 && local++ < limits.nodesPerRegion) {
+        while (identity2 && local++ < limits2.nodesPerRegion) {
           if (identity2 instanceof Element && !isReportUi(identity2)) privacy.remember(identity2);
           if (++seeded % 128 === 0) await yieldSnapshotWork();
           identity2 = identities.nextNode();
@@ -6106,7 +6085,7 @@ ${fence}
     const surfaces = [];
     let discovered = 0;
     let node = root;
-    while (node && discovered < limits.discoveryNodes) {
+    while (node && discovered < limits2.discoveryNodes) {
       if (node instanceof Element && !isReportUi(node)) {
         discovered++;
         privacy.remember(node);
@@ -6147,7 +6126,7 @@ ${fence}
         (region) => region.element === element || region.element.contains(element) || element.contains(region.element)
       ))
         return;
-      if (regions.length < limits.regions) regions.push({ element, selection });
+      if (regions.length < limits2.regions) regions.push({ element, selection });
     };
     if ((target == null ? void 0 : target.isConnected) && target.ownerDocument === document2 && !isReportUi(target)) {
       const region = snapshotTargetRegion(target);
@@ -6186,7 +6165,7 @@ ${fence}
     }
   });
 
-  // src/diagnostics/dom-capture.ts
+  // src/diagnostics/dom-capture-tree.ts
   function dimension(value) {
     return Number.isFinite(value) ? Math.max(-1e5, Math.min(1e5, Math.round(value / 4) * 4)) : 0;
   }
@@ -6217,130 +6196,19 @@ ${fence}
       concealedByAncestor
     };
   }
-  async function captureDomSnapshot(document2, options = {}) {
-    var _a, _b;
-    const start = performance.now();
-    const limits = { ...snapshotLimits };
-    for (const key of Object.keys(limits)) {
-      const value = (_a = options.limits) == null ? void 0 : _a[key];
-      if (typeof value === "number" && Number.isFinite(value))
-        limits[key] = Math.max(1, Math.min(limits[key], Math.floor(value)));
-    }
-    let mutationsDuringCapture = 0;
-    const countMutations = (records) => {
-      for (const record of records) {
-        const element = record.target instanceof Element ? record.target : record.target.parentElement;
-        if (element && !isReportUi(element)) mutationsDuringCapture++;
-      }
-    };
-    const observer = typeof MutationObserver === "undefined" ? null : new MutationObserver(countMutations);
-    observer == null ? void 0 : observer.observe(document2.documentElement, {
-      subtree: true,
-      childList: true,
-      attributes: true,
-      characterData: true
-    });
-    try {
-      const capture = new DomCapture(limits);
-      const selection = await selectSnapshotRegions(
-        document2,
-        options.target || null,
-        limits,
-        capture.privacy
-      );
-      const regions = [];
-      for (const selected of selection.regions) {
-        if (capture.nodes >= limits.nodes) {
-          capture.omit("node-limit");
-          break;
-        }
-        const root = await capture.region(selected.element);
-        const ancestors = [];
-        let ancestor = selected.element.parentElement;
-        while (ancestor && ancestors.length < 8) {
-          ancestors.unshift(capture.shell(ancestor));
-          ancestor = ancestor.parentElement;
-        }
-        regions.push({ ref: root.ref, selection: selected.selection, ancestors, root });
-        await yieldSnapshotWork();
-      }
-      const references2 = [];
-      for (const pending of capture.attributes.pending.values()) {
-        if (references2.length >= limits.references) {
-          capture.omissions["reference-limit"] = capture.attributes.pending.size - references2.length;
-          break;
-        }
-        const target = document2.getElementById(pending.original);
-        if (!target) {
-          references2.push({ id: pending.id, status: "missing", target: null });
-          continue;
-        }
-        const existing = capture.captured.get(target);
-        const publicLeaf = pending.interfaceLabel && target.localName === "span" && target.childElementCount === 0 && capture.privacy.content(target) === "uncertain";
-        if (existing) {
-          if (publicLeaf) capture.promoteLabel(target, existing);
-          references2.push({ id: pending.id, status: "captured", target: null });
-          continue;
-        }
-        if (capture.nodes >= limits.nodes) {
-          references2.push({ id: pending.id, status: "budget-exceeded", target: null });
-          continue;
-        }
-        const copy = await capture.region(target, publicLeaf ? "interface" : void 0);
-        references2.push({ id: pending.id, status: "external", target: copy });
-      }
-      for (const source of capture.privacy.svgDisclosureText.keys()) {
-        const copy = capture.captured.get(source);
-        if (copy && capture.privacy.content(source) === "interface")
-          capture.promoteLabel(source, copy);
-      }
-      if (observer) countMutations(observer.takeRecords());
-      return {
-        version: 1,
-        limits,
-        regions,
-        references: references2,
-        target: options.target ? ((_b = capture.captured.get(options.target)) == null ? void 0 : _b.ref) || null : null,
-        coverage: {
-          scope: "selected-regions",
-          capturedNodes: capture.nodes,
-          discoveredNodes: selection.discovered,
-          identitySeedNodes: selection.seeded,
-          retainedLabelCharacters: capture.labels,
-          redactedTextNodes: capture.redacted,
-          redactedAttributes: capture.attributes.redacted,
-          omissions: { ...capture.omissions, ...capture.attributes.omissions },
-          elapsedMs: Math.round(performance.now() - start),
-          discoveryComplete: selection.discoveryComplete,
-          regionSelectionComplete: selection.selectionComplete,
-          mutationsDuringCapture
-        },
-        privacy: {
-          policy: "content-boundaries-v1",
-          interfaceLabels: "automatically-sanitized",
-          authoredText: "redacted",
-          mediaContent: "omitted",
-          identifiers: "report-local-aliases",
-          classes: "report-local-aliases",
-          destinations: "structural-templates"
-        }
-      };
-    } finally {
-      observer == null ? void 0 : observer.disconnect();
-    }
-  }
   var DomCapture;
-  var init_dom_capture = __esm({
-    "src/diagnostics/dom-capture.ts"() {
+  var init_dom_capture_tree = __esm({
+    "src/diagnostics/dom-capture-tree.ts"() {
       "use strict";
-      init_dom_snapshot();
       init_dom_privacy();
       init_dom_attributes();
       init_dom_selection();
       DomCapture = class {
         /** Capture budgets are immutable for the lifetime of a report generation request. */
-        constructor(limits) {
-          this.limits = limits;
+        constructor(limits2, measureLayout = true, deadline = Infinity) {
+          this.limits = limits2;
+          this.measureLayout = measureLayout;
+          this.deadline = deadline;
           this.privacy = new SnapshotPrivacy();
           this.attributes = new SnapshotAttributes(
             this.privacy,
@@ -6383,7 +6251,19 @@ ${fence}
           const attributes = this.attributes.read(element, content);
           let rendering = this.layouts.get(element);
           if (!rendering) {
-            rendering = layout(element);
+            rendering = this.measureLayout ? layout(element) : {
+              x: 0,
+              y: 0,
+              width: 0,
+              height: 0,
+              display: "unknown",
+              visibility: "unknown",
+              position: "unknown",
+              order: "0",
+              direction: "unknown",
+              inViewport: false,
+              concealedByAncestor: false
+            };
             this.layouts.set(element, rendering);
           }
           return {
@@ -6440,7 +6320,7 @@ ${fence}
          * @param override Only a constrained external accessible-label leaf may receive explicit interface provenance.
          * @returns Ordered sanitized tree, with explicit gaps wherever work limits stop traversal.
          */
-        async region(element, override) {
+        *walk(element, override) {
           this.nodes++;
           const root = this.shell(element, override);
           this.captured.set(element, root);
@@ -6461,6 +6341,10 @@ ${fence}
             }
             const branches = [];
             for (let child = entry.source.firstChild; child; child = child.nextSibling) {
+              if (performance.now() >= this.deadline) {
+                entry.copy.children.push(this.omit("time-limit"));
+                return root;
+              }
               if (this.nodes >= this.limits.nodes || localNodes >= this.limits.nodesPerRegion) {
                 entry.copy.children.push(
                   this.omit(this.nodes >= this.limits.nodes ? "node-limit" : "region-limit")
@@ -6480,13 +6364,565 @@ ${fence}
                 entry.copy.children.push(copy);
                 branches.push({ source: child, copy, depth: entry.depth + 1 });
               } else entry.copy.children.push(this.omit("excluded-content"));
-              if (localNodes % 64 === 0) await yieldSnapshotWork();
+              if (localNodes % 64 === 0) yield;
             }
             queue.push(...branches.reverse());
           }
           return root;
         }
+        /** Capture a foreground report cooperatively, yielding between bounded traversal batches. */
+        async region(element, override) {
+          const steps = this.walk(element, override);
+          let step = steps.next();
+          while (!step.done) {
+            await yieldSnapshotWork();
+            step = steps.next();
+          }
+          return step.value;
+        }
+        /** Freeze a transition before Facebook can replace its nodes; caller supplies strict work and time limits. */
+        regionNow(element, override) {
+          const steps = this.walk(element, override);
+          let step = steps.next();
+          while (!step.done) step = steps.next();
+          return step.value;
+        }
       };
+    }
+  });
+
+  // src/diagnostics/transition-snapshot.ts
+  function captureTransitionSnapshot(post, deadline) {
+    const start = performance.now();
+    const limits2 = {
+      ...snapshotLimits,
+      nodes: 256,
+      nodesPerRegion: 256,
+      depth: 24,
+      regions: 1,
+      references: 8,
+      attributes: 1024,
+      totalLabelCharacters: 1024,
+      discoveryNodes: 256
+    };
+    const capture = new DomCapture(limits2, false, deadline);
+    const walker = post.ownerDocument.createTreeWalker(post, NodeFilter.SHOW_ELEMENT);
+    let node = post;
+    let seeded = 0;
+    while (node && seeded < limits2.discoveryNodes && performance.now() < deadline) {
+      if (node instanceof Element) capture.privacy.remember(node);
+      seeded++;
+      node = walker.nextNode();
+    }
+    const root = capture.regionNow(post);
+    const ancestors = [];
+    let ancestor = post.parentElement;
+    while (ancestor && ancestors.length < 4 && performance.now() < deadline) {
+      ancestors.unshift(capture.shell(ancestor));
+      ancestor = ancestor.parentElement;
+    }
+    const references2 = [];
+    for (const pending of capture.attributes.pending.values()) {
+      if (references2.length >= limits2.references) break;
+      const target = post.ownerDocument.getElementById(pending.original);
+      if (!target) {
+        references2.push({ id: pending.id, status: "missing", target: null });
+        continue;
+      }
+      const publicLeaf = pending.interfaceLabel && target.localName === "span" && target.childElementCount === 0 && capture.privacy.content(target) === "uncertain";
+      const existing = capture.captured.get(target);
+      if (existing) {
+        if (publicLeaf) capture.promoteLabel(target, existing);
+        references2.push({ id: pending.id, status: "captured", target: null });
+        continue;
+      }
+      if (capture.nodes >= limits2.nodes || performance.now() >= deadline) {
+        references2.push({ id: pending.id, status: "budget-exceeded", target: null });
+        continue;
+      }
+      capture.privacy.remember(target);
+      references2.push({
+        id: pending.id,
+        status: "external",
+        target: capture.regionNow(target, publicLeaf ? "interface" : void 0)
+      });
+    }
+    for (const source of capture.privacy.svgDisclosureText.keys()) {
+      const copy = capture.captured.get(source);
+      if (copy && capture.privacy.content(source) === "interface") capture.promoteLabel(source, copy);
+    }
+    return {
+      version: 1,
+      limits: limits2,
+      regions: [{ ref: root.ref, selection: "target", ancestors, root }],
+      references: references2,
+      target: root.ref,
+      coverage: {
+        scope: "selected-regions",
+        capturedNodes: capture.nodes,
+        discoveredNodes: seeded,
+        identitySeedNodes: seeded,
+        retainedLabelCharacters: capture.labels,
+        redactedTextNodes: capture.redacted,
+        redactedAttributes: capture.attributes.redacted,
+        omissions: { ...capture.omissions, ...capture.attributes.omissions },
+        elapsedMs: Math.round(performance.now() - start),
+        discoveryComplete: node === null,
+        regionSelectionComplete: true,
+        mutationsDuringCapture: 0
+      },
+      privacy: {
+        policy: "content-boundaries-v1",
+        interfaceLabels: "automatically-sanitized",
+        authoredText: "redacted",
+        mediaContent: "omitted",
+        identifiers: "report-local-aliases",
+        classes: "report-local-aliases",
+        destinations: "structural-templates"
+      }
+    };
+  }
+  var init_transition_snapshot = __esm({
+    "src/diagnostics/transition-snapshot.ts"() {
+      "use strict";
+      init_dom_snapshot();
+      init_dom_capture_tree();
+    }
+  });
+
+  // src/diagnostics/post-history.ts
+  function startPostHistory(document2) {
+    current == null ? void 0 : current.stop();
+    const recorder = new PostHistoryRecorder(document2);
+    current = recorder;
+    return () => {
+      recorder.stop();
+      if (current === recorder) current = null;
+    };
+  }
+  function readPostHistory() {
+    return (current == null ? void 0 : current.read()) || {
+      version: 1,
+      scope: "news-posts",
+      elapsedMs: 0,
+      limits: { ...limits },
+      dropped: { events: 0, frames: 0, errors: 0 },
+      captureMs: 0,
+      events: [],
+      frames: []
+    };
+  }
+  var limits, current, PostHistoryRecorder;
+  var init_post_history = __esm({
+    "src/diagnostics/post-history.ts"() {
+      "use strict";
+      init_content_version();
+      init_attributes();
+      init_post_trace();
+      init_transition_snapshot();
+      limits = {
+        events: 160,
+        frames: 16,
+        frameBytes: 1e6,
+        ageMs: 12e4,
+        nodesPerFrame: 256,
+        capturesPerSecond: 4,
+        captureMsPerSecond: 24,
+        captureMsPerFrame: 12
+      };
+      current = null;
+      PostHistoryRecorder = class {
+        /** Bind the recorder to one document and sink; teardown releases listeners and all retained sanitized data. */
+        constructor(document2) {
+          this.document = document2;
+          this.ids = /* @__PURE__ */ new WeakMap();
+          this.tracked = /* @__PURE__ */ new WeakMap();
+          this.events = [];
+          this.frames = [];
+          this.nextId = 0;
+          this.sequence = 0;
+          this.nextFrame = 0;
+          this.frameBytes = 0;
+          this.dropped = { events: 0, frames: 0, errors: 0 };
+          this.captureMs = 0;
+          this.windowStart = 0;
+          this.windowCaptures = 0;
+          this.windowWork = 0;
+          this.start = performance.now();
+          /** Observe native details toggles only for directly owned news roots already encountered by filtering. */
+          this.onToggle = (event) => {
+            const target = event.target;
+            if (!(target instanceof Element) || !target.matches(`details[${postAtt}]`)) return;
+            for (const post of Array.from(target.children).slice(0, 32)) {
+              if (!this.tracked.has(post)) continue;
+              finishPostTrace(beginPostTrace(post, "caption-toggle"), "retain");
+            }
+          };
+          this.disconnect = installPostTraceSink((post, trigger) => this.begin(post, trigger));
+          document2.addEventListener("toggle", this.onToggle, true);
+        }
+        /** Assign opaque identities without reading, hashing or retaining source IDs, classes or content. */
+        id(element) {
+          if (!element) return null;
+          let id = this.ids.get(element);
+          if (!id) {
+            id = `p${++this.nextId}`;
+            this.ids.set(element, id);
+          }
+          return id;
+        }
+        /** Read only owned caption state and structural identity edges; avoid computed styles and layout flushes. */
+        presentation(post) {
+          const parent = post.parentElement;
+          const wrapper = (parent == null ? void 0 : parent.matches(`details[${postAtt}]`)) ? parent : null;
+          const position = wrapper || post;
+          return {
+            classified: post.hasAttribute(postAtt),
+            wrapper: this.id(wrapper),
+            open: !!(wrapper == null ? void 0 : wrapper.hasAttribute("open")),
+            parent: this.id(position.parentElement),
+            previousSibling: this.id(position.previousElementSibling)
+          };
+        }
+        /** Expire events and frames together, so bounded history never exposes a dangling frame reference. */
+        prune(now) {
+          var _a, _b;
+          while (this.events.length && (this.events.length > limits.events || ((_b = (_a = this.events[0]) == null ? void 0 : _a.atMs) != null ? _b : now) < now - limits.ageMs)) {
+            this.events.shift();
+            this.dropped.events++;
+          }
+          const used = new Set(this.events.map((event) => event.frame));
+          this.frames = this.frames.filter((frame) => {
+            if (used.has(frame.value.id)) return true;
+            this.frameBytes -= frame.bytes;
+            return false;
+          });
+        }
+        /**
+         * Freeze a budgeted pre-decision frame; skipped work is reported rather than silently represented as an empty tree.
+         * @param post Source root sampled synchronously before filtering mutations.
+         * @param id Opaque identity linking this frame to its event.
+         * @param now Session-relative milliseconds used for the per-second work budget.
+         * @returns Retained frame identity, or null with an explicit dropped/error counter.
+         */
+        capture(post, id, now) {
+          if (now - this.windowStart >= 1e3) {
+            this.windowStart = now;
+            this.windowCaptures = 0;
+            this.windowWork = 0;
+          }
+          if (this.windowCaptures >= limits.capturesPerSecond || this.windowWork >= limits.captureMsPerSecond) {
+            this.dropped.frames++;
+            return null;
+          }
+          this.windowCaptures++;
+          const start = performance.now();
+          try {
+            const snapshot = captureTransitionSnapshot(
+              post,
+              start + Math.min(limits.captureMsPerFrame, limits.captureMsPerSecond - this.windowWork)
+            );
+            const frame = { id: ++this.nextFrame, post: id, snapshot };
+            const bytes = JSON.stringify(frame).length * 2;
+            if (bytes > limits.frameBytes) {
+              this.dropped.frames++;
+              return null;
+            }
+            while (this.frames.length >= limits.frames || this.frameBytes + bytes > limits.frameBytes) {
+              const removed = this.frames.shift();
+              if (!removed) break;
+              this.frameBytes -= removed.bytes;
+              for (const event of this.events) if (event.frame === removed.value.id) event.frame = null;
+              this.dropped.frames++;
+            }
+            this.frames.push({ value: frame, bytes });
+            this.frameBytes += bytes;
+            return frame.id;
+          } catch (e) {
+            this.dropped.errors++;
+            return null;
+          } finally {
+            const elapsed = performance.now() - start;
+            this.windowWork += elapsed;
+            this.captureMs += elapsed;
+          }
+        }
+        /**
+         * Begin only meaningful classifications or changed presentation; unchanged periodic retention creates no events or frames.
+         * @param post Source root, used synchronously and weakly remembered after completion.
+         * @param trigger Stable reason supplied by the filtering boundary, never a page-derived string.
+         * @returns Probe completed by the caller after filtering, or null for unchanged retained presentation.
+         */
+        begin(post, trigger) {
+          if (post.ownerDocument !== this.document) return null;
+          const started = performance.now();
+          const now = started - this.start;
+          const before = this.presentation(post);
+          const previous = this.tracked.get(post);
+          if ((trigger === "retained" || trigger === "caption-toggle") && previous && JSON.stringify(previous.last) === JSON.stringify(before))
+            return null;
+          if (trigger === "discovered" && previous && previous.version !== null && previous.version === getContentVersion(post) && JSON.stringify(previous.last) === JSON.stringify(before))
+            return null;
+          this.prune(now);
+          const id = this.id(post);
+          if (!id) return null;
+          const frame = this.capture(post, id, now);
+          const decisionStart = performance.now();
+          let completed = false;
+          return {
+            /**
+             * Commit the outcome once, retaining no source node in the exported record.
+             * @param action Observed filtering outcome; retained and deferred states preserve the last known matching rule.
+             * @param rule Current machine rule ID, or null when the evaluation found no match.
+             */
+            complete: (action, rule) => {
+              if (completed) return;
+              completed = true;
+              const after = this.presentation(post);
+              this.events.push({
+                sequence: ++this.sequence,
+                post: id,
+                atMs: Math.round(now),
+                durationMs: Math.round((performance.now() - decisionStart) * 100) / 100,
+                trigger,
+                action,
+                rule: action === "defer" || action === "retain" ? (previous == null ? void 0 : previous.rule) || null : rule,
+                before: trigger === "retained" || trigger === "caption-toggle" ? (previous == null ? void 0 : previous.last) || before : before,
+                after,
+                frame
+              });
+              this.tracked.set(post, {
+                last: after,
+                version: getContentVersion(post),
+                rule: action === "defer" || action === "retain" ? (previous == null ? void 0 : previous.rule) || null : rule
+              });
+              this.prune(performance.now() - this.start);
+            }
+          };
+        }
+        /**
+         * Export a detached bounded value; alias remapping prevents identities correlating separate pasted reports.
+         * @returns Chronological observed decisions and redacted fixtures, with explicit limits and missing-frame counts.
+         */
+        read() {
+          this.prune(performance.now() - this.start);
+          const aliases = /* @__PURE__ */ new Map();
+          const alias = (value) => {
+            if (value === null) return null;
+            let mapped = aliases.get(value);
+            if (!mapped) {
+              mapped = `p${aliases.size + 1}`;
+              aliases.set(value, mapped);
+            }
+            return mapped;
+          };
+          const presentation = (value) => ({
+            ...value,
+            wrapper: alias(value.wrapper),
+            parent: alias(value.parent),
+            previousSibling: alias(value.previousSibling)
+          });
+          return {
+            version: 1,
+            scope: "news-posts",
+            elapsedMs: Math.round(performance.now() - this.start),
+            limits: { ...limits },
+            dropped: { ...this.dropped },
+            captureMs: Math.round(this.captureMs * 100) / 100,
+            events: this.events.map((event) => ({
+              ...event,
+              post: alias(event.post) || "p0",
+              before: presentation(event.before),
+              after: presentation(event.after)
+            })),
+            frames: this.frames.map(({ value }) => ({
+              ...value,
+              post: alias(value.post) || "p0",
+              snapshot: JSON.parse(JSON.stringify(value.snapshot))
+            }))
+          };
+        }
+        /** Detach only this session's sink and listener; no private browser state or persistent data is changed. */
+        stop() {
+          this.disconnect();
+          this.document.removeEventListener("toggle", this.onToggle, true);
+          this.events = [];
+          this.frames = [];
+          this.tracked = /* @__PURE__ */ new WeakMap();
+          this.ids = /* @__PURE__ */ new WeakMap();
+        }
+      };
+    }
+  });
+
+  // src/diagnostics/report-encoding.ts
+  async function encodeReport(data) {
+    const text = JSON.stringify(data);
+    if (typeof CompressionStream === "undefined") return JSON.stringify(data, null, 2);
+    try {
+      const compressed = new Blob([text]).stream().pipeThrough(new CompressionStream("gzip"));
+      const bytes = new Uint8Array(await new Response(compressed).arrayBuffer());
+      let binary = "";
+      for (let offset = 0; offset < bytes.length; offset += 8192)
+        binary += String.fromCharCode(...bytes.subarray(offset, offset + 8192));
+      return JSON.stringify({
+        format: "cmf-report",
+        version: 2,
+        encoding: "gzip-base64",
+        data: btoa(binary)
+      });
+    } catch (e) {
+      return JSON.stringify(data, null, 2);
+    }
+  }
+  var init_report_encoding = __esm({
+    "src/diagnostics/report-encoding.ts"() {
+      "use strict";
+    }
+  });
+
+  // src/core/diagnostics/report-markdown.ts
+  function formatReportMarkdown(payload, summary) {
+    const safeSummary = summary.replace(/\s+/g, " ").slice(0, 256).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+    let length = 3;
+    const runs = /`+/g;
+    let match;
+    while (match = runs.exec(payload)) length = Math.max(length, match[0].length + 1);
+    const fence = "`".repeat(length);
+    return `<details>
+<summary>${safeSummary}</summary>
+
+${fence}json
+${payload}
+${fence}
+
+</details>`;
+  }
+  var init_report_markdown = __esm({
+    "src/core/diagnostics/report-markdown.ts"() {
+      "use strict";
+    }
+  });
+
+  // src/diagnostics/dom-capture.ts
+  async function captureDomSnapshot(document2, options = {}) {
+    var _a, _b;
+    const start = performance.now();
+    const limits2 = { ...snapshotLimits };
+    for (const key of Object.keys(limits2)) {
+      const value = (_a = options.limits) == null ? void 0 : _a[key];
+      if (typeof value === "number" && Number.isFinite(value))
+        limits2[key] = Math.max(1, Math.min(limits2[key], Math.floor(value)));
+    }
+    let mutationsDuringCapture = 0;
+    const countMutations = (records) => {
+      for (const record of records) {
+        const element = record.target instanceof Element ? record.target : record.target.parentElement;
+        if (element && !isReportUi(element)) mutationsDuringCapture++;
+      }
+    };
+    const observer = typeof MutationObserver === "undefined" ? null : new MutationObserver(countMutations);
+    observer == null ? void 0 : observer.observe(document2.documentElement, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      characterData: true
+    });
+    try {
+      const capture = new DomCapture(limits2);
+      const selection = await selectSnapshotRegions(
+        document2,
+        options.target || null,
+        limits2,
+        capture.privacy
+      );
+      const regions = [];
+      for (const selected of selection.regions) {
+        if (capture.nodes >= limits2.nodes) {
+          capture.omit("node-limit");
+          break;
+        }
+        const root = await capture.region(selected.element);
+        const ancestors = [];
+        let ancestor = selected.element.parentElement;
+        while (ancestor && ancestors.length < 8) {
+          ancestors.unshift(capture.shell(ancestor));
+          ancestor = ancestor.parentElement;
+        }
+        regions.push({ ref: root.ref, selection: selected.selection, ancestors, root });
+        await yieldSnapshotWork();
+      }
+      const references2 = [];
+      for (const pending of capture.attributes.pending.values()) {
+        if (references2.length >= limits2.references) {
+          capture.omissions["reference-limit"] = capture.attributes.pending.size - references2.length;
+          break;
+        }
+        const target = document2.getElementById(pending.original);
+        if (!target) {
+          references2.push({ id: pending.id, status: "missing", target: null });
+          continue;
+        }
+        const existing = capture.captured.get(target);
+        const publicLeaf = pending.interfaceLabel && target.localName === "span" && target.childElementCount === 0 && capture.privacy.content(target) === "uncertain";
+        if (existing) {
+          if (publicLeaf) capture.promoteLabel(target, existing);
+          references2.push({ id: pending.id, status: "captured", target: null });
+          continue;
+        }
+        if (capture.nodes >= limits2.nodes) {
+          references2.push({ id: pending.id, status: "budget-exceeded", target: null });
+          continue;
+        }
+        const copy = await capture.region(target, publicLeaf ? "interface" : void 0);
+        references2.push({ id: pending.id, status: "external", target: copy });
+      }
+      for (const source of capture.privacy.svgDisclosureText.keys()) {
+        const copy = capture.captured.get(source);
+        if (copy && capture.privacy.content(source) === "interface")
+          capture.promoteLabel(source, copy);
+      }
+      if (observer) countMutations(observer.takeRecords());
+      return {
+        version: 1,
+        limits: limits2,
+        regions,
+        references: references2,
+        target: options.target ? ((_b = capture.captured.get(options.target)) == null ? void 0 : _b.ref) || null : null,
+        coverage: {
+          scope: "selected-regions",
+          capturedNodes: capture.nodes,
+          discoveredNodes: selection.discovered,
+          identitySeedNodes: selection.seeded,
+          retainedLabelCharacters: capture.labels,
+          redactedTextNodes: capture.redacted,
+          redactedAttributes: capture.attributes.redacted,
+          omissions: { ...capture.omissions, ...capture.attributes.omissions },
+          elapsedMs: Math.round(performance.now() - start),
+          discoveryComplete: selection.discoveryComplete,
+          regionSelectionComplete: selection.selectionComplete,
+          mutationsDuringCapture
+        },
+        privacy: {
+          policy: "content-boundaries-v1",
+          interfaceLabels: "automatically-sanitized",
+          authoredText: "redacted",
+          mediaContent: "omitted",
+          identifiers: "report-local-aliases",
+          classes: "report-local-aliases",
+          destinations: "structural-templates"
+        }
+      };
+    } finally {
+      observer == null ? void 0 : observer.disconnect();
+    }
+  }
+  var init_dom_capture = __esm({
+    "src/diagnostics/dom-capture.ts"() {
+      "use strict";
+      init_dom_snapshot();
+      init_dom_capture_tree();
+      init_dom_selection();
     }
   });
 
@@ -6527,7 +6963,7 @@ ${fence}
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:65b5870a8e56715ffcdf6571964c82f4ec1c7cdbba833532ba8f1c471cbe9a7e" : "unbundled";
+      buildIdentity = true ? "source-sha256:03c39c1c20adbd24cc7beeb9d4d347eeb5aa6834d04e57aae07fe5245c29b1b9" : "unbundled";
     }
   });
 
@@ -6898,13 +7334,13 @@ ${fence}
 
   // src/utils/dom.ts
   function climbUpTheTree(element, numberOfBranches = 1) {
-    let current = element;
+    let current2 = element;
     let remaining = numberOfBranches;
-    while (current && remaining > 0) {
-      current = current.parentNode;
+    while (current2 && remaining > 0) {
+      current2 = current2.parentNode;
       remaining -= 1;
     }
-    return current;
+    return current2;
   }
   var init_dom = __esm({
     "src/utils/dom.ts"() {
@@ -8031,8 +8467,11 @@ ${fence}
     if (!root) return changed;
     for (const post of root.querySelectorAll(`[${postAtt}]`)) {
       const previous = hiddenNewsContent.get(post);
-      if (previous !== void 0 && previous !== contentStamp(post) && !isUnloadedNewsPost(post))
-        changed.add(post);
+      if (previous !== void 0 && previous !== contentStamp(post)) {
+        if (isUnloadedNewsPost(post)) {
+          finishPostTrace(beginPostTrace(post, "virtualized-unload"), "defer");
+        } else changed.add(post);
+      }
     }
     return changed;
   }
@@ -8049,6 +8488,7 @@ ${fence}
   var init_news_revalidation = __esm({
     "src/feeds/news-revalidation.ts"() {
       "use strict";
+      init_post_trace();
       init_content_version();
       init_attributes();
       hiddenNewsContent = /* @__PURE__ */ new WeakMap();
@@ -8194,6 +8634,7 @@ ${fence}
       if (post.hasAttribute(postAtt) || !isSponsored(post, { isNF: true })) {
         return;
       }
+      const trace = beginPostTrace(post, "discovered");
       hideNewsPost(post, keyWords.SPONSORED, true, {
         options,
         keyWords,
@@ -8203,6 +8644,7 @@ ${fence}
         },
         state
       });
+      finishPostTrace(trace, "hide", "NF_SPONSORED");
       rememberHiddenNewsContent(post);
     });
   }
@@ -8224,6 +8666,7 @@ ${fence}
       "use strict";
       init_attributes();
       init_dirty_check();
+      init_post_trace();
       init_hide();
       init_news();
       init_sponsored();
@@ -8322,12 +8765,12 @@ ${fence}
         current: element.style.getPropertyValue(name),
         priority: inlinePriority(element.style, name)
       }));
-      for (const { name, current, priority } of currentDeclarations) {
+      for (const { name, current: current2, priority } of currentDeclarations) {
         const previous = change.styles.get(name);
         const value = name === "display" ? "none" : "0px";
-        if (!previous || current !== previous.applied || priority !== "")
-          change.styles.set(name, { original: current, priority, applied: value });
-        if (current !== value || priority !== "") element.style.setProperty(name, value);
+        if (!previous || current2 !== previous.applied || priority !== "")
+          change.styles.set(name, { original: current2, priority, applied: value });
+        if (current2 !== value || priority !== "") element.style.setProperty(name, value);
       }
       change.appliedCssText = element.style.cssText;
       if (element.getAttribute(marker) !== "") element.setAttribute(marker, "");
@@ -8824,15 +9267,15 @@ ${fence}
     if (!rightRail || !sponsoredHeading || !sponsoredLabel) {
       return null;
     }
-    let current = sponsoredHeading.parentElement;
-    while (current && current !== rightRail) {
-      if (current.hasAttribute(postAtt)) {
+    let current2 = sponsoredHeading.parentElement;
+    while (current2 && current2 !== rightRail) {
+      if (current2.hasAttribute(postAtt)) {
         return null;
       }
-      if (hasPlausibleRightRailAdLink(current, sponsoredHeading) && !hasOtherRightRailHeading(current, sponsoredHeading, sponsoredLabel)) {
-        return current;
+      if (hasPlausibleRightRailAdLink(current2, sponsoredHeading) && !hasOtherRightRailHeading(current2, sponsoredHeading, sponsoredLabel)) {
+        return current2;
       }
-      current = current.parentElement;
+      current2 = current2.parentElement;
     }
     return null;
   }
@@ -9095,29 +9538,29 @@ ${fence}
     return typeof value === "object" && value !== null;
   }
   function getReactFiberFromElement(element) {
-    let current = element;
+    let current2 = element;
     let depth = 0;
-    while (current && depth < 4) {
-      const reactFiberKey = Object.getOwnPropertyNames(current).find(
+    while (current2 && depth < 4) {
+      const reactFiberKey = Object.getOwnPropertyNames(current2).find(
         (key) => key.startsWith("__reactFiber$") || key.startsWith("__reactInternalInstance$")
       );
       if (reactFiberKey) {
-        const candidate = Reflect.get(current, reactFiberKey);
+        const candidate = Reflect.get(current2, reactFiberKey);
         if (isReactFiber(candidate)) return candidate;
       }
-      current = current.parentElement;
+      current2 = current2.parentElement;
       depth += 1;
     }
     return null;
   }
   function findAncestorFiber(fiber, predicate) {
-    let current = fiber;
+    let current2 = fiber;
     let safetyCounter = 0;
-    while (current && safetyCounter < 50) {
-      if (predicate(current)) {
-        return current;
+    while (current2 && safetyCounter < 50) {
+      if (predicate(current2)) {
+        return current2;
       }
-      current = isReactFiber(current.return) ? current.return : null;
+      current2 = isReactFiber(current2.return) ? current2.return : null;
       safetyCounter += 1;
     }
     return null;
@@ -9243,13 +9686,13 @@ ${fence}
     const candidateRows = /* @__PURE__ */ new Set();
     const chips = root.querySelectorAll('[data-type="hscroll-child"]');
     chips.forEach((chip) => {
-      let current = chip.parentElement;
-      while (current && current !== root) {
-        if (current.matches(newsSelectors.standardPost)) break;
-        if (isMetaAiPromptCandidateRow(current, root) && containsOnlyPromptContent(current)) {
-          candidateRows.add(current);
+      let current2 = chip.parentElement;
+      while (current2 && current2 !== root) {
+        if (current2.matches(newsSelectors.standardPost)) break;
+        if (isMetaAiPromptCandidateRow(current2, root) && containsOnlyPromptContent(current2)) {
+          candidateRows.add(current2);
         }
-        current = current.parentElement;
+        current2 = current2.parentElement;
       }
     });
     const rows = Array.from(candidateRows);
@@ -9471,65 +9914,91 @@ ${fence}
       const posts = /* @__PURE__ */ new Set([...getCollectionOfNewsPosts(), ...changedPosts]);
       for (const post of posts) {
         if (!post.hasChildNodes()) {
-          if (changedPosts.has(post)) restoreNewsPost(post, state);
+          if (changedPosts.has(post)) {
+            const trace2 = beginPostTrace(post, "content-changed");
+            restoreNewsPost(post, state);
+            finishPostTrace(trace2, "restore");
+          }
           continue;
         }
         let hideReason = "";
         let isSponsoredPost = false;
+        let matchedRule = null;
         const alreadyProcessed = post.hasAttribute(postAtt) && !changedPosts.has(post);
+        const trace = beginPostTrace(
+          post,
+          alreadyProcessed ? "retained" : changedPosts.has(post) ? "content-changed" : "discovered"
+        );
         if (!alreadyProcessed) {
           doLightDusting(post, state);
           if (hideReason === "" && options.NF_REELS_SHORT_VIDEOS) {
             hideReason = isNewsReelsAndShortVideos(post, keyWords);
+            if (hideReason) matchedRule = "NF_REELS_SHORT_VIDEOS";
           }
           if (hideReason === "" && options.NF_SHORT_REEL_VIDEO) {
             hideReason = isNewsShortReelVideo(post, keyWords);
+            if (hideReason) matchedRule = "NF_SHORT_REEL_VIDEO";
           }
           if (hideReason === "" && options.NF_META_AI) {
             hideReason = isNewsMetaAICard(post, keyWords);
+            if (hideReason) matchedRule = "NF_META_AI";
           }
           if (hideReason === "" && options.NF_AI_INFO_POSTS) {
             hideReason = isNewsAiInfoPost(post, keyWords);
+            if (hideReason) matchedRule = "NF_AI_INFO_POSTS";
           }
           if (hideReason === "" && options.NF_PAID_PARTNERSHIP) {
             hideReason = isNewsPaidPartnership(post, keyWords);
+            if (hideReason) matchedRule = "NF_PAID_PARTNERSHIP";
           }
           if (hideReason === "" && options.NF_PEOPLE_YOU_MAY_KNOW) {
             hideReason = isNewsPeopleYouMayKnow(post, keyWords);
+            if (hideReason) matchedRule = "NF_PEOPLE_YOU_MAY_KNOW";
           }
           if (hideReason === "" && options.NF_SUGGESTIONS) {
             hideReason = isNewsSuggested(post, state, keyWords);
+            if (hideReason) matchedRule = "NF_SUGGESTIONS";
           }
           if (hideReason === "" && options.NF_FOLLOW) {
             hideReason = isNewsFollow(post, keyWords);
+            if (hideReason) matchedRule = "NF_FOLLOW";
           }
           if (hideReason === "" && options.NF_PARTICIPATE) {
             hideReason = isNewsParticipate(post, keyWords);
+            if (hideReason) matchedRule = "NF_PARTICIPATE";
           }
           if (hideReason === "" && options.NF_SPONSORED_PAID) {
             hideReason = isNewsSponsoredPaidBy(post, keyWords);
+            if (hideReason) matchedRule = "NF_SPONSORED_PAID";
           }
           if (hideReason === "" && options.NF_EVENTS_YOU_MAY_LIKE) {
             hideReason = isNewsEventsYouMayLike(post, keyWords);
+            if (hideReason) matchedRule = "NF_EVENTS_YOU_MAY_LIKE";
           }
           if (hideReason === "" && options.NF_FILTER_VERIFIED_BADGE) {
             hideReason = isNewsVerifiedBadge(post, keyWords);
+            if (hideReason) matchedRule = "NF_FILTER_VERIFIED_BADGE";
           }
           if (hideReason === "" && options.NF_STORIES) {
             hideReason = isNewsStoriesPost(post, keyWords);
+            if (hideReason) matchedRule = "NF_STORIES";
           }
           if (hideReason === "" && options.NF_ANIMATED_GIFS_POSTS) {
             hideReason = hasNewsAnimatedGifContent(post, keyWords);
+            if (hideReason) matchedRule = "NF_ANIMATED_GIFS_POSTS";
           }
           if (hideReason === "" && options.NF_SPONSORED && isSponsored(post, state)) {
             isSponsoredPost = true;
             hideReason = keyWords.SPONSORED;
+            if (hideReason) matchedRule = "NF_SPONSORED";
           }
           if (hideReason === "" && options.NF_BLOCKED_ENABLED) {
             hideReason = findNewsBlockedText(post, options, filters);
+            if (hideReason) matchedRule = "NF_BLOCKED_ENABLED";
           }
           if (hideReason === "" && options.NF_LIKES_MAXIMUM) {
             hideReason = postExceedsLikeCount(post, options, keyWords) || "";
+            if (hideReason) matchedRule = "NF_LIKES_MAXIMUM";
           }
         }
         if (hideReason.length > 0) {
@@ -9554,6 +10023,11 @@ ${fence}
             hideNumberOfShares(post, state, options);
           }
         }
+        finishPostTrace(
+          trace,
+          hideReason ? "hide" : alreadyProcessed ? "retain" : changedPosts.has(post) ? "restore" : "allow",
+          matchedRule
+        );
         rememberHiddenNewsContent(post);
       }
       state.lastNewsPostSweepAt = Date.now();
@@ -9586,6 +10060,7 @@ ${fence}
       init_animated_gifs();
       init_dirty_check();
       init_dusting();
+      init_post_trace();
       init_hide();
       init_info_boxes();
       init_news();
@@ -11129,6 +11604,7 @@ ${fence}
     const samples = buildSamples(context);
     return {
       schemaVersion: 2,
+      history: readPostHistory(),
       generatedAt: now.toISOString(),
       snapshot,
       script: scriptInfo,
@@ -11166,6 +11642,7 @@ ${fence}
     "src/diagnostics/bug-report.ts"() {
       "use strict";
       init_regex_validation();
+      init_post_history();
       init_report_encoding();
       init_report_markdown();
       init_dom_capture();
@@ -11920,15 +12397,15 @@ ${fence}
       changes.delete(key);
       change = void 0;
     }
-    const current = element.getAttribute(name);
+    const current2 = element.getAttribute(name);
     if (!change) {
-      change = { element, name, original: current, applied: value };
+      change = { element, name, original: current2, applied: value };
       changes.set(key, change);
     } else {
-      if (current !== change.applied) change.original = current;
+      if (current2 !== change.applied) change.original = current2;
       change.applied = value;
     }
-    if (current === value) return;
+    if (current2 === value) return;
     if (value === null) element.removeAttribute(name);
     else element.setAttribute(name, value);
   }
@@ -11961,13 +12438,13 @@ ${fence}
       styles.delete(key);
       change = void 0;
     }
-    const current = element.style.getPropertyValue(name);
+    const current2 = element.style.getPropertyValue(name);
     const priority = element.style.getPropertyPriority(name);
     if (!change) {
       change = {
         element,
         name,
-        original: current,
+        original: current2,
         originalPriority: priority,
         applied: value,
         originalAttribute: element.getAttribute("style"),
@@ -11975,15 +12452,15 @@ ${fence}
       };
       styles.set(key, change);
     } else {
-      if (current !== change.applied || priority !== "") {
-        change.original = current;
+      if (current2 !== change.applied || priority !== "") {
+        change.original = current2;
         change.originalPriority = priority;
         change.originalAttribute = element.getAttribute("style");
         change.originalCssText = element.style.cssText;
       }
       change.applied = value;
     }
-    if (current === value && priority === "") return;
+    if (current2 === value && priority === "") return;
     element.style.setProperty(name, value);
     if (element.style.length === 1) element.setAttribute("style", `${name}:${value};`);
   }
@@ -13913,15 +14390,15 @@ ${fence}
     });
     const syncBanner = () => {
       var _a2, _b;
-      const current = (_b = (_a2 = getTopbarMenuButtons()[0]) == null ? void 0 : _a2.closest('[role="banner"]')) != null ? _b : null;
-      if (current === observedBanner) return false;
+      const current2 = (_b = (_a2 = getTopbarMenuButtons()[0]) == null ? void 0 : _a2.closest('[role="banner"]')) != null ? _b : null;
+      if (current2 === observedBanner) return false;
       bannerOwner == null ? void 0 : bannerOwner.dispose();
       bannerOwner = null;
-      observedBanner = current;
-      if (!current) return true;
+      observedBanner = current2;
+      if (!current2) return true;
       bannerOwner = new UiLifecycle();
       bannerOwner.observe(
-        current,
+        current2,
         {
           childList: true,
           subtree: true,
@@ -16178,6 +16655,7 @@ ${fence}
     initializeRuntimeAttributes(state);
     const { options, filters, keyWords } = await loadOptions(state);
     const context = { state, options, filters, keyWords, pathInfo };
+    const stopPostHistory = startPostHistory(document);
     addCSS(state, options, defaults);
     const extraStylesTimer = window.setTimeout(() => addExtraCSS(state, options, defaults), 150);
     const themeObserver = watchDarkMode(state, () => {
@@ -16217,6 +16695,7 @@ ${fence}
       if (stopped) return;
       stopped = true;
       stopLoop();
+      stopPostHistory();
       restoreFeedPresentation(state);
       clearDirtyTracking();
       stopReelsProcessing(state);
@@ -16253,6 +16732,7 @@ ${fence}
       init_options_service();
       init_defaults();
       init_feed_rules();
+      init_post_history();
       init_bug_report();
       init_dirty_check();
       init_attributes();

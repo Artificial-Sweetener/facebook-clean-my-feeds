@@ -2,6 +2,7 @@
 import { createOptionsService } from "../application/options-service";
 import { defaults } from "../core/options/defaults";
 import { pathInfo } from "../core/rules/feed-rules";
+import { startPostHistory } from "../diagnostics/post-history";
 import { buildBugReport, getSupportUrl } from "../diagnostics/bug-report";
 import { clearDirtyTracking } from "../dom/dirty-check";
 import { initializeRuntimeAttributes } from "../dom/attributes";
@@ -60,6 +61,7 @@ async function startSession(): Promise<() => void> {
   initializeRuntimeAttributes(state);
   const { options, filters, keyWords } = await loadOptions(state);
   const context = { state, options, filters, keyWords, pathInfo };
+  const stopPostHistory = startPostHistory(document);
   addCSS(state, options, defaults);
   const extraStylesTimer = window.setTimeout(() => addExtraCSS(state, options, defaults), 150);
   const themeObserver = watchDarkMode(state, () => {
@@ -97,6 +99,7 @@ async function startSession(): Promise<() => void> {
     if (stopped) return;
     stopped = true;
     stopLoop();
+    stopPostHistory();
     restoreFeedPresentation(state);
     clearDirtyTracking();
     stopReelsProcessing(state);

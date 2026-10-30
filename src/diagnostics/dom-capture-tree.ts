@@ -160,7 +160,7 @@ export class DomCapture {
     const value = node.textContent || "";
     const content =
       inherited || (node.parentElement ? this.privacy.content(node.parentElement) : "uncertain");
-    let safe = this.privacy.text(value, content);
+    let safe = this.privacy.textNode(node, content);
     if (content !== "interface" && value.trim()) this.redacted++;
     if (
       content === "interface" &&

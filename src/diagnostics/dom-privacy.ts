@@ -1,22 +1,18 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import type { SnapshotContent } from "../core/diagnostics/dom-snapshot";
-import { sanitizePathname } from "./location";
-import { sharedSelectors } from "../selectors/shared";
-import { matchesSponsoredLabel } from "../core/filters/disclosure-labels";
-import { matchesNewsLabel } from "../core/filters/labels";
+import { diagnosticSelectors as selectors } from "../selectors/diagnostics";
 import { translations } from "../i18n";
-import { getSvgDisclosure } from "../feeds/shared/svg-disclosure";
+import { readSvgText } from "../dom/svg-text";
+import {
+  boundedLabel,
+  MetadataContext,
+  isProfileDestination,
+  metadataDestination,
+  metadataPost,
+} from "./metadata-context";
 
-const authored = `${sharedSelectors.authoredContent}, textarea, input, [role="textbox"], [role="log"], [data-lexical-editor]`;
-const identity =
-  '[data-ad-rendering-role="profile_name"], [data-hovercard], [data-profileid], [data-userid]';
-const control =
-  'button, [role="button"], [role="menuitem"], [role="tab"], [role="checkbox"], [role="switch"], [role="option"]';
-const heading = 'h1, h2, h3, h4, h5, h6, [role="heading"]';
-const excluded = "script, style, noscript, template, iframe, object, embed, canvas, foreignObject";
-
-/** Compare complete fixed product copy across all locales; partial word matches cannot establish public provenance. */
+/** Compare fixed fallback copy outside structurally established metadata areas across every supported locale. */
 function normalizeLabel(value: string): string {
   return value.normalize("NFKC").replace(/\s+/g, " ").trim().toLocaleLowerCase("en-US");
 }
@@ -31,159 +27,98 @@ const fixedLabels = new Set(
   )
 );
 
-/**
- * Require a header disclosure relationship before treating a link's label as public copy.
- * @param element Candidate link whose metadata and label must establish sponsorship provenance.
- * @returns Whether the link supplies a recognized public disclosure within its owning post header.
- */
-export function isDisclosureLink(element: Element): boolean {
-  if (!element.matches("a[href]")) return false;
-  const post =
-    element.closest(sharedSelectors.postOwner) ||
-    element.closest("div[aria-describedby], div[data-virtualized]");
-  if (post && getSvgDisclosure(element, post)) return true;
-  if (!element.closest("h4, h5")) return false;
-  try {
-    const url = new URL(element.getAttribute("href") || "", "https://www.facebook.com/");
-    const text = boundedText(element);
-    return (
-      /^https?:$/.test(url.protocol) &&
-      !url.username &&
-      !url.password &&
-      /(^|\.)facebook\.com$/.test(url.hostname) &&
-      url.searchParams.has("__cft__[0]") &&
-      !element.matches(identity) &&
-      text !== null &&
-      (!text || matchesSponsoredLabel(text)) &&
-      (element.querySelector("svg[aria-label], svg[aria-labelledby], span[aria-labelledby]") !==
-        null ||
-        matchesSponsoredLabel(element.getAttribute("aria-label") || text || ""))
-    );
-  } catch {
-    return false;
-  }
-}
-
-/** Collect only bounded text used to recognize identity strings locally; none of this dictionary is serialized. */
-function boundedText(element: Element, maximum = 180): string | null {
+/** Gather private author copy without incorrectly teaching the sanitizer that adjacent action labels are names. */
+function identityLabel(element: Element): string | null {
   const walker = element.ownerDocument.createTreeWalker(element, NodeFilter.SHOW_TEXT);
   let text = "";
   let count = 0;
   let node: Node | null;
   while ((node = walker.nextNode())) {
-    if (++count > 24 || text.length > maximum) return null;
-    text += node.textContent || "";
+    if (++count > 128 || text.length > 180) return null;
+    const action = node.parentElement?.closest('button, [role="button"]');
+    if (!action || action === element) text += node.textContent || "";
   }
-  return text.length <= maximum ? text.trim() : null;
+  return text.length <= 180 ? text.trim() : null;
 }
 
-/** Classify destinations before interpreting their labels; profile/content anchors are never public UI by default. */
-export function isInterfaceLink(element: Element): boolean {
-  const href = element.getAttribute("href");
-  if (!href) return element.hasAttribute("aria-label") || element.hasAttribute("aria-labelledby");
-  try {
-    const url = new URL(href, "https://www.facebook.com/");
-    if (!/^https?:$/.test(url.protocol) || url.username || url.password) return false;
-    if (url.hostname === "meta.ai" || url.hostname.endsWith(".meta.ai")) return true;
-    if (!(url.hostname === "facebook.com" || url.hostname.endsWith(".facebook.com"))) return false;
-    return (
-      /^\/(?:ads\/about|business\/help|help|settings|privacy)(?:\/|$)/.test(url.pathname) ||
-      /^\/(?:groups\/discover|friends|reel|stories|watch)\/?$/.test(url.pathname) ||
-      isDisclosureLink(element)
-    );
-  } catch {
-    return false;
-  }
-}
-
-/** Recognize ordinary profile navigation without treating arbitrary content or creation links as personal names. */
-function isProfileLink(element: Element): boolean {
-  if (!element.matches("a[href]") || isInterfaceLink(element)) return false;
-  try {
-    const url = new URL(element.getAttribute("href") || "", "https://www.facebook.com/");
-    return (
-      /(^|\.)facebook\.com$/.test(url.hostname) &&
-      (url.pathname === "/profile.php" ||
-        sanitizePathname(url.pathname).replace(/\/$/, "") === "/[profile]")
-    );
-  } catch {
-    return false;
-  }
-}
-
-/** Recognize only complete supported author actions; private or personalized action text never gains public provenance. */
-function isAuthorActionLabel(value: string): boolean {
-  return matchesNewsLabel(value, "follow") || matchesNewsLabel(value, "join");
-}
-
-/**
- * Separate a fixed action from a broad profile-name wrapper while keeping actual profile anchors and identifying attributes private.
- * @param element Descendant being captured; only an independently named button beside a separate author link is eligible.
- * @returns Whether the surrounding control supplies supported fixed copy without conflicting accessible text or identity markers.
- */
-function isPublicAuthorAction(element: Element): boolean {
-  const action = element.closest('button, [role="button"]');
-  const profile = action?.closest('[data-ad-rendering-role="profile_name"]');
-  const header = action?.closest("h4, h5");
-  if (
-    !action ||
-    !profile ||
-    !header ||
-    profile === action ||
-    action.closest("a, [data-hovercard], [data-profileid], [data-userid]") ||
-    element.closest(identity) !== profile ||
-    action.querySelector("a, [data-hovercard], [data-profileid], [data-userid]") ||
-    !Array.from(header.querySelectorAll("a[href]")).some(
-      (link) => !action.contains(link) && isProfileLink(link)
-    )
-  )
-    return false;
-  const text = boundedText(action);
-  const label = action.getAttribute("aria-label");
-  return (
-    text !== null &&
-    ((!!text && isAuthorActionLabel(text)) || (!text && !!label && isAuthorActionLabel(label))) &&
-    (!label || !text || normalizeLabel(label) === normalizeLabel(text))
-  );
-}
-
-/** Locally remember identity strings and replace them within otherwise useful personalized interface labels. */
+/** Own source-local identity scrubbing and structural public provenance for one automatically redacted capture. */
 export class SnapshotPrivacy {
-  readonly svgDisclosureText = new Map<Element, string>();
+  readonly metadataText = new Map<Element, string>();
+  private privateGraphics = new Set<Element>();
+  private metadata = new MetadataContext();
   private identities = new Set<string>();
   private identityPattern: RegExp | null = null;
   private compiledIdentities = -1;
 
-  /** Retain only complete recognized disclosure copy; unknown SVG names and timestamps keep ordinary redaction. */
-  rememberSvgDisclosure(element: Element): void {
-    if (!element.matches("a[href]") || this.svgDisclosureText.size >= 256) return;
-    const post =
-      element.closest(sharedSelectors.postOwner) ||
-      element.closest("div[aria-describedby], div[data-virtualized]");
-    const disclosure = post ? getSvgDisclosure(element, post) : null;
-    for (const target of disclosure?.textElements || []) {
-      if (this.svgDisclosureText.size >= 256) break;
-      this.svgDisclosureText.set(target, this.svgText(target));
+  /** Identify actual author/profile links separately from post-header timestamps, disclosures and action controls. */
+  private identityLink(link: Element): boolean {
+    if (link.closest(selectors.identity)) return true;
+    if (this.metadata.control(link)) return false;
+    return isProfileDestination(link) || !this.interfaceLink(link);
+  }
+
+  /** Product navigation and independently established metadata can retain novel labels without a filter match. */
+  private interfaceLink(link: Element): boolean {
+    if (this.metadata.control(link)) return true;
+    const url = metadataDestination(link);
+    return (
+      !!url &&
+      (/^\/(?:ads\/about|business\/help|help|settings|privacy)(?:\/|$)/.test(url.pathname) ||
+        /^\/(?:groups\/discover|friends|reel|stories|watch)\/?$/.test(url.pathname))
+    );
+  }
+
+  /** Only metadata controls may authorize external accessible-label text; arbitrary UI references remain private. */
+  publicReferenceSource(element: Element): boolean {
+    return this.metadata.control(element) !== null;
+  }
+
+  /**
+   * Retain local SVG text referenced by structural metadata, independently of recognized ad wording.
+   * Complete text is checked for private substrings before individual fragments receive public provenance.
+   * @param element Candidate metadata link/button, read without modifying it or its referenced definitions.
+   */
+  rememberMetadataGraphics(element: Element): void {
+    if (
+      !element.matches(selectors.control) ||
+      this.metadataText.size >= 256 ||
+      !this.metadata.control(element)
+    )
+      return;
+    const post = metadataPost(element);
+    if (!post) return;
+    for (const graphic of Array.from(element.querySelectorAll("svg")).slice(0, 16)) {
+      if (graphic.closest(selectors.control) !== element) continue;
+      const resolved = readSvgText(graphic, post);
+      if (!resolved) continue;
+      const privateCopy =
+        this.interfaceText(resolved.text) !==
+        resolved.text.normalize("NFKC").replace(/\s+/g, " ").trim();
+      for (const target of resolved.textElements) {
+        if (this.metadataText.size >= 256) break;
+        if (this.metadataText.has(target)) continue;
+        this.metadataText.set(target, this.directText(target));
+        if (privateCopy) this.privateGraphics.add(target);
+      }
     }
   }
 
-  /** Compare only direct contributing text so capture yields cannot transfer public provenance to replaced copy. */
-  private svgText(element: Element): string {
+  /** Record exact direct copy so a reference replaced during cooperative capture loses its earlier public provenance. */
+  private directText(element: Element): string {
     return Array.from(element.childNodes)
       .filter((node) => node.nodeType === Node.TEXT_NODE)
       .map((node) => node.textContent || "")
       .join("");
   }
 
-  /** Derive identity evidence from bounded discovery rather than retaining or hashing private page text. */
+  /** Learn names only from identity-bearing structure; arbitrary metadata links must never poison the name dictionary. */
   remember(element: Element): void {
     if (this.identities.size >= 500) return;
     if (
-      (element.matches(identity) && !element.querySelector('button, [role="button"]')) ||
-      (element.matches("h4 a, h5 a") && !isInterfaceLink(element)) ||
-      isProfileLink(element)
+      element.matches(selectors.identity) ||
+      (element.matches("a[href]") && this.identityLink(element))
     ) {
-      const name = boundedText(element);
+      const name = identityLabel(element);
       if (name) {
         this.identities.add(name);
         const parts = name.split(/\s+/);
@@ -199,29 +134,23 @@ export class SnapshotPrivacy {
   }
 
   /**
-   * Keep private boundaries authoritative; headings and controls require complete fixed copy before text retention.
-   * Novel disclosure labels use their constrained header/graphic relationship instead of a vocabulary match.
-   * @param element Original page element whose ancestors and bounded caption establish text provenance.
-   * @returns Privacy category shared by text and attribute capture; uncertain copy is automatically redacted.
+   * Prefer authored/identity boundaries, then structural metadata, then fixed-copy fallbacks for other UI.
+   * @param element Source element, whose role and author/body relationship establish provenance without a filter result.
+   * @returns Privacy category for both text and accessible attributes; ambiguous content remains explicitly redacted.
    */
   content(element: Element): SnapshotContent {
-    if (element.closest(excluded)) return "excluded";
-    if (element.closest(authored)) return "authored";
-    if (isPublicAuthorAction(element)) return "interface";
-    if (element.closest(identity)) return "identity";
-    const publicSvgText = this.svgDisclosureText.get(element);
-    if (publicSvgText !== undefined && publicSvgText === this.svgText(element)) return "interface";
+    if (element.closest(selectors.excluded)) return "excluded";
+    if (element.closest(selectors.authored)) return "authored";
+    if (this.metadata.independentAction(element)) return "interface";
+    if (element.closest(selectors.identity)) return "identity";
+    const referenced = this.metadataText.get(element);
+    if (referenced !== undefined && referenced === this.directText(element)) return "interface";
     const link = element.closest("a");
-    if (link && !isInterfaceLink(link)) return "identity";
-    if (
-      link &&
-      isDisclosureLink(link) &&
-      element.closest("svg[aria-label], svg[aria-labelledby], span[aria-labelledby]")
-    )
-      return "interface";
-    const labelOwner = element.closest(`${control}, ${heading}, a`);
+    if (link && this.identityLink(link)) return "identity";
+    if (this.metadata.control(element)) return "interface";
+    const labelOwner = element.closest(`${selectors.control}, ${selectors.heading}`);
     if (labelOwner) {
-      const text = boundedText(labelOwner);
+      const text = boundedLabel(labelOwner);
       const label = labelOwner.getAttribute("aria-label");
       if (
         ((text && fixedLabels.has(normalizeLabel(text))) ||
@@ -233,14 +162,51 @@ export class SnapshotPrivacy {
     return "uncertain";
   }
 
-  /** An attribute must establish its own fixed-copy provenance; a safe visible caption cannot authorize a private title. */
-  accessibleText(element: Element, value: string, content: SnapshotContent): string {
-    const link = element.closest("a");
+  /**
+   * Accessible attributes establish their own provenance; a harmless caption cannot authorize a conflicting private title.
+   * @param element Source control or descendant, classified through the same structural boundaries as visible copy.
+   * @param value Attribute copy, sanitized before serialization.
+   * @param content Existing boundary category; authored and identity regions cannot be upgraded here.
+   * @param attribute Only an otherwise unnamed metadata control may publish a novel standalone aria-label.
+   * @returns Public copy with private substrings removed, or a redaction placeholder.
+   */
+  accessibleText(
+    element: Element,
+    value: string,
+    content: SnapshotContent,
+    attribute: "aria-label" | "title"
+  ): string {
+    if (content !== "interface") return this.text(value, content);
+    const text = boundedLabel(element);
+    const sameCopy = text !== null && !!text && normalizeLabel(text) === normalizeLabel(value);
     const publicLabel =
+      sameCopy ||
       fixedLabels.has(normalizeLabel(value)) ||
-      (isPublicAuthorAction(element) && isAuthorActionLabel(value)) ||
-      (link !== null && isDisclosureLink(link));
-    return this.text(value, content === "interface" && !publicLabel ? "uncertain" : content);
+      (attribute === "aria-label" && !text && this.metadata.control(element) !== null);
+    return this.text(value, publicLabel ? "interface" : "uncertain");
+  }
+
+  /**
+   * Scrub complete fragmented labels before exporting pieces so split names, email addresses and phone numbers cannot escape.
+   * @param node Captured text node; no private whole-label text is retained in the report.
+   * @param content Already established boundary provenance.
+   * @returns Sanitized fragment, conservatively suppressed when a multi-node label contains private copy.
+   */
+  textNode(node: Node, content: SnapshotContent): string {
+    const value = node.textContent || "";
+    if (content !== "interface") return this.text(value, content);
+    if (!value.trim()) return value ? " " : "";
+    const parent = node.parentElement;
+    if (parent && this.privateGraphics.has(parent)) return "[redacted interface fragment]";
+    const control = parent ? this.metadata.control(parent) : null;
+    const whole = control ? this.metadata.label(control) : null;
+    if (
+      whole !== null &&
+      whole !== value.trim() &&
+      this.interfaceText(whole) !== whole.normalize("NFKC").replace(/\s+/g, " ").trim()
+    )
+      return "[redacted interface fragment]";
+    return `${/^\s/u.test(value) ? " " : ""}${this.interfaceText(value)}${/\s$/u.test(value) ? " " : ""}`;
   }
 
   /**
@@ -282,7 +248,7 @@ export class SnapshotPrivacy {
       .trim();
   }
 
-  /** Text provenance controls disclosure; unknown text does not become public just because a detector missed it. */
+  /** Only structurally public text reaches the sanitizer; authored and identity boundaries remain placeholders. */
   text(value: string, content: SnapshotContent): string {
     if (!value.trim()) return "";
     if (content !== "interface") return `[${content} text]`;

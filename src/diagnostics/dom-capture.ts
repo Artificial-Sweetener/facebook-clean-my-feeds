@@ -102,7 +102,7 @@ export async function captureDomSnapshot(
       const copy = await capture.region(target, publicLeaf ? "interface" : undefined);
       references.push({ id: pending.id, status: "external", target: copy });
     }
-    for (const source of capture.privacy.svgDisclosureText.keys()) {
+    for (const source of capture.privacy.metadataText.keys()) {
       const copy = capture.captured.get(source);
       if (copy && capture.privacy.content(source) === "interface")
         capture.promoteLabel(source, copy);

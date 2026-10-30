@@ -4535,6 +4535,286 @@
     }
   });
 
+  // src/selectors/shared.ts
+  var sharedSelectors;
+  var init_shared = __esm({
+    "src/selectors/shared.ts"() {
+      "use strict";
+      sharedSelectors = {
+        dialog: 'div[role="dialog"]',
+        postOwner: 'div[role="article"], div[aria-posinset]',
+        profileName: '[data-ad-rendering-role="profile_name"]',
+        storyMessage: '[data-ad-rendering-role="story_message"]',
+        authoredContent: 'p, blockquote, [data-ad-preview="message"], [data-ad-comet-preview="message"], [data-ad-rendering-role="story_message"], [data-ad-rendering-role="creative_body"], [contenteditable="true"], [data-commentid], [data-testid^="UFI2Comment/"], [role="comment"]'
+      };
+    }
+  });
+
+  // src/selectors/diagnostics.ts
+  var diagnosticSelectors;
+  var init_diagnostics = __esm({
+    "src/selectors/diagnostics.ts"() {
+      "use strict";
+      init_shared();
+      diagnosticSelectors = {
+        authored: `${sharedSelectors.authoredContent}, textarea, input, [role="textbox"], [role="log"], [data-lexical-editor]`,
+        identity: '[data-ad-rendering-role="profile_name"], [data-hovercard], [data-profileid], [data-userid]',
+        control: 'a, button, [role="button"], [role="link"], [role="menuitem"], [role="tab"], [role="checkbox"], [role="switch"], [role="option"]',
+        heading: 'h1, h2, h3, h4, h5, h6, [role="heading"]',
+        excluded: "script, style, noscript, template, iframe, object, embed, canvas, foreignObject",
+        post: '[aria-posinset], [role="article"]',
+        legacyPost: "div[aria-describedby], div[data-virtualized]",
+        profile: sharedSelectors.profileName
+      };
+    }
+  });
+
+  // src/dom/post-evidence.ts
+  function facebookUrl(link) {
+    const href = link.getAttribute("href");
+    const previous = destinations.get(link);
+    if ((previous == null ? void 0 : previous.href) === href) return previous.url;
+    let url = null;
+    try {
+      const parsed = href ? new URL(href, "https://www.facebook.com/") : null;
+      if (parsed && /^(https?:)$/.test(parsed.protocol) && !parsed.username && !parsed.password && (parsed.hostname === "facebook.com" || parsed.hostname.endsWith(".facebook.com")))
+        url = parsed;
+    } catch (e) {
+    }
+    destinations.set(link, { href, url });
+    return url;
+  }
+  function getPostEvidence(post) {
+    const version = getContentVersion(post);
+    const previous = cached.get(post);
+    if (version !== null && (previous == null ? void 0 : previous.version) === version) return previous.evidence;
+    forgetLabelReferences(post);
+    const evidence = new PostEvidence(post);
+    if (version !== null) cached.set(post, { version, evidence });
+    return evidence;
+  }
+  var destinations, PostEvidence, cached;
+  var init_post_evidence = __esm({
+    "src/dom/post-evidence.ts"() {
+      "use strict";
+      init_content_version();
+      destinations = /* @__PURE__ */ new WeakMap();
+      PostEvidence = class {
+        /** Keep every query, name and referenced label attached to its owning post scope. */
+        constructor(post) {
+          this.post = post;
+          this.queries = /* @__PURE__ */ new WeakMap();
+          this.visibility = /* @__PURE__ */ new WeakMap();
+          this.painted = /* @__PURE__ */ new WeakMap();
+          this.texts = /* @__PURE__ */ new WeakMap();
+          this.names = /* @__PURE__ */ new WeakMap();
+          this.contentTexts = /* @__PURE__ */ new Map();
+        }
+        /** Execute each selector once per scope and content version without collecting unused filter facts. */
+        select(selector, root = this.post) {
+          let queries = this.queries.get(root);
+          if (!queries) {
+            queries = /* @__PURE__ */ new Map();
+            this.queries.set(root, queries);
+          }
+          let elements = queries.get(selector);
+          if (!elements) {
+            elements = Array.from(root.querySelectorAll(selector));
+            queries.set(selector, elements);
+          }
+          return elements;
+        }
+        /** Reuse bounded body-text extraction across enabled filters and stable recovery sweeps. */
+        readText(key, read) {
+          let text = this.contentTexts.get(key);
+          if (!text) {
+            text = read();
+            this.contentTexts.set(key, text);
+          }
+          return text;
+        }
+        /** Exclude accessibility-hidden metadata while sharing its physical-visibility cache with visual-only counters. */
+        isVisible(element) {
+          const previous = this.visibility.get(element);
+          if (previous !== void 0) return previous;
+          const visible2 = this.isPainted(element) && element.getAttribute("aria-hidden") !== "true";
+          this.visibility.set(element, visible2);
+          return visible2;
+        }
+        /** Read physical visibility once per version, retaining visually displayed counters that Facebook intentionally marks aria-hidden. */
+        isPainted(element) {
+          var _a;
+          const previous = this.painted.get(element);
+          if (previous !== void 0) return previous;
+          const style = (_a = element.ownerDocument.defaultView) == null ? void 0 : _a.getComputedStyle(element);
+          const visible2 = !element.matches("script, style, [hidden]") && (style == null ? void 0 : style.display) !== "none" && (style == null ? void 0 : style.visibility) !== "hidden";
+          this.painted.set(element, visible2);
+          return visible2;
+        }
+        /** Ignore concealed metadata ancestors while allowing diagnostics on a post CMF itself has collapsed. */
+        isRendered(element) {
+          let ancestor = element;
+          while (ancestor && ancestor !== this.post) {
+            if (!this.isVisible(ancestor)) return false;
+            ancestor = ancestor.parentElement;
+          }
+          return ancestor === this.post;
+        }
+        /**
+         * Read fragmented control copy with strict node/character ceilings; oversized labels remain unmatched.
+         * @param control Owned metadata control; surrounding post copy cannot contribute to its label.
+         * @returns Visible label text or an empty string when the traversal budget is exhausted.
+         */
+        visibleText(control) {
+          const previous = this.texts.get(control);
+          if (previous !== void 0) return previous;
+          const walker = control.ownerDocument.createTreeWalker(control, NodeFilter.SHOW_ALL);
+          let node = control;
+          let text = "";
+          let nodes = 0;
+          while (node) {
+            if (++nodes > 128 || text.length > 256) {
+              text = "";
+              break;
+            }
+            let element = node instanceof Element ? node : node.parentElement;
+            let visible2 = true;
+            while (element && control.contains(element)) {
+              if (!this.isVisible(element)) {
+                visible2 = false;
+                break;
+              }
+              if (element === control) break;
+              element = element.parentElement;
+            }
+            if (visible2 && node.nodeType === Node.TEXT_NODE) text += node.textContent || "";
+            node = walker.nextNode();
+          }
+          if (text.length > 256) text = "";
+          this.texts.set(control, text);
+          return text;
+        }
+        /** Read non-rendered accessible label text without allowing oversized referenced subtrees to monopolize a scan. */
+        labelText(label) {
+          const walker = label.ownerDocument.createTreeWalker(label, NodeFilter.SHOW_ALL);
+          let node = label;
+          let text = "";
+          let nodes = 0;
+          while (node) {
+            if (++nodes > 128) return "";
+            if (node.nodeType === Node.TEXT_NODE) text += node.textContent || "";
+            if (text.length > 256) return "";
+            node = walker.nextNode();
+          }
+          return text;
+        }
+        /** Resolve bounded ARIA dependencies, including IDs that have not appeared in the document yet. */
+        referencedLabels(element) {
+          var _a;
+          const ids = ((_a = element.getAttribute("aria-labelledby")) == null ? void 0 : _a.trim().split(/\s+/)) || [];
+          if (!ids.length || ids.length > 8) return [null];
+          return ids.map((id) => {
+            return this.referenceTarget(id);
+          });
+        }
+        /** Subscribe before resolving so late insertion, replacement or text edits invalidate a cached negative result. */
+        referenceTarget(id) {
+          trackLabelReference(this.post, id);
+          return this.post.ownerDocument.getElementById(id) || this.select("[id]").find((label) => label.id === id) || null;
+        }
+        /** Preserve accessible-name precedence without borrowing ancestor copy or unbounded referenced text. */
+        explicitNames(element) {
+          var _a;
+          const previous = this.names.get(element);
+          if (previous) return previous;
+          const labels2 = element.hasAttribute("aria-labelledby") ? this.referencedLabels(element) : [];
+          const reference = labels2.length && labels2.every((label) => label && !label.contains(element)) ? labels2.map((label) => label ? this.labelText(label) : "").join(" ").trim() : "";
+          const title = (_a = Array.from(element.children).find(
+            (child) => child.localName === "title"
+          )) == null ? void 0 : _a.textContent;
+          const name = reference || element.getAttribute("aria-label") || title || element.getAttribute("title") || "";
+          const names = name.trim() && name.length <= 256 ? [name] : [];
+          this.names.set(element, names);
+          return names;
+        }
+      };
+      cached = /* @__PURE__ */ new WeakMap();
+    }
+  });
+
+  // src/dom/svg-text.ts
+  function readSvgText(graphic, post) {
+    const evidence = getPostEvidence(post);
+    let results = cache.get(evidence);
+    if (!results) {
+      results = /* @__PURE__ */ new WeakMap();
+      cache.set(evidence, results);
+    }
+    if (results.has(graphic)) return results.get(graphic) || null;
+    const active = /* @__PURE__ */ new Set();
+    const textElements = /* @__PURE__ */ new Set();
+    let nodes = 0;
+    let characters = 0;
+    const control = graphic.closest('a, button, [role="button"], [role="link"]');
+    function read(element, depth) {
+      var _a;
+      if (++nodes > 128 || depth > 24 || active.has(element) || element.namespaceURI !== svgNamespace || !supportedTags.has(element.localName))
+        return null;
+      if (!evidence.isPainted(element)) return "";
+      if (element.closest(`${sharedSelectors.authoredContent}, ${sharedSelectors.profileName}`))
+        return null;
+      const owner = element.closest(sharedSelectors.postOwner);
+      const ownerControl = element.closest('a, button, [role="button"], [role="link"]');
+      if (owner && owner !== post || ownerControl && ownerControl !== control) return null;
+      active.add(element);
+      let text2 = "";
+      if (element.localName === "use") {
+        const href = (_a = element.getAttribute("href")) != null ? _a : element.getAttribute("xlink:href");
+        if (!href || !/^#[^\s#]{1,512}$/.test(href)) return null;
+        const target = evidence.referenceTarget(href.slice(1));
+        if (!target) return null;
+        const resolved = read(target, depth + 1);
+        if (resolved === null) return null;
+        text2 = resolved;
+      } else {
+        for (const child of Array.from(element.childNodes)) {
+          if (++nodes > 128) return null;
+          if (child instanceof Element) {
+            const resolved = read(child, depth + 1);
+            if (resolved === null) return null;
+            text2 += resolved;
+          } else if (child.nodeType === Node.TEXT_NODE) {
+            const value = child.textContent || "";
+            if (value.trim() && !["text", "tspan"].includes(element.localName)) return null;
+            if (["text", "tspan"].includes(element.localName)) {
+              characters += value.length;
+              if (characters > 256) return null;
+              text2 += value;
+              textElements.add(element);
+            }
+          }
+        }
+      }
+      active.delete(element);
+      return text2;
+    }
+    const text = read(graphic, 0);
+    const result = (text == null ? void 0 : text.trim()) ? { text, textElements: Array.from(textElements) } : null;
+    results.set(graphic, result);
+    return result;
+  }
+  var cache, svgNamespace, supportedTags;
+  var init_svg_text = __esm({
+    "src/dom/svg-text.ts"() {
+      "use strict";
+      init_post_evidence();
+      init_shared();
+      cache = /* @__PURE__ */ new WeakMap();
+      svgNamespace = "http://www.w3.org/2000/svg";
+      supportedTags = /* @__PURE__ */ new Set(["svg", "g", "symbol", "use", "text", "tspan"]);
+    }
+  });
+
   // src/diagnostics/location.ts
   function sanitizePathname(pathname) {
     var _a, _b, _c;
@@ -4667,1021 +4947,251 @@
     }
   });
 
-  // src/selectors/shared.ts
-  var sharedSelectors;
-  var init_shared = __esm({
-    "src/selectors/shared.ts"() {
-      "use strict";
-      sharedSelectors = {
-        dialog: 'div[role="dialog"]',
-        postOwner: 'div[role="article"], div[aria-posinset]',
-        profileName: '[data-ad-rendering-role="profile_name"]',
-        storyMessage: '[data-ad-rendering-role="story_message"]',
-        authoredContent: 'p, blockquote, [data-ad-preview="message"], [data-ad-comet-preview="message"], [data-ad-rendering-role="story_message"], [data-ad-rendering-role="creative_body"], [contenteditable="true"], [data-commentid], [data-testid^="UFI2Comment/"], [role="comment"]'
-      };
-    }
-  });
-
-  // src/i18n/disclosure-labels.ts
-  var disclosureLabels;
-  var init_disclosure_labels = __esm({
-    "src/i18n/disclosure-labels.ts"() {
-      "use strict";
-      disclosureLabels = {
-        en: ["Ad", "AI info", "Visit Meta AI|Meta AI branding", "Try Meta AI|Free AI creation tools"],
-        ar: [
-          "إعلان",
-          "معلومات الذكاء الاصطناعي|معلومات عن الذكاء الاصطناعي",
-          "زيارة Meta AI|علامة Meta AI التجارية",
-          "جرّب Meta AI|أدوات إنشاء مجانية بالذكاء الاصطناعي"
-        ],
-        bg: [
-          "Реклама",
-          "Информация за AI|Информация за ИИ",
-          "Посетете Meta AI|Брандиране на Meta AI",
-          "Изпробвайте Meta AI|Безплатни инструменти за създаване с AI"
-        ],
-        cs: [
-          "Reklama",
-          "Informace o AI",
-          "Navštívit Meta AI|Značka Meta AI",
-          "Vyzkoušejte Meta AI|Bezplatné nástroje pro tvorbu s AI"
-        ],
-        de: [
-          "Anzeige|Werbung",
-          "KI-Info|KI-Informationen",
-          "Meta AI besuchen|Meta AI-Branding",
-          "Meta AI ausprobieren|Kostenlose KI-Kreativtools"
-        ],
-        el: [
-          "Διαφήμιση",
-          "Πληροφορίες AI|Πληροφορίες τεχνητής νοημοσύνης",
-          "Επισκεφτείτε το Meta AI|Επωνυμία Meta AI",
-          "Δοκιμάστε το Meta AI|Δωρεάν εργαλεία δημιουργίας AI"
-        ],
-        es: [
-          "Anuncio",
-          "Información de IA|Información sobre IA",
-          "Visitar Meta AI|Marca de Meta AI",
-          "Prueba Meta AI|Herramientas gratuitas de creación con IA"
-        ],
-        fi: [
-          "Mainos",
-          "Tekoälytiedot|Tietoja tekoälystä",
-          "Siirry Meta AI:hin|Meta AI -brändäys",
-          "Kokeile Meta AI:ta|Maksuttomat tekoälyluontityökalut"
-        ],
-        fr: [
-          "Publicité|Pub",
-          "Infos IA|Informations sur l’IA|Informations sur l'IA",
-          "Visiter Meta AI|Marque Meta AI",
-          "Essayez Meta AI|Outils de création IA gratuits"
-        ],
-        he: [
-          "מודעה",
-          "מידע על AI|מידע על בינה מלאכותית",
-          "ביקור ב-Meta AI|מיתוג Meta AI",
-          "נסו את Meta AI|כלי יצירה חינמיים עם בינה מלאכותית"
-        ],
-        id: [
-          "Iklan",
-          "Info AI",
-          "Kunjungi Meta AI|Branding Meta AI",
-          "Coba Meta AI|Alat kreasi AI gratis"
-        ],
-        it: [
-          "Inserzione|Pubblicità",
-          "Informazioni sull'IA|Informazioni sull’IA",
-          "Visita Meta AI|Branding di Meta AI",
-          "Prova Meta AI|Strumenti di creazione IA gratuiti"
-        ],
-        ja: [
-          "広告",
-          "AI情報|AIに関する情報",
-          "Meta AIにアクセス|Meta AIのブランド",
-          "Meta AIを試す|無料のAI作成ツール"
-        ],
-        lv: [
-          "Reklāma",
-          "MI informācija|Informācija par MI",
-          "Apmeklēt Meta AI|Meta AI zīmols",
-          "Izmēģiniet Meta AI|Bezmaksas MI satura veidošanas rīki"
-        ],
-        nl: [
-          "Advertentie",
-          "AI-info|AI-informatie",
-          "Meta AI bezoeken|Meta AI-branding",
-          "Probeer Meta AI|Gratis AI-creatietools"
-        ],
-        pl: [
-          "Reklama",
-          "Informacje o AI|Informacje o sztucznej inteligencji",
-          "Odwiedź Meta AI|Marka Meta AI",
-          "Wypróbuj Meta AI|Bezpłatne narzędzia do tworzenia z AI"
-        ],
-        pt: [
-          "Anúncio",
-          "Informações de IA|Informações sobre IA",
-          "Visitar Meta AI|Marca da Meta AI",
-          "Experimenta a Meta AI|Experimente a Meta AI|Ferramentas gratuitas de criação com IA"
-        ],
-        ru: [
-          "Реклама",
-          "Информация об ИИ",
-          "Посетить Meta AI|Брендинг Meta AI",
-          "Попробуйте Meta AI|Бесплатные инструменты для творчества с ИИ"
-        ],
-        tr: [
-          "Reklam",
-          "Yapay zeka bilgisi|Yapay zekâ bilgisi",
-          "Meta AI'ı ziyaret et|Meta AI markası",
-          "Meta AI'ı dene|Ücretsiz yapay zeka oluşturma araçları"
-        ],
-        uk: [
-          "Реклама",
-          "Інформація про ШІ",
-          "Відвідати Meta AI|Брендинг Meta AI",
-          "Спробуйте Meta AI|Безкоштовні інструменти для творчості зі ШІ"
-        ],
-        vi: [
-          "Quảng cáo",
-          "Thông tin về AI|Thông tin AI",
-          "Truy cập Meta AI|Thương hiệu Meta AI",
-          "Dùng thử Meta AI|Công cụ sáng tạo AI miễn phí"
-        ],
-        "zh-Hans": [
-          "广告",
-          "AI 信息|AI信息|人工智能信息",
-          "访问 Meta AI|Meta AI 品牌",
-          "试用 Meta AI|免费 AI 创作工具"
-        ],
-        "zh-Hant": [
-          "廣告",
-          "AI 資訊|AI資訊|人工智慧資訊",
-          "造訪 Meta AI|Meta AI 品牌",
-          "試用 Meta AI|免費 AI 創作工具"
-        ]
-      };
-    }
-  });
-
-  // src/core/filters/disclosure-labels.ts
-  function normalize(text) {
-    return text.normalize("NFKC").replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g, "").replace(/\s+/g, " ").trim().toLowerCase();
-  }
-  function matchesDisclosureLabel(text, kind) {
-    var _a;
-    return ((_a = labels.get(kind)) == null ? void 0 : _a.has(normalize(text))) === true;
-  }
-  function containsMetaAiCopy(text) {
-    const normalized = normalize(text);
-    return Array.from(labels.get("metaAiCopy") || []).some(
-      (label) => label !== "" && normalized.includes(label)
-    );
-  }
-  function matchesSponsoredLabel(text) {
-    return sponsorshipLabels.has(normalize(text)) || matchesDisclosureLabel(text, "ad");
-  }
-  var kinds, labels, sponsorshipLabels;
-  var init_disclosure_labels2 = __esm({
-    "src/core/filters/disclosure-labels.ts"() {
-      "use strict";
-      init_i18n();
-      init_disclosure_labels();
-      kinds = ["ad", "aiInfo", "metaAiBrand", "metaAiCopy"];
-      labels = new Map(
-        kinds.map((kind, index) => [
-          kind,
-          new Set(
-            Object.values(disclosureLabels).flatMap(
-              (values) => (values[index] || "").split("|").map(normalize)
-            )
-          )
-        ])
-      );
-      sponsorshipLabels = new Set(
-        Object.values(translations).flatMap(
-          (catalog24) => [catalog24.SPONSORED, catalog24.SPONSORED_EXTRA].filter((label) => typeof label === "string").map(normalize)
-        )
-      );
-    }
-  });
-
-  // src/core/filters/text-normalize.ts
-  function cleanText(text) {
-    return text.normalize("NFKC");
-  }
-  var init_text_normalize = __esm({
-    "src/core/filters/text-normalize.ts"() {
-      "use strict";
-    }
-  });
-
-  // src/i18n/news-labels.ts
-  var newsLabels;
-  var init_news_labels = __esm({
-    "src/i18n/news-labels.ts"() {
-      "use strict";
-      newsLabels = {
-        en: [
-          "Follow",
-          "Join|Join group",
-          "Verified|Verified account",
-          "Suggested for you|Recommended for you|Suggested Pages|Pages you may like",
-          "Groups you might like|Suggested groups",
-          "People you may know",
-          "Reels|Reels and short videos",
-          "Events you may like",
-          "Paid for by ______"
-        ],
-        ar: [
-          "متابعة|تابع",
-          "انضمام|انضمام إلى المجموعة",
-          "تم التحقق|حساب تم التحقق منه|حساب موثّق",
-          "مقترح لك|مقترحات لك|صفحات قد تعجبك",
-          "مجموعات قد تعجبك|مجموعات مقترحة",
-          "أشخاص قد تعرفهم",
-          "ريلز|مقاطع ريلز",
-          "أحداث قد تعجبك",
-          "مدفوعة بواسطة ______"
-        ],
-        bg: [
-          "Следване|Следвай",
-          "Присъединяване|Присъединяване към групата",
-          "Потвърден|Потвърден акаунт",
-          "Предложения за вас|Страници, които може да харесате",
-          "Групи, които може да харесате|Предложени групи",
-          "Хора, които може би познавате",
-          "Ленти|Reels",
-          "Събития, които може да ви харесат",
-          "Платено от ______"
-        ],
-        cs: [
-          "Sledovat",
-          "Přidat se|Přidat se ke skupině",
-          "Ověřeno|Ověřený účet",
-          "Navrhované pro vás|Stránky, které by se vám mohly líbit",
-          "Skupiny, které by se vám mohly líbit|Navrhované skupiny",
-          "Lidé, které možná znáte|Koho možná znáte",
-          "Reely|Reels",
-          "Události, které se vám mohou líbit",
-          "Platí za to ______"
-        ],
-        de: [
-          "Folgen",
-          "Beitreten|Gruppe beitreten",
-          "Verifiziert|Verifiziertes Konto",
-          "Vorschläge für dich|Für dich empfohlen|Seiten, die dir gefallen könnten",
-          "Gruppen, die dir gefallen könnten|Vorgeschlagene Gruppen",
-          "Personen, die du kennen könntest",
-          "Reels",
-          "Veranstaltungen, die dir gefallen könnten|Veranstaltungen, die Ihnen gefallen könnten",
-          "Finanziert von ______"
-        ],
-        el: [
-          "Ακολούθηση|Ακολούθησε",
-          "Συμμετοχή|Γίνετε μέλος",
-          "Επαληθευμένος|Επαληθευμένος λογαριασμός",
-          "Προτεινόμενα για εσάς|Σελίδες που μπορεί να σας αρέσουν",
-          "Ομάδες που μπορεί να σας αρέσουν|Προτεινόμενες ομάδες",
-          "Άτομα που ίσως γνωρίζετε",
-          "Reels",
-          "Εκδηλώσεις που μπορεί να σας αρέσουν",
-          "Πληρωμένο από ______"
-        ],
-        es: [
-          "Seguir",
-          "Unirte|Unirse|Unirte al grupo",
-          "Verificado|Cuenta verificada",
-          "Sugerencias para ti|Sugerido para ti|Páginas que te pueden gustar",
-          "Grupos que te pueden gustar|Grupos sugeridos",
-          "Personas que quizá conozcas|Personas que quizás conozcas",
-          "Reels|Reels y vídeos cortos",
-          "Eventos que te pueden gustar",
-          "Pagado por ______"
-        ],
-        fi: [
-          "Seuraa",
-          "Liity|Liity ryhmään",
-          "Vahvistettu|Vahvistettu tili",
-          "Ehdotuksia sinulle|Sivut, joista saatat pitää",
-          "Ryhmät, joista saatat pitää|Ehdotetut ryhmät",
-          "Ihmisiä, jotka saatat tuntea|Ihmiset, jotka saatat tuntea",
-          "Kelat|Reels",
-          "Tapahtumat, joista saatat pitää",
-          "Maksaja ______"
-        ],
-        fr: [
-          "Suivre|S’abonner|S'abonner",
-          "Rejoindre|Rejoindre le groupe",
-          "Vérifié|Compte vérifié",
-          "Suggestion pour vous|Suggestions pour vous|Pages qui pourraient vous plaire",
-          "Groupes qui pourraient vous plaire|Groupes suggérés",
-          "Vous connaissez peut-être|Connaissez-vous...",
-          "Reels|Reels et vidéos courtes",
-          "Évènements qui pourraient vous intéresser",
-          "Financé par ______"
-        ],
-        he: [
-          "עקוב|מעקב",
-          "הצטרף|הצטרפות לקבוצה",
-          "מאומת|חשבון מאומת",
-          "הצעות עבורך|דפים שאולי תאהב",
-          "קבוצות שאולי תאהב|קבוצות מוצעות",
-          "אנשים שאולי אתה מכיר",
-          "רילס|Reels",
-          "אירועים שאולי תאהבו",
-          "שולם על ידי ______"
-        ],
-        id: [
-          "Ikuti",
-          "Gabung|Gabung grup",
-          "Terverifikasi|Akun terverifikasi",
-          "Disarankan untuk Anda|Halaman yang mungkin Anda sukai",
-          "Grup yang mungkin Anda sukai|Grup yang disarankan",
-          "Orang yang Mungkin Anda Kenal",
-          "Reel|Reels",
-          "Acara yang mungkin Anda sukai",
-          "Dibayar oleh ______"
-        ],
-        it: [
-          "Segui",
-          "Iscriviti|Iscriviti al gruppo",
-          "Verificato|Account verificato",
-          "Contenuti suggeriti per te|Suggerimenti per te|Pagine che potrebbero piacerti",
-          "Gruppi che potrebbero piacerti|Gruppi suggeriti",
-          "Persone che potresti conoscere",
-          "Reel|Reels",
-          "Eventi che potrebbero piacerti",
-          "Finanziato da ______"
-        ],
-        ja: [
-          "フォロー|フォローする",
-          "参加|グループに参加",
-          "認証済み|認証済みアカウント",
-          "おすすめ|おすすめのページ",
-          "おすすめのグループ",
-          "知り合いかも|あなたが知っているかもしれない人々",
-          "リール|リール動画",
-          "おすすめのイベント",
-          "______ による支払い|______による支払い"
-        ],
-        lv: [
-          "Sekot",
-          "Pievienoties|Pievienoties grupai",
-          "Verificēts|Verificēts konts",
-          "Ieteikumi jums|Lapas, kas tev varētu patikt",
-          "Grupas, kas tev varētu patikt|Ieteiktās grupas",
-          "Cilvēki, kurus tu varētu pazīt",
-          "Reels|Rullīši",
-          "Notikumi, kas jums varētu patikt",
-          "Apmaksā ______"
-        ],
-        nl: [
-          "Volgen",
-          "Lid worden|Lid worden van groep",
-          "Geverifieerd|Geverifieerd account",
-          "Voorgesteld voor jou|Pagina’s die je misschien leuk vindt|Pagina's die je misschien leuk vindt",
-          "Groepen die je misschien leuk vindt|Voorgestelde groepen",
-          "Mensen die je misschien kent",
-          "Reels",
-          "Evenementen die je misschien leuk vindt",
-          "Betaald door ______"
-        ],
-        pl: [
-          "Obserwuj",
-          "Dołącz|Dołącz do grupy",
-          "Zweryfikowano|Zweryfikowane konto",
-          "Proponowane dla Ciebie|Strony, które możesz polubić",
-          "Grupy, które mogą Ci się spodobać|Proponowane grupy",
-          "Osoby, które możesz znać",
-          "Rolki",
-          "Wydarzenia, które mogą Ci się spodobać",
-          "Opłacona przez ______"
-        ],
-        pt: [
-          "Seguir",
-          "Participar|Aderir|Entrar no grupo",
-          "Verificado|Conta verificada",
-          "Sugestões para ti|Sugestões para você|Páginas de que poderás gostar|Páginas que você pode curtir",
-          "Grupos de que poderás gostar|Grupos que você pode gostar|Grupos sugeridos",
-          "Pessoas que talvez conheças|Pessoas que você talvez conheça",
-          "Reels|Reels e vídeos curtos",
-          "Eventos que você pode gostar",
-          "Financiado por ______"
-        ],
-        ru: [
-          "Подписаться",
-          "Вступить|Вступить в группу",
-          "Подтверждено|Подтвержденный аккаунт",
-          "Рекомендуем вам|Предлагаемое для вас|Страницы, которые могут вам понравиться",
-          "Группы, которые могут вам понравиться|Рекомендуемые группы",
-          "Люди, которых вы можете знать",
-          "Reels|Короткие видео",
-          "Мероприятия, которые вам могут понравиться",
-          "Оплачено ______"
-        ],
-        tr: [
-          "Takip Et",
-          "Katıl|Gruba Katıl",
-          "Doğrulanmış|Doğrulanmış Hesap",
-          "Senin için önerilenler|Beğenebileceğin Sayfalar",
-          "Beğenebileceğin Gruplar|Önerilen Gruplar",
-          "Tanıyor olabileceğin kişiler",
-          "Reels|Reels videoları",
-          "İlgini çekebilecek etkinlikler",
-          "______ tarafından ödendi"
-        ],
-        uk: [
-          "Стежити|Підписатися",
-          "Приєднатися|Приєднатися до групи",
-          "Підтверджено|Підтверджений обліковий запис",
-          "Рекомендовано для вас|Сторінки, які можуть вам сподобатися",
-          "Групи, які можуть вам сподобатися|Рекомендовані групи",
-          "Люди, яких ви можете знати",
-          "Reels|Короткі відео",
-          "Події, які можуть вам сподобатися",
-          "Оплачено ______"
-        ],
-        vi: [
-          "Theo dõi",
-          "Tham gia|Tham gia nhóm",
-          "Đã xác minh|Tài khoản đã xác minh",
-          "Gợi ý cho bạn|Đề xuất cho bạn|Trang bạn có thể thích",
-          "Nhóm bạn có thể thích|Nhóm được gợi ý",
-          "Những người bạn có thể biết",
-          "Reels|Thước phim",
-          "Sự kiện bạn có thể thích",
-          "Tài trợ bởi ______"
-        ],
-        "zh-Hans": [
-          "关注",
-          "加入|加入小组",
-          "已验证|已认证|已验证账户",
-          "为你推荐|推荐给你|你可能喜欢的公共主页",
-          "你可能喜欢的小组|推荐小组",
-          "你可能认识的人",
-          "Reels|短视频",
-          "您可能喜欢的活动",
-          "由 ______ 付费|由______付费"
-        ],
-        "zh-Hant": [
-          "追蹤",
-          "加入|加入社團",
-          "已驗證|已驗證帳號",
-          "為你推薦|推薦給你|你可能會喜歡的粉絲專頁",
-          "你可能會喜歡的社團|推薦社團",
-          "你可能認識的人",
-          "Reels|連續短片",
-          "你可能感興趣的活動",
-          "出資者：______"
-        ]
-      };
-    }
-  });
-
-  // src/core/filters/labels.ts
-  function normalizeLabel(text) {
-    return cleanText(text).replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g, "").replace(/\s+/g, " ").trim().toLowerCase();
-  }
-  function matchesNewsLabel(text, kind) {
-    var _a;
-    const normalized = normalizeLabel(text);
-    return normalized !== "" && ((_a = labelsByKind.get(kind)) == null ? void 0 : _a.has(normalized)) === true;
-  }
-  function matchesNewsPaidBy(text) {
-    const label = normalizeLabel(text);
-    return Object.values(newsLabels).some(
-      (labels2) => labels2[8].split("|").some((template) => {
-        const [prefix = "", suffix = ""] = normalizeLabel(template).split("______");
-        return (prefix !== "" || suffix !== "") && label.startsWith(prefix) && label.endsWith(suffix) && label.slice(prefix.length, label.length - suffix.length).trim() !== "";
-      })
-    );
-  }
-  var labelKinds, labelsByKind;
-  var init_labels = __esm({
-    "src/core/filters/labels.ts"() {
-      "use strict";
-      init_text_normalize();
-      init_news_labels();
-      labelKinds = [
-        "follow",
-        "join",
-        "verified",
-        "suggested",
-        "groups",
-        "people",
-        "reels",
-        "events"
-      ];
-      labelsByKind = new Map(
-        labelKinds.map((kind, index) => [
-          kind,
-          new Set(
-            Object.values(newsLabels).flatMap(
-              (labels2) => (labels2[index] || "").split("|").map(normalizeLabel)
-            )
-          )
-        ])
-      );
-    }
-  });
-
-  // src/dom/ownership.ts
-  function ownsPostElement(element, post, boundary = {}) {
-    var _a, _b;
-    if (!post.contains(element)) return false;
-    const marked = element.closest(`[${postAtt}]`);
-    if (marked && marked !== post) return false;
-    const authored2 = element.closest(sharedSelectors.authoredContent);
-    if (authored2 && post.contains(authored2)) return false;
-    if ((_a = boundary.bodies) == null ? void 0 : _a.some((body) => body.contains(element))) return false;
-    const owner = element.closest(sharedSelectors.postOwner);
-    if (!owner || owner === post || !post.contains(owner)) return true;
-    if (!boundary.allowArticleWrapper || post.matches(`${sharedSelectors.postOwner}, div[aria-describedby], div[data-virtualized]`))
-      return false;
-    const parentOwner = (_b = owner.parentElement) == null ? void 0 : _b.closest(sharedSelectors.postOwner);
-    return !parentOwner || !post.contains(parentOwner);
-  }
-  var init_ownership = __esm({
-    "src/dom/ownership.ts"() {
-      "use strict";
-      init_attributes();
-      init_shared();
-    }
-  });
-
-  // src/dom/post-evidence.ts
-  function facebookUrl(link) {
-    const href = link.getAttribute("href");
-    const previous = destinations.get(link);
-    if ((previous == null ? void 0 : previous.href) === href) return previous.url;
-    let url = null;
-    try {
-      const parsed = href ? new URL(href, "https://www.facebook.com/") : null;
-      if (parsed && /^(https?:)$/.test(parsed.protocol) && !parsed.username && !parsed.password && (parsed.hostname === "facebook.com" || parsed.hostname.endsWith(".facebook.com")))
-        url = parsed;
-    } catch (e) {
-    }
-    destinations.set(link, { href, url });
-    return url;
-  }
-  function getPostEvidence(post) {
-    const version = getContentVersion(post);
-    const previous = cached.get(post);
-    if (version !== null && (previous == null ? void 0 : previous.version) === version) return previous.evidence;
-    forgetLabelReferences(post);
-    const evidence = new PostEvidence(post);
-    if (version !== null) cached.set(post, { version, evidence });
-    return evidence;
-  }
-  var destinations, PostEvidence, cached;
-  var init_post_evidence = __esm({
-    "src/dom/post-evidence.ts"() {
-      "use strict";
-      init_content_version();
-      destinations = /* @__PURE__ */ new WeakMap();
-      PostEvidence = class {
-        /** Keep every query, name and referenced label attached to its owning post scope. */
-        constructor(post) {
-          this.post = post;
-          this.queries = /* @__PURE__ */ new WeakMap();
-          this.visibility = /* @__PURE__ */ new WeakMap();
-          this.painted = /* @__PURE__ */ new WeakMap();
-          this.texts = /* @__PURE__ */ new WeakMap();
-          this.names = /* @__PURE__ */ new WeakMap();
-          this.contentTexts = /* @__PURE__ */ new Map();
-        }
-        /** Execute each selector once per scope and content version without collecting unused filter facts. */
-        select(selector, root = this.post) {
-          let queries = this.queries.get(root);
-          if (!queries) {
-            queries = /* @__PURE__ */ new Map();
-            this.queries.set(root, queries);
-          }
-          let elements = queries.get(selector);
-          if (!elements) {
-            elements = Array.from(root.querySelectorAll(selector));
-            queries.set(selector, elements);
-          }
-          return elements;
-        }
-        /** Reuse bounded body-text extraction across enabled filters and stable recovery sweeps. */
-        readText(key, read) {
-          let text = this.contentTexts.get(key);
-          if (!text) {
-            text = read();
-            this.contentTexts.set(key, text);
-          }
-          return text;
-        }
-        /** Exclude accessibility-hidden metadata while sharing its physical-visibility cache with visual-only counters. */
-        isVisible(element) {
-          const previous = this.visibility.get(element);
-          if (previous !== void 0) return previous;
-          const visible2 = this.isPainted(element) && element.getAttribute("aria-hidden") !== "true";
-          this.visibility.set(element, visible2);
-          return visible2;
-        }
-        /** Read physical visibility once per version, retaining visually displayed counters that Facebook intentionally marks aria-hidden. */
-        isPainted(element) {
-          var _a;
-          const previous = this.painted.get(element);
-          if (previous !== void 0) return previous;
-          const style = (_a = element.ownerDocument.defaultView) == null ? void 0 : _a.getComputedStyle(element);
-          const visible2 = !element.matches("script, style, [hidden]") && (style == null ? void 0 : style.display) !== "none" && (style == null ? void 0 : style.visibility) !== "hidden";
-          this.painted.set(element, visible2);
-          return visible2;
-        }
-        /** Ignore concealed metadata ancestors while allowing diagnostics on a post CMF itself has collapsed. */
-        isRendered(element) {
-          let ancestor = element;
-          while (ancestor && ancestor !== this.post) {
-            if (!this.isVisible(ancestor)) return false;
-            ancestor = ancestor.parentElement;
-          }
-          return ancestor === this.post;
-        }
-        /**
-         * Read fragmented control copy with strict node/character ceilings; oversized labels remain unmatched.
-         * @param control Owned metadata control; surrounding post copy cannot contribute to its label.
-         * @returns Visible label text or an empty string when the traversal budget is exhausted.
-         */
-        visibleText(control2) {
-          const previous = this.texts.get(control2);
-          if (previous !== void 0) return previous;
-          const walker = control2.ownerDocument.createTreeWalker(control2, NodeFilter.SHOW_ALL);
-          let node = control2;
-          let text = "";
-          let nodes = 0;
-          while (node) {
-            if (++nodes > 128 || text.length > 256) {
-              text = "";
-              break;
-            }
-            let element = node instanceof Element ? node : node.parentElement;
-            let visible2 = true;
-            while (element && control2.contains(element)) {
-              if (!this.isVisible(element)) {
-                visible2 = false;
-                break;
-              }
-              if (element === control2) break;
-              element = element.parentElement;
-            }
-            if (visible2 && node.nodeType === Node.TEXT_NODE) text += node.textContent || "";
-            node = walker.nextNode();
-          }
-          if (text.length > 256) text = "";
-          this.texts.set(control2, text);
-          return text;
-        }
-        /** Read non-rendered accessible label text without allowing oversized referenced subtrees to monopolize a scan. */
-        labelText(label) {
-          const walker = label.ownerDocument.createTreeWalker(label, NodeFilter.SHOW_ALL);
-          let node = label;
-          let text = "";
-          let nodes = 0;
-          while (node) {
-            if (++nodes > 128) return "";
-            if (node.nodeType === Node.TEXT_NODE) text += node.textContent || "";
-            if (text.length > 256) return "";
-            node = walker.nextNode();
-          }
-          return text;
-        }
-        /** Resolve bounded ARIA dependencies, including IDs that have not appeared in the document yet. */
-        referencedLabels(element) {
-          var _a;
-          const ids = ((_a = element.getAttribute("aria-labelledby")) == null ? void 0 : _a.trim().split(/\s+/)) || [];
-          if (!ids.length || ids.length > 8) return [null];
-          return ids.map((id) => {
-            return this.referenceTarget(id);
-          });
-        }
-        /** Subscribe before resolving so late insertion, replacement or text edits invalidate a cached negative result. */
-        referenceTarget(id) {
-          trackLabelReference(this.post, id);
-          return this.post.ownerDocument.getElementById(id) || this.select("[id]").find((label) => label.id === id) || null;
-        }
-        /** Preserve accessible-name precedence without borrowing ancestor copy or unbounded referenced text. */
-        explicitNames(element) {
-          var _a;
-          const previous = this.names.get(element);
-          if (previous) return previous;
-          const labels2 = element.hasAttribute("aria-labelledby") ? this.referencedLabels(element) : [];
-          const reference = labels2.length && labels2.every((label) => label && !label.contains(element)) ? labels2.map((label) => label ? this.labelText(label) : "").join(" ").trim() : "";
-          const title = (_a = Array.from(element.children).find(
-            (child) => child.localName === "title"
-          )) == null ? void 0 : _a.textContent;
-          const name = reference || element.getAttribute("aria-label") || title || element.getAttribute("title") || "";
-          const names = name.trim() && name.length <= 256 ? [name] : [];
-          this.names.set(element, names);
-          return names;
-        }
-      };
-      cached = /* @__PURE__ */ new WeakMap();
-    }
-  });
-
-  // src/dom/svg-text.ts
-  function readSvgText(graphic, post) {
-    const evidence = getPostEvidence(post);
-    let results = cache.get(evidence);
-    if (!results) {
-      results = /* @__PURE__ */ new WeakMap();
-      cache.set(evidence, results);
-    }
-    if (results.has(graphic)) return results.get(graphic) || null;
-    const active = /* @__PURE__ */ new Set();
-    const textElements = /* @__PURE__ */ new Set();
-    let nodes = 0;
-    let characters = 0;
-    const control2 = graphic.closest('a, button, [role="button"], [role="link"]');
-    function read(element, depth) {
-      var _a;
-      if (++nodes > 128 || depth > 24 || active.has(element) || element.namespaceURI !== svgNamespace || !supportedTags.has(element.localName))
-        return null;
-      if (!evidence.isPainted(element)) return "";
-      if (element.closest(`${sharedSelectors.authoredContent}, ${sharedSelectors.profileName}`))
-        return null;
-      const owner = element.closest(sharedSelectors.postOwner);
-      const ownerControl = element.closest('a, button, [role="button"], [role="link"]');
-      if (owner && owner !== post || ownerControl && ownerControl !== control2) return null;
-      active.add(element);
-      let text2 = "";
-      if (element.localName === "use") {
-        const href = (_a = element.getAttribute("href")) != null ? _a : element.getAttribute("xlink:href");
-        if (!href || !/^#[^\s#]{1,512}$/.test(href)) return null;
-        const target = evidence.referenceTarget(href.slice(1));
-        if (!target) return null;
-        const resolved = read(target, depth + 1);
-        if (resolved === null) return null;
-        text2 = resolved;
-      } else {
-        for (const child of Array.from(element.childNodes)) {
-          if (++nodes > 128) return null;
-          if (child instanceof Element) {
-            const resolved = read(child, depth + 1);
-            if (resolved === null) return null;
-            text2 += resolved;
-          } else if (child.nodeType === Node.TEXT_NODE) {
-            const value = child.textContent || "";
-            if (value.trim() && !["text", "tspan"].includes(element.localName)) return null;
-            if (["text", "tspan"].includes(element.localName)) {
-              characters += value.length;
-              if (characters > 256) return null;
-              text2 += value;
-              textElements.add(element);
-            }
-          }
-        }
-      }
-      active.delete(element);
-      return text2;
-    }
-    const text = read(graphic, 0);
-    const result = (text == null ? void 0 : text.trim()) ? { text, textElements: Array.from(textElements) } : null;
-    results.set(graphic, result);
-    return result;
-  }
-  var cache, svgNamespace, supportedTags;
-  var init_svg_text = __esm({
-    "src/dom/svg-text.ts"() {
-      "use strict";
-      init_post_evidence();
-      init_shared();
-      cache = /* @__PURE__ */ new WeakMap();
-      svgNamespace = "http://www.w3.org/2000/svg";
-      supportedTags = /* @__PURE__ */ new Set(["svg", "g", "symbol", "use", "text", "tspan"]);
-    }
-  });
-
-  // src/feeds/shared/blocks.ts
-  function isOwnedLayoutSignal(element, post) {
-    var _a;
-    if (!getPostEvidence(post).isRendered(element)) return false;
-    const owner = element.closest(sharedSelectors.postOwner);
-    const authoredParent = (_a = element.parentElement) == null ? void 0 : _a.closest(sharedSelectors.authoredContent);
-    return (!owner || owner === post || !post.contains(owner)) && (!authoredParent || authoredParent === post || !post.contains(authoredParent));
-  }
-  function getSemanticBlocks(post) {
-    const evidence = getPostEvidence(post);
-    const profile = evidence.select(sharedSelectors.profileName).find((element) => isOwnedLayoutSignal(element, post));
-    if (!profile) return null;
-    const message = evidence.select(sharedSelectors.storyMessage).find((element) => isOwnedLayoutSignal(element, post));
-    const contents = message ? [message] : evidence.select("img, video").filter(
-      (media) => isOwnedLayoutSignal(media, post) && !media.closest(
-        'h4, h5, button, [role="button"], [data-ad-rendering-role="profile_name"]'
-      )
-    );
-    for (const content of contents) {
-      const blocks = semanticBlocks(post, profile, content);
-      if (blocks) return blocks;
-    }
-    return null;
-  }
-  function semanticBlocks(post, profile, message) {
-    if (profile.contains(message) || message.contains(profile)) return null;
-    let container = profile.parentElement;
-    while (container && container !== post && !container.contains(message))
-      container = container.parentElement;
-    if (!container || !container.contains(message)) return null;
-    const children = Array.from(container.children);
-    const headerIndex = children.findIndex((child) => child.contains(profile));
-    const messageIndex = children.findIndex((child) => child.contains(message));
-    if (headerIndex < 0 || messageIndex <= headerIndex) return null;
-    return children.slice(headerIndex).filter((block) => getPostEvidence(post).isRendered(block));
-  }
-  function getNewsBlocks(post) {
-    const evidence = getPostEvidence(post);
-    const cached2 = cachedBlocks.get(evidence);
-    if (cached2) return cached2;
-    const semantic = getSemanticBlocks(post);
-    if (semantic) {
-      cachedBlocks.set(evidence, semantic);
-      return semantic;
-    }
-    let query = "div[aria-posinset] > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div";
-    let blocks = evidence.select(query).filter((block) => evidence.isRendered(block));
-    if (blocks.length <= 1) {
-      query = "div[aria-posinset] > div > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div > div";
-      blocks = evidence.select(query).filter((block) => evidence.isRendered(block));
-    }
-    const selected = blocks.length > 1 ? blocks : evidence.select(query);
-    cachedBlocks.set(evidence, selected);
-    return selected;
-  }
-  function getGroupsBlocks(post) {
-    return getNewsBlocks(post);
-  }
-  var cachedBlocks;
-  var init_blocks = __esm({
-    "src/feeds/shared/blocks.ts"() {
-      "use strict";
-      init_post_evidence();
-      init_shared();
-      cachedBlocks = /* @__PURE__ */ new WeakMap();
-    }
-  });
-
-  // src/feeds/shared/svg-disclosure.ts
-  function getSvgDisclosure(control2, post) {
-    var _a;
-    if (!control2.querySelector("svg")) return null;
-    const evidence = getPostEvidence(post);
-    let results = cache2.get(evidence);
-    if (!results) {
-      results = /* @__PURE__ */ new WeakMap();
-      cache2.set(evidence, results);
-    }
-    if (results.has(control2)) return results.get(control2) || null;
-    const url = facebookUrl(control2);
-    const blocks = getNewsBlocks(post);
-    const name = control2.getAttribute("aria-label");
-    let result = null;
-    if (control2.matches("a[href]") && (url == null ? void 0 : url.searchParams.get("__cft__[0]")) && !url.pathname.startsWith("/groups/") && !url.searchParams.has("section_header_type") && !control2.hasAttribute("aria-labelledby") && (!name || matchesSponsoredLabel(name)) && (control2.closest("h4, h5") || ((_a = blocks[0]) == null ? void 0 : _a.contains(control2))) && ownsPostElement(control2, post, { bodies: blocks.slice(1) }) && evidence.isRendered(control2)) {
-      for (const graphic of evidence.select("svg", control2).slice(0, 16)) {
-        if (graphic.closest('a, button, [role="button"], [role="link"]') !== control2 || !evidence.isRendered(graphic) || graphic.hasAttribute("aria-labelledby"))
-          continue;
-        const graphicName = graphic.getAttribute("aria-label");
-        if (graphicName && !matchesSponsoredLabel(graphicName)) continue;
-        const resolved = readSvgText(graphic, post);
-        if (resolved && matchesSponsoredLabel(resolved.text)) {
-          result = resolved;
-          break;
-        }
-      }
-    }
-    results.set(control2, result);
-    return result;
-  }
-  var cache2;
-  var init_svg_disclosure = __esm({
-    "src/feeds/shared/svg-disclosure.ts"() {
-      "use strict";
-      init_disclosure_labels2();
-      init_ownership();
-      init_post_evidence();
-      init_svg_text();
-      init_blocks();
-      cache2 = /* @__PURE__ */ new WeakMap();
-    }
-  });
-
-  // src/diagnostics/dom-privacy.ts
-  function normalizeLabel2(value) {
-    return value.normalize("NFKC").replace(/\s+/g, " ").trim().toLocaleLowerCase("en-US");
-  }
-  function isDisclosureLink(element) {
-    if (!element.matches("a[href]")) return false;
-    const post = element.closest(sharedSelectors.postOwner) || element.closest("div[aria-describedby], div[data-virtualized]");
-    if (post && getSvgDisclosure(element, post)) return true;
-    if (!element.closest("h4, h5")) return false;
-    try {
-      const url = new URL(element.getAttribute("href") || "", "https://www.facebook.com/");
-      const text = boundedText(element);
-      return /^https?:$/.test(url.protocol) && !url.username && !url.password && /(^|\.)facebook\.com$/.test(url.hostname) && url.searchParams.has("__cft__[0]") && !element.matches(identity) && text !== null && (!text || matchesSponsoredLabel(text)) && (element.querySelector("svg[aria-label], svg[aria-labelledby], span[aria-labelledby]") !== null || matchesSponsoredLabel(element.getAttribute("aria-label") || text || ""));
-    } catch (e) {
-      return false;
-    }
-  }
-  function boundedText(element, maximum = 180) {
+  // src/diagnostics/metadata-context.ts
+  function boundedLabel(element, maximum = 180, maximumNodes = 128) {
     const walker = element.ownerDocument.createTreeWalker(element, NodeFilter.SHOW_TEXT);
     let text = "";
     let count = 0;
     let node;
     while (node = walker.nextNode()) {
-      if (++count > 24 || text.length > maximum) return null;
+      if (++count > maximumNodes || text.length > maximum) return null;
       text += node.textContent || "";
     }
     return text.length <= maximum ? text.trim() : null;
   }
-  function isInterfaceLink(element) {
-    const href = element.getAttribute("href");
-    if (!href) return element.hasAttribute("aria-label") || element.hasAttribute("aria-labelledby");
-    try {
-      const url = new URL(href, "https://www.facebook.com/");
-      if (!/^https?:$/.test(url.protocol) || url.username || url.password) return false;
-      if (url.hostname === "meta.ai" || url.hostname.endsWith(".meta.ai")) return true;
-      if (!(url.hostname === "facebook.com" || url.hostname.endsWith(".facebook.com"))) return false;
-      return /^\/(?:ads\/about|business\/help|help|settings|privacy)(?:\/|$)/.test(url.pathname) || /^\/(?:groups\/discover|friends|reel|stories|watch)\/?$/.test(url.pathname) || isDisclosureLink(element);
-    } catch (e) {
-      return false;
-    }
-  }
-  function isProfileLink(element) {
-    if (!element.matches("a[href]") || isInterfaceLink(element)) return false;
+  function metadataDestination(element) {
     try {
       const url = new URL(element.getAttribute("href") || "", "https://www.facebook.com/");
-      return /(^|\.)facebook\.com$/.test(url.hostname) && (url.pathname === "/profile.php" || sanitizePathname(url.pathname).replace(/\/$/, "") === "/[profile]");
+      return /^https?:$/.test(url.protocol) && !url.username && !url.password && /(^|\.)facebook\.com$/.test(url.hostname) ? url : null;
     } catch (e) {
-      return false;
+      return null;
     }
   }
-  function isAuthorActionLabel(value) {
-    return matchesNewsLabel(value, "follow") || matchesNewsLabel(value, "join");
+  function isProfileDestination(element) {
+    const url = metadataDestination(element);
+    if (!url) return false;
+    if (/^\/(?:story|permalink|photo|video|share)\.php\/?$/.test(url.pathname)) return false;
+    return url.pathname === "/profile.php" || sanitizePathname(url.pathname).replace(/\/$/, "") === "/[profile]";
   }
-  function isPublicAuthorAction(element) {
-    const action = element.closest('button, [role="button"]');
-    const profile = action == null ? void 0 : action.closest('[data-ad-rendering-role="profile_name"]');
-    const header = action == null ? void 0 : action.closest("h4, h5");
-    if (!action || !profile || !header || profile === action || action.closest("a, [data-hovercard], [data-profileid], [data-userid]") || element.closest(identity) !== profile || action.querySelector("a, [data-hovercard], [data-profileid], [data-userid]") || !Array.from(header.querySelectorAll("a[href]")).some(
-      (link) => !action.contains(link) && isProfileLink(link)
-    ))
-      return false;
-    const text = boundedText(action);
-    const label = action.getAttribute("aria-label");
-    return text !== null && (!!text && isAuthorActionLabel(text) || !text && !!label && isAuthorActionLabel(label)) && (!label || !text || normalizeLabel2(label) === normalizeLabel2(text));
+  function metadataPost(element) {
+    return element.closest(diagnosticSelectors.post) || element.closest(diagnosticSelectors.legacyPost);
   }
-  var authored, identity, control, heading, excluded, fixedLabels, SnapshotPrivacy;
+  var MetadataContext;
+  var init_metadata_context = __esm({
+    "src/diagnostics/metadata-context.ts"() {
+      "use strict";
+      init_diagnostics();
+      init_location();
+      init_content_version();
+      MetadataContext = class {
+        constructor() {
+          this.bands = /* @__PURE__ */ new WeakMap();
+          this.labels = /* @__PURE__ */ new WeakMap();
+        }
+        /** Cache bounded composite metadata copy by mutation version, including character-by-character obfuscation. */
+        label(element) {
+          const post = metadataPost(element);
+          const version = post ? getContentVersion(post) : null;
+          const previous = this.labels.get(element);
+          if (version !== null && (previous == null ? void 0 : previous.version) === version) return previous.text;
+          const text = boundedLabel(element, 2048, 512);
+          if (version !== null) this.labels.set(element, { version, text });
+          return text;
+        }
+        /**
+         * Stop header expansion before prose, comments, nested posts or media outside identity controls.
+         * @param scope Proposed header ancestor, bounded before it can include the full post body.
+         * @returns Whether private content or an exhausted traversal budget prevents expanding through this ancestor.
+         */
+        containsBody(scope) {
+          if (scope.querySelector(`${diagnosticSelectors.authored}, ${diagnosticSelectors.post}`)) return true;
+          const walker = scope.ownerDocument.createTreeWalker(
+            scope,
+            NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT
+          );
+          let node = scope;
+          let visited = 0;
+          while (node) {
+            if (++visited > 512) return true;
+            const element = node instanceof Element ? node : node.parentElement;
+            if (element && !element.closest(diagnosticSelectors.identity)) {
+              if (element.matches("img, video, audio, canvas") && !element.closest('a[href], button, [role="button"]'))
+                return true;
+              if (node.nodeType === Node.TEXT_NODE && /[\p{L}\p{N}]/u.test(node.textContent || "") && !element.closest(`${diagnosticSelectors.control}, ${diagnosticSelectors.heading}`))
+                return true;
+            }
+            node = walker.nextNode();
+          }
+          return false;
+        }
+        /**
+         * Locate small author-and-metadata bands; a whole post can never become a public text boundary.
+         * @param post Concrete owning root, including hidden and virtualized posts.
+         * @returns Capture-local header bands established by author structure and conservative legacy headings.
+         */
+        headers(post) {
+          const cached2 = this.bands.get(post);
+          if (cached2) return cached2;
+          const headers = [];
+          for (const profile of Array.from(post.querySelectorAll(diagnosticSelectors.profile)).slice(0, 16)) {
+            if (metadataPost(profile) !== post || profile.closest(diagnosticSelectors.authored)) continue;
+            let header = profile.parentElement;
+            let selected = null;
+            for (let depth = 0; header && header !== post && depth < 12; depth++, header = header.parentElement) {
+              if (this.containsBody(header)) break;
+              selected = header;
+            }
+            if (selected) headers.push(selected);
+          }
+          const heading = post.querySelector("h4, h5");
+          if (heading && !heading.closest(diagnosticSelectors.authored) && metadataPost(heading) === post && heading.querySelector("a[href]"))
+            headers.push(heading);
+          this.bands.set(post, headers);
+          return headers;
+        }
+        /**
+         * Independent author actions retain novel UI wording while the adjacent actual author anchor stays private.
+         * @param element Candidate action descendant inside a broad profile-name wrapper.
+         * @returns Independently named action with a separate identity anchor, or null for private/ambiguous controls.
+         */
+        independentAction(element) {
+          const action = element.closest('button, [role="button"]');
+          const profile = action == null ? void 0 : action.closest(diagnosticSelectors.profile);
+          if (!action || !profile || action === profile || action.closest("a, [data-hovercard], [data-profileid], [data-userid]") || element.closest(diagnosticSelectors.identity) !== profile || action.querySelector("a, [data-hovercard], [data-profileid], [data-userid]"))
+            return null;
+          const post = metadataPost(action);
+          if (!post) return null;
+          const author = Array.from(profile.querySelectorAll("a[href]")).slice(0, 16).find(
+            (link) => !action.contains(link) && metadataPost(link) === post && isProfileDestination(link)
+          );
+          if (!author) return null;
+          const text = this.label(action);
+          const label = action.getAttribute("aria-label");
+          if (text === null || label && text && label.normalize("NFKC").trim() !== text.normalize("NFKC").trim())
+            return null;
+          return action;
+        }
+        /**
+         * Return a bounded metadata control without authorizing the rest of its enclosing post or arbitrary profile labels.
+         * @param element Candidate control or descendant, including obfuscated text spans.
+         * @returns Owning public control, or null when structure cannot separate metadata from identity or authored content.
+         */
+        control(element) {
+          if (element.closest(`${diagnosticSelectors.authored}, ${diagnosticSelectors.excluded}`)) return null;
+          const independent = this.independentAction(element);
+          if (independent) return independent;
+          if (element.closest(diagnosticSelectors.identity)) return null;
+          const control = element.closest(diagnosticSelectors.control);
+          const post = control ? metadataPost(control) : null;
+          if (!control || !post || !this.headers(post).some((header) => header.contains(control)))
+            return null;
+          if (this.label(control) === null) return null;
+          if (control.matches("a[href]")) {
+            const url = metadataDestination(control);
+            if (!url) return null;
+            const heading = control.closest("h4, h5");
+            if (!post.querySelector(diagnosticSelectors.profile) && (heading == null ? void 0 : heading.querySelector("a[href]")) === control && this.label(control))
+              return null;
+            if (isProfileDestination(control)) {
+              if (url.pathname === "/profile.php" || this.label(control) || !control.querySelector("svg"))
+                return null;
+            }
+          }
+          return control;
+        }
+      };
+    }
+  });
+
+  // src/diagnostics/dom-privacy.ts
+  function normalizeLabel(value) {
+    return value.normalize("NFKC").replace(/\s+/g, " ").trim().toLocaleLowerCase("en-US");
+  }
+  function identityLabel(element) {
+    var _a;
+    const walker = element.ownerDocument.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+    let text = "";
+    let count = 0;
+    let node;
+    while (node = walker.nextNode()) {
+      if (++count > 128 || text.length > 180) return null;
+      const action = (_a = node.parentElement) == null ? void 0 : _a.closest('button, [role="button"]');
+      if (!action || action === element) text += node.textContent || "";
+    }
+    return text.length <= 180 ? text.trim() : null;
+  }
+  var fixedLabels, SnapshotPrivacy;
   var init_dom_privacy = __esm({
     "src/diagnostics/dom-privacy.ts"() {
       "use strict";
-      init_location();
-      init_shared();
-      init_disclosure_labels2();
-      init_labels();
+      init_diagnostics();
       init_i18n();
-      init_svg_disclosure();
-      authored = `${sharedSelectors.authoredContent}, textarea, input, [role="textbox"], [role="log"], [data-lexical-editor]`;
-      identity = '[data-ad-rendering-role="profile_name"], [data-hovercard], [data-profileid], [data-userid]';
-      control = 'button, [role="button"], [role="menuitem"], [role="tab"], [role="checkbox"], [role="switch"], [role="option"]';
-      heading = 'h1, h2, h3, h4, h5, h6, [role="heading"]';
-      excluded = "script, style, noscript, template, iframe, object, embed, canvas, foreignObject";
+      init_svg_text();
+      init_metadata_context();
       fixedLabels = new Set(
         Object.values(translations).flatMap(
           (catalog24) => Object.values(catalog24).flatMap(
-            (value) => (Array.isArray(value) ? value : [value]).filter((label) => typeof label === "string" && label.trim() !== "").map(normalizeLabel2)
+            (value) => (Array.isArray(value) ? value : [value]).filter((label) => typeof label === "string" && label.trim() !== "").map(normalizeLabel)
           )
         )
       );
       SnapshotPrivacy = class {
         constructor() {
-          this.svgDisclosureText = /* @__PURE__ */ new Map();
+          this.metadataText = /* @__PURE__ */ new Map();
+          this.privateGraphics = /* @__PURE__ */ new Set();
+          this.metadata = new MetadataContext();
           this.identities = /* @__PURE__ */ new Set();
           this.identityPattern = null;
           this.compiledIdentities = -1;
         }
-        /** Retain only complete recognized disclosure copy; unknown SVG names and timestamps keep ordinary redaction. */
-        rememberSvgDisclosure(element) {
-          if (!element.matches("a[href]") || this.svgDisclosureText.size >= 256) return;
-          const post = element.closest(sharedSelectors.postOwner) || element.closest("div[aria-describedby], div[data-virtualized]");
-          const disclosure = post ? getSvgDisclosure(element, post) : null;
-          for (const target of (disclosure == null ? void 0 : disclosure.textElements) || []) {
-            if (this.svgDisclosureText.size >= 256) break;
-            this.svgDisclosureText.set(target, this.svgText(target));
+        /** Identify actual author/profile links separately from post-header timestamps, disclosures and action controls. */
+        identityLink(link) {
+          if (link.closest(diagnosticSelectors.identity)) return true;
+          if (this.metadata.control(link)) return false;
+          return isProfileDestination(link) || !this.interfaceLink(link);
+        }
+        /** Product navigation and independently established metadata can retain novel labels without a filter match. */
+        interfaceLink(link) {
+          if (this.metadata.control(link)) return true;
+          const url = metadataDestination(link);
+          return !!url && (/^\/(?:ads\/about|business\/help|help|settings|privacy)(?:\/|$)/.test(url.pathname) || /^\/(?:groups\/discover|friends|reel|stories|watch)\/?$/.test(url.pathname));
+        }
+        /** Only metadata controls may authorize external accessible-label text; arbitrary UI references remain private. */
+        publicReferenceSource(element) {
+          return this.metadata.control(element) !== null;
+        }
+        /**
+         * Retain local SVG text referenced by structural metadata, independently of recognized ad wording.
+         * Complete text is checked for private substrings before individual fragments receive public provenance.
+         * @param element Candidate metadata link/button, read without modifying it or its referenced definitions.
+         */
+        rememberMetadataGraphics(element) {
+          if (!element.matches(diagnosticSelectors.control) || this.metadataText.size >= 256 || !this.metadata.control(element))
+            return;
+          const post = metadataPost(element);
+          if (!post) return;
+          for (const graphic of Array.from(element.querySelectorAll("svg")).slice(0, 16)) {
+            if (graphic.closest(diagnosticSelectors.control) !== element) continue;
+            const resolved = readSvgText(graphic, post);
+            if (!resolved) continue;
+            const privateCopy = this.interfaceText(resolved.text) !== resolved.text.normalize("NFKC").replace(/\s+/g, " ").trim();
+            for (const target of resolved.textElements) {
+              if (this.metadataText.size >= 256) break;
+              if (this.metadataText.has(target)) continue;
+              this.metadataText.set(target, this.directText(target));
+              if (privateCopy) this.privateGraphics.add(target);
+            }
           }
         }
-        /** Compare only direct contributing text so capture yields cannot transfer public provenance to replaced copy. */
-        svgText(element) {
+        /** Record exact direct copy so a reference replaced during cooperative capture loses its earlier public provenance. */
+        directText(element) {
           return Array.from(element.childNodes).filter((node) => node.nodeType === Node.TEXT_NODE).map((node) => node.textContent || "").join("");
         }
-        /** Derive identity evidence from bounded discovery rather than retaining or hashing private page text. */
+        /** Learn names only from identity-bearing structure; arbitrary metadata links must never poison the name dictionary. */
         remember(element) {
           if (this.identities.size >= 500) return;
-          if (element.matches(identity) && !element.querySelector('button, [role="button"]') || element.matches("h4 a, h5 a") && !isInterfaceLink(element) || isProfileLink(element)) {
-            const name = boundedText(element);
+          if (element.matches(diagnosticSelectors.identity) || element.matches("a[href]") && this.identityLink(element)) {
+            const name = identityLabel(element);
             if (name) {
               this.identities.add(name);
               const parts = name.split(/\s+/);
@@ -5697,36 +5207,61 @@
           }
         }
         /**
-         * Keep private boundaries authoritative; headings and controls require complete fixed copy before text retention.
-         * Novel disclosure labels use their constrained header/graphic relationship instead of a vocabulary match.
-         * @param element Original page element whose ancestors and bounded caption establish text provenance.
-         * @returns Privacy category shared by text and attribute capture; uncertain copy is automatically redacted.
+         * Prefer authored/identity boundaries, then structural metadata, then fixed-copy fallbacks for other UI.
+         * @param element Source element, whose role and author/body relationship establish provenance without a filter result.
+         * @returns Privacy category for both text and accessible attributes; ambiguous content remains explicitly redacted.
          */
         content(element) {
-          if (element.closest(excluded)) return "excluded";
-          if (element.closest(authored)) return "authored";
-          if (isPublicAuthorAction(element)) return "interface";
-          if (element.closest(identity)) return "identity";
-          const publicSvgText = this.svgDisclosureText.get(element);
-          if (publicSvgText !== void 0 && publicSvgText === this.svgText(element)) return "interface";
+          if (element.closest(diagnosticSelectors.excluded)) return "excluded";
+          if (element.closest(diagnosticSelectors.authored)) return "authored";
+          if (this.metadata.independentAction(element)) return "interface";
+          if (element.closest(diagnosticSelectors.identity)) return "identity";
+          const referenced = this.metadataText.get(element);
+          if (referenced !== void 0 && referenced === this.directText(element)) return "interface";
           const link = element.closest("a");
-          if (link && !isInterfaceLink(link)) return "identity";
-          if (link && isDisclosureLink(link) && element.closest("svg[aria-label], svg[aria-labelledby], span[aria-labelledby]"))
-            return "interface";
-          const labelOwner = element.closest(`${control}, ${heading}, a`);
+          if (link && this.identityLink(link)) return "identity";
+          if (this.metadata.control(element)) return "interface";
+          const labelOwner = element.closest(`${diagnosticSelectors.control}, ${diagnosticSelectors.heading}`);
           if (labelOwner) {
-            const text = boundedText(labelOwner);
+            const text = boundedLabel(labelOwner);
             const label = labelOwner.getAttribute("aria-label");
-            if ((text && fixedLabels.has(normalizeLabel2(text)) || !text && label && fixedLabels.has(normalizeLabel2(label))) && (!label || !text || normalizeLabel2(label) === normalizeLabel2(text)))
+            if ((text && fixedLabels.has(normalizeLabel(text)) || !text && label && fixedLabels.has(normalizeLabel(label))) && (!label || !text || normalizeLabel(label) === normalizeLabel(text)))
               return "interface";
           }
           return "uncertain";
         }
-        /** An attribute must establish its own fixed-copy provenance; a safe visible caption cannot authorize a private title. */
-        accessibleText(element, value, content) {
-          const link = element.closest("a");
-          const publicLabel = fixedLabels.has(normalizeLabel2(value)) || isPublicAuthorAction(element) && isAuthorActionLabel(value) || link !== null && isDisclosureLink(link);
-          return this.text(value, content === "interface" && !publicLabel ? "uncertain" : content);
+        /**
+         * Accessible attributes establish their own provenance; a harmless caption cannot authorize a conflicting private title.
+         * @param element Source control or descendant, classified through the same structural boundaries as visible copy.
+         * @param value Attribute copy, sanitized before serialization.
+         * @param content Existing boundary category; authored and identity regions cannot be upgraded here.
+         * @param attribute Only an otherwise unnamed metadata control may publish a novel standalone aria-label.
+         * @returns Public copy with private substrings removed, or a redaction placeholder.
+         */
+        accessibleText(element, value, content, attribute) {
+          if (content !== "interface") return this.text(value, content);
+          const text = boundedLabel(element);
+          const sameCopy = text !== null && !!text && normalizeLabel(text) === normalizeLabel(value);
+          const publicLabel = sameCopy || fixedLabels.has(normalizeLabel(value)) || attribute === "aria-label" && !text && this.metadata.control(element) !== null;
+          return this.text(value, publicLabel ? "interface" : "uncertain");
+        }
+        /**
+         * Scrub complete fragmented labels before exporting pieces so split names, email addresses and phone numbers cannot escape.
+         * @param node Captured text node; no private whole-label text is retained in the report.
+         * @param content Already established boundary provenance.
+         * @returns Sanitized fragment, conservatively suppressed when a multi-node label contains private copy.
+         */
+        textNode(node, content) {
+          const value = node.textContent || "";
+          if (content !== "interface") return this.text(value, content);
+          if (!value.trim()) return value ? " " : "";
+          const parent = node.parentElement;
+          if (parent && this.privateGraphics.has(parent)) return "[redacted interface fragment]";
+          const control = parent ? this.metadata.control(parent) : null;
+          const whole = control ? this.metadata.label(control) : null;
+          if (whole !== null && whole !== value.trim() && this.interfaceText(whole) !== whole.normalize("NFKC").replace(/\s+/g, " ").trim())
+            return "[redacted interface fragment]";
+          return `${/^\s/u.test(value) ? " " : ""}${this.interfaceText(value)}${/\s$/u.test(value) ? " " : ""}`;
         }
         /**
          * Retain novel interface words while removing observed names, addresses, contact details and opaque identifiers.
@@ -5747,7 +5282,7 @@
             (character) => character.charCodeAt(0) >= 32 || [9, 10, 13].includes(character.charCodeAt(0))
           ).join("").replace(/\s+/g, " ").trim();
         }
-        /** Text provenance controls disclosure; unknown text does not become public just because a detector missed it. */
+        /** Only structurally public text reaches the sanitizer; authored and identity boundaries remain placeholders. */
         text(value, content) {
           if (!value.trim()) return "";
           if (content !== "interface") return `[${content} text]`;
@@ -5810,7 +5345,6 @@
   var init_dom_attributes = __esm({
     "src/diagnostics/dom-attributes.ts"() {
       "use strict";
-      init_dom_privacy();
       init_dom_destinations();
       references = /* @__PURE__ */ new Set([
         "aria-labelledby",
@@ -5922,7 +5456,7 @@
          * @returns Safe attribute values plus transformation categories for the offline inspector.
          */
         read(element, content) {
-          this.privacy.rememberSvgDisclosure(element);
+          this.privacy.rememberMetadataGraphics(element);
           const attributes = {};
           const changes = {};
           const maximum = Math.max(0, Math.min(64, this.attributeLimit - this.attributeReads));
@@ -5955,7 +5489,7 @@
               attributes[name] = value.trim().split(/\s+/, 8).filter(Boolean).slice(0, 8).map(
                 (id) => this.reference(
                   id,
-                  content === "interface" && name === "aria-labelledby" && isDisclosureLink(element.closest("a") || element)
+                  content === "interface" && name === "aria-labelledby" && this.privacy.publicReferenceSource(element)
                 )
               ).join(" ");
               changes[name] = "alias";
@@ -5986,8 +5520,8 @@
               attributes.dir = value;
             } else if (name === "lang" && /^[a-z]{2,3}(?:-[a-z0-9]{2,8}){0,3}$/i.test(value)) {
               attributes.lang = value;
-            } else if (["aria-label", "title"].includes(name)) {
-              attributes[name] = this.privacy.accessibleText(element, value, content).slice(0, 180);
+            } else if (name === "aria-label" || name === "title") {
+              attributes[name] = this.privacy.accessibleText(element, value, content, name).slice(0, 180);
               if (attributes[name] !== value) changes[name] = "redacted";
             } else if (name === "href" || name === "xlink:href") {
               if (value.startsWith("#") && element.namespaceURI === "http://www.w3.org/2000/svg") {
@@ -6067,12 +5601,12 @@
       for (const scope of [region, region.previousElementSibling, region.nextElementSibling]) {
         if (!scope || isReportUi(scope)) continue;
         const identities = document2.createTreeWalker(scope, NodeFilter.SHOW_ELEMENT);
-        let identity2 = scope;
+        let identity = scope;
         let local = 0;
-        while (identity2 && local++ < limits2.nodesPerRegion) {
-          if (identity2 instanceof Element && !isReportUi(identity2)) privacy.remember(identity2);
+        while (identity && local++ < limits2.nodesPerRegion) {
+          if (identity instanceof Element && !isReportUi(identity)) privacy.remember(identity);
           if (++seeded % 128 === 0) await yieldSnapshotWork();
-          identity2 = identities.nextNode();
+          identity = identities.nextNode();
         }
       }
     }
@@ -6288,7 +5822,7 @@
         text(node, inherited) {
           const value = node.textContent || "";
           const content = inherited || (node.parentElement ? this.privacy.content(node.parentElement) : "uncertain");
-          let safe = this.privacy.text(value, content);
+          let safe = this.privacy.textNode(node, content);
           if (content !== "interface" && value.trim()) this.redacted++;
           if (content === "interface" && (safe.length > this.limits.labelCharacters || this.labels + safe.length > this.limits.totalLabelCharacters)) {
             safe = "[interface text omitted: label budget]";
@@ -6447,7 +5981,7 @@
         target: capture.regionNow(target, publicLeaf ? "interface" : void 0)
       });
     }
-    for (const source of capture.privacy.svgDisclosureText.keys()) {
+    for (const source of capture.privacy.metadataText.keys()) {
       const copy = capture.captured.get(source);
       if (copy && capture.privacy.content(source) === "interface") capture.promoteLabel(source, copy);
     }
@@ -6877,7 +6411,7 @@ ${fence}
         const copy = await capture.region(target, publicLeaf ? "interface" : void 0);
         references2.push({ id: pending.id, status: "external", target: copy });
       }
-      for (const source of capture.privacy.svgDisclosureText.keys()) {
+      for (const source of capture.privacy.metadataText.keys()) {
         const copy = capture.captured.get(source);
         if (copy && capture.privacy.content(source) === "interface")
           capture.promoteLabel(source, copy);
@@ -6963,7 +6497,7 @@ ${fence}
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:03c39c1c20adbd24cc7beeb9d4d347eeb5aa6834d04e57aae07fe5245c29b1b9" : "unbundled";
+      buildIdentity = true ? "source-sha256:bfc2d7a31e6ccee89c2b52c724dcad8714c2c286c98439a93efdb1098765de05" : "unbundled";
     }
   });
 
@@ -7359,8 +6893,8 @@ ${fence}
     }
     const animatedGIFs = post.querySelectorAll(getMosquitosQuery());
     for (const gif of animatedGIFs) {
-      const control2 = gif.parentElement;
-      if (!control2 || control2.hasAttribute(postAtt)) continue;
+      const control = gif.parentElement;
+      if (!control || control.hasAttribute(postAtt)) continue;
       let parent = climbUpTheTree(gif, 2);
       let sibling = parent instanceof Element ? parent.querySelector(":scope > a") : null;
       if (!sibling) {
@@ -7369,9 +6903,9 @@ ${fence}
       }
       if (sibling) {
         const siblingCS = window.getComputedStyle(sibling);
-        control2.setAttribute(postAtt, "1");
+        control.setAttribute(postAtt, "1");
         if (siblingCS.opacity === "0") {
-          control2.click();
+          control.click();
         }
       }
     }
@@ -7847,6 +7381,30 @@ ${fence}
     }
   });
 
+  // src/dom/ownership.ts
+  function ownsPostElement(element, post, boundary = {}) {
+    var _a, _b;
+    if (!post.contains(element)) return false;
+    const marked = element.closest(`[${postAtt}]`);
+    if (marked && marked !== post) return false;
+    const authored = element.closest(sharedSelectors.authoredContent);
+    if (authored && post.contains(authored)) return false;
+    if ((_a = boundary.bodies) == null ? void 0 : _a.some((body) => body.contains(element))) return false;
+    const owner = element.closest(sharedSelectors.postOwner);
+    if (!owner || owner === post || !post.contains(owner)) return true;
+    if (!boundary.allowArticleWrapper || post.matches(`${sharedSelectors.postOwner}, div[aria-describedby], div[data-virtualized]`))
+      return false;
+    const parentOwner = (_b = owner.parentElement) == null ? void 0 : _b.closest(sharedSelectors.postOwner);
+    return !parentOwner || !post.contains(parentOwner);
+  }
+  var init_ownership = __esm({
+    "src/dom/ownership.ts"() {
+      "use strict";
+      init_attributes();
+      init_shared();
+    }
+  });
+
   // src/dom/info-boxes.ts
   function restoreDebug(box, record) {
     if (!record.debugApplied || box.getAttribute(record.showAttribute) !== "") return;
@@ -7871,8 +7429,8 @@ ${fence}
     const ownLink = (owned == null ? void 0 : owned.link) === link && (marker === null || marker === owned.reason);
     if (marker !== null && !ownLink) return null;
     if (box.hasAttribute(state.cssHideEl) && !owned) return null;
-    const control2 = ownLink ? link.parentElement : link;
-    if (!control2 || link.matches(sharedSelectors.authoredContent) || !ownsPostElement(control2, post))
+    const control = ownLink ? link.parentElement : link;
+    if (!control || link.matches(sharedSelectors.authoredContent) || !ownsPostElement(control, post))
       return null;
     const evidence = getPostEvidence(post);
     if (owned && box.getAttribute(owned.hideAttribute) === "") {
@@ -7979,6 +7537,16 @@ ${fence}
     "src/core/filters/classifiers/blocked-text.ts"() {
       "use strict";
       init_matching();
+    }
+  });
+
+  // src/core/filters/text-normalize.ts
+  function cleanText(text) {
+    return text.normalize("NFKC");
+  }
+  var init_text_normalize = __esm({
+    "src/core/filters/text-normalize.ts"() {
+      "use strict";
     }
   });
 
@@ -8115,6 +7683,74 @@ ${fence}
     }
   });
 
+  // src/feeds/shared/blocks.ts
+  function isOwnedLayoutSignal(element, post) {
+    var _a;
+    if (!getPostEvidence(post).isRendered(element)) return false;
+    const owner = element.closest(sharedSelectors.postOwner);
+    const authoredParent = (_a = element.parentElement) == null ? void 0 : _a.closest(sharedSelectors.authoredContent);
+    return (!owner || owner === post || !post.contains(owner)) && (!authoredParent || authoredParent === post || !post.contains(authoredParent));
+  }
+  function getSemanticBlocks(post) {
+    const evidence = getPostEvidence(post);
+    const profile = evidence.select(sharedSelectors.profileName).find((element) => isOwnedLayoutSignal(element, post));
+    if (!profile) return null;
+    const message = evidence.select(sharedSelectors.storyMessage).find((element) => isOwnedLayoutSignal(element, post));
+    const contents = message ? [message] : evidence.select("img, video").filter(
+      (media) => isOwnedLayoutSignal(media, post) && !media.closest(
+        'h4, h5, button, [role="button"], [data-ad-rendering-role="profile_name"]'
+      )
+    );
+    for (const content of contents) {
+      const blocks = semanticBlocks(post, profile, content);
+      if (blocks) return blocks;
+    }
+    return null;
+  }
+  function semanticBlocks(post, profile, message) {
+    if (profile.contains(message) || message.contains(profile)) return null;
+    let container = profile.parentElement;
+    while (container && container !== post && !container.contains(message))
+      container = container.parentElement;
+    if (!container || !container.contains(message)) return null;
+    const children = Array.from(container.children);
+    const headerIndex = children.findIndex((child) => child.contains(profile));
+    const messageIndex = children.findIndex((child) => child.contains(message));
+    if (headerIndex < 0 || messageIndex <= headerIndex) return null;
+    return children.slice(headerIndex).filter((block) => getPostEvidence(post).isRendered(block));
+  }
+  function getNewsBlocks(post) {
+    const evidence = getPostEvidence(post);
+    const cached2 = cachedBlocks.get(evidence);
+    if (cached2) return cached2;
+    const semantic = getSemanticBlocks(post);
+    if (semantic) {
+      cachedBlocks.set(evidence, semantic);
+      return semantic;
+    }
+    let query = "div[aria-posinset] > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div";
+    let blocks = evidence.select(query).filter((block) => evidence.isRendered(block));
+    if (blocks.length <= 1) {
+      query = "div[aria-posinset] > div > div > div > div > div > div > div > div > div, div[aria-describedby] > div > div > div > div > div > div > div > div > div";
+      blocks = evidence.select(query).filter((block) => evidence.isRendered(block));
+    }
+    const selected = blocks.length > 1 ? blocks : evidence.select(query);
+    cachedBlocks.set(evidence, selected);
+    return selected;
+  }
+  function getGroupsBlocks(post) {
+    return getNewsBlocks(post);
+  }
+  var cachedBlocks;
+  var init_blocks = __esm({
+    "src/feeds/shared/blocks.ts"() {
+      "use strict";
+      init_post_evidence();
+      init_shared();
+      cachedBlocks = /* @__PURE__ */ new WeakMap();
+    }
+  });
+
   // src/feeds/shared/blocked-text.ts
   function findNewsBlockedText(post, options, filters) {
     if (!post || !options || !filters) {
@@ -8208,9 +7844,238 @@ ${fence}
     }
   });
 
+  // src/i18n/disclosure-labels.ts
+  var disclosureLabels;
+  var init_disclosure_labels = __esm({
+    "src/i18n/disclosure-labels.ts"() {
+      "use strict";
+      disclosureLabels = {
+        en: ["Ad", "AI info", "Visit Meta AI|Meta AI branding", "Try Meta AI|Free AI creation tools"],
+        ar: [
+          "إعلان",
+          "معلومات الذكاء الاصطناعي|معلومات عن الذكاء الاصطناعي",
+          "زيارة Meta AI|علامة Meta AI التجارية",
+          "جرّب Meta AI|أدوات إنشاء مجانية بالذكاء الاصطناعي"
+        ],
+        bg: [
+          "Реклама",
+          "Информация за AI|Информация за ИИ",
+          "Посетете Meta AI|Брандиране на Meta AI",
+          "Изпробвайте Meta AI|Безплатни инструменти за създаване с AI"
+        ],
+        cs: [
+          "Reklama",
+          "Informace o AI",
+          "Navštívit Meta AI|Značka Meta AI",
+          "Vyzkoušejte Meta AI|Bezplatné nástroje pro tvorbu s AI"
+        ],
+        de: [
+          "Anzeige|Werbung",
+          "KI-Info|KI-Informationen",
+          "Meta AI besuchen|Meta AI-Branding",
+          "Meta AI ausprobieren|Kostenlose KI-Kreativtools"
+        ],
+        el: [
+          "Διαφήμιση",
+          "Πληροφορίες AI|Πληροφορίες τεχνητής νοημοσύνης",
+          "Επισκεφτείτε το Meta AI|Επωνυμία Meta AI",
+          "Δοκιμάστε το Meta AI|Δωρεάν εργαλεία δημιουργίας AI"
+        ],
+        es: [
+          "Anuncio",
+          "Información de IA|Información sobre IA",
+          "Visitar Meta AI|Marca de Meta AI",
+          "Prueba Meta AI|Herramientas gratuitas de creación con IA"
+        ],
+        fi: [
+          "Mainos",
+          "Tekoälytiedot|Tietoja tekoälystä",
+          "Siirry Meta AI:hin|Meta AI -brändäys",
+          "Kokeile Meta AI:ta|Maksuttomat tekoälyluontityökalut"
+        ],
+        fr: [
+          "Publicité|Pub",
+          "Infos IA|Informations sur l’IA|Informations sur l'IA",
+          "Visiter Meta AI|Marque Meta AI",
+          "Essayez Meta AI|Outils de création IA gratuits"
+        ],
+        he: [
+          "מודעה",
+          "מידע על AI|מידע על בינה מלאכותית",
+          "ביקור ב-Meta AI|מיתוג Meta AI",
+          "נסו את Meta AI|כלי יצירה חינמיים עם בינה מלאכותית"
+        ],
+        id: [
+          "Iklan",
+          "Info AI",
+          "Kunjungi Meta AI|Branding Meta AI",
+          "Coba Meta AI|Alat kreasi AI gratis"
+        ],
+        it: [
+          "Inserzione|Pubblicità",
+          "Informazioni sull'IA|Informazioni sull’IA",
+          "Visita Meta AI|Branding di Meta AI",
+          "Prova Meta AI|Strumenti di creazione IA gratuiti"
+        ],
+        ja: [
+          "広告",
+          "AI情報|AIに関する情報",
+          "Meta AIにアクセス|Meta AIのブランド",
+          "Meta AIを試す|無料のAI作成ツール"
+        ],
+        lv: [
+          "Reklāma",
+          "MI informācija|Informācija par MI",
+          "Apmeklēt Meta AI|Meta AI zīmols",
+          "Izmēģiniet Meta AI|Bezmaksas MI satura veidošanas rīki"
+        ],
+        nl: [
+          "Advertentie",
+          "AI-info|AI-informatie",
+          "Meta AI bezoeken|Meta AI-branding",
+          "Probeer Meta AI|Gratis AI-creatietools"
+        ],
+        pl: [
+          "Reklama",
+          "Informacje o AI|Informacje o sztucznej inteligencji",
+          "Odwiedź Meta AI|Marka Meta AI",
+          "Wypróbuj Meta AI|Bezpłatne narzędzia do tworzenia z AI"
+        ],
+        pt: [
+          "Anúncio",
+          "Informações de IA|Informações sobre IA",
+          "Visitar Meta AI|Marca da Meta AI",
+          "Experimenta a Meta AI|Experimente a Meta AI|Ferramentas gratuitas de criação com IA"
+        ],
+        ru: [
+          "Реклама",
+          "Информация об ИИ",
+          "Посетить Meta AI|Брендинг Meta AI",
+          "Попробуйте Meta AI|Бесплатные инструменты для творчества с ИИ"
+        ],
+        tr: [
+          "Reklam",
+          "Yapay zeka bilgisi|Yapay zekâ bilgisi",
+          "Meta AI'ı ziyaret et|Meta AI markası",
+          "Meta AI'ı dene|Ücretsiz yapay zeka oluşturma araçları"
+        ],
+        uk: [
+          "Реклама",
+          "Інформація про ШІ",
+          "Відвідати Meta AI|Брендинг Meta AI",
+          "Спробуйте Meta AI|Безкоштовні інструменти для творчості зі ШІ"
+        ],
+        vi: [
+          "Quảng cáo",
+          "Thông tin về AI|Thông tin AI",
+          "Truy cập Meta AI|Thương hiệu Meta AI",
+          "Dùng thử Meta AI|Công cụ sáng tạo AI miễn phí"
+        ],
+        "zh-Hans": [
+          "广告",
+          "AI 信息|AI信息|人工智能信息",
+          "访问 Meta AI|Meta AI 品牌",
+          "试用 Meta AI|免费 AI 创作工具"
+        ],
+        "zh-Hant": [
+          "廣告",
+          "AI 資訊|AI資訊|人工智慧資訊",
+          "造訪 Meta AI|Meta AI 品牌",
+          "試用 Meta AI|免費 AI 創作工具"
+        ]
+      };
+    }
+  });
+
+  // src/core/filters/disclosure-labels.ts
+  function normalize(text) {
+    return text.normalize("NFKC").replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g, "").replace(/\s+/g, " ").trim().toLowerCase();
+  }
+  function matchesDisclosureLabel(text, kind) {
+    var _a;
+    return ((_a = labels.get(kind)) == null ? void 0 : _a.has(normalize(text))) === true;
+  }
+  function containsMetaAiCopy(text) {
+    const normalized = normalize(text);
+    return Array.from(labels.get("metaAiCopy") || []).some(
+      (label) => label !== "" && normalized.includes(label)
+    );
+  }
+  function matchesSponsoredLabel(text) {
+    return sponsorshipLabels.has(normalize(text)) || matchesDisclosureLabel(text, "ad");
+  }
+  var kinds, labels, sponsorshipLabels;
+  var init_disclosure_labels2 = __esm({
+    "src/core/filters/disclosure-labels.ts"() {
+      "use strict";
+      init_i18n();
+      init_disclosure_labels();
+      kinds = ["ad", "aiInfo", "metaAiBrand", "metaAiCopy"];
+      labels = new Map(
+        kinds.map((kind, index) => [
+          kind,
+          new Set(
+            Object.values(disclosureLabels).flatMap(
+              (values) => (values[index] || "").split("|").map(normalize)
+            )
+          )
+        ])
+      );
+      sponsorshipLabels = new Set(
+        Object.values(translations).flatMap(
+          (catalog24) => [catalog24.SPONSORED, catalog24.SPONSORED_EXTRA].filter((label) => typeof label === "string").map(normalize)
+        )
+      );
+    }
+  });
+
+  // src/feeds/shared/svg-disclosure.ts
+  function getSvgDisclosure(control, post) {
+    var _a;
+    if (!control.querySelector("svg")) return null;
+    const evidence = getPostEvidence(post);
+    let results = cache2.get(evidence);
+    if (!results) {
+      results = /* @__PURE__ */ new WeakMap();
+      cache2.set(evidence, results);
+    }
+    if (results.has(control)) return results.get(control) || null;
+    const url = facebookUrl(control);
+    const blocks = getNewsBlocks(post);
+    const name = control.getAttribute("aria-label");
+    let result = null;
+    if (control.matches("a[href]") && (url == null ? void 0 : url.searchParams.get("__cft__[0]")) && !url.pathname.startsWith("/groups/") && !url.searchParams.has("section_header_type") && !control.hasAttribute("aria-labelledby") && (!name || matchesSponsoredLabel(name)) && (control.closest("h4, h5") || ((_a = blocks[0]) == null ? void 0 : _a.contains(control))) && ownsPostElement(control, post, { bodies: blocks.slice(1) }) && evidence.isRendered(control)) {
+      for (const graphic of evidence.select("svg", control).slice(0, 16)) {
+        if (graphic.closest('a, button, [role="button"], [role="link"]') !== control || !evidence.isRendered(graphic) || graphic.hasAttribute("aria-labelledby"))
+          continue;
+        const graphicName = graphic.getAttribute("aria-label");
+        if (graphicName && !matchesSponsoredLabel(graphicName)) continue;
+        const resolved = readSvgText(graphic, post);
+        if (resolved && matchesSponsoredLabel(resolved.text)) {
+          result = resolved;
+          break;
+        }
+      }
+    }
+    results.set(control, result);
+    return result;
+  }
+  var cache2;
+  var init_svg_disclosure = __esm({
+    "src/feeds/shared/svg-disclosure.ts"() {
+      "use strict";
+      init_disclosure_labels2();
+      init_ownership();
+      init_post_evidence();
+      init_svg_text();
+      init_blocks();
+      cache2 = /* @__PURE__ */ new WeakMap();
+    }
+  });
+
   // src/feeds/shared/sponsored.ts
-  function isOwnedControl(control2, post, bodies, evidence) {
-    return ownsPostElement(control2, post, { bodies, allowArticleWrapper: true }) && evidence.isRendered(control2);
+  function isOwnedControl(control, post, bodies, evidence) {
+    return ownsPostElement(control, post, { bodies, allowArticleWrapper: true }) && evidence.isRendered(control);
   }
   function authoredBlocks(post, state) {
     if (state.isNF || state.isGF || state.isSF) {
@@ -8225,20 +8090,20 @@ ${fence}
     }
     return [];
   }
-  function hasSponsoredName(control2, post, bodies, scope) {
-    const cached2 = scope.names.get(control2);
+  function hasSponsoredName(control, post, bodies, scope) {
+    const cached2 = scope.names.get(control);
     if (cached2 !== void 0) return cached2;
-    const result = readSponsoredName(control2, post, bodies, scope);
-    scope.names.set(control2, result);
+    const result = readSponsoredName(control, post, bodies, scope);
+    scope.names.set(control, result);
     return result;
   }
-  function readSponsoredName(control2, post, bodies, scope) {
-    const ariaLabel = control2.getAttribute("aria-label");
+  function readSponsoredName(control, post, bodies, scope) {
+    const ariaLabel = control.getAttribute("aria-label");
     if (ariaLabel) return matchesSponsoredLabel(ariaLabel);
-    const labelIds = control2.getAttribute("aria-labelledby");
+    const labelIds = control.getAttribute("aria-labelledby");
     if (labelIds) {
-      const labels2 = scope.dom.referencedLabels(control2).map(
-        (label) => label && post.contains(label) && !label.contains(control2) && isOwnedControl(label, post, bodies, scope.dom) ? label : null
+      const labels2 = scope.dom.referencedLabels(control).map(
+        (label) => label && post.contains(label) && !label.contains(control) && isOwnedControl(label, post, bodies, scope.dom) ? label : null
       );
       if (labels2.every((label) => label !== null)) {
         return matchesSponsoredLabel(
@@ -8247,21 +8112,21 @@ ${fence}
       }
       return false;
     }
-    return [scope.dom.visibleText(control2), control2.getAttribute("title") || ""].some(
+    return [scope.dom.visibleText(control), control.getAttribute("title") || ""].some(
       (label) => matchesSponsoredLabel(label)
-    ) || hasSponsoredGraphicName(control2, post, bodies, scope);
+    ) || hasSponsoredGraphicName(control, post, bodies, scope);
   }
-  function hasSponsoredGraphicName(control2, post, bodies, scope) {
-    return scope.dom.select("svg[aria-label], svg[aria-labelledby], span[aria-labelledby]", control2).slice(0, 16).some((graphic) => {
+  function hasSponsoredGraphicName(control, post, bodies, scope) {
+    return scope.dom.select("svg[aria-label], svg[aria-labelledby], span[aria-labelledby]", control).slice(0, 16).some((graphic) => {
       var _a, _b;
-      if (!isOwnedControl(graphic, post, bodies, scope.dom) || graphic.closest('a, button, [role="button"], [role="link"]') !== control2 || graphic.closest('[hidden], [aria-hidden="true"]') || !scope.dom.isVisible(graphic) || graphic.localName === "span" && (graphic.childElementCount !== 1 || ((_a = graphic.firstElementChild) == null ? void 0 : _a.localName) !== "svg"))
+      if (!isOwnedControl(graphic, post, bodies, scope.dom) || graphic.closest('a, button, [role="button"], [role="link"]') !== control || graphic.closest('[hidden], [aria-hidden="true"]') || !scope.dom.isVisible(graphic) || graphic.localName === "span" && (graphic.childElementCount !== 1 || ((_a = graphic.firstElementChild) == null ? void 0 : _a.localName) !== "svg"))
         return false;
       const ariaLabel = graphic.getAttribute("aria-label");
       if (ariaLabel) return matchesSponsoredLabel(ariaLabel);
       const ids = (_b = graphic.getAttribute("aria-labelledby")) == null ? void 0 : _b.trim().split(/\s+/);
       if (!(ids == null ? void 0 : ids.length)) return false;
       const labels2 = scope.dom.referencedLabels(graphic).map((label) => {
-        if (!label || label.contains(control2) || label.contains(post)) return null;
+        if (!label || label.contains(control) || label.contains(post)) return null;
         if (post.contains(label))
           return isOwnedControl(label, post, bodies, scope.dom) ? label : null;
         return label.localName === "span" && label.childElementCount === 0 && !label.closest(
@@ -8277,20 +8142,20 @@ ${fence}
     if (hasSponsoredName(link, post, bodies, scope)) return true;
     const header = link.closest("h4, h5");
     return !!header && post.contains(header) && scope.dom.select('a, button, [role="button"], [role="link"]', header).some(
-      (control2) => control2 !== link && isOwnedControl(control2, post, bodies, scope.dom) && hasSponsoredName(control2, post, bodies, scope)
+      (control) => control !== link && isOwnedControl(control, post, bodies, scope.dom) && hasSponsoredName(control, post, bodies, scope)
     );
   }
   function isSponsored(post, state) {
     return inspectSponsored(post, state).isSponsored;
   }
-  function isSponsoredDisclosure(control2, post) {
-    if (!control2.matches("a[href]")) return false;
-    const url = facebookUrl(control2);
+  function isSponsoredDisclosure(control, post) {
+    if (!control.matches("a[href]")) return false;
+    const url = facebookUrl(control);
     const scope = { dom: getPostEvidence(post), names: /* @__PURE__ */ new Map() };
-    const owner = control2.closest(sharedSelectors.postOwner);
-    return (url == null ? void 0 : url.pathname) === "/ads/about/" && (!owner || owner === post || !post.contains(owner)) && isOwnedControl(control2, post, [], scope.dom) && Array.from(control2.querySelectorAll("*")).every(
+    const owner = control.closest(sharedSelectors.postOwner);
+    return (url == null ? void 0 : url.pathname) === "/ads/about/" && (!owner || owner === post || !post.contains(owner)) && isOwnedControl(control, post, [], scope.dom) && Array.from(control.querySelectorAll("*")).every(
       (child) => !scope.dom.isRendered(child) || isOwnedControl(child, post, [], scope.dom)
-    ) && hasSponsoredName(control2, post, [], scope);
+    ) && hasSponsoredName(control, post, [], scope);
   }
   function getSponsoredDiagnostics(post, state) {
     return inspectSponsored(post, state).diagnostics;
@@ -8683,6 +8548,316 @@ ${fence}
     }
   });
 
+  // src/i18n/news-labels.ts
+  var newsLabels;
+  var init_news_labels = __esm({
+    "src/i18n/news-labels.ts"() {
+      "use strict";
+      newsLabels = {
+        en: [
+          "Follow",
+          "Join|Join group",
+          "Verified|Verified account",
+          "Suggested for you|Recommended for you|Suggested Pages|Pages you may like",
+          "Groups you might like|Suggested groups",
+          "People you may know",
+          "Reels|Reels and short videos",
+          "Events you may like",
+          "Paid for by ______"
+        ],
+        ar: [
+          "متابعة|تابع",
+          "انضمام|انضمام إلى المجموعة",
+          "تم التحقق|حساب تم التحقق منه|حساب موثّق",
+          "مقترح لك|مقترحات لك|صفحات قد تعجبك",
+          "مجموعات قد تعجبك|مجموعات مقترحة",
+          "أشخاص قد تعرفهم",
+          "ريلز|مقاطع ريلز",
+          "أحداث قد تعجبك",
+          "مدفوعة بواسطة ______"
+        ],
+        bg: [
+          "Следване|Следвай",
+          "Присъединяване|Присъединяване към групата",
+          "Потвърден|Потвърден акаунт",
+          "Предложения за вас|Страници, които може да харесате",
+          "Групи, които може да харесате|Предложени групи",
+          "Хора, които може би познавате",
+          "Ленти|Reels",
+          "Събития, които може да ви харесат",
+          "Платено от ______"
+        ],
+        cs: [
+          "Sledovat",
+          "Přidat se|Přidat se ke skupině",
+          "Ověřeno|Ověřený účet",
+          "Navrhované pro vás|Stránky, které by se vám mohly líbit",
+          "Skupiny, které by se vám mohly líbit|Navrhované skupiny",
+          "Lidé, které možná znáte|Koho možná znáte",
+          "Reely|Reels",
+          "Události, které se vám mohou líbit",
+          "Platí za to ______"
+        ],
+        de: [
+          "Folgen",
+          "Beitreten|Gruppe beitreten",
+          "Verifiziert|Verifiziertes Konto",
+          "Vorschläge für dich|Für dich empfohlen|Seiten, die dir gefallen könnten",
+          "Gruppen, die dir gefallen könnten|Vorgeschlagene Gruppen",
+          "Personen, die du kennen könntest",
+          "Reels",
+          "Veranstaltungen, die dir gefallen könnten|Veranstaltungen, die Ihnen gefallen könnten",
+          "Finanziert von ______"
+        ],
+        el: [
+          "Ακολούθηση|Ακολούθησε",
+          "Συμμετοχή|Γίνετε μέλος",
+          "Επαληθευμένος|Επαληθευμένος λογαριασμός",
+          "Προτεινόμενα για εσάς|Σελίδες που μπορεί να σας αρέσουν",
+          "Ομάδες που μπορεί να σας αρέσουν|Προτεινόμενες ομάδες",
+          "Άτομα που ίσως γνωρίζετε",
+          "Reels",
+          "Εκδηλώσεις που μπορεί να σας αρέσουν",
+          "Πληρωμένο από ______"
+        ],
+        es: [
+          "Seguir",
+          "Unirte|Unirse|Unirte al grupo",
+          "Verificado|Cuenta verificada",
+          "Sugerencias para ti|Sugerido para ti|Páginas que te pueden gustar",
+          "Grupos que te pueden gustar|Grupos sugeridos",
+          "Personas que quizá conozcas|Personas que quizás conozcas",
+          "Reels|Reels y vídeos cortos",
+          "Eventos que te pueden gustar",
+          "Pagado por ______"
+        ],
+        fi: [
+          "Seuraa",
+          "Liity|Liity ryhmään",
+          "Vahvistettu|Vahvistettu tili",
+          "Ehdotuksia sinulle|Sivut, joista saatat pitää",
+          "Ryhmät, joista saatat pitää|Ehdotetut ryhmät",
+          "Ihmisiä, jotka saatat tuntea|Ihmiset, jotka saatat tuntea",
+          "Kelat|Reels",
+          "Tapahtumat, joista saatat pitää",
+          "Maksaja ______"
+        ],
+        fr: [
+          "Suivre|S’abonner|S'abonner",
+          "Rejoindre|Rejoindre le groupe",
+          "Vérifié|Compte vérifié",
+          "Suggestion pour vous|Suggestions pour vous|Pages qui pourraient vous plaire",
+          "Groupes qui pourraient vous plaire|Groupes suggérés",
+          "Vous connaissez peut-être|Connaissez-vous...",
+          "Reels|Reels et vidéos courtes",
+          "Évènements qui pourraient vous intéresser",
+          "Financé par ______"
+        ],
+        he: [
+          "עקוב|מעקב",
+          "הצטרף|הצטרפות לקבוצה",
+          "מאומת|חשבון מאומת",
+          "הצעות עבורך|דפים שאולי תאהב",
+          "קבוצות שאולי תאהב|קבוצות מוצעות",
+          "אנשים שאולי אתה מכיר",
+          "רילס|Reels",
+          "אירועים שאולי תאהבו",
+          "שולם על ידי ______"
+        ],
+        id: [
+          "Ikuti",
+          "Gabung|Gabung grup",
+          "Terverifikasi|Akun terverifikasi",
+          "Disarankan untuk Anda|Halaman yang mungkin Anda sukai",
+          "Grup yang mungkin Anda sukai|Grup yang disarankan",
+          "Orang yang Mungkin Anda Kenal",
+          "Reel|Reels",
+          "Acara yang mungkin Anda sukai",
+          "Dibayar oleh ______"
+        ],
+        it: [
+          "Segui",
+          "Iscriviti|Iscriviti al gruppo",
+          "Verificato|Account verificato",
+          "Contenuti suggeriti per te|Suggerimenti per te|Pagine che potrebbero piacerti",
+          "Gruppi che potrebbero piacerti|Gruppi suggeriti",
+          "Persone che potresti conoscere",
+          "Reel|Reels",
+          "Eventi che potrebbero piacerti",
+          "Finanziato da ______"
+        ],
+        ja: [
+          "フォロー|フォローする",
+          "参加|グループに参加",
+          "認証済み|認証済みアカウント",
+          "おすすめ|おすすめのページ",
+          "おすすめのグループ",
+          "知り合いかも|あなたが知っているかもしれない人々",
+          "リール|リール動画",
+          "おすすめのイベント",
+          "______ による支払い|______による支払い"
+        ],
+        lv: [
+          "Sekot",
+          "Pievienoties|Pievienoties grupai",
+          "Verificēts|Verificēts konts",
+          "Ieteikumi jums|Lapas, kas tev varētu patikt",
+          "Grupas, kas tev varētu patikt|Ieteiktās grupas",
+          "Cilvēki, kurus tu varētu pazīt",
+          "Reels|Rullīši",
+          "Notikumi, kas jums varētu patikt",
+          "Apmaksā ______"
+        ],
+        nl: [
+          "Volgen",
+          "Lid worden|Lid worden van groep",
+          "Geverifieerd|Geverifieerd account",
+          "Voorgesteld voor jou|Pagina’s die je misschien leuk vindt|Pagina's die je misschien leuk vindt",
+          "Groepen die je misschien leuk vindt|Voorgestelde groepen",
+          "Mensen die je misschien kent",
+          "Reels",
+          "Evenementen die je misschien leuk vindt",
+          "Betaald door ______"
+        ],
+        pl: [
+          "Obserwuj",
+          "Dołącz|Dołącz do grupy",
+          "Zweryfikowano|Zweryfikowane konto",
+          "Proponowane dla Ciebie|Strony, które możesz polubić",
+          "Grupy, które mogą Ci się spodobać|Proponowane grupy",
+          "Osoby, które możesz znać",
+          "Rolki",
+          "Wydarzenia, które mogą Ci się spodobać",
+          "Opłacona przez ______"
+        ],
+        pt: [
+          "Seguir",
+          "Participar|Aderir|Entrar no grupo",
+          "Verificado|Conta verificada",
+          "Sugestões para ti|Sugestões para você|Páginas de que poderás gostar|Páginas que você pode curtir",
+          "Grupos de que poderás gostar|Grupos que você pode gostar|Grupos sugeridos",
+          "Pessoas que talvez conheças|Pessoas que você talvez conheça",
+          "Reels|Reels e vídeos curtos",
+          "Eventos que você pode gostar",
+          "Financiado por ______"
+        ],
+        ru: [
+          "Подписаться",
+          "Вступить|Вступить в группу",
+          "Подтверждено|Подтвержденный аккаунт",
+          "Рекомендуем вам|Предлагаемое для вас|Страницы, которые могут вам понравиться",
+          "Группы, которые могут вам понравиться|Рекомендуемые группы",
+          "Люди, которых вы можете знать",
+          "Reels|Короткие видео",
+          "Мероприятия, которые вам могут понравиться",
+          "Оплачено ______"
+        ],
+        tr: [
+          "Takip Et",
+          "Katıl|Gruba Katıl",
+          "Doğrulanmış|Doğrulanmış Hesap",
+          "Senin için önerilenler|Beğenebileceğin Sayfalar",
+          "Beğenebileceğin Gruplar|Önerilen Gruplar",
+          "Tanıyor olabileceğin kişiler",
+          "Reels|Reels videoları",
+          "İlgini çekebilecek etkinlikler",
+          "______ tarafından ödendi"
+        ],
+        uk: [
+          "Стежити|Підписатися",
+          "Приєднатися|Приєднатися до групи",
+          "Підтверджено|Підтверджений обліковий запис",
+          "Рекомендовано для вас|Сторінки, які можуть вам сподобатися",
+          "Групи, які можуть вам сподобатися|Рекомендовані групи",
+          "Люди, яких ви можете знати",
+          "Reels|Короткі відео",
+          "Події, які можуть вам сподобатися",
+          "Оплачено ______"
+        ],
+        vi: [
+          "Theo dõi",
+          "Tham gia|Tham gia nhóm",
+          "Đã xác minh|Tài khoản đã xác minh",
+          "Gợi ý cho bạn|Đề xuất cho bạn|Trang bạn có thể thích",
+          "Nhóm bạn có thể thích|Nhóm được gợi ý",
+          "Những người bạn có thể biết",
+          "Reels|Thước phim",
+          "Sự kiện bạn có thể thích",
+          "Tài trợ bởi ______"
+        ],
+        "zh-Hans": [
+          "关注",
+          "加入|加入小组",
+          "已验证|已认证|已验证账户",
+          "为你推荐|推荐给你|你可能喜欢的公共主页",
+          "你可能喜欢的小组|推荐小组",
+          "你可能认识的人",
+          "Reels|短视频",
+          "您可能喜欢的活动",
+          "由 ______ 付费|由______付费"
+        ],
+        "zh-Hant": [
+          "追蹤",
+          "加入|加入社團",
+          "已驗證|已驗證帳號",
+          "為你推薦|推薦給你|你可能會喜歡的粉絲專頁",
+          "你可能會喜歡的社團|推薦社團",
+          "你可能認識的人",
+          "Reels|連續短片",
+          "你可能感興趣的活動",
+          "出資者：______"
+        ]
+      };
+    }
+  });
+
+  // src/core/filters/labels.ts
+  function normalizeLabel2(text) {
+    return cleanText(text).replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g, "").replace(/\s+/g, " ").trim().toLowerCase();
+  }
+  function matchesNewsLabel(text, kind) {
+    var _a;
+    const normalized = normalizeLabel2(text);
+    return normalized !== "" && ((_a = labelsByKind.get(kind)) == null ? void 0 : _a.has(normalized)) === true;
+  }
+  function matchesNewsPaidBy(text) {
+    const label = normalizeLabel2(text);
+    return Object.values(newsLabels).some(
+      (labels2) => labels2[8].split("|").some((template) => {
+        const [prefix = "", suffix = ""] = normalizeLabel2(template).split("______");
+        return (prefix !== "" || suffix !== "") && label.startsWith(prefix) && label.endsWith(suffix) && label.slice(prefix.length, label.length - suffix.length).trim() !== "";
+      })
+    );
+  }
+  var labelKinds, labelsByKind;
+  var init_labels = __esm({
+    "src/core/filters/labels.ts"() {
+      "use strict";
+      init_text_normalize();
+      init_news_labels();
+      labelKinds = [
+        "follow",
+        "join",
+        "verified",
+        "suggested",
+        "groups",
+        "people",
+        "reels",
+        "events"
+      ];
+      labelsByKind = new Map(
+        labelKinds.map((kind, index) => [
+          kind,
+          new Set(
+            Object.values(newsLabels).flatMap(
+              (labels2) => (labels2[index] || "").split("|").map(normalizeLabel2)
+            )
+          )
+        ])
+      );
+    }
+  });
+
   // src/feeds/news-presentation.ts
   function isNewsFeatureCollapsed(element, feature) {
     return (element instanceof HTMLElement || element instanceof SVGElement) && presentations[feature].has(element);
@@ -8818,7 +8993,7 @@ ${fence}
   }
   function hasNewsCardHeading(post, kind) {
     return getPostEvidence(post).select('h2, h3, [role="heading"]').some(
-      (heading2) => isOwnedNewsMetadata(heading2, post) && getPostEvidence(post).isRendered(heading2) && matchesNewsLabel(getPostEvidence(post).visibleText(heading2), kind)
+      (heading) => isOwnedNewsMetadata(heading, post) && getPostEvidence(post).isRendered(heading) && matchesNewsLabel(getPostEvidence(post).visibleText(heading), kind)
     );
   }
   function hasNewsActionName(element, post, kind) {
@@ -8978,7 +9153,7 @@ ${fence}
       return keyWords.NF_EVENTS_YOU_MAY_LIKE;
     const events = getPostEvidence(post).select(query);
     return events.some(
-      (heading2) => isOwnedNewsMetadata(heading2, post) && matchesNewsLabel(getPostEvidence(post).visibleText(heading2), "events")
+      (heading) => isOwnedNewsMetadata(heading, post) && matchesNewsLabel(getPostEvidence(post).visibleText(heading), "events")
     ) ? keyWords.NF_EVENTS_YOU_MAY_LIKE : "";
   }
   function hasHeaderAction(post, kind) {
@@ -8988,7 +9163,7 @@ ${fence}
       const hasAuthor = paths.some((path) => path !== "/" && !/^\/groups(?:\/|$)/.test(path));
       if (kind === "join" ? !hasGroup : !hasAuthor || hasGroup) return false;
       return getPostEvidence(post).select('button, [role="button"]', header).some(
-        (control2) => isOwnedNewsElement(control2, post) && hasNewsActionName(control2, post, kind)
+        (control) => isOwnedNewsElement(control, post) && hasNewsActionName(control, post, kind)
       );
     });
   }
@@ -9042,10 +9217,10 @@ ${fence}
       return "";
     }
     const evidence = getPostEvidence(post);
-    const hasAiInfoLabel = evidence.select('button, [role="button"]').some((control2) => {
-      if (!isOwnedNewsElement(control2, post) || !evidence.isRendered(control2)) return false;
-      const names = evidence.explicitNames(control2);
-      return (names.length ? names : [evidence.visibleText(control2)]).some(
+    const hasAiInfoLabel = evidence.select('button, [role="button"]').some((control) => {
+      if (!isOwnedNewsElement(control, post) || !evidence.isRendered(control)) return false;
+      const names = evidence.explicitNames(control);
+      return (names.length ? names : [evidence.visibleText(control)]).some(
         (name) => matchesDisclosureLabel(name, "aiInfo")
       );
     });
@@ -9246,12 +9421,12 @@ ${fence}
     }
     return /(?:utm_[a-z0-9_]+|fbclid|ad_id|adset_id|campaign_id)(?:=|%3D)/i.test(href);
   }
-  function hasPlausibleRightRailAdLink(section, heading2) {
-    if (!section || !heading2) {
+  function hasPlausibleRightRailAdLink(section, heading) {
+    if (!section || !heading) {
       return false;
     }
     return Array.from(section.querySelectorAll("a")).some(
-      (link) => isAfterElement(heading2, link) && isPlausibleRightRailAdLink(link)
+      (link) => isAfterElement(heading, link) && isPlausibleRightRailAdLink(link)
     );
   }
   function hasOtherRightRailHeading(section, sponsoredHeading, sponsoredLabel) {
@@ -9260,7 +9435,7 @@ ${fence}
     }
     const headingQuery = 'h1, h2, h3, h4, [role="heading"]';
     return Array.from(section.querySelectorAll(headingQuery)).some(
-      (heading2) => heading2 !== sponsoredHeading && getNormalizedElementText(heading2).length > 0 && !isRightRailHeadingText(heading2, sponsoredLabel)
+      (heading) => heading !== sponsoredHeading && getNormalizedElementText(heading).length > 0 && !isRightRailHeadingText(heading, sponsoredLabel)
     );
   }
   function findRightRailSponsoredSection(rightRail, sponsoredHeading, sponsoredLabel) {
@@ -9291,10 +9466,10 @@ ${fence}
     }
     const headings = Array.from(
       rightRail.querySelectorAll('h1, h2, h3, h4, [role="heading"]')
-    ).filter((heading2) => isRightRailHeadingText(heading2, keyWords.SPONSORED));
+    ).filter((heading) => isRightRailHeadingText(heading, keyWords.SPONSORED));
     let hidden = false;
-    for (const heading2 of headings) {
-      const section = findRightRailSponsoredSection(rightRail, heading2, keyWords.SPONSORED);
+    for (const heading of headings) {
+      const section = findRightRailSponsoredSection(rightRail, heading, keyWords.SPONSORED);
       if (section) {
         hideFeature(section, keyWords.SPONSORED, false, context);
         hidden = true;
@@ -9312,8 +9487,8 @@ ${fence}
         if (!kinds2.some((kind) => hasNewsCardHeading(item, kind))) continue;
         const otherHeading = Array.from(
           item.querySelectorAll('h1, h2, h3, h4, [role="heading"]')
-        ).some((heading2) => {
-          const label = heading2.textContent || "";
+        ).some((heading) => {
+          const label = heading.textContent || "";
           return label.trim() !== "" && !kinds2.some((kind) => matchesNewsLabel(label, kind));
         });
         if (otherHeading || item.querySelector('a[href="/events/birthdays/"]')) continue;
@@ -9779,12 +9954,12 @@ ${fence}
   function isRequestSignal(element, section) {
     return ownsPostElement(element, section) && getPostEvidence(section).isRendered(element);
   }
-  function hasFriendsHeader(section, heading2) {
+  function hasFriendsHeader(section, heading) {
     return Array.from(section.querySelectorAll(newsSelectors.railFriendLinks)).some((link) => {
       if (!isFriendsDestination(link) || !isRequestSignal(link, section)) return false;
       let row = link;
       while (row && row !== section) {
-        if (row.contains(heading2) && !Array.from(row.querySelectorAll(newsSelectors.railActions)).some(
+        if (row.contains(heading) && !Array.from(row.querySelectorAll(newsSelectors.railActions)).some(
           (action) => isRequestSignal(action, section)
         ))
           return true;
@@ -9799,7 +9974,7 @@ ${fence}
       let card = link.parentElement;
       while (card && card !== section) {
         if (Array.from(card.querySelectorAll(newsSelectors.railHeadings)).some(
-          (heading2) => isRequestSignal(heading2, section)
+          (heading) => isRequestSignal(heading, section)
         ))
           return false;
         if (Array.from(card.querySelectorAll(newsSelectors.railActions)).filter(
@@ -9816,22 +9991,22 @@ ${fence}
     for (const rail of document.querySelectorAll(newsSelectors.rightRail)) {
       if (rail.closest(newsSelectors.railContentBoundary)) continue;
       if (!getPostEvidence(rail.ownerDocument.documentElement).isRendered(rail)) continue;
-      for (const heading2 of rail.querySelectorAll(newsSelectors.railHeadings)) {
-        if (heading2.closest(`${newsSelectors.railContentBoundary}, ${sharedSelectors.authoredContent}`))
+      for (const heading of rail.querySelectorAll(newsSelectors.railHeadings)) {
+        if (heading.closest(`${newsSelectors.railContentBoundary}, ${sharedSelectors.authoredContent}`))
           continue;
-        let section = heading2.parentElement;
+        let section = heading.parentElement;
         while (section && section !== rail) {
           if (section.closest('[hidden], [inert], [aria-hidden="true"]')) break;
           if (!getPostEvidence(section).isVisible(section) && !isNewsFeatureCollapsed(section, "friendRequests"))
             break;
-          if (!isRequestSignal(heading2, section)) break;
+          if (!isRequestSignal(heading, section)) break;
           const boundary = section;
           if (Array.from(boundary.querySelectorAll(newsSelectors.railHeadings)).filter(
             (candidate) => isRequestSignal(candidate, boundary)
           ).length !== 1)
             break;
           if (section.querySelector(newsSelectors.railContentBoundary)) break;
-          if (hasFriendsHeader(section, heading2) && hasRequestCard(section)) {
+          if (hasFriendsHeader(section, heading) && hasRequestCard(section)) {
             panels.add(section);
             break;
           }
@@ -10164,13 +10339,13 @@ ${fence}
     }
     for (const link of root.querySelectorAll(marketplaceSponsoredHeadingQuery)) {
       const parent = link.parentElement;
-      const heading2 = (parent == null ? void 0 : parent.tagName) === "OBJECT" ? parent.parentElement : parent;
-      if (!heading2 || heading2 === root || !root.contains(heading2) || !isSponsoredDisclosure(link, heading2))
+      const heading = (parent == null ? void 0 : parent.tagName) === "OBJECT" ? parent.parentElement : parent;
+      if (!heading || heading === root || !root.contains(heading) || !isSponsoredDisclosure(link, heading))
         continue;
-      let tile = heading2.nextElementSibling;
+      let tile = heading.nextElementSibling;
       while (tile == null ? void 0 : tile.matches("div[style]")) {
         if (!tile.querySelector(marketplaceSponsoredTileQuery)) break;
-        boxes.add(heading2);
+        boxes.add(heading);
         boxes.add(tile);
         tile = tile.nextElementSibling;
       }
@@ -10585,8 +10760,8 @@ ${fence}
       const concrete = hasOwnContent ? [] : evidence.select(sharedSelectors.postOwner).filter((post) => {
         var _a2, _b;
         const parentOwner = (_a2 = post.parentElement) == null ? void 0 : _a2.closest(sharedSelectors.postOwner);
-        const authored2 = (_b = post.parentElement) == null ? void 0 : _b.closest(sharedSelectors.authoredContent);
-        return (!parentOwner || !wrapper.contains(parentOwner)) && (!authored2 || !wrapper.contains(authored2)) && evidence.isRendered(post);
+        const authored = (_b = post.parentElement) == null ? void 0 : _b.closest(sharedSelectors.authoredContent);
+        return (!parentOwner || !wrapper.contains(parentOwner)) && (!authored || !wrapper.contains(authored)) && evidence.isRendered(post);
       });
       if (concrete.length) for (const post of concrete) posts.add(post);
       else posts.add(wrapper);
@@ -10763,7 +10938,7 @@ ${fence}
     );
     const headings = ((_b = blocks[1]) == null ? void 0 : _b.querySelectorAll("h3 > div > span ~ span > span > div > div")) || [];
     const hasSuggestionHeading = Array.from(headings).some(
-      (heading2) => hasGroupsSuggestionLabel(heading2, post)
+      (heading) => hasGroupsSuggestionLabel(heading, post)
     );
     return hasSuggestionIcon || hasSuggestionHeading ? keyWords.GF_SUGGESTIONS : "";
   }
@@ -11212,10 +11387,10 @@ ${fence}
               hideReason = findVideosBlockedText(post, options, filters, queryBlocks);
             }
             if (hideReason === "" && options.VF_DUPLICATE_VIDEOS) {
-              const identity2 = getVideoIdentity(post, queryBlocks);
-              if (identity2) {
-                if (seenVideoIds.has(identity2)) hideReason = keyWords.VF_DUPLICATE_VIDEOS;
-                else seenVideoIds.add(identity2);
+              const identity = getVideoIdentity(post, queryBlocks);
+              if (identity) {
+                if (seenVideoIds.has(identity)) hideReason = keyWords.VF_DUPLICATE_VIDEOS;
+                else seenVideoIds.add(identity);
               }
             }
             if (wasDuplicate) {
@@ -13453,7 +13628,7 @@ ${fence}
   }
   function dedupeOverlappingControls(controls) {
     return controls.filter(
-      (control2, index) => !controls.slice(0, index).some((existingControl) => isSameRect(existingControl.rect, control2.rect))
+      (control, index) => !controls.slice(0, index).some((existingControl) => isSameRect(existingControl.rect, control.rect))
     );
   }
   function isTopbarControlCandidate(element, bannerRect) {
@@ -13478,28 +13653,28 @@ ${fence}
   }
   function buildControlClusters(controls) {
     const clusters = [];
-    controls.forEach((control2) => {
+    controls.forEach((control) => {
       const currentCluster = clusters[clusters.length - 1];
       if (!currentCluster) {
         clusters.push({
-          controls: [control2],
-          rightEdge: control2.rect.right
+          controls: [control],
+          rightEdge: control.rect.right
         });
         return;
       }
       const previous = currentCluster.controls[currentCluster.controls.length - 1];
       if (!previous) return;
-      const gap = control2.rect.left - previous.rect.right;
-      const sameRow = Math.abs(control2.rect.top - previous.rect.top) <= MAX_ROW_OFFSET;
-      const similarHeight = Math.abs(control2.rect.height - previous.rect.height) <= MAX_ROW_OFFSET;
+      const gap = control.rect.left - previous.rect.right;
+      const sameRow = Math.abs(control.rect.top - previous.rect.top) <= MAX_ROW_OFFSET;
+      const similarHeight = Math.abs(control.rect.height - previous.rect.height) <= MAX_ROW_OFFSET;
       if (sameRow && similarHeight && gap >= -1 && gap <= MAX_CLUSTER_GAP) {
-        currentCluster.controls.push(control2);
-        currentCluster.rightEdge = control2.rect.right;
+        currentCluster.controls.push(control);
+        currentCluster.rightEdge = control.rect.right;
         return;
       }
       clusters.push({
-        controls: [control2],
-        rightEdge: control2.rect.right
+        controls: [control],
+        rightEdge: control.rect.right
       });
     });
     return clusters;
@@ -13521,10 +13696,10 @@ ${fence}
     var _a, _b;
     const bannerRect = getRect(banner);
     const controls = dedupeOverlappingControls(
-      Array.from(new Set(Array.from(banner.querySelectorAll(topbarControlSelector)))).filter((control2) => isTopbarControlCandidate(control2, bannerRect)).map((control2) => ({
-        element: control2,
-        rect: getRect(control2)
-      })).filter((control2) => control2.rect !== null).sort((a, b) => a.rect.left - b.rect.left)
+      Array.from(new Set(Array.from(banner.querySelectorAll(topbarControlSelector)))).filter((control) => isTopbarControlCandidate(control, bannerRect)).map((control) => ({
+        element: control,
+        rect: getRect(control)
+      })).filter((control) => control.rect !== null).sort((a, b) => a.rect.left - b.rect.left)
     );
     if (controls.length === 0) {
       return [];
@@ -13534,7 +13709,7 @@ ${fence}
     candidateClusters.sort(
       (a, b) => b.rightEdge - a.rightEdge || b.controls.length - a.controls.length
     );
-    return (_b = (_a = candidateClusters[0]) == null ? void 0 : _a.controls.map((control2) => control2.element)) != null ? _b : [];
+    return (_b = (_a = candidateClusters[0]) == null ? void 0 : _a.controls.map((control) => control.element)) != null ? _b : [];
   }
   function getTopbarMenuButton(root = document) {
     var _a;
@@ -13542,7 +13717,7 @@ ${fence}
     return (_a = controls[0]) != null ? _a : null;
   }
   function isTopbarControlButton(element, root = document) {
-    return getTopbarControlButtons(root).some((control2) => control2 === element);
+    return getTopbarControlButtons(root).some((control) => control === element);
   }
   var MIN_CONTROL_SIZE, MAX_CONTROL_SIZE, MIN_ASPECT_RATIO, MAX_ASPECT_RATIO, MAX_CLUSTER_GAP, MAX_ROW_OFFSET, RECT_MATCH_TOLERANCE, topbarControlSelector;
   var init_topbar_controls = __esm({
@@ -14274,8 +14449,8 @@ ${fence}
     if (!element || typeof element.closest !== "function") {
       return false;
     }
-    const control2 = element.closest('button, [role="button"]');
-    return control2 ? isTopbarControlButton(control2) : false;
+    const control = element.closest('button, [role="button"]');
+    return control ? isTopbarControlButton(control) : false;
   }
   function mountToggleButton(state, keyWords) {
     if (!state || !keyWords) {

@@ -182,7 +182,9 @@ describe("independent sanitized DOM capture", () => {
   });
 
   test("oversized interface labels are explicitly omitted rather than partially exported", async () => {
-    const target = mountComplaint();
+    mountComplaint();
+    const target = document.querySelector('[role="article"]');
+    if (!target) throw new Error("Missing post-header label fixture");
     target.innerHTML = `<h4><a href="/publisher?__cft__[0]=${"x".repeat(400)}"><span aria-labelledby="oversized"><svg></svg></span></a></h4><span id="oversized">${"long interface label ".repeat(30)}</span>`;
     const snapshot = await captureDomSnapshot(document, {
       target,

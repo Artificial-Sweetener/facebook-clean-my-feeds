@@ -38,19 +38,17 @@ test.each(["Ad", "Sponsored", "贊助", "Publicidad"])(
   }
 );
 
-test.each([
-  "Private User Name",
-  "9 minutes ago",
-  "alice@example.test",
-  "Sponsored by Private User",
-])("unproven SVG copy stays redacted: %s", async (label) => {
-  const post = mountSvgDisclosure(label);
-  const snapshot = await captureDomSnapshot(document, { target: post });
-  expect(JSON.stringify(snapshot)).not.toContain(`"value":"${label}"`);
-  expect(snapshot.references.some((reference) => reference.target?.content === "interface")).toBe(
-    false
-  );
-});
+test.each(["Private User Name", "alice@example.test", "Sponsored by Private User"])(
+  "observed identity copy is scrubbed inside structural SVG metadata: %s",
+  async (label) => {
+    const post = mountSvgDisclosure(label);
+    requireElement(post.querySelector('[data-ad-rendering-role="profile_name"] a')).textContent =
+      label;
+    const snapshot = await captureDomSnapshot(document, { target: post });
+    expect(JSON.stringify(snapshot)).not.toContain(`"value":"${label}"`);
+    expect(JSON.stringify(snapshot)).toContain("[redacted interface fragment]");
+  }
+);
 
 test("authored SVGs and hidden reference branches do not gain public provenance", async () => {
   const post = mountSvgDisclosure("Sponsored");
@@ -70,9 +68,9 @@ test("authored SVGs and hidden reference branches do not gain public provenance"
 
 test("a changing SVG label cannot reuse public provenance during capture", async () => {
   const post = mountSvgDisclosure();
-  const remember = SnapshotPrivacy.prototype.rememberSvgDisclosure;
+  const remember = SnapshotPrivacy.prototype.rememberMetadataGraphics;
   const spy = jest
-    .spyOn(SnapshotPrivacy.prototype, "rememberSvgDisclosure")
+    .spyOn(SnapshotPrivacy.prototype, "rememberMetadataGraphics")
     .mockImplementation(function (this: SnapshotPrivacy, element: Element): void {
       remember.call(this, element);
       if (element.id === "disclosure")

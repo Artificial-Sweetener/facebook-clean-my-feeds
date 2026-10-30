@@ -71,7 +71,7 @@ export function captureTransitionSnapshot(post: Element, deadline: number): DomS
       target: capture.regionNow(target, publicLeaf ? "interface" : undefined),
     });
   }
-  for (const source of capture.privacy.svgDisclosureText.keys()) {
+  for (const source of capture.privacy.metadataText.keys()) {
     const copy = capture.captured.get(source);
     if (copy && capture.privacy.content(source) === "interface") capture.promoteLabel(source, copy);
   }

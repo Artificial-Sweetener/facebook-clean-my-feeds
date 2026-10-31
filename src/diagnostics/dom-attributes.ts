@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import type { SnapshotAttributeChange, SnapshotContent } from "../core/diagnostics/dom-snapshot";
-import { isDisclosureLink, SnapshotPrivacy } from "./dom-privacy";
+import { SnapshotPrivacy } from "./dom-privacy";
 import { snapshotDestination } from "./dom-destinations";
 
 const references = new Set([
@@ -131,6 +131,7 @@ export class SnapshotAttributes {
     element: Element,
     content: SnapshotContent
   ): { attributes: Record<string, string>; changes: Record<string, SnapshotAttributeChange> } {
+    this.privacy.rememberMetadataGraphics(element);
     const attributes: Record<string, string> = {};
     const changes: Record<string, SnapshotAttributeChange> = {};
     const maximum = Math.max(0, Math.min(64, this.attributeLimit - this.attributeReads));
@@ -176,7 +177,7 @@ export class SnapshotAttributes {
               id,
               content === "interface" &&
                 name === "aria-labelledby" &&
-                isDisclosureLink(element.closest("a") || element)
+                this.privacy.publicReferenceSource(element)
             )
           )
           .join(" ");
@@ -212,8 +213,8 @@ export class SnapshotAttributes {
         attributes.dir = value;
       } else if (name === "lang" && /^[a-z]{2,3}(?:-[a-z0-9]{2,8}){0,3}$/i.test(value)) {
         attributes.lang = value;
-      } else if (["aria-label", "title"].includes(name)) {
-        attributes[name] = this.privacy.accessibleText(element, value, content).slice(0, 180);
+      } else if (name === "aria-label" || name === "title") {
+        attributes[name] = this.privacy.accessibleText(element, value, content, name).slice(0, 180);
         if (attributes[name] !== value) changes[name] = "redacted";
       } else if (name === "href" || name === "xlink:href") {
         if (value.startsWith("#") && element.namespaceURI === "http://www.w3.org/2000/svg") {

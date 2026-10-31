@@ -8,6 +8,7 @@ import {
   hasSizeChanged,
   isElementDirty,
 } from "../dom/dirty-check";
+import { beginPostTrace, finishPostTrace } from "../dom/post-trace";
 import { hideNewsPost } from "../dom/hide";
 import { newsSelectors } from "../selectors/news";
 import { isSponsored } from "./shared/sponsored";
@@ -154,6 +155,7 @@ export function scrubOrphanSponsoredNewsPosts(
       return;
     }
 
+    const trace = beginPostTrace(post, "discovered");
     hideNewsPost(post, keyWords.SPONSORED, true, {
       options,
       keyWords,
@@ -163,6 +165,7 @@ export function scrubOrphanSponsoredNewsPosts(
       },
       state,
     });
+    finishPostTrace(trace, "hide", "NF_SPONSORED");
     rememberHiddenNewsContent(post);
   });
 }

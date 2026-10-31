@@ -156,13 +156,18 @@ export class PostEvidence {
     const ids = element.getAttribute("aria-labelledby")?.trim().split(/\s+/) || [];
     if (!ids.length || ids.length > 8) return [null];
     return ids.map((id) => {
-      trackLabelReference(this.post, id);
-      return (
-        element.ownerDocument.getElementById(id) ||
-        this.select("[id]").find((label) => label.id === id) ||
-        null
-      );
+      return this.referenceTarget(id);
     });
+  }
+
+  /** Subscribe before resolving so late insertion, replacement or text edits invalidate a cached negative result. */
+  referenceTarget(id: string): Element | null {
+    trackLabelReference(this.post, id);
+    return (
+      this.post.ownerDocument.getElementById(id) ||
+      this.select("[id]").find((label) => label.id === id) ||
+      null
+    );
   }
 
   /** Preserve accessible-name precedence without borrowing ancestor copy or unbounded referenced text. */

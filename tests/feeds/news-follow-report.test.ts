@@ -109,10 +109,10 @@ test.each(Object.entries(newsLabels))(
 test.each([
   '<h4><a href="/person">Follow</a></h4>',
   '<h4><a href="/person"><div role="button">PrivateControlName</div></a></h4>',
-  '<h4><a href="/person">PrivateAuthor</a><div role="button">PrivateControlName</div></h4>',
+  '<h4><a href="/person">PrivateAuthor</a><div role="button">PrivateAuthor</div></h4>',
   '<h4><a href="/person">PrivateAuthor</a><div role="button" aria-label="PrivatePersonalizedAction">Follow</div></h4>',
 ])(
-  "profile-header redaction does not expose identities or unfamiliar actions in %s",
+  "profile-header redaction protects identity anchors, observed names and conflicting accessible labels in %s",
   async (markup) => {
     const post = mountFollowPost();
     requireElement(post.querySelector('[data-ad-rendering-role="profile_name"]')).innerHTML =

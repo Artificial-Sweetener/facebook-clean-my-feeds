@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
 import { getRegexValidationIssues } from "../core/options/regex-validation";
+import { readPostHistory } from "./post-history";
 import { encodeReport } from "./report-encoding";
+import { formatReportMarkdown } from "../core/diagnostics/report-markdown";
 import { captureDomSnapshot } from "./dom-capture";
 import type { SnapshotCaptureOptions } from "./dom-capture";
 import {
@@ -29,7 +31,7 @@ export { getSupportUrl } from "./serialization";
 /** Serializable report shape inferred from the deliberately bounded collection pipeline. */
 export type BugReportData = Awaited<ReturnType<typeof collectBugReportData>>;
 
-/** Complete generated report; text is a copyable encoding of the automatically redacted data. */
+/** Complete generated report; text wraps the automatically redacted encoding in collapsible GitHub Markdown. */
 export interface GeneratedBugReport {
   data: BugReportData;
   text: string;
@@ -47,7 +49,7 @@ export type BugReportResult = GeneratedBugReport | UnavailableBugReport;
 /**
  * Preserve precise snapshot fields for initialized callers.
  * @param context Initialized options, translated labels, filters, and narrow feed state.
- * @returns The report data and formatted JSON, or a startup error with empty text.
+ * @returns The report data and collapsible Markdown, or a startup error with empty text.
  */
 export function buildBugReport(
   context: BugReportContext,
@@ -56,7 +58,7 @@ export function buildBugReport(
 /**
  * Preserve the historical empty report when the runtime is not available.
  * @param context Initialized options, translated labels, filters, and narrow feed state.
- * @returns The report data and formatted JSON, or a startup error with empty text.
+ * @returns The report data and collapsible Markdown, or a startup error with empty text.
  */
 export function buildBugReport(
   context: null | undefined,
@@ -65,7 +67,7 @@ export function buildBugReport(
 /**
  * Accept deferred contexts supplied by UI capability implementations.
  * @param context Initialized options, translated labels, filters, and narrow feed state.
- * @returns The report data and formatted JSON, or a startup error with empty text.
+ * @returns The report data and collapsible Markdown, or a startup error with empty text.
  */
 export function buildBugReport(
   context?: BugReportContext | null,
@@ -74,7 +76,7 @@ export function buildBugReport(
 /**
  * Serialize a fresh read-only snapshot, or retain the startup error contract without context.
  * @param context Initialized options, translated labels, filters, and narrow feed state.
- * @returns The report data and formatted JSON, or a startup error with empty text.
+ * @returns The report data and collapsible Markdown, or a startup error with empty text.
  */
 export async function buildBugReport(
   context?: BugReportContext | null,
@@ -84,7 +86,13 @@ export async function buildBugReport(
     return { data: { error: "No context available." }, text: "" };
   }
   const data = await collectBugReportData(context, capture);
-  return { data, text: await encodeReport(data) };
+  return {
+    data,
+    text: formatReportMarkdown(
+      await encodeReport(data),
+      `${context.keyWords.DLG_REPORT_BUG} — CMF ${data.script.version}`
+    ),
+  };
 }
 
 /**
@@ -102,6 +110,7 @@ async function collectBugReportData(context: BugReportContext, capture: Snapshot
   const samples = buildSamples(context);
   return {
     schemaVersion: 2,
+    history: readPostHistory(),
     generatedAt: now.toISOString(),
     snapshot,
     script: scriptInfo,

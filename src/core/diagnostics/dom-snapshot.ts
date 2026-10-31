@@ -60,7 +60,7 @@ export interface SnapshotText {
 /** A structural gap states why descendants cannot support conclusions or complete selector evaluation. */
 export interface SnapshotOmission {
   kind: "omitted";
-  reason: "node-limit" | "region-limit" | "depth-limit" | "excluded-content";
+  reason: "node-limit" | "region-limit" | "depth-limit" | "excluded-content" | "time-limit";
 }
 
 /** Ordered node records can be reconstructed into inert test fixtures without consulting the original page. */

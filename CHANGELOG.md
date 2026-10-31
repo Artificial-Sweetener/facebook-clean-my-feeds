@@ -1,3 +1,17 @@
+# [6.5.0](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.4.0...v6.5.0) (2026-10-31)
+
+
+### Bug Fixes
+
+* **diagnostics:** preserve unfamiliar header metadata ([e45b44a](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/e45b44af81a5442972d249299d87aba123bafc1f))
+* **filters:** resolve SVG disclosures and improve bug reports ([df7300d](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/df7300dde56604439bd12856104f7868ea9441c1))
+* **news:** stop caption blinking during post virtualization ([b0402bb](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/b0402bbb696a8df0b133d0f10592c659f2cd15af))
+
+
+### Features
+
+* **diagnostics:** capture bounded post transition history ([1e5189d](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/1e5189d05b791db2811e3313afda05dd5fa2bad1))
+
 # [6.4.0](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.3.2...v6.4.0) (2026-10-27)
 
 

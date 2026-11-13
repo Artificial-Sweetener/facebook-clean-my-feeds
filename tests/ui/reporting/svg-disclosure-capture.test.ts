@@ -46,11 +46,11 @@ test.each(["Private User Name", "alice@example.test", "Sponsored by Private User
       label;
     const snapshot = await captureDomSnapshot(document, { target: post });
     expect(JSON.stringify(snapshot)).not.toContain(`"value":"${label}"`);
-    expect(JSON.stringify(snapshot)).toContain("[redacted interface fragment]");
+    expect(JSON.stringify(snapshot)).toContain(label.includes("@") ? "[email]" : "[identity]");
   }
 );
 
-test("authored SVGs and hidden reference branches do not gain public provenance", async () => {
+test("authored SVGs remain private while concealed diagnostic branches retain evidence", async () => {
   const post = mountSvgDisclosure("Sponsored");
   const secret = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
   secret.style.display = "none";
@@ -58,7 +58,7 @@ test("authored SVGs and hidden reference branches do not gain public provenance"
   requireElement(document.getElementById("glyph-7")).append(secret);
   let snapshot = await captureDomSnapshot(document, { target: post });
   expect(JSON.stringify(snapshot)).toContain('"value":"Sponsored"');
-  expect(JSON.stringify(snapshot)).not.toContain("Private Hidden Name");
+  expect(JSON.stringify(snapshot)).toContain("Private Hidden Name");
   requireElement(document.getElementById("message")).append(
     requireElement(document.getElementById("disclosure"))
   );
@@ -66,20 +66,36 @@ test("authored SVGs and hidden reference branches do not gain public provenance"
   expect(JSON.stringify(snapshot)).not.toContain('"value":"Sponsored"');
 });
 
-test("a changing SVG label cannot reuse public provenance during capture", async () => {
+test("moving a referenced SVG into an authored region updates its redaction during capture", async () => {
   const post = mountSvgDisclosure();
-  const remember = SnapshotPrivacy.prototype.rememberMetadataGraphics;
-  const spy = jest
-    .spyOn(SnapshotPrivacy.prototype, "rememberMetadataGraphics")
-    .mockImplementation(function (this: SnapshotPrivacy, element: Element): void {
-      remember.call(this, element);
-      if (element.id === "disclosure")
-        requireElement(document.getElementById("glyph-7")).textContent = "Private Changed Name";
-    });
+  const remember = SnapshotPrivacy.prototype.remember;
+  const spy = jest.spyOn(SnapshotPrivacy.prototype, "remember").mockImplementation(function (
+    this: SnapshotPrivacy,
+    element: Element
+  ): void {
+    remember.call(this, element);
+    if (element.id === "disclosure")
+      requireElement(document.getElementById("message")).append(
+        requireElement(document.getElementById("glyph-7"))
+      );
+  });
   try {
     const snapshot = await captureDomSnapshot(document, { target: post });
-    expect(JSON.stringify(snapshot)).not.toContain("Private Changed Name");
+    expect(JSON.stringify(snapshot)).not.toContain('"value":"Sponsored"');
   } finally {
     spy.mockRestore();
   }
+});
+
+test("nested SVG label evidence survives a page full of unrelated ARIA references", async () => {
+  const post = mountSvgDisclosure("Future disclosure");
+  for (let index = 0; index < 90; index++) {
+    const control = document.createElement("button");
+    control.setAttribute("aria-controls", `missing-panel-${index}`);
+    post.prepend(control);
+  }
+  const snapshot = await captureDomSnapshot(document, { target: post });
+  expect(JSON.stringify(snapshot)).toContain('"value":"Future disclosure"');
+  expect(snapshot.references.length).toBeLessThanOrEqual(snapshot.limits.references);
+  expect(snapshot.coverage.omissions["reference-limit"]).toBeGreaterThan(0);
 });

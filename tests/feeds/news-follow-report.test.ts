@@ -16,7 +16,7 @@ function mountFollowPost(label = "Follow", extraWrapper = false): HTMLElement {
     '<div aria-hidden="true"><div role="button"><blockquote>Hidden private decoy</blockquote></div></div>'.repeat(
       11
     );
-  const blocks = `<div id="header"><div data-ad-rendering-role="profile_name"><h4><span><span><a href="/profile.php?id=PrivateId">PrivateName PrivateSurname</a></span><span><div id="follow" role="button" tabindex="0"><span>${label}</span></div></span></span></h4></div></div><div id="message"><img><div><span>Private message</span></div></div><div id="footer">Private reactions</div>`;
+  const blocks = `<div id="header"><div data-ad-rendering-role="profile_name"><h4><span><span><a href="/profile.php?id=PrivateId">PrivateName PrivateSurname</a></span><span><div id="follow" role="button" tabindex="0"><span>${label}</span></div></span></span></h4></div></div><div id="message"><img><div><span>Private message</span></div></div><div id="footer">Unfamiliar reaction summary</div>`;
   const depth = extraWrapper ? 12 : 7;
   document.body.innerHTML = `<div role="navigation"></div><div role="main"><div aria-posinset="1" id="post">${"<div>".repeat(depth)}${decoys}${extraWrapper ? `<div>${blocks}</div>` : blocks}${decoys}${"</div>".repeat(depth)}</div></div>`;
   return requireElement(document.getElementById("post"));
@@ -71,6 +71,7 @@ test("a visible Follow caption survives report reconstruction without an accessi
   const region = snapshot.regions[0];
   if (!region) throw new Error("Missing captured Follow caption");
   expect(JSON.stringify(snapshot)).toContain('"value":"Follow"');
+  expect(JSON.stringify(snapshot)).toContain("Unfamiliar reaction summary");
   expect(JSON.stringify(snapshot)).not.toContain("Private");
   document.body.innerHTML = new DOMParser().parseFromString(
     snapshotRegionHtml(snapshot, region),
@@ -91,7 +92,7 @@ test.each(Object.entries(newsLabels))(
     const post = mountFollowPost(label, true);
     const button = requireElement(document.getElementById("follow"));
     button.setAttribute("aria-label", label);
-    button.setAttribute("title", "Private personalized title");
+    button.setAttribute("title", "PrivateName PrivateSurname profile action");
     const snapshot = await captureDomSnapshot(document, { target: post });
     expect(JSON.stringify(snapshot)).toContain(label);
     expect(JSON.stringify(snapshot)).not.toContain("Private");
@@ -110,15 +111,17 @@ test.each([
   '<h4><a href="/person">Follow</a></h4>',
   '<h4><a href="/person"><div role="button">PrivateControlName</div></a></h4>',
   '<h4><a href="/person">PrivateAuthor</a><div role="button">PrivateAuthor</div></h4>',
-  '<h4><a href="/person">PrivateAuthor</a><div role="button" aria-label="PrivatePersonalizedAction">Follow</div></h4>',
+  '<h4><a href="/person">PrivateAuthor</a><div role="button" aria-label="Contact PrivateAuthor">Follow</div></h4>',
 ])(
-  "profile-header redaction protects identity anchors, observed names and conflicting accessible labels in %s",
+  "profile-header redaction protects identities while retaining independent controls in %s",
   async (markup) => {
     const post = mountFollowPost();
     requireElement(post.querySelector('[data-ad-rendering-role="profile_name"]')).innerHTML =
       markup;
     const snapshot = await captureDomSnapshot(document, { target: post });
     expect(JSON.stringify(snapshot)).not.toContain("Private");
-    expect(JSON.stringify(snapshot)).not.toContain('"value":"Follow"');
+    expect(JSON.stringify(snapshot).includes('"value":"Follow"')).toBe(
+      markup.includes("Contact PrivateAuthor")
+    );
   }
 );

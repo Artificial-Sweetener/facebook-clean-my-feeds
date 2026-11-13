@@ -1,7 +1,21 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-/** Content provenance is explicit; an unknown region is never silently treated as public interface copy. */
+/** Content categories describe best-effort redaction; unfamiliar text is retained, with uncertain reserved for older reports. */
 export type SnapshotContent = "interface" | "authored" | "identity" | "uncertain" | "excluded";
+
+/** Explain each sensitive-region decision without including the private evidence that caused it. */
+export interface SnapshotRedaction {
+  reason:
+    | "authored-region"
+    | "editable-region"
+    | "identity-region"
+    | "identity-link"
+    | "post-body"
+    | "filter-caption"
+    | "private-reference"
+    | "executable-content";
+  confidence: "explicit" | "inferred";
+}
 
 /** Capture limits apply to work as well as output; omitted evidence remains distinguishable from absent evidence. */
 export interface SnapshotLimits {
@@ -41,6 +55,7 @@ export interface SnapshotElement {
   tag: string;
   namespace: "html" | "svg" | "other";
   content: SnapshotContent;
+  redaction?: SnapshotRedaction;
   attributes: Record<string, string>;
   attributeChanges: Record<string, SnapshotAttributeChange>;
   layout: SnapshotLayout;
@@ -53,6 +68,7 @@ export interface SnapshotText {
   kind: "text";
   ref: string;
   content: SnapshotContent;
+  redaction?: SnapshotRedaction;
   value: string;
   size: "empty" | "short" | "medium" | "long";
 }
@@ -103,7 +119,7 @@ export interface DomSnapshot {
     mutationsDuringCapture: number;
   };
   privacy: {
-    policy: "content-boundaries-v1";
+    policy: "content-boundaries-v1" | "sensitive-regions-v2";
     interfaceLabels: "automatically-sanitized";
     authoredText: "redacted";
     mediaContent: "omitted";

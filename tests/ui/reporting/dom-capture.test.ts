@@ -31,7 +31,7 @@ function mountComplaint(): Element {
       <div data-ad-rendering-role="story_message"><p>PrivateBody <button aria-label="PrivateControl">PrivateControl</button><img src="https://private-media.example/private-photo" alt="PrivateImage" /></p></div>
       <div role="comment"><a href="/PrivateCommenter">PrivateCommenter</a><p>PrivateComment</p></div>
     </div>
-    <section role="region" data-unfamiliar-widget="PrivateAttribute"><h3>Neighborhood discoveries</h3><button id="complaint" aria-label="Explore nearby topics">Explore nearby topics</button><button>Hide this module</button></section>
+    <section role="region" data-unfamiliar-widget="discovery-vNext" data-session-token="PrivateAttribute"><h3>Neighborhood discoveries</h3><button id="complaint" aria-label="Explore nearby topics">Explore nearby topics</button><button>Hide this module</button></section>
     <section><h3>Neighbor module</h3><button>Keep this module</button></section>
   </main><span id="private-shared-label">Paid placement</span><svg id="private-artwork"><path d="PrivateGeometry"></path></svg>`;
   const target = document.getElementById("complaint");
@@ -49,9 +49,9 @@ describe("independent sanitized DOM capture", () => {
     const target = mountComplaint();
     const snapshot = await captureDomSnapshot(document, { target });
     const text = JSON.stringify(snapshot);
-    expect(text).not.toContain("Neighborhood discoveries");
-    expect(text).toContain("[uncertain text]");
-    expect(text).not.toContain("Explore nearby topics");
+    expect(text).toContain("Neighborhood discoveries");
+    expect(text).not.toContain("[uncertain text]");
+    expect(text).toContain("Explore nearby topics");
     expect(elements(snapshot).filter((node) => node.tag === "button").length).toBeGreaterThan(2);
     expect(snapshot.target).not.toBeNull();
     expect(snapshot.regions[0]?.selection).toBe("target");
@@ -60,12 +60,14 @@ describe("independent sanitized DOM capture", () => {
       snapshot.regions[0]?.ancestors.some((ancestor) => ancestor.attributes.role === "main")
     ).toBe(true);
     const buttons = elements(snapshot).filter((node) => node.tag === "button");
-    expect(buttons.some((node) => node.attributes["aria-label"] === "[uncertain text]")).toBe(true);
+    expect(buttons.some((node) => node.attributes["aria-label"] === "Explore nearby topics")).toBe(
+      true
+    );
     expect(
       elements(snapshot).some(
         (node) =>
           "data-unfamiliar-widget" in node.attributes &&
-          node.attributes["data-unfamiliar-widget"] === ""
+          node.attributes["data-unfamiliar-widget"] === "discovery-vNext"
       )
     ).toBe(true);
   });
@@ -125,7 +127,7 @@ describe("independent sanitized DOM capture", () => {
     const text = JSON.stringify(snapshot);
     for (const secret of ["Alice", "PrivateSurname", "alice@example.test", "555 123 4567"])
       expect(text).not.toContain(secret);
-    expect(text).toContain("[uncertain text]");
+    expect(text).not.toContain("[uncertain text]");
   });
 
   test("does not promote an external authored label into public interface text", async () => {
@@ -233,24 +235,24 @@ describe("independent sanitized DOM capture", () => {
   });
 
   test.each(["محتوى ترويجي جديد", "新しいおすすめ", "Nouveaux sujets à découvrir", "Нова добірка"])(
-    "redacts unfamiliar control copy without guessing its language: %s",
+    "retains unfamiliar control copy without guessing its language: %s",
     async (label) => {
       const target = mountComplaint();
       target.textContent = label;
       target.setAttribute("aria-label", label);
       const snapshot = await captureDomSnapshot(document, { target });
-      expect(JSON.stringify(snapshot).includes(label)).toBe(false);
+      expect(JSON.stringify(snapshot).includes(label)).toBe(true);
     }
   );
 });
 test("identity names from ordinary profile anchors are removed from personalized controls", async () => {
   document.body.innerHTML =
-    '<nav><a href="/PrivateOwner">PrivateOwner FamilyName</a><a href="/pages/create">Create a post</a></nav><main role="main"><button>What is on your mind, PrivateOwner?</button><button>Create a post</button></main>';
+    '<nav><a data-profileid="owner" href="/PrivateOwner">PrivateOwner FamilyName</a><a href="/pages/create">Create a post</a></nav><main role="main"><button>What is on your mind, PrivateOwner FamilyName?</button><button>Create a post</button></main>';
   const snapshot = await captureDomSnapshot(document);
   expect(JSON.stringify(snapshot)).not.toContain("PrivateOwner");
   expect(JSON.stringify(snapshot)).not.toContain("FamilyName");
-  expect(JSON.stringify(snapshot).includes("Create a post")).toBe(false);
-  expect(JSON.stringify(snapshot)).toContain("[uncertain text]");
+  expect(JSON.stringify(snapshot).includes("Create a post")).toBe(true);
+  expect(JSON.stringify(snapshot)).toContain("[identity]");
 });
 
 test("a selected unfamiliar heading includes its nearby controls through wrapper-only ancestors", async () => {

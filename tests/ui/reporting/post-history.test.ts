@@ -216,6 +216,7 @@ test("stopping collection removes the listener and sink and resets the next sess
 
 test("a private configured match is represented by its rule ID without preserving its reason or content", () => {
   const { post } = mountNewsPost(newsTextBlocks("ConfidentialKeyword private@example.test"));
+  requireElement(post.querySelector("span")).setAttribute("data-ad-preview", "message");
   const context = createNewsContext({
     options: { NF_BLOCKED_ENABLED: true, VERBOSITY_DEBUG: true },
   });

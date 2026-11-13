@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import type {
-  SnapshotContent,
   SnapshotElement,
   SnapshotLayout,
   SnapshotLimits,
   SnapshotNode,
+  SnapshotText,
 } from "../core/diagnostics/dom-snapshot";
 import { SnapshotPrivacy } from "./dom-privacy";
 import { SnapshotAttributes } from "./dom-attributes";
@@ -75,6 +75,8 @@ export class DomCapture {
   private nextRef = 0;
   private customTags = new Map<string, string>();
   private layouts = new WeakMap<Element, SnapshotLayout>();
+  private elementSources = new Map<SnapshotElement, Element>();
+  private textSources = new Map<SnapshotText, Node>();
 
   /** Capture budgets are immutable for the lifetime of a report generation request. */
   constructor(
@@ -106,11 +108,11 @@ export class DomCapture {
   /**
    * Copy safe element facts once, including ancestry shells whose omitted descendants remain explicit.
    * @param element Source node read without mutation or retention in serialized output.
-   * @param override Interface provenance for a separately referenced plain label, when permitted by the caller.
    * @returns A detached data record with safe attributes, rendering facts and initially empty children.
    */
-  shell(element: Element, override?: SnapshotContent): SnapshotElement {
-    const content = override || this.privacy.content(element);
+  shell(element: Element): SnapshotElement {
+    this.privacy.remember(element);
+    const { content, redaction } = this.privacy.regions.classify(element);
     const attributes = this.attributes.read(element, content);
     let rendering = this.layouts.get(element);
     if (!rendering) {
@@ -131,7 +133,7 @@ export class DomCapture {
           };
       this.layouts.set(element, rendering);
     }
-    return {
+    const copy: SnapshotElement = {
       kind: "element",
       ref: `n${++this.nextRef}`,
       tag: this.tag(element),
@@ -142,24 +144,27 @@ export class DomCapture {
             ? "html"
             : "other",
       content,
+      ...(redaction ? { redaction } : {}),
       attributes: attributes.attributes,
       attributeChanges: attributes.changes,
       layout: rendering,
       childNodeCount: element.childNodes.length,
       children: [],
     };
+    this.elementSources.set(copy, element);
+    return copy;
   }
 
   /**
    * Redact private text at its source; retain bounded unfamiliar interface labels without a known-phrase lookup.
    * @param node Original text node; raw content is used only for immediate redaction and size bucketing.
-   * @param inherited Optional explicit provenance for a separately referenced accessible label.
    * @returns A safe text record with either interface copy or an explicit redaction/omission placeholder.
    */
-  private text(node: Node, inherited?: SnapshotContent): SnapshotNode {
+  private text(node: Node): SnapshotText {
     const value = node.textContent || "";
-    const content =
-      inherited || (node.parentElement ? this.privacy.content(node.parentElement) : "uncertain");
+    const { content, redaction } = node.parentElement
+      ? this.privacy.regions.classify(node.parentElement)
+      : { content: "interface" as const };
     let safe = this.privacy.textNode(node, content);
     if (content !== "interface" && value.trim()) this.redacted++;
     if (
@@ -170,10 +175,11 @@ export class DomCapture {
       safe = "[interface text omitted: label budget]";
       this.omissions["label-limit"] = (this.omissions["label-limit"] || 0) + 1;
     } else if (content === "interface") this.labels += safe.length;
-    return {
+    const copy: SnapshotText = {
       kind: "text",
       ref: `n${++this.nextRef}`,
       content,
+      ...(redaction ? { redaction } : {}),
       value: safe,
       size: !value.trim()
         ? "empty"
@@ -183,29 +189,68 @@ export class DomCapture {
             ? "medium"
             : "long",
     };
+    this.textSources.set(copy, node);
+    return copy;
   }
 
-  /** Restore a bounded disclosure leaf already visited before its ARIA source, using the same budgets as external labels. */
-  promoteLabel(source: Element, copy: SnapshotElement): void {
-    copy.content = "interface";
-    for (const [index, node] of Array.from(source.childNodes).entries()) {
-      const previous = copy.children[index];
-      if (node.nodeType !== Node.TEXT_NODE || previous?.kind !== "text") continue;
-      if (previous.content === "interface") continue;
-      if (node.textContent?.trim()) this.redacted--;
-      copy.children[index] = this.text(node, "interface");
+  /** Reconcile late identity/reference discoveries and moved nodes without granting permanent public provenance to old labels. */
+  reconcilePrivacy(): void {
+    for (const source of this.elementSources.values()) {
+      if (performance.now() >= this.deadline) {
+        this.omissions["redaction-time-limit"] = 1;
+        return;
+      }
+      if (source.isConnected) this.privacy.remember(source);
     }
+    this.attributes.reconcile(this.deadline);
+    for (const [copy, source] of this.elementSources) {
+      if (performance.now() >= this.deadline) {
+        this.omissions["redaction-time-limit"] = 1;
+        return;
+      }
+      if (!source.isConnected || (copy.redaction && copy.redaction.reason !== "private-reference"))
+        continue;
+      const { content, redaction } = this.privacy.regions.classify(source);
+      copy.content = content;
+      if (redaction) copy.redaction = redaction;
+      else delete copy.redaction;
+    }
+    this.labels = 0;
+    this.redacted = 0;
+    delete this.omissions["label-limit"];
+    const sources = Array.from(this.textSources);
+    this.textSources.clear();
+    for (const [copy, source] of sources) {
+      // A move cannot declassify already captured private content; newly discovered shared references can.
+      if (copy.redaction && copy.redaction.reason !== "private-reference") {
+        if (copy.size !== "empty") this.redacted++;
+        continue;
+      }
+      if (!source.isConnected || performance.now() >= this.deadline) {
+        if (performance.now() >= this.deadline) this.omissions["redaction-time-limit"] = 1;
+        if (copy.content !== "interface" && source.textContent?.trim()) this.redacted++;
+        else this.labels += copy.value.length;
+        continue;
+      }
+      const refreshed = this.text(source);
+      copy.content = refreshed.content;
+      copy.value = refreshed.value;
+      if (refreshed.redaction) copy.redaction = refreshed.redaction;
+      else delete copy.redaction;
+    }
+    if (this.privacy.regions.referenceLimitReached) this.omissions["redaction-reference-limit"] = 1;
+    if (this.privacy.labels.identityLimitReached) this.omissions["redaction-identity-limit"] = 1;
+    if (this.privacy.labels.limitReached) this.omissions["redaction-fragment-limit"] = 1;
   }
 
   /**
    * Copy one region using iterative traversal, releasing the event loop between bounded batches.
    * @param element Region root selected independently of filter outcomes.
-   * @param override Only a constrained external accessible-label leaf may receive explicit interface provenance.
    * @returns Ordered sanitized tree, with explicit gaps wherever work limits stop traversal.
    */
-  private *walk(element: Element, override?: SnapshotContent): Generator<void, SnapshotElement> {
+  private *walk(element: Element): Generator<void, SnapshotElement> {
     this.nodes++;
-    const root = this.shell(element, override);
+    const root = this.shell(element);
     this.captured.set(element, root);
     const queue: Array<{ source: Element; copy: SnapshotElement; depth: number }> = [
       { source: element, copy: root, depth: 0 },
@@ -236,7 +281,7 @@ export class DomCapture {
         }
         this.nodes++;
         localNodes++;
-        if (child.nodeType === Node.TEXT_NODE) entry.copy.children.push(this.text(child, override));
+        if (child.nodeType === Node.TEXT_NODE) entry.copy.children.push(this.text(child));
         else if (child instanceof Element) {
           if (isReportUi(child)) {
             entry.copy.children.push(this.omit("excluded-content"));
@@ -254,8 +299,8 @@ export class DomCapture {
     return root;
   }
   /** Capture a foreground report cooperatively, yielding between bounded traversal batches. */
-  async region(element: Element, override?: SnapshotContent): Promise<SnapshotElement> {
-    const steps = this.walk(element, override);
+  async region(element: Element): Promise<SnapshotElement> {
+    const steps = this.walk(element);
     let step = steps.next();
     while (!step.done) {
       await yieldSnapshotWork();
@@ -265,8 +310,8 @@ export class DomCapture {
   }
 
   /** Freeze a transition before Facebook can replace its nodes; caller supplies strict work and time limits. */
-  regionNow(element: Element, override?: SnapshotContent): SnapshotElement {
-    const steps = this.walk(element, override);
+  regionNow(element: Element): SnapshotElement {
+    const steps = this.walk(element);
     let step = steps.next();
     while (!step.done) step = steps.next();
     return step.value;

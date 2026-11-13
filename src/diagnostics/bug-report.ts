@@ -140,9 +140,9 @@ async function collectBugReportData(context: BugReportContext, capture: Snapshot
     samples: { ...samples, summary: buildMatchSummary(samples.samples) },
     notes: {
       redaction:
-        "Authored text and media are removed. Interface labels are automatically sanitized. IDs and classes are report-local aliases; destinations are structural templates.",
+        "Likely sensitive regions and substrings receive best-effort redaction; media is omitted. IDs and classes are report-local aliases; destinations are structural templates.",
       limitations:
-        "Unknown text is explicitly redacted. Coverage and attribute transformations qualify offline selector results.",
+        "Unfamiliar text is retained as diagnostic evidence and may contain sensitive content. Review before sharing. Redaction reasons, coverage limits and attribute transformations qualify offline selector results.",
     },
   };
 }

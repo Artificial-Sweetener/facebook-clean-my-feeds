@@ -74,7 +74,7 @@ export async function captureDomSnapshot(
       await yieldSnapshotWork();
     }
     const references: DomSnapshot["references"] = [];
-    for (const pending of capture.attributes.pending.values()) {
+    for (const pending of capture.attributes.references()) {
       if (references.length >= limits.references) {
         capture.omissions["reference-limit"] = capture.attributes.pending.size - references.length;
         break;
@@ -85,13 +85,7 @@ export async function captureDomSnapshot(
         continue;
       }
       const existing = capture.captured.get(target);
-      const publicLeaf =
-        pending.interfaceLabel &&
-        target.localName === "span" &&
-        target.childElementCount === 0 &&
-        capture.privacy.content(target) === "uncertain";
       if (existing) {
-        if (publicLeaf) capture.promoteLabel(target, existing);
         references.push({ id: pending.id, status: "captured", target: null });
         continue;
       }
@@ -99,14 +93,10 @@ export async function captureDomSnapshot(
         references.push({ id: pending.id, status: "budget-exceeded", target: null });
         continue;
       }
-      const copy = await capture.region(target, publicLeaf ? "interface" : undefined);
+      const copy = await capture.region(target);
       references.push({ id: pending.id, status: "external", target: copy });
     }
-    for (const source of capture.privacy.metadataText.keys()) {
-      const copy = capture.captured.get(source);
-      if (copy && capture.privacy.content(source) === "interface")
-        capture.promoteLabel(source, copy);
-    }
+    capture.reconcilePrivacy();
     if (observer) countMutations(observer.takeRecords());
     return {
       version: 1,
@@ -129,7 +119,7 @@ export async function captureDomSnapshot(
         mutationsDuringCapture,
       },
       privacy: {
-        policy: "content-boundaries-v1",
+        policy: "sensitive-regions-v2",
         interfaceLabels: "automatically-sanitized",
         authoredText: "redacted",
         mediaContent: "omitted",

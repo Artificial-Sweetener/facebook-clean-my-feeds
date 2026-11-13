@@ -77,18 +77,16 @@ test("dense metadata fragmentation is not mistaken for an oversized identity or 
   expect(JSON.stringify(snapshot)).not.toContain("Private Author");
 });
 
-test("an unfamiliar header action survives while actual identity controls and conflicting private titles remain redacted", async () => {
+test("an unfamiliar header action and its independent title survive while identity controls remain redacted", async () => {
   const post = mountFragmentedHeader("New placement");
   const profile = requireElement(post.querySelector('[data-ad-rendering-role="profile_name"]'));
   profile.insertAdjacentHTML(
     "beforeend",
-    '<button title="Unobserved Private Title">Inspect new module</button><button data-userid="PrivateId">Private Recipient</button>'
+    '<button title="Inspect module details">Inspect new module</button><button data-userid="PrivateId">Private Recipient</button>'
   );
   const snapshot = await captureDomSnapshot(document, { target: post });
   expect(retainedText(snapshot)).toContain("Inspect new module");
-  expect(
-    /Private Recipient|Unobserved Private Title|PrivateId/.test(JSON.stringify(snapshot))
-  ).toBe(false);
+  expect(/Private Recipient|PrivateId/.test(JSON.stringify(snapshot))).toBe(false);
 });
 
 test("names and contact details split across public metadata fragments cannot be reconstructed", async () => {
@@ -100,7 +98,7 @@ test("names and contact details split across public metadata fragments cannot be
   expect(text).not.toContain("Private Author");
   expect(text).not.toContain("personal@example.test");
   expect(text).not.toContain("555 123 4567");
-  expect(text).toContain("[redacted interface fragment]");
+  expect(text).toContain("Sponsored by [identity] via [email] or [number]");
 });
 
 test.each(["Commercial placement alpha", "9 minutes ago", "新規広告枠"])(
@@ -114,22 +112,23 @@ test.each(["Commercial placement alpha", "9 minutes ago", "新規広告枠"])(
   }
 );
 
-test("authored, nested-post and unnamed-body controls cannot borrow the outer header's provenance", async () => {
+test("authored and nested-post regions remain private while independent controls retain their copy", async () => {
   const post = mountFragmentedHeader("New placement");
   const body = requireElement(post.querySelector('[data-ad-rendering-role="story_message"]'));
   body.innerHTML =
     '<h4><a href="/PrivatePerson">Private Sender</a><button>Private authored action</button></h4><div role="article"><button>Private nested action</button></div>';
   body.insertAdjacentHTML(
     "afterend",
-    "<div><span>Private unannotated body</span><button>Private unannotated action</button></div>"
+    "<div><span>Private unannotated body<br>Private continuation</span><button>Private unannotated action</button></div>"
   );
   const snapshot = await captureDomSnapshot(document, { target: post });
   expect(
-    /Private Sender|Private authored action|Private nested action|Private unannotated/.test(
+    /Private Sender|Private authored action|Private nested action|Private unannotated body/.test(
       JSON.stringify(snapshot)
     )
   ).toBe(false);
   expect(retainedText(snapshot)).toContain("New placement");
+  expect(retainedText(snapshot)).toContain("Private unannotated action");
 });
 
 test("explicitly private ARIA targets remain private even when referenced by metadata controls", async () => {

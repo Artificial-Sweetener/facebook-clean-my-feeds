@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import type { SnapshotAttributeChange, SnapshotContent } from "../core/diagnostics/dom-snapshot";
+import { postAtt } from "../dom/attributes";
 import { SnapshotPrivacy } from "./dom-privacy";
 import { snapshotDestination } from "./dom-destinations";
 
@@ -53,24 +54,21 @@ const numbers = new Set([
   "height",
   "tabindex",
 ]);
-const roles = new Set(
-  "article banner button checkbox columnheader combobox complementary contentinfo definition dialog document feed figure form generic grid gridcell group heading img link list listbox listitem log main marquee math menu menubar menuitem menuitemcheckbox menuitemradio navigation none note option paragraph presentation progressbar radio radiogroup region row rowgroup rowheader scrollbar search searchbox separator slider spinbutton status strong subscript suggestion superscript switch tab table tablist tabpanel term textbox time timer toolbar tooltip tree treegrid treeitem comment".split(
-    " "
-  )
-);
 const publicMarkers = new Set([
   "data-ad-rendering-role",
   "data-ad-preview",
   "data-ad-comet-preview",
   "data-visualcompletion",
   "data-type",
+  "data-testid",
+  "data-pagelet",
 ]);
 
 /** Aliased references carry only report-local IDs; the original strings stay in transient collector memory. */
 export interface PendingSnapshotReference {
   original: string;
   id: string;
-  interfaceLabel: boolean;
+  priority: number;
 }
 
 /** Apply one attribute policy to elements, ancestry shells and external references throughout a report. */
@@ -82,6 +80,34 @@ export class SnapshotAttributes {
   readonly omissions: Record<string, number> = {};
   redacted = 0;
   private attributeReads = 0;
+  private textReads: Array<{
+    element: Element;
+    content: SnapshotContent;
+    name: string;
+    value: string;
+    accessible: boolean;
+    privateAtCapture: boolean;
+    attributes: Record<string, string>;
+    changes: Record<string, SnapshotAttributeChange>;
+  }> = [];
+
+  /** Reapply late identity and ancestry evidence only to originally captured text values; never bypass capture budgets. */
+  reconcile(deadline: number): void {
+    for (const entry of this.textReads) {
+      if (performance.now() >= deadline) {
+        this.omit("redaction-time-limit");
+        break;
+      }
+      const content =
+        !entry.privateAtCapture && entry.element.isConnected
+          ? this.privacy.regions.classify(entry.element).content
+          : entry.content;
+      const safe = this.privacy.text(entry.value, content);
+      entry.attributes[entry.name] = entry.accessible ? safe.slice(0, 180) : safe;
+      if (entry.attributes[entry.name] !== entry.value) entry.changes[entry.name] = "redacted";
+      else delete entry.changes[entry.name];
+    }
+  }
 
   /** Keep privacy dictionaries local and share aliases without publishing their reverse mapping. */
   constructor(
@@ -106,19 +132,33 @@ export class SnapshotAttributes {
   }
 
   /** Record external label dependencies even when their targets are absent or outside the sampled feed. */
-  private reference(value: string, interfaceLabel: boolean): string {
+  private reference(value: string, priority: number): string {
     const id = this.alias(value, this.ids, "cmf-id-");
     const previous = this.pending.get(value);
-    if (!previous && this.pending.size >= this.referenceLimit) {
-      this.omit("reference-limit");
+    if (!previous && this.pending.size >= this.referenceLimit * 16) {
+      this.omit("reference-discovery-limit");
       return id;
     }
     this.pending.set(value, {
       original: value,
       id,
-      interfaceLabel: interfaceLabel || previous?.interfaceLabel === true,
+      priority: Math.min(previous?.priority ?? priority, priority),
     });
     return id;
+  }
+
+  /** Follow visible-label dependencies before structural ARIA edges, including newly discovered SVG chains. */
+  *references(): Generator<PendingSnapshotReference> {
+    const visited = new Set<string>();
+    while (visited.size < this.pending.size) {
+      let next: PendingSnapshotReference | undefined;
+      for (const entry of this.pending.values()) {
+        if (!visited.has(entry.original) && (!next || entry.priority < next.priority)) next = entry;
+      }
+      if (!next) return;
+      visited.add(next.original);
+      yield next;
+    }
   }
 
   /**
@@ -131,7 +171,10 @@ export class SnapshotAttributes {
     element: Element,
     content: SnapshotContent
   ): { attributes: Record<string, string>; changes: Record<string, SnapshotAttributeChange> } {
-    this.privacy.rememberMetadataGraphics(element);
+    this.privacy.regions.rememberReferences(element);
+    const privateAtCapture =
+      content !== "interface" &&
+      this.privacy.regions.classify(element).redaction?.reason !== "private-reference";
     const attributes: Record<string, string> = {};
     const changes: Record<string, SnapshotAttributeChange> = {};
     const maximum = Math.max(0, Math.min(64, this.attributeLimit - this.attributeReads));
@@ -173,12 +216,7 @@ export class SnapshotAttributes {
           .filter(Boolean)
           .slice(0, 8)
           .map((id) =>
-            this.reference(
-              id,
-              content === "interface" &&
-                name === "aria-labelledby" &&
-                this.privacy.publicReferenceSource(element)
-            )
+            this.reference(id, name === "aria-labelledby" || name === "aria-describedby" ? 1 : 2)
           )
           .join(" ");
         changes[name] = "alias";
@@ -207,18 +245,29 @@ export class SnapshotAttributes {
           : "[number]";
         changes[name] = "bounded";
       } else if (name === "role") {
-        attributes.role = roles.has(value) ? value : "[role]";
-        if (attributes.role === "[role]") changes.role = "redacted";
+        attributes.role = this.privacy.interfaceText(value);
+        if (attributes.role !== value) changes.role = "redacted";
       } else if (name === "dir" && ["auto", "ltr", "rtl"].includes(value)) {
         attributes.dir = value;
       } else if (name === "lang" && /^[a-z]{2,3}(?:-[a-z0-9]{2,8}){0,3}$/i.test(value)) {
         attributes.lang = value;
       } else if (name === "aria-label" || name === "title") {
-        attributes[name] = this.privacy.accessibleText(element, value, content, name).slice(0, 180);
+        if (value.length > 180) this.omit("accessible-label-limit");
+        attributes[name] = this.privacy.accessibleText(value, content).slice(0, 180);
+        this.textReads.push({
+          element,
+          content,
+          name,
+          value,
+          accessible: true,
+          privateAtCapture,
+          attributes,
+          changes,
+        });
         if (attributes[name] !== value) changes[name] = "redacted";
       } else if (name === "href" || name === "xlink:href") {
         if (value.startsWith("#") && element.namespaceURI === "http://www.w3.org/2000/svg") {
-          attributes[name] = `#${this.reference(value.slice(1), false)}`;
+          attributes[name] = `#${this.reference(value.slice(1), 0)}`;
           changes[name] = "alias";
         } else {
           const destination = snapshotDestination(value);
@@ -226,12 +275,9 @@ export class SnapshotAttributes {
           Object.assign(attributes, destination.facts);
           changes[name] = "route";
         }
-      } else if (
-        publicMarkers.has(name) &&
-        /^[a-z][a-z_-]{0,63}$/.test(value) &&
-        this.privacy.interfaceText(value) === value
-      ) {
-        attributes[name] = value;
+      } else if (publicMarkers.has(name)) {
+        attributes[name] = this.privacy.interfaceText(value);
+        if (attributes[name] !== value) changes[name] = "redacted";
       } else if (
         name === "type" &&
         /^(?:button|submit|reset|checkbox|radio|text|search|email|password|hidden|number|range|date|file)$/.test(
@@ -239,7 +285,24 @@ export class SnapshotAttributes {
         )
       ) {
         attributes[name] = value;
-      } else {
+      } else if (
+        name === postAtt ||
+        name.startsWith("on") ||
+        /(?:^|[-_:])(?:token|session|secret|password|auth|cookie|csrf|userid|profileid|account|tracking)(?:$|[-_:])/i.test(
+          name
+        ) ||
+        [
+          "src",
+          "srcset",
+          "poster",
+          "action",
+          "formaction",
+          "srcdoc",
+          "style",
+          "value",
+          "alt",
+        ].includes(name)
+      ) {
         attributes[
           name.startsWith("on") ||
           [
@@ -252,13 +315,27 @@ export class SnapshotAttributes {
             "style",
             "value",
             "alt",
-            "d",
-            "points",
           ].includes(name)
             ? `data-cmf-original-${name.replace(/[^a-z0-9-]/g, "-")}`
             : name
         ] = "";
         changes[name] = "presence";
+      } else if (name === "d" || name === "points") {
+        attributes[name] = /^[MmZzLlHhVvCcSsQqTtAaEe0-9+.,\s-]*$/.test(value) ? value : "";
+        if (attributes[name] !== value) changes[name] = "redacted";
+      } else {
+        attributes[name] = this.privacy.text(value, content);
+        this.textReads.push({
+          element,
+          content,
+          name,
+          value,
+          accessible: false,
+          privateAtCapture,
+          attributes,
+          changes,
+        });
+        if (attributes[name] !== value) changes[name] = "redacted";
       }
     }
     this.redacted += Object.keys(changes).length;

@@ -89,7 +89,7 @@ export function isDomSnapshot(value: unknown, maximumNodes = 12000): value is Do
     return false;
   if (
     value.coverage.scope !== "selected-regions" ||
-    value.privacy.policy !== "content-boundaries-v1" ||
+    !["content-boundaries-v1", "sensitive-regions-v2"].includes(String(value.privacy.policy)) ||
     value.privacy.interfaceLabels !== "automatically-sanitized" ||
     value.privacy.authoredText !== "redacted" ||
     value.privacy.mediaContent !== "omitted" ||
@@ -136,6 +136,22 @@ export function isDomSnapshot(value: unknown, maximumNodes = 12000): value is Do
     const entry = queue.pop();
     if (!entry || ++count > maximumNodes || entry.depth > 48 || !record(entry.node)) return false;
     const node = entry.node;
+    if (
+      node.redaction !== undefined &&
+      (!record(node.redaction) ||
+        ![
+          "authored-region",
+          "editable-region",
+          "identity-region",
+          "identity-link",
+          "post-body",
+          "filter-caption",
+          "private-reference",
+          "executable-content",
+        ].includes(String(node.redaction.reason)) ||
+        !["explicit", "inferred"].includes(String(node.redaction.confidence)))
+    )
+      return false;
     if (node.kind === "omitted") {
       if (
         !["node-limit", "region-limit", "depth-limit", "excluded-content", "time-limit"].includes(

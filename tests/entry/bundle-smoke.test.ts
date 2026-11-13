@@ -53,7 +53,7 @@ async function startBundle(database: IDBFactory, withManager: boolean): Promise<
   virtualConsole.on("error", (error: unknown) => errors.push(error));
   virtualConsole.on("warn", (warning: unknown) => errors.push(warning));
   const dom = new JSDOM(
-    '<!doctype html><html lang="en"><head></head><body><div role="banner"></div><div role="navigation"></div><div role="main"><div role="feed"><div aria-posinset="1"><a href="/private-person/posts/private-post-id">Private Person</a><p>Private post body sentinel</p></div></div></div></body></html>',
+    '<!doctype html><html lang="en"><head></head><body><div role="banner"></div><div role="navigation"></div><div role="main"><div role="feed"><div aria-posinset="1"><a data-ad-rendering-role="profile_name" href="/private-person/posts/private-post-id">Private Person</a><p>Private post body sentinel</p></div></div></div></body></html>',
     {
       url: "https://www.facebook.com/?private_query=secret-query#secret-fragment",
       runScripts: "outside-only",

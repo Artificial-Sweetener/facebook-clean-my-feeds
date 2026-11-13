@@ -42,21 +42,18 @@ export function captureTransitionSnapshot(post: Element, deadline: number): DomS
     ancestor = ancestor.parentElement;
   }
   const references: DomSnapshot["references"] = [];
-  for (const pending of capture.attributes.pending.values()) {
-    if (references.length >= limits.references) break;
+  for (const pending of capture.attributes.references()) {
+    if (references.length >= limits.references) {
+      capture.omissions["reference-limit"] = capture.attributes.pending.size - references.length;
+      break;
+    }
     const target = post.ownerDocument.getElementById(pending.original);
     if (!target) {
       references.push({ id: pending.id, status: "missing", target: null });
       continue;
     }
-    const publicLeaf =
-      pending.interfaceLabel &&
-      target.localName === "span" &&
-      target.childElementCount === 0 &&
-      capture.privacy.content(target) === "uncertain";
     const existing = capture.captured.get(target);
     if (existing) {
-      if (publicLeaf) capture.promoteLabel(target, existing);
       references.push({ id: pending.id, status: "captured", target: null });
       continue;
     }
@@ -68,13 +65,10 @@ export function captureTransitionSnapshot(post: Element, deadline: number): DomS
     references.push({
       id: pending.id,
       status: "external",
-      target: capture.regionNow(target, publicLeaf ? "interface" : undefined),
+      target: capture.regionNow(target),
     });
   }
-  for (const source of capture.privacy.metadataText.keys()) {
-    const copy = capture.captured.get(source);
-    if (copy && capture.privacy.content(source) === "interface") capture.promoteLabel(source, copy);
-  }
+  capture.reconcilePrivacy();
   return {
     version: 1,
     limits,
@@ -96,7 +90,7 @@ export function captureTransitionSnapshot(post: Element, deadline: number): DomS
       mutationsDuringCapture: 0,
     },
     privacy: {
-      policy: "content-boundaries-v1",
+      policy: "sensitive-regions-v2",
       interfaceLabels: "automatically-sanitized",
       authoredText: "redacted",
       mediaContent: "omitted",

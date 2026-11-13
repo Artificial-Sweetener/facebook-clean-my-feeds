@@ -13,33 +13,36 @@ import { translations } from "../../../src/i18n";
 afterEach(() => document.body.replaceChildren());
 
 test.each([
-  '<button aria-label="Message PrivateUnobservedPerson">Message PrivateUnobservedPerson</button>',
-  "<h1>PrivateUnobservedPerson Support Circle</h1>",
-  "<section><h3>PrivateUnobservedPerson Support Circle</h3></section>",
-  '<div role="dialog"><h2>Chat with PrivateUnobservedPerson</h2></div>',
-  '<button aria-labelledby="name"><svg></svg></button><span id="name">PrivateUnobservedPerson</span>',
-  '<button title="PrivateUnobservedPerson">Sponsored</button>',
-  '<button aria-label="Sponsored"><span title="PrivateUnobservedPerson">Sponsored</span></button>',
-  '<button aria-label="Message PrivateUnobservedPerson">Sponsored</button>',
-  "<button>إرسال إلى PrivateUnobservedPerson</button>",
-  "<h3>与PrivateUnobservedPerson聊天</h3>",
-])("the full report automatically redacts unobserved identities in %s", async (markup) => {
-  document.body.innerHTML = `<main role="main">${markup}</main>`;
-  const settings = hydrateOptions();
-  const report = await buildBugReport({
-    ...settings,
-    pathInfo: {},
-    state: {
-      ...createFeedState(),
-      hideAtt: "hide",
-      hideWithNoCaptionAtt: "hideNoCaption",
-      cssHideEl: "hideBlock",
-      cssHideNumberOfShares: "hideShares",
-    },
-  });
-  expect(JSON.stringify(report.data).includes("PrivateUnobservedPerson")).toBe(false);
-  expect(report.data.snapshot?.regions.length).toBeGreaterThan(0);
-});
+  '<button aria-label="Message UnknownControlCopy">Message UnknownControlCopy</button>',
+  "<h1>UnknownControlCopy Support Circle</h1>",
+  "<section><h3>UnknownControlCopy Support Circle</h3></section>",
+  '<div role="dialog"><h2>Chat with UnknownControlCopy</h2></div>',
+  '<button aria-labelledby="name"><svg></svg></button><span id="name">UnknownControlCopy</span>',
+  '<button title="UnknownControlCopy">Sponsored</button>',
+  '<button aria-label="Sponsored"><span title="UnknownControlCopy">Sponsored</span></button>',
+  '<button aria-label="Message UnknownControlCopy">Sponsored</button>',
+  "<button>إرسال إلى UnknownControlCopy</button>",
+  "<h3>与UnknownControlCopy聊天</h3>",
+])(
+  "the full report preserves unfamiliar copy without inventing identity evidence in %s",
+  async (markup) => {
+    document.body.innerHTML = `<main role="main">${markup}</main>`;
+    const settings = hydrateOptions();
+    const report = await buildBugReport({
+      ...settings,
+      pathInfo: {},
+      state: {
+        ...createFeedState(),
+        hideAtt: "hide",
+        hideWithNoCaptionAtt: "hideNoCaption",
+        cssHideEl: "hideBlock",
+        cssHideNumberOfShares: "hideShares",
+      },
+    });
+    expect(JSON.stringify(report.data).includes("UnknownControlCopy")).toBe(true);
+    expect(report.data.snapshot?.regions.length).toBeGreaterThan(0);
+  }
+);
 
 test.each(Object.values(translations).map((catalog) => catalog.SPONSORED))(
   "fixed interface copy remains usable independently of the selected language: %s",
@@ -70,11 +73,11 @@ test.each(["Commercial notice beta", "محتوى ترويجي جديد", "新し
 );
 
 test.each(["aria-labelledby", "aria-describedby"])(
-  "generic controls cannot promote private reference targets through %s",
+  "generic controls preserve unfamiliar reference targets through %s",
   async (attribute) => {
-    document.body.innerHTML = `<main role="main"><button ${attribute}="private-label">Sponsored</button></main><span id="private-label">PrivateReferenceCanary</span>`;
+    document.body.innerHTML = `<main role="main"><button ${attribute}="private-label">Sponsored</button></main><span id="private-label">UnknownReferenceLabel</span>`;
     const snapshot = await captureDomSnapshot(document);
-    expect(JSON.stringify(snapshot).includes("PrivateReferenceCanary")).toBe(false);
+    expect(JSON.stringify(snapshot).includes("UnknownReferenceLabel")).toBe(true);
   }
 );
 

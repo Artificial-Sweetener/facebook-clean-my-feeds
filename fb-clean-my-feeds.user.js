@@ -6497,7 +6497,7 @@ ${fence}
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:12e1e7f5dc69d8cd6d42e7028f4cd1efca5c035ef6830bff701a7bc1ddd0b1dd" : "unbundled";
+      buildIdentity = true ? "source-sha256:5f63b9a8c2caecb93842382f139d9de70da79d1134ace0a92314d53983b4279a" : "unbundled";
     }
   });
 
@@ -9119,7 +9119,7 @@ ${fence}
   }
   function isNewsPeopleYouMayKnow(post, keyWords) {
     const matches = hasNewsCardHeading(post, "people") && getPostEvidence(post).select('a[href][role="link"]').some(
-      (link) => /^\/friends(?:\/|$)/.test(facebookPath(link) || "") && isOwnedNewsMetadata(link, post)
+      (link) => /^\/friends(?:\/|$)/.test(facebookPath(link) || "") && isOwnedNewsElement(link, post) && getPostEvidence(post).isRendered(link)
     );
     return matches ? keyWords.NF_PEOPLE_YOU_MAY_KNOW : "";
   }

@@ -75,7 +75,11 @@ export function isGroupsYouMightLike(post: Element) {
   );
 }
 
-/** Require this card's people-discovery heading and link rather than a friend's ordinary profile or comment link. */
+/**
+ * Pair the card's own metadata heading with a rendered Facebook friend-discovery link.
+ * Links may live in the header, carousel or footer; ownership still excludes authored
+ * content, comments and nested posts without imposing the header's block-position rules.
+ */
 export function isNewsPeopleYouMayKnow(
   post: Element,
   keyWords: Pick<Keywords, "NF_PEOPLE_YOU_MAY_KNOW">
@@ -86,7 +90,9 @@ export function isNewsPeopleYouMayKnow(
       .select('a[href][role="link"]')
       .some(
         (link) =>
-          /^\/friends(?:\/|$)/.test(facebookPath(link) || "") && isOwnedNewsMetadata(link, post)
+          /^\/friends(?:\/|$)/.test(facebookPath(link) || "") &&
+          isOwnedNewsElement(link, post) &&
+          getPostEvidence(post).isRendered(link)
       );
   return matches ? keyWords.NF_PEOPLE_YOU_MAY_KNOW : "";
 }

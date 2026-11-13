@@ -4560,7 +4560,7 @@
         authored: `${sharedSelectors.authoredContent}, [role="log"], [role="paragraph"], [data-ad-rendering-role^="title"], [data-ad-rendering-role^="description"]`,
         filterCaption: "details[cmfr] > summary, h6[cmftsb]",
         editable: 'textarea, input, [role="textbox"], [contenteditable]:not([contenteditable="false"]), [data-lexical-editor]',
-        personalIdentity: "[data-hovercard], [data-profileid], [data-userid]",
+        personalIdentity: '[data-hovercard], [data-profileid], [data-userid], a[href*="/events/birthdays"] b, a[href*="/events/birthdays"] strong',
         control: 'a, button, [role="button"], [role="link"], [role="menuitem"], [role="tab"], [role="checkbox"], [role="switch"], [role="option"]',
         heading: 'h1, h2, h3, h4, h5, h6, [role="heading"]',
         excluded: "script, style, noscript, template, iframe, object, embed, canvas, foreignObject",
@@ -4592,10 +4592,19 @@
     if (/^\/friends\/(?:requests|suggestions)/.test(path))
       return url.searchParams.has("profile_id") || link.querySelector("img") !== null;
     const segments = path.split("/").filter(Boolean);
-    if (segments.length !== 1 || /\./.test(segments[0] || "")) return false;
+    if (segments.length !== 1) return false;
     const authorHeading = link.closest("h4, h5") && link.closest(diagnosticSelectors.post);
-    const avatar = link.querySelector("img");
-    return !!((_a = link.textContent) == null ? void 0 : _a.trim()) && !!(authorHeading || avatar);
+    const avatar = link.querySelector("img, svg image");
+    if (avatar) return true;
+    if (!((_a = link.textContent) == null ? void 0 : _a.trim())) return false;
+    if (authorHeading) return true;
+    const post = link.closest(diagnosticSelectors.post);
+    return Array.from((post == null ? void 0 : post.querySelectorAll("a[href]")) || []).slice(0, 128).some(
+      (candidate) => {
+        var _a2;
+        return candidate !== link && candidate.querySelector("svg image") && ((_a2 = facebookDestination(candidate)) == null ? void 0 : _a2.href) === url.href;
+      }
+    );
   }
   function decision(content, reason, confidence = "explicit") {
     return { content, redaction: { reason, confidence } };
@@ -4659,6 +4668,7 @@
         }
         /** Determine sensitive ancestry before considering indirect references; unfamiliar markup alone is never private. */
         local(element) {
+          var _a;
           if (element.closest(diagnosticSelectors.excluded)) return decision("excluded", "executable-content");
           if (element.closest(diagnosticSelectors.filterCaption)) return decision("authored", "filter-caption");
           if (element.closest(diagnosticSelectors.editable)) return decision("authored", "editable-region");
@@ -4670,6 +4680,8 @@
             return decision("identity", "identity-region");
           const link = element.closest("a[href]");
           if (link && isIdentityLink(link)) return decision("identity", "identity-link", "inferred");
+          if (link && /^\/(?:reel|reels)\/\d+\/?$/.test(((_a = facebookDestination(link)) == null ? void 0 : _a.pathname) || ""))
+            return decision("authored", "authored-region", "inferred");
           if (this.isBodyText(element)) return decision("authored", "post-body", "inferred");
           return { content: "interface" };
         }
@@ -4753,6 +4765,7 @@
         constructor() {
           this.identities = /* @__PURE__ */ new Set();
           this.identityPattern = null;
+          this.givenNamePattern = null;
           this.identityVersion = 0;
           this.compiledVersion = -1;
           this.fragments = /* @__PURE__ */ new WeakMap();
@@ -4770,11 +4783,20 @@
           this.identities.add(name);
           this.identityVersion++;
         }
-        /** Construct Unicode word-bounded patterns so names such as Ann cannot erase words such as announcement. */
+        /**
+         * Compile full-name boundaries and narrowly contextual given-name patterns from observed identities.
+         * Ordinary words and month names never qualify solely because they match part of a person's name.
+         * @returns Full-identity matcher, or null until identities are observed; also refreshes the personalized-name matcher.
+         */
         names() {
           if (this.compiledVersion !== this.identityVersion) {
             const names = Array.from(this.identities).sort((a, b) => b.length - a.length).map((name) => name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s+"));
             this.identityPattern = names.length ? new RegExp(`(?<![\\p{L}\\p{N}_])(?:${names.join("|")})(?![\\p{L}\\p{N}_])`, "giu") : null;
+            const givenNames = Array.from(this.identities).filter((name) => name.includes(" ")).map((name) => name.split(" ")[0] || "").filter((name) => /^[\p{L}][\p{L}'’-]{1,}$/u.test(name)).map((name) => name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+            this.givenNamePattern = givenNames.length ? new RegExp(
+              `(?:(?<![\\p{L}\\p{N}_])(?:${givenNames.join("|")})(?=['’]s\\b)|(?<=[,，]\\s)(?:${givenNames.join("|")})(?=[?？!！.]|$))`,
+              "giu"
+            ) : null;
             this.compiledVersion = this.identityVersion;
           }
           return this.identityPattern;
@@ -4793,7 +4815,8 @@
               /\b(?:\d{12,}|(?=[A-Za-z0-9_-]*[A-Za-z])(?=[A-Za-z0-9_-]*\d)[A-Za-z0-9_-]{28,})\b/g,
               "[identifier]"
             ],
-            [this.names(), "[identity]"]
+            [this.names(), "[identity]"],
+            [this.givenNamePattern, "[identity]"]
           ];
           const ranges = [];
           for (const [pattern, replacement] of patterns) {
@@ -6359,7 +6382,7 @@ ${fence}
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:e421367f913d442906104039c787a4940ab1dfbf46f96d4e91555d6df62867f4" : "unbundled";
+      buildIdentity = true ? "source-sha256:c3e88711fd22077e7875211e6249925147fbed0e93b99eef3ba0a0de9c7d9f40" : "unbundled";
     }
   });
 

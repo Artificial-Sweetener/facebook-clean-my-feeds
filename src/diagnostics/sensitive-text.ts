@@ -11,6 +11,7 @@ interface RedactionRange {
 export class SensitiveText {
   private identities = new Set<string>();
   private identityPattern: RegExp | null = null;
+  private givenNamePattern: RegExp | null = null;
   private identityVersion = 0;
   private compiledVersion = -1;
   private fragments = new WeakMap<
@@ -32,7 +33,11 @@ export class SensitiveText {
     this.identityVersion++;
   }
 
-  /** Construct Unicode word-bounded patterns so names such as Ann cannot erase words such as announcement. */
+  /**
+   * Compile full-name boundaries and narrowly contextual given-name patterns from observed identities.
+   * Ordinary words and month names never qualify solely because they match part of a person's name.
+   * @returns Full-identity matcher, or null until identities are observed; also refreshes the personalized-name matcher.
+   */
   private names(): RegExp | null {
     if (this.compiledVersion !== this.identityVersion) {
       const names = Array.from(this.identities)
@@ -40,6 +45,18 @@ export class SensitiveText {
         .map((name) => name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s+"));
       this.identityPattern = names.length
         ? new RegExp(`(?<![\\p{L}\\p{N}_])(?:${names.join("|")})(?![\\p{L}\\p{N}_])`, "giu")
+        : null;
+      const givenNames = Array.from(this.identities)
+        .filter((name) => name.includes(" "))
+        .map((name) => name.split(" ")[0] || "")
+        .filter((name) => /^[\p{L}][\p{L}'’-]{1,}$/u.test(name))
+        .map((name) => name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+      // Short names need personalized grammar, never a match against ordinary interface words alone.
+      this.givenNamePattern = givenNames.length
+        ? new RegExp(
+            `(?:(?<![\\p{L}\\p{N}_])(?:${givenNames.join("|")})(?=['’]s\\b)|(?<=[,，]\\s)(?:${givenNames.join("|")})(?=[?？!！.]|$))`,
+            "giu"
+          )
         : null;
       this.compiledVersion = this.identityVersion;
     }
@@ -61,6 +78,7 @@ export class SensitiveText {
         "[identifier]",
       ],
       [this.names(), "[identity]"],
+      [this.givenNamePattern, "[identity]"],
     ];
     const ranges: RedactionRange[] = [];
     for (const [pattern, replacement] of patterns) {

@@ -23,6 +23,8 @@ function facebookDestination(element: Element): URL | null {
  * Identify destination-bearing people/page/group links, not arbitrary unknown controls.
  * Content routes and site navigation remain useful evidence; an empty SVG timestamp or
  * disclosure does not become a profile just because Facebook gives it a profile-shaped URL.
+ * @param link Candidate anchor; paired avatars must share its complete destination, including query parameters.
+ * @returns Whether identity markup, avatar media or an author relationship supports redacting this link's copy.
  */
 export function isIdentityLink(link: Element): boolean {
   const url = facebookDestination(link);
@@ -35,10 +37,21 @@ export function isIdentityLink(link: Element): boolean {
   if (/^\/friends\/(?:requests|suggestions)/.test(path))
     return url.searchParams.has("profile_id") || link.querySelector("img") !== null;
   const segments = path.split("/").filter(Boolean);
-  if (segments.length !== 1 || /\./.test(segments[0] || "")) return false;
+  if (segments.length !== 1) return false;
   const authorHeading = link.closest("h4, h5") && link.closest(selectors.post);
-  const avatar = link.querySelector("img");
-  return !!link.textContent?.trim() && !!(authorHeading || avatar);
+  const avatar = link.querySelector("img, svg image");
+  if (avatar) return true;
+  if (!link.textContent?.trim()) return false;
+  if (authorHeading) return true;
+  const post = link.closest(selectors.post);
+  return Array.from(post?.querySelectorAll("a[href]") || [])
+    .slice(0, 128)
+    .some(
+      (candidate) =>
+        candidate !== link &&
+        candidate.querySelector("svg image") &&
+        facebookDestination(candidate)?.href === url.href
+    );
 }
 
 /** Keep exclusion reasons stable across full reports, history frames and live audit output. */
@@ -122,6 +135,8 @@ export class SensitiveRegions {
       return decision("identity", "identity-region");
     const link = element.closest("a[href]");
     if (link && isIdentityLink(link)) return decision("identity", "identity-link", "inferred");
+    if (link && /^\/(?:reel|reels)\/\d+\/?$/.test(facebookDestination(link)?.pathname || ""))
+      return decision("authored", "authored-region", "inferred");
     if (this.isBodyText(element)) return decision("authored", "post-body", "inferred");
     return { content: "interface" };
   }

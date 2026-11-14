@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { matchesNewsLabel, matchesNewsPaidBy } from "../core/filters/labels";
+import { matchesNewsLabel } from "../core/filters/labels";
 import { isNewsFeatureCollapsed } from "./news-presentation";
 import type { Keywords } from "../i18n";
 import { matchesDisclosureLabel, containsMetaAiCopy } from "../core/filters/disclosure-labels";
@@ -8,6 +8,7 @@ import { facebookUrl, getPostEvidence } from "../dom/post-evidence";
 import { extractFeedBlockText } from "../dom/walker";
 import { getNewsBlocks } from "./shared/blocks";
 import { hasPaidPartnershipDisclosure } from "./shared/paid-partnership";
+import { hasPaidByDisclosure } from "./shared/paid-disclosure";
 import { isNewsStoryShelf } from "./news-stories";
 import {
   facebookPath,
@@ -99,21 +100,12 @@ export function isNewsPaidPartnership(
   return hasPaidPartnershipDisclosure(post) ? keyWords.NF_PAID_PARTNERSHIP : "";
 }
 
-/** Require the owned disclosure layout and a localized paid-by statement with a nonempty payer. */
+/** Apply the paid-by setting to complete disclosures in both legacy leaves and semantic header controls. */
 export function isNewsSponsoredPaidBy(
   post: Element,
   keyWords: Pick<Keywords, "NF_SPONSORED_PAID">
 ) {
-  const querySPB =
-    "div:nth-child(2) > div > div:nth-child(2) > span[class] > span[id] > div:nth-child(2)";
-  const sponsoredPaidBy = getPostEvidence(post).select(querySPB);
-  return sponsoredPaidBy.some(
-    (label) =>
-      isOwnedNewsMetadata(label, post) &&
-      matchesNewsPaidBy(getPostEvidence(post).visibleText(label))
-  )
-    ? keyWords.NF_SPONSORED_PAID
-    : "";
+  return hasPaidByDisclosure(post) ? keyWords.NF_SPONSORED_PAID : "";
 }
 
 /** Recognize separate preview cards before all carousel items load, retaining established labelled and larger-shelf routes. */

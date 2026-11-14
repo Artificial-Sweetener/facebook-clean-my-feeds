@@ -2,6 +2,7 @@
 
 import { cleanText } from "./text-normalize";
 import { newsLabels } from "../../i18n/news-labels";
+import { matchesSponsoredLabel } from "./disclosure-labels";
 
 /** Semantic slots are independent of settings labels and remain exact matches after normalization. */
 export type NewsLabelKind =
@@ -63,5 +64,16 @@ export function matchesNewsPaidBy(text: string): boolean {
         label.slice(prefix.length, label.length - suffix.length).trim() !== ""
       );
     })
+  );
+}
+
+/** Match a complete payer disclosure, optionally preceded by an exact sponsorship label and metadata separator. */
+export function matchesPaidByDisclosure(text: string): boolean {
+  if (matchesNewsPaidBy(text)) return true;
+  const separator = text.indexOf("·");
+  return (
+    separator >= 0 &&
+    matchesSponsoredLabel(text.slice(0, separator)) &&
+    matchesNewsPaidBy(text.slice(separator + 1))
   );
 }

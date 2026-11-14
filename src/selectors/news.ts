@@ -13,6 +13,10 @@ const newsSelectors = {
   surveyButton: 'a[href*="/survey/?session="] > div[role="none"]',
   standardPost: 'div[role="article"], div[aria-posinset]',
   sponsoredLink: 'a[href*="/ads/about/"]',
+  paidDisclosureLegacy:
+    "div:nth-child(2) > div > div:nth-child(2) > span[class] > span[id] > div:nth-child(2)",
+  paidDisclosureControls: 'button, [role="button"], a[href], [role="link"]',
+  paidDisclosureIdentity: '[data-ad-rendering-role="profile_name"], h4, h5',
   virtualizedContainer: "div[data-virtualized]",
   storyShelfCandidates:
     'div[role="main"] div[data-virtualized] [data-type="hscroll-child"] a[href*="/stories/"]',

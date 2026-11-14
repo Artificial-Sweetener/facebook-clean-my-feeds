@@ -6382,7 +6382,7 @@ ${fence}
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:c3e88711fd22077e7875211e6249925147fbed0e93b99eef3ba0a0de9c7d9f40" : "unbundled";
+      buildIdentity = true ? "source-sha256:519e2be2801c49a7c49f719e90e56af987ac265e3cb14aee5c70143b6cd8591b" : "unbundled";
     }
   });
 
@@ -6635,6 +6635,9 @@ ${fence}
         surveyButton: 'a[href*="/survey/?session="] > div[role="none"]',
         standardPost: 'div[role="article"], div[aria-posinset]',
         sponsoredLink: 'a[href*="/ads/about/"]',
+        paidDisclosureLegacy: "div:nth-child(2) > div > div:nth-child(2) > span[class] > span[id] > div:nth-child(2)",
+        paidDisclosureControls: 'button, [role="button"], a[href], [role="link"]',
+        paidDisclosureIdentity: '[data-ad-rendering-role="profile_name"], h4, h5',
         virtualizedContainer: "div[data-virtualized]",
         storyShelfCandidates: 'div[role="main"] div[data-virtualized] [data-type="hscroll-child"] a[href*="/stories/"]',
         storyShelfItems: '[data-type="hscroll-child"]',
@@ -8960,12 +8963,18 @@ ${fence}
       })
     );
   }
+  function matchesPaidByDisclosure(text) {
+    if (matchesNewsPaidBy(text)) return true;
+    const separator = text.indexOf("·");
+    return separator >= 0 && matchesSponsoredLabel(text.slice(0, separator)) && matchesNewsPaidBy(text.slice(separator + 1));
+  }
   var labelKinds, labelsByKind;
   var init_labels = __esm({
     "src/core/filters/labels.ts"() {
       "use strict";
       init_text_normalize();
       init_news_labels();
+      init_disclosure_labels2();
       labelKinds = [
         "follow",
         "join",
@@ -9220,6 +9229,42 @@ ${fence}
     }
   });
 
+  // src/feeds/shared/paid-disclosure.ts
+  function hasPaidByDisclosure(post) {
+    const evidence = getPostEvidence(post);
+    const legacy = evidence.select(newsSelectors.paidDisclosureLegacy);
+    const header = getNewsBlocks(post)[0];
+    const controls = header ? evidence.select(newsSelectors.paidDisclosureControls, header) : [];
+    return [.../* @__PURE__ */ new Set([...legacy, ...controls])].some((control) => {
+      var _a;
+      if (!isOwnedNewsMetadata(control, post) || control.closest(newsSelectors.paidDisclosureIdentity) || ((_a = control.parentElement) == null ? void 0 : _a.closest(newsSelectors.paidDisclosureControls)) || control.localName === "a" && !facebookUrl(control) || !matchesPaidByDisclosure(evidence.visibleText(control)))
+        return false;
+      const descendants = evidence.select("*", control);
+      if (descendants.length > 128 || descendants.some(
+        (child) => evidence.isRendered(child) && (!isOwnedNewsMetadata(child, post) || child.matches(
+          `${sharedSelectors.profileName}, ${newsSelectors.paidDisclosureControls}`
+        ))
+      ))
+        return false;
+      if (control.hasAttribute("aria-label") || control.hasAttribute("aria-labelledby")) {
+        const names = evidence.explicitNames(control);
+        if (!names.length || !names.every(matchesPaidByDisclosure)) return false;
+      }
+      return true;
+    });
+  }
+  var init_paid_disclosure = __esm({
+    "src/feeds/shared/paid-disclosure.ts"() {
+      "use strict";
+      init_labels();
+      init_post_evidence();
+      init_news();
+      init_shared();
+      init_news_identity();
+      init_blocks();
+    }
+  });
+
   // src/feeds/news-detectors.ts
   function isNewsSuggested(post, state, keyWords) {
     const queries = [
@@ -9258,11 +9303,7 @@ ${fence}
     return hasPaidPartnershipDisclosure(post) ? keyWords.NF_PAID_PARTNERSHIP : "";
   }
   function isNewsSponsoredPaidBy(post, keyWords) {
-    const querySPB = "div:nth-child(2) > div > div:nth-child(2) > span[class] > span[id] > div:nth-child(2)";
-    const sponsoredPaidBy = getPostEvidence(post).select(querySPB);
-    return sponsoredPaidBy.some(
-      (label) => isOwnedNewsMetadata(label, post) && matchesNewsPaidBy(getPostEvidence(post).visibleText(label))
-    ) ? keyWords.NF_SPONSORED_PAID : "";
+    return hasPaidByDisclosure(post) ? keyWords.NF_SPONSORED_PAID : "";
   }
   function isNewsReelsAndShortVideos(post, keyWords) {
     if (isNewsReelShelf(post)) return keyWords.NF_REELS_SHORT_VIDEOS;
@@ -9381,6 +9422,7 @@ ${fence}
       init_walker();
       init_blocks();
       init_paid_partnership();
+      init_paid_disclosure();
       init_news_stories();
       init_news_identity();
     }

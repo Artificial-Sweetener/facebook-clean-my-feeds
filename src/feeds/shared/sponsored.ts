@@ -8,6 +8,7 @@ import { sharedSelectors } from "../../selectors/shared";
 import type { SponsoredState } from "../types";
 import { getNewsBlocks } from "./blocks";
 import { getSvgDisclosure } from "./svg-disclosure";
+import { getStructuralSponsoredKind } from "./sponsored-structure";
 
 const cftParam = "__cft__[0]=";
 const maximumCandidateLinks = 10;
@@ -230,6 +231,10 @@ function getSponsoredDiagnostics(post: Element | null, state: SponsoredState | n
 function inspectSponsored(post: Element | null, state: SponsoredState | null) {
   const diagnostics = createSponsoredDiagnostics(post, state);
   if (!post || !state) return { isSponsored: false, diagnostics };
+  if (state.isNF && getStructuralSponsoredKind(post) === "sponsored") {
+    diagnostics.matchedBy = "creative-structure";
+    return { isSponsored: true, diagnostics };
+  }
   const scope = { dom: getPostEvidence(post), names: new Map<Element, boolean>() };
   const bodies = authoredBlocks(post, state);
   diagnostics.adsAboutLinkCount = scope.dom.select("a[href]").filter((link) => {

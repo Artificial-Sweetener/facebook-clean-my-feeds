@@ -6,15 +6,17 @@ import { newsSelectors } from "../../selectors/news";
 import { sharedSelectors } from "../../selectors/shared";
 import { isOwnedNewsMetadata } from "../news-identity";
 import { getNewsBlocks } from "./blocks";
+import { getStructuralSponsoredKind } from "./sponsored-structure";
 
 /**
- * Match complete payer disclosures in legacy metadata leaves or controls in the owning header.
+ * Try language-independent creative/disclaimer evidence before localized payer disclosures.
  * Header boundaries come from owned profile/content signals or the established block layouts;
  * wrapper depth, generated classes, tracking length and the position of the author heading are irrelevant.
  * @param post Read-only news post; authored text, profile names and independent nested content cannot supply evidence.
  * @returns Whether one rendered candidate owns a complete localized paid-by statement, with an optional sponsored prefix.
  */
 export function hasPaidByDisclosure(post: Element): boolean {
+  if (getStructuralSponsoredKind(post) === "paid") return true;
   const evidence = getPostEvidence(post);
   const legacy = evidence.select(newsSelectors.paidDisclosureLegacy);
   const header = getNewsBlocks(post)[0];

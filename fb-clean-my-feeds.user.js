@@ -4544,7 +4544,15 @@
         dialog: 'div[role="dialog"]',
         postOwner: 'div[role="article"], div[aria-posinset]',
         profileName: '[data-ad-rendering-role="profile_name"]',
+        authorMetadata: '[data-ad-rendering-role="profile_name"], h4, h5',
         storyMessage: '[data-ad-rendering-role="story_message"]',
+        interactive: 'a, button, [role="button"], [role="link"]',
+        adCreativeCta: '[data-ad-rendering-role^="cta-"]',
+        adCreativeMedia: '[data-ad-rendering-role="image"] img, [data-ad-rendering-role="image"] video',
+        paidMetadataButton: 'button:not([aria-haspopup]), [role="button"]:not([aria-haspopup])',
+        disclosureNonTextContent: 'a, button, [role="button"], [role="link"], svg, img, video',
+        avatarMedia: "img, image, video",
+        svgLabelGeometry: "svg use, svg text",
         authoredContent: 'p, blockquote, [data-ad-preview="message"], [data-ad-comet-preview="message"], [data-ad-rendering-role="story_message"], [data-ad-rendering-role="creative_body"], [contenteditable="true"], [data-commentid], [data-testid^="UFI2Comment/"], [role="comment"]'
       };
     }
@@ -6382,7 +6390,7 @@ ${fence}
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:519e2be2801c49a7c49f719e90e56af987ac265e3cb14aee5c70143b6cd8591b" : "unbundled";
+      buildIdentity = true ? "source-sha256:f4e02abb74eb7b1550c56c7fef26f0f27510abef5ac64e6968a627492fd3a5e9" : "unbundled";
     }
   });
 
@@ -6638,6 +6646,10 @@ ${fence}
         paidDisclosureLegacy: "div:nth-child(2) > div > div:nth-child(2) > span[class] > span[id] > div:nth-child(2)",
         paidDisclosureControls: 'button, [role="button"], a[href], [role="link"]',
         paidDisclosureIdentity: '[data-ad-rendering-role="profile_name"], h4, h5',
+        peopleTiles: '[data-type="hscroll-child"]',
+        peopleLinks: 'a[href][role="link"]',
+        peopleActions: 'button, [role="button"]',
+        peoplePostContent: '[data-ad-rendering-role="profile_name"], [data-ad-rendering-role="story_message"], [data-ad-preview="message"], [data-ad-comet-preview="message"], h4, h5, p, blockquote',
         virtualizedContainer: "div[data-virtualized]",
         storyShelfCandidates: 'div[role="main"] div[data-virtualized] [data-type="hscroll-child"] a[href*="/stories/"]',
         storyShelfItems: '[data-type="hscroll-child"]',
@@ -8207,6 +8219,60 @@ ${fence}
     }
   });
 
+  // src/feeds/shared/sponsored-structure.ts
+  function getStructuralSponsoredKind(post) {
+    var _a;
+    const evidence = getPostEvidence(post);
+    if (cache3.has(evidence)) return (_a = cache3.get(evidence)) != null ? _a : null;
+    const result = inspectStructure(post, evidence);
+    cache3.set(evidence, result);
+    return result;
+  }
+  function isOwnedSignal(element, post, evidence) {
+    return ownsPostElement(element, post) && evidence.isRendered(element);
+  }
+  function inspectStructure(post, evidence) {
+    const blocks = getNewsBlocks(post);
+    const header = blocks[0];
+    if (!header || blocks.length < 2) return null;
+    const tracked = evidence.select("a[href]", header).filter((link) => {
+      const url = facebookUrl(link);
+      const signature = url == null ? void 0 : url.searchParams.get("__cft__[0]");
+      return !!signature && signature.length + "__cft__[0]=".length >= 311 && !(url == null ? void 0 : url.pathname.startsWith("/groups/")) && !(url == null ? void 0 : url.searchParams.has("section_header_type")) && isOwnedSignal(link, post, evidence);
+    });
+    if (tracked.length < 2 || !tracked.some((link) => link.closest(sharedSelectors.profileName)))
+      return null;
+    const creative = blocks.slice(1).some((block) => {
+      const cta = evidence.select(sharedSelectors.adCreativeCta, block).some((element) => isOwnedSignal(element, post, evidence));
+      return cta && evidence.select(sharedSelectors.adCreativeMedia, block).some((media) => isOwnedSignal(media, post, evidence));
+    });
+    if (!creative) return null;
+    const paid = evidence.select(sharedSelectors.paidMetadataButton, header).some((button) => {
+      var _a;
+      if (!isOwnedSignal(button, post, evidence) || button.closest(sharedSelectors.authorMetadata) || ((_a = button.parentElement) == null ? void 0 : _a.closest(sharedSelectors.interactive)) || button.querySelector(
+        `${sharedSelectors.disclosureNonTextContent}, ${sharedSelectors.authoredContent}`
+      ))
+        return false;
+      const parts = Array.from(button.children).filter((part) => evidence.isRendered(part));
+      return parts.length === 2 && parts.every((part) => part.localName === "span" && isOwnedSignal(part, post, evidence));
+    });
+    if (paid) return "paid";
+    return tracked.some(
+      (link) => !link.closest(sharedSelectors.profileName) && !link.querySelector(sharedSelectors.avatarMedia) && evidence.select(sharedSelectors.svgLabelGeometry, link).some((graphic) => isOwnedSignal(graphic, post, evidence))
+    ) ? "sponsored" : null;
+  }
+  var cache3;
+  var init_sponsored_structure = __esm({
+    "src/feeds/shared/sponsored-structure.ts"() {
+      "use strict";
+      init_ownership();
+      init_post_evidence();
+      init_shared();
+      init_blocks();
+      cache3 = /* @__PURE__ */ new WeakMap();
+    }
+  });
+
   // src/feeds/shared/sponsored.ts
   function isOwnedControl(control, post, bodies, evidence) {
     return ownsPostElement(control, post, { bodies, allowArticleWrapper: true }) && evidence.isRendered(control);
@@ -8297,6 +8363,10 @@ ${fence}
   function inspectSponsored(post, state) {
     const diagnostics = createSponsoredDiagnostics(post, state);
     if (!post || !state) return { isSponsored: false, diagnostics };
+    if (state.isNF && getStructuralSponsoredKind(post) === "sponsored") {
+      diagnostics.matchedBy = "creative-structure";
+      return { isSponsored: true, diagnostics };
+    }
     const scope = { dom: getPostEvidence(post), names: /* @__PURE__ */ new Map() };
     const bodies = authoredBlocks(post, state);
     diagnostics.adsAboutLinkCount = scope.dom.select("a[href]").filter((link) => {
@@ -8396,6 +8466,7 @@ ${fence}
       init_shared();
       init_blocks();
       init_svg_disclosure();
+      init_sponsored_structure();
       cftParam = "__cft__[0]=";
       maximumCandidateLinks = 10;
     }
@@ -9231,6 +9302,7 @@ ${fence}
 
   // src/feeds/shared/paid-disclosure.ts
   function hasPaidByDisclosure(post) {
+    if (getStructuralSponsoredKind(post) === "paid") return true;
     const evidence = getPostEvidence(post);
     const legacy = evidence.select(newsSelectors.paidDisclosureLegacy);
     const header = getNewsBlocks(post)[0];
@@ -9262,6 +9334,56 @@ ${fence}
       init_shared();
       init_news_identity();
       init_blocks();
+      init_sponsored_structure();
+    }
+  });
+
+  // src/feeds/news-people-structure.ts
+  function hasPeopleDiscoveryStructure(post) {
+    var _a;
+    const evidence = getPostEvidence(post);
+    if (!post.matches(sharedSelectors.postOwner) || post.closest(sharedSelectors.authoredContent) || ((_a = post.parentElement) == null ? void 0 : _a.closest(sharedSelectors.postOwner)) || evidence.select(newsSelectors.peoplePostContent).some(
+      (element) => evidence.isRendered(element) && !element.closest(newsSelectors.peopleTiles)
+    ))
+      return false;
+    let matchingTiles = 0;
+    for (const tile of evidence.select(newsSelectors.peopleTiles)) {
+      if (!ownsPostElement(tile, post) || !evidence.isRendered(tile)) continue;
+      const links = evidence.select(newsSelectors.peopleLinks, tile).filter(
+        (link) => {
+          var _a2;
+          return /^\/friends\/suggestions\/?$/.test(((_a2 = facebookUrl(link)) == null ? void 0 : _a2.pathname) || "") && link.closest(newsSelectors.peopleTiles) === tile && ownsPostElement(link, post);
+        }
+      );
+      if (!links.some((link) => evidence.isRendered(link))) continue;
+      const portrait = links.some(
+        (link) => evidence.select("img", link).some((image) => {
+          if (!ownsPostElement(image, post)) return false;
+          let ancestor = image;
+          while (ancestor && ancestor !== post) {
+            if (!evidence.isPainted(ancestor)) return false;
+            ancestor = ancestor.parentElement;
+          }
+          return ancestor === post;
+        })
+      );
+      const actions = evidence.select(newsSelectors.peopleActions, tile).filter(
+        (action) => {
+          var _a2;
+          return action.closest(newsSelectors.peopleTiles) === tile && ownsPostElement(action, post) && evidence.isRendered(action) && !((_a2 = action.parentElement) == null ? void 0 : _a2.closest(newsSelectors.peopleActions));
+        }
+      );
+      if (portrait && actions.length >= 2 && ++matchingTiles >= 2) return true;
+    }
+    return false;
+  }
+  var init_news_people_structure = __esm({
+    "src/feeds/news-people-structure.ts"() {
+      "use strict";
+      init_ownership();
+      init_post_evidence();
+      init_news();
+      init_shared();
     }
   });
 
@@ -9294,8 +9416,9 @@ ${fence}
     );
   }
   function isNewsPeopleYouMayKnow(post, keyWords) {
+    if (hasPeopleDiscoveryStructure(post)) return keyWords.NF_PEOPLE_YOU_MAY_KNOW;
     const matches = hasNewsCardHeading(post, "people") && getPostEvidence(post).select('a[href][role="link"]').some(
-      (link) => /^\/friends(?:\/|$)/.test(facebookPath(link) || "") && isOwnedNewsMetadata(link, post)
+      (link) => /^\/friends(?:\/|$)/.test(facebookPath(link) || "") && isOwnedNewsElement(link, post) && getPostEvidence(post).isRendered(link)
     );
     return matches ? keyWords.NF_PEOPLE_YOU_MAY_KNOW : "";
   }
@@ -9423,6 +9546,7 @@ ${fence}
       init_blocks();
       init_paid_partnership();
       init_paid_disclosure();
+      init_news_people_structure();
       init_news_stories();
       init_news_identity();
     }

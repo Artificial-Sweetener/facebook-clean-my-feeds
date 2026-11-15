@@ -17,6 +17,11 @@ const newsSelectors = {
     "div:nth-child(2) > div > div:nth-child(2) > span[class] > span[id] > div:nth-child(2)",
   paidDisclosureControls: 'button, [role="button"], a[href], [role="link"]',
   paidDisclosureIdentity: '[data-ad-rendering-role="profile_name"], h4, h5',
+  peopleTiles: '[data-type="hscroll-child"]',
+  peopleLinks: 'a[href][role="link"]',
+  peopleActions: 'button, [role="button"]',
+  peoplePostContent:
+    '[data-ad-rendering-role="profile_name"], [data-ad-rendering-role="story_message"], [data-ad-preview="message"], [data-ad-comet-preview="message"], h4, h5, p, blockquote',
   virtualizedContainer: "div[data-virtualized]",
   storyShelfCandidates:
     'div[role="main"] div[data-virtualized] [data-type="hscroll-child"] a[href*="/stories/"]',

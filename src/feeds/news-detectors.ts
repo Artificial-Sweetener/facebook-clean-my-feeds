@@ -9,6 +9,7 @@ import { extractFeedBlockText } from "../dom/walker";
 import { getNewsBlocks } from "./shared/blocks";
 import { hasPaidPartnershipDisclosure } from "./shared/paid-partnership";
 import { hasPaidByDisclosure } from "./shared/paid-disclosure";
+import { hasPeopleDiscoveryStructure } from "./news-people-structure";
 import { isNewsStoryShelf } from "./news-stories";
 import {
   facebookPath,
@@ -76,18 +77,25 @@ export function isGroupsYouMightLike(post: Element) {
   );
 }
 
-/** Require this card's people-discovery heading and link rather than a friend's ordinary profile or comment link. */
+/**
+ * Try language-independent friend-discovery tiles before the localized heading/link fallback.
+ * Links may live in the header, carousel or footer; ownership still excludes authored
+ * content, comments and nested posts without imposing the header's block-position rules.
+ */
 export function isNewsPeopleYouMayKnow(
   post: Element,
   keyWords: Pick<Keywords, "NF_PEOPLE_YOU_MAY_KNOW">
 ) {
+  if (hasPeopleDiscoveryStructure(post)) return keyWords.NF_PEOPLE_YOU_MAY_KNOW;
   const matches =
     hasNewsCardHeading(post, "people") &&
     getPostEvidence(post)
       .select('a[href][role="link"]')
       .some(
         (link) =>
-          /^\/friends(?:\/|$)/.test(facebookPath(link) || "") && isOwnedNewsMetadata(link, post)
+          /^\/friends(?:\/|$)/.test(facebookPath(link) || "") &&
+          isOwnedNewsElement(link, post) &&
+          getPostEvidence(post).isRendered(link)
       );
   return matches ? keyWords.NF_PEOPLE_YOU_MAY_KNOW : "";
 }

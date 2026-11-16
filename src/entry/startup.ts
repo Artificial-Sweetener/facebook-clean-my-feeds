@@ -6,6 +6,7 @@ import { startPostHistory } from "../diagnostics/post-history";
 import { buildBugReport, getSupportUrl } from "../diagnostics/bug-report";
 import { clearDirtyTracking } from "../dom/dirty-check";
 import { initializeRuntimeAttributes } from "../dom/attributes";
+import { startStoryNavigation } from "../dom/story-navigation";
 import { addCSS, addExtraCSS } from "../dom/styles";
 import { watchDarkMode } from "../dom/theme";
 import { resetFeedProcessing, restoreFeedPresentation } from "../feeds/reset";
@@ -63,6 +64,7 @@ async function startSession(): Promise<() => void> {
   const { options, filters, keyWords } = await loadOptions(state);
   const context = { state, options, filters, keyWords, pathInfo };
   const stopPostHistory = startPostHistory(document);
+  const stopStoryNavigation = startStoryNavigation(window);
   addCSS(state, options, defaults);
   const extraStylesTimer = window.setTimeout(() => addExtraCSS(state, options, defaults), 150);
   const themeObserver = watchDarkMode(state, () => {
@@ -101,6 +103,7 @@ async function startSession(): Promise<() => void> {
     stopped = true;
     stopLoop();
     stopPostHistory();
+    stopStoryNavigation();
     restoreFeedPresentation(state);
     clearDirtyTracking();
     clearPageMediaFacts();

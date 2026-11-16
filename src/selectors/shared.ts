@@ -4,6 +4,9 @@
 const sharedSelectors = {
   dialog: 'div[role="dialog"]',
   postOwner: 'article, [role="article"], div[aria-posinset]',
+  feedStory: '[data-focus="feed_story"], [role="article"][aria-posinset]',
+  textEntry:
+    'input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="textbox"]',
   commentContent: '[data-commentid], [data-testid^="UFI2Comment/"], [role="comment"]',
   profileName: '[data-ad-rendering-role="profile_name"]',
   authorMetadata: '[data-ad-rendering-role="profile_name"], h4, h5',

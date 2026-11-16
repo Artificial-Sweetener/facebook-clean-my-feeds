@@ -4547,6 +4547,8 @@
       sharedSelectors = {
         dialog: 'div[role="dialog"]',
         postOwner: 'article, [role="article"], div[aria-posinset]',
+        feedStory: '[data-focus="feed_story"], [role="article"][aria-posinset]',
+        textEntry: 'input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="textbox"]',
         commentContent: '[data-commentid], [data-testid^="UFI2Comment/"], [role="comment"]',
         profileName: '[data-ad-rendering-role="profile_name"]',
         authorMetadata: '[data-ad-rendering-role="profile_name"], h4, h5',
@@ -6981,7 +6983,7 @@ ${fence}
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:d5860758602d961589138950a520f666dcf6b4cb0422372988d5574174f7769c" : "unbundled";
+      buildIdentity = true ? "source-sha256:bacda3dbbd9e05273c05d75ead25a9b9b350c370b3567fffc82db392f0be9240" : "unbundled";
     }
   });
 
@@ -13613,6 +13615,72 @@ ${fence}
     }
   });
 
+  // src/dom/story-navigation.ts
+  function isCollapsed(story) {
+    return story.getBoundingClientRect().height === 0;
+  }
+  function collectStories(root) {
+    return Array.from(root.querySelectorAll(sharedSelectors.feedStory)).filter(
+      (story) => {
+        var _a;
+        return !((_a = story.parentElement) == null ? void 0 : _a.closest(sharedSelectors.feedStory));
+      }
+    );
+  }
+  function findDestination(stories, current2, direction) {
+    const ordered = direction === 1 ? stories : [...stories].reverse();
+    if (current2) {
+      return ordered.slice(ordered.indexOf(current2) + 1).find((story) => !isCollapsed(story));
+    }
+    return ordered.find((story) => {
+      const distance = (story.getBoundingClientRect().top - landingOffset) * direction;
+      return !isCollapsed(story) && distance > landingTolerance;
+    });
+  }
+  function startStoryNavigation(view) {
+    const onKeyDown = (event) => {
+      const direction = directions[event.key.toLowerCase()];
+      if (!direction || event.defaultPrevented || event.isComposing || event.ctrlKey || event.altKey || event.metaKey || event.shiftKey)
+        return;
+      const page = view.document;
+      const focused = page.activeElement;
+      if (!focused || focused.closest(sharedSelectors.textEntry)) return;
+      const current2 = focused.closest(sharedSelectors.feedStory);
+      if (!current2) {
+        const dialogs = Array.from(page.querySelectorAll(sharedSelectors.dialog));
+        if (focused !== page.body || dialogs.some((dialog) => !isCollapsed(dialog))) return;
+      }
+      const stories = collectStories(page);
+      if (!stories.some(isCollapsed)) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const origin = current2 && stories.find((story) => story.contains(current2));
+      const destination = findDestination(stories, origin != null ? origin : null, direction);
+      if (destination instanceof HTMLElement) {
+        if (!destination.hasAttribute("tabindex")) destination.tabIndex = -1;
+        destination.focus({ preventScroll: true });
+        view.scrollTo({
+          top: destination.getBoundingClientRect().top + view.pageYOffset - landingOffset,
+          behavior: "smooth"
+        });
+      } else if (direction === 1) {
+        view.scrollTo({ top: page.documentElement.scrollHeight, behavior: "smooth" });
+      }
+    };
+    view.addEventListener("keydown", onKeyDown, true);
+    return () => view.removeEventListener("keydown", onKeyDown, true);
+  }
+  var landingOffset, landingTolerance, directions;
+  var init_story_navigation = __esm({
+    "src/dom/story-navigation.ts"() {
+      "use strict";
+      init_shared();
+      landingOffset = 76;
+      landingTolerance = 2;
+      directions = { j: 1, k: -1 };
+    }
+  });
+
   // src/dom/styles/builder.ts
   function ensureStyleTag(id, doc = document) {
     if (!doc || typeof doc.getElementById !== "function") {
@@ -18406,6 +18474,7 @@ ${fence}
     const { options, filters, keyWords } = await loadOptions(state);
     const context = { state, options, filters, keyWords, pathInfo };
     const stopPostHistory = startPostHistory(document);
+    const stopStoryNavigation = startStoryNavigation(window);
     addCSS(state, options, defaults);
     const extraStylesTimer = window.setTimeout(() => addExtraCSS(state, options, defaults), 150);
     const themeObserver = watchDarkMode(state, () => {
@@ -18446,6 +18515,7 @@ ${fence}
       stopped = true;
       stopLoop();
       stopPostHistory();
+      stopStoryNavigation();
       restoreFeedPresentation(state);
       clearDirtyTracking();
       clearPageMediaFacts();
@@ -18487,6 +18557,7 @@ ${fence}
       init_bug_report();
       init_dirty_check();
       init_attributes();
+      init_story_navigation();
       init_styles();
       init_theme();
       init_reset();

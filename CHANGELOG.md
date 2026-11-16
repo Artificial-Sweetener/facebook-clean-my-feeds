@@ -1,3 +1,16 @@
+## [6.5.1](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.5.0...v6.5.1) (2026-11-16)
+
+
+### Bug Fixes
+
+* **diagnostics:** preserve evidence with targeted region redaction ([81261e0](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/81261e04a8c0980d116e4f35cd8e97a89bc65569))
+* **diagnostics:** redact identities found in live report testing ([2176a99](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/2176a9946e9a75aba2e8a4cca133628ef40684de))
+* **filters:** detect feed features structurally before locale fallbacks ([348347b](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/348347bfb262a70f8c480c6a4536288ef5a21b34))
+* **filters:** detect paid sponsorship disclosures across DOM layouts ([944a11b](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/944a11bca4a71723f2b64761916f732bef08f87e))
+* **filters:** prioritize structural detection in merged feed fixes ([97e921d](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/97e921d25279d83c5ede0c5ec67f9632e7e1f0b9))
+* **news:** keep J/K post navigation working past hidden posts ([a6e1753](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/a6e1753457b927a9fc72b2b4a692743e36cd9cd5)), closes [#27](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/issues/27)
+* **news:** recognize people suggestions across card layouts ([9f99dbb](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/commit/9f99dbb16d073b1691a740dac4d987ef40f56753))
+
 # [6.5.0](https://github.com/Artificial-Sweetener/facebook-clean-my-feeds/compare/v6.4.0...v6.5.0) (2026-10-31)
 
 

@@ -7,6 +7,7 @@ import { facebookUrl, getPostEvidence } from "../dom/post-evidence";
 import { sharedSelectors } from "../selectors/shared";
 import { matchesSponsoredLabel } from "../core/filters/disclosure-labels";
 import { isSponsoredDisclosure } from "./shared/sponsored";
+import { collectStructuralAdSlots } from "./shared/ad-slots";
 import {
   marketplaceListingQueries,
   marketplaceSponsoredHeadingQuery,
@@ -30,6 +31,20 @@ export interface MarketplaceListing {
 
 let listingSignatures = new WeakMap<Element, string>();
 
+/** Require a real listing destination outside authored posts and navigation before applying card-layout rules. */
+function listingDestination(item: Element): URL | null {
+  const url = facebookUrl(item);
+  if (
+    !url ||
+    !/^\/marketplace\/(?:np\/)?item\/[^/]+\/?$/.test(url.pathname) ||
+    item.closest(
+      `${sharedSelectors.authoredContent}, ${sharedSelectors.postOwner}, nav, [role="navigation"]`
+    )
+  )
+    return null;
+  return url;
+}
+
 /**
  * Combine legacy styled tiles with current independent virtualized cards without class-name dependencies.
  * Current cells require one named Facebook listing destination and separate media/caption regions;
@@ -41,6 +56,7 @@ export function collectMarketplaceListings(root: Element): MarketplaceListing[] 
   const boxes = new Map<Element, MarketplaceListing>();
   for (const query of marketplaceListingQueries) {
     for (const item of root.querySelectorAll(query)) {
+      if (!listingDestination(item)) continue;
       const box = item.closest("div[style]");
       if (box && box !== root && root.contains(box) && !boxes.has(box))
         boxes.set(box, {
@@ -53,7 +69,7 @@ export function collectMarketplaceListings(root: Element): MarketplaceListing[] 
   }
   for (const item of root.querySelectorAll(marketplaceVirtualizedListingQuery)) {
     const box = item.closest("[data-virtualized]");
-    const url = facebookUrl(item);
+    const url = listingDestination(item);
     const content =
       item.childElementCount === 1 && item.firstElementChild?.localName === "div"
         ? item.firstElementChild
@@ -65,9 +81,6 @@ export function collectMarketplaceListings(root: Element): MarketplaceListing[] 
       boxes.has(box) ||
       !url ||
       !/^\/marketplace\/(?:np\/)?item\/\d+\/?$/.test(url.pathname) ||
-      item.closest(
-        `${sharedSelectors.authoredContent}, ${sharedSelectors.postOwner}, article, [role="article"], nav, [role="navigation"]`
-      ) ||
       box.querySelectorAll(marketplaceVirtualizedAnchorQuery).length !== 1 ||
       content.childElementCount !== 2 ||
       content.firstElementChild?.localName !== "div" ||
@@ -137,7 +150,7 @@ export function revalidateMarketplaceListings(root: Element, state: PostPresenta
 }
 
 /**
- * Find heading-owned sponsored tile runs without borrowing a heading from another page or section.
+ * Prefer exclusive structural ad slots, then find named sponsored tile runs without borrowing neighboring headings.
  * Each heading must directly precede one or more supported tiles. An unrelated sibling ends the
  * run, and nested navigation or listing sections are never promoted to ad containers.
  * @param root Active listing surface; only rendered, exactly named Facebook disclosures establish headings.
@@ -145,8 +158,10 @@ export function revalidateMarketplaceListings(root: Element, state: PostPresenta
  * @returns Independent ad headings and tiles, including validated legacy inline slots.
  */
 export function collectMarketplaceSponsoredBoxes(root: Element, itemHeadings = false): Element[] {
-  const boxes = new Set<Element>();
+  const structural = collectStructuralAdSlots(root);
+  const boxes = new Set<Element>(structural);
   for (const item of root.querySelectorAll(marketplaceLegacySponsoredQuery)) {
+    if (structural.some((slot) => slot.contains(item))) continue;
     const box = item.parentElement;
     if (!box) continue;
     const evidence = getPostEvidence(box);
@@ -154,6 +169,7 @@ export function collectMarketplaceSponsoredBoxes(root: Element, itemHeadings = f
       boxes.add(box);
   }
   for (const link of root.querySelectorAll(marketplaceSponsoredHeadingQuery)) {
+    if (structural.some((slot) => slot.contains(link))) continue;
     const parent = link.parentElement;
     const heading = parent?.tagName === "OBJECT" ? parent.parentElement : parent;
     if (
@@ -173,6 +189,7 @@ export function collectMarketplaceSponsoredBoxes(root: Element, itemHeadings = f
   }
   if (itemHeadings) {
     for (const link of root.querySelectorAll(marketplaceItemSponsoredHeadingQuery)) {
+      if (structural.some((slot) => slot.contains(link))) continue;
       const box = link.closest("h2")?.closest("span");
       if (box && root.contains(box) && isSponsoredDisclosure(link, box)) boxes.add(box);
     }

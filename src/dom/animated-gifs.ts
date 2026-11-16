@@ -2,16 +2,10 @@
 import { climbUpTheTree } from "../utils/dom";
 
 import { postAtt } from "./attributes";
+import { collectGifControls, isGifMediaPlaying } from "./gif-controls";
 
 /**
- * Target only unprocessed Facebook GIF controls, excluding already-realized icons.
- */
-export function getMosquitosQuery(): string {
-  return `div[role="button"][aria-label*="GIF"]:not([${postAtt}]) > i:not([data-visualcompletion])`;
-}
-
-/**
- * Pause invisible GIF overlays once per owning Facebook control. Mark each control before
+ * Pause playing GIF media once per owning Facebook control. Mark each control before
  * clicking so multiple icon children and synchronous rescans cannot toggle playback twice.
  * @param post Search scope, including a missing root during page navigation.
  */
@@ -20,10 +14,12 @@ export function swatTheMosquitos(post: ParentNode | null): void {
     return;
   }
 
-  const animatedGIFs = post.querySelectorAll(getMosquitosQuery());
-  for (const gif of animatedGIFs) {
-    const control = gif.parentElement;
-    if (!control || control.hasAttribute(postAtt)) continue;
+  for (const { control, icon: gif, media } of collectGifControls(post)) {
+    if (media) {
+      control.setAttribute(postAtt, "1");
+      if (isGifMediaPlaying(media)) control.click();
+      continue;
+    }
     let parent = climbUpTheTree(gif, 2);
     let sibling = parent instanceof Element ? parent.querySelector(":scope > a") : null;
     if (!sibling) {

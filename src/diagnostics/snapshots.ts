@@ -7,7 +7,7 @@ import { marketplaceSelectors } from "../selectors/marketplace";
 import { profileSelectors } from "../selectors/profile";
 import { searchSelectors } from "../selectors/search";
 import { collectSafeReasons, getSanitizedReason } from "./redaction";
-import { buildDomSignature } from "./collection";
+import { buildDomSignature, getProfilePostCollection, getSearchPostCollection } from "./collection";
 import type { Keywords } from "../i18n";
 import type { DiagnosticsState } from "./types";
 import type { DiagnosticCounts } from "./types";
@@ -98,11 +98,11 @@ export function buildSelectorDiagnostics(state: DiagnosticsState) {
     },
     search: {
       mainColumn: document.querySelectorAll(searchSelectors.mainColumn).length,
-      postsQuery: document.querySelectorAll(searchSelectors.postsQuery).length,
+      postsQuery: getSearchPostCollection().posts.length,
     },
     profile: {
       mainColumn: document.querySelectorAll(profileSelectors.mainColumn).length,
-      postsQuery: document.querySelectorAll(profileSelectors.postsQuery).length,
+      postsQuery: getProfilePostCollection().posts.length,
     },
   };
 }

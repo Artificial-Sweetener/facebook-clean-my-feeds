@@ -26,6 +26,12 @@ const ignoredAttributes = new Set([
 ]);
 let nextVersion = 0;
 
+/** Invalidate a registered post when external machine metadata changes without a post DOM mutation. */
+export function invalidateContentVersion(post: Element): void {
+  const scope = scopes.get(post.ownerDocument);
+  if (scope?.versions.has(post)) scope.versions.set(post, ++nextVersion);
+}
+
 /** Visibility markers belong to CMF presentation and cannot change Facebook content identity. */
 export function ignoreContentAttributes(attributes: readonly string[]): void {
   for (const attribute of attributes) if (attribute) ignoredAttributes.add(attribute);

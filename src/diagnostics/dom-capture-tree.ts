@@ -10,6 +10,8 @@ import type {
 import { SnapshotPrivacy } from "./dom-privacy";
 import { SnapshotAttributes } from "./dom-attributes";
 import { isReportUi, yieldSnapshotWork } from "./dom-selection";
+import { snapshotVisualFacts, snapshotMediaFacts } from "./dom-visual-facts";
+import { snapshotMachineFacts } from "./dom-machine-facts";
 
 /** Quantize potentially unstable geometry and bound values before exporting them. */
 function dimension(value: number): number {
@@ -21,12 +23,14 @@ function dimension(value: number): number {
 /**
  * Capture only rendering facts useful for interpreting controls and hidden decoys, without copying arbitrary CSS.
  * @param element Original page element whose quantized geometry and public rendering state are sampled.
+ * @param facts Safe attribute projection receiving inert static-sprite evidence from the same style read.
  * @returns Bounded viewport coordinates, rendering properties and explicit ancestor concealment evidence.
  */
-function layout(element: Element): SnapshotLayout {
+function layout(element: Element, facts: Record<string, string>): SnapshotLayout {
   const rect = element.getBoundingClientRect();
   const view = element.ownerDocument.defaultView;
   const style = view?.getComputedStyle(element);
+  Object.assign(facts, snapshotVisualFacts(style));
   let ancestor = element.parentElement;
   let concealedByAncestor = false;
   for (let depth = 0; ancestor && depth < 40; depth++, ancestor = ancestor.parentElement) {
@@ -114,10 +118,15 @@ export class DomCapture {
     this.privacy.remember(element);
     const { content, redaction } = this.privacy.regions.classify(element);
     const attributes = this.attributes.read(element, content);
+    Object.assign(
+      attributes.attributes,
+      snapshotMediaFacts(element),
+      snapshotMachineFacts(element)
+    );
     let rendering = this.layouts.get(element);
     if (!rendering) {
       rendering = this.measureLayout
-        ? layout(element)
+        ? layout(element, attributes.attributes)
         : {
             x: 0,
             y: 0,

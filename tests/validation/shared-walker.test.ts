@@ -16,21 +16,21 @@ describe("validation: shared filtering text extraction", () => {
     const root = sharedPost(
       "direct root text<p>unsupported direct paragraph</p><div>ＦＯＯ</div><span>FOO</span><blockquote>Quoted text</blockquote><span>first\nsecond</span><div>A</div><div>Facebook</div>"
     );
-    expect(scanTreeForText(root)).toEqual(["FOO", "Quoted text", "first", "second"]);
+    expect(scanTreeForText(root, root)).toEqual(["FOO", "Quoted text", "first", "second"]);
   });
 
-  test("direct aria flags and title text are excluded without pretending to evaluate CSS visibility", () => {
+  test("direct aria flags and title text are excluded from visible filtering text", () => {
     const root = sharedPost(
       '<span aria-hidden="true">Hidden direct text</span><div aria-hidden="false">Legacy excluded branch</div><span><svg><title>Icon title</title></svg>Body text</span>'
     );
-    expect(scanTreeForText(root)).toEqual(["Body text"]);
+    expect(scanTreeForText(root, root)).toEqual(["Body text"]);
   });
 
   test("button-noise rules retain object controls and single-span text but reject multi-container controls", () => {
     const root = sharedPost(
       '<div role="button">Direct button</div><div><object><div role="button">Object caption</div></object></div><div role="button"><span>Single span</span></div><div role="button"><span>First noise</span><span>Second noise</span></div>'
     );
-    expect(scanTreeForText(root)).toEqual(["Object caption", "Single span"]);
+    expect(scanTreeForText(root, root)).toEqual(["Object caption", "Single span"]);
   });
 
   test("a root marker does not suppress its own text while a descendant marker does", () => {
@@ -45,7 +45,7 @@ describe("validation: shared filtering text extraction", () => {
     expect(isNestedMarkedNode(null, root)).toBe(false);
     expect(isNestedMarkedNode(undefined, root)).toBe(false);
     expect(isNestedMarkedNode(nested, null)).toBe(false);
-    expect(scanTreeForText(root)).toEqual(["Retained text"]);
+    expect(scanTreeForText(root, root)).toEqual(["Retained text"]);
   });
 
   test("descendant counting concerns div/span structure rather than arbitrary HTML descendants", () => {
@@ -68,7 +68,7 @@ describe("validation: shared filtering text extraction", () => {
     hidden.setAttribute(postAtt, "hidden child");
     hidden.append(sharedImage("Hidden image text", 100));
     root.append(hidden);
-    expect(scanImagesForAltText(root)).toEqual(["FOO", "foo"]);
+    expect(scanImagesForAltText(root, root)).toEqual(["FOO", "foo"]);
   });
 
   test("bounded extraction skips empty structures and marked blocks without expanding its block budget", () => {

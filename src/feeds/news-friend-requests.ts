@@ -54,8 +54,10 @@ function hasRequestCard(section: Element): boolean {
       )
         return false;
       if (
-        Array.from(card.querySelectorAll(newsSelectors.railActions)).filter((action) =>
-          isRequestSignal(action, section)
+        Array.from(card.querySelectorAll(newsSelectors.railActions)).filter(
+          (action) =>
+            isRequestSignal(action, section) &&
+            !action.parentElement?.closest(newsSelectors.railActions)
         ).length >= 2
       )
         return true;

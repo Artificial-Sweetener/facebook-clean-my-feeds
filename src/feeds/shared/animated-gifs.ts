@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import type { Keywords } from "../../i18n";
-import { getMosquitosQuery } from "../../dom/animated-gifs";
+import { collectGifControls } from "../../dom/gif-controls";
 
 import { getGroupsBlocks, getNewsBlocks } from "./blocks";
 
@@ -20,7 +20,7 @@ function hasNewsAnimatedGifContent(
   if (postBlocks.length >= 2) {
     const contentBlock = postBlocks[1];
     if (!contentBlock) return "";
-    const animatedGIFs = contentBlock.querySelectorAll(getMosquitosQuery());
+    const animatedGIFs = collectGifControls(contentBlock);
     return animatedGIFs.length > 0 ? keyWords.GF_ANIMATED_GIFS_POSTS : "";
   }
 
@@ -42,7 +42,7 @@ function hasGroupsAnimatedGifContent(
   if (postBlocks.length >= 2) {
     const contentBlock = postBlocks[1];
     if (!contentBlock) return "";
-    const animatedGIFs = contentBlock.querySelectorAll(getMosquitosQuery());
+    const animatedGIFs = collectGifControls(contentBlock);
     return animatedGIFs.length > 0 ? keyWords.GF_ANIMATED_GIFS_POSTS : "";
   }
 

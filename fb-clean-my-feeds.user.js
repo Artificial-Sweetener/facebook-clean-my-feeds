@@ -4314,27 +4314,31 @@
   });
 
   // src/dom/content-version.ts
+  function invalidateContentVersion(post) {
+    const scope = scopes.get(post.ownerDocument);
+    if (scope == null ? void 0 : scope.versions.has(post)) scope.versions.set(post, ++nextVersion);
+  }
   function ignoreContentAttributes(attributes) {
     for (const attribute of attributes) if (attribute) ignoredAttributes.add(attribute);
   }
   function invalidate(scope, document2, records) {
     if (!records.length) return;
     const changed = /* @__PURE__ */ new Set();
-    for (const record of records) {
-      const presentationOnly = record.type === "attributes" && ignoredAttributes.has(record.attributeName || "");
-      let node = record.target;
+    for (const record2 of records) {
+      const presentationOnly = record2.type === "attributes" && ignoredAttributes.has(record2.attributeName || "");
+      let node = record2.target;
       while (node) {
-        if (node instanceof Element && scope.versions.has(node) && !(presentationOnly && node === record.target))
+        if (node instanceof Element && scope.versions.has(node) && !(presentationOnly && node === record2.target))
           changed.add(node);
         node = node.parentNode;
       }
-      if (record.type === "attributes" && !presentationOnly) {
+      if (record2.type === "attributes" && !presentationOnly) {
         for (const post of scope.versions.keys()) {
-          if (record.target !== post && record.target.contains(post)) changed.add(post);
+          if (record2.target !== post && record2.target.contains(post)) changed.add(post);
         }
       }
-      if (record.type === "childList") {
-        const moved = [...record.addedNodes, ...record.removedNodes];
+      if (record2.type === "childList") {
+        const moved = [...record2.addedNodes, ...record2.removedNodes];
         for (const post of scope.versions.keys()) {
           if (moved.some((node2) => node2.contains(post))) changed.add(post);
         }
@@ -4343,7 +4347,7 @@
     for (const [id, reference] of scope.references) {
       const target = document2.getElementById(id);
       if (target !== reference.target || records.some(
-        (record) => !!target && (target.contains(record.target) || record.target.contains(target))
+        (record2) => !!target && (target.contains(record2.target) || record2.target.contains(target))
       )) {
         for (const post of reference.posts) changed.add(post);
       }
@@ -4524,12 +4528,12 @@
       snapshotLimits = {
         nodes: 6e3,
         nodesPerRegion: 1600,
-        depth: 36,
+        depth: 64,
         regions: 12,
         labelCharacters: 180,
         totalLabelCharacters: 16e3,
         discoveryNodes: 12e3,
-        references: 64,
+        references: 128,
         attributes: 24e3
       };
     }
@@ -4542,7 +4546,8 @@
       "use strict";
       sharedSelectors = {
         dialog: 'div[role="dialog"]',
-        postOwner: 'div[role="article"], div[aria-posinset]',
+        postOwner: 'article, [role="article"], div[aria-posinset]',
+        commentContent: '[data-commentid], [data-testid^="UFI2Comment/"], [role="comment"]',
         profileName: '[data-ad-rendering-role="profile_name"]',
         authorMetadata: '[data-ad-rendering-role="profile_name"], h4, h5',
         storyMessage: '[data-ad-rendering-role="story_message"]',
@@ -4550,9 +4555,14 @@
         adCreativeCta: '[data-ad-rendering-role^="cta-"]',
         adCreativeMedia: '[data-ad-rendering-role="image"] img, [data-ad-rendering-role="image"] video',
         paidMetadataButton: 'button:not([aria-haspopup]), [role="button"]:not([aria-haspopup])',
+        statefulDisclosureControl: '[aria-pressed], [aria-expanded], [aria-controls], [aria-disabled="true"], [disabled]',
+        svgDefinition: "defs, symbol, clipPath, mask, marker, pattern",
         disclosureNonTextContent: 'a, button, [role="button"], [role="link"], svg, img, video',
         avatarMedia: "img, image, video",
         svgLabelGeometry: "svg use, svg text",
+        svgShapes: "path, use, image, circle, rect, polygon, polyline, ellipse, line",
+        links: "a[href]",
+        images: "img",
         authoredContent: 'p, blockquote, [data-ad-preview="message"], [data-ad-comet-preview="message"], [data-ad-rendering-role="story_message"], [data-ad-rendering-role="creative_body"], [contenteditable="true"], [data-commentid], [data-testid^="UFI2Comment/"], [role="comment"]'
       };
     }
@@ -4571,7 +4581,7 @@
         personalIdentity: '[data-hovercard], [data-profileid], [data-userid], a[href*="/events/birthdays"] b, a[href*="/events/birthdays"] strong',
         control: 'a, button, [role="button"], [role="link"], [role="menuitem"], [role="tab"], [role="checkbox"], [role="switch"], [role="option"]',
         heading: 'h1, h2, h3, h4, h5, h6, [role="heading"]',
-        excluded: "script, style, noscript, template, iframe, object, embed, canvas, foreignObject",
+        excluded: "script, style, noscript, template, iframe, embed, canvas, foreignObject",
         post: '[aria-posinset], [role="article"]',
         profile: sharedSelectors.profileName,
         labelReference: "[aria-labelledby], [aria-describedby], svg use"
@@ -4955,8 +4965,9 @@
   });
 
   // src/diagnostics/location.ts
-  function sanitizePathname(pathname) {
-    var _a, _b, _c;
+  function sanitizePathname(pathname, numericAlias) {
+    var _a, _b, _c, _d;
+    if (/^\/(?:business\/)?help\/\d+\/?$/.test(pathname)) return pathname;
     const segments = pathname.split("/").filter(Boolean);
     const root = segments[0];
     if (!root) return "/";
@@ -4974,6 +4985,14 @@
       const allowed = staticSegments != null ? staticSegments : knownRoot ? /* @__PURE__ */ new Set() : contentSections;
       if (allowed.has(segment)) safeSegments.push(segment);
       else safeSegments.push(index === 1 ? (_c = rule == null ? void 0 : rule.identifier) != null ? _c : "[segment]" : "[segment]");
+    }
+    if (numericAlias) {
+      if (safeSegments[0] === "[profile]" && !/^\d+$/.test(root))
+        safeSegments[0] = `cmf-profile-${numericAlias(root)}`;
+      for (const [index, segment] of segments.entries()) {
+        if (((_d = safeSegments[index]) == null ? void 0 : _d.startsWith("[")) && /^\d+$/.test(segment))
+          safeSegments[index] = numericAlias(segment);
+      }
     }
     return `/${safeSegments.join("/")}${pathname.endsWith("/") ? "/" : ""}`;
   }
@@ -5030,7 +5049,15 @@
           "business",
           { identifier: "[segment]", firstSegments: /* @__PURE__ */ new Set(["help"]), laterSegments: /* @__PURE__ */ new Set() }
         ],
-        ...["help", "privacy", "settings", "events"].map((root) => [
+        [
+          "events",
+          {
+            identifier: "[event]",
+            firstSegments: /* @__PURE__ */ new Set(["birthdays", "discover", "calendar", "create"]),
+            laterSegments: /* @__PURE__ */ new Set()
+          }
+        ],
+        ...["help", "privacy", "settings"].map((root) => [
           root,
           { identifier: "[segment]", firstSegments: /* @__PURE__ */ new Set(), laterSegments: /* @__PURE__ */ new Set() }
         ]),
@@ -5043,6 +5070,7 @@
           }
         ],
         ["reel", { identifier: "[reel]", firstSegments: /* @__PURE__ */ new Set(), laterSegments: /* @__PURE__ */ new Set() }],
+        ["pages", { identifier: "[page]", firstSegments: /* @__PURE__ */ new Set(), laterSegments: contentSections }],
         ["reels", { identifier: "[reel]", firstSegments: /* @__PURE__ */ new Set(), laterSegments: /* @__PURE__ */ new Set() }],
         [
           "watch",
@@ -5087,23 +5115,54 @@
   });
 
   // src/diagnostics/dom-destinations.ts
-  function snapshotDestination(href) {
+  function instagramDestination(url) {
+    const parts = url.pathname.split("/").filter(Boolean);
+    const routes = /* @__PURE__ */ new Set(["p", "reel", "tv", "stories"]);
+    const path = parts.map((part, index) => index === 0 && routes.has(part) ? part : "[segment]");
+    return `https://www.instagram.com/${path.join("/")}${path.length && url.pathname.endsWith("/") ? "/" : ""}`;
+  }
+  function snapshotDestination(href, numericAlias, redirectDepth = 0) {
+    var _a;
     const facts = {};
+    if (redirectDepth > 2) return { value: "[redirect-limit]", facts };
     try {
-      let url = new URL(href, "https://www.facebook.com/");
+      const url = new URL(href, "https://www.facebook.com/");
+      if (!/^https?:$/.test(url.protocol) || url.username || url.password)
+        return { value: "[non-web]", facts };
       if (url.hostname === "l.facebook.com" && url.pathname === "/l.php") {
         facts["data-cmf-redirect"] = "facebook-outbound";
         const destination = url.searchParams.get("u");
-        if (destination) url = new URL(destination);
+        if (destination) {
+          const safe = snapshotDestination(destination, numericAlias, redirectDepth + 1);
+          return {
+            value: `https://l.facebook.com/l.php?u=${encodeURIComponent(safe.value)}${url.searchParams.get("ai") ? "&ai=[value]" : ""}`,
+            facts: { ...facts, ...safe.facts }
+          };
+        }
       }
-      if (!/^https?:$/.test(url.protocol) || url.username || url.password)
-        return { value: "[non-web]", facts };
       if (url.hostname === "meta.ai" || url.hostname.endsWith(".meta.ai"))
         return { value: "https://meta.ai/", facts };
+      if (url.hostname === "manus.im" || url.hostname === "www.manus.im")
+        return { value: "https://manus.im/", facts };
+      if (url.hostname === "instagram.com" || url.hostname === "www.instagram.com")
+        return { value: instagramDestination(url), facts };
       if (!(url.hostname === "facebook.com" || url.hostname.endsWith(".facebook.com")))
         return { value: "https://external.invalid/[path]", facts };
-      let value = sanitizePathname(url.pathname);
+      let value = sanitizePathname(url.pathname, numericAlias);
       const query = new URLSearchParams();
+      if (/^\/pages\/?$/.test(url.pathname)) {
+        const category = url.searchParams.get("category");
+        if (category !== null)
+          query.set(
+            "category",
+            ["top", "liked", "invites"].includes(category) ? category : "[value]"
+          );
+      }
+      if (url.pathname === "/profile.php") {
+        const identifier = url.searchParams.get("id");
+        if (identifier !== null)
+          query.set("id", identifier ? (_a = numericAlias == null ? void 0 : numericAlias(identifier)) != null ? _a : "[profile]" : "");
+      }
       for (const [key, values] of publicQuery) {
         const original = url.searchParams.get(key);
         if (original !== null) query.set(key, values.has(original) ? original : "[value]");
@@ -5162,7 +5221,8 @@
         "controls",
         "loop",
         "muted",
-        "autoplay"
+        "autoplay",
+        "attributionsrc"
       ]);
       states = /* @__PURE__ */ new Set([
         "aria-hidden",
@@ -5208,6 +5268,8 @@
           this.ids = /* @__PURE__ */ new Map();
           this.classes = /* @__PURE__ */ new Map();
           this.privateNames = /* @__PURE__ */ new Map();
+          this.destinations = /* @__PURE__ */ new Map();
+          this.numericIds = /* @__PURE__ */ new Map();
           this.pending = /* @__PURE__ */ new Map();
           this.omissions = {};
           this.redacted = 0;
@@ -5291,7 +5353,7 @@
             this.attributeReads++;
             let name = attribute.name;
             const value = attribute.value;
-            if (!/^[a-z][a-z0-9_.:-]{0,63}$/.test(name) || this.privacy.interfaceText(name) !== name) {
+            if (!/^[a-z][a-z0-9_.:-]{0,63}$/i.test(name) || this.privacy.interfaceText(name) !== name) {
               name = this.alias(name, this.privateNames, "data-cmf-attribute-");
             }
             if (value.length > 4096) {
@@ -5304,17 +5366,18 @@
               attributes.id = this.alias(value, this.ids, "cmf-id-");
               changes.id = "alias";
             } else if (name === "class") {
-              if (value.trim().split(/\s+/, 33).length > 32) this.omit("class-token-limit");
-              attributes.class = value.trim().split(/\s+/, 32).filter(Boolean).slice(0, 32).map((token) => this.alias(token, this.classes, "cmf-class-")).join(" ");
+              if (value.trim().split(/\s+/, 129).length > 128) this.omit("class-token-limit");
+              attributes.class = value.trim().split(/\s+/, 128).filter(Boolean).slice(0, 128).map((token) => this.alias(token, this.classes, "cmf-class-")).join(" ");
               changes.class = "alias";
             } else if (references.has(name)) {
-              if (value.trim().split(/\s+/, 9).length > 8) this.omit("reference-token-limit");
-              attributes[name] = value.trim().split(/\s+/, 8).filter(Boolean).slice(0, 8).map(
+              if (value.trim().split(/\s+/, 33).length > 32) this.omit("reference-token-limit");
+              attributes[name] = value.trim().split(/\s+/, 32).filter(Boolean).slice(0, 32).map(
                 (id) => this.reference(id, name === "aria-labelledby" || name === "aria-describedby" ? 1 : 2)
               ).join(" ");
               changes[name] = "alias";
             } else if (booleans.has(name)) {
               attributes[name] = "";
+              if (value) changes[name] = "presence";
             } else if (states.has(name)) {
               attributes[name] = [
                 "",
@@ -5359,9 +5422,13 @@
                 attributes[name] = `#${this.reference(value.slice(1), 0)}`;
                 changes[name] = "alias";
               } else {
-                const destination = snapshotDestination(value);
+                const destination = snapshotDestination(
+                  value,
+                  (identifier) => this.alias(identifier, this.numericIds, "900000000")
+                );
                 attributes[name] = destination.value;
                 Object.assign(attributes, destination.facts);
+                attributes["data-cmf-link-key"] = this.alias(value, this.destinations, "destination-");
                 changes[name] = "route";
               }
             } else if (publicMarkers.has(name)) {
@@ -5382,7 +5449,10 @@
               "srcdoc",
               "style",
               "value",
-              "alt"
+              "alt",
+              "data",
+              "codebase",
+              "archive"
             ].includes(name)) {
               attributes[name.startsWith("on") || [
                 "src",
@@ -5393,11 +5463,17 @@
                 "srcdoc",
                 "style",
                 "value",
-                "alt"
+                "alt",
+                "data",
+                "codebase",
+                "archive"
               ].includes(name) ? `data-cmf-original-${name.replace(/[^a-z0-9-]/g, "-")}` : name] = "";
               changes[name] = "presence";
             } else if (name === "d" || name === "points") {
               attributes[name] = /^[MmZzLlHhVvCcSsQqTtAaEe0-9+.,\s-]*$/.test(value) ? value : "";
+              if (attributes[name] !== value) changes[name] = "redacted";
+            } else if (element.namespaceURI === "http://www.w3.org/2000/svg" && ["viewBox", "x", "y", "cx", "cy", "r", "rx", "ry", "x1", "x2", "y1", "y2"].includes(name)) {
+              attributes[name] = /^[-+\d.eE,\s%]+$/.test(value) ? value : "";
               if (attributes[name] !== value) changes[name] = "redacted";
             } else {
               attributes[name] = this.privacy.text(value, content);
@@ -5557,15 +5633,522 @@
     }
   });
 
+  // src/dom/media-rendition.ts
+  function facebookImageRendition(source) {
+    var _a;
+    try {
+      const url = new URL(source);
+      if (url.protocol !== "https:" || !url.hostname.endsWith(".fbcdn.net") || url.username || url.password)
+        return null;
+      const format = (_a = /(?:^|_)dst-(gif|emg0)(?:_|$)/.exec(url.searchParams.get("stp") || "")) == null ? void 0 : _a[1];
+      return format === "gif" || format === "emg0" ? format : null;
+    } catch (e) {
+      return null;
+    }
+  }
+  var init_media_rendition = __esm({
+    "src/dom/media-rendition.ts"() {
+      "use strict";
+    }
+  });
+
+  // src/diagnostics/dom-visual-facts.ts
+  function snapshotVisualFacts(style) {
+    const facts = {};
+    if (!style) return facts;
+    for (const kind of ["background", "mask"]) {
+      const image = style.getPropertyValue(`${kind}-image`);
+      const match = /^url\(["']?(https:\/\/[^\s"')]+)["']?\)$/.exec(image);
+      if (!(match == null ? void 0 : match[1])) continue;
+      try {
+        const url = new URL(match[1]);
+        if (!/^static(?:\.[a-z0-9-]+)+\.fbcdn\.net$/i.test(url.hostname) || !/^\/rsrc\.php\/[a-zA-Z0-9_./-]+\.(?:png|webp|svg)$/.test(url.pathname) || url.username || url.password || url.pathname.length > 256)
+          continue;
+        facts[`data-cmf-${kind}-sprite`] = `${url.origin}${url.pathname}`;
+        for (const property of ["position", "size"]) {
+          const value = style.getPropertyValue(`${kind}-${property}`);
+          if (value.length <= 80 && /^(?:-?[\d.]+(?:px|%)?|auto|contain|cover)(?:\s+(?:-?[\d.]+(?:px|%)?|auto)){0,3}$/.test(
+            value
+          ))
+            facts[`data-cmf-${kind}-${property}`] = value;
+        }
+      } catch (e) {
+      }
+    }
+    return facts;
+  }
+  function snapshotMediaFacts(element) {
+    if (element instanceof HTMLImageElement) {
+      const rendition = facebookImageRendition(element.currentSrc || element.src);
+      return rendition ? { "data-cmf-image-rendition": rendition } : {};
+    }
+    if (!(element instanceof HTMLVideoElement)) return {};
+    const duration = element.duration;
+    const facts = {
+      "data-cmf-video-duration": duration === Infinity ? "unbounded" : Number.isFinite(duration) ? String(Math.max(0, Math.min(604800, Math.round(duration)))) : "unavailable",
+      "data-cmf-video-ready-state": String(element.readyState),
+      "data-cmf-video-paused": String(element.paused),
+      "data-cmf-video-controls": String(element.controls)
+    };
+    const ranges = [];
+    const seekable = element.seekable;
+    for (let index = 0; index < Math.min(2, seekable.length); index++) {
+      const start = seekable.start(index);
+      const end = seekable.end(index);
+      if (Number.isFinite(start) && Number.isFinite(end))
+        ranges.push([
+          Math.round(Math.max(0, Math.min(604800, start))),
+          Math.round(Math.max(0, Math.min(604800, end)))
+        ]);
+    }
+    facts["data-cmf-video-seekable"] = JSON.stringify(ranges);
+    return facts;
+  }
+  var init_dom_visual_facts = __esm({
+    "src/diagnostics/dom-visual-facts.ts"() {
+      "use strict";
+      init_media_rendition();
+    }
+  });
+
+  // src/core/filters/page-media-facts.ts
+  function record(value) {
+    return value !== null && typeof value === "object" && !Array.isArray(value) ? value : void 0;
+  }
+  function rendererTypes(values) {
+    var _a;
+    const types = /* @__PURE__ */ new Set();
+    for (const value of values.slice(0, 64)) {
+      const name = (_a = record(value)) == null ? void 0 : _a.__typename;
+      if (typeof name === "string" && /^(?:Comet|XFBFBShorts)[A-Za-z0-9_]{1,100}$/.test(name))
+        types.add(name);
+    }
+    return [...types];
+  }
+  function storyRenderers(value) {
+    var _a;
+    const sections = record(value.comet_sections);
+    if (!sections) return [];
+    const context = record((_a = record(sections.context_layout)) == null ? void 0 : _a.story);
+    const own = typeof value.id === "string" && (context == null ? void 0 : context.id) === value.id ? record(context.comet_sections) : void 0;
+    const values = [...Object.values(sections), ...Object.values(own || {})].flatMap(
+      (section) => Array.isArray(section) ? section.slice(0, 64) : [section]
+    );
+    return rendererTypes(values);
+  }
+  function storyAi(value) {
+    var _a;
+    const sections = record(value.comet_sections);
+    const context = record(sections == null ? void 0 : sections.context_layout);
+    const story = record(context == null ? void 0 : context.story);
+    if (typeof value.id !== "string" || (story == null ? void 0 : story.id) !== value.id) return void 0;
+    const metadata = (_a = record(story == null ? void 0 : story.comet_sections)) == null ? void 0 : _a.metadata;
+    if (!Array.isArray(metadata)) return void 0;
+    return metadata.some((item) => {
+      const disclosure = record(item);
+      return (disclosure == null ? void 0 : disclosure.__typename) === "CometFeedStoryGenAIContentTransparencyStrategy" && disclosure.is_prod_eligible === true;
+    });
+  }
+  function storyKeys(value) {
+    var _a, _b;
+    const feedback = record((_a = record(value.comet_sections)) == null ? void 0 : _a.feedback);
+    const container = record((_b = record(feedback == null ? void 0 : feedback.story)) == null ? void 0 : _b.story_ufi_container);
+    const story = record(container == null ? void 0 : container.story);
+    const tokens = [value.encrypted_click_tracking];
+    if (typeof value.id === "string" && (story == null ? void 0 : story.id) === value.id)
+      tokens.push(story.encrypted_click_tracking);
+    return tokens.filter(
+      (token) => typeof token === "string" && token.length > 0 && token.length <= 2048
+    ).map((token) => `story:${token}`);
+  }
+  function extractPageMediaFacts(input) {
+    const result = /* @__PURE__ */ new Map();
+    const pending = [input];
+    let visited = 0;
+    while (pending.length) {
+      if (++visited > 1e5) return /* @__PURE__ */ new Map();
+      const value = pending.pop();
+      if (Array.isArray(value)) {
+        if (pending.length + value.length > 1e5) return /* @__PURE__ */ new Map();
+        for (const child of value) pending.push(child);
+        continue;
+      }
+      const object = record(value);
+      if (!object) continue;
+      let keys = [];
+      const facts = {};
+      if (object.__typename === "Video" && typeof object.id === "string" && /^\d{1,30}$/.test(object.id)) {
+        keys = [`video:${object.id}`];
+        if (object.is_live_streaming === false) facts.live = false;
+        else if (object.is_live_streaming === true && (typeof object.broadcast_status === "string" || object.broadcast_status === null))
+          facts.live = object.broadcast_status === "LIVE";
+        if (Array.isArray(object.augments)) {
+          facts.ai = object.augments.some(
+            (augment) => {
+              var _a;
+              return ((_a = record(augment)) == null ? void 0 : _a.__typename) === "XFBFBShortsGenAITransparencyAttribution";
+            }
+          );
+          facts.renderers = rendererTypes(object.augments);
+        }
+      } else if (object.__typename === "Story") {
+        keys = storyKeys(object);
+        const ai = storyAi(object);
+        if (ai !== void 0) facts.ai = ai;
+        const renderers = storyRenderers(object);
+        if (renderers.length) facts.renderers = renderers;
+      }
+      for (const key of Object.keys(facts).length ? keys : []) {
+        const previous = result.get(key) || {};
+        for (const kind of ["ai", "live"]) {
+          const next = facts[kind];
+          if (next !== void 0 && previous[kind] !== false) previous[kind] = next;
+        }
+        if (facts.renderers)
+          previous.renderers = [
+            .../* @__PURE__ */ new Set([...previous.renderers || [], ...facts.renderers])
+          ].slice(0, 64);
+        result.set(key, previous);
+      }
+      const children = Object.values(object).filter(
+        (child) => child !== null && typeof child === "object"
+      );
+      if (pending.length + children.length > 1e5) return /* @__PURE__ */ new Map();
+      for (const child of children) pending.push(child);
+    }
+    return result;
+  }
+  var init_page_media_facts = __esm({
+    "src/core/filters/page-media-facts.ts"() {
+      "use strict";
+    }
+  });
+
+  // src/selectors/page-metadata.ts
+  var pageMetadataSelectors;
+  var init_page_metadata = __esm({
+    "src/selectors/page-metadata.ts"() {
+      "use strict";
+      pageMetadataSelectors = {
+        payload: 'script[type="application/json"][data-sjs]',
+        player: "[data-video-id]",
+        video: "video",
+        liveToggle: '[role="button"][aria-pressed="true"], [role="button"][aria-pressed="false"]',
+        transport: 'button, [role="button"]',
+        slider: '[role="slider"]',
+        links: "a[href]",
+        storyLinks: 'h3 a[href], h4 a[href], h5 a[href], [data-ad-rendering-role="profile_name"] a[href]'
+      };
+    }
+  });
+
+  // src/dom/page-media-facts.ts
+  function ingest(script, index) {
+    if (index.seen.has(script) || !script.matches(pageMetadataSelectors.payload)) return;
+    const text = script.textContent || "";
+    if (!text) return;
+    index.seen.add(script);
+    if (text.length > 25e5 || !/"(?:is_live_streaming|augments|encrypted_click_tracking)"\s*:/.test(text))
+      return;
+    let input;
+    try {
+      input = JSON.parse(text);
+    } catch (e) {
+      return;
+    }
+    for (const [key, update] of extractPageMediaFacts(input)) {
+      const previous = index.facts.get(key);
+      const next = { ...previous, ...update };
+      index.facts.delete(key);
+      index.facts.set(key, next);
+      if ((previous == null ? void 0 : previous.ai) !== next.ai || (previous == null ? void 0 : previous.live) !== next.live) {
+        const posts = index.subscribers.get(key);
+        for (const post of posts || []) {
+          if (post.isConnected) invalidateContentVersion(post);
+          else posts == null ? void 0 : posts.delete(post);
+        }
+      }
+      if (index.facts.size > 2048) {
+        const oldest = index.facts.keys().next().value;
+        if (oldest !== void 0) {
+          index.facts.delete(oldest);
+          index.subscribers.delete(oldest);
+        }
+      }
+    }
+  }
+  function receive(records, index) {
+    for (const mutation of records) {
+      if (mutation.target instanceof Element && mutation.target.matches(pageMetadataSelectors.payload)) {
+        index.seen.delete(mutation.target);
+        ingest(mutation.target, index);
+      }
+      for (const node of mutation.addedNodes) {
+        if (!(node instanceof Element)) continue;
+        if (node.tagName === "SCRIPT") ingest(node, index);
+        else if (node.tagName === "HEAD" || node.tagName === "BODY")
+          for (const script of node.querySelectorAll(pageMetadataSelectors.payload))
+            ingest(script, index);
+      }
+    }
+  }
+  function readPageMediaFacts(post, key) {
+    var _a;
+    const page = post.ownerDocument;
+    let index = indexes.get(page);
+    if (!index) {
+      index = { facts: /* @__PURE__ */ new Map(), subscribers: /* @__PURE__ */ new Map(), seen: /* @__PURE__ */ new WeakSet(), observer: void 0 };
+      indexes.set(page, index);
+      for (const script of page.querySelectorAll(pageMetadataSelectors.payload))
+        ingest(script, index);
+      if (typeof MutationObserver !== "undefined") {
+        const current2 = index;
+        index.observer = new MutationObserver((records) => receive(records, current2));
+        index.observer.observe(page, { childList: true, subtree: true });
+      }
+    }
+    receive(((_a = index.observer) == null ? void 0 : _a.takeRecords()) || [], index);
+    if (post.isConnected) {
+      let posts = index.subscribers.get(key);
+      if (!posts) {
+        if (index.subscribers.size >= 2048) index.subscribers.clear();
+        posts = /* @__PURE__ */ new Set();
+        index.subscribers.set(key, posts);
+      }
+      for (const previous of posts) if (!previous.isConnected) posts.delete(previous);
+      if (posts.size < 64) posts.add(post);
+    }
+    return index.facts.get(key);
+  }
+  function clearPageMediaFacts() {
+    var _a;
+    for (const index of indexes.values()) (_a = index.observer) == null ? void 0 : _a.disconnect();
+    indexes.clear();
+  }
+  var indexes;
+  var init_page_media_facts2 = __esm({
+    "src/dom/page-media-facts.ts"() {
+      "use strict";
+      init_page_media_facts();
+      init_page_metadata();
+      init_content_version();
+      indexes = /* @__PURE__ */ new Map();
+    }
+  });
+
+  // src/dom/post-evidence.ts
+  function facebookUrl(link) {
+    const href = link.getAttribute("href");
+    const previous = destinations.get(link);
+    if ((previous == null ? void 0 : previous.href) === href) return previous.url;
+    let url = null;
+    try {
+      const parsed = href ? new URL(href, "https://www.facebook.com/") : null;
+      if (parsed && /^(https?:)$/.test(parsed.protocol) && !parsed.username && !parsed.password && (parsed.hostname === "facebook.com" || parsed.hostname.endsWith(".facebook.com")))
+        url = parsed;
+    } catch (e) {
+    }
+    destinations.set(link, { href, url });
+    return url;
+  }
+  function getPostEvidence(post) {
+    const version = getContentVersion(post);
+    const previous = cached.get(post);
+    if (version !== null && (previous == null ? void 0 : previous.version) === version) return previous.evidence;
+    forgetLabelReferences(post);
+    const evidence = new PostEvidence(post);
+    if (version !== null) cached.set(post, { version, evidence });
+    return evidence;
+  }
+  var destinations, PostEvidence, cached;
+  var init_post_evidence = __esm({
+    "src/dom/post-evidence.ts"() {
+      "use strict";
+      init_content_version();
+      destinations = /* @__PURE__ */ new WeakMap();
+      PostEvidence = class {
+        /** Keep every query, name and referenced label attached to its owning post scope. */
+        constructor(post) {
+          this.post = post;
+          this.queries = /* @__PURE__ */ new WeakMap();
+          this.visibility = /* @__PURE__ */ new WeakMap();
+          this.painted = /* @__PURE__ */ new WeakMap();
+          this.texts = /* @__PURE__ */ new WeakMap();
+          this.names = /* @__PURE__ */ new WeakMap();
+          this.contentTexts = /* @__PURE__ */ new Map();
+        }
+        /** Execute each selector once per scope and content version without collecting unused filter facts. */
+        select(selector, root = this.post) {
+          let queries = this.queries.get(root);
+          if (!queries) {
+            queries = /* @__PURE__ */ new Map();
+            this.queries.set(root, queries);
+          }
+          let elements = queries.get(selector);
+          if (!elements) {
+            elements = Array.from(root.querySelectorAll(selector));
+            queries.set(selector, elements);
+          }
+          return elements;
+        }
+        /** Reuse bounded body-text extraction across enabled filters and stable recovery sweeps. */
+        readText(key, read) {
+          let text = this.contentTexts.get(key);
+          if (!text) {
+            text = read();
+            this.contentTexts.set(key, text);
+          }
+          return text;
+        }
+        /** Exclude accessibility-hidden metadata while sharing its physical-visibility cache with visual-only counters. */
+        isVisible(element) {
+          const previous = this.visibility.get(element);
+          if (previous !== void 0) return previous;
+          const visible2 = this.isPainted(element) && element.getAttribute("aria-hidden") !== "true";
+          this.visibility.set(element, visible2);
+          return visible2;
+        }
+        /** Read physical visibility once per version, retaining visually displayed counters that Facebook intentionally marks aria-hidden. */
+        isPainted(element) {
+          var _a;
+          const previous = this.painted.get(element);
+          if (previous !== void 0) return previous;
+          const style = (_a = element.ownerDocument.defaultView) == null ? void 0 : _a.getComputedStyle(element);
+          const visible2 = !element.matches("script, style, [hidden]") && (style == null ? void 0 : style.display) !== "none" && (style == null ? void 0 : style.visibility) !== "hidden";
+          this.painted.set(element, visible2);
+          return visible2;
+        }
+        /** Ignore concealed metadata ancestors while allowing diagnostics on a post CMF itself has collapsed. */
+        isRendered(element) {
+          let ancestor = element;
+          while (ancestor && ancestor !== this.post) {
+            if (!this.isVisible(ancestor)) return false;
+            ancestor = ancestor.parentElement;
+          }
+          return ancestor === this.post;
+        }
+        /**
+         * Read fragmented control copy with strict node/character ceilings; oversized labels remain unmatched.
+         * @param control Owned metadata control; surrounding post copy cannot contribute to its label.
+         * @returns Visible label text or an empty string when the traversal budget is exhausted.
+         */
+        visibleText(control) {
+          const previous = this.texts.get(control);
+          if (previous !== void 0) return previous;
+          const walker = control.ownerDocument.createTreeWalker(control, NodeFilter.SHOW_ALL);
+          let node = control;
+          let text = "";
+          let nodes = 0;
+          while (node) {
+            if (++nodes > 128 || text.length > 256) {
+              text = "";
+              break;
+            }
+            let element = node instanceof Element ? node : node.parentElement;
+            let visible2 = true;
+            while (element && control.contains(element)) {
+              if (!this.isVisible(element)) {
+                visible2 = false;
+                break;
+              }
+              if (element === control) break;
+              element = element.parentElement;
+            }
+            if (visible2 && node.nodeType === Node.TEXT_NODE) text += node.textContent || "";
+            node = walker.nextNode();
+          }
+          if (text.length > 256) text = "";
+          this.texts.set(control, text);
+          return text;
+        }
+        /** Read non-rendered accessible label text without allowing oversized referenced subtrees to monopolize a scan. */
+        labelText(label) {
+          const walker = label.ownerDocument.createTreeWalker(label, NodeFilter.SHOW_ALL);
+          let node = label;
+          let text = "";
+          let nodes = 0;
+          while (node) {
+            if (++nodes > 128) return "";
+            if (node.nodeType === Node.TEXT_NODE) text += node.textContent || "";
+            if (text.length > 256) return "";
+            node = walker.nextNode();
+          }
+          return text;
+        }
+        /** Resolve bounded ARIA dependencies, including IDs that have not appeared in the document yet. */
+        referencedLabels(element) {
+          var _a;
+          const ids = ((_a = element.getAttribute("aria-labelledby")) == null ? void 0 : _a.trim().split(/\s+/)) || [];
+          if (!ids.length || ids.length > 8) return [null];
+          return ids.map((id) => {
+            return this.referenceTarget(id);
+          });
+        }
+        /** Subscribe before resolving so late insertion, replacement or text edits invalidate a cached negative result. */
+        referenceTarget(id) {
+          trackLabelReference(this.post, id);
+          return this.post.ownerDocument.getElementById(id) || this.select("[id]").find((label) => label.id === id) || null;
+        }
+        /** Preserve accessible-name precedence without borrowing ancestor copy or unbounded referenced text. */
+        explicitNames(element) {
+          var _a;
+          const previous = this.names.get(element);
+          if (previous) return previous;
+          const labels2 = element.hasAttribute("aria-labelledby") ? this.referencedLabels(element) : [];
+          const reference = labels2.length && labels2.every((label) => label && !label.contains(element)) ? labels2.map((label) => label ? this.labelText(label) : "").join(" ").trim() : "";
+          const title = (_a = Array.from(element.children).find(
+            (child) => child.localName === "title"
+          )) == null ? void 0 : _a.textContent;
+          const name = reference || element.getAttribute("aria-label") || title || element.getAttribute("title") || "";
+          const names = name.trim() && name.length <= 256 ? [name] : [];
+          this.names.set(element, names);
+          return names;
+        }
+      };
+      cached = /* @__PURE__ */ new WeakMap();
+    }
+  });
+
+  // src/diagnostics/dom-machine-facts.ts
+  function snapshotMachineFacts(element) {
+    var _a, _b;
+    const player = element.getAttribute("data-video-id");
+    const url = element.matches("a[href]") ? facebookUrl(element) : null;
+    const token = url == null ? void 0 : url.searchParams.get("__cft__[0]");
+    const video = player || url && (/^\/watch\/?$/.test(url.pathname) ? url.searchParams.get("v") : (_a = /^\/(?:reel|(?:[^/]+\/)?videos)\/(\d+)\/?$/.exec(url.pathname)) == null ? void 0 : _a[1]);
+    const result = {};
+    for (const [kind, identity] of [
+      ["story", token],
+      ["video", video]
+    ]) {
+      if (!identity || identity.length > 2048 || kind === "video" && !/^\d{1,30}$/.test(identity))
+        continue;
+      const facts = readPageMediaFacts(element, `${kind}:${identity}`);
+      if (!facts) continue;
+      for (const field of ["ai", "live"])
+        if (facts[field] !== void 0) result[`data-cmf-${kind}-${field}`] = String(facts[field]);
+      if ((_b = facts.renderers) == null ? void 0 : _b.length) result[`data-cmf-${kind}-renderers`] = facts.renderers.join(" ");
+    }
+    return result;
+  }
+  var init_dom_machine_facts = __esm({
+    "src/diagnostics/dom-machine-facts.ts"() {
+      "use strict";
+      init_page_media_facts2();
+      init_post_evidence();
+    }
+  });
+
   // src/diagnostics/dom-capture-tree.ts
   function dimension(value) {
     return Number.isFinite(value) ? Math.max(-1e5, Math.min(1e5, Math.round(value / 4) * 4)) : 0;
   }
-  function layout(element) {
+  function layout(element, facts) {
     var _a;
     const rect = element.getBoundingClientRect();
     const view = element.ownerDocument.defaultView;
     const style = view == null ? void 0 : view.getComputedStyle(element);
+    Object.assign(facts, snapshotVisualFacts(style));
     let ancestor = element.parentElement;
     let concealedByAncestor = false;
     for (let depth = 0; ancestor && depth < 40; depth++, ancestor = ancestor.parentElement) {
@@ -5595,6 +6178,8 @@
       init_dom_privacy();
       init_dom_attributes();
       init_dom_selection();
+      init_dom_visual_facts();
+      init_dom_machine_facts();
       DomCapture = class {
         /** Capture budgets are immutable for the lifetime of a report generation request. */
         constructor(limits2, measureLayout = true, deadline = Infinity) {
@@ -5643,9 +6228,14 @@
           this.privacy.remember(element);
           const { content, redaction } = this.privacy.regions.classify(element);
           const attributes = this.attributes.read(element, content);
+          Object.assign(
+            attributes.attributes,
+            snapshotMediaFacts(element),
+            snapshotMachineFacts(element)
+          );
           let rendering = this.layouts.get(element);
           if (!rendering) {
-            rendering = this.measureLayout ? layout(element) : {
+            rendering = this.measureLayout ? layout(element, attributes.attributes) : {
               x: 0,
               y: 0,
               width: 0,
@@ -6242,6 +6832,7 @@ ${fence}
     var _a, _b;
     const start = performance.now();
     const limits2 = { ...snapshotLimits };
+    if (options.target) limits2.nodesPerRegion = limits2.nodes;
     for (const key of Object.keys(limits2)) {
       const value = (_a = options.limits) == null ? void 0 : _a[key];
       if (typeof value === "number" && Number.isFinite(value))
@@ -6249,8 +6840,8 @@ ${fence}
     }
     let mutationsDuringCapture = 0;
     const countMutations = (records) => {
-      for (const record of records) {
-        const element = record.target instanceof Element ? record.target : record.target.parentElement;
+      for (const record2 of records) {
+        const element = record2.target instanceof Element ? record2.target : record2.target.parentElement;
         if (element && !isReportUi(element)) mutationsDuringCapture++;
       }
     };
@@ -6390,7 +6981,7 @@ ${fence}
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:f4e02abb74eb7b1550c56c7fef26f0f27510abef5ac64e6968a627492fd3a5e9" : "unbundled";
+      buildIdentity = true ? "source-sha256:703d9bba9099b5bc5cdacef722221c205093528b5f2e8c655afc5be1f2c82e7d" : "unbundled";
     }
   });
 
@@ -6635,20 +7226,36 @@ ${fence}
         mainColumn: 'div[role="navigation"] ~ div[role="main"]',
         dialog: 'div[role="dialog"]',
         rightRail: '[role="complementary"]',
+        featureContentBoundary: 'article, [role="article"], div[aria-posinset], [role="main"], [role="feed"], [role="navigation"], h4, h5, p, blockquote, [data-ad-rendering-role="profile_name"], [data-ad-rendering-role="story_message"], [data-ad-preview="message"], [data-ad-comet-preview="message"]',
+        mainSurface: '[role="main"]',
+        authorActions: 'button, [role="button"]',
+        authorLinks: "a[href]",
+        inlineAuthorAction: 'div[role="button"][tabindex="0"]',
+        statefulAuthorAction: '[aria-haspopup], [aria-expanded], [aria-pressed], [aria-disabled="true"], [disabled], [aria-controls]',
+        actionCaption: ":scope > span",
+        actionNonCaption: 'a, button, [role="button"], svg, img, i, input, [role="img"], [role="switch"], [role="checkbox"]',
+        authorSeparator: 'span[aria-hidden="true"]',
+        advertisingRailHeadings: 'h1, h2, h3, h4, h5, h6, [role="heading"]',
+        attributedAdLinks: "a[attributionsrc][href]",
         railHeadings: 'h1, h2, h3, h4, h5, h6, [role="heading"]',
         railFriendLinks: 'a[href*="/friends"]',
         railRequestLinks: 'a[href*="/friends/requests"]',
         railActions: 'button, [role="button"]',
-        railContentBoundary: '[role="article"], [role="feed"], [role="navigation"], [role="dialog"]',
+        railContentBoundary: 'article, [role="article"], [role="feed"], [role="navigation"], [role="dialog"]',
         surveyButton: 'a[href*="/survey/?session="] > div[role="none"]',
-        standardPost: 'div[role="article"], div[aria-posinset]',
+        standardPost: 'article, [role="article"], div[aria-posinset]',
         sponsoredLink: 'a[href*="/ads/about/"]',
         paidDisclosureLegacy: "div:nth-child(2) > div > div:nth-child(2) > span[class] > span[id] > div:nth-child(2)",
         paidDisclosureControls: 'button, [role="button"], a[href], [role="link"]',
         paidDisclosureIdentity: '[data-ad-rendering-role="profile_name"], h4, h5',
         peopleTiles: '[data-type="hscroll-child"]',
+        discoveryListItems: "ul > li",
+        discoveryCaption: "span",
+        discoveryActionMedia: 'svg, img, i, input, a, [role="img"]',
         peopleLinks: 'a[href][role="link"]',
         peopleActions: 'button, [role="button"]',
+        promptButtons: '[data-type="hscroll-child"] button, [data-type="hscroll-child"] [role="button"]',
+        promptIcons: "i, img, svg",
         peoplePostContent: '[data-ad-rendering-role="profile_name"], [data-ad-rendering-role="story_message"], [data-ad-preview="message"], [data-ad-comet-preview="message"], h4, h5, p, blockquote',
         virtualizedContainer: "div[data-virtualized]",
         storyShelfCandidates: 'div[role="main"] div[data-virtualized] [data-type="hscroll-child"] a[href*="/stories/"]',
@@ -6749,7 +7356,7 @@ ${fence}
       profileSelectors = {
         mainColumn: 'div[role="main"]',
         dialog: 'div[role="dialog"]',
-        postsQuery: 'div[role="main"] > div > div > div > div:nth-of-type(2) > div:not([class]) > div > div[class]'
+        permalinks: 'a[href*="/posts/"], a[href*="/story.php"], a[href*="/permalink/"], a[href*="permalink.php"]'
       };
     }
   });
@@ -6761,181 +7368,9 @@ ${fence}
       "use strict";
       searchSelectors = {
         mainColumn: 'div[role="region"] ~ div[role="main"]',
-        postsQuery: 'div[role="feed"] > div > div'
+        feed: '[role="feed"]',
+        legacyPosts: ":scope > div > div"
       };
-    }
-  });
-
-  // src/dom/post-evidence.ts
-  function facebookUrl(link) {
-    const href = link.getAttribute("href");
-    const previous = destinations.get(link);
-    if ((previous == null ? void 0 : previous.href) === href) return previous.url;
-    let url = null;
-    try {
-      const parsed = href ? new URL(href, "https://www.facebook.com/") : null;
-      if (parsed && /^(https?:)$/.test(parsed.protocol) && !parsed.username && !parsed.password && (parsed.hostname === "facebook.com" || parsed.hostname.endsWith(".facebook.com")))
-        url = parsed;
-    } catch (e) {
-    }
-    destinations.set(link, { href, url });
-    return url;
-  }
-  function getPostEvidence(post) {
-    const version = getContentVersion(post);
-    const previous = cached.get(post);
-    if (version !== null && (previous == null ? void 0 : previous.version) === version) return previous.evidence;
-    forgetLabelReferences(post);
-    const evidence = new PostEvidence(post);
-    if (version !== null) cached.set(post, { version, evidence });
-    return evidence;
-  }
-  var destinations, PostEvidence, cached;
-  var init_post_evidence = __esm({
-    "src/dom/post-evidence.ts"() {
-      "use strict";
-      init_content_version();
-      destinations = /* @__PURE__ */ new WeakMap();
-      PostEvidence = class {
-        /** Keep every query, name and referenced label attached to its owning post scope. */
-        constructor(post) {
-          this.post = post;
-          this.queries = /* @__PURE__ */ new WeakMap();
-          this.visibility = /* @__PURE__ */ new WeakMap();
-          this.painted = /* @__PURE__ */ new WeakMap();
-          this.texts = /* @__PURE__ */ new WeakMap();
-          this.names = /* @__PURE__ */ new WeakMap();
-          this.contentTexts = /* @__PURE__ */ new Map();
-        }
-        /** Execute each selector once per scope and content version without collecting unused filter facts. */
-        select(selector, root = this.post) {
-          let queries = this.queries.get(root);
-          if (!queries) {
-            queries = /* @__PURE__ */ new Map();
-            this.queries.set(root, queries);
-          }
-          let elements = queries.get(selector);
-          if (!elements) {
-            elements = Array.from(root.querySelectorAll(selector));
-            queries.set(selector, elements);
-          }
-          return elements;
-        }
-        /** Reuse bounded body-text extraction across enabled filters and stable recovery sweeps. */
-        readText(key, read) {
-          let text = this.contentTexts.get(key);
-          if (!text) {
-            text = read();
-            this.contentTexts.set(key, text);
-          }
-          return text;
-        }
-        /** Exclude accessibility-hidden metadata while sharing its physical-visibility cache with visual-only counters. */
-        isVisible(element) {
-          const previous = this.visibility.get(element);
-          if (previous !== void 0) return previous;
-          const visible2 = this.isPainted(element) && element.getAttribute("aria-hidden") !== "true";
-          this.visibility.set(element, visible2);
-          return visible2;
-        }
-        /** Read physical visibility once per version, retaining visually displayed counters that Facebook intentionally marks aria-hidden. */
-        isPainted(element) {
-          var _a;
-          const previous = this.painted.get(element);
-          if (previous !== void 0) return previous;
-          const style = (_a = element.ownerDocument.defaultView) == null ? void 0 : _a.getComputedStyle(element);
-          const visible2 = !element.matches("script, style, [hidden]") && (style == null ? void 0 : style.display) !== "none" && (style == null ? void 0 : style.visibility) !== "hidden";
-          this.painted.set(element, visible2);
-          return visible2;
-        }
-        /** Ignore concealed metadata ancestors while allowing diagnostics on a post CMF itself has collapsed. */
-        isRendered(element) {
-          let ancestor = element;
-          while (ancestor && ancestor !== this.post) {
-            if (!this.isVisible(ancestor)) return false;
-            ancestor = ancestor.parentElement;
-          }
-          return ancestor === this.post;
-        }
-        /**
-         * Read fragmented control copy with strict node/character ceilings; oversized labels remain unmatched.
-         * @param control Owned metadata control; surrounding post copy cannot contribute to its label.
-         * @returns Visible label text or an empty string when the traversal budget is exhausted.
-         */
-        visibleText(control) {
-          const previous = this.texts.get(control);
-          if (previous !== void 0) return previous;
-          const walker = control.ownerDocument.createTreeWalker(control, NodeFilter.SHOW_ALL);
-          let node = control;
-          let text = "";
-          let nodes = 0;
-          while (node) {
-            if (++nodes > 128 || text.length > 256) {
-              text = "";
-              break;
-            }
-            let element = node instanceof Element ? node : node.parentElement;
-            let visible2 = true;
-            while (element && control.contains(element)) {
-              if (!this.isVisible(element)) {
-                visible2 = false;
-                break;
-              }
-              if (element === control) break;
-              element = element.parentElement;
-            }
-            if (visible2 && node.nodeType === Node.TEXT_NODE) text += node.textContent || "";
-            node = walker.nextNode();
-          }
-          if (text.length > 256) text = "";
-          this.texts.set(control, text);
-          return text;
-        }
-        /** Read non-rendered accessible label text without allowing oversized referenced subtrees to monopolize a scan. */
-        labelText(label) {
-          const walker = label.ownerDocument.createTreeWalker(label, NodeFilter.SHOW_ALL);
-          let node = label;
-          let text = "";
-          let nodes = 0;
-          while (node) {
-            if (++nodes > 128) return "";
-            if (node.nodeType === Node.TEXT_NODE) text += node.textContent || "";
-            if (text.length > 256) return "";
-            node = walker.nextNode();
-          }
-          return text;
-        }
-        /** Resolve bounded ARIA dependencies, including IDs that have not appeared in the document yet. */
-        referencedLabels(element) {
-          var _a;
-          const ids = ((_a = element.getAttribute("aria-labelledby")) == null ? void 0 : _a.trim().split(/\s+/)) || [];
-          if (!ids.length || ids.length > 8) return [null];
-          return ids.map((id) => {
-            return this.referenceTarget(id);
-          });
-        }
-        /** Subscribe before resolving so late insertion, replacement or text edits invalidate a cached negative result. */
-        referenceTarget(id) {
-          trackLabelReference(this.post, id);
-          return this.post.ownerDocument.getElementById(id) || this.select("[id]").find((label) => label.id === id) || null;
-        }
-        /** Preserve accessible-name precedence without borrowing ancestor copy or unbounded referenced text. */
-        explicitNames(element) {
-          var _a;
-          const previous = this.names.get(element);
-          if (previous) return previous;
-          const labels2 = element.hasAttribute("aria-labelledby") ? this.referencedLabels(element) : [];
-          const reference = labels2.length && labels2.every((label) => label && !label.contains(element)) ? labels2.map((label) => label ? this.labelText(label) : "").join(" ").trim() : "";
-          const title = (_a = Array.from(element.children).find(
-            (child) => child.localName === "title"
-          )) == null ? void 0 : _a.textContent;
-          const name = reference || element.getAttribute("aria-label") || title || element.getAttribute("title") || "";
-          const names = name.trim() && name.length <= 256 ? [name] : [];
-          this.names.set(element, names);
-          return names;
-        }
-      };
-      cached = /* @__PURE__ */ new WeakMap();
     }
   });
 
@@ -6956,18 +7391,106 @@ ${fence}
     }
   });
 
-  // src/dom/animated-gifs.ts
-  function getMosquitosQuery() {
-    return `div[role="button"][aria-label*="GIF"]:not([${postAtt}]) > i:not([data-visualcompletion])`;
+  // src/selectors/gifs.ts
+  var gifSelectors;
+  var init_gifs = __esm({
+    "src/selectors/gifs.ts"() {
+      "use strict";
+      gifSelectors = {
+        candidates: 'div[role="button"] > i:not([data-visualcompletion])',
+        layers: ':scope > span > i[data-visualcompletion="css-img"]',
+        media: "img, video",
+        controls: 'button, [role="button"]',
+        stateful: "[aria-haspopup], [aria-expanded], [aria-pressed], [aria-controls], [disabled]"
+      };
+    }
+  });
+
+  // src/dom/gif-controls.ts
+  function hasGifLayers(icon) {
+    const layers = Array.from(icon.querySelectorAll(gifSelectors.layers));
+    const dimensions = [
+      [72, 72],
+      [66, 66],
+      [32, 17]
+    ];
+    if (icon.children.length !== 3 || layers.length !== 3) return false;
+    let sprite = null;
+    return layers.every((layer, index) => {
+      var _a;
+      if (!(layer instanceof HTMLElement) || ((_a = layer.parentElement) == null ? void 0 : _a.parentElement) !== icon)
+        return false;
+      const size = dimensions[index];
+      if (!size || layer.style.width !== `${size[0]}px` || layer.style.height !== `${size[1]}px`)
+        return false;
+      const image = layer.style.backgroundImage;
+      if (!image || image === "none") return false;
+      if (sprite === null) sprite = image;
+      return image === sprite;
+    });
   }
+  function structuralGifMedia(control, icon, root) {
+    if (control.matches(gifSelectors.stateful) || control.closest(sharedSelectors.commentContent) || !hasGifLayers(icon))
+      return null;
+    const boundary = root instanceof Element ? root : control.ownerDocument.documentElement;
+    const evidence = getPostEvidence(boundary);
+    if (!evidence.isRendered(control)) return null;
+    const owner = control.closest(sharedSelectors.postOwner);
+    if (owner && owner !== boundary && boundary.contains(owner)) return null;
+    for (let depth = 0, parent = control.parentElement; parent && depth < 3; depth++, parent = parent.parentElement) {
+      if (!boundary.contains(parent) || parent === owner) break;
+      const controls = parent.querySelectorAll(gifSelectors.controls);
+      if (controls.length !== 1 || controls[0] !== control) return null;
+      const media = parent.querySelectorAll(gifSelectors.media);
+      if (media.length > 1) return null;
+      const candidate = media[0];
+      if (candidate instanceof HTMLImageElement || candidate instanceof HTMLVideoElement) {
+        if (!evidence.isRendered(candidate) || candidate.closest(sharedSelectors.postOwner) !== owner)
+          return null;
+        return candidate;
+      }
+      if (parent === boundary) break;
+    }
+    return null;
+  }
+  function collectGifControls(root) {
+    var _a;
+    const controls = /* @__PURE__ */ new Map();
+    for (const icon of root.querySelectorAll(gifSelectors.candidates)) {
+      const control = icon.parentElement;
+      if (!control || control.hasAttribute(postAtt) || controls.has(control)) continue;
+      const media = structuralGifMedia(control, icon, root);
+      if (media || ((_a = control.getAttribute("aria-label")) == null ? void 0 : _a.includes("GIF")))
+        controls.set(control, { control, icon, media });
+    }
+    return Array.from(controls.values());
+  }
+  function isGifMediaPlaying(media) {
+    if (media instanceof HTMLVideoElement) return !media.paused && !media.ended;
+    return facebookImageRendition(media.currentSrc || media.src) === "gif";
+  }
+  var init_gif_controls = __esm({
+    "src/dom/gif-controls.ts"() {
+      "use strict";
+      init_attributes();
+      init_post_evidence();
+      init_gifs();
+      init_shared();
+      init_media_rendition();
+    }
+  });
+
+  // src/dom/animated-gifs.ts
   function swatTheMosquitos(post) {
     if (!post || typeof post.querySelectorAll !== "function") {
       return;
     }
-    const animatedGIFs = post.querySelectorAll(getMosquitosQuery());
-    for (const gif of animatedGIFs) {
-      const control = gif.parentElement;
-      if (!control || control.hasAttribute(postAtt)) continue;
+    for (const { control, icon: gif, media } of collectGifControls(post)) {
+      if (media) {
+        control.setAttribute(postAtt, "1");
+        if (isGifMediaPlaying(media)) control.click();
+        continue;
+      }
       let parent = climbUpTheTree(gif, 2);
       let sibling = parent instanceof Element ? parent.querySelector(":scope > a") : null;
       if (!sibling) {
@@ -6988,6 +7511,7 @@ ${fence}
       "use strict";
       init_dom();
       init_attributes();
+      init_gif_controls();
     }
   });
 
@@ -7479,22 +8003,22 @@ ${fence}
   });
 
   // src/dom/info-boxes.ts
-  function restoreDebug(box, record) {
-    if (!record.debugApplied || box.getAttribute(record.showAttribute) !== "") return;
-    if (record.originalShow === null) box.removeAttribute(record.showAttribute);
-    else box.setAttribute(record.showAttribute, record.originalShow);
-    record.debugApplied = false;
+  function restoreDebug(box, record2) {
+    if (!record2.debugApplied || box.getAttribute(record2.showAttribute) !== "") return;
+    if (record2.originalShow === null) box.removeAttribute(record2.showAttribute);
+    else box.setAttribute(record2.showAttribute, record2.originalShow);
+    record2.debugApplied = false;
   }
-  function restoreBox(box, record) {
-    if (box.getAttribute(record.hideAttribute) === "") box.removeAttribute(record.hideAttribute);
-    if (record.link.getAttribute(postAtt) === record.reason) record.link.removeAttribute(postAtt);
-    restoreDebug(box, record);
+  function restoreBox(box, record2) {
+    if (box.getAttribute(record2.hideAttribute) === "") box.removeAttribute(record2.hideAttribute);
+    if (record2.link.getAttribute(postAtt) === record2.reason) record2.link.removeAttribute(postAtt);
+    restoreDebug(box, record2);
   }
   function findInfoBox(link, post, previous, state) {
     const box = climbUpTheTree(link, 5);
     if (!(box instanceof Element) || box === post || !post.contains(box)) return null;
     if (box.matches(sharedSelectors.postOwner) || box.querySelector(
-      `${sharedSelectors.postOwner}, ${sharedSelectors.profileName}, ${sharedSelectors.storyMessage}, h4, h5, [role="feed"], [role="navigation"], [role="main"]`
+      `${sharedSelectors.postOwner}, ${sharedSelectors.profileName}, ${sharedSelectors.authoredContent}, h4, h5, [role="feed"], [role="navigation"], [role="main"]`
     ))
       return null;
     const owned = previous.get(box);
@@ -7528,15 +8052,15 @@ ${fence}
         if (box && !targets.has(box)) targets.set(box, { link, reason: keyWords[topic] });
       }
     }
-    for (const [box, record] of previous) {
+    for (const [box, record2] of previous) {
       const target = targets.get(box);
-      if (!target || target.link !== record.link || record.hideAttribute !== state.cssHideEl || record.showAttribute !== state.showAtt) {
-        restoreBox(box, record);
+      if (!target || target.link !== record2.link || record2.hideAttribute !== state.cssHideEl || record2.showAttribute !== state.showAtt) {
+        restoreBox(box, record2);
         previous.delete(box);
       }
     }
     for (const [box, target] of targets) {
-      const record = (_b = previous.get(box)) != null ? _b : {
+      const record2 = (_b = previous.get(box)) != null ? _b : {
         link: target.link,
         reason: target.reason,
         hideAttribute: state.cssHideEl,
@@ -7544,15 +8068,15 @@ ${fence}
         originalShow: box.getAttribute(state.showAtt),
         debugApplied: false
       };
-      if (!options.VERBOSITY_DEBUG) restoreDebug(box, record);
+      if (!options.VERBOSITY_DEBUG) restoreDebug(box, record2);
       else if (box.getAttribute(state.showAtt) !== "")
-        record.originalShow = box.getAttribute(state.showAtt);
+        record2.originalShow = box.getAttribute(state.showAtt);
       if (box.getAttribute(state.cssHideEl) !== "" || target.link.getAttribute(postAtt) !== target.reason || options.VERBOSITY_DEBUG && box.getAttribute(state.showAtt) !== "") {
         hideBlock(box, target.link, target.reason, state, options, { postAtt });
       }
-      record.reason = target.reason;
-      record.debugApplied = !!options.VERBOSITY_DEBUG;
-      previous.set(box, record);
+      record2.reason = target.reason;
+      record2.debugApplied = !!options.VERBOSITY_DEBUG;
+      previous.set(box, record2);
     }
     if (previous.size) ownedBoxes.set(post, previous);
     else ownedBoxes.delete(post);
@@ -7624,6 +8148,9 @@ ${fence}
   });
 
   // src/dom/walker.ts
+  function isReadableContent(element, post) {
+    return !isNestedMarkedNode(element, post) && !element.closest(sharedSelectors.commentContent) && getPostEvidence(post).isRendered(element);
+  }
   function countDescendants(element) {
     return element.querySelectorAll("div, span").length;
   }
@@ -7634,12 +8161,12 @@ ${fence}
     const markedAncestor = node.closest(`[${postAtt}]`);
     return !!markedAncestor && markedAncestor !== root;
   }
-  function scanTreeForText(node) {
+  function scanTreeForText(node, post) {
     var _a;
     const arrayTextValues = [];
     const elements = node.querySelectorAll(":scope > div, :scope > blockquote, :scope > span");
     for (const element of elements) {
-      if (isNestedMarkedNode(element, node)) {
+      if (!isReadableContent(element, post)) {
         continue;
       }
       if (element.hasAttribute("aria-hidden") && element.getAttribute("aria-hidden") === "false") {
@@ -7652,7 +8179,7 @@ ${fence}
         if (!elParent) continue;
         const elParentTN = elParent.tagName.toLowerCase();
         const val = cleanText((_a = currentNode.textContent) != null ? _a : "").trim();
-        if (isNestedMarkedNode(elParent, node)) {
+        if (!isReadableContent(elParent, post)) {
           continue;
         }
         if (val === "" || val.toLowerCase() === "facebook") {
@@ -7704,11 +8231,11 @@ ${fence}
     }
     return arrayTextValues;
   }
-  function scanImagesForAltText(node) {
+  function scanImagesForAltText(node, post) {
     const arrayAltTextValues = [];
     const images = node.querySelectorAll("img[alt]");
     for (const img of images) {
-      if (isNestedMarkedNode(img, node)) {
+      if (!isReadableContent(img, post)) {
         continue;
       }
       if (img.alt.length > 0 && img.naturalWidth > 32) {
@@ -7741,8 +8268,8 @@ ${fence}
         continue;
       }
       if (countDescendants(block) > 0) {
-        arrayTextValues.push(...scanTreeForText(block));
-        arrayTextValues.push(...scanImagesForAltText(block));
+        arrayTextValues.push(...scanTreeForText(block, post));
+        arrayTextValues.push(...scanImagesForAltText(block, post));
       }
     }
     return arrayTextValues.filter((item) => item !== "");
@@ -7753,6 +8280,7 @@ ${fence}
       init_post_evidence();
       init_text_normalize();
       init_attributes();
+      init_shared();
     }
   });
 
@@ -7891,7 +8419,7 @@ ${fence}
     if (postBlocks.length >= 2) {
       const contentBlock = postBlocks[1];
       if (!contentBlock) return "";
-      const animatedGIFs = contentBlock.querySelectorAll(getMosquitosQuery());
+      const animatedGIFs = collectGifControls(contentBlock);
       return animatedGIFs.length > 0 ? keyWords.GF_ANIMATED_GIFS_POSTS : "";
     }
     return "";
@@ -7904,7 +8432,7 @@ ${fence}
     if (postBlocks.length >= 2) {
       const contentBlock = postBlocks[1];
       if (!contentBlock) return "";
-      const animatedGIFs = contentBlock.querySelectorAll(getMosquitosQuery());
+      const animatedGIFs = collectGifControls(contentBlock);
       return animatedGIFs.length > 0 ? keyWords.GF_ANIMATED_GIFS_POSTS : "";
     }
     return "";
@@ -7912,7 +8440,7 @@ ${fence}
   var init_animated_gifs2 = __esm({
     "src/feeds/shared/animated-gifs.ts"() {
       "use strict";
-      init_animated_gifs();
+      init_gif_controls();
       init_blocks();
     }
   });
@@ -8249,7 +8777,7 @@ ${fence}
     if (!creative) return null;
     const paid = evidence.select(sharedSelectors.paidMetadataButton, header).some((button) => {
       var _a;
-      if (!isOwnedSignal(button, post, evidence) || button.closest(sharedSelectors.authorMetadata) || ((_a = button.parentElement) == null ? void 0 : _a.closest(sharedSelectors.interactive)) || button.querySelector(
+      if (!isOwnedSignal(button, post, evidence) || button.matches(sharedSelectors.statefulDisclosureControl) || button.closest(sharedSelectors.authorMetadata) || ((_a = button.parentElement) == null ? void 0 : _a.closest(sharedSelectors.interactive)) || button.querySelector(
         `${sharedSelectors.disclosureNonTextContent}, ${sharedSelectors.authoredContent}`
       ))
         return false;
@@ -8363,7 +8891,7 @@ ${fence}
   function inspectSponsored(post, state) {
     const diagnostics = createSponsoredDiagnostics(post, state);
     if (!post || !state) return { isSponsored: false, diagnostics };
-    if (state.isNF && getStructuralSponsoredKind(post) === "sponsored") {
+    if ((state.isNF || state.isGF || state.isSF || state.isVF) && getStructuralSponsoredKind(post) === "sponsored") {
       diagnostics.matchedBy = "creative-structure";
       return { isSponsored: true, diagnostics };
     }
@@ -9069,9 +9597,49 @@ ${fence}
     }
   });
 
+  // src/feeds/verified-structure.ts
+  function hasVerifiedGeometry(icon, post) {
+    var _a, _b, _c;
+    if (((_a = icon.getAttribute("viewBox")) == null ? void 0 : _a.trim().replace(/\s+/g, " ")) !== "0 0 12 12") return false;
+    const evidence = getPostEvidence(post);
+    const geometry = evidence.select(sharedSelectors.svgShapes, icon);
+    const shape = geometry[0];
+    if (!shape || shape.closest(sharedSelectors.svgDefinition)) return false;
+    let ancestor = shape;
+    while (ancestor && ancestor !== icon) {
+      if (!evidence.isVisible(ancestor)) return false;
+      ancestor = ancestor.parentElement;
+    }
+    return geometry.length === 1 && ((_b = geometry[0]) == null ? void 0 : _b.localName) === "path" && ((_c = geometry[0].getAttribute("d")) == null ? void 0 : _c.trim().replace(/\s+/g, " ")) === verifiedPath;
+  }
+  var verifiedPath;
+  var init_verified_structure = __esm({
+    "src/feeds/verified-structure.ts"() {
+      "use strict";
+      init_post_evidence();
+      init_shared();
+      verifiedPath = "M7.198.34a.88.88 0 0 1 1.164.38l.623 1.175 1.311.23a.88.88 0 0 1 .72.99l-.187 1.318.925.956a.88.88 0 0 1 0 1.224l-.925.957.186 1.317a.88.88 0 0 1-.719.99l-1.31.23-.625 1.176a.88.88 0 0 1-1.163.378l-1.196-.584-1.196.584a.88.88 0 0 1-1.164-.378l-.623-1.176-1.311-.23a.88.88 0 0 1-.72-.99l.187-1.317-.925-.957a.88.88 0 0 1 0-1.224l.925-.956-.187-1.318a.88.88 0 0 1 .72-.99l1.31-.23L3.643.72A.88.88 0 0 1 4.806.34l1.196.584L7.198.341zm1.656 4.764a.5.5 0 1 0-.708-.708L5.25 7.293 3.854 5.896a.5.5 0 1 0-.708.708L4.543 8a1 1 0 0 0 1.414 0l2.897-2.896z";
+    }
+  });
+
   // src/feeds/news-presentation.ts
   function isNewsFeatureCollapsed(element, feature) {
     return (element instanceof HTMLElement || element instanceof SVGElement) && presentations[feature].has(element);
+  }
+  function isNewsFeatureRendered(element, post, feature) {
+    var _a;
+    const evidence = getPostEvidence(post);
+    let ancestor = element;
+    while (ancestor && ancestor !== post) {
+      if (ancestor.hasAttribute("hidden") || ancestor.getAttribute("aria-hidden") === "true")
+        return false;
+      if (!evidence.isVisible(ancestor)) {
+        if (!isNewsFeatureCollapsed(ancestor, feature) || ((_a = ancestor.ownerDocument.defaultView) == null ? void 0 : _a.getComputedStyle(ancestor).visibility) === "hidden")
+          return false;
+      }
+      ancestor = ancestor.parentElement;
+    }
+    return ancestor === post;
   }
   function inlinePriority(style, name) {
     var _a;
@@ -9166,6 +9734,7 @@ ${fence}
   var init_news_presentation = __esm({
     "src/feeds/news-presentation.ts"() {
       "use strict";
+      init_post_evidence();
       presentations = {
         badge: /* @__PURE__ */ new Map(),
         sidebar: /* @__PURE__ */ new Map(),
@@ -9217,7 +9786,9 @@ ${fence}
   function ownVerifiedBadges(post) {
     return ownNewsHeaders(post).flatMap(
       (header) => getPostEvidence(post).select("svg", header).filter((icon) => {
-        if (!isOwnedNewsElement(icon, post)) return false;
+        if (!isOwnedNewsElement(icon, post) || !isNewsFeatureRendered(icon, post, "badge"))
+          return false;
+        if (hasVerifiedGeometry(icon, post)) return true;
         const iconNames = explicitNewsNames(icon, post);
         if (iconNames.length > 0)
           return iconNames.some((name) => matchesNewsLabel(name, "verified"));
@@ -9279,6 +9850,8 @@ ${fence}
       init_blocks();
       init_news();
       init_shared();
+      init_verified_structure();
+      init_news_presentation();
     }
   });
 
@@ -9342,9 +9915,13 @@ ${fence}
   function hasPeopleDiscoveryStructure(post) {
     var _a;
     const evidence = getPostEvidence(post);
-    if (!post.matches(sharedSelectors.postOwner) || post.closest(sharedSelectors.authoredContent) || ((_a = post.parentElement) == null ? void 0 : _a.closest(sharedSelectors.postOwner)) || evidence.select(newsSelectors.peoplePostContent).some(
+    if (!post.matches(sharedSelectors.postOwner) && !post.closest(newsSelectors.rightRail) || post.closest(sharedSelectors.authoredContent) || ((_a = post.parentElement) == null ? void 0 : _a.closest(sharedSelectors.postOwner)) || post.querySelector(sharedSelectors.postOwner) || evidence.select(newsSelectors.peoplePostContent).some(
       (element) => evidence.isRendered(element) && !element.closest(newsSelectors.peopleTiles)
     ))
+      return false;
+    if (!post.matches(sharedSelectors.postOwner) && evidence.select(newsSelectors.railHeadings).filter(
+      (heading) => !heading.closest(newsSelectors.peopleTiles) && evidence.isRendered(heading)
+    ).length !== 1)
       return false;
     let matchingTiles = 0;
     for (const tile of evidence.select(newsSelectors.peopleTiles)) {
@@ -9387,8 +9964,373 @@ ${fence}
     }
   });
 
+  // src/feeds/discovery-structure.ts
+  function isGroupListTile(tile, root) {
+    const evidence = getPostEvidence(root);
+    if (evidence.select(newsSelectors.discoveryListItems, tile).length) return false;
+    const links = evidence.select(sharedSelectors.links, tile).filter((link) => ownsPostElement(link, root) && evidence.isRendered(link));
+    if (links.length !== 2) return false;
+    const paths = links.map((link) => {
+      var _a;
+      return (_a = facebookUrl(link)) == null ? void 0 : _a.pathname.replace(/\/$/, "");
+    });
+    const path = paths[0];
+    if (!path || path !== paths[1] || !/^\/groups\/(?!(?:discover|feed|search|create|joins|categories|notifications|invites|memberships)$)[^/]+$/.test(
+      path
+    ))
+      return false;
+    const covers = links.filter(
+      (link) => evidence.select(sharedSelectors.images, link).some((image) => evidence.isRendered(image))
+    );
+    if (covers.length !== 1) return false;
+    const actions = evidence.select(newsSelectors.peopleActions, tile).filter(
+      (control) => ownsPostElement(control, root) && evidence.isRendered(control) && !control.matches(`${sharedSelectors.statefulDisclosureControl}, [aria-haspopup]`) && !evidence.select(newsSelectors.discoveryActionMedia, control).length && evidence.select(newsSelectors.discoveryCaption, control).some((caption) => !caption.childElementCount)
+    );
+    return actions.length === 2;
+  }
+  function isTileContent(node, root, kind) {
+    const carousel = node.closest(newsSelectors.peopleTiles);
+    if (carousel && root.contains(carousel)) return true;
+    const item = kind === "groups" ? node.closest(newsSelectors.discoveryListItems) : null;
+    return !!item && root.contains(item) && isGroupListTile(item, root);
+  }
+  function hasDiscoveryShelf(root, kind) {
+    var _a, _b;
+    const evidence = getPostEvidence(root);
+    const tileSelector = kind === "groups" ? `${newsSelectors.peopleTiles}, ${newsSelectors.discoveryListItems}` : newsSelectors.peopleTiles;
+    if (!root.matches(sharedSelectors.postOwner) && !root.closest(newsSelectors.rightRail) || root.closest(sharedSelectors.authoredContent) || ((_a = root.parentElement) == null ? void 0 : _a.closest(sharedSelectors.postOwner)) || root.querySelector(sharedSelectors.postOwner))
+      return false;
+    if (!root.matches(sharedSelectors.postOwner) && evidence.select(newsSelectors.railHeadings).filter((heading) => !isTileContent(heading, root, kind) && evidence.isRendered(heading)).length !== 1)
+      return false;
+    if (evidence.select(`${sharedSelectors.authoredContent}, ${sharedSelectors.authorMetadata}`).some((node) => evidence.isRendered(node) && !isTileContent(node, root, kind)))
+      return false;
+    const discovery = evidence.select(sharedSelectors.links).some((link) => {
+      var _a2;
+      const path = (_a2 = facebookUrl(link)) == null ? void 0 : _a2.pathname;
+      return (path === `/${kind}/discover/` || path === `/${kind}/discover`) && !link.closest(tileSelector) && ownsPostElement(link, root) && evidence.isRendered(link);
+    });
+    if (!discovery) return false;
+    const lists = /* @__PURE__ */ new Map();
+    const destinations2 = /* @__PURE__ */ new Set();
+    for (const tile of evidence.select(tileSelector)) {
+      if (!ownsPostElement(tile, root) || !evidence.isRendered(tile)) continue;
+      if (kind === "groups" && !tile.matches(newsSelectors.peopleTiles)) {
+        const list = tile.parentElement;
+        if (!list || !isGroupListTile(tile, root)) continue;
+        const count = (lists.get(list) || 0) + 1;
+        if (count >= 2) return true;
+        lists.set(list, count);
+        continue;
+      }
+      const preview = evidence.select(sharedSelectors.links, tile).find((link) => {
+        var _a2;
+        const parts = (_a2 = facebookUrl(link)) == null ? void 0 : _a2.pathname.split("/").filter(Boolean);
+        return (parts == null ? void 0 : parts.length) === 2 && parts[0] === kind && /^\d+$/.test(parts[1] || "") && link.closest(newsSelectors.peopleTiles) === tile && ownsPostElement(link, root) && evidence.isRendered(link) && evidence.select(sharedSelectors.images, link).some((image) => evidence.isRendered(image));
+      });
+      const action = evidence.select(newsSelectors.peopleActions, tile).some(
+        (control) => control.closest(newsSelectors.peopleTiles) === tile && ownsPostElement(control, root) && evidence.isRendered(control)
+      );
+      if (preview && action) {
+        destinations2.add(((_b = facebookUrl(preview)) == null ? void 0 : _b.pathname.replace(/\/$/, "")) || "");
+        if (destinations2.size >= 2) return true;
+      }
+    }
+    return false;
+  }
+  var init_discovery_structure = __esm({
+    "src/feeds/discovery-structure.ts"() {
+      "use strict";
+      init_post_evidence();
+      init_ownership();
+      init_shared();
+      init_news();
+    }
+  });
+
+  // src/selectors/page-suggestions.ts
+  var pageSuggestionSelectors;
+  var init_page_suggestions = __esm({
+    "src/selectors/page-suggestions.ts"() {
+      "use strict";
+      pageSuggestionSelectors = {
+        list: '[role="list"]',
+        items: ':scope > [role="listitem"]',
+        nestedContent: '[role="list"], [role="listitem"], article, [role="article"], [aria-posinset]',
+        icons: "svg",
+        portrait: "svg image",
+        actions: 'button, [role="button"]',
+        statefulAction: "[aria-haspopup], [aria-pressed], [aria-expanded], [aria-controls]",
+        disabledAction: '[aria-disabled="true"], [disabled]'
+      };
+    }
+  });
+
+  // src/feeds/page-suggestions.ts
+  function isPaintedInside(element, boundary, root) {
+    const evidence = getPostEvidence(root);
+    let node = element;
+    while (node && node !== boundary) {
+      if (!evidence.isPainted(node)) return false;
+      node = node.parentElement;
+    }
+    return node === boundary;
+  }
+  function hasActionGeometry(control, root, path, viewBox) {
+    var _a;
+    const evidence = getPostEvidence(root);
+    const icons = evidence.select(pageSuggestionSelectors.icons, control);
+    const icon = icons[0];
+    if (icons.length !== 1 || !icon || icon.getAttribute("viewBox") !== viewBox) return false;
+    const shapes = evidence.select(sharedSelectors.svgShapes, icon);
+    const shape = shapes[0];
+    if (shapes.length !== 1 || (shape == null ? void 0 : shape.localName) !== "path" || shape.closest(sharedSelectors.svgDefinition))
+      return false;
+    if (!isPaintedInside(shape, control, root)) return false;
+    return ((_a = shape.getAttribute("d")) == null ? void 0 : _a.trim().replace(/\s+/g, " ")) === path;
+  }
+  function pageIdentity(link) {
+    const url = facebookUrl(link);
+    if (!url || !/^(?:www\.|m\.)?facebook\.com$/.test(url.hostname)) return null;
+    if (url.pathname === "/profile.php") {
+      const id = url.searchParams.get("id");
+      return id && /^\d+$/.test(id) ? `id:${id}` : null;
+    }
+    if (/\.php\/?$/.test(url.pathname)) return null;
+    return /^\/(?!(?:groups|watch|reel|reels|stories|events|friends|marketplace|saved|settings|notifications|search|help|gaming|pages)\/?$)[\w.-]+\/?$/.test(
+      url.pathname
+    ) ? url.pathname.replace(/\/$/, "") : null;
+  }
+  function pageTileIdentity(tile, root) {
+    const evidence = getPostEvidence(root);
+    if (!evidence.isRendered(tile) || !ownsPostElement(tile, root) || tile.querySelector(pageSuggestionSelectors.nestedContent))
+      return null;
+    const links = evidence.select(sharedSelectors.links, tile);
+    if (links.length < 3 || links.length > 4 || links.some((link) => !evidence.isRendered(link)))
+      return null;
+    const identity = links[0] && pageIdentity(links[0]);
+    if (!identity || links.some((link) => pageIdentity(link) !== identity)) return null;
+    if (links.filter((link) => !evidence.select(sharedSelectors.avatarMedia, link).length).length !== 1)
+      return null;
+    const media = evidence.select(sharedSelectors.avatarMedia, tile);
+    if (media.length !== 2 || media.some(
+      (image) => !["img", "image"].includes(image.localName) || !image.closest(sharedSelectors.links) || !isPaintedInside(image, tile, root)
+    ) || evidence.select(pageSuggestionSelectors.portrait, tile).length < 1)
+      return null;
+    const controls = evidence.select(pageSuggestionSelectors.actions, tile);
+    if (controls.length !== 2 || controls.some(
+      (control) => !evidence.isRendered(control) || control.matches(pageSuggestionSelectors.statefulAction)
+    ))
+      return null;
+    return controls.some((control) => hasActionGeometry(control, root, followPath, "0 0 16 16")) && controls.some(
+      (control) => !control.matches(pageSuggestionSelectors.disabledAction) && hasActionGeometry(control, root, dismissPath, "0 0 20 20")
+    ) ? identity : null;
+  }
+  function hasPageSuggestionShelf(root) {
+    var _a;
+    if (!root.matches(pageSuggestionSelectors.list) && !root.querySelector(pageSuggestionSelectors.list)) return false;
+    if (root.closest(sharedSelectors.authoredContent) || ((_a = root.parentElement) == null ? void 0 : _a.closest(sharedSelectors.postOwner)) || root.querySelector(
+      `${sharedSelectors.postOwner}, ${sharedSelectors.authoredContent}, ${sharedSelectors.authorMetadata}`
+    ))
+      return false;
+    const evidence = getPostEvidence(root);
+    const lists = root.matches(pageSuggestionSelectors.list) ? [root] : evidence.select(pageSuggestionSelectors.list);
+    if (lists.length !== 1) return false;
+    const list = lists[0];
+    if (!list || !evidence.isRendered(list)) return false;
+    if (Array.from(list.children).some((child) => child.getAttribute("role") !== "listitem"))
+      return false;
+    if (evidence.select(`${sharedSelectors.links}, ${pageSuggestionSelectors.actions}`).some((node) => !list.contains(node)))
+      return false;
+    const identities = /* @__PURE__ */ new Set();
+    for (const tile of evidence.select(pageSuggestionSelectors.items, list)) {
+      if (!tile.hasChildNodes()) continue;
+      const identity = pageTileIdentity(tile, root);
+      if (!identity) return false;
+      identities.add(identity);
+    }
+    return identities.size >= 2;
+  }
+  var followPath, dismissPath;
+  var init_page_suggestions2 = __esm({
+    "src/feeds/page-suggestions.ts"() {
+      "use strict";
+      init_post_evidence();
+      init_ownership();
+      init_shared();
+      init_page_suggestions();
+      followPath = "M5.675.5c-.393 0-.696 0-.963.053A2.75 2.75 0 0 0 2.55 2.714c-.051.257-.053.546-.053.915-.479.395-.82.95-.947 1.585-.051.257-.053.547-.053.919-.067.053-.132.11-.194.173-.456.455-.642 1.022-.726 1.65-.08.595-.08 1.344-.08 2.242v.604c0 .899 0 1.648.08 2.243.084.628.27 1.195.726 1.65.455.455 1.022.641 1.65.726.594.08 1.344.08 2.242.08H10.8c.898 0 1.647 0 2.242-.08.628-.085 1.195-.27 1.65-.726.456-.455.641-1.022.726-1.65.08-.595.08-1.344.08-2.242v-.605c0-.898 0-1.647-.08-2.242-.085-.628-.27-1.195-.726-1.65a2.252 2.252 0 0 0-.194-.173c0-.371-.002-.662-.053-.919a2.749 2.749 0 0 0-.947-1.585c0-.37-.002-.658-.053-.915a2.75 2.75 0 0 0-2.16-2.16C11.017.5 10.715.5 10.32.5H5.675zm7.31 5.073C12.398 5.5 11.668 5.5 10.8 5.5H5.196c-.87 0-1.599 0-2.184.073a1.25 1.25 0 0 1 .992-1.048c.103-.02.243-.024.744-.024h6.5c.5 0 .642.003.744.024a1.25 1.25 0 0 1 .992 1.048zm-1.01-2.56a9.405 9.405 0 0 0-.654-.012H4.675c-.25 0-.463 0-.654.013l.001-.007a1.25 1.25 0 0 1 .982-.982c.103-.02.243-.024.744-.024h4.5c.5 0 .642.003.744.024.496.098.883.486.982.982l.002.007zM8 8a.75.75 0 0 1 .75.75v1h1a.75.75 0 0 1 0 1.5h-1v1a.75.75 0 0 1-1.5 0v-1h-1a.75.75 0 0 1 0-1.5h1v-1A.75.75 0 0 1 8 8z";
+      dismissPath = "M4.28 3.22a.75.75 0 1 0-1.06 1.06L8.94 10l-5.72 5.72a.75.75 0 1 0 1.06 1.06L10 11.06l5.72 5.72a.75.75 0 0 0 1.06-1.06L11.06 10l5.72-5.72a.75.75 0 0 0-1.06-1.06L10 8.94 4.28 3.22z";
+    }
+  });
+
+  // src/feeds/ai-destinations.ts
+  function serviceHostname(link) {
+    const href = link.getAttribute("href");
+    if (!href) return null;
+    try {
+      let url = new URL(href, document.baseURI);
+      if (url.hostname === "l.facebook.com" && url.pathname === "/l.php") {
+        if (url.username || url.password || !/^https?:$/.test(url.protocol)) return null;
+        const destination = url.searchParams.get("u");
+        if (!destination) return null;
+        url = new URL(destination);
+      }
+      return /^https?:$/.test(url.protocol) && !url.username && !url.password ? url.hostname : null;
+    } catch (e) {
+      return null;
+    }
+  }
+  function isMetaAiLink(link) {
+    const hostname = serviceHostname(link);
+    return hostname === "meta.ai" || (hostname == null ? void 0 : hostname.endsWith(".meta.ai")) === true;
+  }
+  function isManusAiLink(link) {
+    const hostname = serviceHostname(link);
+    return hostname === "manus.im" || hostname === "www.manus.im";
+  }
+  var init_ai_destinations = __esm({
+    "src/feeds/ai-destinations.ts"() {
+      "use strict";
+    }
+  });
+
+  // src/feeds/shared/media-metadata.ts
+  function videoId(link) {
+    var _a;
+    const url = facebookUrl(link);
+    if (!url) return void 0;
+    const id = /^\/watch\/?$/.test(url.pathname) ? url.searchParams.get("v") : (_a = /^\/(?:reel|(?:[^/]+\/)?videos)\/(\d+)\/?$/.exec(url.pathname)) == null ? void 0 : _a[1];
+    return id && /^\d{1,30}$/.test(id) ? id : void 0;
+  }
+  function ownedVideo(post) {
+    const evidence = getPostEvidence(post);
+    const videos = evidence.select(pageMetadataSelectors.video).filter((video) => ownsPostElement(video, post) && evidence.isRendered(video));
+    return videos.length === 1 ? videos[0] : void 0;
+  }
+  function playerId(video, post) {
+    const player = video.closest(pageMetadataSelectors.player);
+    if (!player || !post.contains(player) || !ownsPostElement(player, post)) return void 0;
+    const id = player.getAttribute("data-video-id");
+    return id && /^\d{1,30}$/.test(id) ? id : void 0;
+  }
+  function hasAiMetadata(post) {
+    var _a, _b, _c;
+    const evidence = getPostEvidence(post);
+    const keys = /* @__PURE__ */ new Set();
+    for (const link of evidence.select(pageMetadataSelectors.storyLinks)) {
+      if (!isOwnedNewsMetadata(link, post)) continue;
+      const key = (_a = facebookUrl(link)) == null ? void 0 : _a.searchParams.get("__cft__[0]");
+      if (key && key.length <= 2048) keys.add(key);
+    }
+    if (keys.size === 1) {
+      const key = keys.values().next().value;
+      if (key && ((_b = readPageMediaFacts(post, `story:${key}`)) == null ? void 0 : _b.ai) === true) return true;
+    }
+    const video = ownedVideo(post);
+    const id = video && playerId(video, post);
+    if (!id) return false;
+    const ownsIdentity = post.matches(pageMetadataSelectors.player) || evidence.select(pageMetadataSelectors.storyLinks).some((link) => isOwnedNewsMetadata(link, post) && videoId(link) === id);
+    return ownsIdentity && ((_c = readPageMediaFacts(post, `video:${id}`)) == null ? void 0 : _c.ai) === true;
+  }
+  function hasLiveTransport(player, post) {
+    const evidence = getPostEvidence(post);
+    return evidence.select(pageMetadataSelectors.liveToggle, player).some((toggle) => {
+      var _a;
+      if (!ownsPostElement(toggle, post) || !evidence.isRendered(toggle)) return false;
+      let row = toggle.parentElement;
+      for (let depth = 0; row && row !== player && depth < 6; depth++, row = row.parentElement) {
+        const controls = evidence.select(pageMetadataSelectors.transport, row);
+        if (controls.length < 5) continue;
+        return controls.length === 5 && controls[4] === toggle && controls.slice(0, 4).every((control) => !control.hasAttribute("aria-pressed")) && !!((_a = row.parentElement) == null ? void 0 : _a.querySelector(pageMetadataSelectors.slider));
+      }
+      return false;
+    });
+  }
+  function hasLiveMetadata(post) {
+    var _a;
+    const video = ownedVideo(post);
+    if (!video) return false;
+    const evidence = getPostEvidence(post);
+    let player = video.parentElement;
+    for (let depth = 0; player && post.contains(player) && depth < 16; depth++, player = player.parentElement) {
+      if (evidence.select(pageMetadataSelectors.video, player).length !== 1) return false;
+      if (!hasLiveTransport(player, post)) continue;
+      const ids = /* @__PURE__ */ new Set();
+      const ownedId = playerId(video, post);
+      if (ownedId) ids.add(ownedId);
+      for (const link of evidence.select(pageMetadataSelectors.links, player)) {
+        if (!ownsPostElement(link, post) || !evidence.isRendered(link)) continue;
+        const id2 = videoId(link);
+        if (id2) ids.add(id2);
+      }
+      if (ids.size !== 1) continue;
+      const id = ids.values().next().value;
+      return !!id && ((_a = readPageMediaFacts(post, `video:${id}`)) == null ? void 0 : _a.live) === true;
+    }
+    return false;
+  }
+  var init_media_metadata = __esm({
+    "src/feeds/shared/media-metadata.ts"() {
+      "use strict";
+      init_page_media_facts2();
+      init_post_evidence();
+      init_ownership();
+      init_page_metadata();
+      init_news_identity();
+    }
+  });
+
+  // src/feeds/news-author-action.ts
+  function authorKind(link) {
+    const url = facebookUrl(link);
+    if (!url || !/^(?:www\.|m\.)?facebook\.com$/.test(url.hostname)) return null;
+    if (/^\/groups\/(?!discover\/?$|feed\/?$|search\/?$)[^/]+\/?$/.test(url.pathname)) return "join";
+    if (url.pathname === "/profile.php" && url.searchParams.get("id")) return "follow";
+    if (/\.php\/?$/.test(url.pathname)) return null;
+    if (/^\/(?!(?:groups|watch|reel|reels|stories|events|friends|marketplace|saved|settings|notifications|search|help|gaming|pages)\/?$)[\w.-]+\/?$/.test(
+      url.pathname
+    ))
+      return "follow";
+    return null;
+  }
+  function hasInlineAuthorAction(post, kind) {
+    const evidence = getPostEvidence(post);
+    return ownNewsHeaders(post).some((header) => {
+      const controls = evidence.select(newsSelectors.authorActions, header).filter((control2) => isOwnedNewsMetadata(control2, post));
+      const control = controls[0];
+      if (controls.length !== 1 || !control || !control.matches(newsSelectors.inlineAuthorAction) || control.matches(newsSelectors.statefulAuthorAction) || control.closest(newsSelectors.authorLinks) || evidence.select(newsSelectors.actionNonCaption, control).length > 0)
+        return false;
+      const captions = evidence.select(newsSelectors.actionCaption, control);
+      const caption = captions[0];
+      if (captions.length !== 1 || !caption || !evidence.isRendered(caption)) return false;
+      const links = evidence.select(newsSelectors.authorLinks, header).filter((link) => isOwnedNewsMetadata(link, post));
+      if (!links.length || links.some((link) => authorKind(link) !== kind)) return false;
+      let branch = control;
+      while (branch && branch !== header) {
+        const separator = branch.previousElementSibling;
+        const actionBranch = branch;
+        if (separator && !separator.querySelector(newsSelectors.authorActions) && !separator.querySelector(newsSelectors.authorLinks) && evidence.select(newsSelectors.authorSeparator, separator).length === 1 && links.every(
+          (link) => !actionBranch.contains(link) && Boolean(link.compareDocumentPosition(separator) & Node.DOCUMENT_POSITION_FOLLOWING)
+        ))
+          return true;
+        branch = branch.parentElement;
+      }
+      return false;
+    });
+  }
+  var init_news_author_action = __esm({
+    "src/feeds/news-author-action.ts"() {
+      "use strict";
+      init_post_evidence();
+      init_news();
+      init_news_identity();
+    }
+  });
+
   // src/feeds/news-detectors.ts
   function isNewsSuggested(post, state, keyWords) {
+    if (hasDiscoveryShelf(post, "groups")) return keyWords.NF_SUGGESTIONS;
+    if (hasPageSuggestionShelf(post)) return keyWords.NF_SUGGESTIONS;
     const queries = [
       "div[aria-posinset] > div > div > div > div > div > div:nth-of-type(2) > div > div > div:nth-of-type(2) > div > div:nth-of-type(2) > div > div:nth-of-type(2) > span > div > span:nth-of-type(1)",
       "div[aria-describedby] > div > div > div > div > div > div:nth-of-type(2) > div > div > div:nth-of-type(2) > div > div:nth-of-type(2) > div > div:nth-of-type(2) > span > div > span:nth-of-type(1)"
@@ -9411,6 +10353,7 @@ ${fence}
     return "";
   }
   function isGroupsYouMightLike(post) {
+    if (hasDiscoveryShelf(post, "groups")) return true;
     return hasNewsCardHeading(post, "groups") && getPostEvidence(post).select("a[href]").some(
       (link) => /^\/groups\/discover\/?$/.test(facebookPath(link) || "") && isOwnedNewsMetadata(link, post)
     );
@@ -9429,18 +10372,20 @@ ${fence}
     return hasPaidByDisclosure(post) ? keyWords.NF_SPONSORED_PAID : "";
   }
   function isNewsReelsAndShortVideos(post, keyWords) {
-    if (isNewsReelShelf(post)) return keyWords.NF_REELS_SHORT_VIDEOS;
+    if (isNewsReelShelf(post) || ownPostReelLinks(post).length > 4)
+      return keyWords.NF_REELS_SHORT_VIDEOS;
     const shelf = hasNewsCardHeading(post, "reels") && getPostEvidence(post).select("a[href]").some((link) => {
       var _a;
       if (facebookPath(link) !== "/reel/" || !isOwnedNewsMetadata(link, post)) return false;
       return ((_a = facebookUrl(link)) == null ? void 0 : _a.searchParams.get("s")) === "ifu_see_more";
     });
-    return shelf || ownPostReelLinks(post).length > 4 ? keyWords.NF_REELS_SHORT_VIDEOS : "";
+    return shelf ? keyWords.NF_REELS_SHORT_VIDEOS : "";
   }
   function isNewsShortReelVideo(post, keyWords) {
     return ownPostReelLinks(post).length === 1 ? keyWords.NF_SHORT_REEL_VIDEO : "";
   }
   function isNewsEventsYouMayLike(post, keyWords) {
+    if (hasDiscoveryShelf(post, "events")) return keyWords.NF_EVENTS_YOU_MAY_LIKE;
     const query = ":scope div > div:nth-of-type(2) > div > div >  h3 > span";
     if (hasNewsCardHeading(post, "events") && getPostEvidence(post).select("a[href]").some(
       (link) => isOwnedNewsMetadata(link, post) && /^\/events(?:\/|$)/.test(facebookPath(link) || "")
@@ -9463,6 +10408,8 @@ ${fence}
     });
   }
   function isNewsFollow(post, keyWords) {
+    if (hasInlineAuthorAction(post, "follow")) return keyWords.NF_FOLLOW;
+    if (hasHeaderAction(post, "follow")) return keyWords.NF_FOLLOW;
     const queries = [
       ":scope h4[id] > span > div > span",
       ":scope h4[id] > span > span > div > span",
@@ -9472,37 +10419,25 @@ ${fence}
     const fallback = leaves.length === 1 && leaves.some(
       (leaf) => isOwnedNewsMetadata(leaf, post) && hasNewsActionName(leaf, post, "follow")
     );
-    return hasHeaderAction(post, "follow") || fallback ? keyWords.NF_FOLLOW : "";
+    return fallback ? keyWords.NF_FOLLOW : "";
   }
   function isNewsParticipate(post, keyWords) {
+    if (hasInlineAuthorAction(post, "join")) return keyWords.NF_PARTICIPATE;
+    if (hasHeaderAction(post, "join")) return keyWords.NF_PARTICIPATE;
     const leaves = getPostEvidence(post).select(":scope h4 > span > span[class] > span").filter((leaf) => leaf.childElementCount === 0 && isOwnedNewsMetadata(leaf, post));
     const fallback = leaves.length === 1 && leaves.some((leaf) => isOwnedNewsMetadata(leaf, post) && hasNewsActionName(leaf, post, "join"));
-    return hasHeaderAction(post, "join") || fallback ? keyWords.NF_PARTICIPATE : "";
-  }
-  function isMetaAiLink(link) {
-    const href = link.getAttribute("href");
-    if (!href) return false;
-    try {
-      let url = new URL(href, document.baseURI);
-      if (url.hostname === "l.facebook.com" && url.pathname === "/l.php") {
-        const destination = url.searchParams.get("u");
-        if (!destination) return false;
-        url = new URL(destination);
-      }
-      return (url.protocol === "https:" || url.protocol === "http:") && (url.hostname === "meta.ai" || url.hostname.endsWith(".meta.ai"));
-    } catch (e) {
-      return false;
-    }
+    return fallback ? keyWords.NF_PARTICIPATE : "";
   }
   function isNewsMetaAICard(post, keyWords) {
     const evidence = getPostEvidence(post);
-    const branding = evidence.select("a[aria-label], a[aria-labelledby]").some(
-      (link) => isOwnedNewsMetadata(link, post) && evidence.isRendered(link) && evidence.explicitNames(link).some((name) => matchesDisclosureLabel(name, "metaAiBrand"))
-    );
-    if (branding || evidence.select("a[href]").some(
+    if (evidence.select("a[href]").some(
       (link) => isOwnedNewsMetadata(link, post) && evidence.isRendered(link) && isMetaAiLink(link)
     ))
       return keyWords.NF_META_AI;
+    const branding = evidence.select("a[aria-label], a[aria-labelledby]").some(
+      (link) => isOwnedNewsMetadata(link, post) && evidence.isRendered(link) && evidence.explicitNames(link).some((name) => matchesDisclosureLabel(name, "metaAiBrand"))
+    );
+    if (branding) return keyWords.NF_META_AI;
     const postTexts = extractFeedBlockText(post, getNewsBlocks(post), 3).join(" ");
     if (containsMetaAiCopy(postTexts)) return keyWords.NF_META_AI;
     return "";
@@ -9511,6 +10446,7 @@ ${fence}
     if (!post || !keyWords || typeof post.querySelectorAll !== "function") {
       return "";
     }
+    if (hasAiMetadata(post)) return keyWords.NF_AI_INFO_POSTS;
     const evidence = getPostEvidence(post);
     const hasAiInfoLabel = evidence.select('button, [role="button"]').some((control) => {
       if (!isOwnedNewsElement(control, post) || !evidence.isRendered(control)) return false;
@@ -9531,15 +10467,12 @@ ${fence}
     return matched ? keyWords.NF_STORIES : "";
   }
   function isNewsVerifiedBadge(post, keyWords) {
-    return ownVerifiedBadges(post).some(
-      (icon) => getPostEvidence(post).isRendered(icon) || isNewsFeatureCollapsed(icon, "badge")
-    ) ? keyWords.NF_FILTER_VERIFIED_BADGE : "";
+    return ownVerifiedBadges(post).length > 0 ? keyWords.NF_FILTER_VERIFIED_BADGE : "";
   }
   var init_news_detectors = __esm({
     "src/feeds/news-detectors.ts"() {
       "use strict";
       init_labels();
-      init_news_presentation();
       init_disclosure_labels2();
       init_post_evidence();
       init_walker();
@@ -9547,6 +10480,11 @@ ${fence}
       init_paid_partnership();
       init_paid_disclosure();
       init_news_people_structure();
+      init_discovery_structure();
+      init_page_suggestions2();
+      init_ai_destinations();
+      init_media_metadata();
+      init_news_author_action();
       init_news_stories();
       init_news_identity();
     }
@@ -9690,6 +10628,49 @@ ${fence}
     }
   });
 
+  // src/feeds/news-rail-structure.ts
+  function findStructuralRailAdSection(rail, heading) {
+    for (let section = heading.parentElement; section && section !== rail; section = section.parentElement) {
+      if (section.hasAttribute(postAtt) || section.querySelector(newsSelectors.railContentBoundary))
+        return null;
+      const evidence = getPostEvidence(section);
+      const headings = evidence.select(newsSelectors.advertisingRailHeadings);
+      if (headings.length !== 1 || headings[0] !== heading) return null;
+      if (!evidence.isRendered(heading)) return null;
+      const ad = evidence.select(newsSelectors.attributedAdLinks).some((link) => {
+        if (!ownsPostElement(link, section) || !evidence.isRendered(link) || !(heading.compareDocumentPosition(link) & Node.DOCUMENT_POSITION_FOLLOWING))
+          return false;
+        try {
+          const url = new URL(link.getAttribute("href") || "", "https://www.facebook.com/");
+          if (url.protocol !== "https:" || url.hostname !== "l.facebook.com" || url.pathname !== "/l.php" || url.username || url.password || !url.searchParams.has("u"))
+            return false;
+          return evidence.select(sharedSelectors.images, link).some((image) => {
+            let ancestor = image;
+            while (ancestor && ancestor !== link) {
+              if (!evidence.isPainted(ancestor)) return false;
+              ancestor = ancestor.parentElement;
+            }
+            return ancestor === link;
+          });
+        } catch (e) {
+          return false;
+        }
+      });
+      if (ad) return section;
+    }
+    return null;
+  }
+  var init_news_rail_structure = __esm({
+    "src/feeds/news-rail-structure.ts"() {
+      "use strict";
+      init_post_evidence();
+      init_ownership();
+      init_attributes();
+      init_news();
+      init_shared();
+    }
+  });
+
   // src/feeds/news-right-rail.ts
   function getNormalizedElementText(element) {
     if (!element) {
@@ -9761,12 +10742,10 @@ ${fence}
     if (!rightRail) {
       return false;
     }
-    const headings = Array.from(
-      rightRail.querySelectorAll('h1, h2, h3, h4, [role="heading"]')
-    ).filter((heading) => isRightRailHeadingText(heading, keyWords.SPONSORED));
+    const headings = Array.from(rightRail.querySelectorAll('h1, h2, h3, h4, [role="heading"]'));
     let hidden = false;
     for (const heading of headings) {
-      const section = findRightRailSponsoredSection(rightRail, heading, keyWords.SPONSORED);
+      const section = findStructuralRailAdSection(rightRail, heading) || (isRightRailHeadingText(heading, keyWords.SPONSORED) ? findRightRailSponsoredSection(rightRail, heading, keyWords.SPONSORED) : null);
       if (section) {
         hideFeature(section, keyWords.SPONSORED, false, context);
         hidden = true;
@@ -9780,6 +10759,15 @@ ${fence}
     const query = 'div[role="complementary"] > div > div > div > div > div:not([data-visualcompletion])';
     for (const container of document.querySelectorAll(query)) {
       for (const item of container.querySelectorAll(`:scope > div:not([${postAtt}])`)) {
+        if (hasDiscoveryShelf(item, "groups") || hasPeopleDiscoveryStructure(item) || hasPageSuggestionShelf(item)) {
+          hideNewsPost(item, keyWords.NF_SUGGESTIONS, false, {
+            options,
+            keyWords,
+            attributes: { postAtt, postAttTab },
+            state
+          });
+          continue;
+        }
         const kinds2 = ["suggested", "groups", "people"];
         if (!kinds2.some((kind) => hasNewsCardHeading(item, kind))) continue;
         const otherHeading = Array.from(
@@ -9806,6 +10794,59 @@ ${fence}
       init_text_normalize();
       init_attributes();
       init_hide();
+      init_news_rail_structure();
+      init_discovery_structure();
+      init_page_suggestions2();
+      init_news_people_structure();
+    }
+  });
+
+  // src/feeds/news-feature-boundary.ts
+  function isStandaloneNewsFeature(candidate, main, allowIndependentPost = false) {
+    if (!candidate || !main || candidate === main || !main.contains(candidate)) return false;
+    const owner = candidate.closest(sharedSelectors.postOwner);
+    if (owner && (!allowIndependentPost || owner !== candidate)) return false;
+    if (candidate.closest(sharedSelectors.authoredContent) || candidate.querySelector(newsSelectors.featureContentBoundary))
+      return false;
+    return getPostEvidence(main).isRendered(candidate);
+  }
+  var init_news_feature_boundary = __esm({
+    "src/feeds/news-feature-boundary.ts"() {
+      "use strict";
+      init_post_evidence();
+      init_news();
+      init_shared();
+    }
+  });
+
+  // src/feeds/news-sidebar-target.ts
+  function getAiSidebarLinkTarget(link, surface, matchesDestination) {
+    var _a;
+    if (!ownsPostElement(link, surface) || !isNewsFeatureRendered(link, surface, "sidebar"))
+      return null;
+    const item = link.closest("li");
+    if (!item || item === surface || !surface.contains(item)) return link;
+    const links = Array.from(item.querySelectorAll(sharedSelectors.links));
+    if (links.some((candidate) => !matchesDestination(candidate))) return link;
+    if (item.querySelector(`${sharedSelectors.postOwner}, ${sharedSelectors.authoredContent}`) || Array.from(item.querySelectorAll(sharedSelectors.interactive)).some(
+      (control) => !links.some((candidate) => candidate === control || candidate.contains(control))
+    ))
+      return link;
+    const walker = item.ownerDocument.createTreeWalker(item, NodeFilter.SHOW_TEXT);
+    let node;
+    while (node = walker.nextNode()) {
+      const textNode = node;
+      if (((_a = textNode.textContent) == null ? void 0 : _a.trim()) && !links.some((candidate) => candidate.contains(textNode)))
+        return link;
+    }
+    return item;
+  }
+  var init_news_sidebar_target = __esm({
+    "src/feeds/news-sidebar-target.ts"() {
+      "use strict";
+      init_ownership();
+      init_shared();
+      init_news_presentation();
     }
   });
 
@@ -9817,10 +10858,12 @@ ${fence}
     const labelledRegion = mainColumn.querySelector(
       'div[role="region"][aria-label="profile plus top of feed cards"]'
     );
-    if (labelledRegion) {
+    if (isStandaloneNewsFeature(labelledRegion, mainColumn)) {
       return labelledRegion;
     }
-    const anchors = Array.from(mainColumn.querySelectorAll('a[href="/reel/"], a[href="/stories/"]'));
+    const anchors = Array.from(
+      mainColumn.querySelectorAll('a[href="/reel/"], a[href="/stories/"]')
+    ).filter((link) => !link.closest(sharedSelectors.authoredContent));
     if (anchors.length === 0) {
       return null;
     }
@@ -9830,7 +10873,7 @@ ${fence}
         return;
       }
       const region = anchor.closest('div[role="region"]');
-      if (region && mainColumn.contains(region)) {
+      if (isStandaloneNewsFeature(region, mainColumn)) {
         candidates.add(region);
       }
     });
@@ -9850,7 +10893,7 @@ ${fence}
     }
     let node = reelsLink.parentElement;
     while (node && node !== mainColumn) {
-      if (node.contains(storiesLink)) {
+      if (node.contains(storiesLink) && isStandaloneNewsFeature(node, mainColumn)) {
         return node;
       }
       node = node.parentElement;
@@ -9871,7 +10914,7 @@ ${fence}
         return;
       }
       const elParent = climbUpTheTree(elTabList, 4);
-      if (elParent instanceof Element) {
+      if (elParent instanceof Element && isStandaloneNewsFeature(elParent, elTabList.closest(newsSelectors.mainSurface))) {
         if (tabLabel) {
           hideFeature(elParent, tabLabel.replaceAll('"', ""), false, context);
         }
@@ -9883,7 +10926,8 @@ ${fence}
       const elCreateStory = document.querySelector(queryForCreateStory);
       if (elCreateStory && !elCreateStory.hasAttribute(postAttChildFlag)) {
         const elParent = getStoriesParent(elCreateStory);
-        if (elParent instanceof Element) {
+        const url = facebookUrl(elCreateStory);
+        if (elParent instanceof Element && url && /^\/stories\/create\/?$/.test(url.pathname) && isStandaloneNewsFeature(elParent, elCreateStory.closest(newsSelectors.mainSurface))) {
           hideFeature(elParent, keyWords.NF_TABLIST_STORIES_REELS_ROOMS, false, context);
           elCreateStory.setAttribute(postAttChildFlag, "1");
         }
@@ -9909,10 +10953,14 @@ ${fence}
       document.querySelectorAll(
         `${newsSelectors.surveyButton}:not([${postAtt}]):not([${postAttChildFlag}])`
       )
-    ).find((button) => !button.closest(`[${postAtt}]`));
+    ).find((button) => {
+      const link = button.parentElement;
+      const url = link ? facebookUrl(link) : null;
+      return !button.closest(`[${postAtt}]`) && url && /^\/survey\/?$/.test(url.pathname) && url.searchParams.has("session") && !button.closest(sharedSelectors.authoredContent);
+    });
     if (btnSurvey) {
       const elContainer = climbUpTheTree(btnSurvey.closest('[style*="border-radius"]'), 3);
-      if (elContainer instanceof Element) {
+      if (elContainer instanceof Element && isStandaloneNewsFeature(elContainer, btnSurvey.closest(newsSelectors.mainSurface), true)) {
         hideFeature(elContainer, "Survey", false, context);
         btnSurvey.setAttribute(postAttChildFlag, keyWords.NF_SURVEY);
       }
@@ -9957,13 +11005,17 @@ ${fence}
     const targets = /* @__PURE__ */ new Set();
     const navs = Array.from(document.querySelectorAll('div[role="navigation"]'));
     navs.forEach((nav) => {
-      const metaLinks = Array.from(nav.querySelectorAll("a[href]")).filter(isMetaAiLink);
+      const metaLinks = Array.from(nav.querySelectorAll("a[href]")).filter(
+        (link) => isMetaAiLink(link) || isManusAiLink(link)
+      );
       metaLinks.forEach((link) => {
-        const li = link.closest("li");
-        targets.add(li || link);
+        const matchesDestination = isManusAiLink(link) ? isManusAiLink : isMetaAiLink;
+        const target = getAiSidebarLinkTarget(link, nav, matchesDestination);
+        if (target) targets.add(target);
       });
       const navItems = Array.from(nav.querySelectorAll("li"));
       navItems.forEach((li) => {
+        if (Array.from(targets).some((target) => li.contains(target))) return;
         const text = li.textContent ? li.textContent.trim() : "";
         if (text === "Manus AI") {
           targets.add(li);
@@ -9974,11 +11026,21 @@ ${fence}
     if (rightPanel) {
       const metaThreads = rightPanel.querySelectorAll('a[href*="/messages/t/36327,2227039302/"]');
       metaThreads.forEach((link) => {
-        const li = link.closest("li");
-        targets.add(li || link);
+        var _a;
+        if (((_a = facebookUrl(link)) == null ? void 0 : _a.pathname) !== "/messages/t/36327,2227039302/") return;
+        const target = getAiSidebarLinkTarget(
+          link,
+          rightPanel,
+          (candidate) => {
+            var _a2;
+            return ((_a2 = facebookUrl(candidate)) == null ? void 0 : _a2.pathname) === "/messages/t/36327,2227039302/";
+          }
+        );
+        if (target) targets.add(target);
       });
       const rightItems = Array.from(rightPanel.querySelectorAll("li"));
       rightItems.forEach((li) => {
+        if (Array.from(targets).some((target) => li.contains(target))) return;
         const text = li.textContent ? li.textContent.trim() : "";
         if (text.includes("Meta AI")) {
           targets.add(li);
@@ -9999,7 +11061,11 @@ ${fence}
       init_hide();
       init_dom();
       init_news();
-      init_news_detectors();
+      init_shared();
+      init_post_evidence();
+      init_news_feature_boundary();
+      init_news_sidebar_target();
+      init_ai_destinations();
       init_news_identity();
       init_news_presentation();
     }
@@ -10077,23 +11143,25 @@ ${fence}
     if (!row || typeof row.querySelectorAll !== "function") {
       return [];
     }
-    return Array.from(
-      row.querySelectorAll(
-        '[data-type="hscroll-child"] button, [data-type="hscroll-child"] [role="button"]'
-      )
-    );
+    const evidence = getPostEvidence(row);
+    return evidence.select(newsSelectors.promptButtons).filter((button) => {
+      var _a;
+      const parentAction = (_a = button.parentElement) == null ? void 0 : _a.closest(newsSelectors.peopleActions);
+      return (!parentAction || !row.contains(parentAction)) && !button.closest(sharedSelectors.authoredContent) && evidence.isRendered(button);
+    });
   }
   function getMetaAiPromptButtonText(button) {
     if (!button || typeof button.textContent !== "string") {
       return "";
     }
-    return cleanText(button.textContent).trim();
+    return cleanText(getPostEvidence(button).visibleText(button)).trim();
   }
   function hasMetaAiPromptButtonIcon(button) {
     if (!button || typeof button.querySelector !== "function") {
       return false;
     }
-    return button.querySelector("i, img, svg") !== null;
+    const evidence = getPostEvidence(button);
+    return evidence.select(newsSelectors.promptIcons).some((icon) => evidence.isRendered(icon));
   }
   function hasMetaAiPromptButtonLabel(button) {
     if (!button || typeof button.getAttribute !== "function") {
@@ -10109,6 +11177,8 @@ ${fence}
     if (chipButtons.length !== 3) {
       return false;
     }
+    if (new Set(chipButtons.map((button) => button.closest(newsSelectors.peopleTiles))).size !== 3)
+      return false;
     const buttonTexts = chipButtons.map((button) => getMetaAiPromptButtonText(button));
     if (buttonTexts[0] === "" || buttonTexts[1] === "" || buttonTexts[2] !== "") {
       return false;
@@ -10158,10 +11228,11 @@ ${fence}
     const candidateRows = /* @__PURE__ */ new Set();
     const chips = root.querySelectorAll('[data-type="hscroll-child"]');
     chips.forEach((chip) => {
+      if (chip.closest(sharedSelectors.authoredContent)) return;
       let current2 = chip.parentElement;
       while (current2 && current2 !== root) {
         if (current2.matches(newsSelectors.standardPost)) break;
-        if (isMetaAiPromptCandidateRow(current2, root) && containsOnlyPromptContent(current2)) {
+        if (getPostEvidence(root).isRendered(current2) && isMetaAiPromptCandidateRow(current2, root) && containsOnlyPromptContent(current2)) {
           candidateRows.add(current2);
         }
         current2 = current2.parentElement;
@@ -10238,8 +11309,10 @@ ${fence}
     "src/feeds/news-meta-ai.ts"() {
       "use strict";
       init_text_normalize();
+      init_post_evidence();
       init_hide();
       init_news();
+      init_shared();
     }
   });
 
@@ -10275,7 +11348,10 @@ ${fence}
         ))
           return false;
         if (Array.from(card.querySelectorAll(newsSelectors.railActions)).filter(
-          (action) => isRequestSignal(action, section)
+          (action) => {
+            var _a;
+            return isRequestSignal(action, section) && !((_a = action.parentElement) == null ? void 0 : _a.closest(newsSelectors.railActions));
+          }
         ).length >= 2)
           return true;
         card = card.parentElement;
@@ -10558,12 +11634,122 @@ ${fence}
     }
   });
 
+  // src/selectors/ad-slots.ts
+  var adSlotSelectors;
+  var init_ad_slots = __esm({
+    "src/selectors/ad-slots.ts"() {
+      "use strict";
+      adSlotSelectors = {
+        disclosures: 'h2 a[href*="/ads/about/"], h3 a[href*="/ads/about/"]',
+        headings: "h2, h3",
+        links: "a[href]",
+        controls: 'button, [role="button"]',
+        menu: '[aria-haspopup="dialog"], [aria-haspopup="menu"]',
+        media: "img, video",
+        input: 'input, textarea, select, [contenteditable="true"]'
+      };
+    }
+  });
+
+  // src/feeds/shared/ad-slots.ts
+  function isOwnedSlot(container, root) {
+    const foreign = container.closest(
+      `${sharedSelectors.postOwner}, ${sharedSelectors.authoredContent}`
+    );
+    if (foreign && foreign !== root && root.contains(foreign)) return false;
+    const evidence = getPostEvidence(root);
+    let ancestor = container;
+    while (ancestor && ancestor !== root) {
+      if (ancestor === container && ancestor.hasAttribute(postAtt)) {
+        if (ancestor.matches('[hidden], [inert], [aria-hidden="true"]') || ancestor instanceof HTMLElement && (ancestor.style.display === "none" || ancestor.style.visibility === "hidden"))
+          return false;
+      } else if (!evidence.isVisible(ancestor)) return false;
+      ancestor = ancestor.parentElement;
+    }
+    return ancestor === root;
+  }
+  function hasForeignContent(container, heading, creative) {
+    var _a;
+    const pending = [container];
+    let visited = 0;
+    while (pending.length) {
+      const node = pending.pop();
+      if (!node || node === heading || node === creative) continue;
+      if (++visited > 128) return true;
+      if (node.nodeType === Node.TEXT_NODE && ((_a = node.textContent) == null ? void 0 : _a.trim())) return true;
+      if (node instanceof Element && node.matches("img, video, svg, input, textarea")) return true;
+      pending.push(...Array.from(node.childNodes));
+    }
+    return false;
+  }
+  function isAdCreative(link) {
+    const url = facebookUrl(link);
+    return !!((url == null ? void 0 : url.hostname) === "l.facebook.com" && url.pathname === "/l.php" && url.searchParams.get("u") && url.searchParams.get("ai"));
+  }
+  function findAdSlot(disclosure, root) {
+    var _a;
+    if (((_a = facebookUrl(disclosure)) == null ? void 0 : _a.pathname) !== "/ads/about/") return null;
+    const heading = disclosure.closest(adSlotSelectors.headings);
+    if (!heading || heading.querySelectorAll(adSlotSelectors.links).length !== 1) return null;
+    const controls = heading.querySelectorAll(adSlotSelectors.controls);
+    const menu = controls[0];
+    if (controls.length !== 1 || !(menu == null ? void 0 : menu.matches(adSlotSelectors.menu)) || !menu.querySelector("svg, i"))
+      return null;
+    let container = heading.parentElement;
+    for (let depth = 0; container && container !== root && depth < 12; depth++, container = container.parentElement) {
+      if (!root.contains(container)) return null;
+      const links = container.querySelectorAll(adSlotSelectors.links);
+      if (links.length < 2) continue;
+      if (links.length !== 2 || container.children.length !== 2) return null;
+      const creative = Array.from(links).find((link) => link !== disclosure);
+      const evidence = getPostEvidence(container);
+      if (!creative || !isOwnedSlot(container, root) || !ownsPostElement(disclosure, container) || !ownsPostElement(menu, container) || !evidence.isRendered(disclosure) || !evidence.isRendered(menu) || heading.contains(creative) || !isAdCreative(creative) || !ownsPostElement(creative, container) || !evidence.isRendered(creative) || hasForeignContent(container, heading, creative) || container.querySelectorAll(adSlotSelectors.headings).length !== 1 || container.querySelector(
+        `${sharedSelectors.postOwner}, ${sharedSelectors.authoredContent}, ${adSlotSelectors.input}`
+      ) || !Array.from(creative.querySelectorAll(adSlotSelectors.media)).some(
+        (media) => evidence.isRendered(media)
+      ) || Array.from(container.querySelectorAll(adSlotSelectors.controls)).some(
+        (control) => !heading.contains(control) && !creative.contains(control)
+      ))
+        return null;
+      const branches = Array.from(container.children);
+      return branches.some((branch) => branch.contains(heading) && !branch.contains(creative)) && branches.some((branch) => branch.contains(creative) && !branch.contains(heading)) ? container : null;
+    }
+    return null;
+  }
+  function collectStructuralAdSlots(root) {
+    const slots = /* @__PURE__ */ new Set();
+    for (const disclosure of root.querySelectorAll(adSlotSelectors.disclosures)) {
+      const slot = findAdSlot(disclosure, root);
+      if (slot) slots.add(slot);
+    }
+    return Array.from(slots);
+  }
+  var init_ad_slots2 = __esm({
+    "src/feeds/shared/ad-slots.ts"() {
+      "use strict";
+      init_post_evidence();
+      init_ownership();
+      init_ad_slots();
+      init_shared();
+      init_attributes();
+    }
+  });
+
   // src/feeds/marketplace-discovery.ts
+  function listingDestination(item) {
+    const url = facebookUrl(item);
+    if (!url || !/^\/marketplace\/(?:np\/)?item\/[^/]+\/?$/.test(url.pathname) || item.closest(
+      `${sharedSelectors.authoredContent}, ${sharedSelectors.postOwner}, nav, [role="navigation"]`
+    ))
+      return null;
+    return url;
+  }
   function collectMarketplaceListings(root) {
     var _a, _b, _c;
     const boxes = /* @__PURE__ */ new Map();
     for (const query of marketplaceListingQueries) {
       for (const item of root.querySelectorAll(query)) {
+        if (!listingDestination(item)) continue;
         const box = item.closest("div[style]");
         if (box && box !== root && root.contains(box) && !boxes.has(box))
           boxes.set(box, {
@@ -10576,11 +11762,9 @@ ${fence}
     }
     for (const item of root.querySelectorAll(marketplaceVirtualizedListingQuery)) {
       const box = item.closest("[data-virtualized]");
-      const url = facebookUrl(item);
+      const url = listingDestination(item);
       const content = item.childElementCount === 1 && ((_a = item.firstElementChild) == null ? void 0 : _a.localName) === "div" ? item.firstElementChild : item;
-      if (!box || box === root || !root.contains(box) || boxes.has(box) || !url || !/^\/marketplace\/(?:np\/)?item\/\d+\/?$/.test(url.pathname) || item.closest(
-        `${sharedSelectors.authoredContent}, ${sharedSelectors.postOwner}, article, [role="article"], nav, [role="navigation"]`
-      ) || box.querySelectorAll(marketplaceVirtualizedAnchorQuery).length !== 1 || content.childElementCount !== 2 || ((_b = content.firstElementChild) == null ? void 0 : _b.localName) !== "div" || ((_c = content.lastElementChild) == null ? void 0 : _c.localName) !== "div")
+      if (!box || box === root || !root.contains(box) || boxes.has(box) || !url || !/^\/marketplace\/(?:np\/)?item\/\d+\/?$/.test(url.pathname) || box.querySelectorAll(marketplaceVirtualizedAnchorQuery).length !== 1 || content.childElementCount !== 2 || ((_b = content.firstElementChild) == null ? void 0 : _b.localName) !== "div" || ((_c = content.lastElementChild) == null ? void 0 : _c.localName) !== "div")
         continue;
       const textBlocks = Array.from(content.querySelectorAll(marketplaceVirtualizedTextBlockQuery));
       if (textBlocks.length < 2) continue;
@@ -10626,8 +11810,10 @@ ${fence}
   }
   function collectMarketplaceSponsoredBoxes(root, itemHeadings = false) {
     var _a;
-    const boxes = /* @__PURE__ */ new Set();
+    const structural = collectStructuralAdSlots(root);
+    const boxes = new Set(structural);
     for (const item of root.querySelectorAll(marketplaceLegacySponsoredQuery)) {
+      if (structural.some((slot) => slot.contains(item))) continue;
       const box = item.parentElement;
       if (!box) continue;
       const evidence = getPostEvidence(box);
@@ -10635,6 +11821,7 @@ ${fence}
         boxes.add(box);
     }
     for (const link of root.querySelectorAll(marketplaceSponsoredHeadingQuery)) {
+      if (structural.some((slot) => slot.contains(link))) continue;
       const parent = link.parentElement;
       const heading = (parent == null ? void 0 : parent.tagName) === "OBJECT" ? parent.parentElement : parent;
       if (!heading || heading === root || !root.contains(heading) || !isSponsoredDisclosure(link, heading))
@@ -10649,6 +11836,7 @@ ${fence}
     }
     if (itemHeadings) {
       for (const link of root.querySelectorAll(marketplaceItemSponsoredHeadingQuery)) {
+        if (structural.some((slot) => slot.contains(link))) continue;
         const box = (_a = link.closest("h2")) == null ? void 0 : _a.closest("span");
         if (box && root.contains(box) && isSponsoredDisclosure(link, box)) boxes.add(box);
       }
@@ -10668,8 +11856,282 @@ ${fence}
       init_shared();
       init_disclosure_labels2();
       init_sponsored();
+      init_ad_slots2();
       init_marketplace();
       listingSignatures = /* @__PURE__ */ new WeakMap();
+    }
+  });
+
+  // src/feeds/search-discovery.ts
+  function collectSearchPosts(root) {
+    var _a, _b;
+    const posts = /* @__PURE__ */ new Set();
+    for (const feed of root.querySelectorAll(searchSelectors.feed)) {
+      const enclosing = (_a = feed.parentElement) == null ? void 0 : _a.closest(
+        `${searchSelectors.feed}, ${sharedSelectors.postOwner}, ${sharedSelectors.authoredContent}`
+      );
+      if (enclosing && root.contains(enclosing)) continue;
+      const candidates = /* @__PURE__ */ new Set([
+        ...feed.querySelectorAll(searchSelectors.legacyPosts),
+        ...feed.querySelectorAll(sharedSelectors.postOwner)
+      ]);
+      for (const candidate of candidates) {
+        const parent = (_b = candidate.parentElement) == null ? void 0 : _b.closest(
+          `${sharedSelectors.postOwner}, ${sharedSelectors.authoredContent}`
+        );
+        if (parent && feed.contains(parent)) continue;
+        if (candidate.matches(sharedSelectors.postOwner)) {
+          posts.add(candidate);
+          continue;
+        }
+        const evidence = getPostEvidence(candidate);
+        const hasOwnContent = evidence.select(`${sharedSelectors.authorMetadata}, ${sharedSelectors.authoredContent}`).some((signal) => {
+          const owner = signal.closest(sharedSelectors.postOwner);
+          return (!owner || !candidate.contains(owner)) && evidence.isRendered(signal);
+        });
+        if (hasOwnContent || !candidate.querySelector(sharedSelectors.postOwner))
+          posts.add(candidate);
+      }
+    }
+    return Array.from(posts).filter((post) => {
+      let parent = post.parentElement;
+      while (parent && parent !== root) {
+        if (posts.has(parent)) return false;
+        parent = parent.parentElement;
+      }
+      return true;
+    }).sort(
+      (left, right) => left.compareDocumentPosition(right) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1
+    );
+  }
+  var init_search_discovery = __esm({
+    "src/feeds/search-discovery.ts"() {
+      "use strict";
+      init_post_evidence();
+      init_search();
+      init_shared();
+    }
+  });
+
+  // src/feeds/profile.ts
+  function isProfileColumnDirty(state) {
+    const arrReturn = [null, null];
+    const mainColumn = document.querySelector(profileSelectors.mainColumn);
+    if (mainColumn) {
+      ensureDirtyObserver(mainColumn);
+      if (!mainColumn.hasAttribute(mainColumnAtt)) {
+        mainColumn.setAttribute(mainColumnAtt, "1");
+        markElementDirty(mainColumn);
+      }
+      if (state && state.forceProcess) {
+        markElementDirty(mainColumn);
+      }
+      if (state && state.forceProcess) {
+        arrReturn[0] = mainColumn;
+      } else if (isElementDirty(mainColumn)) {
+        arrReturn[0] = mainColumn;
+      }
+    }
+    const elDialog = document.querySelector(profileSelectors.dialog);
+    if (elDialog) {
+      ensureDirtyObserver(elDialog);
+      if (!elDialog.hasAttribute(mainColumnAtt)) {
+        elDialog.setAttribute(mainColumnAtt, "1");
+        markElementDirty(elDialog);
+      }
+      if (state && state.forceProcess) {
+        markElementDirty(elDialog);
+      }
+      if (state && state.forceProcess) {
+        arrReturn[1] = elDialog;
+      } else if (isElementDirty(elDialog)) {
+        arrReturn[1] = elDialog;
+      }
+    }
+    if (state) {
+      state.noChangeCounter += 1;
+    }
+    return arrReturn;
+  }
+  function profilePermalinkIdentity(link) {
+    const url = facebookUrl(link);
+    if (!url) return null;
+    if (/^\/(?:story|permalink)\.php$/.test(url.pathname)) {
+      const story = url.searchParams.get("story_fbid");
+      return story ? `${url.origin}${url.pathname}?story_fbid=${story}` : null;
+    }
+    return /^\/(?:[^/]+\/)*(?:posts|permalink)\/[^/]+\/?$/.test(url.pathname) ? `${url.origin}${url.pathname.replace(/\/$/, "")}` : null;
+  }
+  function collectProfilePosts(mainColumn) {
+    var _a, _b, _c;
+    if (!mainColumn) {
+      return [];
+    }
+    const containers = /* @__PURE__ */ new Set();
+    const rootEvidence = getPostEvidence(mainColumn);
+    for (const post of mainColumn.querySelectorAll(sharedSelectors.postOwner)) {
+      const authoredParent = (_a = post.parentElement) == null ? void 0 : _a.closest(sharedSelectors.authoredContent);
+      if (authoredParent && mainColumn.contains(authoredParent)) continue;
+      if (post.hasAttribute("hidden") || post.getAttribute("aria-hidden") === "true") continue;
+      if (!post.parentElement || !rootEvidence.isRendered(post.parentElement)) continue;
+      if (!post.hasAttribute(postAtt) && !rootEvidence.isVisible(post)) continue;
+      const evidence = getPostEvidence(post);
+      const author = evidence.select(sharedSelectors.profileName).some((signal) => {
+        const authored = signal.closest(sharedSelectors.authoredContent);
+        return signal.closest(sharedSelectors.postOwner) === post && (!authored || !post.contains(authored)) && evidence.isRendered(signal) && evidence.select(sharedSelectors.links, signal).some((link) => evidence.isRendered(link) && facebookUrl(link) !== null);
+      });
+      if (author) containers.add(post);
+    }
+    const selector = profileSelectors.permalinks;
+    const permalinks = Array.from(mainColumn.querySelectorAll(selector)).filter(
+      (link) => profilePermalinkIdentity(link) !== null && !link.closest(sharedSelectors.commentContent) && getPostEvidence(mainColumn).isRendered(link)
+    );
+    for (const link of permalinks) {
+      if (Array.from(containers).some((post) => post.contains(link))) continue;
+      let node = link.parentElement;
+      let lastSingle = null;
+      const explicitPost = link.closest(sharedSelectors.postOwner);
+      if (explicitPost && explicitPost !== mainColumn && mainColumn.contains(explicitPost)) {
+        let ownedPost = explicitPost;
+        let enclosing = (_b = explicitPost.parentElement) == null ? void 0 : _b.closest(
+          sharedSelectors.postOwner
+        );
+        while (enclosing && enclosing !== mainColumn && mainColumn.contains(enclosing)) {
+          ownedPost = enclosing;
+          enclosing = (_c = enclosing.parentElement) == null ? void 0 : _c.closest(sharedSelectors.postOwner);
+        }
+        containers.add(ownedPost);
+        continue;
+      }
+      while (node && node !== mainColumn) {
+        if (Array.from(containers).some((post) => node == null ? void 0 : node.contains(post))) break;
+        const identities = new Set(
+          permalinks.filter((candidate) => node == null ? void 0 : node.contains(candidate)).map(profilePermalinkIdentity)
+        );
+        if (identities.size === 1) {
+          lastSingle = node;
+        } else {
+          break;
+        }
+        node = node.parentElement;
+      }
+      if (lastSingle) {
+        containers.add(lastSingle);
+      }
+    }
+    return Array.from(containers).filter((post) => {
+      let parent = post.parentElement;
+      while (parent && parent !== mainColumn) {
+        if (containers.has(parent)) return false;
+        parent = parent.parentElement;
+      }
+      return true;
+    }).sort(
+      (left, right) => left.compareDocumentPosition(right) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1
+    );
+  }
+  function mopProfileFeed(context) {
+    if (!context) {
+      return null;
+    }
+    const { state, options, filters, keyWords, pathInfo: pathInfo2 } = context;
+    if (!state || !options || !filters || !keyWords || !pathInfo2) {
+      return null;
+    }
+    const proceed = options.PP_BLOCKED_ENABLED || options.PP_ANIMATED_GIFS_POSTS || options.PP_ANIMATED_GIFS_PAUSE || state.hideAnInfoBox;
+    if (!proceed) {
+      return null;
+    }
+    const [mainColumn, elDialog] = isProfileColumnDirty(state);
+    if (!mainColumn && !elDialog) {
+      return null;
+    }
+    const mainColumnToken = mainColumn ? getDirtyToken(mainColumn) : null;
+    const dialogToken = elDialog ? getDirtyToken(elDialog) : null;
+    revalidateTrackedPosts(mainColumn, state);
+    if (mainColumn) {
+      const posts = collectProfilePosts(mainColumn);
+      if (posts.length === 0) {
+        return { mainColumn, elDialog };
+      }
+      for (const post of posts) {
+        if (!post.hasChildNodes()) {
+          continue;
+        }
+        let hideReason = "";
+        let alreadyHidden = false;
+        const isSponsoredPost = false;
+        const postChanged = hasPostChanged(post);
+        if (postChanged) {
+          resetPostState(post, state);
+        }
+        if (post.hasAttribute(postAtt)) {
+          alreadyHidden = true;
+        } else {
+          if (hideReason === "" && options.PP_ANIMATED_GIFS_POSTS) {
+            hideReason = hasNewsAnimatedGifContent(post, keyWords);
+          }
+          if (hideReason === "" && options.PP_BLOCKED_ENABLED) {
+            hideReason = findProfileBlockedText(post, options, filters);
+          }
+        }
+        if (alreadyHidden || hideReason.length > 0) {
+          if (!alreadyHidden) {
+            hidePost(post, hideReason, isSponsoredPost, {
+              options,
+              keyWords,
+              attributes: {
+                postAtt,
+                postAttTab
+              },
+              state
+            });
+          }
+        } else {
+          if (options.PP_ANIMATED_GIFS_PAUSE) {
+            swatTheMosquitos(post);
+          }
+          if (state.hideAnInfoBox) {
+            scrubInfoBoxes(post, options, keyWords, pathInfo2, state);
+          }
+        }
+        trackPostSignature(post);
+      }
+      if (!mainColumn.hasAttribute(mainColumnAtt)) {
+        mainColumn.setAttribute(mainColumnAtt, "1");
+      }
+      if (mainColumnToken !== null) {
+        markElementCleanIfUnchanged(mainColumn, mainColumnToken);
+      }
+      state.noChangeCounter = 0;
+    }
+    if (elDialog) {
+      if (options.PP_ANIMATED_GIFS_PAUSE) {
+        swatTheMosquitos(elDialog);
+      }
+      if (!elDialog.hasAttribute(mainColumnAtt)) {
+        elDialog.setAttribute(mainColumnAtt, "1");
+      }
+      if (dialogToken !== null) {
+        markElementCleanIfUnchanged(elDialog, dialogToken);
+      }
+      state.noChangeCounter = 0;
+    }
+    return { mainColumn, elDialog };
+  }
+  var init_profile2 = __esm({
+    "src/feeds/profile.ts"() {
+      "use strict";
+      init_attributes();
+      init_animated_gifs();
+      init_dirty_check();
+      init_hide();
+      init_info_boxes();
+      init_profile();
+      init_shared();
+      init_post_evidence();
+      init_blocked_text2();
+      init_animated_gifs2();
     }
   });
 
@@ -10827,12 +12289,14 @@ ${fence}
     return { query: root ? "combined" : "", listings: root ? collectMarketplaceListings(root) : [] };
   }
   function getProfilePostCollection() {
-    const posts = document.querySelectorAll(profileSelectors.postsQuery);
-    return { query: profileSelectors.postsQuery, posts: Array.from(posts) };
+    const root = document.querySelector(profileSelectors.mainColumn);
+    const posts = collectProfilePosts(root).filter((post) => post instanceof HTMLElement);
+    return { query: "profile post ownership", posts };
   }
   function getSearchPostCollection() {
-    const posts = document.querySelectorAll(searchSelectors.postsQuery);
-    return { query: searchSelectors.postsQuery, posts: Array.from(posts) };
+    const root = document.querySelector(searchSelectors.mainColumn);
+    const posts = root ? collectSearchPosts(root).filter((post) => post instanceof HTMLElement) : [];
+    return { query: "feed ownership", posts };
   }
   function buildDomSignature(post) {
     if (!post) {
@@ -10897,6 +12361,8 @@ ${fence}
       init_news2();
       init_sponsored();
       init_marketplace_discovery();
+      init_search_discovery();
+      init_profile2();
     }
   });
 
@@ -10963,11 +12429,11 @@ ${fence}
       },
       search: {
         mainColumn: document.querySelectorAll(searchSelectors.mainColumn).length,
-        postsQuery: document.querySelectorAll(searchSelectors.postsQuery).length
+        postsQuery: getSearchPostCollection().posts.length
       },
       profile: {
         mainColumn: document.querySelectorAll(profileSelectors.mainColumn).length,
-        postsQuery: document.querySelectorAll(profileSelectors.postsQuery).length
+        postsQuery: getProfilePostCollection().posts.length
       }
     };
   }
@@ -11095,12 +12561,11 @@ ${fence}
       if (!rail || !rail.contains(asideBox) || asideBox.querySelector('[role="main"], [role="feed"], [role="navigation"]')) {
         continue;
       }
-      const labels2 = asideBox.querySelectorAll(
-        ':scope > span, :scope > h2, :scope > h3, :scope > [role="heading"]'
-      );
-      const hasSuggestionLabel = Array.from(labels2).some(
-        (label) => hasGroupsSuggestionLabel(label, asideBox)
-      );
+      const hasSuggestionLabel = hasDiscoveryShelf(asideBox, "groups") || Array.from(
+        asideBox.querySelectorAll(
+          ':scope > span, :scope > h2, :scope > h3, :scope > [role="heading"]'
+        )
+      ).some((label) => hasGroupsSuggestionLabel(label, asideBox));
       if (hasSuggestionLabel && !asideBox.hasAttribute(postAtt)) {
         hideFeature(asideBox, keyWords.GF_SUGGESTIONS, true, { options, keyWords, state });
       }
@@ -11159,6 +12624,7 @@ ${fence}
     "src/feeds/groups-features.ts"() {
       "use strict";
       init_groups_identity();
+      init_discovery_structure();
       init_attributes();
       init_hide();
       init_dom();
@@ -11227,6 +12693,7 @@ ${fence}
   }
   function isGroupsSuggested(post, keyWords) {
     var _a, _b;
+    if (hasDiscoveryShelf(post, "groups")) return keyWords.GF_SUGGESTIONS;
     const blocks = getGroupsBlocks(post);
     if (blocks.length <= 1) return "";
     const icons = ((_a = blocks[0]) == null ? void 0 : _a.querySelectorAll('i[data-visualcompletion="css-img"][style]')) || [];
@@ -11405,6 +12872,7 @@ ${fence}
     "src/feeds/groups.ts"() {
       "use strict";
       init_groups_identity();
+      init_discovery_structure();
       init_groups_discovery();
       init_groups_features();
       init_attributes();
@@ -11465,8 +12933,8 @@ ${fence}
         const blockOfIcons = elHeader.querySelector(":scope > div:nth-of-type(2) > span");
         let newLink = "";
         if (blockOfIcons) {
-          const videoId = new URL(postLink.href).searchParams.get("v");
-          if (videoId !== null) {
+          const videoId2 = new URL(postLink.href).searchParams.get("v");
+          if (videoId2 !== null) {
             const watchLink = post.querySelector('a[href*="/watch/"]');
             if (!(watchLink instanceof HTMLAnchorElement)) {
               return;
@@ -11475,7 +12943,7 @@ ${fence}
             if (publisherLink === "") {
               return;
             }
-            newLink = `${publisherLink}videos/${videoId}/`;
+            newLink = `${publisherLink}videos/${videoId2}/`;
           } else {
             return;
           }
@@ -11567,6 +13035,7 @@ ${fence}
     });
   }
   function isVideoLive(post, keyWords) {
+    if (hasLiveMetadata(post)) return keyWords.VF_LIVE;
     const liveRule = 'div[role="presentation"] ~ div > div:nth-of-type(1) > span';
     return Array.from(post.querySelectorAll(liveRule)).some(
       (status) => isOwnedVideoSignal(status, post) && liveStatusLabels.has(normalizeVideoLabel(getPostEvidence(post).visibleText(status)))
@@ -11593,13 +13062,16 @@ ${fence}
     if (thirdBlock.hasAttribute(state.hideAtt)) {
       return;
     }
-    if (!isOwnedNewsElement(thirdBlock, post) || !Array.from(thirdBlock.querySelectorAll("a[href]")).some(
+    if (!isOwnedNewsElement(thirdBlock, post)) return;
+    const structural = collectStructuralAdSlots(post).filter((slot) => thirdBlock.contains(slot));
+    const targets = structural.length ? structural : Array.from(thirdBlock.querySelectorAll("a[href]")).some(
       (link) => isSponsoredDisclosure(link, post)
-    ))
-      return;
-    thirdBlock.setAttribute(postAtt, keyWords.SPONSORED);
-    thirdBlock.setAttribute(state.hideAtt, keyWords.SPONSORED);
-    if (options.VERBOSITY_DEBUG) thirdBlock.setAttribute(state.showAtt, "");
+    ) ? [thirdBlock] : [];
+    for (const target of targets) {
+      target.setAttribute(postAtt, keyWords.SPONSORED);
+      target.setAttribute(state.hideAtt, keyWords.SPONSORED);
+      if (options.VERBOSITY_DEBUG) target.setAttribute(state.showAtt, "");
+    }
   }
   function scrubSponsoredBlock(post, context) {
     const { state, options, keyWords } = context;
@@ -11762,6 +13234,7 @@ ${fence}
     "src/feeds/videos.ts"() {
       "use strict";
       init_video_links();
+      init_media_metadata();
       init_i18n();
       init_text_normalize();
       init_post_evidence();
@@ -11775,6 +13248,7 @@ ${fence}
       init_news_identity();
       init_blocked_text2();
       init_sponsored();
+      init_ad_slots2();
       liveStatusLabels = new Set(
         [...Object.values(translations).map((catalog24) => catalog24.VF_LIVE), "EN VIVO", "AO VIVO"].map(
           normalizeVideoLabel
@@ -13379,214 +14853,6 @@ ${fence}
     }
   });
 
-  // src/feeds/profile.ts
-  function isProfileColumnDirty(state) {
-    const arrReturn = [null, null];
-    const mainColumn = document.querySelector(profileSelectors.mainColumn);
-    if (mainColumn) {
-      ensureDirtyObserver(mainColumn);
-      if (!mainColumn.hasAttribute(mainColumnAtt)) {
-        mainColumn.setAttribute(mainColumnAtt, "1");
-        markElementDirty(mainColumn);
-      }
-      if (state && state.forceProcess) {
-        markElementDirty(mainColumn);
-      }
-      if (state && state.forceProcess) {
-        arrReturn[0] = mainColumn;
-      } else if (isElementDirty(mainColumn)) {
-        arrReturn[0] = mainColumn;
-      }
-    }
-    const elDialog = document.querySelector(profileSelectors.dialog);
-    if (elDialog) {
-      ensureDirtyObserver(elDialog);
-      if (!elDialog.hasAttribute(mainColumnAtt)) {
-        elDialog.setAttribute(mainColumnAtt, "1");
-        markElementDirty(elDialog);
-      }
-      if (state && state.forceProcess) {
-        markElementDirty(elDialog);
-      }
-      if (state && state.forceProcess) {
-        arrReturn[1] = elDialog;
-      } else if (isElementDirty(elDialog)) {
-        arrReturn[1] = elDialog;
-      }
-    }
-    if (state) {
-      state.noChangeCounter += 1;
-    }
-    return arrReturn;
-  }
-  function profilePermalinkIdentity(link) {
-    var _a;
-    const href = (_a = link.getAttribute("href")) != null ? _a : "";
-    try {
-      const url = new URL(href, document.baseURI);
-      if (url.pathname.endsWith("story.php") || url.pathname.endsWith("permalink.php")) {
-        const story = url.searchParams.get("story_fbid");
-        return story ? `${url.origin}${url.pathname}?story_fbid=${story}` : `${url.origin}${url.pathname}${url.search}`;
-      }
-      return `${url.origin}${url.pathname.replace(/\/$/, "")}`;
-    } catch (e) {
-      return href;
-    }
-  }
-  function getProfilePostsFromPermalinks(mainColumn) {
-    var _a, _b;
-    if (!mainColumn) {
-      return [];
-    }
-    const selector = profilePermalinkSelectors.join(",");
-    const permalinks = Array.from(mainColumn.querySelectorAll(selector));
-    if (permalinks.length === 0) {
-      return [];
-    }
-    const containers = /* @__PURE__ */ new Set();
-    for (const link of permalinks) {
-      let node = link.parentElement;
-      let lastSingle = null;
-      const explicitPost = link.closest('div[aria-posinset], div[role="article"]');
-      if (explicitPost && explicitPost !== mainColumn && mainColumn.contains(explicitPost)) {
-        let ownedPost = explicitPost;
-        let enclosing = (_a = explicitPost.parentElement) == null ? void 0 : _a.closest(
-          'div[aria-posinset], div[role="article"]'
-        );
-        while (enclosing && enclosing !== mainColumn && mainColumn.contains(enclosing)) {
-          ownedPost = enclosing;
-          enclosing = (_b = enclosing.parentElement) == null ? void 0 : _b.closest('div[aria-posinset], div[role="article"]');
-        }
-        containers.add(ownedPost);
-        continue;
-      }
-      while (node && node !== mainColumn) {
-        const identities = new Set(
-          Array.from(node.querySelectorAll(selector), profilePermalinkIdentity)
-        );
-        if (identities.size === 1) {
-          lastSingle = node;
-        } else {
-          break;
-        }
-        node = node.parentElement;
-      }
-      if (lastSingle) {
-        containers.add(lastSingle);
-      }
-    }
-    return Array.from(containers);
-  }
-  function mopProfileFeed(context) {
-    if (!context) {
-      return null;
-    }
-    const { state, options, filters, keyWords, pathInfo: pathInfo2 } = context;
-    if (!state || !options || !filters || !keyWords || !pathInfo2) {
-      return null;
-    }
-    const proceed = options.PP_BLOCKED_ENABLED || options.PP_ANIMATED_GIFS_POSTS || options.PP_ANIMATED_GIFS_PAUSE || state.hideAnInfoBox;
-    if (!proceed) {
-      return null;
-    }
-    const [mainColumn, elDialog] = isProfileColumnDirty(state);
-    if (!mainColumn && !elDialog) {
-      return null;
-    }
-    const mainColumnToken = mainColumn ? getDirtyToken(mainColumn) : null;
-    const dialogToken = elDialog ? getDirtyToken(elDialog) : null;
-    revalidateTrackedPosts(mainColumn, state);
-    if (mainColumn) {
-      const posts = getProfilePostsFromPermalinks(mainColumn);
-      if (posts.length === 0) {
-        return { mainColumn, elDialog };
-      }
-      for (const post of posts) {
-        if (!post.hasChildNodes()) {
-          continue;
-        }
-        let hideReason = "";
-        let alreadyHidden = false;
-        const isSponsoredPost = false;
-        const postChanged = hasPostChanged(post);
-        if (postChanged) {
-          resetPostState(post, state);
-        }
-        if (post.hasAttribute(postAtt)) {
-          alreadyHidden = true;
-        } else {
-          if (hideReason === "" && options.PP_ANIMATED_GIFS_POSTS) {
-            hideReason = hasNewsAnimatedGifContent(post, keyWords);
-          }
-          if (hideReason === "" && options.PP_BLOCKED_ENABLED) {
-            hideReason = findProfileBlockedText(post, options, filters);
-          }
-        }
-        if (alreadyHidden || hideReason.length > 0) {
-          if (!alreadyHidden) {
-            hidePost(post, hideReason, isSponsoredPost, {
-              options,
-              keyWords,
-              attributes: {
-                postAtt,
-                postAttTab
-              },
-              state
-            });
-          }
-        } else {
-          if (options.PP_ANIMATED_GIFS_PAUSE) {
-            swatTheMosquitos(post);
-          }
-          if (state.hideAnInfoBox) {
-            scrubInfoBoxes(post, options, keyWords, pathInfo2, state);
-          }
-        }
-        trackPostSignature(post);
-      }
-      if (!mainColumn.hasAttribute(mainColumnAtt)) {
-        mainColumn.setAttribute(mainColumnAtt, "1");
-      }
-      if (mainColumnToken !== null) {
-        markElementCleanIfUnchanged(mainColumn, mainColumnToken);
-      }
-      state.noChangeCounter = 0;
-    }
-    if (elDialog) {
-      if (options.PP_ANIMATED_GIFS_PAUSE) {
-        swatTheMosquitos(elDialog);
-      }
-      if (!elDialog.hasAttribute(mainColumnAtt)) {
-        elDialog.setAttribute(mainColumnAtt, "1");
-      }
-      if (dialogToken !== null) {
-        markElementCleanIfUnchanged(elDialog, dialogToken);
-      }
-      state.noChangeCounter = 0;
-    }
-    return { mainColumn, elDialog };
-  }
-  var profilePermalinkSelectors;
-  var init_profile2 = __esm({
-    "src/feeds/profile.ts"() {
-      "use strict";
-      init_attributes();
-      init_animated_gifs();
-      init_dirty_check();
-      init_hide();
-      init_info_boxes();
-      init_profile();
-      init_blocked_text2();
-      init_animated_gifs2();
-      profilePermalinkSelectors = [
-        'a[href*="/posts/"]',
-        'a[href*="/story.php"]',
-        'a[href*="/permalink/"]',
-        'a[href*="permalink.php"]'
-      ];
-    }
-  });
-
   // src/feeds/reels.ts
   function scheduleReels(context, loop) {
     const { state } = context;
@@ -13702,7 +14968,7 @@ ${fence}
     const mainColumnToken = getDirtyToken(mainColumn);
     revalidateTrackedPosts(mainColumn, state);
     if (options.NF_BLOCKED_ENABLED || options.NF_SPONSORED || options.NF_ANIMATED_GIFS_PAUSE || state.hideAnInfoBox) {
-      const posts = Array.from(mainColumn.querySelectorAll(searchSelectors.postsQuery));
+      const posts = collectSearchPosts(mainColumn);
       for (const post of posts) {
         if (!post.hasChildNodes()) {
           continue;
@@ -13766,6 +15032,7 @@ ${fence}
       init_hide();
       init_info_boxes();
       init_search();
+      init_search_discovery();
       init_blocked_text2();
       init_sponsored();
     }
@@ -17170,6 +18437,7 @@ ${fence}
       stopPostHistory();
       restoreFeedPresentation(state);
       clearDirtyTracking();
+      clearPageMediaFacts();
       stopReelsProcessing(state);
       themeObserver == null ? void 0 : themeObserver.disconnect();
       window.clearTimeout(extraStylesTimer);
@@ -17213,6 +18481,7 @@ ${fence}
       init_reset();
       init_load_options();
       init_loop();
+      init_page_media_facts2();
       init_process_page();
       init_routes2();
       init_state3();

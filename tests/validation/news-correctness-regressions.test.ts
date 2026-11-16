@@ -1,12 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { isMetaAiLink } from "../../src/feeds/ai-destinations";
 import { mainColumnAtt, postAtt, postAttTab } from "../../src/dom/attributes";
-import {
-  getCollectionOfNewsPosts,
-  getNewsPostDiscovery,
-  isMetaAiLink,
-  mopNewsFeed,
-} from "../../src/feeds/news";
+import { getCollectionOfNewsPosts, getNewsPostDiscovery, mopNewsFeed } from "../../src/feeds/news";
 import { createMetaAiPromptRow, createNewsContext, requireElement } from "../feeds/news-fixtures";
 import { mountNewsPost } from "./news-contract-fixtures";
 

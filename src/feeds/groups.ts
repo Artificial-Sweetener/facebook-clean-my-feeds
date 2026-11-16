@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { hasGroupsSuggestionLabel } from "./groups-identity";
+import { hasDiscoveryShelf } from "./discovery-structure";
 import { collectGroupsPosts } from "./groups-discovery";
 import { cleanGroupsSuggestions, setPostLinkToOpenInNewTab } from "./groups-features";
 import type { Keywords } from "../i18n";
@@ -98,8 +99,9 @@ function isGroupsColumnDirty(state: FeedProcessingState): DirtyFeedRoots {
   return arrReturn;
 }
 
-/** Retain both supported layouts, but require owned recommendation text instead of treating every styled privacy icon or nested heading as a suggestion. */
+/** Prefer corroborated discovery shelves; other layouts require owned recommendation text on their icon or heading. */
 function isGroupsSuggested(post: Element, keyWords: Pick<Keywords, "GF_SUGGESTIONS">) {
+  if (hasDiscoveryShelf(post, "groups")) return keyWords.GF_SUGGESTIONS;
   const blocks = getGroupsBlocks(post);
   if (blocks.length <= 1) return "";
   const icons = blocks[0]?.querySelectorAll('i[data-visualcompletion="css-img"][style]') || [];

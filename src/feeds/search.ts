@@ -17,6 +17,7 @@ import {
 import { hidePost } from "../dom/hide";
 import { scrubInfoBoxes } from "../dom/info-boxes";
 import { searchSelectors } from "../selectors/search";
+import { collectSearchPosts } from "./search-discovery";
 
 import { findNewsBlockedText } from "./shared/blocked-text";
 import { isSponsored } from "./shared/sponsored";
@@ -81,7 +82,7 @@ function mopSearchFeed(context: FeedContext | null) {
     options.NF_ANIMATED_GIFS_PAUSE ||
     state.hideAnInfoBox
   ) {
-    const posts = Array.from(mainColumn.querySelectorAll(searchSelectors.postsQuery));
+    const posts = collectSearchPosts(mainColumn);
 
     for (const post of posts) {
       if (!post.hasChildNodes()) {

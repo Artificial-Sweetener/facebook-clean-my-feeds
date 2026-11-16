@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { matchesNewsLabel } from "../core/filters/labels";
-import { isNewsFeatureCollapsed } from "./news-presentation";
 import type { Keywords } from "../i18n";
 import { matchesDisclosureLabel, containsMetaAiCopy } from "../core/filters/disclosure-labels";
 import { facebookUrl, getPostEvidence } from "../dom/post-evidence";
@@ -10,6 +9,11 @@ import { getNewsBlocks } from "./shared/blocks";
 import { hasPaidPartnershipDisclosure } from "./shared/paid-partnership";
 import { hasPaidByDisclosure } from "./shared/paid-disclosure";
 import { hasPeopleDiscoveryStructure } from "./news-people-structure";
+import { hasDiscoveryShelf } from "./discovery-structure";
+import { hasPageSuggestionShelf } from "./page-suggestions";
+import { isMetaAiLink } from "./ai-destinations";
+import { hasAiMetadata } from "./shared/media-metadata";
+import { hasInlineAuthorAction } from "./news-author-action";
 import { isNewsStoryShelf } from "./news-stories";
 import {
   facebookPath,
@@ -24,7 +28,7 @@ import {
 } from "./news-identity";
 
 /**
- * Read exact rendered recommendation copy in the supported legacy header, including inline formatting; reel shelves retain their separate classification.
+ * Prefer corroborated group-discovery shelves, then exact rendered recommendation copy; reel shelves retain their separate classification.
  * @param post News post whose header structure and discovery links are inspected without mutation.
  * @param state Unused compatibility argument retained for existing callers; it must not be forwarded as reel keyword copy.
  * @param keyWords NF_SUGGESTIONS is the returned reason; NF_REELS_SHORT_VIDEOS lets the exclusion check recognize a reel shelf.
@@ -35,6 +39,8 @@ export function isNewsSuggested(
   state: unknown,
   keyWords: Pick<Keywords, "NF_REELS_SHORT_VIDEOS" | "NF_SUGGESTIONS">
 ) {
+  if (hasDiscoveryShelf(post, "groups")) return keyWords.NF_SUGGESTIONS;
+  if (hasPageSuggestionShelf(post)) return keyWords.NF_SUGGESTIONS;
   const queries = [
     "div[aria-posinset] > div > div > div > div > div > div:nth-of-type(2) > div > div > div:nth-of-type(2) > div > div:nth-of-type(2) > div > div:nth-of-type(2) > span > div > span:nth-of-type(1)",
     "div[aria-describedby] > div > div > div > div > div > div:nth-of-type(2) > div > div > div:nth-of-type(2) > div > div:nth-of-type(2) > div > div:nth-of-type(2) > span > div > span:nth-of-type(1)",
@@ -63,8 +69,9 @@ export function isNewsSuggested(
   return "";
 }
 
-/** Require a recommendation heading and an owned Facebook discovery destination, never a body link alone. */
+/** Prefer a complete discovery shelf, retaining the owned heading/destination fallback for smaller group cards. */
 export function isGroupsYouMightLike(post: Element) {
+  if (hasDiscoveryShelf(post, "groups")) return true;
   return (
     hasNewsCardHeading(post, "groups") &&
     getPostEvidence(post)
@@ -121,7 +128,8 @@ export function isNewsReelsAndShortVideos(
   post: Element,
   keyWords: Pick<Keywords, "NF_REELS_SHORT_VIDEOS">
 ) {
-  if (isNewsReelShelf(post)) return keyWords.NF_REELS_SHORT_VIDEOS;
+  if (isNewsReelShelf(post) || ownPostReelLinks(post).length > 4)
+    return keyWords.NF_REELS_SHORT_VIDEOS;
   const shelf =
     hasNewsCardHeading(post, "reels") &&
     getPostEvidence(post)
@@ -130,7 +138,7 @@ export function isNewsReelsAndShortVideos(
         if (facebookPath(link) !== "/reel/" || !isOwnedNewsMetadata(link, post)) return false;
         return facebookUrl(link)?.searchParams.get("s") === "ifu_see_more";
       });
-  return shelf || ownPostReelLinks(post).length > 4 ? keyWords.NF_REELS_SHORT_VIDEOS : "";
+  return shelf ? keyWords.NF_REELS_SHORT_VIDEOS : "";
 }
 
 /** Require exactly one owned reel media preview; an ordinary text link is not enough to classify a post. */
@@ -141,11 +149,12 @@ export function isNewsShortReelVideo(
   return ownPostReelLinks(post).length === 1 ? keyWords.NF_SHORT_REEL_VIDEO : "";
 }
 
-/** Require an exact localized event-recommendation heading in the owned card layout. */
+/** Prefer independent event-discovery tiles before the localized heading routes for older card layouts. */
 export function isNewsEventsYouMayLike(
   post: Element,
   keyWords: Pick<Keywords, "NF_EVENTS_YOU_MAY_LIKE">
 ) {
+  if (hasDiscoveryShelf(post, "events")) return keyWords.NF_EVENTS_YOU_MAY_LIKE;
   const query = ":scope div > div:nth-of-type(2) > div > div >  h3 > span";
   if (
     hasNewsCardHeading(post, "events") &&
@@ -185,8 +194,10 @@ function hasHeaderAction(post: Element, kind: "follow" | "join"): boolean {
   });
 }
 
-/** Preserve the supported leaf-header layouts only when their exact localized action label identifies Follow. */
+/** Prefer the inline author/action structure, retaining named controls and legacy leaves as lazy fallbacks. */
 export function isNewsFollow(post: Element, keyWords: Pick<Keywords, "NF_FOLLOW">) {
+  if (hasInlineAuthorAction(post, "follow")) return keyWords.NF_FOLLOW;
+  if (hasHeaderAction(post, "follow")) return keyWords.NF_FOLLOW;
   const queries = [
     ":scope h4[id] > span > div > span",
     ":scope h4[id] > span > span > div > span",
@@ -200,43 +211,33 @@ export function isNewsFollow(post: Element, keyWords: Pick<Keywords, "NF_FOLLOW"
     leaves.some(
       (leaf) => isOwnedNewsMetadata(leaf, post) && hasNewsActionName(leaf, post, "follow")
     );
-  return hasHeaderAction(post, "follow") || fallback ? keyWords.NF_FOLLOW : "";
+  return fallback ? keyWords.NF_FOLLOW : "";
 }
 
-/** Preserve exact localized Join controls and the supported named leaf-header fallback, rejecting arbitrary group actions. */
+/** Prefer the inline group/action structure, retaining named controls and legacy leaves as lazy fallbacks. */
 export function isNewsParticipate(post: Element, keyWords: Pick<Keywords, "NF_PARTICIPATE">) {
+  if (hasInlineAuthorAction(post, "join")) return keyWords.NF_PARTICIPATE;
+  if (hasHeaderAction(post, "join")) return keyWords.NF_PARTICIPATE;
   const leaves = getPostEvidence(post)
     .select(":scope h4 > span > span[class] > span")
     .filter((leaf) => leaf.childElementCount === 0 && isOwnedNewsMetadata(leaf, post));
   const fallback =
     leaves.length === 1 &&
     leaves.some((leaf) => isOwnedNewsMetadata(leaf, post) && hasNewsActionName(leaf, post, "join"));
-  return hasHeaderAction(post, "join") || fallback ? keyWords.NF_PARTICIPATE : "";
-}
-
-/** Accept the actual Meta AI host or its subdomains, including a destination carried by Facebook's known outbound redirect. */
-export function isMetaAiLink(link: Element): boolean {
-  const href = link.getAttribute("href");
-  if (!href) return false;
-  try {
-    let url = new URL(href, document.baseURI);
-    if (url.hostname === "l.facebook.com" && url.pathname === "/l.php") {
-      const destination = url.searchParams.get("u");
-      if (!destination) return false;
-      url = new URL(destination);
-    }
-    return (
-      (url.protocol === "https:" || url.protocol === "http:") &&
-      (url.hostname === "meta.ai" || url.hostname.endsWith(".meta.ai"))
-    );
-  } catch {
-    return false;
-  }
+  return fallback ? keyWords.NF_PARTICIPATE : "";
 }
 
 /** Detect explicit Meta AI promotional controls, verified destination links, or known creation-tool copy in content blocks. */
 export function isNewsMetaAICard(post: Element, keyWords: Pick<Keywords, "NF_META_AI">) {
   const evidence = getPostEvidence(post);
+  if (
+    evidence
+      .select("a[href]")
+      .some(
+        (link) => isOwnedNewsMetadata(link, post) && evidence.isRendered(link) && isMetaAiLink(link)
+      )
+  )
+    return keyWords.NF_META_AI;
   const branding = evidence
     .select("a[aria-label], a[aria-labelledby]")
     .some(
@@ -245,26 +246,20 @@ export function isNewsMetaAICard(post: Element, keyWords: Pick<Keywords, "NF_MET
         evidence.isRendered(link) &&
         evidence.explicitNames(link).some((name) => matchesDisclosureLabel(name, "metaAiBrand"))
     );
-  if (
-    branding ||
-    evidence
-      .select("a[href]")
-      .some(
-        (link) => isOwnedNewsMetadata(link, post) && evidence.isRendered(link) && isMetaAiLink(link)
-      )
-  )
-    return keyWords.NF_META_AI;
+  if (branding) return keyWords.NF_META_AI;
   const postTexts = extractFeedBlockText(post, getNewsBlocks(post), 3).join(" ");
   if (containsMetaAiCopy(postTexts)) return keyWords.NF_META_AI;
 
   return "";
 }
 
-/** Match only an exact normalized AI info label on a button-like control, never ordinary body text. */
+/** Prefer explicit owned machine disclosures, then exact AI info labels on owned controls. */
 export function isNewsAiInfoPost(post: Element, keyWords: Pick<Keywords, "NF_AI_INFO_POSTS">) {
   if (!post || !keyWords || typeof post.querySelectorAll !== "function") {
     return "";
   }
+
+  if (hasAiMetadata(post)) return keyWords.NF_AI_INFO_POSTS;
 
   const evidence = getPostEvidence(post);
   const hasAiInfoLabel = evidence.select('button, [role="button"]').some((control) => {
@@ -297,14 +292,10 @@ export function isNewsStoriesPost(post: Element, keyWords: Pick<Keywords, "NF_ST
   return matched ? keyWords.NF_STORIES : "";
 }
 
-/** Identify a verified author by an exact semantic badge name in this post's own header, never by SVG presence alone. */
+/** Identify an owned author badge by known geometry first, retaining exact semantic names for other artwork. */
 export function isNewsVerifiedBadge(
   post: Element,
   keyWords: Pick<Keywords, "NF_FILTER_VERIFIED_BADGE">
 ) {
-  return ownVerifiedBadges(post).some(
-    (icon) => getPostEvidence(post).isRendered(icon) || isNewsFeatureCollapsed(icon, "badge")
-  )
-    ? keyWords.NF_FILTER_VERIFIED_BADGE
-    : "";
+  return ownVerifiedBadges(post).length > 0 ? keyWords.NF_FILTER_VERIFIED_BADGE : "";
 }

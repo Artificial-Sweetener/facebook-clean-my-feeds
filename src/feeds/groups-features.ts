@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { hasGroupsSuggestionLabel } from "./groups-identity";
+import { hasDiscoveryShelf } from "./discovery-structure";
 import type { FeedContext, FeedProcessingState } from "./types";
 import { postAtt } from "../dom/attributes";
 import { hideFeature } from "../dom/hide";
@@ -13,7 +14,7 @@ import {
 } from "../dom/dirty-check";
 
 /**
- * Hide only an exactly labeled recommendation block within its complementary rail.
+ * Hide a corroborated discovery shelf or an exactly labeled recommendation block within its complementary rail.
  * The legacy content depth remains a layout guard; no ancestor climb may hide sibling rails, navigation, or the feed.
  * @param context Current translated reason and reversible presentation state; a missing context leaves the page unchanged.
  */
@@ -44,12 +45,13 @@ export function cleanGroupsSuggestions(context: FeedContext | null) {
     ) {
       continue;
     }
-    const labels = asideBox.querySelectorAll(
-      ':scope > span, :scope > h2, :scope > h3, :scope > [role="heading"]'
-    );
-    const hasSuggestionLabel = Array.from(labels).some((label) =>
-      hasGroupsSuggestionLabel(label, asideBox)
-    );
+    const hasSuggestionLabel =
+      hasDiscoveryShelf(asideBox, "groups") ||
+      Array.from(
+        asideBox.querySelectorAll(
+          ':scope > span, :scope > h2, :scope > h3, :scope > [role="heading"]'
+        )
+      ).some((label) => hasGroupsSuggestionLabel(label, asideBox));
     if (hasSuggestionLabel && !asideBox.hasAttribute(postAtt)) {
       hideFeature(asideBox, keyWords.GF_SUGGESTIONS, true, { options, keyWords, state });
     }

@@ -3,6 +3,16 @@ import { getPostEvidence } from "./post-evidence";
 import { cleanText } from "../core/filters/text-normalize";
 
 import { postAtt } from "./attributes";
+import { sharedSelectors } from "../selectors/shared";
+
+/** Keep content extraction within rendered post text, excluding comments and independently hidden features. */
+function isReadableContent(element: Element, post: Element): boolean {
+  return (
+    !isNestedMarkedNode(element, post) &&
+    !element.closest(sharedSelectors.commentContent) &&
+    getPostEvidence(post).isRendered(element)
+  );
+}
 
 /**
  * Count only structural text containers used by the button-noise heuristic.
@@ -29,14 +39,15 @@ export function isNestedMarkedNode(
 /**
  * Collect visible filtering text while excluding nested marked content and button noise.
  * @param node Post content root; only immediate div, blockquote and span branches are scanned.
+ * @param post Owning post boundary used to reject concealed ancestors above this content block.
  * @returns Deduplicated nonempty text fragments in discovery order.
  */
-export function scanTreeForText(node: Element): string[] {
+export function scanTreeForText(node: Element, post: Element): string[] {
   const arrayTextValues: string[] = [];
   const elements = node.querySelectorAll(":scope > div, :scope > blockquote, :scope > span");
 
   for (const element of elements) {
-    if (isNestedMarkedNode(element, node)) {
+    if (!isReadableContent(element, post)) {
       continue;
     }
 
@@ -52,7 +63,7 @@ export function scanTreeForText(node: Element): string[] {
       const elParentTN = elParent.tagName.toLowerCase();
       const val = cleanText(currentNode.textContent ?? "").trim();
 
-      if (isNestedMarkedNode(elParent, node)) {
+      if (!isReadableContent(elParent, post)) {
         continue;
       }
 
@@ -126,13 +137,15 @@ export function mpScanTreeForText(node: Element, boundary = node, visualText = f
 }
 
 /**
- * Use loaded content images as fallback text while excluding icons and nested CMF features.
+ * Use loaded content images as fallback text while excluding concealed images, comments and nested features.
+ * @param node Content block containing candidate image descriptions.
+ * @param post Owning post boundary, including visibility ancestors outside the individual block.
  */
-export function scanImagesForAltText(node: Element): string[] {
+export function scanImagesForAltText(node: Element, post: Element): string[] {
   const arrayAltTextValues: string[] = [];
   const images = node.querySelectorAll<HTMLImageElement>("img[alt]");
   for (const img of images) {
-    if (isNestedMarkedNode(img, node)) {
+    if (!isReadableContent(img, post)) {
       continue;
     }
 
@@ -189,8 +202,8 @@ function extractBlockText(post: Element, blocks: readonly Element[], maxBlocks: 
     }
 
     if (countDescendants(block) > 0) {
-      arrayTextValues.push(...scanTreeForText(block));
-      arrayTextValues.push(...scanImagesForAltText(block));
+      arrayTextValues.push(...scanTreeForText(block, post));
+      arrayTextValues.push(...scanImagesForAltText(block, post));
     }
   }
 

@@ -9,6 +9,8 @@ import { getNewsPostDiscovery, getOrphanSponsoredNewsPosts } from "../feeds/news
 import { getSponsoredDiagnostics } from "../feeds/shared/sponsored";
 import type { DiagnosticsState } from "./types";
 import { collectMarketplaceListings, getMarketplaceRoot } from "../feeds/marketplace-discovery";
+import { collectSearchPosts } from "../feeds/search-discovery";
+import { collectProfilePosts } from "../feeds/profile";
 
 /**
  * Union every known news selector without changing runtime discovery or processing posts twice.
@@ -228,21 +230,23 @@ export function getMarketplaceItems(state: Pick<DiagnosticsState, "mpType">) {
 }
 
 /**
- * Collect profile posts using the shared production selector.
- * @returns The profile post query and all current matching roots.
+ * Share production post ownership so reports capture the post that filtering actually processes.
+ * @returns The discovery description and independent profile roots in the active main column.
  */
 export function getProfilePostCollection() {
-  const posts = document.querySelectorAll<HTMLElement>(profileSelectors.postsQuery);
-  return { query: profileSelectors.postsQuery, posts: Array.from(posts) };
+  const root = document.querySelector(profileSelectors.mainColumn);
+  const posts = collectProfilePosts(root).filter((post) => post instanceof HTMLElement);
+  return { query: "profile post ownership", posts };
 }
 
 /**
- * Collect search results using the shared production selector.
- * @returns The search-result post query and all current matching roots.
+ * Share production search ownership instead of sampling transport wrappers or nested comments.
+ * @returns The discovery description and independent results from the active search main column.
  */
 export function getSearchPostCollection() {
-  const posts = document.querySelectorAll<HTMLElement>(searchSelectors.postsQuery);
-  return { query: searchSelectors.postsQuery, posts: Array.from(posts) };
+  const root = document.querySelector(searchSelectors.mainColumn);
+  const posts = root ? collectSearchPosts(root).filter((post) => post instanceof HTMLElement) : [];
+  return { query: "feed ownership", posts };
 }
 
 /**

@@ -70,7 +70,7 @@ function findInfoBox(
   if (
     box.matches(sharedSelectors.postOwner) ||
     box.querySelector(
-      `${sharedSelectors.postOwner}, ${sharedSelectors.profileName}, ${sharedSelectors.storyMessage}, h4, h5, [role="feed"], [role="navigation"], [role="main"]`
+      `${sharedSelectors.postOwner}, ${sharedSelectors.profileName}, ${sharedSelectors.authoredContent}, h4, h5, [role="feed"], [role="navigation"], [role="main"]`
     )
   )
     return null;

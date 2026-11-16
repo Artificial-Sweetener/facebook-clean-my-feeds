@@ -56,7 +56,15 @@ const routeRules = new Map<string, RoutePrivacyRule>([
     "business",
     { identifier: "[segment]", firstSegments: new Set(["help"]), laterSegments: new Set() },
   ],
-  ...["help", "privacy", "settings", "events"].map((root): [string, RoutePrivacyRule] => [
+  [
+    "events",
+    {
+      identifier: "[event]",
+      firstSegments: new Set(["birthdays", "discover", "calendar", "create"]),
+      laterSegments: new Set(),
+    },
+  ],
+  ...["help", "privacy", "settings"].map((root): [string, RoutePrivacyRule] => [
     root,
     { identifier: "[segment]", firstSegments: new Set(), laterSegments: new Set() },
   ]),
@@ -69,6 +77,7 @@ const routeRules = new Map<string, RoutePrivacyRule>([
     },
   ],
   ["reel", { identifier: "[reel]", firstSegments: new Set(), laterSegments: new Set() }],
+  ["pages", { identifier: "[page]", firstSegments: new Set(), laterSegments: contentSections }],
   ["reels", { identifier: "[reel]", firstSegments: new Set(), laterSegments: new Set() }],
   [
     "watch",
@@ -114,9 +123,15 @@ const routeRules = new Map<string, RoutePrivacyRule>([
  * Preserve feed routing structure without publishing profile names, group names, or content IDs.
  * Only exact known route words are retained; encoded and unknown values are replaced without decoding.
  * @param pathname Browser pathname without query or fragment components.
+ * @param numericAlias Optional capture-local replacement preserving numeric routes and syntactically valid profile aliases.
  * @returns An absolute structural path whose variable segments contain descriptive placeholders.
  */
-export function sanitizePathname(pathname: string): string {
+export function sanitizePathname(
+  pathname: string,
+  numericAlias?: (identifier: string) => string
+): string {
+  // Public help-article IDs identify disclosure semantics, not accounts or authored content.
+  if (/^\/(?:business\/)?help\/\d+\/?$/.test(pathname)) return pathname;
   const segments = pathname.split("/").filter(Boolean);
   const root = segments[0];
   if (!root) return "/";
@@ -134,6 +149,14 @@ export function sanitizePathname(pathname: string): string {
     const allowed = staticSegments ?? (knownRoot ? new Set<string>() : contentSections);
     if (allowed.has(segment)) safeSegments.push(segment);
     else safeSegments.push(index === 1 ? (rule?.identifier ?? "[segment]") : "[segment]");
+  }
+  if (numericAlias) {
+    if (safeSegments[0] === "[profile]" && !/^\d+$/.test(root))
+      safeSegments[0] = `cmf-profile-${numericAlias(root)}`;
+    for (const [index, segment] of segments.entries()) {
+      if (safeSegments[index]?.startsWith("[") && /^\d+$/.test(segment))
+        safeSegments[index] = numericAlias(segment);
+    }
   }
   return `/${safeSegments.join("/")}${pathname.endsWith("/") ? "/" : ""}`;
 }

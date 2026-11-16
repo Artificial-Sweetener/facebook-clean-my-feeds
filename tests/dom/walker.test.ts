@@ -30,9 +30,9 @@ describe("dom/walker", () => {
       <div>Keep me</div>
     `;
 
-    const values = scanTreeForText(root);
+    const values = scanTreeForText(root, root);
 
-    expect(values).toEqual(["Keep me", "Hidden", "Allowed button"]);
+    expect(values).toEqual(["Keep me", "Allowed button"]);
   });
 
   test("mpScanTreeForText lowercases and filters short/facebook values", () => {
@@ -58,7 +58,7 @@ describe("dom/walker", () => {
 
     root.append(img1, img2, img3);
 
-    expect(scanImagesForAltText(root)).toEqual(["Alt text"]);
+    expect(scanImagesForAltText(root, root)).toEqual(["Alt text"]);
   });
 
   test("extractTextContent merges text and alt text from blocks", () => {

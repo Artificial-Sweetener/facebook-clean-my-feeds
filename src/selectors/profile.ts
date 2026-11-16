@@ -4,8 +4,8 @@
 const profileSelectors = {
   mainColumn: 'div[role="main"]',
   dialog: 'div[role="dialog"]',
-  postsQuery:
-    'div[role="main"] > div > div > div > div:nth-of-type(2) > div:not([class]) > div > div[class]',
+  permalinks:
+    'a[href*="/posts/"], a[href*="/story.php"], a[href*="/permalink/"], a[href*="permalink.php"]',
 };
 
 export { profileSelectors };

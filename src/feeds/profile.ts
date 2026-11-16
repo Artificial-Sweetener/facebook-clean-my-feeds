@@ -17,6 +17,8 @@ import {
 import { hidePost } from "../dom/hide";
 import { scrubInfoBoxes } from "../dom/info-boxes";
 import { profileSelectors } from "../selectors/profile";
+import { sharedSelectors } from "../selectors/shared";
+import { facebookUrl, getPostEvidence } from "../dom/post-evidence";
 
 import { findProfileBlockedText } from "./shared/blocked-text";
 import { hasNewsAnimatedGifContent } from "./shared/animated-gifs";
@@ -70,73 +72,87 @@ function isProfileColumnDirty(state: FeedProcessingState): DirtyFeedRoots {
   return arrReturn;
 }
 
-const profilePermalinkSelectors = [
-  'a[href*="/posts/"]',
-  'a[href*="/story.php"]',
-  'a[href*="/permalink/"]',
-  'a[href*="permalink.php"]',
-];
-
 /**
- * Normalize a supported post destination without treating tracking fragments as another post.
- * Path-based links retain publisher ownership; query-based story links retain their post ID.
+ * Normalize actual Facebook post destinations, excluding external URLs and query-only lookalikes.
+ * @param link Candidate permalink whose literal href is parsed by the shared destination cache.
+ * @returns Stable publisher/path or story identity without tracking, or null for unsupported destinations.
  */
-function profilePermalinkIdentity(link: Element): string {
-  const href = link.getAttribute("href") ?? "";
-  try {
-    const url = new URL(href, document.baseURI);
-    if (url.pathname.endsWith("story.php") || url.pathname.endsWith("permalink.php")) {
-      const story = url.searchParams.get("story_fbid");
-      return story
-        ? `${url.origin}${url.pathname}?story_fbid=${story}`
-        : `${url.origin}${url.pathname}${url.search}`;
-    }
-    return `${url.origin}${url.pathname.replace(/\/$/, "")}`;
-  } catch {
-    return href;
+function profilePermalinkIdentity(link: Element): string | null {
+  const url = facebookUrl(link);
+  if (!url) return null;
+  if (/^\/(?:story|permalink)\.php$/.test(url.pathname)) {
+    const story = url.searchParams.get("story_fbid");
+    return story ? `${url.origin}${url.pathname}?story_fbid=${story}` : null;
   }
+  return /^\/(?:[^/]+\/)*(?:posts|permalink)\/[^/]+\/?$/.test(url.pathname)
+    ? `${url.origin}${url.pathname.replace(/\/$/, "")}`
+    : null;
 }
 
 /**
- * Prefer the outer owned post boundary even when its body links to related posts or comments.
- * Without an explicit boundary, climb only through ancestors containing one distinct post destination.
+ * Discover owned author containers without depending on timestamp destinations, then supplement legacy layouts with permalinks.
+ * Without an explicit boundary, climb only through ancestors containing one distinct post destination and no independent structural post.
  * The profile root and wrappers combining independent posts are never selected.
- * @param mainColumn Boundary containing profile posts; null or a root without supported permalinks yields an empty list.
- * @returns Deduplicated explicit post roots or single-permalink fallback ancestors, in discovery order.
+ * @param mainColumn Boundary containing profile posts; null yields an empty list.
+ * @returns Deduplicated structural post roots and single-permalink fallback ancestors in document order.
  */
-function getProfilePostsFromPermalinks(mainColumn: Element | null) {
+function collectProfilePosts(mainColumn: Element | null) {
   if (!mainColumn) {
     return [];
   }
 
-  const selector = profilePermalinkSelectors.join(",");
-  const permalinks = Array.from(mainColumn.querySelectorAll(selector));
-  if (permalinks.length === 0) {
-    return [];
+  const containers = new Set<Element>();
+  const rootEvidence = getPostEvidence(mainColumn);
+  for (const post of mainColumn.querySelectorAll(sharedSelectors.postOwner)) {
+    const authoredParent = post.parentElement?.closest(sharedSelectors.authoredContent);
+    if (authoredParent && mainColumn.contains(authoredParent)) continue;
+    if (post.hasAttribute("hidden") || post.getAttribute("aria-hidden") === "true") continue;
+    if (!post.parentElement || !rootEvidence.isRendered(post.parentElement)) continue;
+    if (!post.hasAttribute(postAtt) && !rootEvidence.isVisible(post)) continue;
+    const evidence = getPostEvidence(post);
+    const author = evidence.select(sharedSelectors.profileName).some((signal) => {
+      const authored = signal.closest(sharedSelectors.authoredContent);
+      return (
+        signal.closest(sharedSelectors.postOwner) === post &&
+        (!authored || !post.contains(authored)) &&
+        evidence.isRendered(signal) &&
+        evidence
+          .select(sharedSelectors.links, signal)
+          .some((link) => evidence.isRendered(link) && facebookUrl(link) !== null)
+      );
+    });
+    if (author) containers.add(post);
   }
 
-  const containers = new Set<Element>();
-
+  const selector = profileSelectors.permalinks;
+  const permalinks = Array.from(mainColumn.querySelectorAll(selector)).filter(
+    (link) =>
+      profilePermalinkIdentity(link) !== null &&
+      !link.closest(sharedSelectors.commentContent) &&
+      getPostEvidence(mainColumn).isRendered(link)
+  );
   for (const link of permalinks) {
+    if (Array.from(containers).some((post) => post.contains(link))) continue;
     let node = link.parentElement;
     let lastSingle = null;
-    const explicitPost = link.closest('div[aria-posinset], div[role="article"]');
+    const explicitPost = link.closest(sharedSelectors.postOwner);
     if (explicitPost && explicitPost !== mainColumn && mainColumn.contains(explicitPost)) {
       let ownedPost: Element = explicitPost;
       let enclosing: Element | null | undefined = explicitPost.parentElement?.closest(
-        'div[aria-posinset], div[role="article"]'
+        sharedSelectors.postOwner
       );
       while (enclosing && enclosing !== mainColumn && mainColumn.contains(enclosing)) {
         ownedPost = enclosing;
-        enclosing = enclosing.parentElement?.closest('div[aria-posinset], div[role="article"]');
+        enclosing = enclosing.parentElement?.closest(sharedSelectors.postOwner);
       }
       containers.add(ownedPost);
       continue;
     }
 
     while (node && node !== mainColumn) {
+      if (Array.from(containers).some((post) => node?.contains(post))) break;
       const identities = new Set(
-        Array.from(node.querySelectorAll(selector), profilePermalinkIdentity)
+        permalinks.filter((candidate) => node?.contains(candidate)).map(profilePermalinkIdentity)
       );
       if (identities.size === 1) {
         lastSingle = node;
@@ -151,11 +167,22 @@ function getProfilePostsFromPermalinks(mainColumn: Element | null) {
     }
   }
 
-  return Array.from(containers);
+  return Array.from(containers)
+    .filter((post) => {
+      let parent = post.parentElement;
+      while (parent && parent !== mainColumn) {
+        if (containers.has(parent)) return false;
+        parent = parent.parentElement;
+      }
+      return true;
+    })
+    .sort((left, right) =>
+      left.compareDocumentPosition(right) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1
+    );
 }
 
 /**
- * Run only when a profile blocked-text, animated-post, or GIF-pause option is enabled, then discover posts from their permalinks.
+ * Run only when a profile blocked-text, animated-post, or GIF-pause option is enabled, discovering structural and legacy post roots.
  * Recycled posts lose stale markers before GIF/text classification. Visible posts may pause GIFs or scrub info boxes, and dirty dialogs may pause GIFs.
  * A main root with no discoverable posts returns before clean-token acknowledgement, allowing later markup to be retried.
  * @param context PP options and text filters select profile actions; keyword copy supplies hiding reasons and state tracks observer-driven progress. Null leaves the page untouched.
@@ -190,7 +217,7 @@ function mopProfileFeed(context: FeedContext | null) {
   revalidateTrackedPosts(mainColumn, state);
 
   if (mainColumn) {
-    const posts = getProfilePostsFromPermalinks(mainColumn);
+    const posts = collectProfilePosts(mainColumn);
     if (posts.length === 0) {
       return { mainColumn, elDialog };
     }
@@ -269,4 +296,4 @@ function mopProfileFeed(context: FeedContext | null) {
   return { mainColumn, elDialog };
 }
 
-export { getProfilePostsFromPermalinks, mopProfileFeed };
+export { collectProfilePosts, mopProfileFeed };

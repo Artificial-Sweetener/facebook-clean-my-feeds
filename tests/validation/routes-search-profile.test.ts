@@ -2,7 +2,7 @@
 
 import { postAtt } from "../../src/dom/attributes";
 import { mopSearchFeed } from "../../src/feeds/search";
-import { getProfilePostsFromPermalinks, mopProfileFeed } from "../../src/feeds/profile";
+import { collectProfilePosts, mopProfileFeed } from "../../src/feeds/profile";
 import { resetFeedProcessing } from "../../src/feeds/reset";
 import {
   cleanRouteDocument,
@@ -255,7 +255,7 @@ describe("profile route option integration", () => {
     mountProfile(
       '<a id="standalone" href="/publisher/posts/100/">Unwanted standalone link</a><section id="composer"><div>Unwanted draft</div></section><a id="ordinary-link" href="/publisher/about">About</a>'
     );
-    expect(getProfilePostsFromPermalinks(element("profile-root"))).toEqual([]);
+    expect(collectProfilePosts(element("profile-root"))).toEqual([]);
     mopProfileFeed(context);
     for (const id of ["standalone", "composer", "ordinary-link", "profile-root"])
       expect(element(id).hasAttribute(postAtt)).toBe(false);

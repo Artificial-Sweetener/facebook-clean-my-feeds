@@ -133,11 +133,11 @@ export interface DomSnapshot {
 export const snapshotLimits: Readonly<SnapshotLimits> = {
   nodes: 6000,
   nodesPerRegion: 1600,
-  depth: 36,
+  depth: 64,
   regions: 12,
   labelCharacters: 180,
   totalLabelCharacters: 16000,
   discoveryNodes: 12000,
-  references: 64,
+  references: 128,
   attributes: 24000,
 };

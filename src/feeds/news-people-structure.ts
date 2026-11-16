@@ -16,14 +16,24 @@ import { sharedSelectors } from "../selectors/shared";
 export function hasPeopleDiscoveryStructure(post: Element): boolean {
   const evidence = getPostEvidence(post);
   if (
-    !post.matches(sharedSelectors.postOwner) ||
+    (!post.matches(sharedSelectors.postOwner) && !post.closest(newsSelectors.rightRail)) ||
     post.closest(sharedSelectors.authoredContent) ||
     post.parentElement?.closest(sharedSelectors.postOwner) ||
+    post.querySelector(sharedSelectors.postOwner) ||
     evidence
       .select(newsSelectors.peoplePostContent)
       .some(
         (element) => evidence.isRendered(element) && !element.closest(newsSelectors.peopleTiles)
       )
+  )
+    return false;
+  if (
+    !post.matches(sharedSelectors.postOwner) &&
+    evidence
+      .select(newsSelectors.railHeadings)
+      .filter(
+        (heading) => !heading.closest(newsSelectors.peopleTiles) && evidence.isRendered(heading)
+      ).length !== 1
   )
     return false;
   let matchingTiles = 0;

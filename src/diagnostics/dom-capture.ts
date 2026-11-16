@@ -9,7 +9,7 @@ import type {
 import { DomCapture } from "./dom-capture-tree";
 import { isReportUi, selectSnapshotRegions, yieldSnapshotWork } from "./dom-selection";
 
-/** A selected complaint element bypasses detector-dependent discovery; limits can only reduce the production defaults. */
+/** A complaint target receives the total node budget; optional limits can reduce its effective capture caps. */
 export interface SnapshotCaptureOptions {
   target?: Element | null;
   limits?: Partial<SnapshotLimits>;
@@ -27,6 +27,7 @@ export async function captureDomSnapshot(
 ): Promise<DomSnapshot> {
   const start = performance.now();
   const limits = { ...snapshotLimits };
+  if (options.target) limits.nodesPerRegion = limits.nodes;
   for (const key of Object.keys(limits) as Array<keyof SnapshotLimits>) {
     const value = options.limits?.[key];
     if (typeof value === "number" && Number.isFinite(value))

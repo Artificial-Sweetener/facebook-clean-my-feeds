@@ -6,6 +6,10 @@ import { hasNewsCardHeading } from "./news-identity";
 import { cleanText } from "../core/filters/text-normalize";
 import { postAtt, postAttTab } from "../dom/attributes";
 import { hideNewsPost, hideFeature } from "../dom/hide";
+import { findStructuralRailAdSection } from "./news-rail-structure";
+import { hasDiscoveryShelf } from "./discovery-structure";
+import { hasPageSuggestionShelf } from "./page-suggestions";
+import { hasPeopleDiscoveryStructure } from "./news-people-structure";
 
 /** Normalize invisible characters and whitespace before comparing a rendered heading. */
 export function getNormalizedElementText(element: Element | null) {
@@ -116,7 +120,11 @@ export function findRightRailSponsoredSection(
   return null;
 }
 
-/** Hide matching sponsored sections while retaining neighboring birthday and contact sections. */
+/**
+ * Hide independently bounded rail ads, trying attributed image creatives before localized headings.
+ * @param context Current reason labels and reversible feature-presentation settings.
+ * @returns Whether at least one advertising section was hidden.
+ */
 export function scrubRightRailSponsored(context: FeedContext | null) {
   if (!context) return false;
   const { keyWords, state, options } = context;
@@ -129,13 +137,15 @@ export function scrubRightRailSponsored(context: FeedContext | null) {
     return false;
   }
 
-  const headings = Array.from(
-    rightRail.querySelectorAll('h1, h2, h3, h4, [role="heading"]')
-  ).filter((heading) => isRightRailHeadingText(heading, keyWords.SPONSORED));
+  const headings = Array.from(rightRail.querySelectorAll('h1, h2, h3, h4, [role="heading"]'));
 
   let hidden = false;
   for (const heading of headings) {
-    const section = findRightRailSponsoredSection(rightRail, heading, keyWords.SPONSORED);
+    const section =
+      findStructuralRailAdSection(rightRail, heading) ||
+      (isRightRailHeadingText(heading, keyWords.SPONSORED)
+        ? findRightRailSponsoredSection(rightRail, heading, keyWords.SPONSORED)
+        : null);
     if (section) {
       hideFeature(section, keyWords.SPONSORED, false, context);
       hidden = true;
@@ -158,6 +168,19 @@ export function scrubRightRailSuggestions(context: FeedContext | null) {
     'div[role="complementary"] > div > div > div > div > div:not([data-visualcompletion])';
   for (const container of document.querySelectorAll(query)) {
     for (const item of container.querySelectorAll(`:scope > div:not([${postAtt}])`)) {
+      if (
+        hasDiscoveryShelf(item, "groups") ||
+        hasPeopleDiscoveryStructure(item) ||
+        hasPageSuggestionShelf(item)
+      ) {
+        hideNewsPost(item, keyWords.NF_SUGGESTIONS, false, {
+          options,
+          keyWords,
+          attributes: { postAtt, postAttTab },
+          state,
+        });
+        continue;
+      }
       const kinds = ["suggested", "groups", "people"] as const;
       if (!kinds.some((kind) => hasNewsCardHeading(item, kind))) continue;
       const otherHeading = Array.from(

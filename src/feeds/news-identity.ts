@@ -7,6 +7,8 @@ import { ownsPostElement } from "../dom/ownership";
 import { getNewsBlocks } from "./shared/blocks";
 import { newsSelectors } from "../selectors/news";
 import { sharedSelectors } from "../selectors/shared";
+import { hasVerifiedGeometry } from "./verified-structure";
+import { isNewsFeatureRendered } from "./news-presentation";
 
 /** Reject user-authored message blocks, paragraphs/quotes, nested posts/comments, and independently hidden child features. */
 export function isOwnedNewsElement(element: Element, post: Element): boolean {
@@ -72,7 +74,9 @@ export function ownVerifiedBadges(post: Element): Element[] {
     getPostEvidence(post)
       .select("svg", header)
       .filter((icon) => {
-        if (!isOwnedNewsElement(icon, post)) return false;
+        if (!isOwnedNewsElement(icon, post) || !isNewsFeatureRendered(icon, post, "badge"))
+          return false;
+        if (hasVerifiedGeometry(icon, post)) return true;
         const iconNames = explicitNewsNames(icon, post);
         if (iconNames.length > 0)
           return iconNames.some((name) => matchesNewsLabel(name, "verified"));

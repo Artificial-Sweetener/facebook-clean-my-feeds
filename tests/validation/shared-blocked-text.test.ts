@@ -64,6 +64,29 @@ function textPost(
 }
 
 describe("validation: shared content blocks and blocked text", () => {
+  test.each(
+    textRoutes.flatMap((route) =>
+      [
+        "hidden",
+        'style="display:none"',
+        'aria-hidden="true"',
+        'data-commentid="1"',
+        'role="comment"',
+      ].flatMap((attribute) => ["text", "image"].map((source) => ({ ...route, attribute, source })))
+    )
+  )("$name excludes $source inside $attribute content", ({ match, attribute, source }) => {
+    const { options, filters } = textSettings("blocked");
+    const { post, blocks } = textPost([
+      `<span>Ordinary</span><div ${attribute}><span>blocked</span></div>`,
+      "<span>Extra</span>",
+    ]);
+    if (source === "image") {
+      const first = requireShared(blocks[0]);
+      first.innerHTML = `<span>Ordinary</span><div ${attribute}></div>`;
+      requireShared(first.querySelector("div")).append(sharedImage("blocked", 100));
+    }
+    expect(match(post, options, filters)).toBe("");
+  });
   test.each([8, 9] as const)(
     "both wrapper families discover independently constructed depth %i",
     (depth) => {

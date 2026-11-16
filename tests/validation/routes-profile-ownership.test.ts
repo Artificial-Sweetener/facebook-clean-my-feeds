@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { postAtt } from "../../src/dom/attributes";
-import { getProfilePostsFromPermalinks, mopProfileFeed } from "../../src/feeds/profile";
+import { collectProfilePosts, mopProfileFeed } from "../../src/feeds/profile";
 import { cleanRouteDocument, element, routeContext, textPost } from "./routes-fixtures";
 
 afterEach(cleanRouteDocument);
@@ -17,7 +17,7 @@ describe("explicit profile roots retain related-post links inside their content"
       PP_BLOCKED_TEXT: "unwanted",
     });
     document.body.innerHTML = `<div role="main" id="profile-root">${textPost("target", `Unwanted offer ${reference}`, '<a href="/publisher/posts/100/">Yesterday</a>')}${textPost("ordinary", "Community news", '<a href="/publisher/posts/101/">Today</a>')}</div>`;
-    expect(getProfilePostsFromPermalinks(element("profile-root"))).toEqual([
+    expect(collectProfilePosts(element("profile-root"))).toEqual([
       element("target"),
       element("ordinary"),
     ]);

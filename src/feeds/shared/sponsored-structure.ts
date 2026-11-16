@@ -13,7 +13,7 @@ const cache = new WeakMap<PostEvidence, StructuralSponsoredKind>();
  * Corroborate the historical tracking signature with owned creative and metadata structure.
  * No heading, accessible name, SVG text or translated label is consulted. Missing structure
  * returns null so established localized detectors can still handle incomplete and older layouts.
- * @param post News post whose header, media and CTA must belong to one rendered creative.
+ * @param post Feed post whose header, media and CTA must belong to one rendered creative.
  * @returns The structural disclosure family, cached only for the current DOM content version.
  */
 export function getStructuralSponsoredKind(post: Element): StructuralSponsoredKind {
@@ -31,7 +31,7 @@ function isOwnedSignal(element: Element, post: Element, evidence: PostEvidence):
 
 /**
  * Inspect corroborated ad creatives; a long ordinary author URL never establishes sponsorship alone.
- * @param post Owning news item whose header and creative must supply all structural signals.
+ * @param post Owning feed item whose header and creative must supply all structural signals.
  * @param evidence Per-version queries and visibility facts shared with the localized fallback.
  * @returns The independently selectable disclosure family, or null when any corroborating signal is missing.
  */
@@ -67,6 +67,7 @@ function inspectStructure(post: Element, evidence: PostEvidence): StructuralSpon
   const paid = evidence.select(sharedSelectors.paidMetadataButton, header).some((button) => {
     if (
       !isOwnedSignal(button, post, evidence) ||
+      button.matches(sharedSelectors.statefulDisclosureControl) ||
       button.closest(sharedSelectors.authorMetadata) ||
       button.parentElement?.closest(sharedSelectors.interactive) ||
       button.querySelector(

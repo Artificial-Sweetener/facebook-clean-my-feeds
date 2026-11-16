@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import { getVideoIdentity, setPostLinkToOpenInNewTab } from "./video-links";
+import { hasLiveMetadata } from "./shared/media-metadata";
 import type { Keywords } from "../i18n";
 import { translations } from "../i18n";
 import { cleanText } from "../core/filters/text-normalize";
@@ -27,6 +28,7 @@ import { explicitNewsNames, isOwnedNewsElement } from "./news-identity";
 
 import { findVideosBlockedText } from "./shared/blocked-text";
 import { isSponsored, isSponsoredDisclosure } from "./shared/sponsored";
+import { collectStructuralAdSlots } from "./shared/ad-slots";
 
 /**
  * Choose the last main-column candidate in the nested video layout, and observe the dialog's main region separately.
@@ -132,8 +134,9 @@ function isOwnedVideoSignal(signal: Element, post: Element): boolean {
   );
 }
 
-/** Require both the existing player/status structure and an exact localized live label; recorded durations are insufficient. */
+/** Prefer corroborated live machine/player state, retaining the exact localized status fallback. */
 function isVideoLive(post: Element, keyWords: Pick<Keywords, "VF_LIVE">) {
+  if (hasLiveMetadata(post)) return keyWords.VF_LIVE;
   const liveRule = 'div[role="presentation"] ~ div > div:nth-of-type(1) > span';
   return Array.from(post.querySelectorAll(liveRule)).some(
     (status) =>
@@ -157,7 +160,7 @@ function isInstagram(post: Element, keyWords: Pick<Keywords, "VF_INSTAGRAM">) {
 }
 
 /**
- * Hide the retained classless third-block ad slot only with an owned exact sponsorship disclosure and its enabled option.
+ * Hide exclusive structural ads in the retained classless third block, then fall back to a named owned disclosure.
  * @param post Owning video, which remains visible when only its embedded ad is hidden.
  * @param queryBlocks Existing route-specific content-block selector.
  * @param context Filter preference, localized reason, and reversible visibility attributes.
@@ -177,16 +180,20 @@ function hideSponsoredBlock(post: Element, queryBlocks: string, context: FeedCon
   if (thirdBlock.hasAttribute(state.hideAtt)) {
     return;
   }
-  if (
-    !isOwnedNewsElement(thirdBlock, post) ||
-    !Array.from(thirdBlock.querySelectorAll("a[href]")).some((link) =>
-      isSponsoredDisclosure(link, post)
-    )
-  )
-    return;
-  thirdBlock.setAttribute(postAtt, keyWords.SPONSORED);
-  thirdBlock.setAttribute(state.hideAtt, keyWords.SPONSORED);
-  if (options.VERBOSITY_DEBUG) thirdBlock.setAttribute(state.showAtt, "");
+  if (!isOwnedNewsElement(thirdBlock, post)) return;
+  const structural = collectStructuralAdSlots(post).filter((slot) => thirdBlock.contains(slot));
+  const targets = structural.length
+    ? structural
+    : Array.from(thirdBlock.querySelectorAll("a[href]")).some((link) =>
+          isSponsoredDisclosure(link, post)
+        )
+      ? [thirdBlock]
+      : [];
+  for (const target of targets) {
+    target.setAttribute(postAtt, keyWords.SPONSORED);
+    target.setAttribute(state.hideAtt, keyWords.SPONSORED);
+    if (options.VERBOSITY_DEBUG) target.setAttribute(state.showAtt, "");
+  }
 }
 
 /**

@@ -27,6 +27,7 @@ const booleans = new Set([
   "loop",
   "muted",
   "autoplay",
+  "attributionsrc",
 ]);
 const states = new Set([
   "aria-hidden",
@@ -76,6 +77,8 @@ export class SnapshotAttributes {
   private ids = new Map<string, string>();
   private classes = new Map<string, string>();
   private privateNames = new Map<string, string>();
+  private destinations = new Map<string, string>();
+  private numericIds = new Map<string, string>();
   readonly pending = new Map<string, PendingSnapshotReference>();
   readonly omissions: Record<string, number> = {};
   redacted = 0;
@@ -186,7 +189,7 @@ export class SnapshotAttributes {
       this.attributeReads++;
       let name = attribute.name;
       const value = attribute.value;
-      if (!/^[a-z][a-z0-9_.:-]{0,63}$/.test(name) || this.privacy.interfaceText(name) !== name) {
+      if (!/^[a-z][a-z0-9_.:-]{0,63}$/i.test(name) || this.privacy.interfaceText(name) !== name) {
         name = this.alias(name, this.privateNames, "data-cmf-attribute-");
       }
       if (value.length > 4096) {
@@ -199,22 +202,22 @@ export class SnapshotAttributes {
         attributes.id = this.alias(value, this.ids, "cmf-id-");
         changes.id = "alias";
       } else if (name === "class") {
-        if (value.trim().split(/\s+/, 33).length > 32) this.omit("class-token-limit");
+        if (value.trim().split(/\s+/, 129).length > 128) this.omit("class-token-limit");
         attributes.class = value
           .trim()
-          .split(/\s+/, 32)
+          .split(/\s+/, 128)
           .filter(Boolean)
-          .slice(0, 32)
+          .slice(0, 128)
           .map((token) => this.alias(token, this.classes, "cmf-class-"))
           .join(" ");
         changes.class = "alias";
       } else if (references.has(name)) {
-        if (value.trim().split(/\s+/, 9).length > 8) this.omit("reference-token-limit");
+        if (value.trim().split(/\s+/, 33).length > 32) this.omit("reference-token-limit");
         attributes[name] = value
           .trim()
-          .split(/\s+/, 8)
+          .split(/\s+/, 32)
           .filter(Boolean)
-          .slice(0, 8)
+          .slice(0, 32)
           .map((id) =>
             this.reference(id, name === "aria-labelledby" || name === "aria-describedby" ? 1 : 2)
           )
@@ -222,6 +225,7 @@ export class SnapshotAttributes {
         changes[name] = "alias";
       } else if (booleans.has(name)) {
         attributes[name] = "";
+        if (value) changes[name] = "presence";
       } else if (states.has(name)) {
         attributes[name] = [
           "",
@@ -270,9 +274,12 @@ export class SnapshotAttributes {
           attributes[name] = `#${this.reference(value.slice(1), 0)}`;
           changes[name] = "alias";
         } else {
-          const destination = snapshotDestination(value);
+          const destination = snapshotDestination(value, (identifier) =>
+            this.alias(identifier, this.numericIds, "900000000")
+          );
           attributes[name] = destination.value;
           Object.assign(attributes, destination.facts);
+          attributes["data-cmf-link-key"] = this.alias(value, this.destinations, "destination-");
           changes[name] = "route";
         }
       } else if (publicMarkers.has(name)) {
@@ -301,6 +308,9 @@ export class SnapshotAttributes {
           "style",
           "value",
           "alt",
+          "data",
+          "codebase",
+          "archive",
         ].includes(name)
       ) {
         attributes[
@@ -315,6 +325,9 @@ export class SnapshotAttributes {
             "style",
             "value",
             "alt",
+            "data",
+            "codebase",
+            "archive",
           ].includes(name)
             ? `data-cmf-original-${name.replace(/[^a-z0-9-]/g, "-")}`
             : name
@@ -322,6 +335,12 @@ export class SnapshotAttributes {
         changes[name] = "presence";
       } else if (name === "d" || name === "points") {
         attributes[name] = /^[MmZzLlHhVvCcSsQqTtAaEe0-9+.,\s-]*$/.test(value) ? value : "";
+        if (attributes[name] !== value) changes[name] = "redacted";
+      } else if (
+        element.namespaceURI === "http://www.w3.org/2000/svg" &&
+        ["viewBox", "x", "y", "cx", "cy", "r", "rx", "ry", "x1", "x2", "y1", "y2"].includes(name)
+      ) {
+        attributes[name] = /^[-+\d.eE,\s%]+$/.test(value) ? value : "";
         if (attributes[name] !== value) changes[name] = "redacted";
       } else {
         attributes[name] = this.privacy.text(value, content);

@@ -231,7 +231,10 @@ function getSponsoredDiagnostics(post: Element | null, state: SponsoredState | n
 function inspectSponsored(post: Element | null, state: SponsoredState | null) {
   const diagnostics = createSponsoredDiagnostics(post, state);
   if (!post || !state) return { isSponsored: false, diagnostics };
-  if (state.isNF && getStructuralSponsoredKind(post) === "sponsored") {
+  if (
+    (state.isNF || state.isGF || state.isSF || state.isVF) &&
+    getStructuralSponsoredKind(post) === "sponsored"
+  ) {
     diagnostics.matchedBy = "creative-structure";
     return { isSponsored: true, diagnostics };
   }

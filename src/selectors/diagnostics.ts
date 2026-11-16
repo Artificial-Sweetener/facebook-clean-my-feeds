@@ -13,7 +13,7 @@ export const diagnosticSelectors = {
   control:
     'a, button, [role="button"], [role="link"], [role="menuitem"], [role="tab"], [role="checkbox"], [role="switch"], [role="option"]',
   heading: 'h1, h2, h3, h4, h5, h6, [role="heading"]',
-  excluded: "script, style, noscript, template, iframe, object, embed, canvas, foreignObject",
+  excluded: "script, style, noscript, template, iframe, embed, canvas, foreignObject",
   post: '[aria-posinset], [role="article"]',
   profile: sharedSelectors.profileName,
   labelReference: "[aria-labelledby], [aria-describedby], svg use",

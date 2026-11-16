@@ -11,6 +11,7 @@ import { watchDarkMode } from "../dom/theme";
 import { resetFeedProcessing, restoreFeedPresentation } from "../feeds/reset";
 import { loadOptions } from "../runtime/load-options";
 import { startLoop } from "../runtime/loop";
+import { clearPageMediaFacts } from "../dom/page-media-facts";
 import { processPage } from "../runtime/process-page";
 import { setFeedSettings } from "../runtime/routes";
 import { createState } from "../runtime/state";
@@ -102,6 +103,7 @@ async function startSession(): Promise<() => void> {
     stopPostHistory();
     restoreFeedPresentation(state);
     clearDirtyTracking();
+    clearPageMediaFacts();
     stopReelsProcessing(state);
     themeObserver?.disconnect();
     window.clearTimeout(extraStylesTimer);

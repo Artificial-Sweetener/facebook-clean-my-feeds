@@ -14,7 +14,6 @@ const excludedTags = new Set([
   "iframe",
   "frame",
   "frameset",
-  "object",
   "embed",
   "link",
   "meta",
@@ -79,7 +78,7 @@ function elementHtml(element: SnapshotElement, children: string): string {
   const attributes = Object.entries(element.attributes)
     .filter(
       ([name]) =>
-        /^[a-z][a-z0-9_.:-]{0,80}$/.test(name) &&
+        /^[a-z][a-z0-9_.:-]{0,80}$/i.test(name) &&
         !/^on/i.test(name) &&
         ![
           "style",
@@ -93,6 +92,9 @@ function elementHtml(element: SnapshotElement, children: string): string {
           "is",
           "data-cmf-node",
           "data-cmf-projected-style",
+          "data",
+          "codebase",
+          "archive",
         ].includes(name)
     )
     .map(([name, value]) => ` ${name}="${escapeHtml(value)}"`)

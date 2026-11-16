@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { getMosquitosQuery, swatTheMosquitos } from "../../src/dom/animated-gifs";
+import { swatTheMosquitos } from "../../src/dom/animated-gifs";
 import { postAtt } from "../../src/dom/attributes";
 
 afterEach(() => {
@@ -8,10 +8,6 @@ afterEach(() => {
 });
 
 describe("dom/animated-gifs", () => {
-  test("getMosquitosQuery includes the post attribute", () => {
-    expect(getMosquitosQuery()).toContain(postAtt);
-  });
-
   test("swatTheMosquitos clicks hidden gifs and marks the parent", () => {
     const post = document.createElement("div");
     const wrapper = document.createElement("div");

@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { getPostEvidence } from "../dom/post-evidence";
+
 /** News features retain independent ownership of reversible inline layout changes. */
 type NewsFeature = "badge" | "sidebar" | "friendRequests";
 
@@ -32,6 +34,35 @@ export function isNewsFeatureCollapsed(element: Element, feature: NewsFeature): 
     (element instanceof HTMLElement || element instanceof SVGElement) &&
     presentations[feature].has(element)
   );
+}
+
+/**
+ * Retain feature identity through CMF's own collapse while honoring native concealment on ancestors.
+ * @param element Feature whose physical and accessibility visibility must remain valid.
+ * @param post Owning boundary; its own post-filter collapse does not invalidate child evidence.
+ * @param feature Presentation owner allowed to account for display:none on the ancestor chain.
+ * @returns Whether every ancestor is rendered or intentionally collapsed by this feature alone.
+ */
+export function isNewsFeatureRendered(
+  element: Element,
+  post: Element,
+  feature: NewsFeature
+): boolean {
+  const evidence = getPostEvidence(post);
+  let ancestor: Element | null = element;
+  while (ancestor && ancestor !== post) {
+    if (ancestor.hasAttribute("hidden") || ancestor.getAttribute("aria-hidden") === "true")
+      return false;
+    if (!evidence.isVisible(ancestor)) {
+      if (
+        !isNewsFeatureCollapsed(ancestor, feature) ||
+        ancestor.ownerDocument.defaultView?.getComputedStyle(ancestor).visibility === "hidden"
+      )
+        return false;
+    }
+    ancestor = ancestor.parentElement;
+  }
+  return ancestor === post;
 }
 
 /** Read longhand priority even when CSSOM stores the declaration as a margin/padding shorthand. */

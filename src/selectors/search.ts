@@ -3,7 +3,8 @@
 /** Search results use a region-adjacent main root and their own nested feed wrapper. */
 const searchSelectors = {
   mainColumn: 'div[role="region"] ~ div[role="main"]',
-  postsQuery: 'div[role="feed"] > div > div',
+  feed: '[role="feed"]',
+  legacyPosts: ":scope > div > div",
 };
 
 export { searchSelectors };

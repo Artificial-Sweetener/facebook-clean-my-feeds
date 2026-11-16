@@ -2,7 +2,7 @@
 
 import { postAtt, postAttMPSkip } from "../../src/dom/attributes";
 import { mopMarketplaceFeed } from "../../src/feeds/marketplace";
-import { getProfilePostsFromPermalinks, mopProfileFeed } from "../../src/feeds/profile";
+import { collectProfilePosts, mopProfileFeed } from "../../src/feeds/profile";
 import { mopReelsFeed, stopReelsProcessing } from "../../src/feeds/reels";
 import { resetFeedProcessing } from "../../src/feeds/reset";
 import {
@@ -191,7 +191,7 @@ describe("approved route marker, identity and settings regressions", () => {
       PP_BLOCKED_TEXT: "unwanted",
     });
     document.body.innerHTML = `<div role="main" id="profile-root">${textPost("post", "Unwanted offer", '<div id="timestamp-header" aria-describedby="timestamp-tooltip"><a href="/publisher/posts/100/">Yesterday</a></div>')}${textPost("ordinary", "Community news", '<a href="/publisher/posts/200/">Yesterday</a>')}</div>`;
-    expect(getProfilePostsFromPermalinks(element("profile-root"))).toEqual([
+    expect(collectProfilePosts(element("profile-root"))).toEqual([
       element("post"),
       element("ordinary"),
     ]);
@@ -205,7 +205,7 @@ describe("approved route marker, identity and settings regressions", () => {
   test("article post boundaries take precedence over described timestamp tooltips", () => {
     document.body.innerHTML =
       '<div role="main" id="profile-root"><div role="article" id="post"><div aria-describedby="timestamp-tooltip"><a href="/publisher/posts/100/">Yesterday</a></div><div>Post body</div></div><div role="article" id="ordinary"><a href="/publisher/posts/200/">Today</a></div></div>';
-    expect(getProfilePostsFromPermalinks(element("profile-root"))).toEqual([
+    expect(collectProfilePosts(element("profile-root"))).toEqual([
       element("post"),
       element("ordinary"),
     ]);

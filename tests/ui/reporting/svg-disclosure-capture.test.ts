@@ -94,7 +94,7 @@ test("nested SVG label evidence survives a page full of unrelated ARIA reference
     control.setAttribute("aria-controls", `missing-panel-${index}`);
     post.prepend(control);
   }
-  const snapshot = await captureDomSnapshot(document, { target: post });
+  const snapshot = await captureDomSnapshot(document, { target: post, limits: { references: 64 } });
   expect(JSON.stringify(snapshot)).toContain('"value":"Future disclosure"');
   expect(snapshot.references.length).toBeLessThanOrEqual(snapshot.limits.references);
   expect(snapshot.coverage.omissions["reference-limit"]).toBeGreaterThan(0);

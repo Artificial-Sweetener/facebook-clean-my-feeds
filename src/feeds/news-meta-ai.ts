@@ -2,8 +2,10 @@
 
 import type { FeedContext } from "./types";
 import { cleanText } from "../core/filters/text-normalize";
+import { getPostEvidence } from "../dom/post-evidence";
 import { hideFeatureNoCaption } from "../dom/hide";
 import { newsSelectors } from "../selectors/news";
+import { sharedSelectors } from "../selectors/shared";
 
 /** Foreign React metadata is inspected lazily, never asserted to match a complete private React type. */
 type ReactFiber = Record<string, unknown>;
@@ -111,17 +113,21 @@ export function isButtonLike(element: Element | null) {
   return element.tagName === "BUTTON" || element.getAttribute("role") === "button";
 }
 
-/** Collect button-like descendants only inside horizontal-scroll chips. */
+/** Collect independent rendered chip controls, excluding nested controls and authored subtrees. */
 export function getMetaAiPromptChipButtons(row: Element | null | undefined) {
   if (!row || typeof row.querySelectorAll !== "function") {
     return [];
   }
 
-  return Array.from(
-    row.querySelectorAll(
-      '[data-type="hscroll-child"] button, [data-type="hscroll-child"] [role="button"]'
-    )
-  );
+  const evidence = getPostEvidence(row);
+  return evidence.select(newsSelectors.promptButtons).filter((button) => {
+    const parentAction = button.parentElement?.closest(newsSelectors.peopleActions);
+    return (
+      (!parentAction || !row.contains(parentAction)) &&
+      !button.closest(sharedSelectors.authoredContent) &&
+      evidence.isRendered(button)
+    );
+  });
 }
 
 /** Normalize a chip label while preserving an empty feedback button label. */
@@ -130,7 +136,7 @@ export function getMetaAiPromptButtonText(button: Element | null | undefined) {
     return "";
   }
 
-  return cleanText(button.textContent).trim();
+  return cleanText(getPostEvidence(button).visibleText(button)).trim();
 }
 
 /** Recognize the icon-bearing prompt and feedback controls used by the DOM fallback. */
@@ -139,7 +145,8 @@ export function hasMetaAiPromptButtonIcon(button: Element | null | undefined) {
     return false;
   }
 
-  return button.querySelector("i, img, svg") !== null;
+  const evidence = getPostEvidence(button);
+  return evidence.select(newsSelectors.promptIcons).some((icon) => evidence.isRendered(icon));
 }
 
 /** Accept a nonempty accessible label or title as evidence of a feedback control. */
@@ -162,6 +169,8 @@ export function hasMetaAiPromptDomSignature(row: Element | null) {
   if (chipButtons.length !== 3) {
     return false;
   }
+  if (new Set(chipButtons.map((button) => button.closest(newsSelectors.peopleTiles))).size !== 3)
+    return false;
 
   const buttonTexts = chipButtons.map((button) => getMetaAiPromptButtonText(button));
   if (buttonTexts[0] === "" || buttonTexts[1] === "" || buttonTexts[2] !== "") {
@@ -226,10 +235,15 @@ export function findMetaAiPromptCandidateRows(root: Element | null) {
   const chips = root.querySelectorAll('[data-type="hscroll-child"]');
 
   chips.forEach((chip) => {
+    if (chip.closest(sharedSelectors.authoredContent)) return;
     let current = chip.parentElement;
     while (current && current !== root) {
       if (current.matches(newsSelectors.standardPost)) break;
-      if (isMetaAiPromptCandidateRow(current, root) && containsOnlyPromptContent(current)) {
+      if (
+        getPostEvidence(root).isRendered(current) &&
+        isMetaAiPromptCandidateRow(current, root) &&
+        containsOnlyPromptContent(current)
+      ) {
         candidateRows.add(current);
       }
       current = current.parentElement;

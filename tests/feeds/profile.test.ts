@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { getProfilePostsFromPermalinks } from "../../src/feeds/profile";
+import { collectProfilePosts } from "../../src/feeds/profile";
 import { profileSelectors } from "../../src/selectors/profile";
 
 describe("feeds/profile", () => {
-  test("getProfilePostsFromPermalinks returns per-post containers", () => {
+  test("collectProfilePosts returns per-post containers", () => {
     document.body.innerHTML = `
       <div role="main">
         <div id="wrapper">
@@ -24,7 +24,7 @@ describe("feeds/profile", () => {
     `;
 
     const mainColumn = document.querySelector(profileSelectors.mainColumn);
-    const posts = getProfilePostsFromPermalinks(mainColumn);
+    const posts = collectProfilePosts(mainColumn);
 
     const ids = posts.map((post) => post.id);
     expect(ids).toContain("post-one");
@@ -32,7 +32,7 @@ describe("feeds/profile", () => {
     expect(ids).toHaveLength(2);
   });
 
-  test("getProfilePostsFromPermalinks ignores non-post blocks", () => {
+  test("collectProfilePosts ignores non-post blocks", () => {
     document.body.innerHTML = `
       <div role="main">
         <div id="composer">
@@ -42,7 +42,7 @@ describe("feeds/profile", () => {
     `;
 
     const mainColumn = document.querySelector(profileSelectors.mainColumn);
-    const posts = getProfilePostsFromPermalinks(mainColumn);
+    const posts = collectProfilePosts(mainColumn);
 
     expect(posts).toHaveLength(0);
   });

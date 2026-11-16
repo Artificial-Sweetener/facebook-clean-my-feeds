@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
+import { collectGifControls } from "../../src/dom/gif-controls";
 import { postAtt } from "../../src/dom/attributes";
-import { getMosquitosQuery, swatTheMosquitos } from "../../src/dom/animated-gifs";
+import { swatTheMosquitos } from "../../src/dom/animated-gifs";
 import {
   hasGroupsAnimatedGifContent,
   hasNewsAnimatedGifContent,
@@ -91,7 +92,7 @@ describe("validation: shared GIF detection and pausing", () => {
   ])(
     "GIF controls use the existing case-sensitive substring and structural contract: %s",
     (markup, count) => {
-      expect(sharedPost(markup).querySelectorAll(getMosquitosQuery())).toHaveLength(count);
+      expect(collectGifControls(sharedPost(markup))).toHaveLength(count);
     }
   );
 

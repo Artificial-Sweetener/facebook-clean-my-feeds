@@ -3,6 +3,7 @@
 import { postAtt } from "../../src/dom/attributes";
 import { mopVideosFeed } from "../../src/feeds/videos";
 import { resetFeedProcessing } from "../../src/feeds/reset";
+import { structuralAdSlot } from "../feeds/ad-slot-fixtures";
 import {
   cleanRouteDocument,
   element,
@@ -29,6 +30,22 @@ function mountEmbeddedSlot(kind: string, content: string): void {
 }
 
 afterEach(cleanRouteDocument);
+
+test("structural embedded advertising hides only its own slot and restores on disable", () => {
+  const context = routeContext("/watch", { VF_SPONSORED: true });
+  mountEmbeddedSlot(
+    "third-block",
+    `<div id="third">${structuralAdSlot()}<div id="neighbor">Keep me</div></div>`
+  );
+  mopVideosFeed(context);
+  expect(element("ad-slot").getAttribute(context.state.hideAtt)).toBe(context.keyWords.SPONSORED);
+  for (const id of ["third", "neighbor", "owner", "sibling"])
+    expect(element(id).hasAttribute(context.state.hideAtt)).toBe(false);
+  context.options.VF_SPONSORED = false;
+  resetFeedProcessing(context.state);
+  mopVideosFeed(context);
+  expect(element("ad-slot").hasAttribute(context.state.hideAtt)).toBe(false);
+});
 
 describe("Video attribution requires an owned Instagram name", () => {
   test.each([

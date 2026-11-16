@@ -5,7 +5,11 @@ import { postAtt, postAttChildFlag } from "../dom/attributes";
 import { hideFeature } from "../dom/hide";
 import { climbUpTheTree } from "../utils/dom";
 import { newsSelectors } from "../selectors/news";
-import { isMetaAiLink } from "./news-detectors";
+import { sharedSelectors } from "../selectors/shared";
+import { facebookUrl } from "../dom/post-evidence";
+import { isStandaloneNewsFeature } from "./news-feature-boundary";
+import { getAiSidebarLinkTarget } from "./news-sidebar-target";
+import { isManusAiLink, isMetaAiLink } from "./ai-destinations";
 import { isBadgeOnlyWrapper, ownVerifiedBadges } from "./news-identity";
 import { newsCollapsedSpacing, reconcileNewsPresentation } from "./news-presentation";
 
@@ -23,11 +27,13 @@ export function findTopCardsForPagesContainer(mainColumn: Element | null) {
   const labelledRegion = mainColumn.querySelector(
     'div[role="region"][aria-label="profile plus top of feed cards"]'
   );
-  if (labelledRegion) {
+  if (isStandaloneNewsFeature(labelledRegion, mainColumn)) {
     return labelledRegion;
   }
 
-  const anchors = Array.from(mainColumn.querySelectorAll('a[href="/reel/"], a[href="/stories/"]'));
+  const anchors = Array.from(
+    mainColumn.querySelectorAll('a[href="/reel/"], a[href="/stories/"]')
+  ).filter((link) => !link.closest(sharedSelectors.authoredContent));
   if (anchors.length === 0) {
     return null;
   }
@@ -38,7 +44,7 @@ export function findTopCardsForPagesContainer(mainColumn: Element | null) {
       return;
     }
     const region = anchor.closest('div[role="region"]');
-    if (region && mainColumn.contains(region)) {
+    if (isStandaloneNewsFeature(region, mainColumn)) {
       candidates.add(region);
     }
   });
@@ -65,7 +71,7 @@ export function findTopCardsForPagesContainer(mainColumn: Element | null) {
 
   let node = reelsLink.parentElement;
   while (node && node !== mainColumn) {
-    if (node.contains(storiesLink)) {
+    if (node.contains(storiesLink) && isStandaloneNewsFeature(node, mainColumn)) {
       return node;
     }
     node = node.parentElement;
@@ -96,7 +102,10 @@ export function scrubTabbies(context: FeedContext | null) {
       return;
     }
     const elParent = climbUpTheTree(elTabList, 4);
-    if (elParent instanceof Element) {
+    if (
+      elParent instanceof Element &&
+      isStandaloneNewsFeature(elParent, elTabList.closest(newsSelectors.mainSurface))
+    ) {
       if (tabLabel) {
         hideFeature(elParent, tabLabel.replaceAll('"', ""), false, context);
       }
@@ -109,7 +118,13 @@ export function scrubTabbies(context: FeedContext | null) {
     const elCreateStory = document.querySelector(queryForCreateStory);
     if (elCreateStory && !elCreateStory.hasAttribute(postAttChildFlag)) {
       const elParent = getStoriesParent(elCreateStory);
-      if (elParent instanceof Element) {
+      const url = facebookUrl(elCreateStory);
+      if (
+        elParent instanceof Element &&
+        url &&
+        /^\/stories\/create\/?$/.test(url.pathname) &&
+        isStandaloneNewsFeature(elParent, elCreateStory.closest(newsSelectors.mainSurface))
+      ) {
         hideFeature(elParent, keyWords.NF_TABLIST_STORIES_REELS_ROOMS, false, context);
         elCreateStory.setAttribute(postAttChildFlag, "1");
       }
@@ -133,7 +148,10 @@ export function getStoriesParent(element: Element | null) {
   return elParent;
 }
 
-/** Hide one unprocessed survey wrapper using the historical Survey caption; skip owned ancestors and the child marker to avoid duplicate captions. */
+/**
+ * Hide an independent survey wrapper without consuming authored posts or the main feed.
+ * @param context Active presentation state and translated marker; null leaves the page unchanged.
+ */
 export function scrubSurvey(context: FeedContext | null) {
   if (!context) return;
   const { keyWords } = context;
@@ -141,10 +159,23 @@ export function scrubSurvey(context: FeedContext | null) {
     document.querySelectorAll(
       `${newsSelectors.surveyButton}:not([${postAtt}]):not([${postAttChildFlag}])`
     )
-  ).find((button) => !button.closest(`[${postAtt}]`));
+  ).find((button) => {
+    const link = button.parentElement;
+    const url = link ? facebookUrl(link) : null;
+    return (
+      !button.closest(`[${postAtt}]`) &&
+      url &&
+      /^\/survey\/?$/.test(url.pathname) &&
+      url.searchParams.has("session") &&
+      !button.closest(sharedSelectors.authoredContent)
+    );
+  });
   if (btnSurvey) {
     const elContainer = climbUpTheTree(btnSurvey.closest('[style*="border-radius"]'), 3);
-    if (elContainer instanceof Element) {
+    if (
+      elContainer instanceof Element &&
+      isStandaloneNewsFeature(elContainer, btnSurvey.closest(newsSelectors.mainSurface), true)
+    ) {
       hideFeature(elContainer, "Survey", false, context);
       btnSurvey.setAttribute(postAttChildFlag, keyWords.NF_SURVEY);
     }
@@ -197,7 +228,7 @@ export function scrubVerifiedBadges(context: FeedContext | null) {
 }
 
 /**
- * Collect the nearest list item for Meta AI navigation links and the known Meta AI message thread, plus matching Manus AI/Meta AI list entries.
+ * Collect exclusive Meta AI/Manus destination entries and the known Meta AI message thread, then inspect text only for unmatched entries.
  * A set deduplicates entries found by both link and text signals; collection itself does not hide or restyle anything.
  * @returns Sidebar elements to collapse, retaining discovery order across navigation and right-panel searches.
  */
@@ -206,14 +237,18 @@ export function getSidePanelAiTargets() {
 
   const navs = Array.from(document.querySelectorAll('div[role="navigation"]'));
   navs.forEach((nav) => {
-    const metaLinks = Array.from(nav.querySelectorAll("a[href]")).filter(isMetaAiLink);
+    const metaLinks = Array.from(nav.querySelectorAll("a[href]")).filter(
+      (link) => isMetaAiLink(link) || isManusAiLink(link)
+    );
     metaLinks.forEach((link) => {
-      const li = link.closest("li");
-      targets.add(li || link);
+      const matchesDestination = isManusAiLink(link) ? isManusAiLink : isMetaAiLink;
+      const target = getAiSidebarLinkTarget(link, nav, matchesDestination);
+      if (target) targets.add(target);
     });
 
     const navItems = Array.from(nav.querySelectorAll("li"));
     navItems.forEach((li) => {
+      if (Array.from(targets).some((target) => li.contains(target))) return;
       const text = li.textContent ? li.textContent.trim() : "";
       if (text === "Manus AI") {
         targets.add(li);
@@ -225,12 +260,18 @@ export function getSidePanelAiTargets() {
   if (rightPanel) {
     const metaThreads = rightPanel.querySelectorAll('a[href*="/messages/t/36327,2227039302/"]');
     metaThreads.forEach((link) => {
-      const li = link.closest("li");
-      targets.add(li || link);
+      if (facebookUrl(link)?.pathname !== "/messages/t/36327,2227039302/") return;
+      const target = getAiSidebarLinkTarget(
+        link,
+        rightPanel,
+        (candidate) => facebookUrl(candidate)?.pathname === "/messages/t/36327,2227039302/"
+      );
+      if (target) targets.add(target);
     });
 
     const rightItems = Array.from(rightPanel.querySelectorAll("li"));
     rightItems.forEach((li) => {
+      if (Array.from(targets).some((target) => li.contains(target))) return;
       const text = li.textContent ? li.textContent.trim() : "";
       if (text.includes("Meta AI")) {
         targets.add(li);

@@ -56,6 +56,22 @@ All 17 runtime icons are manually authored static SVGs on the original 64px canv
 
 Preserve userscript behavior, filter outcomes, metadata grants and matches, settings options, and installation guidance unless the requested change intentionally affects them. Mention any such impact in the PR. Keep failures at boundaries so a malformed setting or missing element cannot break the page.
 
+## Diagnostic reports
+
+The settings dialog's Generate report and Copy report buttons produce the report users paste into issues. A copied report appears as a collapsible section on GitHub. Collection stays in memory.
+
+Reports preserve diagnostic text and attributes by default, including unfamiliar labels, accessible names, fragmented text, and local SVG references, without requiring a filter match. Redaction uses independent structural and semantic signals to identify likely post, comment, message, input, and identity regions, and sanitizes sensitive substrings and destinations. It is best effort: unfamiliar markup can hide sensitive content, so ask reporters to review a report before sharing it. Each region redaction records its reason and whether the signal was explicit or inferred; capture limits and omissions remain visible.
+
+Reports also include up to two minutes of bounded, automatically redacted news-post transitions: filter decisions, caption identity and open state, structural movement, unloaded placeholders, and processing timings. Retained structural frames carry explicit capture limits and omissions. Observed decisions are recorded as evidence; maintainers annotate expected outcomes.
+
+To investigate a report, reconstruct its sanitized DOM fixtures and test a proposed selector:
+
+```sh
+npm run report:inspect -- report.json output-directory "CSS selector"
+```
+
+The inspector accepts the copied Markdown section or an existing JSON report, decodes it locally, and writes the captured regions and diagnostic context. It exports the transition frames as `history-replay.json`, linking chronological steps to the same post for regression tests.
+
 ## Offline performance and failure checks
 
 Run `node --import tsx tools/performance/feed-profile.ts` with Node 22.14.0 to profile the real News processor in jsdom. The deterministic fixture contains 80 mixed organic/sponsored posts, nested media/comment markup, and 20 hidden posts. After two settling passes, it measures 24 idle ticks, 24 periodic sweeps, 24 hidden-post content replacements, 24 coalesced mutation batches of 100 changes at 75 ms intervals, and 24 SPA root replacements. It reports HTML serialization work, median/p95 scan milliseconds, and scans exceeding 50 ms. No Facebook account, network request, or live-page stress is involved.

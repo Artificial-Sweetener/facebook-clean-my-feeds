@@ -82,24 +82,6 @@ If you spot gaps or mistranslations, open an issue. I'd love to make the UI feel
 - **Pull Requests:** Yes please. Keep them focused and describe what you touched.
 - **Translations:** If you can help keep the UI text sharp across languages, I'm all ears.
 
-## Development
-
-Use Node **>=22.14.0 <23**; `.nvmrc` and CI pin **22.14.0**. Author source, tests, and tools in strict TypeScript. The installed userscript remains a single self-contained ES2018 browser bundle.
-
-Shared TypeScript defaults live in `tsconfig.json`; scoped compiler and tool configurations live in `tools/config`. Release configuration is in the `release` field of `package.json`, and CI workflows live in `.github/workflows`.
-
-```sh
-nvm use
-npm ci
-npm run verify
-```
-
-If you do not use nvm, install the supported Node version first. The one verification command runs formatting, lint, strict browser/core/tool/test typechecks, Jest tests, locale and governance checks, then builds and validates the userscript. It checks metadata, no external runtime dependencies, unchanged source assets, and reproducible output. Commit the rebuilt `fb-clean-my-feeds.user.js` with source changes; never edit it by hand.
-
-Copied bug reports appear as collapsible sections when pasted into GitHub issues. Reports preserve diagnostic text and attributes by default, including unfamiliar labels, accessible names, fragmented text and local SVG references, without requiring a filter match. Redaction uses independent structural and semantic signals to identify likely post, comment, message, input and identity regions, and sanitizes sensitive substrings and destinations. It is best effort: unfamiliar markup can hide sensitive content, so review the report before sharing it. Region redactions record their reason and whether the signal was explicit or inferred; capture limits and omissions remain visible. Maintainers can reconstruct sanitized DOM fixtures and test a proposed selector with `npm run report:inspect -- report.json output-directory "CSS selector"`. The inspector accepts the copied Markdown section or existing JSON reports, decodes the report locally, and writes the captured regions and diagnostic context for investigation. Reports also include up to two minutes of bounded, automatically redacted news-post transitions: filter decisions, caption identity and open state, structural movement, unloaded placeholders, and processing timings. Retained structural frames carry explicit capture limits and omissions. The inspector exports these frames with `history-replay.json`, linking chronological steps to the same post for regression tests. Observed decisions are recorded as evidence; maintainers annotate expected outcomes. Collection stays in memory and uses the existing Generate report and Copy report buttons.
-
-All 17 icons are manually authored SVGs with theme-native inline colors and explicit light/dark colors for standalone documentation and userscript-manager icons. Builds validate inert SVG geometry and leave the original PNG references unchanged. Modules warn above 350 non-comment lines and require a reviewed exception above 500. Named functions, methods, classes, and exported contracts need useful JSDoc. See [CONTRIBUTING.md](CONTRIBUTING.md) for architecture, temporary exceptions, and the release gate. Keep this README and its Vietnamese version synchronized.
-
 ## <img src="src/res/info.svg" alt="license" width="36"/> License & Credits
 
 - **License:** GNU General Public License v3.0 only (GPL-3.0-only). You are free to share, tweak, and improve as long as you pass those freedoms on.

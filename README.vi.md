@@ -84,24 +84,6 @@ Nếu bạn thấy chỗ nào dịch chưa ổn hoặc còn thiếu, cứ mở i
 - **Pull Requests:** Rất hoan nghênh. Giữ phạm vi gọn và mô tả rõ bạn đã sửa gì.
 - **Translations:** Nếu bạn muốn giúp phần chữ trên giao diện sắc sảo hơn ở nhiều ngôn ngữ, mình rất sẵn lòng.
 
-## Phát triển
-
-Dùng Node **>=22.14.0 <23**; `.nvmrc` và CI cố định phiên bản **22.14.0**. Mã nguồn, kiểm thử và công cụ được viết bằng TypeScript với kiểm tra kiểu nghiêm ngặt. Userscript cài trên trình duyệt vẫn là một gói ES2018 độc lập, không cần tải thêm mã bên ngoài.
-
-Các thiết lập TypeScript dùng chung nằm trong `tsconfig.json`; cấu hình kiểm tra kiểu cho từng phạm vi và các công cụ nằm trong `tools/config`. Cấu hình phát hành nằm ở trường `release` của `package.json`, còn quy trình CI nằm trong `.github/workflows`.
-
-```sh
-nvm use
-npm ci
-npm run verify
-```
-
-Nếu không dùng nvm, hãy cài phiên bản Node được hỗ trợ trước. Lệnh kiểm tra duy nhất này chạy kiểm tra định dạng, lint, kiểm tra kiểu riêng cho trình duyệt/lõi/công cụ/kiểm thử, các bài kiểm thử Jest, kiểm tra bản dịch và quy tắc dự án, rồi build và xác minh userscript. Lệnh cũng kiểm tra metadata, bảo đảm không có phụ thuộc mã chạy bên ngoài, tài nguyên gốc không bị sửa và kết quả build có thể tái tạo giống hệt nhau. Commit cả `fb-clean-my-feeds.user.js` đã build lại cùng thay đổi mã nguồn; đừng sửa trực tiếp tệp này.
-
-Báo cáo lỗi đã sao chép sẽ hiển thị dưới dạng mục có thể thu gọn khi dán vào issue trên GitHub. Báo cáo mặc định giữ lại văn bản và thuộc tính phục vụ chẩn đoán, kể cả nhãn chưa biết, tên trợ năng, văn bản bị chia nhỏ và chuỗi tham chiếu SVG trong trang, mà không cần bộ lọc nhận diện trước. Việc ẩn dữ liệu dựa trên các dấu hiệu độc lập về cấu trúc và ngữ nghĩa để nhận diện những vùng có khả năng chứa nội dung bài viết, bình luận, tin nhắn, ô nhập liệu và danh tính, đồng thời loại bỏ các đoạn thông tin nhạy cảm và xử lý địa chỉ liên kết. Cơ chế này chỉ có thể cố gắng nhận diện: cấu trúc trang chưa biết có thể khiến dữ liệu nhạy cảm bị bỏ sót, vì vậy hãy xem lại báo cáo trước khi chia sẻ. Mỗi vùng bị ẩn đều ghi rõ lý do và dấu hiệu đó là trực tiếp hay suy luận; giới hạn thu thập và phần bị lược bỏ cũng được ghi rõ. Người duy trì có thể dựng lại các mẫu DOM đã ẩn dữ liệu riêng tư và kiểm tra bộ chọn bằng `npm run report:inspect -- report.json output-directory "CSS selector"`. Công cụ chấp nhận cả mục Markdown đã sao chép lẫn báo cáo JSON hiện có, giải mã ngay trên máy và lưu các vùng đã chụp cùng thông tin chẩn đoán để điều tra lỗi. Báo cáo còn kèm lịch sử chuyển trạng thái của bài viết trên Bảng tin trong tối đa hai phút, được giới hạn dung lượng và tự động ẩn dữ liệu riêng tư: quyết định lọc, danh tính và trạng thái mở của khung chú thích, thay đổi vị trí trong DOM, vùng giữ chỗ khi nội dung bị dỡ tải và thời gian xử lý. Các bản chụp cấu trúc ghi rõ giới hạn thu thập và phần bị lược bỏ. Công cụ xuất các bản chụp này cùng `history-replay.json`, liên kết các bước theo thời gian với cùng một bài viết để tạo kiểm thử hồi quy. Quyết định quan sát được chỉ là bằng chứng; người duy trì bổ sung kết quả mong đợi. Dữ liệu chỉ được giữ trong bộ nhớ và vẫn dùng các nút Tạo báo cáo và Sao chép báo cáo hiện có.
-
-Cả 17 biểu tượng đều được vẽ SVG thủ công, dùng màu theo giao diện khi hiển thị trong trang và màu sáng/tối phù hợp khi xuất hiện riêng trong tài liệu hoặc trình quản lý userscript. Quá trình dựng kiểm tra SVG chỉ chứa hình học tĩnh an toàn và giữ nguyên các PNG gốc để đối chiếu. Mô-đun vượt 350 dòng mã không tính chú thích sẽ được cảnh báo; vượt 500 dòng cần ngoại lệ đã được xem xét. Hàm có tên, phương thức, lớp và hợp đồng dữ liệu được xuất ra cần JSDoc có nội dung hữu ích. Xem [CONTRIBUTING.md](CONTRIBUTING.md) để biết kiến trúc, ngoại lệ tạm thời và điều kiện phát hành. Giữ nội dung thiết yếu của README này đồng bộ với bản tiếng Anh.
-
 ## <img src="src/res/info.svg" alt="license" width="36"/> Giấy phép & Ghi công
 
 - **License:** GNU General Public License v3.0, chỉ phiên bản 3 (GPL-3.0-only). Bạn được quyền chia sẻ, chỉnh sửa và cải tiến, miễn là vẫn giữ lại những quyền tự do đó cho người khác.

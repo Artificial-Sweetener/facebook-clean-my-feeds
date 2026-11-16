@@ -6981,7 +6981,7 @@ ${fence}
   var init_build_identity = __esm({
     "src/core/diagnostics/build-identity.ts"() {
       "use strict";
-      buildIdentity = true ? "source-sha256:703d9bba9099b5bc5cdacef722221c205093528b5f2e8c655afc5be1f2c82e7d" : "unbundled";
+      buildIdentity = true ? "source-sha256:d5860758602d961589138950a520f666dcf6b4cb0422372988d5574174f7769c" : "unbundled";
     }
   });
 
@@ -8747,76 +8747,12 @@ ${fence}
     }
   });
 
-  // src/feeds/shared/sponsored-structure.ts
-  function getStructuralSponsoredKind(post) {
-    var _a;
-    const evidence = getPostEvidence(post);
-    if (cache3.has(evidence)) return (_a = cache3.get(evidence)) != null ? _a : null;
-    const result = inspectStructure(post, evidence);
-    cache3.set(evidence, result);
-    return result;
+  // src/feeds/shared/sponsored-names.ts
+  function createSponsoredScope(post) {
+    return { dom: getPostEvidence(post), names: /* @__PURE__ */ new Map() };
   }
-  function isOwnedSignal(element, post, evidence) {
-    return ownsPostElement(element, post) && evidence.isRendered(element);
-  }
-  function inspectStructure(post, evidence) {
-    const blocks = getNewsBlocks(post);
-    const header = blocks[0];
-    if (!header || blocks.length < 2) return null;
-    const tracked = evidence.select("a[href]", header).filter((link) => {
-      const url = facebookUrl(link);
-      const signature = url == null ? void 0 : url.searchParams.get("__cft__[0]");
-      return !!signature && signature.length + "__cft__[0]=".length >= 311 && !(url == null ? void 0 : url.pathname.startsWith("/groups/")) && !(url == null ? void 0 : url.searchParams.has("section_header_type")) && isOwnedSignal(link, post, evidence);
-    });
-    if (tracked.length < 2 || !tracked.some((link) => link.closest(sharedSelectors.profileName)))
-      return null;
-    const creative = blocks.slice(1).some((block) => {
-      const cta = evidence.select(sharedSelectors.adCreativeCta, block).some((element) => isOwnedSignal(element, post, evidence));
-      return cta && evidence.select(sharedSelectors.adCreativeMedia, block).some((media) => isOwnedSignal(media, post, evidence));
-    });
-    if (!creative) return null;
-    const paid = evidence.select(sharedSelectors.paidMetadataButton, header).some((button) => {
-      var _a;
-      if (!isOwnedSignal(button, post, evidence) || button.matches(sharedSelectors.statefulDisclosureControl) || button.closest(sharedSelectors.authorMetadata) || ((_a = button.parentElement) == null ? void 0 : _a.closest(sharedSelectors.interactive)) || button.querySelector(
-        `${sharedSelectors.disclosureNonTextContent}, ${sharedSelectors.authoredContent}`
-      ))
-        return false;
-      const parts = Array.from(button.children).filter((part) => evidence.isRendered(part));
-      return parts.length === 2 && parts.every((part) => part.localName === "span" && isOwnedSignal(part, post, evidence));
-    });
-    if (paid) return "paid";
-    return tracked.some(
-      (link) => !link.closest(sharedSelectors.profileName) && !link.querySelector(sharedSelectors.avatarMedia) && evidence.select(sharedSelectors.svgLabelGeometry, link).some((graphic) => isOwnedSignal(graphic, post, evidence))
-    ) ? "sponsored" : null;
-  }
-  var cache3;
-  var init_sponsored_structure = __esm({
-    "src/feeds/shared/sponsored-structure.ts"() {
-      "use strict";
-      init_ownership();
-      init_post_evidence();
-      init_shared();
-      init_blocks();
-      cache3 = /* @__PURE__ */ new WeakMap();
-    }
-  });
-
-  // src/feeds/shared/sponsored.ts
   function isOwnedControl(control, post, bodies, evidence) {
     return ownsPostElement(control, post, { bodies, allowArticleWrapper: true }) && evidence.isRendered(control);
-  }
-  function authoredBlocks(post, state) {
-    if (state.isNF || state.isGF || state.isSF) {
-      return getNewsBlocks(post).slice(1);
-    }
-    if (state.isVF) {
-      return Array.from(
-        post.querySelectorAll(
-          `${videosSelectors.blockQueries.videos}, ${videosSelectors.blockQueries.search}`
-        )
-      );
-    }
-    return [];
   }
   function hasSponsoredName(control, post, bodies, scope) {
     const cached2 = scope.names.get(control);
@@ -8873,13 +8809,91 @@ ${fence}
       (control) => control !== link && isOwnedControl(control, post, bodies, scope.dom) && hasSponsoredName(control, post, bodies, scope)
     );
   }
+  var init_sponsored_names = __esm({
+    "src/feeds/shared/sponsored-names.ts"() {
+      "use strict";
+      init_ownership();
+      init_post_evidence();
+      init_disclosure_labels2();
+      init_shared();
+    }
+  });
+
+  // src/feeds/shared/sponsored-structure.ts
+  function getStructuralSponsoredKind(post) {
+    var _a;
+    const evidence = getPostEvidence(post);
+    if (cache3.has(evidence)) return (_a = cache3.get(evidence)) != null ? _a : null;
+    const result = inspectStructure(post, evidence);
+    cache3.set(evidence, result);
+    return result;
+  }
+  function isOwnedSignal(element, post, evidence) {
+    return ownsPostElement(element, post) && evidence.isRendered(element);
+  }
+  function inspectStructure(post, evidence) {
+    const blocks = getNewsBlocks(post);
+    const header = blocks[0];
+    if (!header || blocks.length < 2) return null;
+    const tracked = evidence.select("a[href]", header).filter((link) => {
+      const url = facebookUrl(link);
+      const signature = url == null ? void 0 : url.searchParams.get("__cft__[0]");
+      return !!signature && signature.length + "__cft__[0]=".length >= 311 && !(url == null ? void 0 : url.pathname.startsWith("/groups/")) && !(url == null ? void 0 : url.searchParams.has("section_header_type")) && isOwnedSignal(link, post, evidence);
+    });
+    if (tracked.length < 2 || !tracked.some((link) => link.closest(sharedSelectors.profileName)))
+      return null;
+    const creative = blocks.slice(1).some((block) => {
+      const cta = evidence.select(sharedSelectors.adCreativeCta, block).some((element) => isOwnedSignal(element, post, evidence));
+      return cta && evidence.select(sharedSelectors.adCreativeMedia, block).some((media) => isOwnedSignal(media, post, evidence));
+    });
+    if (!creative) return null;
+    const paid = evidence.select(sharedSelectors.paidMetadataButton, header).some((button) => {
+      var _a;
+      if (!isOwnedSignal(button, post, evidence) || button.matches(sharedSelectors.statefulDisclosureControl) || button.closest(sharedSelectors.authorMetadata) || ((_a = button.parentElement) == null ? void 0 : _a.closest(sharedSelectors.interactive)) || button.querySelector(
+        `${sharedSelectors.disclosureNonTextContent}, ${sharedSelectors.authoredContent}`
+      ))
+        return false;
+      const parts = Array.from(button.children).filter((part) => evidence.isRendered(part));
+      return parts.length === 2 && parts.every((part) => part.localName === "span" && isOwnedSignal(part, post, evidence));
+    });
+    if (paid) return "paid";
+    return tracked.some(
+      (link) => !link.closest(sharedSelectors.profileName) && !link.querySelector(sharedSelectors.avatarMedia) && evidence.select(sharedSelectors.svgLabelGeometry, link).some((graphic) => isOwnedSignal(graphic, post, evidence))
+    ) ? "sponsored" : null;
+  }
+  var cache3;
+  var init_sponsored_structure = __esm({
+    "src/feeds/shared/sponsored-structure.ts"() {
+      "use strict";
+      init_ownership();
+      init_post_evidence();
+      init_shared();
+      init_blocks();
+      cache3 = /* @__PURE__ */ new WeakMap();
+    }
+  });
+
+  // src/feeds/shared/sponsored.ts
+  function authoredBlocks(post, state) {
+    if (state.isNF || state.isGF || state.isSF) {
+      return getNewsBlocks(post).slice(1);
+    }
+    if (state.isVF) {
+      return Array.from(
+        post.querySelectorAll(
+          `${videosSelectors.blockQueries.videos}, ${videosSelectors.blockQueries.search}`
+        )
+      );
+    }
+    return [];
+  }
   function isSponsored(post, state) {
     return inspectSponsored(post, state).isSponsored;
   }
   function isSponsoredDisclosure(control, post) {
     if (!control.matches("a[href]")) return false;
     const url = facebookUrl(control);
-    const scope = { dom: getPostEvidence(post), names: /* @__PURE__ */ new Map() };
+    const scope = createSponsoredScope(post);
     const owner = control.closest(sharedSelectors.postOwner);
     return (url == null ? void 0 : url.pathname) === "/ads/about/" && (!owner || owner === post || !post.contains(owner)) && isOwnedControl(control, post, [], scope.dom) && Array.from(control.querySelectorAll("*")).every(
       (child) => !scope.dom.isRendered(child) || isOwnedControl(child, post, [], scope.dom)
@@ -8895,7 +8909,7 @@ ${fence}
       diagnostics.matchedBy = "creative-structure";
       return { isSponsored: true, diagnostics };
     }
-    const scope = { dom: getPostEvidence(post), names: /* @__PURE__ */ new Map() };
+    const scope = createSponsoredScope(post);
     const bodies = authoredBlocks(post, state);
     diagnostics.adsAboutLinkCount = scope.dom.select("a[href]").filter((link) => {
       const url = facebookUrl(link);
@@ -8947,18 +8961,16 @@ ${fence}
       queries.push(`div[role="article"] span > a[href*="${cftParam}"]`);
       selectedSource = "nested-article";
     }
+    const isCorroboratedTrackingLink = (link) => {
+      const url = facebookUrl(link);
+      return url !== null && !url.pathname.startsWith("/groups/") && !url.searchParams.has("section_header_type") && url.searchParams.has("__cft__[0]") && isOwnedControl(link, post, bodies, scope.dom) && hasSponsoredCorroboration(link, post, bodies, scope);
+    };
     for (const query of queries) {
-      const links = scope.dom.select(query).filter((link) => {
-        const url = facebookUrl(link);
-        return url !== null && !url.pathname.startsWith("/groups/") && !url.searchParams.has("section_header_type") && url.searchParams.has("__cft__[0]") && isOwnedControl(link, post, bodies, scope.dom) && hasSponsoredCorroboration(link, post, bodies, scope);
-      });
+      const links = scope.dom.select(query).filter(isCorroboratedTrackingLink);
       if (links.length > 0) return { links, selectedSource };
     }
     if (state.isNF || state.isGF || state.isVF || state.isSF) {
-      const links = scope.dom.select("h4 a[href], h5 a[href]").filter((link) => {
-        const url = facebookUrl(link);
-        return url !== null && !url.pathname.startsWith("/groups/") && !url.searchParams.has("section_header_type") && url.searchParams.has("__cft__[0]") && isOwnedControl(link, post, bodies, scope.dom) && hasSponsoredCorroboration(link, post, bodies, scope);
-      });
+      const links = scope.dom.select("h4 a[href], h5 a[href]").filter(isCorroboratedTrackingLink);
       if (links.length) return { links, selectedSource: "semantic-header" };
     }
     return { links: [], selectedSource: "none" };
@@ -8987,13 +8999,12 @@ ${fence}
   var init_sponsored = __esm({
     "src/feeds/shared/sponsored.ts"() {
       "use strict";
-      init_ownership();
       init_post_evidence();
-      init_disclosure_labels2();
       init_videos();
       init_shared();
       init_blocks();
       init_svg_disclosure();
+      init_sponsored_names();
       init_sponsored_structure();
       cftParam = "__cft__[0]=";
       maximumCandidateLinks = 10;

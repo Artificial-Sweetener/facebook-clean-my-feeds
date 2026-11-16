@@ -30,7 +30,25 @@ The public contract is:
 
 Do not change user-visible behavior unless explicitly requested. Internal refactors are fine, but remove old paths in the same change when migrating.
 
-## 4) Documentation
+## 4) Filter Detection
+
+Filters identify Facebook content from structure, not from wording.
+
+- **Structure first.** Detect with link destinations and URL shape, DOM relationships and ownership, ARIA roles and state, icon geometry, and Facebook's embedded page metadata.
+- **Text is not a signal.** Visible text, accessible names, `aria-label` values, and the locale dictionaries do not decide a match. Brand and control names such as "Instagram" or "GIF" count as text. Facebook's generated class names are not signals either.
+- **Text only when structure is proven impossible.** Proof is a confirmed live example of the content and of the ordinary content it could be confused with, both examined for every signal above, with each candidate shown to appear on both. Finding no signal, or having no example to examine, is not proof; the filter stays unresolved.
+- **Record the proof.** The detector's docstring names the signals ruled out and why. Re-examine them when Facebook changes the layout.
+- **Fallbacks are lazy.** Existing locale matchers remain behind structural detection. They run only after it fails, and a structural match never calls them.
+- **Reports carry structure.** A diagnostic report preserves enough non-text evidence to build a locale-independent fix from it.
+
+### Detection Tests
+
+- Replace every label and accessible name with unknown strings; the structural detector still matches.
+- Assert that a structural match does not call the locale matcher.
+- Cover false positives: ordinary, quoted, and nested posts, comments, hidden elements, and lookalike URLs.
+- Run the full built userscript on live Facebook and confirm the filter hides the content when on and restores it when off.
+
+## 5) Documentation
 
 - **No docs/ tree.** Keep documentation limited to `README.md` and approved localized README variants.
 - **Mandatory docstrings:** Every declared function, method, class, and non-obvious exported contract must have a useful TypeScript-compatible JSDoc comment. Use full Google-style substance where complexity warrants it and a concise comment where it does not. A docstring must never merely restate the name or what the code obviously does.
@@ -40,7 +58,7 @@ Do not change user-visible behavior unless explicitly requested. Internal refact
 
 ### Localization
 
-Treat user-facing copy as an all-locales surface. This includes `src/i18n/locales/en.ts`, `README.md`, and any localized README variants.
+Treat user-facing copy as an all-locales surface. This includes `src/i18n/locales/en.ts`, `README.md`, and any localized README variants. This section governs the copy users read. Detection does not depend on any locale; see Filter Detection.
 
 Any change to existing user-facing text must be updated across every supported locale in the same change. Do not make English-only wording edits unless the user explicitly requests an English-only change.
 
@@ -48,14 +66,14 @@ Write translations as natural product copy in each language, not rigid word-for-
 
 When localized README files exist, keep them in sync with the English README for substantive content, setup steps, feature descriptions, warnings, and credits. Localized README wording may adapt for natural flow, but it must not drift in meaning or omit important changes.
 
-## 5) Naming & Casing (JS Norms)
+## 6) Naming & Casing (JS Norms)
 
 - `camelCase` for variables, functions, and methods.
 - `PascalCase` for classes/constructors.
 - Use `UPPER_SNAKE_CASE` only for true module-level constants if it improves clarity; otherwise stay with `camelCase`.
 - Files and folders should be consistent; prefer `kebab-case` for files unless a pattern already exists.
 
-## 6) Verification
+## 7) Verification
 
 Run the project’s lint, test, and build scripts when available. If no scripts exist yet, call that out clearly.
 
@@ -69,11 +87,11 @@ npm run check:locales
 
 This tool compares all supported languages against the English baseline and reports missing keys.
 
-## 7) Commit Messages
+## 8) Commit Messages
 
 When asked to draft a commit, use Conventional Commits: `type(scope): subject`.
 
-## 8) TypeScript and Repository Governance
+## 9) TypeScript and Repository Governance
 
 - Use Node >=22.14.0 <23; `.nvmrc` and CI pin 22.14.0. Install with `npm ci`.
 - Author source, tests, and tools in TypeScript. Only `fb-clean-my-feeds.user.js` may remain tracked JavaScript; metadata is `src/entry/metadata.txt` and executable configs are replaced by JSON.

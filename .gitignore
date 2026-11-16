@@ -13,6 +13,7 @@ Thumbs.db
 
 .idea/
 .vscode/
+.codex-scratch/
 
 .env
 .env.*
